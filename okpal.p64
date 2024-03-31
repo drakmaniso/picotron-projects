@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: exports/lib/
 :: exports/lib/oklab.lua
---[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-03-31 11:31:10",revision=98]]
+--[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-03-31 19:46:33",revision=109]]
 -- Copyright(c) 2021 Bjorn Ottosson
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -43,9 +43,9 @@ end
 
 function oklab.okhsl_to_color(okhsl)
 	local srgb = oklab.okhsl_to_srgb(okhsl)
-	local r = math.floor(mid(0.0, srgb.r, 1.0) * 0xff)
-	local g = math.floor(mid(0.0, srgb.g, 1.0) * 0xff)
-	local b = math.floor(mid(0.0, srgb.b, 1.0) * 0xff)
+	local r = math.floor(mid(0.0, srgb.r, 1.0) * 0x100)
+	local g = math.floor(mid(0.0, srgb.g, 1.0) * 0x100)
+	local b = math.floor(mid(0.0, srgb.b, 1.0) * 0x100)
 	return (r << 16) | (g << 8) | b
 end
 
@@ -721,7 +721,7 @@ end
 
 return oklab
 :: exports/lib/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-03-31 14:11:45",revision=311]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-03-31 21:02:07",revision=611]]
 function load_palette(filename)
 	poke4(0x5000, get(fetch(filename)))
 end
@@ -759,17 +759,27 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE1IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTUiXV1sejQABAAAAAMAAAAwbmls
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxNDoxMTo0NSIscmV2aXNpb249NDIyXV1sejQAbQAAAAUxAADzFHtbMF09e2JtcD1weHUA
-QyAQEATw8CxmbGFncz0wLHBhbl94CADPeT0wLHpvb209OH0sMQD-------------------------
----------------------------------------nUG09OH19
+My0zMSAyMTowMjowNyIscmV2aXNpb249NzMyXV1sejQA9AAAAHkxAADzFHtbMF09e2JtcD1weHUA
+QyAQEATw8CxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sMQDxBQwMBPAALXANIA1gDaANkG1A
+HSAdBAAxLQAtBAAvbeBPAAseNU8AYydwByAHYAQAYVBnQBcgFwQAMScAJwQAH2dTAB7-Eww3YFdA
+dyAXABcABwAXEAcQNxAHIAcQFxAHQAcwB2A38AxSAB1gLQ1wDRAN_ACPUA1ADTANYD1EABAPaQEc
+DzEA---------------------------------------------------------------zUG09OH19
+:: gfx/temp.gfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDIwOjM1OjU4Iixtb2RpZmllZD0iMjAyNC0w
+My0zMSAyMTowMjowNyIscmV2aXNpb249MzJdXWx6NABtAAAABTEAAPMUe1swXT17Ym1wPXB4dQBD
+IBAQBPDwLGZsYWdzPTAscGFuX3gIAM95PTAsem9vbT04fSwxAP--------------------------
+-------------------------------------_dQbT04fX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-03-31 14:11:45",revision=574]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-03-31 21:02:07",revision=980]]
 function generate_gui()
 	gui = create_gui()
-	gui:attach(create_palette{})
+	local palette_el = create_palette{}
+	gui:attach(palette_el)
+	gui:attach(create_visibility_buttons { x = palette_el.x - 14, y = palette_el.y + 1 })
+	gui:attach(create_color_preview { x = palette_el.x + palette_el.width + 8, y = palette_el.y })
 	gui:attach(create_hue_chroma_selector{})
 	gui:attach(create_luminance_chroma_selector{})
 end
@@ -807,6 +817,61 @@ function create_palette(el)
 end
 
 
+function create_visibility_buttons(el)
+	local size = 12
+	local nb_rows = 4
+	el.width = size
+	el.height = nb_rows * size
+	
+	function el:draw(msg)
+		pal(13, 0)
+		for row = 0, 3 do
+			if hidden_rows[row] then
+				spr(4, 0, row * size)
+			else
+				spr(3, 0, row * size)
+			end
+		end
+		pal(13, 13)
+	end
+	
+	function el:tap(msg)
+		local row = mid(0, msg.my \ size, 3)
+		hidden_rows[row] = not hidden_rows[row]
+	end
+	
+	return el
+end
+
+
+function create_color_preview(el)
+	local size = 12
+	el.width = size * 4 + 2
+	el.height = size * 4 + 2
+	
+	function el:draw(msg)
+		rectfill(0, 0, self.width, self.height, 0)
+		rectfill(1, 1, self.width - 2, self.height - 2, active_color)
+		pal(13, 0)
+		if locked[active_color] then
+			spr(2, 0, self.height - size - 1)
+		else
+			spr(1, 0, self.height - size - 1)
+		end
+		pal(13, 13)
+		print(tostr(active_color), self.width - 12, self.height - 10, 0)
+	end
+	
+	function el:tap(msg)
+		if msg.mx < size and msg.my >= self.height - size then
+			locked[active_color] = not locked[active_color]
+		end
+	end
+	
+	return el
+end
+
+
 local selector_size = 170
 
 
@@ -828,13 +893,21 @@ function create_hue_chroma_selector(el)
 		clip()
 		ovalfill(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h, 0)
 		for c = 0, 63 do
-			local x, y = hs_coords(c, inner)
-			ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+			-- TODO: put nb_columns in global constant
+			if not hidden_rows[c \ 16] then
+				local x, y = hs_coords(c, inner)
+				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+			end
 		end
 		local x, y = hs_coords(active_color, inner)
-		rectfill(x - 5, y - 5, x + 5, y + 5, 7)
-		rectfill(x - 4, y - 4, x + 4, y + 4, active_color)
-	end	
+		if self.drag_delta then
+			-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+		else
+			ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+		end
+end	
 
 	
 	function el:click(msg)
@@ -842,9 +915,19 @@ function create_hue_chroma_selector(el)
 		local dx = abs(ax - msg.mx)
 		local dy = abs(ay - msg.my)
 		if dx < 5 and dy < 5 then
-			local ax, ay = hs_coords(active_color, inner)
 			self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
 			return
+		else
+			for c = 0, 63 do
+				local cx, cy = hs_coords(c, inner)
+				local dx = abs(cx - msg.mx)
+				local dy = abs(cy - msg.my)
+				if dx < 3 and dy < 3 then
+					active_color = c
+					self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+					return
+				end
+			end
 		end
 		self.drag_delta = nil
 	end
@@ -854,7 +937,7 @@ function create_hue_chroma_selector(el)
 	end
 	
 	function el:drag(msg)
-		if self.drag_delta then
+		if self.drag_delta and not locked[active_color] then
 			local ax = msg.mx + self.drag_delta.x
 			local ay = msg.my + self.drag_delta.y
 			local hue, sat = coords_hs(ax, ay, inner)
@@ -884,16 +967,18 @@ function create_luminance_chroma_selector(el)
 		clip()
 		rectfill(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h, 0)
 		for c = 0, 63 do
-			local x, y = sl_coords(c, inner)
-			ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+			if not hidden_rows[c \ 16] then
+				local x, y = sl_coords(c, inner)
+				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+			end
 		end
 		local x, y = sl_coords(active_color, inner)
 		if self.drag_delta then
-			rectfill(x - 6, y - 6, x + 6, y + 6, 7)
-			rectfill(x - 5, y - 5, x + 5, y + 5, active_color)
+			-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
 		else
-			rectfill(x - 5, y - 5, x + 5, y + 5, 7)
-			rectfill(x - 4, y - 4, x + 4, y + 4, active_color)
+			ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
 		end
 	end	
 	
@@ -901,10 +986,20 @@ function create_luminance_chroma_selector(el)
 		local ax, ay = sl_coords(active_color, inner)
 		local dx = abs(ax - msg.mx)
 		local dy = abs(ay - msg.my)
-		if dx < 5 and dy < 5 then
-			local ax, ay = sl_coords(active_color, inner)
+		if dx < 6 and dy < 6 then
 			self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
 			return
+		else
+			for c = 0, 63 do
+				local cx, cy = sl_coords(c, inner)
+				local dx = abs(cx - msg.mx)
+				local dy = abs(cy - msg.my)
+				if dx < 3 and dy < 3 then
+					active_color = c
+					self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+					return
+				end
+			end
 		end
 		self.drag_delta = nil
 	end
@@ -914,7 +1009,7 @@ function create_luminance_chroma_selector(el)
 	end
 	
 	function el:drag(msg)
-		if self.drag_delta then
+		if self.drag_delta and not locked[active_color] then
 			local ax = msg.mx + self.drag_delta.x
 			local ay = msg.my + self.drag_delta.y
 			local sat, lum = coords_sl(ax, ay, inner)
@@ -963,14 +1058,98 @@ function coords_hs(x, y, inner)
 	local sat = sqrt(dx * dx + dy * dy)
 	return hue, sat
 end
+:: label.png
+b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAASE0lEQVR4Ae3dT4wcVX7A8VdF
+5YLCjoQGyQhjyYcVdmAhitBosTEHc0BEDsUwDBVC7OokkxmtJtEi4Uxs7bIHI_TN4EiLIgt5NJG6
+mFikPB47ZazsaR0JMAsOimD-yCAUsTJGcbLOShMrbJSw7hzebLmorq4-3dXVr159P2rB65k37a7f
+q-721eisXxEAAPVYFf97b43NKDuLB9eX5WLllZdz-sneb3yTewjAkBid9SvR591tKrFBfdRZRrPo
+H-b3V-IP89eZRgPd5CdIfi6i65TNsf35P1Y59_fPWq_Pf_b7WXnl5b3f_Kb8b9Ekyl4lsvKMoNDF
+lBisB9eXwwsoVNu3xmZSrhlABXWWi5VXXi6arZypLfSa0c29KjyI-uosM5XSq3igY5ch-9U81zw8
+iW89-GEY7vBS_ZAAqPILqdD3RyxZ6eKBDv8B_erpXzWJvy232g_uL-f6epHXKTd0Px3SNyR3JFBB
+6fJ-KlV487G3kXItsZr1ilvPQEdLlHnxFUwnf23zfB0NeAA0GhjGhyv6scr-KQu35Q9R5itXXPzM
+aiUEWl5DbGT5r7ayK5TXJgv_4PpyuBjS1zt1Bmqn6Ge21-6Kw90z0IUyNOw3-dbYTLTC0RBHfxjd
+GSt4dE-FJw00kAzIyisvyzjIT016KGKfrKF_0HImK7otz-vJ-55llKKxSmxXyOisX6ns8ErMZbnx
+jb5s0ftjVF_tAGoq2q6UOgshLA2uEABqJD3KUYbr2MwLABRkMgIAINAAAAINAAQaAECgAYBAAwAI
+NACgF4sR1IjnBwwBA3Idexgv2146Fq5bs3Oxp_GecJ345-K3iX9LoKGJO__eytzzR-_b-TqH-vh6
+5p7Vf-4sc8-Z37g9c8_f-NmBzD277t2a-abH-jR7z8rr2XsevStzi-E-Y5l7tr-7buaeP3j3bzP3
+fNv4zez3PG1mv_f7nxrSXRetcGJbo9ntrnOY5tbsXPdLNVb2iQJAYlXzNzRMcPQn9DeTxQgADFLn
+aHxjayFErMuxbXLRmp3rjnV30xvI5FYDUJRMZ-S-saTK7EbLG226XESjLDdT5xiLEQAoKlrbPDGV
+G2IFZ4wEGkD5WrNzsra96izb3SvE8g9j7abaBBpAaY2OJbXXOs_G9KeNZTICACDQAAACDQD1ZzEC
+AEW1l461ZudKfDUhRPiC0adyLXX-i7E-JNAAMJTWy0XsaazaKX9IoDF6m-edzNzz6SP-nbnnl-7n
+mXtufe_NzD3v-uu1zD3-cd3M3POz82cy9_z69z2Ze94Sncw9297JnvPxR_-I3vQvY5lbdv7OLzP3
+7PjPhzP3fPbce5l77vhK9nmVG1YhRCyR0UX423SJe7pznPMPCTQAxNMcy2uvcGe2PtwcbXSvP8--
+NUCgUT_LK5OJP1-Ye5rhYBDRvGY2NBbx2OaUuOepP4FGjXW3uFe1gfzyR7bvvGrcZQINoMwct5eO
+JT6VDU0pabg53Bl9mtLlzJ0EGkBDi9xrkfg056sVfapxmiWTWw0ACDQAgEADQP1ZjKDhFlcmGQIG
+1F461pqdq-KfE0J0-4vy55L8bWxnrz8k0FDRwt7TDAE1-TJI-FaI-iS2M-0PCTQArUIZbaJ8Ggti
+r9-KdTSU0Q2F-vUUdalwCsN1bG61uvD8gCFgQKV85KNtjT7tTnPib2P-7fU6KWnu-tvu74zu7ndv
+UJzF-QqgdEULGKYzz5-3_m33V0Is9_HTuozR5E4CMNqCy4DGfjL4P1GjEPdicaMA6COvYf6iYU3f
+3Gtn9NUyX7P71WTfo0WWTxN35nnD6jBcx_ZuqwvPDxgCBsRHvkZMRgAABBoAQKABgEADaKD20rH2
+0rFC_0f1PvO856KXQ6ABqKs1OzfU-cOoc2t2rjU71x3ilF_NnMWtBmDADsr_yoXMnFyEPw8bHUYw
+THae38Y25Ml99M3k_ZNwZ_xyRjtbk9sLQLnCOif2tDU7F0tnr6fyReQj_jQa0-6_S1J_rk6dhRAW
+NxOAESoU2djm9IZGK5-e3NjPFamzEMLk-gBQupyBkynMX0O5OdyfEvdwW2adE99S0W_OIbG4kwD0
+J8xresvkbxMTmf630d-G-qFofPO-2_jfhu8nfNnYaxZ68SExXMfmPqsLzw8YAgbER75GTEYAAAQa
+AECgAYBAAwAINAAQaAAAgQYAEGgAINAAgDIYrmMzBQBQkMkIAIBAAwAINAAQaAAAgQYAAg0AINAA
+AAINAAQaAECgAYBAAwAINACAQAMAgQYAEGgAINAAAAINAAQaAECgAQDpLEZQO_3pBblorS4yDUBj
+huvYTKGOdc7Z6Bn-V3Kx7NzE9AACjTJ5fhB92jl5-kvn9_TO7j8JzzSsM43OHCx0ok3WLM5Sv2SE
+rzMj9qRsa-vX5aLlmAwfINAQQogX--EP5eJbv-t3RaNsPLmzc-J8uO4v3K5jh3WWpabRgIL4WI6s
+zrF1oUbLR_bOXeJs4rrotwKAkbAYQWVkFl_8pZ8o9y3a5fT35jo2Z4Ra66xfkYvW7JweV2RyqNWk
+WdZZHYZ4PbZW8E0CfdRZCNFeOqbHRVmc61C73P3DzdemL9_yGq4VaXT3e3YdmxMECHRT0hxtdF0u
+gUwDI2QygtK7ll5nLgcYBmNsU7huzc7pcVEW51piy-S_NNexOWXUotHa3KsEmjQXznT73i3yJ60f
+XeL0oZTO1buEEEJ82JrfpsHlmJzogM1qSJ1DYZ1ja0CZOgshRPvohwS66XVmCACGx2IEpBmAmkxG
+QJ0LMb71N9E131VQ6OYc-yhct_a3EWjq3NBGywczgYKNNsY-0qPOQgiLEyXNZQ3HdWxGAZTIZATU
+mSkBBJruMCsABViMgOKUPjHXsZkDqtd574RctF46rscVGXyWSPOQKH5rcb661lmnRlucq8qf3u98
+dUouDn28VscZ8vUPDMJkBOrXObZmkgCBps5gnqgN4-6nwnXrpeN6XJTFuVKTCqb68-mN9f6rNgNB
+Id_7ulsunh0-l7PRrqPJbWZy-MrW_dDHa4nr2gnrLIQ4Ms5XIPqpc2zdEBZ3gJp11qDLQCEzn3wu
+F8tbb2YakskIAKhT59iaQEN4fsAQhue2ozfW_6-aDAT5PTt_LnHdEBZ3AHWuttGB69Bo9NnodJ2T
+5_Witbqox7Wb1JkPADPHyC1vvTlxnV9YZyFEe3pBj7FYlKKx9t_3XS6OfHCx4n_6-RfPyEXrpeOK
+TOONN38oFw-teoBcjrzRkExG0PA6x9YV6Lx3orvUitQ5tgYI9Gh4fsDxA9owntwZrluri3pclEWd
+kWj1iQm5mD51gWmgXo12HVuPKzKpczMd_eBi4jpW59i6nE-R-U8lrkfooV0PJK5RM5cnNh66sDhT
+Gl09Rbrcq9Goa51-zfvrf3Ofu12DazKbdoieH3AncyLQXnuPDvdVswJNC3KaPnUhcc25AFWyGAEy
+Gw3UwOYL4vKEXHb_SZO7t0GB9vyAe1jl03EdmzlgwEZ3VjaWrbM63E4NCjQA7Rl7hRBCmy97syHH
+5vkB9y5nBBBoAEAJrCZcpOcHnHRdTsp1bOaA-nRe-HO5aP3oEoEGoI8fLH0iFw-Pbq11nYUQ7Xu3
+6NFoU-vbzvMDPnucF3LWObYGgQYAJLD0vjzPDyr4VzrrV9I3GGObuNUKnZrr2MwBxfzXTvGV8zfW
+4hKBxoaFvad7-WpxZZL5FPvCWxFCBEKI1lkyXZGHZ7f_YOmTcF3HSzD_6vc7f-n3ct362Wt6nAuB
+hoJ13tDeE9DoKhtd6-e-fa3zW_GTCWfixOMaHIqp8Q3n_YFmV-To174uH9QEaAKdA61fnRPXAAh0
+zXh_wOnWkbH3xrp11mYgyOnilBGuJ048rsdFWZwrlG206zAM9NPoCUeTr3aTQ62L7--4ncQ1AF1Z
+Wl6V5wfaN7oJPD9wHZtPKRrLZAQAoCaLEZRicWWSIQAj9-N5_f9g-1Vbg8sxOdHBGWOb0h_MCKjC
+mcnbHpm87ZFJIcSR8YBAq8jzdTgYcJooWudwKRtNoAEAw2IxAqB0r373oFzsO3CYaYzE-qu2Bldh
+cpDAkOocW2O4rj2evCbQ6vD8gBuVM0VzGy0furA401F5YWFZLp5fnGEawKCeccVxTy7dM6cINEqo
+s1wPo9GvfvegXOw7cJiBV2nfgcMMv3od8XvimZPh05ZjEmgoKgyEXJOJ6hvNEECgATTd5VtWhRCf
+CXHHtVc1uzST0x2J5xdnEtcA_qiz9Nkt__Si5WhSNgI9ykbLxzBefN_Bw4lrQG_GeN0Qr2tzOZZO
+Z_P5ATeoll32-MB1bM4UTWMyAmAkXlhYlg9GMYjN16YT1wQaanEdWz4YRS3qnLhGf42WD-0ujUDr
+U_fENQACDQAomcUI6uKNN38oFw-teoBp1N3zizMvLCyHawYCAq1DneW6u9GeH7iOHa6ZWC0azRBA
+oHXTXWe6DGjJZAT53Xn3lHwwCgAEWq06J66r8dCuBzgCIMPhyY2HLizOtC5oNNSx_sSEXEyfuqBQ
+nX-N_23Tff_6BnM2udUA9Ffn2BoEemQ_-ela4hoAhsRiBP01GoBaDp4Whyfl0n3-OoEG0ETTpy6s
+PjERrtV5Y28e-D_5WHZuItAAaqOzfiV9gzG2qVCjVbvAN8WecD3j-0qPRhNooCkW9p7u9avFlUnm
+oyBTp4txHZsT1RInCwINAHW1S5wN18vOTXpclMW5AtCs0a6w9bgik0MFAAINAAk27zspH4yCQHM3
+AGp9HhPXaGKguRsA1IWl2fW4ju35Aeeqgc7Vu_SiNb_NaYBAA8rVWQjRPvrhyBvtOrZc1Prrf3Fl
+UsF3dfnVJzfvOxmuufkbHWjuBvRdZ7muaaONsU0qfyq5zQg0dwOAOjH1uyTXsTnXujPGPwrXrflt
+DAQEGlCr0cb4RyrU2fODxDUwbBYjAAo1GqiMyQgAgEBXx3VsjpZzBOrOYgQABvGdr07JxaGP15hG
+uUxGAGDwOsfWINBpXMfmdDlBKOjWqaflg1E0N9AASrT-vu3yMXidE9doXKBdx_aAOTuUUufEtRDi
+0MdriWuUwmIEAAZBl4fHZAQAKvOLtdcS10hkuI6t9xV6fsAx10s19yQ3RiH779suF0c_uMgtVBmL
+Ow9Aplp0WT_m9le4fa0jHxx2LbiOzRCARgT6wlP-EC015w2AQAP9cB2bIQAEGgAI9EhNnHg8XF_c
+MjhvlbmOzRCABgVaNlo_OGwo7tGvfV0_GAWaEuiQ69icN6ejcp0T1yDQAAACPVKuY3PknAtAoGkB
+OJECvv-jdxLXaDKLEQAKNhoQQpgNvGbXsTl4zgJRd949JR_MgkDTBXAKatU5cY38zv3EGsbLDuVF
+61IHzw_4scr1vau75eLZ8XPUGc2p86W3j27ZMb-7ni-KfWWT4aL0OsfWQBNcevvouZ9YBLo0rmNz
+VzF5fPrTtcQ1Rt7okntfx1J4fsCNRZ1pNEMoq9FbdszvvueLUl7NZKD0oizPjp9LXDNtNMSWHfMl
+1lkIYTFTWQ3PD5hDuY2mzmiI3fd8sWXHvBDi0ttH5YJAA4BCjRZCtGbndt9T5suaTFZyHZshMGFA
+KQS6tILMfPK5fDBJ6gwQaIU6Eu1yd6NvnXpaPpgqAAKtUE2iXW5go6kzQKBpCpMECDRlSbK89ebE
+NTME0DeDT1E6zw8Gf5Fbp56Wi1_svUaadTpZcAcOlcVZZp704J-khnRZs88GMHImI6A4A7k8sfFg
+VgCBptFq1TmyZkoAgR5ZowkQAAKtdKYZAgACTaMVc2Zy4xHafOHGWJ67nXsDKJfFCPputOcHzapz
+dP3Y6Y0vque4HYBhMRnBgJnm2gEQaEU7RaoAEGgyXYnDkxuPmMdO37je49c5dKACFiMoMdNCCM8P
+6l3n6PrgRpQ3vn7oMkCgybRqlwNgJExGMKSuaZA26gyMlsUIKgic5wf1eMcHT4vDkxtv-v3rnCBA
+oJtS6p6ZPu5tLJ5xR-91QpcBAt3YTMdLHdZZritvdPiuABBofKmJkTwT5ep86TsSINBQ51uBOjME
+EGjk6OaZU95jT4Rr0ZXRPmpCiwECjdIaTW1HOX8mDFWZjABNLjJ1hsoMblAAUJPJCACAQAMACDQA
+EGgAAIEGAAINACDQAAACDQAEGgBAoAGAQAMACDQAgEADAIEGABBoACDQAAACDQBN9P9Q75kcBzbv
+VAAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-03-31 14:11:45",revision=545]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-03-31 21:02:07",revision=894]]
 include "exports/lib/oklab.lua"
 include "exports/lib/palette.lua"
 include "gui.lua"
 
 
-active_color = 32
+active_color = 33
 pal_okhsl = {}
 pal_code = {}
 
@@ -987,6 +1166,17 @@ function _init()
 		load_working_file,
 		"/ram/cart/pal/0.pal" -- default
 	)
+
+	hidden_rows = {
+		[0] = false,
+		[1] = false,
+		[2] = false,
+		[3] = false,
+	}
+	locked = {}
+	for c = 0, 63 do
+		locked[c] = c < 33
+	end
 	
 	rebuild_pal()
 	generate_gui()
@@ -996,7 +1186,7 @@ end
 function _draw()
 	cls(5)
 	local c = get_color(active_color)
-	print("#" .. color_to_hex(c), 360, 8, 7)
+	print("#" .. color_to_hex(c), 400, 13, 7)
 	local okhsl = oklab.color_to_okhsl(c)
 	print("hue: " .. string.format("%0.1f", okhsl.h * 360.0) .. "")
 	print("chroma: " .. string.format("%0.3f", okhsl.s))
@@ -1009,6 +1199,16 @@ end
 function _update()
 	gui:update_all()
 end
+
+
+on_event("drop_items",function(msg)
+	for i = 1, #msg.items do
+		local item = msg.items[i]
+		if item.pod_type == "file_reference" and item.attrib== "file" then
+			send_message(pid(), {event = "open_file", filename = item.fullpath})
+		end
+	end
+end)
 
 
 function rebuild_pal()
@@ -1072,26 +1272,36 @@ function load_working_file(item)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxNDoxMTo0NSIscmV2aXNpb249NDAzXV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
+My0zMSAyMTowMjowNyIscmV2aXNpb249Njk1XV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
 KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
 CADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: pal/0.pal
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDEzOjQ2OjEzIixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxNDoxMToyMyIscmV2aXNpb249MjNdXWx6NAAkAQAAFQIAAPBMdXNlcmRhdGEoImkzMiIs
-NjQsIjAwMjYxNDNjMDAzYTEwMWIwMDQzMjEzMTAwMDA4NzUxMDBhYjUyMzYwMDVmNTc0ZjAwYzJj
-M2M3MDBjY2U5YWUwMGZmMDA0ZAgAIGEzNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIABA
-NzdhOAgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJk
-MzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAw
-YmSJAACWAEAwZGFiQABfODU2ZDABAKZQNTljNDlYAW85N2RmNDABACFQMDAwIik=
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Iixtb2RpZmllZD0iMjAyNC0w
+My0zMSAyMTowMjowNyIscmV2aXNpb249NzFdXWx6NAA7AQAAFQIAAPUFdXNlcmRhdGEoImkzMiIs
+NjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUyMzYwMDVmNTc0ZjAwYzJjM2M3MDBm
+ZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlhZCQAYDgzNzY5YyAAMTc3YTgAwGNj
+YWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJkMzgwMGEyODg3
+OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAwYmSJAACWAEAw
+ZGFiQABVODU2ZDABAPAHOGJhMzhmMDBiNmFkN2UwMGNmOWI2YQgAIDcxSAD-AGI2M2U1YjAwNzMy
+NDY3MAEAsVAwMDAiKQ==
+:: pal/1.pal
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDIwOjM3OjEzIixtb2RpZmllZD0iMjAyNC0w
+My0zMSAyMDozODo0MyIscmV2aXNpb249NF1dbHo0ADwBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2
+NCwiMAEAwDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZm
+ZjFlOAgAQDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2Nh
+YTAwMWM1ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5
+QADwA2FjYzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBk
+YWJAAFU4NTZkMAEA8A00YTY5OGEwMDRlODM5NDAwNTk5ZDkwMDA3ZmFjWgD-AGMxYjE1ZTAwZjFi
+NTdjMAEAsVAwMDAiKQ==
 :: pal/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDExOjQ2OjA5IixzdG9yZWQ9IjIwMjQtMDMt
-MzEgMTE6NDY6MDkiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
+MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxNDoxMTo0NSIscmV2aXNpb249Mzk5XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
+My0zMSAyMTowMjowNyIscmV2aXNpb249Njg1XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
@@ -1100,6 +1310,13 @@ v-gPQAANQP--sPBwCgD--2Qf-wEAl1D-----Hw==
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: todo.txt
+--[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-03-31 21:02:07",revision=37]]
+- add support for loading ".hex" files;
+- add support for importing a palette from
+  image saved by the #paint cartridge;
+- add support for dropping (or copy/pasting) gfx;
+
 :: .info.pod
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
 MDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcw
@@ -1111,11 +1328,13 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTAzLTMxIDE0OjExOjQ1Iix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzcw
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzciLHdvcmtzcGFjZV9pbmRl
-eD0xfSx7bG9jYXRpb249ImV4cG9ydHMvbGliL3BhbGV0dGUubHVhIzIiLHdvcmtzcGFjZV9pbmRl
-eD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0i
-bWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtz
-cGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
+KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTAzLTMxIDIxOjAyOjA3Iix0aXRsZT0i
+T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzci
+LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249Imd1aS5sdWEjMjA0Iix3b3Jrc3BhY2VfaW5k
+ZXg9MX0se2xvY2F0aW9uPSJleHBvcnRzL2xpYi9wYWxldHRlLmx1YSMyIix3b3Jrc3BhY2VfaW5k
+ZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249
+ImdmeC90ZW1wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3
+b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00
+fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: [eoc]
