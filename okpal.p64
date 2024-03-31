@@ -721,7 +721,13 @@ end
 
 return oklab
 :: exports/lib/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-03-31 13:30:45",revision=274]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-03-31 14:11:45",revision=311]]
+function load_palette(filename)
+	poke4(0x5000, get(fetch(filename)))
+end
+
+
+--[[
 function fetch_palette(filename)
 	local colors = split(fetch(filename):gsub("\r",""),"\n",true)
 	local palette = {}
@@ -730,6 +736,7 @@ function fetch_palette(filename)
 	end
 	return palette
 end
+]]--
 
 
 function set_color(c, code)
@@ -752,14 +759,14 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE1IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTUiXV1sejQABAAAAAMAAAAwbmls
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxMzozMDo0NSIscmV2aXNpb249MzkxXV1sejQAbQAAAAUxAADzFHtbMF09e2JtcD1weHUA
+My0zMSAxNDoxMTo0NSIscmV2aXNpb249NDIyXV1sejQAbQAAAAUxAADzFHtbMF09e2JtcD1weHUA
 QyAQEATw8CxmbGFncz0wLHBhbl94CADPeT0wLHpvb209OH0sMQD-------------------------
 ---------------------------------------nUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-03-31 13:30:45",revision=545]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-03-31 14:11:45",revision=574]]
 function generate_gui()
 	gui = create_gui()
 	gui:attach(create_palette{})
@@ -957,7 +964,7 @@ function coords_hs(x, y, inner)
 	return hue, sat
 end
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-03-31 13:30:45",revision=509]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-03-31 14:11:45",revision=545]]
 include "exports/lib/oklab.lua"
 include "exports/lib/palette.lua"
 include "gui.lua"
@@ -1029,9 +1036,9 @@ end
 
 
 function save_working_file()
-	local output = {}
+	local output = userdata("i32", 64)
 	for c = 0, 63 do
-		output[c] = get_color(c)
+		output:set(c, get_color(c))
 	end
 --	local output = ""
 --	for c = 0, 63 do
@@ -1042,10 +1049,10 @@ end
 
 
 function load_working_file(item)
-	if type(item) == "table" then
+	if type(item) == "userdata" then
 		for c = 0, 63 do
 			if item[c] then
-				set_color(c, item[c])
+				set_color(c, item:get(c))
 			end
 		end
 	elseif type(item) == "string" then
@@ -1065,26 +1072,26 @@ function load_working_file(item)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxMzozMDo0NSIscmV2aXNpb249MzczXV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
+My0zMSAxNDoxMTo0NSIscmV2aXNpb249NDAzXV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
 KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
 CADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: pal/0.pal
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDEyOjQ2OjM1Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxMzozMDo0NSIscmV2aXNpb249MTE4XV1sejQAJgEAAFoBAADwMHtbMF09MCwyMTA3OTcw
-LDU3MDcwNjMsMzQ2NDEsMTEyMjc3MDIsNjI0ODI3MSwxMjc2NDEwMywxNjc3MzYwOAkAUDExNzU3
-CQAyNTM0EgDxDDcyMTM1LDU4NDIyLDI3MzE1MTksMTIxNjQ1OCkAUDQyMzEyCQDwCzY0MDc0LDE4
-NTkyNDQsNDI0MDEsNzY4NzgzbADwDzAwOTg1LDc2MTQyNDksNDc5NTcwNCwxMDY1MTc2OUAAQDU1
-OTBbAPAkNzc5NTk2LDE1NDI4MzUyLDk0OTc2NjYsNDU2NDksNjYxMDkzNCwxMzMxNjk4MSwxNDk0
-6gAAQwDQNDU4MzcsNzI1MjQyNksAfzM4OTQ2LDACABwQOdwA0DkxLDAsMCwwLDAsMH0=
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDEzOjQ2OjEzIixtb2RpZmllZD0iMjAyNC0w
+My0zMSAxNDoxMToyMyIscmV2aXNpb249MjNdXWx6NAAkAQAAFQIAAPBMdXNlcmRhdGEoImkzMiIs
+NjQsIjAwMjYxNDNjMDAzYTEwMWIwMDQzMjEzMTAwMDA4NzUxMDBhYjUyMzYwMDVmNTc0ZjAwYzJj
+M2M3MDBjY2U5YWUwMGZmMDA0ZAgAIGEzNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIABA
+NzdhOAgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJk
+MzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAw
+YmSJAACWAEAwZGFiQABfODU2ZDABAKZQNTljNDlYAW85N2RmNDABACFQMDAwIik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDExOjQ2OjA5IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTE6NDY6MDkiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAxMzozMDo0NSIscmV2aXNpb249MzY4XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
+My0zMSAxNDoxMTo0NSIscmV2aXNpb249Mzk5XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
@@ -1104,12 +1111,11 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTAzLTMxIDEzOjMwOjQ1Iix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzYx
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzE5MyIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0iZXhwb3J0cy9saWIvcGFsZXR0ZS5sdWEjNyIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9u
-PSJtYXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29y
-a3NwYWNlX2luZGV4PTR9LHtsb2NhdGlvbj0icGFsLzAucGFsIix3b3Jrc3BhY2VfaW5kZXg9N319
-XV1sejQABAAAAAMAAAAwbmls
+KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTAzLTMxIDE0OjExOjQ1Iix0aXRsZT0i
+T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzcw
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzciLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249ImV4cG9ydHMvbGliL3BhbGV0dGUubHVhIzIiLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0i
+bWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtz
+cGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
