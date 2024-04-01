@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: exports/lib/
 :: exports/lib/oklab.lua
---[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-03-31 19:46:33",revision=109]]
+--[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-01 07:43:31",revision=211]]
 -- Copyright(c) 2021 Bjorn Ottosson
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -43,9 +43,9 @@ end
 
 function oklab.okhsl_to_color(okhsl)
 	local srgb = oklab.okhsl_to_srgb(okhsl)
-	local r = math.floor(mid(0.0, srgb.r, 1.0) * 0x100)
-	local g = math.floor(mid(0.0, srgb.g, 1.0) * 0x100)
-	local b = math.floor(mid(0.0, srgb.b, 1.0) * 0x100)
+	local r = mid(0x00, math.floor(srgb.r * 255 + 0.5), 0xff)
+	local g = mid(math.floor(srgb.g * 255 + 0.5), 0xff)
+	local b = mid(math.floor(srgb.b * 255 + 0.5), 0xff)
 	return (r << 16) | (g << 8) | b
 end
 
@@ -721,7 +721,7 @@ end
 
 return oklab
 :: exports/lib/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-03-31 21:02:07",revision=611]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-01 07:43:31",revision=713]]
 function load_palette(filename)
 	poke4(0x5000, get(fetch(filename)))
 end
@@ -759,29 +759,29 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE1IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTUiXV1sejQABAAAAAMAAAAwbmls
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMTowMjowNyIscmV2aXNpb249NzMyXV1sejQA9AAAAHkxAADzFHtbMF09e2JtcD1weHUA
+NC0wMSAwNzo0MzozMSIscmV2aXNpb249ODM5XV1sejQAKAEAAKMxAADzFHtbMF09e2JtcD1weHUA
 QyAQEATw8CxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sMQDxBQwMBPAALXANIA1gDaANkG1A
 HSAdBAAxLQAtBAAvbeBPAAseNU8AYydwByAHYAQAYVBnQBcgFwQAMScAJwQAH2dTAB7-Eww3YFdA
-dyAXABcABwAXEAcQNxAHIAcQFxAHQAcwB2A38AxSAB1gLQ1wDRAN_ACPUA1ADTANYD1EABAPaQEc
-DzEA---------------------------------------------------------------zUG09OH19
-:: gfx/temp.gfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDIwOjM1OjU4Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMTowMjowNyIscmV2aXNpb249MzJdXWx6NABtAAAABTEAAPMUe1swXT17Ym1wPXB4dQBD
-IBAQBPDwLGZsYWdzPTAscGFuX3gIAM95PTAsem9vbT04fSwxAP--------------------------
--------------------------------------_dQbT04fX0=
+dyAXABcABwAXEAcQNxAHIAcQFxAHQAcwB2A38AxSAB1gLQ1wDRAN_ACPUA1ADTANYD1EABv3AAsH
+BBBnIIcAJw0HDQcNVwYAbycAhyBnEIQBGf8EBwsEECcgRwCHLactpy2HAEcgJ0AADw71AQ8xAP--
+------------------------------------------------------------rlBtPTh9fQ==
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-03-31 21:02:07",revision=980]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-01 07:43:31",revision=1175]]
 function generate_gui()
 	gui = create_gui()
-	local palette_el = create_palette{}
-	gui:attach(palette_el)
-	gui:attach(create_visibility_buttons { x = palette_el.x - 14, y = palette_el.y + 1 })
-	gui:attach(create_color_preview { x = palette_el.x + palette_el.width + 8, y = palette_el.y })
-	gui:attach(create_hue_chroma_selector{})
-	gui:attach(create_luminance_chroma_selector{})
+	local pal_el = create_palette{}
+	gui:attach(pal_el)
+	gui:attach(create_visibility_buttons { x = pal_el.x - 14, y = pal_el.y + 1 })
+	gui:attach(create_color_preview { x = pal_el.x + pal_el.width + 8, y = pal_el.y })
+	local hs_slider = create_hue_sat_slider{}
+	gui:attach(hs_slider)
+	local sl_slider = create_sat_lum_slider{}
+	gui:attach(sl_slider)
+	gui:attach(create_sat_slider { x = sl_slider.x, y = sl_slider.y + sl_slider.height + 2 })
+	gui:attach(create_lum_slider { x = sl_slider.x + sl_slider.width + 2, y = sl_slider.y })
 end
 
 
@@ -791,7 +791,7 @@ function create_palette(el)
 	local nb_rows = 4
 	el.width = (nb_columns * size) + 1
 	el.height = (nb_rows * size) + 1
-	el.x = (480 - el.width) \ 2
+	el.x = (480 - el.width) \ 2 - 60
 	el.y = 8
 		
 	function el:draw()
@@ -850,7 +850,8 @@ function create_color_preview(el)
 	el.height = size * 4 + 2
 	
 	function el:draw(msg)
-		rectfill(0, 0, self.width, self.height, 0)
+		if (not active_color) return
+		rect(0, 0, self.width - 1, self.height - 1, 0)
 		rectfill(1, 1, self.width - 2, self.height - 2, active_color)
 		pal(13, 0)
 		if locked[active_color] then
@@ -863,6 +864,7 @@ function create_color_preview(el)
 	end
 	
 	function el:tap(msg)
+		if (not active_color) return
 		if msg.mx < size and msg.my >= self.height - size then
 			locked[active_color] = not locked[active_color]
 		end
@@ -872,61 +874,86 @@ function create_color_preview(el)
 end
 
 
-local selector_size = 170
+-- 2D Sliders -----------------------------------------------------------------------
 
 
-function create_hue_chroma_selector(el)
-	el.x = 240 - selector_size - 8
+local slider_size = 170
+local slider_border = 6
+local slider_inner = slider_size - 2 * slider_border
+
+
+function create_hue_sat_slider(el)
+	el.x = 240 - slider_size - 8
 	el.y = 74
-	el.width = selector_size
-	el.height = selector_size
+	el.width = slider_size
+	el.height = slider_size
 	el.drag_delta = nil
 	
-	local inner = {
-		x = 6,
-		y = 6,
-		w = el.width - 2 * 6,
-		h = el.height - 2 * 6,
-	}
-		
 	function el:draw()
 		clip()
-		ovalfill(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h, 0)
+		ovalfill(
+			slider_border - 1, slider_border - 1,
+			slider_border + slider_inner + 1, slider_border + slider_inner + 1,
+			7
+		)
+		ovalfill(
+			slider_border, slider_border,
+			slider_border + slider_inner,
+			slider_border + slider_inner,
+			0
+		)
 		for c = 0, 63 do
 			-- TODO: put nb_columns in global constant
 			if not hidden_rows[c \ 16] then
-				local x, y = hs_coords(c, inner)
+				local x, y = hs_coords(c)
 				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
 			end
 		end
-		local x, y = hs_coords(active_color, inner)
-		if self.drag_delta then
-			-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-		else
-			ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+		if active_color then
+			local x, y = hs_coords(active_color)
+			if self.drag_delta then
+				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+			else
+				ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+			end
 		end
-end	
+	end	
 
+	function el:hover(msg)
+		if active_color then
+			local ax, ay = hs_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 5 and dy < 5 then
+				self.cursor = "grab"
+			else
+				self.cursor = false
+			end
+		end
+	end
 	
 	function el:click(msg)
-		local ax, ay = hs_coords(active_color, inner)
-		local dx = abs(ax - msg.mx)
-		local dy = abs(ay - msg.my)
-		if dx < 5 and dy < 5 then
-			self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
-			return
-		else
-			for c = 0, 63 do
-				local cx, cy = hs_coords(c, inner)
-				local dx = abs(cx - msg.mx)
-				local dy = abs(cy - msg.my)
-				if dx < 3 and dy < 3 then
-					active_color = c
-					self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
-					return
-				end
+		if active_color then
+			local ax, ay = hs_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 5 and dy < 5 then
+				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
+				return
+			end
+		end
+		active_color = nil
+		for c = 0, 63 do
+			local cx, cy = hs_coords(c)
+			local dx = abs(cx - msg.mx)
+			local dy = abs(cy - msg.my)
+			if dx < 3 and dy < 3 then
+				active_color = c
+				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+				self.cursor = "grab"
+				return
 			end
 		end
 		self.drag_delta = nil
@@ -937,10 +964,10 @@ end
 	end
 	
 	function el:drag(msg)
-		if self.drag_delta and not locked[active_color] then
+		if active_color and self.drag_delta and not locked[active_color] then
 			local ax = msg.mx + self.drag_delta.x
 			local ay = msg.my + self.drag_delta.y
-			local hue, sat = coords_hs(ax, ay, inner)
+			local hue, sat = coords_hs(ax, ay)
 			update_pal(active_color, hue, sat, nil)
 		end
 	end
@@ -949,56 +976,77 @@ end
 end
 
 
-function create_luminance_chroma_selector(el)
+function create_sat_lum_slider(el)
 	el.x = 240 + 8
 	el.y = 74
-	el.width = selector_size
-	el.height = selector_size
+	el.width = slider_size
+	el.height = slider_size
 	el.drag_delta = nil
-	
-	local inner = {
-		x = 6,
-		y = 6,
-		w = el.width - 2 * 6,
-		h = el.height - 2 * 6,
-	}
-	
+		
 	function el:draw()
 		clip()
-		rectfill(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h, 0)
+		rectfill(
+			slider_border - 1, slider_border - 1, 
+			slider_border + slider_inner + 1, slider_border + slider_inner + 1, 
+			7
+		)
+		rectfill(
+			slider_border, slider_border, 
+			slider_border + slider_inner, slider_border + slider_inner,
+			0
+		)
 		for c = 0, 63 do
 			if not hidden_rows[c \ 16] then
-				local x, y = sl_coords(c, inner)
+				local x, y = sl_coords(c)
 				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
 			end
 		end
-		local x, y = sl_coords(active_color, inner)
-		if self.drag_delta then
-			-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-		else
-			ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-			ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+		if active_color then
+			local x, y = sl_coords(active_color)
+			if self.drag_delta then
+				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+			else
+				ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
+			end
 		end
 	end	
+
+	
+	function el:hover(msg)
+		if active_color then
+			local ax, ay = sl_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 6 and dy < 6 then
+				self.cursor = "grab"
+			else
+				self.cursor = false
+			end
+		end
+	end
 	
 	function el:click(msg)
-		local ax, ay = sl_coords(active_color, inner)
-		local dx = abs(ax - msg.mx)
-		local dy = abs(ay - msg.my)
-		if dx < 6 and dy < 6 then
-			self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
-			return
-		else
-			for c = 0, 63 do
-				local cx, cy = sl_coords(c, inner)
-				local dx = abs(cx - msg.mx)
-				local dy = abs(cy - msg.my)
-				if dx < 3 and dy < 3 then
-					active_color = c
-					self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
-					return
-				end
+		if active_color then
+			local ax, ay = sl_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 6 and dy < 6 then
+				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
+				return
+			end
+		end
+		active_color = nil
+		for c = 0, 63 do
+			local cx, cy = sl_coords(c)
+			local dx = abs(cx - msg.mx)
+			local dy = abs(cy - msg.my)
+			if dx < 3 and dy < 3 then
+				active_color = c
+				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+				self.cursor = "grab"
+				return
 			end
 		end
 		self.drag_delta = nil
@@ -1009,10 +1057,10 @@ function create_luminance_chroma_selector(el)
 	end
 	
 	function el:drag(msg)
-		if self.drag_delta and not locked[active_color] then
+		if active_color and self.drag_delta and not locked[active_color] then
 			local ax = msg.mx + self.drag_delta.x
 			local ay = msg.my + self.drag_delta.y
-			local sat, lum = coords_sl(ax, ay, inner)
+			local sat, lum = coords_sl(ax, ay)
 			update_pal(active_color, nil, sat, lum)
 		end
 	end
@@ -1021,40 +1069,146 @@ function create_luminance_chroma_selector(el)
 end
 
 
-function sl_coords(c, inner)
+-- 1D Sliders ----------------------------------------------------------------------
+
+
+function create_sat_slider(el)
+	el.width = slider_size
+	el.height = 7
+	
+	function el:draw()
+		line(6, self.height \ 2, self.width - 6, self.height \ 2, 0)
+		if active_color then
+			local ax, _ = sl_coords(active_color)
+			pal(13, 0)
+			spr(5, ax - 5, 0)
+			pal(13, 13)
+		end
+	end	
+	
+	function el:hover(msg)
+		if active_color then
+			local ax, _ = sl_coords(active_color)
+			if msg.mx and msg.mx >= ax - 3 and msg.mx <= ax + 3 then
+				self.cursor = "grab"
+			else
+				self.cursor = false
+			end
+		end
+	end
+
+	function el:click(msg)
+		if active_color then
+			local ax, _ = sl_coords(active_color)
+			if msg.mx and msg.mx >= ax - 3 and msg.mx <= ax + 3 then
+				self.drag_delta_x = ax - msg.mx
+			end
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta_x = nil
+	end
+	
+	function el:drag(msg)
+		if active_color and self.drag_delta_x and not locked[active_color] then
+			local ax = msg.mx + self.drag_delta_x
+			local sat, lum = coords_sl(ax, 0)
+			update_pal(active_color, nil, sat, nil)
+		end
+	end
+		
+	return el
+end
+
+
+function create_lum_slider(el)
+	el.width = 7
+	el.height = slider_size
+	
+	function el:draw()
+		line(self.width \ 2, 6, self.width \ 2, self.height - 6, 0)
+		if active_color then
+			local _, ay = sl_coords(active_color)
+			pal(13, 0)
+			spr(6, 0, ay - 5, 0)
+			pal(13, 13)
+		end
+	end	
+	
+	function el:hover(msg)
+		if active_color then
+			local _, ay = sl_coords(active_color)
+			if msg.my and msg.my >= ay - 3 and msg.my <= ay + 3 then
+				self.cursor = "grab"
+			else
+				self.cursor = false
+			end
+		end
+	end
+
+	function el:click(msg)
+		if active_color then
+			local _, ay = sl_coords(active_color)
+			if msg.my and msg.my >= ay - 3 and msg.my <= ay + 3 then
+				self.drag_delta_y = ay - msg.my
+			end
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta_y = nil
+	end
+	
+	function el:drag(msg)
+		if active_color and self.drag_delta_y and not locked[active_color] then
+			local ay = msg.my + self.drag_delta_y
+			local sat, lum = coords_sl(0, ay)
+			update_pal(active_color, nil, nil, lum)
+		end
+	end
+		
+	return el
+end
+
+
+-- Utility functions ----------------------------------------------------------------
+
+
+function sl_coords(c)
 	local sat = pal_okhsl[c].s
 	local lum = pal_okhsl[c].l
-	local x = inner.x + sat * inner.w
-	local y = inner.y + inner.h - lum * inner.h
+	local x = slider_border + sat * slider_inner
+	local y = slider_border + slider_inner - lum * slider_inner
 	return x, y
 end
 
 
-function coords_sl(x, y, inner)
-	local sat = (x - inner.x) / inner.w
-	local lum = 1.0 - ((y - inner.y) / inner.h)
+function coords_sl(x, y)
+	local sat = (x - slider_border) / slider_inner
+	local lum = 1.0 - ((y - slider_border) / slider_inner)
 	return sat, lum
 end
 
 
-function hs_coords(c, inner)
+function hs_coords(c)
 	local hue = pal_okhsl[c].h
 	local sat = mid(0.0, pal_okhsl[c].s, 1.0)
 	local a = 0.25 - hue
-	local dx = sat * cos(a) * (inner.w / 2)
-	local dy = sat * sin(a) * (inner.h / 2)
-	local x = inner.x + (inner.w / 2) + dx
-	local y = inner.y + (inner.h / 2) + dy
+	local dx = sat * cos(a) * (slider_inner / 2)
+	local dy = sat * sin(a) * (slider_inner / 2)
+	local x = slider_border + (slider_inner / 2) + dx
+	local y = slider_border + (slider_inner / 2) + dy
 	return x, y
 end
 
 
-function coords_hs(x, y, inner)
-	local dx = inner.x + (inner.w / 2) - x
-	local dy = inner.y + (inner.h / 2) - y
+function coords_hs(x, y)
+	local dx = slider_border + (slider_inner / 2) - x
+	local dy = slider_border + (slider_inner / 2) - y
 	local hue = atan2(dx, - dy) - 0.25
-	dx = (2.0 * dx) / inner.w
-	dy = (2.0 * dy) / inner.h
+	dx = (2.0 * dx) / slider_inner
+	dy = (2.0 * dy) / slider_inner
 	local sat = sqrt(dx * dx + dy * dy)
 	return hue, sat
 end
@@ -1143,13 +1297,13 @@ EGjk6OaZU95jT4Rr0ZXRPmpCiwECjdIaTW1HOX8mDFWZjABNLjJ1hsoMblAAUJPJCACAQAMACDQA
 EGgAAIEGAAINACDQAAACDQAEGgBAoAGAQAMACDQAgEADAIEGABBoACDQAAACDQBN9P9Q75kcBzbv
 VAAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-03-31 21:02:07",revision=894]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-01 07:43:31",revision=1002]]
 include "exports/lib/oklab.lua"
 include "exports/lib/palette.lua"
 include "gui.lua"
 
 
-active_color = 33
+active_color = nil
 pal_okhsl = {}
 pal_code = {}
 
@@ -1185,13 +1339,15 @@ end
 
 function _draw()
 	cls(5)
-	local c = get_color(active_color)
-	print("#" .. color_to_hex(c), 400, 13, 7)
-	local okhsl = oklab.color_to_okhsl(c)
-	print("hue: " .. string.format("%0.1f", okhsl.h * 360.0) .. "")
-	print("chroma: " .. string.format("%0.3f", okhsl.s))
-	print("luminance: " .. string.format("%0.1f", okhsl.l * 100.0) .. "%")
-	--	print(color_to_hex(oklab.okhsl_to_color({h = 0, s = 0.5, l = 0.9})))
+	if active_color then
+		local c = get_color(active_color)
+		print("#" .. color_to_hex(c), 340, 13, 7)
+		local okhsl = oklab.color_to_okhsl(c)
+		print("hue: " .. string.format("%0.1f", okhsl.h * 360.0) .. "")
+		print("chroma: " .. string.format("%0.3f", okhsl.s))
+		print("luminance: " .. string.format("%0.1f", okhsl.l * 100.0) .. "%")
+		--	print(color_to_hex(oklab.okhsl_to_color({h = 0, s = 0.5, l = 0.9})))
+	end
 	gui:draw_all()
 end
 
@@ -1272,7 +1428,7 @@ function load_working_file(item)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMTowMjowNyIscmV2aXNpb249Njk1XV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
+NC0wMSAwNzo0MzozMSIscmV2aXNpb249Nzk5XV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
 KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
 CADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9fQ==
 :: map/.info.pod
@@ -1280,28 +1436,29 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: pal/0.pal
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMTowMjowNyIscmV2aXNpb249NzFdXWx6NAA7AQAAFQIAAPUFdXNlcmRhdGEoImkzMiIs
-NjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUyMzYwMDVmNTc0ZjAwYzJjM2M3MDBm
-ZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlhZCQAYDgzNzY5YyAAMTc3YTgAwGNj
-YWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJkMzgwMGEyODg3
-OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAwYmSJAACWAEAw
-ZGFiQABVODU2ZDABAPAHOGJhMzhmMDBiNmFkN2UwMGNmOWI2YQgAIDcxSAD-AGI2M2U1YjAwNzMy
-NDY3MAEAsVAwMDAiKQ==
+NC0wMSAwNzo0MzozMSIscmV2aXNpb249MjUzXV1sejQAcgEAABUCAAD1BXVzZXJkYXRhKCJpMzIi
+LDY0LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1ZjU3NGYwMGMyYzNjNzAw
+ZmZmMWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4Mzc2OWMgADE3N2E4AMBj
+Y2FhMDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYyOTAwNDkyZDM4MDBhMjg4
+NzlAAPADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2NGRmZjYwMGJkiQAAlgBA
+MGRhYkAAVTg1NmQwAQDwBjg3YTQ4YzAwYjZhZDgwMDBjYzljNvAAMGY3MUgA-QBiNjNlNWIwMDcz
+MjQ2NzABAP8QMzA1MjZhMDAzNTY0N2UwMDQxN2Q5OTAwNTM5NmIxMAEATv8AYTg5ZWY4MDBkZTRj
+NjUwAQARUDAwMCIp
 :: pal/1.pal
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDIwOjM3OjEzIixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMDozODo0MyIscmV2aXNpb249NF1dbHo0ADwBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2
+NC0wMSAwNDozNTozMiIscmV2aXNpb249Nl1dbHo0ADsBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2
 NCwiMAEAwDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZm
 ZjFlOAgAQDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2Nh
 YTAwMWM1ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5
 QADwA2FjYzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBk
-YWJAAFU4NTZkMAEA8A00YTY5OGEwMDRlODM5NDAwNTk5ZDkwMDA3ZmFjWgD-AGMxYjE1ZTAwZjFi
-NTdjMAEAsVAwMDAiKQ==
+YWJAAFU4NTZkMAEA8A80YTY5OGEwMDRmODE5MTAwNTg5NzhiMDA3YmE2NjhOAN9hMzU2MDBkYjk2
+NTIwAQCxUDAwMCIp
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-My0zMSAyMTowMjowNyIscmV2aXNpb249Njg1XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
+NC0wMSAwNzo0MzozMSIscmV2aXNpb249Nzg2XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
@@ -1311,11 +1468,19 @@ v-gPQAANQP--sPBwCgD--2Qf-wEAl1D-----Hw==
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: todo.txt
---[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-03-31 21:02:07",revision=37]]
-- add support for loading ".hex" files;
-- add support for importing a palette from
-  image saved by the #paint cartridge;
-- add support for dropping (or copy/pasting) gfx;
+--[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-01 07:43:31",revision=109]]
+- import ".hex" files;
+- import the palette from an image saved by
+  the #paint cartridge;
+- accept drag-and-drop (or copy/pasting) of gfx;
+- add a test zone with shaded cubes;
+- add a logo (when no color is selected);
+
+Maybe:
+- multi-selection (ability to move a group of
+  colors in the sliders)
+- reorder colors by drag-and-drop (while respecting
+  locked colors)
 
 :: .info.pod
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
@@ -1328,13 +1493,13 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTAzLTMxIDIxOjAyOjA3Iix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzci
-LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249Imd1aS5sdWEjMjA0Iix3b3Jrc3BhY2VfaW5k
+KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAxIDA3OjQzOjMxIix0aXRsZT0i
+T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzQ0
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzEyIix3b3Jrc3BhY2VfaW5k
 ZXg9MX0se2xvY2F0aW9uPSJleHBvcnRzL2xpYi9wYWxldHRlLmx1YSMyIix3b3Jrc3BhY2VfaW5k
-ZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249
-ImdmeC90ZW1wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3
-b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00
-fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAA
-MG5pbA==
+ZXg9MX0se2xvY2F0aW9uPSJleHBvcnRzL2xpYi9va2xhYi5sdWEjMzciLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0i
+bWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtz
+cGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1d
+bHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
