@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: exports/lib/
 :: exports/lib/oklab.lua
---[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-01 11:05:32",revision=406]]
+--[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-02 08:30:12",revision=966]]
 -- Copyright(c) 2021 Bjorn Ottosson
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -721,7 +721,7 @@ end
 
 return oklab
 :: exports/lib/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-01 11:05:32",revision=910]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-02 08:30:12",revision=1467]]
 function load_palette(filename)
 	poke4(0x5000, get(fetch(filename)))
 end
@@ -759,36 +759,79 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE1IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTUiXV1sejQABAAAAAMAAAAwbmls
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMSAxMTowNTozMiIscmV2aXNpb249MTA0NV1dbHo0AEEBAAC_MQAA8xR7WzBdPXtibXA9cHh1
-AEMgEBAE8PAsZmxhZ3M9MCxwYW5feAgAx3k9MCx6b29tPTh9LDEA8QUMDATwAC1wDSANYA2gDZBt
-QB0gHQQAMS0ALQQAL23gTwALHjVPAGMncAcgB2AEAGFQZ0AXIBcEADEnACcEAB9nUwAe-xMMN2BX
-QHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AMUgAdYC0NcA0QDfgAj1ANQA0wDWA9RAAb9wAL
-BwQQZyCHACcNBw0HDVcGAG8nAIcgZxCEARn-BAcLBBAnIEcAhy2nLacthwBHICdAABqRCQkEEEcg
-ZwAXgAAXxwYAXxcAZyBHTAAPDkECDzEA--------------------------------------------
-------------------99UG09OH19
+NC0wMiAwODozMDoxMiIscmV2aXNpb249MTY0Nl1dbHo0AJ4BAAC5MgAA9hl7WzBdPXtibXA9cHh1
+AEMgEBAE8PAsZmxhZ3M9MCxwYW5feD02LjE2AQARMxYAZ3k9LTAuMwEAtzI3LHpvb209N30sTwDx
+CAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA-Z-ALaQA6I-AMagA-IAdQaABL-xI3YFdAdyAXABcA
+BwAXEAcQNxAHIAcQFxAHQAcwB2A38AxwADtgLQdwBxAH3AAfUGIAQPEGCQkEMAdgBw0HQActByAH
+TQcAB20XAgBLBwBnAGgAEzBaABIwSgAdOEoAYTcwBz0HEEYAEF1CACEHXQ4AbyAHPQcwN04AHSkQ
+R5AAAVAAX00HIEcQSAAZ-woYGATwKNqA2g8ZcNoeYNouUNo_QNpOMNleAwAE-wJOQNk_UNkuYNke
+cNkOgNnwKG0ACx0xrwH-BxsHsAewB1BnMAcAR0AHECdQByAH8AyzABkHRgAB8QFPAAcgB0oAIw7P
+Aw8xAP-------------------------------------------------------------eUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-01 11:05:32",revision=1527]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-02 08:30:12",revision=2557]]
 local slider_size = 170
 local slider_border = 6
 local slider_inner = slider_size - 2 * slider_border
 
 
+test_cube_colors = {
+	[0] = 
+	{15, 31, 4},
+	{31, 4, 20},
+	{4, 20, 21},
+	--
+	{10, 9, 25},
+	{9, 25, 24},
+	{8, 24, 2},
+	--
+	{26, 11, 27},
+	{11, 27, 3},
+	{27, 3, 19},
+	--
+	{28, 17, 3},
+	{28, 12, 16},
+	{12, 16, 1},
+	--
+	{23, 29, 13},
+	{29, 13, 18},
+	{13, 18, 1},
+	--
+	{15, 23, 14},
+	{23, 14, 13},
+	{14, 30, 18},
+	--
+	{7, 6, 22},
+	{6, 22, 5},
+	{22, 5, 21},
+	--
+	{1, 1, 1},
+	{1, 1, 1},
+	{1, 1, 1},
+	--
+}
+
+
 function generate_gui()
 	gui = create_gui()
-	local pal_el = create_palette{ x = 16, y = 8 }
+	local pal_el = create_palette{ x = 16, y = 6 }
 	gui:attach(pal_el)
 	gui:attach(create_visibility_buttons { x = pal_el.x - 14, y = pal_el.y + 1 })
 	gui:attach(create_color_preview { x = pal_el.x + pal_el.width + 8, y = pal_el.y })
-	local h_slider = create_hue_slider{ x = 4, y = 74 }
+	for i = 0, 2 do
+		for j = 0, 7 do
+			gui:attach(create_test_cube { x = 390 + i * 28, y = 16 + j * 28, test_id = i + 3 * j })
+		end
+	end
+	local h_slider = create_hue_slider{ x = 6, y = 68 }
 	gui:attach(h_slider)
 	h_slider:attach(create_hue_sat_slider {})
-	local sl_slider = create_sat_lum_slider{ x = 192, y = 74 }
+	local sl_slider = create_sat_lum_slider{ x = 192, y = 68 }
+	gui:attach(create_sat_slider { x = sl_slider.x, y = sl_slider.y + sl_slider.height })
+	gui:attach(create_lum_slider { x = sl_slider.x + sl_slider.width, y = sl_slider.y })
 	gui:attach(sl_slider)
-	gui:attach(create_sat_slider { x = sl_slider.x, y = sl_slider.y + sl_slider.height + 2 })
-	gui:attach(create_lum_slider { x = sl_slider.x + sl_slider.width + 2, y = sl_slider.y })
 end
 
 
@@ -801,21 +844,33 @@ function create_palette(el)
 		
 	function el:draw()
 		clip()
-		rectfill(0, 0, self.width, self.height, 0)
+		rect(0, 0, self.width, self.height, outline_color())
 		for c = 0, 63 do
 			local x = 1 + ((c % nb_columns) * size)
 			local y = 1 + ((c \ nb_columns) * size)
 			rectfill(x, y, x + size - 1, y + size - 1, c)
+			if hidden[c] then
+				ovalfill(x + 2, y + 2, x + size - 3, y + size - 3, 0)
+			end
 			if c == active_color then
-				rect(x + 2, y + 2, x + size - 3, y + size - 3, 7)
+				local contrast_color = 0
+				if pal_okhsl[active_color].l < 0.5 then
+					contrast_color = 7
+				end
+				rect(x + 1, y + 1, x + size - 2, y + size - 2, contrast_color)
 			end
 		end	
 	end
 
-	function el:drag(msg)
+	function el:click(msg)
 		local x = min(nb_columns - 1, (msg.mx - 1) \ size)
 		local y = min(nb_rows - 1, (msg.my - 1) \ size)
-		active_color = x + y * nb_columns
+		local c = x + y * nb_columns
+		if msg.mb == 1 then
+			active_color = c
+		elseif msg.mb == 2 then
+			hidden[c] = not hidden[c]
+		end
 	end	
 
 	return el
@@ -827,22 +882,26 @@ function create_visibility_buttons(el)
 	local nb_rows = 4
 	el.width = size
 	el.height = nb_rows * size
+	el.cursor = "pointer"
 	
 	function el:draw(msg)
-		pal(13, 0)
+		pal(7, outline_color())
 		for row = 0, 3 do
-			if hidden_rows[row] then
+			if hidden_toggles[row] then
 				spr(4, 0, row * size)
 			else
 				spr(3, 0, row * size)
 			end
 		end
-		pal(13, 13)
+		pal(7, 7)
 	end
 	
 	function el:tap(msg)
 		local row = mid(0, msg.my \ size, 3)
-		hidden_rows[row] = not hidden_rows[row]
+		hidden_toggles[row] = not hidden_toggles[row]
+		for c = row * 16, row * 16 + 15 do
+			hidden[c] = hidden_toggles[row]
+		end
 	end
 	
 	return el
@@ -851,27 +910,117 @@ end
 
 function create_color_preview(el)
 	local size = 12
-	el.width = size * 4 + 2
+	el.width = size * 4 + 2 + 120
 	el.height = size * 4 + 2
 	
 	function el:draw(msg)
-		if (not active_color) return
-		rect(0, 0, self.width - 1, self.height - 1, 0)
-		rectfill(1, 1, self.width - 2, self.height - 2, active_color)
-		pal(13, 0)
-		if locked[active_color] then
-			spr(2, 0, self.height - size - 1)
+		if active_color then
+			---rect(0, 0, self.height - 1, self.height - 1, 0)
+			rectfill(1, 1, self.height - 2, self.height - 2, active_color)
+			local contrast_color = 0
+			if pal_okhsl[active_color].l < 0.5 then
+				contrast_color = 7
+			end
+			print(string.format("%d", active_color), 4, 4, contrast_color)
+			local c = get_color(active_color)
+			print("#" .. color_to_hex(c), 7, self.height - 10, contrast_color)
+			pal(7, outline_color())
+			if locked[active_color] then
+				spr(2, self.height + 4, 1)
+			else
+				spr(1, self.height + 4, 1)
+			end
+			if hidden[active_color] then
+				spr(4, self.height + 4 + size, 1)
+			else
+				spr(3, self.height + 4 + size, 1)
+			end
+			if bg_color == active_color then
+				spr(10, self.height + 4 + 2 * size, 1)
+			else
+				spr(9, self.height + 4 + 2 * size, 1)
+			end
+			pal(7, 7)
+			local hue = pal_okhsl[active_color].h * 360.0
+			while hue < 0.0 do
+				hue += 360.0
+			end
+			print("\|k\014       hue: " .. string.format("%3.0f", hue) .. "", self.height + 5, 26, outline_color())
+			print("\014saturation:" .. string.format("%3.0f", pal_okhsl[active_color].s * 100.0) .. "%")
+			print("\014 luminance:" .. string.format("%3.0f", pal_okhsl[active_color].l * 100.0) .. "%")
 		else
-			spr(1, 0, self.height - size - 1)
+			print("\^pOkPal\^-p\014\|o 0.0.3", 8, 16, 7)
+			print("\014\|4- 'save as' to create a new palette")
+			print("\014- 'open' to drag-n-drop a file")
 		end
-		pal(13, 13)
-		print(tostr(active_color), self.width - 12, self.height - 10, 0)
 	end
 	
 	function el:tap(msg)
 		if (not active_color) return
-		if msg.mx < size and msg.my >= self.height - size then
+		if msg.mx < self.height or msg.my > size then
+			return
+		elseif msg.mx < self.height + 4 + size then
 			locked[active_color] = not locked[active_color]
+		elseif msg.mx < self.height + 4 + 2 * size then
+			hidden[active_color] = not hidden[active_color]
+		elseif msg.mx < self.height + 4 + 3 * size then
+			if bg_color == active_color then
+				bg_color = 0
+			else
+				bg_color = active_color
+			end
+		end
+	end
+	
+	function el:hover(msg)
+		if msg.mx >= self.height + 4 and msg.mx <= self.height + 4 + 3 * size and msg.my <= size then
+			self.cursor = "pointer"
+		else
+			self.cursor = false
+		end
+	end
+	
+	return el
+end
+
+
+function create_test_cube(el)
+	el.width = 24 + 4
+	el.height = 24 + 4
+
+	function el:draw()
+		rectfill(0, 0, self.width, self.width, 0)
+		local colors = test_cube_colors[self.test_id]
+		pal(10, colors[1])
+		pal(9, colors[2])
+		pal(25, colors[3])
+		spr(8, 2, 2)
+		pal(10, 10)
+		pal(9, 9)
+		pal(25, 25)
+	end
+	
+	function el:hover(msg)
+		if msg.mx > 2 and msg.my > 2 and msg.mx < self.width - 2 and msg.my < self.height - 2 then
+			el.cursor = "crosshair"
+		else
+			el.cursor = false
+		end
+	end
+	
+	function el:click(msg)
+		local face = 2
+		if msg.mx > self.width - 10 or msg.my < 10 then
+			if msg.mx > self.height - msg.my then
+				face = 3
+			else
+				face = 1
+			end
+		end
+		if msg.mb == 1 then
+			test_cube_colors[self.test_id][face] = active_color or 1
+		elseif msg.mb == 2 then
+			active_color = test_cube_colors[self.test_id][face]
 		end
 	end
 	
@@ -894,7 +1043,7 @@ function create_hue_sat_slider(el)
 		ovalfill(
 			slider_border - 1, slider_border - 1,
 			slider_border + slider_inner + 1, slider_border + slider_inner + 1,
-			7
+			outline_color()
 		)
 		ovalfill(
 			slider_border, slider_border,
@@ -902,22 +1051,24 @@ function create_hue_sat_slider(el)
 			slider_border + slider_inner,
 			0
 		)
-		line(slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, slider_size \ 2, 7)
-		line(slider_size \ 2, slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, 7)
+		fillp(0b0101101001011010)
+		rectfill(slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, slider_size \ 2, 7)
+		rectfill(slider_size \ 2, slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, 7)
+		fillp()
 		for c = 0, 63 do
 			-- TODO: put nb_columns in global constant
-			if not hidden_rows[c \ 16] then
+			if not hidden[c] and pal_okhsl[c].l ~= 0 then
 				local x, y = hs_coords(c)
-				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
 			end
 		end
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local x, y = hs_coords(active_color)
 			if self.drag_delta then
 				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
 				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
 			else
-				ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
+				oval(x - 6, y - 6, x + 6, y + 6, 7)
 				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
 			end
 		end
@@ -929,11 +1080,11 @@ function create_hue_sat_slider(el)
 		if r > 1.02 then
 			return false
 		end
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, ay = hs_coords(active_color)
 			local dx = abs(ax - msg.mx)
 			local dy = abs(ay - msg.my)
-			if dx < 5 and dy < 5 then
+			if dx <= 5 and dy <= 5 then
 				self.cursor = "grab"
 			else
 				self.cursor = false
@@ -947,28 +1098,30 @@ function create_hue_sat_slider(el)
 		if r > 1.02 then
 			return false
 		end
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, ay = hs_coords(active_color)
 			local dx = abs(ax - msg.mx)
 			local dy = abs(ay - msg.my)
-			if dx < 5 and dy < 5 then
+			if dx <= 5 and dy <= 5 then
 				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
 				return true
 			end
 		end
 		active_color = nil
-		for c = 0, 63 do
+		-- In reverse order to prioritize colors on top
+		for c = 63, 0, -1 do
 			local cx, cy = hs_coords(c)
 			local dx = abs(cx - msg.mx)
 			local dy = abs(cy - msg.my)
-			if dx < 3 and dy < 3 then
+			if dx <= 3 and dy <= 3 and not hidden[c] and pal_okhsl[c].l ~= 0 then
 				active_color = c
 				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
 				self.cursor = "grab"
-				return
+				return true
 			end
 		end
 		self.drag_delta = nil
+		return true
 	end
 	
 	function el:release(msg)
@@ -998,10 +1151,10 @@ function create_sat_lum_slider(el)
 		
 	function el:draw()
 		clip()
-		rectfill(
+		rect(
 			slider_border - 1, slider_border - 1, 
 			slider_border + slider_inner + 1, slider_border + slider_inner + 1, 
-			7
+			outline_color()
 		)
 		rectfill(
 			slider_border, slider_border, 
@@ -1009,12 +1162,12 @@ function create_sat_lum_slider(el)
 			0
 		)
 		for c = 0, 63 do
-			if not hidden_rows[c \ 16] then
+			if not hidden[c] and pal_okhsl[c].l ~= 0 then
 				local x, y = sl_coords(c)
-				ovalfill(x - 2, y - 2, x + 2, y + 2, c)
+				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
 			end
 		end
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local x, y = sl_coords(active_color)
 			if self.drag_delta then
 				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
@@ -1028,7 +1181,7 @@ function create_sat_lum_slider(el)
 
 	
 	function el:hover(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, ay = sl_coords(active_color)
 			local dx = abs(ax - msg.mx)
 			local dy = abs(ay - msg.my)
@@ -1041,7 +1194,7 @@ function create_sat_lum_slider(el)
 	end
 	
 	function el:click(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, ay = sl_coords(active_color)
 			local dx = abs(ax - msg.mx)
 			local dy = abs(ay - msg.my)
@@ -1051,11 +1204,12 @@ function create_sat_lum_slider(el)
 			end
 		end
 		active_color = nil
-		for c = 0, 63 do
+		-- In reverse order to prioritize colors on top
+		for c = 63, 0, -1 do
 			local cx, cy = sl_coords(c)
 			local dx = abs(cx - msg.mx)
 			local dy = abs(cy - msg.my)
-			if dx < 3 and dy < 3 then
+			if dx < 3 and dy < 3 and not hidden[c] and pal_okhsl[c].l ~= 0 then
 				active_color = c
 				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
 				self.cursor = "grab"
@@ -1091,12 +1245,20 @@ function create_hue_slider(el)
 
 	function el:draw()
 		clip()
-		oval(3, 3, self.width - 3, self.height - 3, 0)
-		if active_color then
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l ~= 0 then
+				cx1, cy1 = h_coords(c, -2)
+				cx2, cy2 = h_coords(c, 18)
+				line(cx1, cy1, cx2, cy2, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
 			local ax, ay = h_coords(active_color)
-			pal(13, 0)
+			pal(7, outline_color())
+			pal(13, active_color)
 			spr(7, ax - 4, ay - 4)
 			pal(13, 13)
+			pal(7, 7)
 		end
 	end	
 
@@ -1121,7 +1283,7 @@ function create_hue_slider(el)
 	end
 
 	function el:click(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, ay = h_coords(active_color)
 			--[[
 			if
@@ -1153,22 +1315,30 @@ end
 
 function create_sat_slider(el)
 	el.width = slider_size
-	el.height = 7
+	el.height = 16
 	
 	function el:draw()
-		line(6, self.height \ 2, self.width - 6, self.height \ 2, 0)
-		if active_color then
+		clip()
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l ~= 0 then
+				local ax, _ = sl_coords(c)
+				line(ax, 0, ax, self.height - 9, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
 			local ax, _ = sl_coords(active_color)
-			pal(13, 0)
-			spr(5, ax - 5, 0)
+			pal(7, outline_color())
+			pal(13, active_color)
+			spr(5, ax - 4, self.height - 9)
 			pal(13, 13)
+			pal(7, 7)
 		end
 	end	
 	
 	function el:hover(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, _ = sl_coords(active_color)
-			if msg.mx and msg.mx >= ax - 3 and msg.mx <= ax + 3 then
+			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
 				self.cursor = "grab"
 			else
 				self.cursor = false
@@ -1177,9 +1347,9 @@ function create_sat_slider(el)
 	end
 
 	function el:click(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local ax, _ = sl_coords(active_color)
-			if msg.mx and msg.mx >= ax - 3 and msg.mx <= ax + 3 then
+			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
 				self.drag_delta_x = ax - msg.mx
 			end
 		end
@@ -1202,23 +1372,31 @@ end
 
 
 function create_lum_slider(el)
-	el.width = 7
+	el.width = 16
 	el.height = slider_size
 	
 	function el:draw()
-		line(self.width \ 2, 6, self.width \ 2, self.height - 6, 0)
-		if active_color then
+		clip()
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l ~= 0 then
+				local _, ay = sl_coords(c)
+				line(0, ay, self.width - 9, ay, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
 			local _, ay = sl_coords(active_color)
-			pal(13, 0)
-			spr(6, 0, ay - 5, 0)
+			pal(7, outline_color())
+			pal(13, active_color)
+			spr(6, self.width - 9, ay - 4)
 			pal(13, 13)
+			pal(7, 7)
 		end
 	end	
 	
 	function el:hover(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local _, ay = sl_coords(active_color)
-			if msg.my and msg.my >= ay - 3 and msg.my <= ay + 3 then
+			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
 				self.cursor = "grab"
 			else
 				self.cursor = false
@@ -1227,9 +1405,9 @@ function create_lum_slider(el)
 	end
 
 	function el:click(msg)
-		if active_color then
+		if active_color and not hidden[active_color] then
 			local _, ay = sl_coords(active_color)
-			if msg.my and msg.my >= ay - 3 and msg.my <= ay + 3 then
+			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
 				self.drag_delta_y = ay - msg.my
 			end
 		end
@@ -1254,6 +1432,15 @@ end
 -- Utility functions ----------------------------------------------------------------
 
 
+function outline_color()
+	if pal_okhsl[bg_color].l < 0.5 then
+		return 7
+	else
+		return 0
+	end
+end
+
+
 function sl_coords(c)
 	local sat = pal_okhsl[c].s
 	local lum = pal_okhsl[c].l
@@ -1270,7 +1457,10 @@ function coords_sl(x, y)
 end
 
 
-local angle_correction = 0.33
+-- Remove 0.25 to compensate for Picotron's angle origin,
+-- and 29/360 to compensate for OkLab weird position of
+-- the red color.
+local angle_correction = 0.25 + 0.08
 
 
 function hs_coords(c)
@@ -1296,9 +1486,9 @@ function coords_hs(x, y)
 end
 
 
-function h_coords(c)
+function h_coords(c, radius_delta)
 	local s = slider_size + 2 * slider_border
-	local r = s - 6
+	local r = s - slider_border + (radius_delta or 0)
 	local hue = pal_okhsl[c].h
 	local a = angle_correction - hue
 	local dx = cos(a) * (r / 2)
@@ -1321,97 +1511,153 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: label.png
-b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAASE0lEQVR4Ae3dT4wcVX7A8VdF
-5YLCjoQGyQhjyYcVdmAhitBosTEHc0BEDsUwDBVC7OokkxmtJtEi4Uxs7bIHI_TN4EiLIgt5NJG6
-mFikPB47ZazsaR0JMAsOimD-yCAUsTJGcbLOShMrbJSw7hzebLmorq4-3dXVr159P2rB65k37a7f
-q-721eisXxEAAPVYFf97b43NKDuLB9eX5WLllZdz-sneb3yTewjAkBid9SvR591tKrFBfdRZRrPo
-H-b3V-IP89eZRgPd5CdIfi6i65TNsf35P1Y59_fPWq_Pf_b7WXnl5b3f_Kb8b9Ekyl4lsvKMoNDF
-lBisB9eXwwsoVNu3xmZSrhlABXWWi5VXXi6arZypLfSa0c29KjyI-uosM5XSq3igY5ch-9U81zw8
-iW89-GEY7vBS_ZAAqPILqdD3RyxZ6eKBDv8B_erpXzWJvy232g_uL-f6epHXKTd0Px3SNyR3JFBB
-6fJ-KlV487G3kXItsZr1ilvPQEdLlHnxFUwnf23zfB0NeAA0GhjGhyv6scr-KQu35Q9R5itXXPzM
-aiUEWl5DbGT5r7ayK5TXJgv_4PpyuBjS1zt1Bmqn6Ge21-6Kw90z0IUyNOw3-dbYTLTC0RBHfxjd
-GSt4dE-FJw00kAzIyisvyzjIT016KGKfrKF_0HImK7otz-vJ-55llKKxSmxXyOisX6ns8ErMZbnx
-jb5s0ftjVF_tAGoq2q6UOgshLA2uEABqJD3KUYbr2MwLABRkMgIAINAAAAINAAQaAECgAYBAAwAI
-NACgF4sR1IjnBwwBA3Idexgv2146Fq5bs3Oxp_GecJ345-K3iX9LoKGJO__eytzzR-_b-TqH-vh6
-5p7Vf-4sc8-Z37g9c8_f-NmBzD277t2a-abH-jR7z8rr2XsevStzi-E-Y5l7tr-7buaeP3j3bzP3
-fNv4zez3PG1mv_f7nxrSXRetcGJbo9ntrnOY5tbsXPdLNVb2iQJAYlXzNzRMcPQn9DeTxQgADFLn
-aHxjayFErMuxbXLRmp3rjnV30xvI5FYDUJRMZ-S-saTK7EbLG226XESjLDdT5xiLEQAoKlrbPDGV
-G2IFZ4wEGkD5WrNzsra96izb3SvE8g9j7abaBBpAaY2OJbXXOs_G9KeNZTICACDQAAACDQD1ZzEC
-AEW1l461ZudKfDUhRPiC0adyLXX-i7E-JNAAMJTWy0XsaazaKX9IoDF6m-edzNzz6SP-nbnnl-7n
-mXtufe_NzD3v-uu1zD3-cd3M3POz82cy9_z69z2Ze94Sncw9297JnvPxR_-I3vQvY5lbdv7OLzP3
-7PjPhzP3fPbce5l77vhK9nmVG1YhRCyR0UX423SJe7pznPMPCTQAxNMcy2uvcGe2PtwcbXSvP8--
-NUCgUT_LK5OJP1-Ye5rhYBDRvGY2NBbx2OaUuOepP4FGjXW3uFe1gfzyR7bvvGrcZQINoMwct5eO
-JT6VDU0pabg53Bl9mtLlzJ0EGkBDi9xrkfg056sVfapxmiWTWw0ACDQAgEADQP1ZjKDhFlcmGQIG
-1F461pqdq-KfE0J0-4vy55L8bWxnrz8k0FDRwt7TDAE1-TJI-FaI-iS2M-0PCTQArUIZbaJ8Ggti
-r9-KdTSU0Q2F-vUUdalwCsN1bG61uvD8gCFgQKV85KNtjT7tTnPib2P-7fU6KWnu-tvu74zu7ndv
-UJzF-QqgdEULGKYzz5-3_m33V0Is9_HTuozR5E4CMNqCy4DGfjL4P1GjEPdicaMA6COvYf6iYU3f
-3Gtn9NUyX7P71WTfo0WWTxN35nnD6jBcx_ZuqwvPDxgCBsRHvkZMRgAABBoAQKABgEADaKD20rH2
-0rFC_0f1PvO856KXQ6ABqKs1OzfU-cOoc2t2rjU71x3ilF_NnMWtBmDADsr_yoXMnFyEPw8bHUYw
-THae38Y25Ml99M3k_ZNwZ_xyRjtbk9sLQLnCOif2tDU7F0tnr6fyReQj_jQa0-6_S1J_rk6dhRAW
-NxOAESoU2djm9IZGK5-e3NjPFamzEMLk-gBQupyBkynMX0O5OdyfEvdwW2adE99S0W_OIbG4kwD0
-J8xresvkbxMTmf630d-G-qFofPO-2_jfhu8nfNnYaxZ68SExXMfmPqsLzw8YAgbER75GTEYAAAQa
-AECgAYBAAwAINAAQaAAAgQYAEGgAINAAgDIYrmMzBQBQkMkIAIBAAwAINAAQaAAAgQYAAg0AINAA
-AAINAAQaAECgAYBAAwAINACAQAMAgQYAEGgAINAAAAINAAQaAECgAQDpLEZQO_3pBblorS4yDUBj
-huvYTKGOdc7Z6Bn-V3Kx7NzE9AACjTJ5fhB92jl5-kvn9_TO7j8JzzSsM43OHCx0ok3WLM5Sv2SE
-rzMj9qRsa-vX5aLlmAwfINAQQogX--EP5eJbv-t3RaNsPLmzc-J8uO4v3K5jh3WWpabRgIL4WI6s
-zrF1oUbLR_bOXeJs4rrotwKAkbAYQWVkFl_8pZ8o9y3a5fT35jo2Z4Ra66xfkYvW7JweV2RyqNWk
-WdZZHYZ4PbZW8E0CfdRZCNFeOqbHRVmc61C73P3DzdemL9_yGq4VaXT3e3YdmxMECHRT0hxtdF0u
-gUwDI2QygtK7ll5nLgcYBmNsU7huzc7pcVEW51piy-S_NNexOWXUotHa3KsEmjQXznT73i3yJ60f
-XeL0oZTO1buEEEJ82JrfpsHlmJzogM1qSJ1DYZ1ja0CZOgshRPvohwS66XVmCACGx2IEpBmAmkxG
-QJ0LMb71N9E131VQ6OYc-yhct_a3EWjq3NBGywczgYKNNsY-0qPOQgiLEyXNZQ3HdWxGAZTIZATU
-mSkBBJruMCsABViMgOKUPjHXsZkDqtd574RctF46rscVGXyWSPOQKH5rcb661lmnRlucq8qf3u98
-dUouDn28VscZ8vUPDMJkBOrXObZmkgCBps5gnqgN4-6nwnXrpeN6XJTFuVKTCqb68-mN9f6rNgNB
-Id_7ulsunh0-l7PRrqPJbWZy-MrW_dDHa4nr2gnrLIQ4Ms5XIPqpc2zdEBZ3gJp11qDLQCEzn3wu
-F8tbb2YakskIAKhT59iaQEN4fsAQhue2ozfW_6-aDAT5PTt_LnHdEBZ3AHWuttGB69Bo9NnodJ2T
-5_Witbqox7Wb1JkPADPHyC1vvTlxnV9YZyFEe3pBj7FYlKKx9t_3XS6OfHCx4n_6-RfPyEXrpeOK
-TOONN38oFw-teoBcjrzRkExG0PA6x9YV6Lx3orvUitQ5tgYI9Gh4fsDxA9owntwZrluri3pclEWd
-kWj1iQm5mD51gWmgXo12HVuPKzKpczMd_eBi4jpW59i6nE-R-U8lrkfooV0PJK5RM5cnNh66sDhT
-Gl09Rbrcq9Goa51-zfvrf3Ofu12DazKbdoieH3AncyLQXnuPDvdVswJNC3KaPnUhcc25AFWyGAEy
-Gw3UwOYL4vKEXHb_SZO7t0GB9vyAe1jl03EdmzlgwEZ3VjaWrbM63E4NCjQA7Rl7hRBCmy97syHH
-5vkB9y5nBBBoAEAJrCZcpOcHnHRdTsp1bOaA-nRe-HO5aP3oEoEGoI8fLH0iFw-Pbq11nYUQ7Xu3
-6NFoU-vbzvMDPnucF3LWObYGgQYAJLD0vjzPDyr4VzrrV9I3GGObuNUKnZrr2MwBxfzXTvGV8zfW
-4hKBxoaFvad7-WpxZZL5FPvCWxFCBEKI1lkyXZGHZ7f_YOmTcF3HSzD_6vc7f-n3ct362Wt6nAuB
-hoJ13tDeE9DoKhtd6-e-fa3zW_GTCWfixOMaHIqp8Q3n_YFmV-To174uH9QEaAKdA61fnRPXAAh0
-zXh_wOnWkbH3xrp11mYgyOnilBGuJ048rsdFWZwrlG206zAM9NPoCUeTr3aTQ62L7--4ncQ1AF1Z
-Wl6V5wfaN7oJPD9wHZtPKRrLZAQAoCaLEZRicWWSIQAj9-N5_f9g-1Vbg8sxOdHBGWOb0h_MCKjC
-mcnbHpm87ZFJIcSR8YBAq8jzdTgYcJooWudwKRtNoAEAw2IxAqB0r373oFzsO3CYaYzE-qu2Bldh
-cpDAkOocW2O4rj2evCbQ6vD8gBuVM0VzGy0furA401F5YWFZLp5fnGEawKCeccVxTy7dM6cINEqo
-s1wPo9GvfvegXOw7cJiBV2nfgcMMv3od8XvimZPh05ZjEmgoKgyEXJOJ6hvNEECgATTd5VtWhRCf
-CXHHtVc1uzST0x2J5xdnEtcA_qiz9Nkt__Si5WhSNgI9ykbLxzBefN_Bw4lrQG_GeN0Qr2tzOZZO
-Z_P5ATeoll32-MB1bM4UTWMyAmAkXlhYlg9GMYjN16YT1wQaanEdWz4YRS3qnLhGf42WD-0ujUDr
-U_fENQACDQAomcUI6uKNN38oFw-teoBp1N3zizMvLCyHawYCAq1DneW6u9GeH7iOHa6ZWC0azRBA
-oHXTXWe6DGjJZAT53Xn3lHwwCgAEWq06J66r8dCuBzgCIMPhyY2HLizOtC5oNNSx_sSEXEyfuqBQ
-nX-N_23Tff_6BnM2udUA9Ffn2BoEemQ_-ela4hoAhsRiBP01GoBaDp4Whyfl0n3-OoEG0ETTpy6s
-PjERrtV5Y28e-D_5WHZuItAAaqOzfiV9gzG2qVCjVbvAN8WecD3j-0qPRhNooCkW9p7u9avFlUnm
-oyBTp4txHZsT1RInCwINAHW1S5wN18vOTXpclMW5AtCs0a6w9bgik0MFAAINAAk27zspH4yCQHM3
-AGp9HhPXaGKguRsA1IWl2fW4ju35Aeeqgc7Vu_SiNb_NaYBAA8rVWQjRPvrhyBvtOrZc1Prrf3Fl
-UsF3dfnVJzfvOxmuufkbHWjuBvRdZ7muaaONsU0qfyq5zQg0dwOAOjH1uyTXsTnXujPGPwrXrflt
-DAQEGlCr0cb4RyrU2fODxDUwbBYjAAo1GqiMyQgAgEBXx3VsjpZzBOrOYgQABvGdr07JxaGP15hG
-uUxGAGDwOsfWINBpXMfmdDlBKOjWqaflg1E0N9AASrT-vu3yMXidE9doXKBdx_aAOTuUUufEtRDi
-0MdriWuUwmIEAAZBl4fHZAQAKvOLtdcS10hkuI6t9xV6fsAx10s19yQ3RiH779suF0c_uMgtVBmL
-Ow9Aplp0WT_m9le4fa0jHxx2LbiOzRCARgT6wlP-EC015w2AQAP9cB2bIQAEGgAI9EhNnHg8XF_c
-MjhvlbmOzRCABgVaNlo_OGwo7tGvfV0_GAWaEuiQ69icN6ejcp0T1yDQAAACPVKuY3PknAtAoGkB
-OJECvv-jdxLXaDKLEQAKNhoQQpgNvGbXsTl4zgJRd949JR_MgkDTBXAKatU5cY38zv3EGsbLDuVF
-61IHzw_4scr1vau75eLZ8XPUGc2p86W3j27ZMb-7ni-KfWWT4aL0OsfWQBNcevvouZ9YBLo0rmNz
-VzF5fPrTtcQ1Rt7okntfx1J4fsCNRZ1pNEMoq9FbdszvvueLUl7NZKD0oizPjp9LXDNtNMSWHfMl
-1lkIYTFTWQ3PD5hDuY2mzmiI3fd8sWXHvBDi0ttH5YJAA4BCjRZCtGbndt9T5suaTFZyHZshMGFA
-KQS6tILMfPK5fDBJ6gwQaIU6Eu1yd6NvnXpaPpgqAAKtUE2iXW5go6kzQKBpCpMECDRlSbK89ebE
-NTME0DeDT1E6zw8Gf5Fbp56Wi1_svUaadTpZcAcOlcVZZp704J-khnRZs88GMHImI6A4A7k8sfFg
-VgCBptFq1TmyZkoAgR5ZowkQAAKtdKYZAgACTaMVc2Zy4xHafOHGWJ67nXsDKJfFCPputOcHzapz
-dP3Y6Y0vque4HYBhMRnBgJnm2gEQaEU7RaoAEGgyXYnDkxuPmMdO37je49c5dKACFiMoMdNCCM8P
-6l3n6PrgRpQ3vn7oMkCgybRqlwNgJExGMKSuaZA26gyMlsUIKgic5wf1eMcHT4vDkxtv-v3rnCBA
-oJtS6p6ZPu5tLJ5xR-91QpcBAt3YTMdLHdZZritvdPiuABBofKmJkTwT5ep86TsSINBQ51uBOjME
-EGjk6OaZU95jT4Rr0ZXRPmpCiwECjdIaTW1HOX8mDFWZjABNLjJ1hsoMblAAUJPJCACAQAMACDQA
-EGgAAIEGAAINACDQAAACDQAEGgBAoAGAQAMACDQAgEADAIEGABBoACDQAAACDQBN9P9Q75kcBzbv
-VAAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
+b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAeT0lEQVR4Ae2df8wc5Z3Yn9ns
+tRUqXQkZdaOYSlZlAUW5SNUrKxTMteEqDsnxnPPaDFeKZ9v6dkXeiw7pgOKjYNmEGoz-CEres3bv
+vWrHFiKD-ULHuAenC0SHIYDzXlqSOiZyI0exkTZ3PqqJU_7UqExbPb7xeHZ25tnd2dn58flotPrO
+zHefeeb7PN-P-Kt57kAAAED_qGf8vLcau3Jbi9vdFRkcOfSc4l-uf_B32UMAMCM0zx0Ez4fdlKKD
+JrCzlOa4f5zsX-KP6nbG0QDDyA6SfRGMY5JD_eptpZivrrVR7Z84nyOHnrv-gd_Vv_MqUfoqkrpK
+CcZ6mRSFdbu74r-AWLZ9q7Er5p0BIAM7y_DIoefG1ZaiascaM5g8ysLTMJmdpaZifBUWdOg15FNV
+3nl2RE7dv_iL239VmgQAsvwgjfX9CCkrnrCg-QfI0eM-NZF307X27e7KqM_LfE_ZMHw6oy8kOxIg
+A9Opd2UeJh_aRsy7hGw2Sm4jBR00UeLLZ1AddduqfI6mXAAcDTCL5gq2lXqX_WnqIkocOWPjJ1or
+QtDyHUIlU3-bzN5Qvps0_O3uih-M6POOnQEKx7g9Oyo-Y3GPFPRYGpr1pN9q7ApaOCji4MVgZsjg
+wZyMVxqggkiBHDn0nJSD7Jp4UYQ6a6aNpqisYJrKfNTnLKUUlFWku3w0zx1ktngp6jJd_QaHHXd-
+zOvTCgAFJeiuGDsLIeoleEMAgAIRL_Ugmmno1AsAIIfUKAEAAIIGAAAEDQCAoAEAAEEDACBoAABA
+0AAAMIr6uH_wbIeqwZSYhl6UrRU5VYCcClqRG25ZTMz5N-87eZx9--aTxJyj3-0wMefEr3w6Meff
+-c6jiTmbf3VD8qQbv52cc_SV5Jy7b0xM0f6mkZhz83vvJeb8q-f_KDHnP2h-P3nOO2rJc164Z9St
+JzYmb5ss2Xd2FUfAHEluJwAAmAv14Uv9XtePW_3OrGewd2058vqehSWWBwAQdLSd5WkGjh528Shr
+AwBUVNAhO2fpaICCEuyayE6RCfJWKHn4v8FkgFrkNvKD4V0FAEFa7Y48Rulb3vWbKJQfPB1OBgR9
+1VYL_ZqPOcCwc4MNEpkwWfvQaxCiHtwcoQ948KtOpQBCdg62hh8PB8Nx0MXxpxXEsp3Kvrtp6CMF
+HXL08MYCAL9HRvnXl2zw1L8b_svwCMNyhypzlaD9-Rc8zWASe9eWWQkoBLI7-N-IBgnJWr2J8DIk
+CDozKfvsWVhiGaAotNodqdEYO0t9_60UPI25FUxA0zBS0AAQ7_iQQ0M_VbwVKWLUHI_39qJiprZw
+j_qYT31FdczHvq6YefRLmxQzd7x0KmVBr995LDHn-F3-KzHnr_2PE3OuW3szMee9H19KzPmLT2qJ
+OT95_3hizuafbUnMeUt4iTk3vZtc5_fv-kxy0vcaiSm3-dO-Tsz5Z391Z2LOh7_3lpjzmX_QvF4A
+s7bzsf94MHU7P-zit1K38386m_ClZG0BAGDn7O0shKgPX_r3un7canfYGQCAnbO3c4Sgg3aWpzga
+YEYdIdtNDhhsveCV4ccNZ2LnUto5LOiQnXE0QAau94Ngow3fDVKdlqyyna8StP_5DgbyF0cDDHdK
+pEaDd_OJz6HjLpv0T04q2fnP31M3qWLyez__pDjmQ5_7WTH59CeNsSpwRdDDH3D-oh8DQMjIIXeP
+Enei6yPlPurv6p8BKDRXBC1F3Gp3fCOr7DAAGFZnyOYqrg9qOr71hjOhrNRCC__rGTsDTIDsnaBD
+FVU_fJfWg-rw9gruG7YIQLyOQ-3in8reiekgP1nmhP44fMVX9nAmVEXQrDpAvJFHBRO0TzA5cZxR
+T4QSU6MEAAD5pD7Bfy4c3p6cdDg55dmU3uFgSuO8_ui7iTk7xf50HraskvNGKo9aEdco5KTEY-QU
+QGrUKAEAlIwdL51KfcyD759JfcxXf-BufEJ9_FK-1-XjVrvDYgOMot-rZtkjsjeHnzjcs8OZGU8V
+O09vZyFELWalh08BYL4fg1a7M9yV8rrv3_HM6jRymewshKgn6rg6H14ARVH6WvRP-djXYuRdGQd7
+Kpgw1tPVM4Ozws4FsrMQohZaTn_jyCC4sQBAyk4efqcE9ecnBOOg00O6HP574tNV7sZnYudC2Pkq
+QYc_48ENRFsCKDJuv-R73aCU4-_uaOfhTPmIePtj57zZWQhRD65o6IMv17iCn2KAbAzuN5evzlm0
+W3EbWXvs65VVeVjQIUfPbrsAFFqvvkwTW8NPHpUZHC1xzOHRRrVn4nOhMJ8o09BDl4I7ZniBLduh
+ajAlw7tObq0nNi7map77zq5GThVmR5UNM7zZ6pGfX3YJAMDcqVECAAAEDQAAY1CnBJBD9q4ty2DP
+wlKuJtbvdYUQrXZHPV89eUaTHDVneV2S-SRhQkGzbDB3O-teDsZ5oNXuBBtEJT97O8uHyiB0Gjm3
+sd4I5ino0FLN5fsPkBn7zq4KIZ7YuJiKCn2D_9d9D-qdFdJi-N1QgkozjrLwuK_Tz-XyLt6omKmt
+_5HqmEdUn67drzxP8UXVMcUrMXdrMXbm6wqlt-MTGxef2LgoNT09vp0jfdpqd-xb8adyEHkET-3k
+_K7s97ohycY4179VJjtf3JO_nd_6f0vqdt6z8e-EJ1wRdGhLhdaMZoZs2Lu2LH-l4V_ZBU9sXJzj
+m0qNTpYc79BhmyfaOTETO2dv56sEHVr14Icda0DG7FlYkkcGz9p3djVFUyv2i1ShenPJZD8-xuyh
+W_rO9TPVPxvYeaZ2FkLUgzvA3zRyhfzVwtFQViazc6hT4l0Z2UHx-w3eDT1IDhXTkqH_DQo3vqP9
+i3nr98raWQihmYYe870dXkvLduhqmJLQrvO31hMbF-euLV-exAtLwXgudt53djVyqjA7QoaZ2M7X
+X947adp5sziRup33nV2N6Yt6-Ic9b99SgNQdLYN4U8Nc8I4I8epV2h1p53dVx-zLJdXkD5avsnMM
+J8WWt4SnkvmnG--uWBUICxopQ07Yu7Y860cgZcg5EYIGmCN7FpYoAgCChtyx7_wqRQCYXNCmoVM1
+mAVsLYAQNUoAAICgAQAAQQMAIGgAgLxx-XL6Y24WJ1Ifc9-ZVQQNANi5eHZG0ACAnXNqZwQNANg5
+p3ZG0ACAnXNqZwQNANg5p3YWQtRZWgDIJ9r91VW5pMYmAADIJwgaAABBAwAAggYAQNAAAICgAQAQ
+NAAA5IE6JQCAovC1i19QzHxw3Ruqg17YpJq5-pRq5vFtqplbX0bQcVi2M9kfTUOnegB5tPN3Gunb
+_chnUrfzddbf_yg2oVqCjnTxxJ5NdzQAqJqdE3PKL_igRtO1Z_Ros3tcIej3uqik3LTaHeycjZ1L
+K_g5WjL4uGrKWms0sVhZ8dxBfN-NYp9X1s5lE7QvxJzYMFLW1TE1AHaexs4lEXQh3OfPDVMDqJv0
+wb-5hVLm98Yx6ffUMk8rz3P-NsXk69bGsHOxBV1Q02FqACizoKXasvRa-1f-kQxa3--pjEyNpiG3
+eO6AIiDo2aq5b39yWbJGLXyr14375zeeusrUv-OYEKLV7qRrajQN2BmKKugp-eXb_XLs-mHwrtZo
+xm3Qp74ynBy5a6exNpoGgOIJeixn7bL-jwxWjE9dMXKvK_zfVjeyCpEjBK09mazRNAAUQ9Djesq3
+s4xvd1d8mXrii5O7_LGve099xY8VrR2S9cF1jowfupj8Omga8oPWaAY3M2RJLbdqtmzHNPRp9KQ1
+mvIQQmjilSvXA7G6o_UxwdO1RtO3sxAiGCdq2jR0WQp2KszX0X4rQZbU5-jsfq8bPG21O76dx-Wy
+HOote1fcJhvfy7N7cf9lVTQ9WU0AUsS7eKMQQvzy14S4qQDT3fpy_mPuTn-Mj1ZfyKmgQ3aWV_Qn
+eiwT_ePI-54UW_TpZnEiz-tHTnssTVu2M25xANK0s9y6yx_0lvLt6LLYWQhRm6OepFKDv547UBdQ
+v9eVTpeH72V55GrDXL98VezPWb5C-_H75JHoaF-TAFB6Owsh6vP8LLuD0O9IF_94RAatowdCfi8K
+QUf7aI2mt-bildd8_L7Ws88nalo6Wv1LBoCdi2hnIURtjsWUhg3_xttZxv1eV2s0i2XndDEN3dc0
+QBatuu5Hftxaugk7Z2PnOQvacwehX3Wtl5V_r9vvdRU1jaMhS0dr634kfuXPsHNmdp6zoKVqg79V
+3PcL9wRjrdHUGk1FTUtHo2koLetPqR5jqVzxGEvliseYzEfQUseeOwj9ttqdUGa-1xXfPX-lPBiX
+yNHyCNZHalrF0VLT9DJA_ZiDoC3bMQ192MWhK-1et9-rao2m9sy94rvn5aE9c2911kY6WlHTOBqg
+fNTnYudII4fsrDWaV1RVJS_HHC2E8NxBTK2CjvZrC5Ai3tqLFKH8glYxSL-X9cUEvqY9dxD-ScPR
+kIWdz75JQbKkhp2L4mi-PomOplwACDp9O2uNJnaOcbTWaOJoAASdqZ37va60M_uhoun_FkceOBqy
+2HIL91w52XgHBcmSeh7sLL3DYqjgHQmUbovTOhFdW_no_MpDxfnaxS-I4MF1byg62nMH853zrnMf
+K2aubLhmjmPevOopZp5Z1GLu1rBzWZGOpg4Qb_dQnGfGMOk370t9zNf2-HHqdv7FE9vjE2YoaBU7
+a40mdp4G_YXD0RDvIHkU-S2qZucZClrRzjTPuGj3XxVrjSaOBkUHFdfR1bTzrASdaOen-vhff7j_
+5IVrj9I-kzlaHpdPcTSMz4Pr3oiMsXN_7CyEqM-Fzn584dqj6y-tKNbOPvqlTTLY8dKpvCi70fTc
+QavdiXd0-LpAlR0dj3fsbeycvZ3TF3SiBfq97ofrTxZ3T-t2ljGOhpyzsuEa30crG66ZYISr7Pyn
+P8509s9bK985qpT50-_sbtK3v6eUeclZVRxz-c5jisnan78wVgFSFnQ8-V5XazQvXKtW8fnx0Odu
+lsHB988UqBUTHT0X3jz5jgzu2HwrupyXoylCQamlOJZlO6ahx9tZCLH_0o4rX55AnDc7h_KiOLrf
+6466axq6ZTtzsXMoBoBMBZ1o5_Dp_ks75FG4eu146VRknCty5WgoOtr2266c-Mt-TEGypJ6ZnbVG
+M61Je_7gqg2U3sjjOjqP7dRoeu6g3_u22p0YR8esF8AoR4daD2ZNLTNrpGjnPQtLwSPdTXPw-TOR
+cZHaKdsvVgx3bL41MoaCcWHT5QOypT79EJbtmIY_6m6-103dzqGL0tEpPqWgXg452nMHrXYn8q5p
+6PGrNiNHQ1Ht7O_rS1tN8WlKkhm1ots56GiWM_Tofq876q50NFWCcelvYdsUR9BxCznaDunaGUdn
+tgoAxWD3y6kPeeHw9tTHPH96dYaCtmzHNPSYBK3RZKvMkfj6m4Zu2Q5VggTWn-JD79tXYuw8aztP
+Jeh4O-d7XeycE0f3e10cDVM62vv2KWnn1omRXY_d07XzVIKOATsXyNEASrvofqHdL8TWAXbOzM6T
+C9qyHdPI94cU1DAN3bId6gCFp3R2nlzQMfR7Xa3RTP8D3mjuXVuOSdi7tjyL55YDrdHs97rUAbBz
+gewshKhP8AzLdkxDz9LOvmU8d7BnYQk7T1y9VrszfMs09Jg1BfCe_sp8HnyfmfqQZxa1Qqh8ckHP
+3TIhR2NnyDOv987J4M72hsLb_RtPsaBZMragLdsxDT3yVr-XzUCU0tGhKyykeula7c7wLdPQY1YW
+prezjAvqaCiMoHMiGlYOAEpPbaxsy3ZMQ4_81e918WYhvm39Xjfylmnolu1QIgjz89uiY8iboAFg
+LO5sb4iMi-RRf_Ze8fPbLh_--89Z05wK2rId09Ajb-V7Xa3RpJrF6LdGs9-rRt4yDd2yHUqUuqPl
+UdD537zq-ZNNxuXjW-_QBc2poAEAIEvqinmW7ZiGHnmr3_tqjSalLBBao_m5g1a7M3zLNPSYtQaY
+L96xt1U3_fbbFDNf751TzLyzvUEx88lHVhQzHz_wK_ZujSUHgBjOLGp_-MNf-1kh7PzVU2dSt-Nr
+J15L3c69--JqfEJ9ypL1e12t0WQTFw6t0fTcQavdoRQwhqPdAXbOzM5CiJrKQJbtmIbONq0IpqFb
+tkMdID9U086qgh5Fv9dl6xQaVhCwc27tPK2ghRBao8kGKiisHWDnPNtZCFFPzLBsxzR0NkqlMA2d
+dYcgf7n0-31x8febQmS3K17vnXvjI6XM7-yP19VNqpj88w9_qTjmw1sPKSZ-88ffGqsCtYlr1_91
+tUaTjVtotEaz3_tSB0jg_Lbr79p2-V3bhBAH1znUIzMmFzQAVMTOfigdDXkRtGU7pqFXtjqeOyj5
+C168Ufzy1-rLHwzfMg3dsh06BGCO1Cf7W7-X1RrNwr3t3Z-9vAxe-cG7rL138cYrC7r8QWvppvzP
+_fDTu2Ww89H9rOBceOiiThEyo1adV-XtHIqhKPh2DsUwWy79ZnQMCBoAcuFoeUB_BG3Zjmno1Kis
+aOt_5MetpZuGE0xDt2yHQlWd_0w-9LbcRT2ypD7Bf-q9rtZoFu5VX-3Bu3d-9vN_zNoHHe25f9Zq
+d3I_252P7j-89G4-ZvmywRNfFPcd_9uzY8Ko5X-Ojx-YlfqYzx5-IPUxz59eTV-QxQUvFx28DNWx
+c_UEPSWHn96NJqA6XLj2qBDiQyE_c_kwds7ezkKI2qgblu2Yhs4eHbZzKC43pqFbtsPqV9bOkg_v
+3Xk5cv8QO2dm5zhBj6Lf62qNJtu3ZGiNZr-XpQ4wcoeIVzTxCnbO0s6TCBoAADtnYOf-92Gss7SK
+7Hx0-_Gnd-sxBcktTz6yMrumrQ7rL_24cO1RP57LHO5sb6isyhH0JI6mCEWxs4xx9JSOpgjzpUYJ
+AAAQNAAAjEE98qplO6ahz2VCr-fOyeC1E6-J4NnjD_ShUn5BLNup1BYxDX2O_2FcHj_w68lHVvyY
+DodCUxsru9-rao1mBnYWQvzGlt_QwcNbD_XHzqG4TGiNZr-XLcGLPH5glzxob6iWoAEAAEEDAFSd
+eq5mc2d7w_u9czJ_7cRrMnj2_ANzn5hlO6ah_zH7BqrF-m05mYi39qJiprZwj_qYx95WHXP7bapj
+-vtvqo75zL2FEbR0dD63KF6GDDj6pU0y2PHSqRzaWfuDB8wi2Fkc-SR1O3-11JnU7fzImf8Zn5A7
+QafCk4_syODxA7voeSicnWWcI0fngAraWQhRK7GdQ-EEaI0mjQGAnediZyFEnbUP8ubJd2Rwx_Zb
+qQaAEELsflns33ZZQF8_1Gp3sHM2dq6EoD13oJh58vvnph9kFFqjSadDPDteOnX0S5v8OD8TO7n7
+l5ejL2fevxW2czkF-fiBXU8_suLHjx9Q-eObJ99BrzB3R_dtSifFFj9_q7FLGJ-Kzs7H3hY-UUv9
+7vkxTKqW-FXvF4pjXrj26Id-oJT53L_4OFYFSiho6eUpR3jz5Dt3bL4VXwDAHKlRAp_gkWXsuQPK
+AgAIOi_OlgelgAl4eOsheZTppTaLE358u7vCKiNogELaOTIuh6PlwSojaAAAQNAApWb9zmPyoBQI
+GqDSPHv8gch4jnaOjKFA1MfKbrU7njvQGk0KVz48d9Bqd6hDWo6GOaI9c2-qYz5_YFf2G6YWedU0
+dMt2WGYQQli2Yxo6dQDsnP3nvM5ywhzx1W-ZDtVIlwuHt6-fecyPsXPh7IygIRd2ljGOnoWjK-W_
+JbOzEKLGJgYA7JxDOyNoAMDOObWzEKLO0sK8sGzHNHQ-piBBPHdwlYAazSpqd-tthVD5_ks7ZlSB
+sQXdanc8d1DN7VJovnbxCzJ4cN0bkTpotTtzcTRLE7kcexaWQldy3nT9Xrff60pFsIJpURt1wzR0
+mqd8dg7FKgI1DZ0CztfOQog9C0ueO8iznSNjmJWgASAnds65o4eNjKMRNECF7JxzRwshtEZTHqxj
+itQn_E_r3fHcAStRIB5c98bXLn7Bj4e90Gp3qBJM_XWhCKlTi7lnGrplO3mY5Q23LMqDBZvG0fJQ
+-4tlO6ahU7qicN3ib8ljLk-XGk15sBApUs--FINevuGWxfOnV1k2KA0Pfe5mGRx8-8yUdg7GH62_
+kPGLeO6A1ayioAFKb_dQXES0RjMDU6sP7s8nkTdPvqOYecfmWxUzDz_9WzFz56P70xd0q93x3IF6
+CSC3eO6g1e5Qh5w4znMHexaWRiXsXVvObdPN1MvjPuLIoedSt-MffePp1O38wvPfjk_oxd82Dd2y
+nfku-PnTq5FxNg1TWVlYtmMaOtLM3tF715YnsPNHqy9Exhkw-IGfxSe-gnYWQtQLsWsz9jJANhx8
+-8xDn7vZj31He_5gz8KSup3n4uWQkfu9LnZO185TCbrV7njuIHHTQJ7x3MEs2gnGcvTwReno0JWc
+v0ir3bFsxzR07JyWnYUQtcQM09At26GRKsWMOg3U0RrN4FHZOlTZzkKI_vTlq-LuqcjWB5gLb558
+5_T3z6lk-uTt4_omVUx_-b-_UHFM09AVk--ihz8bqwK1acrXanfYQ4WGFQTIM0qCNg3dsh2KVQYu
+bLp8jMayHdPQKRVAMQQdQ6vd8dwBdSyMnQNxq92hJABlFjRA-rn7s5_XB6WAcgraNHTLdiJvtdod
+zx1QynJg2Y5p6CWzc2QMUB5BQxlYf_rKF-f3Pk09AMojaNPQLduJvNVqdzx3QDUL4Wjv2uOj7GzZ
+jmnoFAmgeIIGKCKv-uDdyBhKzM5H96c_pmU7M92ckdTHGs40dMt2TEMfvtVqdzx3oDWabI7ccXzb
+5WDry547aLU7o-Zf5MqWzNGAnYtiZyFEjeWsip1DMWTCDbcsyoNSYOdx7TyJoE1DHzXdVrvjuQO2
+SJ5ptTujtqBp6NQndTtHxoCdFTPHFjQAAHbOwM4TCto09FHzbrU7njtgr_SIrS9fWbjnPxm1C01D
+p1SAnXNlZyFEPfUZSEdrjeZY-1q-85gMLhzezm5L3dGeO2i1O1QiY86fXr3hlkU-piDjcsfmWyur
+8qkEbRq6ZTumoacyCd-OMsbRWZLiOkKkoykCTExtFoO22h3PHVDcnOC5g1a7Qx0AKiRo09At28HR
+eWT-tstHkp0t2zENnYIBlE3QiY6WdlAZ58Lh7ZExTGjnyBg7AxSN_uyGbrU7-V5XMRkvz24VKAJA
+QalN_X-T0C3bibGD5w6ocg6xbMc0dOoAUGZB4_jcsfvlK0vz3z7BzgDFpZ7NYzx3oDWalDujan-5
+kPw0UgooGTfcsqiYef70agnGrKVSNdPQLdsZdVeawnMHbK9svoXxdrZsxzR0CgUltnNpxkxH0IqO
+hmzAzoCdyzFmaoJWcbTnDthnM8VzB9gZsHNpxkxT0Ing6DnaGQA7F27MlAVtGrplOzg6h3a2bMc0
+dAoF2LkoY6YvaByNnQGwc34FjaOxMwDkV9A4GjsDwPTUZze0dHSMHXxHa40mKzGBmmUNsTNAWanN
+dHTp6JgE6Rfpmpxz3eJvyQM7A0AZBF0aRwe9PHdHY2cABJ2po1vtju-om1c9ebA8kXaW5cLOAAg6
+I0dLTXvuIOhlHB1Ss7RzfBp2BkDQs3L0fMux69zH8ghd-2j1hcg4Szur1Ac7Awghzp9eLceY9Syr
+Jh2dW4MEvbzr3McrG64Z5ejs7azy6cLOAGWysxCilnHtpKNjEja9_Jt_-MNf-1nFt5rnDrAzQDXt
+LISoZ19B6egYm-iObr0oPHegNZqVtbOKmrEzQCntPB9B_46WQXxmq93x3IEQIgNNr2y4Zte5j-14
+vmqW766iZpUyAmDnIo45H0H7TrFsR8XRvrNmren5enksNStWDwA7F3fMuQna17SiZbLUdP7VnFs7
+l3JpAO1mP2YuBO07WgbV1PQEalYsV8bIiQFAeQTtu8ayHUXpFEnTz1uXg-vM6dU8VpUAAEGnqWnL
+dnxfj6XpnJrat7OM-9bR-pzHVbN6cfKA-5pQEQq0OYuClsOaWrYz7qz6vW4eNR0UtBDiPnMyNU9W
+k3mtHb0KUGZB_30_wdzyZeqrBe1tuWtcL09TCgBA0HnUdNDU85K15w6EENqJP5Gn5vGXUDMAlEfQ
+aXkqM1lLKUta7c4cXxkAEHSRND0s62msHXRxKlJGzQBQVEHP1F_R1o5nehejZgAolaBL6TLUDCH6
+ve7wxVa7Q2UQdMG8Vly1FX3_kKWdcTSCLirFMh1eBhU7a42m5w6Cvzi6gtRL8A6_6fLsvup42X9T
+mEbQ_Sxv6Xcvgs7U1PPdUjmZBj1MeaGgaKVf74wtWU0pQ4r0e91Rt1rtDvVB0JWQ9fQaTXc0gHhH
+Y2cEXUUiPasCpQMABA0AUEVqlAAAAEEDAACCBgAoOG-89zqCBgDIo51-_p3l-wsPNthNOJ0xEgAA
+ABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-01 11:05:32",revision=1210]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-02 08:30:12",revision=1811]]
 include "exports/lib/oklab.lua"
 include "exports/lib/palette.lua"
 include "gui.lua"
 
 
-active_color = nil
+active_color = 2
+bg_color = 0
 pal_okhsl = {}
 pal_code = {}
 
@@ -1429,32 +1675,30 @@ function _init()
 		"/ram/cart/pal/0.pal" -- default
 	)
 
-	hidden_rows = {
+	hidden_toggles = {
 		[0] = false,
 		[1] = false,
 		[2] = false,
 		[3] = false,
 	}
+	hidden = {}
+	for c = 0, 63 do
+		hidden[c] = false
+	end
 	locked = {}
 	for c = 0, 63 do
 		locked[c] = c < 33
 	end
-	
+		
 	rebuild_pal()
 	generate_gui()
 end
 
 
 function _draw()
-	cls(5)
-	if active_color then
-		local c = get_color(active_color)
-		print("#" .. color_to_hex(c), 272, 13, 7)
-		local okhsl = oklab.color_to_okhsl(c)
-		print("hue: " .. string.format("%0.1f", okhsl.h * 360.0) .. "")
-		print("chroma: " .. string.format("%0.3f", okhsl.s))
-		print("luminance: " .. string.format("%0.1f", okhsl.l * 100.0) .. "%")
-		--	print(color_to_hex(oklab.okhsl_to_color({h = 0, s = 0.5, l = 0.9})))
+	cls(bg_color)
+	if not active_color then
+		print("\014poke4(0x5000,get(fetch\"/ram/cart/pal/0.pal\"))", 292, 4, 7)
 	end
 	gui:draw_all()
 end
@@ -1536,59 +1780,50 @@ function load_working_file(item)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMSAxMTowNTozMiIscmV2aXNpb249OTkyXV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
-KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
-CADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9fQ==
+NC0wMiAwODozMDoxMiIscmV2aXNpb249MTU0M11dbHo0AGgAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
+MAgA0nk9MCx0aWxlX2g9MTYKABB3CgCAem9vbT0xfX0=
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: pal/0.pal
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMSAxMTowNTozMiIscmV2aXNpb249NTkzXV1sejQAcgEAABUCAAD1BXVzZXJkYXRhKCJpMzIi
-LDY0LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1ZjU3NGYwMGMyYzNjNzAw
-ZmZmMWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4Mzc2OWMgADE3N2E4AMBj
-Y2FhMDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYyOTAwNDkyZDM4MDBhMjg4
-NzlAAPADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2NGRmZjYwMGJkiQAAlgBA
-MGRhYkAAVTg1NmQwAQDwBTg3YTQ4YzAwYjZhZDgwMDBkMWEyIABAY2Y3MUgAUDViNzU3IAFtMzI0
-NjcwAQD-EDMwNTI2YTAwMzU2NDdlMDA0MTdkOTkwMDUzOTZiMTABAA5AOWZlMpgADwEALX9mZjAx
-MDIwAQARUDAwMCIp
-:: pal/1.pal
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDIwOjM3OjEzIixtb2RpZmllZD0iMjAyNC0w
-NC0wMSAwNDozNTozMiIscmV2aXNpb249Nl1dbHo0ADsBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAyIDA4OjI5OjE1Iixtb2RpZmllZD0iMjAyNC0w
+NC0wMiAwODozMDoxMiIscmV2aXNpb249NF1dbHo0AAkBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2
 NCwiMAEAwDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZm
 ZjFlOAgAQDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2Nh
 YTAwMWM1ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5
 QADwA2FjYzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBk
-YWJAAFU4NTZkMAEA8A80YTY5OGEwMDRmODE5MTAwNTg5NzhiMDA3YmE2NjhOAN9hMzU2MDBkYjk2
-NTIwAQCxUDAwMCIp
+YWJAAF84NTZkMAEA6VAwMDAiKQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMSAxMTowNTozMiIscmV2aXNpb249OTc4XV1sejQAEAEAAFEHAADwJ3B4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD-OR--AQDc
-v-gPQAANQP--sPBwCgD--2Qf-wEAl1D-----Hw==
+NC0wMiAwODozMDoxMyIscmV2aXNpb249MTUyNV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
+Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
+Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
+IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
+3L-4D0AADUD--7DwcAoA--9kH-8BAJdQ-----x8=
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: todo.txt
---[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-01 09:01:14",revision=179]]
+--[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-02 08:30:12",revision=449]]
+- copy/paste colors
+- text entry for hex code
+- "New Empty Palette" in menu;
+- right click for fine-tuning colors;
 - import ".hex" files;
+- accept drag-and-drop (or copy/pasting) of gfx;
 - import the palette from an image saved by
   the #paint cartridge;
-- accept drag-and-drop (or copy/pasting) of gfx;
-- add a test zone with shaded cubes;
-- add a logo (when no color is selected);
 
 Maybe:
+- reorder colors by drag-and-drop (i.e. swap two
+  colors)
 - multi-selection (ability to move a group of
   colors in the sliders)
-- reorder colors by drag-and-drop (while respecting
-  locked colors)
 
 :: .info.pod
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
@@ -1601,13 +1836,13 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAxIDExOjA1OjMzIix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzg0
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzUwMCIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0iZXhwb3J0cy9saWIvcGFsZXR0ZS5sdWEjMiIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0iZXhwb3J0cy9saWIvb2tsYWIubHVhIzM3Iix3b3Jrc3BhY2VfaW5k
-ZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249
-Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jr
-c3BhY2VfaW5kZXg9NH0se2xvY2F0aW9uPSJwYWwvMC5wYWwiLHdvcmtzcGFjZV9pbmRleD03fX1d
-XWx6NAAEAAAAAwAAADBuaWw=
+KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAyIDA4OjMwOjEzIix0aXRsZT0i
+T2tQQUwiLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzYi
+LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249Imd1aS5sdWEjODIiLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249ImV4cG9ydHMvbGliL3BhbGV0dGUubHVhIzIiLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249ImV4cG9ydHMvbGliL29rbGFiLmx1YSMzNyIsd29ya3NwYWNlX2luZGV4
+PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJt
+YXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3Nw
+YWNlX2luZGV4PTR9LHtsb2NhdGlvbj0icGFsLzAucGFsIix3b3Jrc3BhY2VfaW5kZXg9N319XV1s
+ejQABAAAAAMAAAAwbmls
 :: [eoc]
