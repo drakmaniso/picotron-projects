@@ -7,750 +7,6 @@ version 2
 :: exports/
 :: pal/
 :: exports/lib/
-:: exports/lib/oklab.lua
---[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-02 08:53:32",revision=979]]
--- Copyright(c) 2021 Bjorn Ottosson
---
--- Permission is hereby granted, free of charge, to any person obtaining a copy of
--- this software and associated documentation files(the "Software"), to deal in
--- the Software without restriction, including without limitation the rights to
--- use, copy, modify, merge, publish, distribute, sublicense, and /or sell copies
--- of the Software, and to permit persons to whom the Software is furnished to do
--- so, subject to the following conditions:
---
--- The above copyright noticeand this permission notice shall be included in all
--- copies or substantial portions of the Software.
---
--- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
--- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
--- SOFTWARE.
-
-oklab = {}
-oklab.__index = oklab
-
-function oklab.color_to_okhsl(code)
-	local srgb = {
-		r = ((code & 0xff0000) >> 16) / 255,
-		g = ((code & 0x00ff00) >> 8) / 255,
-		b = ((code & 0x0000ff)) / 255,
-	}
-	return oklab.srgb_to_okhsl(srgb)
-end
-
-function oklab.okhsl_to_color(okhsl)
-	local srgb = oklab.okhsl_to_srgb(okhsl)
-	local r = mid(0x00, math.floor(srgb.r * 255 + 0.5), 0xff)
-	local g = mid(math.floor(srgb.g * 255 + 0.5), 0xff)
-	local b = mid(math.floor(srgb.b * 255 + 0.5), 0xff)
-	return (r << 16) | (g << 8) | b
-end
-
-function oklab.new()
-    local inst = setmetatable({}, oklab)
-    return inst
-end
-
--- Finds the maximum saturation possible for a given hue that fits in sRGB
--- Saturation here is defined as S = C/L
--- a and b must be normalized so a^2 + b^2 == 1
-function oklab.compute_max_saturation(a, b)
-    if a ~= 0.0 or b ~= 0.0 then
-    	-- Max saturation will be when one of r, g or b goes below zero.
-        -- Select different coefficients depending on which component goes below zero first
-
-        -- Blue component (default)
-        local k0 = 1.35733652
-        local k1 = -0.00915799
-        local k2 = -1.1513021
-        local k3 = -0.50559606
-        local k4 = 0.00692167
-        local wl = -0.0041960863
-        local wm = -0.7034186147
-        local ws = 1.707614701
-
-        if -1.88170328 * a - 0.80936493 * b > 1 then
-            -- Red component
-            k0 = 1.19086277
-            k1 = 1.76576728
-            k2 = 0.59662641
-            k3 = 0.75515197
-            k4 = 0.56771245
-            wl = 4.0767416621
-            wm = -3.3077115913
-            ws = 0.2309699292
-        elseif 1.81444104 * a - 1.19445276 * b > 1 then
-            -- Green component
-            k0 = 0.73956515
-            k1 = -0.45954404
-            k2 = 0.08285427
-            k3 = 0.1254107
-            k4 = 0.14503204
-            wl = -1.2684380046
-            wm = 2.6097574011
-            ws = -0.3413193965
-        end
-
-        -- Approximate max saturation using a polynomial:
-        local S = k0 + k1 * a + k2 * b + k3 * a * a + k4 * a * b
-
-        -- Do one step Halley's method to get closer
-        -- this gives an error less than 10e6, except for some blue hues where the dS/dh is close to infinite
-        -- this should be sufficient for most applications, otherwise do two/three steps
-
-        local k_l = 0.3963377774 * a + 0.2158037573 * b
-        local k_m = -0.1055613458 * a - 0.0638541728 * b
-        local k_s = -0.0894841775 * a - 1.291485548 * b
-
-        do
-            local l_ = 1.0 + S * k_l
-            local m_ = 1.0 + S * k_m
-            local s_ = 1.0 + S * k_s
-
-            local l = l_ * l_ * l_
-            local m = m_ * m_ * m_
-            local s = s_ * s_ * s_
-
-            local l_dS = 3.0 * k_l * l_ * l_
-            local m_dS = 3.0 * k_m * m_ * m_
-            local s_dS = 3.0 * k_s * s_ * s_
-
-            local l_dS2 = 6.0 * k_l * k_l * l_
-            local m_dS2 = 6.0 * k_m * k_m * m_
-            local s_dS2 = 6.0 * k_s * k_s * s_
-
-            local f = wl * l + wm * m + ws * s
-            local f1 = wl * l_dS + wm * m_dS + ws * s_dS
-            local f2 = wl * l_dS2 + wm * m_dS2 + ws * s_dS2
-
-            local s_denom = f1 * f1 - 0.5 * f * f2
-            if s_denom ~= 0.0 then  S = S - f * f1 / s_denom end
-        end
-
-        return S
-    else
-        return 0.0
-    end
-end
-
--- finds L_cusp and C_cusp for a given hue
--- a and b must be normalized so a^2 + b^2 == 1
-function oklab.find_cusp(a, b)
-	-- First, find the maximum saturation (saturation S = C/L)
-    local S_cusp = oklab.compute_max_saturation(a, b)
-
-    -- Convert to linear sRGB to find the first point where at least one of r,g or b >= 1:
-    local rgb_at_max = oklab.oklab_to_linear_srgb({L = 1, a = S_cusp * a, b = S_cusp * b })
-    local max_comp = math.max(rgb_at_max.r, rgb_at_max.g, rgb_at_max.b)
-    if max_comp ~= 0.0 then
-        local L_cusp = (1.0 / max_comp) ^ 0.3333333333333333
-        return { L = L_cusp, C = L_cusp * S_cusp }
-    else
-        return { L = 0.0, C = 0.0 }
-    end
-end
-
--- Finds intersection of the line defined by
--- L = L0 * (1 - t) + t * L1
--- C = t * C1
--- a and b must be normalized so a^2 + b^2 == 1
-function oklab.find_gamut_intersection(a, b, L1, C1, L0, x)
-    -- Find the cusp of the gamut triangle
-    local cusp = x or oklab.find_cusp(a, b)
-
-    -- Find the intersection for upper and lower half separately
-    local t = 0.0
-    if ((L1 - L0) * cusp.C - (cusp.L - L0) * C1) <= 0.0 then
-        -- Lower half
-        local t_denom = C1 * cusp.L + cusp.C * (L0 - L1)
-        if t_denom ~= 0.0 then t = cusp.C * L0 / t_denom end
-    else
-        -- Upper half
-        -- First intersect with triangle
-        local t_denom = C1 * (cusp.L - 1.0) + cusp.C * (L0 - L1)
-        if t_denom ~= 0.0 then t = cusp.C * (L0 - 1.0) / t_denom end
-
-        -- Then one step Halley's method
-        do
-            local dL = L1 - L0
-            local dC = C1
-
-            local k_l = 0.3963377774 * a + 0.2158037573 * b
-            local k_m = -0.1055613458 * a - 0.0638541728 * b
-            local k_s = -0.0894841775 * a - 1.291485548 * b
-
-            local l_dt = dL + dC * k_l
-            local m_dt = dL + dC * k_m
-            local s_dt = dL + dC * k_s
-
-            -- If higher accuracy is required, 2 or 3 iterations of the following block can be used:
-            do
-                local L = L0 * (1.0 - t) + t * L1
-				local C = t * C1
-
-				local l_ = L + C * k_l
-				local m_ = L + C * k_m
-				local s_ = L + C * k_s
-
-				local l = l_ * l_ * l_
-				local m = m_ * m_ * m_
-				local s = s_ * s_ * s_
-
-				local ldt = 3.0 * l_dt * l_ * l_
-				local mdt = 3.0 * m_dt * m_ * m_
-				local sdt = 3.0 * s_dt * s_ * s_
-
-				local ldt2 = 6.0 * l_dt * l_dt * l_
-				local mdt2 = 6.0 * m_dt * m_dt * m_
-				local sdt2 = 6.0 * s_dt * s_dt * s_
-
-                local r0 = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s - 1
-				local r1 = 4.0767416621 * ldt - 3.3077115913 * mdt + 0.2309699292 * sdt
-				local r2 = 4.0767416621 * ldt2 - 3.3077115913 * mdt2 + 0.2309699292 * sdt2
-
-                local r_denom = r1 * r1 - 0.5 * r0 * r2
-                local u_r = 0.0
-                if r_denom ~= 0.0 then u_r = r1 / r_denom end
-				local t_r = -r0 * u_r
-
-                local g0 = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s - 1
-				local g1 = -1.2684380046 * ldt + 2.6097574011 * mdt - 0.3413193965 * sdt
-				local g2 = -1.2684380046 * ldt2 + 2.6097574011 * mdt2 - 0.3413193965 * sdt2
-
-                local g_denom = g1 * g1 - 0.5 * g0 * g2
-                local u_g = 0.0
-                if g_denom ~= 0.0 then u_g = g1 / g_denom end
-				local t_g = -g0 * u_g
-
-                local b0 = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s - 1
-				local b1 = -0.0041960863 * ldt - 0.7034186147 * mdt + 1.707614701 * sdt
-				local b2 = -0.0041960863 * ldt2 - 0.7034186147 * mdt2 + 1.707614701 * sdt2
-
-                local b_denom = (b1 * b1 - 0.5 * b0 * b2)
-                local u_b = 0.0
-                if b_denom ~= 0.0 then u_b = b1 / b_denom end
-				local t_b = -b0 * u_b
-
-                if u_r < 0.0 then t_r = 3.40282347e+38 end
-                if u_g < 0.0 then t_g = 3.40282347e+38 end
-                if u_b < 0.0 then t_b = 3.40282347e+38 end
-
-                t = t + math.min(t_r, t_g, t_b)
-            end
-        end
-    end
-
-    return t
-end
-
-function oklab.get_Cs(L, a_, b_)
-    local cusp = oklab.find_cusp(a_, b_)
-    local C_max = oklab.find_gamut_intersection(a_, b_, L, 1.0, L, cusp)
-    local ST_max = oklab.to_ST(cusp)
-
-    -- Scale factor to compensate for the curved part of gamut shape:
-    local k = 0.0
-    local k_denom = math.min(L * ST_max.S, (1.0 - L) * ST_max.T)
-    if k_denom ~= 0.0 then k = C_max / k_denom end
-
-    local C_mid = 0.0
-    do
-        local ST_mid = oklab.get_ST_mid(a_, b_)
-
-        -- Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
-        local C_a = L * ST_mid.S
-        local C_b = (1.0 - L) * ST_mid.T
-
-        local cae4 = C_a * C_a * C_a * C_a
-        local cbe4 = C_b * C_b * C_b * C_b
-        C_mid = 0.9 * k * ((1.0 / (1.0 / cae4 + 1.0 / cbe4)) ^ 0.25)
-    end
-
-    local C_0 = 0.0
-    do
-        -- for C_0, the shape is independent of hue, so ST are constant. Values picked to roughly be the average values of ST.
-        local C_a = L * 0.4
-        local C_b = (1.0 - L) * 0.8
-
-        -- Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
-        local cae2 = C_a * C_a
-        local cbe2 = C_b * C_b
-        C_0 = math.sqrt(1.0 / (1.0 / cae2 + 1.0 / cbe2))
-    end
-
-    return { C_0 = C_0, C_mid = C_mid, C_max = C_max }
-end
-
--- Returns a smooth approximation of the location of the cusp
--- This polynomial was created by an optimization process
--- It has been designed so that S_mid < S_max and T_mid < T_max
-function oklab.get_ST_mid(a_, b_)
-    local S = 0.11516993
-    local s_denom = 7.4477897 + 4.1590124 * b_
-        + a_ * (-2.19557347 + 1.75198401 * b_
-        + a_ * (-2.13704948 - 10.02301043 * b_
-        + a_ * (-4.24894561 + 5.38770819 * b_ + 4.69891013 * a_)))
-    if s_denom ~= 0.0 then
-        S = 0.11516993 + 1.0 / s_denom
-    end
-
-    local T = 0.11239642
-    local t_denom = 1.6132032 - 0.68124379 * b_
-        + a_ * (0.40370612 + 0.90148123 * b_
-        + a_ * (-0.27087943 + 0.6122399 * b_
-        + a_ * (0.00299215 - 0.45399568 * b_ - 0.14661872 * a_)))
-	if t_denom ~= 0.0 then
-        T = 0.11239642 + 1.0 / t_denom
-    end
-
-	return { S = S, T = T }
-end
-
-function oklab.linear_srgb_to_oklab(c)
-    local l = 0.4122214708 * c.r
-            + 0.5363325363 * c.g
-            + 0.0514459929 * c.b
-	local m = 0.2119034982 * c.r
-            + 0.6806995451 * c.g
-            + 0.1073969566 * c.b
-	local s = 0.0883024619 * c.r
-            + 0.2817188376 * c.g
-            + 0.6299787005 * c.b
-
-    local l_ = l ^ 0.3333333333333333
-    local m_ = m ^ 0.3333333333333333
-    local s_ = s ^ 0.3333333333333333
-
-    return {
-        L = 0.2104542553 * l_
-          + 0.793617785 * m_
-          - 0.0040720468 * s_,
-        a = 1.9779984951 * l_
-          - 2.428592205 * m_
-          + 0.4505937099 * s_,
-        b = 0.0259040371 * l_
-          + 0.7827717662 * m_
-          - 0.808675766 * s_ }
-end
-
-function oklab.okhsl_to_oklab(hsl)
-	local l = hsl.l
-    if l >= 1.0 then return { L = 1.0, a = 0.0, b = 0.0 } end
-    if l <= 0.0 then return { L = 0.0, a = 0.0, b = 0.0 } end
-
-    local s = hsl.s
-    if s < 0.0 then s = 0.0 end
-    if s > 1.0 then s = 1.0 end
-
-    local h = hsl.h
-    local h_rad = h * 6.283185307179586
-    local a_ = math.cos(h_rad)
-    local b_ = math.sin(h_rad)
-    local L = oklab.toe_inv(l)
-
-    local cs = oklab.get_Cs(L, a_, b_)
-    local C_0 = cs.C_0
-	local C_mid = cs.C_mid
-	local C_max = cs.C_max
-
-    local mid = 0.8
-	local mid_inv = 1.25
-
-    local C = 0.0
-    local t = 0.0
-    local k_0 = 0.0
-    local k_1 = 0.0
-    local k_2 = 0.0
-    if s < mid then
-        t = mid_inv * s
-
-		k_1 = mid * C_0
-        if C_mid ~= 0.0 then
-		    k_2 = 1.0 - k_1 / C_mid
-        end
-
-        local k_denom = 1.0 - k_2 * t
-		if k_denom ~= 0.0 then
-            C = t * k_1 / k_denom
-        end
-    else
-        local t_denom = 1.0 - mid
-        if t_denom ~= 0.0 then
-            t = (s - mid) / t_denom
-        end
-
-		k_0 = C_mid
-        if C_0 ~= 0.0 then
-		    k_1 = (1.0 - mid) * C_mid * C_mid * mid_inv * mid_inv / C_0
-        end
-
-        local C_denom = C_max - C_mid
-		k_2 = 1.0
-        if C_denom ~= 0.0 then
-            k_2 = 1.0 - k_1 / C_denom
-        end
-
-        local k_denom = 1.0 - k_2 * t
-        if k_denom ~= 0.0 then
-		    C = k_0 + t * k_1 / k_denom
-        end
-    end
-
-    return {
-        L = L,
-        a = C * a_,
-        b = C * b_ }
-end
-
-function oklab.okhsl_to_srgb(hsl)
-    return oklab.oklab_to_srgb(oklab.okhsl_to_oklab(hsl))
-end
-
-function oklab.okhsv_to_oklab(hsv)
-	local v = hsv.v
-    if v <= 0.0 then return { L = 0.0, a = 0.0, b = 0.0 } end
-    if v > 1.0 then v = 1.0 end
-
-    local s = hsv.s
-    if s < 0.0 then s = 0.0 end
-    if s > 1.0 then s = 1.0 end
-
-    local h = hsv.h
-    local h_rad = h * 6.283185307179586
-    local a_ = math.cos(h_rad)
-    local b_ = math.sin(h_rad)
-
-    local cusp = oklab.find_cusp(a_, b_)
-	local ST_max = oklab.to_ST(cusp)
-	local S_max = ST_max.S
-	local T_max = ST_max.T
-	local S_0 = 0.5
-    local k = 1.0
-    if S_max ~= 0.0 then
-	    k = 1.0 - S_0 / S_max
-    end
-
-    -- first we compute L and V as if the gamut is a perfect triangle:
-
-	-- L, C when v==1:
-    local v_denom = S_0 + T_max - T_max * k * s
-    local L_v = 1.0
-    local C_v = 0.0
-    if v_denom ~= 0.0 then
-        L_v = 1.0 - s * S_0 / v_denom
-	    C_v = s * T_max * S_0 / v_denom
-    end
-
-    local L = v * L_v
-	local C = v * C_v
-
-    --then we compensate for both toe and the curved top part of the triangle:
-    local L_vt = oklab.toe_inv(L_v)
-    local C_vt = 0.0
-    if L_v ~= 0.0 then
-        C_vt = C_v * L_vt / L_v
-    end
-
-    local L_new = oklab.toe_inv(L)
-    if L ~= 0.0 then
-        C = C * L_new / L
-    end
-    L = L_new
-
-    local rgb_scale = oklab.oklab_to_linear_srgb({
-        L = L_vt,
-        a = a_ * C_vt,
-        b = b_ * C_vt })
-    local max_comp = math.max(
-        rgb_scale.r,
-        rgb_scale.g,
-        rgb_scale.b, 0.0)
-    local scale_L = 0.0
-    if max_comp ~= 0.0 then
-        scale_L = (1.0 / max_comp) ^ 0.3333333333333333
-    end
-
-	C = C * scale_L
-    return {
-        L = L * scale_L,
-        a = C * a_,
-        b = C * b_ }
-end
-
-function oklab.okhsv_to_srgb(hsv)
-    return oklab.oklab_to_srgb(oklab.okhsv_to_oklab(hsv))
-end
-
-function oklab.oklab_to_linear_srgb(lab)
-    local l_ = lab.L
-        + 0.3963377774 * lab.a
-        + 0.2158037573 * lab.b
-	local m_ = lab.L
-        - 0.1055613458 * lab.a
-        - 0.0638541728 * lab.b
-	local s_ = lab.L
-        - 0.0894841775 * lab.a
-        - 1.291485548 * lab.b
-
-    local l = l_ * l_ * l_
-    local m = m_ * m_ * m_
-    local s = s_ * s_ * s_
-
-    return {
-        r = 4.0767416621 * l
-          - 3.3077115913 * m
-          + 0.2309699292 * s,
-        g = -1.2684380046 * l
-           + 2.6097574011 * m
-           - 0.3413193965 * s,
-        b = -0.0041960863 * l
-           - 0.7034186147 * m
-           + 1.707614701 * s }
-end
-
-function oklab.oklab_to_okhsl(lab)
-    local L = lab.L
-    if L >= 1.0 then return { h = 0.0, s = 0.0, l = 1.0 } end
-    if L <= 0.0 then return { h = 0.0, s = 0.0, l = 0.0 } end
-
-    local Csq = lab.a * lab.a + lab.b * lab.b
-    if Csq > 0.0 then
-        local C = math.sqrt(Csq)
-        local a_ = lab.a / C
-        local b_ = lab.b / C
-
-        -- 1.0 / math.pi = 0.3183098861837907
-        local h = 0.5 + 0.5 * math.atan(-lab.b, -lab.a) * 0.3183098861837907
-
-        local cs = oklab.get_Cs(L, a_, b_)
-        local C_0 = cs.C_0
-        local C_mid = cs.C_mid
-        local C_max = cs.C_max
-
-        -- Inverse of the interpolation in okhsl_to_srgb:
-        local mid = 0.8
-        local mid_inv = 1.25
-
-        local s = 0.0
-        if C < C_mid then
-            local k_1 = mid * C_0
-            local k_2 = 1.0
-            if C_mid ~= 0.0 then
-                k_2 = (1.0 - k_1 / C_mid)
-            end
-
-            local t_denom = k_1 + k_2 * C
-            local t = 0.0
-            if t_denom ~= 0.0 then
-                t = C / t_denom
-            end
-
-            s = t * mid
-        else
-            local k_0 = C_mid
-            local k_1 = 0.0
-            if C_0 ~= 0.0 then
-                k_1 = (1.0 - mid) * C_mid * C_mid * mid_inv * mid_inv / C_0
-            end
-
-            local C_denom = C_max - C_mid
-            local k_2 = 1.0
-            if C_denom ~= 0.0 then
-                k_2 = 1.0 - k_1 / C_denom
-            end
-
-            local t_denom = k_1 + k_2 * (C - k_0)
-            local t = 0.0
-            if t_denom ~= 0.0 then
-                t = (C - k_0) / t_denom
-            end
-
-            s = mid + (1.0 - mid) * t
-        end
-
-        return { h = h, s = s, l = oklab.toe(L) }
-    else
-        return { h = 0.0, s = 0.0, l = L }
-    end
-end
-
-function oklab.oklab_to_okhsv(lab)
-    local L = lab.L
-    if L >= 1.0 then return { h = 0.0, s = 0.0, v = 1.0 } end
-    if L <= 0.0 then return { h = 0.0, s = 0.0, v = 0.0 } end
-
-    local Csq = lab.a * lab.a + lab.b * lab.b
-    if Csq > 0.0 then
-        local C = math.sqrt(Csq)
-        local a_ = lab.a / C
-        local b_ = lab.b / C
-
-        -- 1.0 / math.pi = 0.3183098861837907
-        local h = 0.5 + 0.5 * math.atan(-lab.b, -lab.a) * 0.3183098861837907
-
-        local cusp = oklab.find_cusp(a_, b_)
-        local ST_max = oklab.to_ST(cusp)
-        local S_max = ST_max.S
-        local T_max = ST_max.T
-        local S_0 = 0.5
-        local k = 1.0
-        if S_max ~= 0.0 then
-            k = 1.0 - S_0 / S_max
-        end
-
-        -- first we find L_v, C_v, L_vt and C_vt
-        local t_denom = C + L * T_max
-        local t = 0.0
-        if t_denom ~= 0.0 then
-            t = T_max / t_denom
-        end
-        local L_v = t * L
-        local C_v = t * C
-
-        local L_vt = oklab.toe_inv(L_v)
-        local C_vt = 0.0
-        if L_v ~= 0.0 then
-            C_vt = C_v * L_vt / L_v
-        end
-
-        -- we can then use these to invert the step that compensates for the toe and the curved top part of the triangle:
-        local rgb_scale = oklab.oklab_to_linear_srgb({
-            L = L_vt,
-            a = a_ * C_vt,
-            b = b_ * C_vt })
-        local scale_denom = math.max(
-            rgb_scale.r,
-            rgb_scale.g,
-            rgb_scale.b, 0.0)
-        local scale_L = 0.0
-        if scale_denom ~= 0.0 then
-            scale_L = (1.0 / scale_denom) ^ 0.3333333333333333
-            L = L / scale_L
-            C = C / scale_L
-        end
-
-        local toel = oklab.toe(L)
-        C = C * toel / L
-        L = toel
-
-        -- we can now compute v and s:
-        local v = 0.0
-        if L_v ~= 0.0 then v = L / L_v end
-
-        local s = 0.0
-        local s_denom = ((T_max * S_0) + T_max * k * C_v)
-        if s_denom ~= 0.0 then
-            s = (S_0 + T_max) * C_v / s_denom
-        end
-
-        return { h = h, s = s, v = v }
-    else
-        return { h = 0.0, s = 0.0, v = L }
-    end
-end
-
-function oklab.oklab_to_srgb(lab)
-    local lrgb = oklab.oklab_to_linear_srgb(lab)
-	return {
-		r = oklab.srgb_transfer_function(lrgb.r),
-		g = oklab.srgb_transfer_function(lrgb.g),
-		b = oklab.srgb_transfer_function(lrgb.b) }
-end
-
-function oklab.srgb_to_okhsl(rgb)
-    return oklab.oklab_to_okhsl(oklab.srgb_to_oklab(rgb))
-end
-
-function oklab.srgb_to_okhsv(rgb)
-    return oklab.oklab_to_okhsv(oklab.srgb_to_oklab(rgb))
-end
-
-function oklab.srgb_to_oklab(srgb)
-    return oklab.linear_srgb_to_oklab({
-		r = oklab.srgb_transfer_function_inv(srgb.r),
-		g = oklab.srgb_transfer_function_inv(srgb.g),
-		b = oklab.srgb_transfer_function_inv(srgb.b) })
-end
-
-function oklab.srgb_transfer_function(a)
-    if 0.0031308 >= a then
-        return 12.92 * a
-    else
-        return 1.055 * (a ^ 0.4166666666666667) - 0.055
-    end
-end
-
-function oklab.srgb_transfer_function_inv(a)
-    if 0.04045 < a then
-        return ((a + 0.055) * 0.9478672985781991) ^ 2.4
-    else
-        return a * 0.07739938080495357
-    end
-end
-
-function oklab.to_ST(cusp)
-	local L = cusp.L
-    local C = cusp.C
-    if L ~= 0.0 and L ~= 1.0 then
-        return { S = C / L, T = C / (1.0 - L) }
-    elseif L ~= 0.0 then
-        return { S = C / L, T = 0.0 }
-    elseif L ~= 1.0 then
-        return { S = 0.0, T = C / (1.0 - L) }
-    else
-        return { S = 0.0, T = 0.0 }
-    end
-end
-
-function oklab.toe(x)
-    local y = 1.170873786407767 * x - 0.206
-	return 0.5 * (y + math.sqrt(y * y + 0.14050485436893204 * x))
-end
-
-function oklab.toe_inv(x)
-    local denom = 1.170873786407767 * (x + 0.03)
-    if denom ~= 0.0 then
-    	return (x * x + 0.206 * x) / denom
-    else
-        return 0.0
-    end
-end
-
-return oklab
-:: exports/lib/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-02 14:43:11",revision=1762]]
-function load_palette(filename)
-	poke4(0x5000, get(fetch(filename)))
-end
-
-
---[[
-function fetch_palette(filename)
-	local colors = split(fetch(filename):gsub("\r",""),"\n",true)
-	local palette = {}
-	for i = 1, #colors do
-		palette[i - 1] = tonum("0x00" .. colors[i])
-	end
-	return palette
-end
-]]--
-
-
-function set_color(c, code)
-	poke4(0x5000 + 4 * c, code)
-end
-
-
-function get_color(c)
-	return peek4(0x5000 + 4 * c)
-end
-
-function color_to_hex(c)
-	return string.format("%06x", c)
-end
 :: exports/lib/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE5IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTkiXV1sejQABAAAAAMAAAAwbmls
@@ -759,7 +15,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA4OjQyOjE1IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDg6NDI6MTUiXV1sejQABAAAAAMAAAAwbmls
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMiAxNDo0NDozNCIscmV2aXNpb249MTk1Nl1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
+NC0wMyAxMDoxOToyNyIscmV2aXNpb249MjA3NV1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -771,48 +27,26 @@ ZzAHAEdABxAnUAcgB-AMswAZB0YAAfEBTwAHIAdKACNfEBAE8PAxAP----------------------
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: globals.lua
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-03 10:19:27",revision=106]]
+active_color = nil
+bg_color = 0
+
+pal_okhsl = {}
+pal_code = {}
+
+hidden_toggles = {}
+hidden = {}
+locked = {}
+
+
+test_cube_colors = {}
+
 :: gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-02 14:44:34",revision=2856]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-03 10:19:27",revision=2983]]
 local slider_size = 170
 local slider_border = 6
 local slider_inner = slider_size - 2 * slider_border
-
-
-test_cube_colors = {
-	[0] = 
-	{15, 31, 4},
-	{31, 4, 20},
-	{4, 20, 21},
-	--
-	{10, 9, 25},
-	{9, 25, 24},
-	{8, 24, 2},
-	--
-	{26, 11, 27},
-	{11, 27, 3},
-	{27, 3, 19},
-	--
-	{28, 17, 3},
-	{28, 12, 16},
-	{12, 16, 1},
-	--
-	{23, 29, 13},
-	{29, 13, 18},
-	{13, 18, 1},
-	--
-	{15, 23, 14},
-	{23, 14, 13},
-	{14, 30, 18},
-	--
-	{7, 6, 22},
-	{6, 22, 5},
-	{22, 5, 21},
-	--
-	{1, 1, 1},
-	{1, 1, 1},
-	{1, 1, 1},
-	--
-}
 
 
 function generate_gui()
@@ -842,7 +76,7 @@ function create_palette(el)
 	local nb_rows = 4
 	el.width = (nb_columns * size) + 1
 	el.height = (nb_rows * size) + 1
-		
+
 	function el:draw()
 		clip()
 		rect(0, 0, self.width, self.height, outline_color())
@@ -1673,24 +907,17 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-02 14:44:34",revision=2272]]
-include "exports/lib/oklab.lua"
-include "exports/lib/palette.lua"
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-03 10:19:27",revision=2452]]
+include "globals.lua"
+include "oklab.lua"
+include "palette.lua"
 include "gui.lua"
-
-
-active_color = nil
-bg_color = 0
-pal_okhsl = {}
-pal_code = {}
 
 
 function _init()	
 	window {
 		tabbed = true,
---		icon = --[[pod,pod_type="image"]]unpod("b64:bHo0ACQAAAAiAAAA8BNweHUAQyAICARAF0AHEAcAJyAXMAcAF1AXUAcABzAHIDcQ")
---		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABkAAAAXAAAA8AhweHUAQyAICARAF0A3ADcAZwD3ARBHkA==")
-		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA==")
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA=="),
 	}
 
 	mkdir("/ram/cart/pal")
@@ -1700,22 +927,10 @@ function _init()
 		"/ram/cart/pal/0.pal" -- default
 	)
 
-	hidden_toggles = {
-		[0] = false,
-		[1] = false,
-		[2] = false,
-		[3] = false,
-	}
-	hidden = {}
-	for c = 0, 63 do
-		hidden[c] = false
-	end
-	locked = {}
-	for c = 0, 63 do
-		locked[c] = c < 33
-	end
-		
+	-- Initialize globals
+	load_metadata({})
 	rebuild_pal()
+	
 	generate_gui()
 end
 
@@ -1754,54 +969,37 @@ function _update()
 end
 
 
+-- Drag-and-drop ------------------------------------------------------------------
+
+
 on_event("drop_items",function(msg)
 	for i = 1, #msg.items do
 		local item = msg.items[i]
+		for k, _ in pairs(item) do
+			printh("key '" .. tostr(k) .. "'")
+		end
 		if item.pod_type == "file_reference" and item.attrib== "file" then
-			if sub(item.fullpath, -4, -1) == ".pal" then
+			if item.fullpath:ext() == "pal" then
 				send_message(pid(), {event = "open_file", filename = item.fullpath})
-			elseif sub(item.fullpath, -4, -1) == ".hex" then
+			elseif item.fullpath:ext() == "hex" then
 				notify("*** hex file dropped! ***")
 				import_hex_file(item.fullpath)
 				local import_name = sub(item.fullpath, 1, -5) .. ".pal"
 				send_message(pid(), {event = "open_file", filename = import_name})
+			else
+				notify("*** unkown file extension ***")
 			end
 		end
 	end
 end)
 
+
+-- Loading and saving -------------------------------------------------------------
+
+
 on_event("open_file", function(msg) end)
 on_event("save_file", function(msg) end)
 on_event("save_file_as", function(msg) end)
-
-
-function rebuild_pal(c)
-	for c = 0, 63 do
-		change_color_code(c)
-	end
-end
-
-
-function change_color_code(c)
-	pal_code[c] = get_color(c)
-	pal_okhsl[c] = oklab.color_to_okhsl(pal_code[c])
-end
-
-
-function change_color(c, hue, sat, lum)
-	local hsl = {
-		h = hue or pal_okhsl[c].h,
-		s = sat or pal_okhsl[c].s,
-		l = lum or pal_okhsl[c].l,
-	}
-	hsl.h = mid(-1.0, hsl.h, 1.0)
-	hsl.s = mid(0.0, hsl.s, 1.0)
-	hsl.l = mid(0.0, hsl.l, 1.0)
-	local code = oklab.okhsl_to_color(hsl)
-	pal_code[c] = code
-	pal_okhsl[c] = hsl
-	set_color(c, code)
-end
 
 
 function save_working_file()
@@ -1809,8 +1007,110 @@ function save_working_file()
 	for c = 0, 63 do
 		output:set(c, get_color(c))
 	end
-	return output
+	return output, create_metadata()
 end
+
+
+function load_working_file(data, metadata)
+	if type(data) ~= "userdata" then
+		if data then
+			notify("unable to load working file")
+		end
+		return
+	end
+	for c = 0, 63 do
+		if data[c] then
+			set_color(c, data[c])
+		end
+	end
+	rebuild_pal()
+	load_metadata(metadata)
+end
+
+
+function create_metadata()
+	local metadata = {}
+	metadata.bg_color = bg_color
+	metadata.hidden_toggles = hidden_toggles
+	metadata.hidden = hidden
+	metadata.locked = locked
+	metadata.test_cube_colors = test_cube_colors
+	return metadata
+end
+
+
+function load_metadata(metadata)
+	bg_color = metadata.bg_color or 0
+	
+	if type(metadata.hidden_toggles) == "table" then
+		hidden_toggles = metadata.hidden_toggles
+	else
+		hidden_toggles = {}
+		for row = 0, 3 do
+			hidden_toggles[row] = false
+		end
+	end
+	
+	if type(metadata.hidden) == "table" then
+		hidden = metadata.hidden
+	else
+		hidden = {}
+		for c = 0, 63 do
+			hidden[c] = false
+		end
+	end
+	
+	if type(metadata.locked) == "table" then
+		locked = metadata.locked
+	else
+		locked = {}
+		for c = 0, 63 do
+			locked[c] = c < 33
+		end
+	end
+	
+	if type(metadata.test_cube_colors) == "table" then
+		test_cube_colors = metadata.test_cube_colors
+	else
+		test_cube_colors = {
+			[0] = 
+			{15, 31, 4},
+			{31, 4, 20},
+			{4, 20, 21},
+			--
+			{10, 9, 25},
+			{9, 25, 24},
+			{8, 24, 2},
+			--
+			{26, 11, 27},
+			{11, 27, 3},
+			{27, 3, 19},
+			--
+			{28, 17, 3},
+			{28, 12, 16},
+			{12, 16, 1},
+			--
+			{23, 29, 13},
+			{29, 13, 18},
+			{13, 18, 1},
+			--
+			{15, 23, 14},
+			{23, 14, 13},
+			{14, 30, 18},
+			--
+			{7, 6, 22},
+			{6, 22, 5},
+			{22, 5, 21},
+			--
+			{1, 1, 1},
+			{1, 1, 1},
+			{1, 1, 1},
+			--
+		}
+	end
+end
+
+-- Importing and exporting hex files ----------------------------------------------
 
 
 function export_hex_file(filename)
@@ -1823,32 +1123,15 @@ function export_hex_file(filename)
 end
 
 
-function load_working_file(item)
-	if type(item) ~= "userdata" then
-		if item then
-			notify("unable to auto-save")
-		end
-		return
-	end
-	for c = 0, 63 do
-		if item[c] then
-			set_color(c, item:get(c))
-		end
-	end
-	rebuild_pal()
-end
-
-
 function import_hex_file(filename)
 	local item = fetch(filename)
 	if type(item) == "string" then
 		printh("load working file: string")
----		local colors = split(item:gsub("\r",""),"\n",true)
 		local lines = split(item, "\n", false)
 		local codes = {}
 		for l in all(lines) do
 			printh("line: " .. l)
-			local code = tonum("0x" .. l)
+			local code = tonum("0x" .. l:gsub("%s",""))
 			if type(code) == "number" then
 				codes[#codes + 1] = code
 			else
@@ -1886,7 +1169,7 @@ function paste_color()
 	end
 	local cb = get_clipboard()
 	if type(cb) == "string" then
-		local hex = cb
+		local hex = string.gsub(cb, "%s", "")
 		if sub(hex, 1, 1) == "#" then
 			hex = sub(hex, 2, -1)
 		end
@@ -1895,7 +1178,7 @@ function paste_color()
 			set_color(active_color, code)
 			change_color_code(active_color)
 		else
-			notify("unable to paste: unrecognized string: " .. cb)
+			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
 		end
 	else
 		notify("unable to paste: type not supported (" .. type(cb) .. ")")
@@ -1903,18 +1186,857 @@ function paste_color()
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMiAxNDo0NDozNCIscmV2aXNpb249MTgzNl1dbHo0AGgAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wMyAxMDoxOToyNyIscmV2aXNpb249MTk1NV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
-MAgA0nk9MCx0aWxlX2g9MTYKABB3CgCAem9vbT0xfX0=
+MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: oklab.lua
+--[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-02 08:53:32",revision=979]]
+-- Copyright(c) 2021 Bjorn Ottosson
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of
+-- this software and associated documentation files(the "Software"), to deal in
+-- the Software without restriction, including without limitation the rights to
+-- use, copy, modify, merge, publish, distribute, sublicense, and /or sell copies
+-- of the Software, and to permit persons to whom the Software is furnished to do
+-- so, subject to the following conditions:
+--
+-- The above copyright noticeand this permission notice shall be included in all
+-- copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-- SOFTWARE.
+
+oklab = {}
+oklab.__index = oklab
+
+function oklab.color_to_okhsl(code)
+	local srgb = {
+		r = ((code & 0xff0000) >> 16) / 255,
+		g = ((code & 0x00ff00) >> 8) / 255,
+		b = ((code & 0x0000ff)) / 255,
+	}
+	return oklab.srgb_to_okhsl(srgb)
+end
+
+function oklab.okhsl_to_color(okhsl)
+	local srgb = oklab.okhsl_to_srgb(okhsl)
+	local r = mid(0x00, math.floor(srgb.r * 255 + 0.5), 0xff)
+	local g = mid(math.floor(srgb.g * 255 + 0.5), 0xff)
+	local b = mid(math.floor(srgb.b * 255 + 0.5), 0xff)
+	return (r << 16) | (g << 8) | b
+end
+
+function oklab.new()
+    local inst = setmetatable({}, oklab)
+    return inst
+end
+
+-- Finds the maximum saturation possible for a given hue that fits in sRGB
+-- Saturation here is defined as S = C/L
+-- a and b must be normalized so a^2 + b^2 == 1
+function oklab.compute_max_saturation(a, b)
+    if a ~= 0.0 or b ~= 0.0 then
+    	-- Max saturation will be when one of r, g or b goes below zero.
+        -- Select different coefficients depending on which component goes below zero first
+
+        -- Blue component (default)
+        local k0 = 1.35733652
+        local k1 = -0.00915799
+        local k2 = -1.1513021
+        local k3 = -0.50559606
+        local k4 = 0.00692167
+        local wl = -0.0041960863
+        local wm = -0.7034186147
+        local ws = 1.707614701
+
+        if -1.88170328 * a - 0.80936493 * b > 1 then
+            -- Red component
+            k0 = 1.19086277
+            k1 = 1.76576728
+            k2 = 0.59662641
+            k3 = 0.75515197
+            k4 = 0.56771245
+            wl = 4.0767416621
+            wm = -3.3077115913
+            ws = 0.2309699292
+        elseif 1.81444104 * a - 1.19445276 * b > 1 then
+            -- Green component
+            k0 = 0.73956515
+            k1 = -0.45954404
+            k2 = 0.08285427
+            k3 = 0.1254107
+            k4 = 0.14503204
+            wl = -1.2684380046
+            wm = 2.6097574011
+            ws = -0.3413193965
+        end
+
+        -- Approximate max saturation using a polynomial:
+        local S = k0 + k1 * a + k2 * b + k3 * a * a + k4 * a * b
+
+        -- Do one step Halley's method to get closer
+        -- this gives an error less than 10e6, except for some blue hues where the dS/dh is close to infinite
+        -- this should be sufficient for most applications, otherwise do two/three steps
+
+        local k_l = 0.3963377774 * a + 0.2158037573 * b
+        local k_m = -0.1055613458 * a - 0.0638541728 * b
+        local k_s = -0.0894841775 * a - 1.291485548 * b
+
+        do
+            local l_ = 1.0 + S * k_l
+            local m_ = 1.0 + S * k_m
+            local s_ = 1.0 + S * k_s
+
+            local l = l_ * l_ * l_
+            local m = m_ * m_ * m_
+            local s = s_ * s_ * s_
+
+            local l_dS = 3.0 * k_l * l_ * l_
+            local m_dS = 3.0 * k_m * m_ * m_
+            local s_dS = 3.0 * k_s * s_ * s_
+
+            local l_dS2 = 6.0 * k_l * k_l * l_
+            local m_dS2 = 6.0 * k_m * k_m * m_
+            local s_dS2 = 6.0 * k_s * k_s * s_
+
+            local f = wl * l + wm * m + ws * s
+            local f1 = wl * l_dS + wm * m_dS + ws * s_dS
+            local f2 = wl * l_dS2 + wm * m_dS2 + ws * s_dS2
+
+            local s_denom = f1 * f1 - 0.5 * f * f2
+            if s_denom ~= 0.0 then  S = S - f * f1 / s_denom end
+        end
+
+        return S
+    else
+        return 0.0
+    end
+end
+
+-- finds L_cusp and C_cusp for a given hue
+-- a and b must be normalized so a^2 + b^2 == 1
+function oklab.find_cusp(a, b)
+	-- First, find the maximum saturation (saturation S = C/L)
+    local S_cusp = oklab.compute_max_saturation(a, b)
+
+    -- Convert to linear sRGB to find the first point where at least one of r,g or b >= 1:
+    local rgb_at_max = oklab.oklab_to_linear_srgb({L = 1, a = S_cusp * a, b = S_cusp * b })
+    local max_comp = math.max(rgb_at_max.r, rgb_at_max.g, rgb_at_max.b)
+    if max_comp ~= 0.0 then
+        local L_cusp = (1.0 / max_comp) ^ 0.3333333333333333
+        return { L = L_cusp, C = L_cusp * S_cusp }
+    else
+        return { L = 0.0, C = 0.0 }
+    end
+end
+
+-- Finds intersection of the line defined by
+-- L = L0 * (1 - t) + t * L1
+-- C = t * C1
+-- a and b must be normalized so a^2 + b^2 == 1
+function oklab.find_gamut_intersection(a, b, L1, C1, L0, x)
+    -- Find the cusp of the gamut triangle
+    local cusp = x or oklab.find_cusp(a, b)
+
+    -- Find the intersection for upper and lower half separately
+    local t = 0.0
+    if ((L1 - L0) * cusp.C - (cusp.L - L0) * C1) <= 0.0 then
+        -- Lower half
+        local t_denom = C1 * cusp.L + cusp.C * (L0 - L1)
+        if t_denom ~= 0.0 then t = cusp.C * L0 / t_denom end
+    else
+        -- Upper half
+        -- First intersect with triangle
+        local t_denom = C1 * (cusp.L - 1.0) + cusp.C * (L0 - L1)
+        if t_denom ~= 0.0 then t = cusp.C * (L0 - 1.0) / t_denom end
+
+        -- Then one step Halley's method
+        do
+            local dL = L1 - L0
+            local dC = C1
+
+            local k_l = 0.3963377774 * a + 0.2158037573 * b
+            local k_m = -0.1055613458 * a - 0.0638541728 * b
+            local k_s = -0.0894841775 * a - 1.291485548 * b
+
+            local l_dt = dL + dC * k_l
+            local m_dt = dL + dC * k_m
+            local s_dt = dL + dC * k_s
+
+            -- If higher accuracy is required, 2 or 3 iterations of the following block can be used:
+            do
+                local L = L0 * (1.0 - t) + t * L1
+				local C = t * C1
+
+				local l_ = L + C * k_l
+				local m_ = L + C * k_m
+				local s_ = L + C * k_s
+
+				local l = l_ * l_ * l_
+				local m = m_ * m_ * m_
+				local s = s_ * s_ * s_
+
+				local ldt = 3.0 * l_dt * l_ * l_
+				local mdt = 3.0 * m_dt * m_ * m_
+				local sdt = 3.0 * s_dt * s_ * s_
+
+				local ldt2 = 6.0 * l_dt * l_dt * l_
+				local mdt2 = 6.0 * m_dt * m_dt * m_
+				local sdt2 = 6.0 * s_dt * s_dt * s_
+
+                local r0 = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s - 1
+				local r1 = 4.0767416621 * ldt - 3.3077115913 * mdt + 0.2309699292 * sdt
+				local r2 = 4.0767416621 * ldt2 - 3.3077115913 * mdt2 + 0.2309699292 * sdt2
+
+                local r_denom = r1 * r1 - 0.5 * r0 * r2
+                local u_r = 0.0
+                if r_denom ~= 0.0 then u_r = r1 / r_denom end
+				local t_r = -r0 * u_r
+
+                local g0 = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s - 1
+				local g1 = -1.2684380046 * ldt + 2.6097574011 * mdt - 0.3413193965 * sdt
+				local g2 = -1.2684380046 * ldt2 + 2.6097574011 * mdt2 - 0.3413193965 * sdt2
+
+                local g_denom = g1 * g1 - 0.5 * g0 * g2
+                local u_g = 0.0
+                if g_denom ~= 0.0 then u_g = g1 / g_denom end
+				local t_g = -g0 * u_g
+
+                local b0 = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s - 1
+				local b1 = -0.0041960863 * ldt - 0.7034186147 * mdt + 1.707614701 * sdt
+				local b2 = -0.0041960863 * ldt2 - 0.7034186147 * mdt2 + 1.707614701 * sdt2
+
+                local b_denom = (b1 * b1 - 0.5 * b0 * b2)
+                local u_b = 0.0
+                if b_denom ~= 0.0 then u_b = b1 / b_denom end
+				local t_b = -b0 * u_b
+
+                if u_r < 0.0 then t_r = 3.40282347e+38 end
+                if u_g < 0.0 then t_g = 3.40282347e+38 end
+                if u_b < 0.0 then t_b = 3.40282347e+38 end
+
+                t = t + math.min(t_r, t_g, t_b)
+            end
+        end
+    end
+
+    return t
+end
+
+function oklab.get_Cs(L, a_, b_)
+    local cusp = oklab.find_cusp(a_, b_)
+    local C_max = oklab.find_gamut_intersection(a_, b_, L, 1.0, L, cusp)
+    local ST_max = oklab.to_ST(cusp)
+
+    -- Scale factor to compensate for the curved part of gamut shape:
+    local k = 0.0
+    local k_denom = math.min(L * ST_max.S, (1.0 - L) * ST_max.T)
+    if k_denom ~= 0.0 then k = C_max / k_denom end
+
+    local C_mid = 0.0
+    do
+        local ST_mid = oklab.get_ST_mid(a_, b_)
+
+        -- Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
+        local C_a = L * ST_mid.S
+        local C_b = (1.0 - L) * ST_mid.T
+
+        local cae4 = C_a * C_a * C_a * C_a
+        local cbe4 = C_b * C_b * C_b * C_b
+        C_mid = 0.9 * k * ((1.0 / (1.0 / cae4 + 1.0 / cbe4)) ^ 0.25)
+    end
+
+    local C_0 = 0.0
+    do
+        -- for C_0, the shape is independent of hue, so ST are constant. Values picked to roughly be the average values of ST.
+        local C_a = L * 0.4
+        local C_b = (1.0 - L) * 0.8
+
+        -- Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
+        local cae2 = C_a * C_a
+        local cbe2 = C_b * C_b
+        C_0 = math.sqrt(1.0 / (1.0 / cae2 + 1.0 / cbe2))
+    end
+
+    return { C_0 = C_0, C_mid = C_mid, C_max = C_max }
+end
+
+-- Returns a smooth approximation of the location of the cusp
+-- This polynomial was created by an optimization process
+-- It has been designed so that S_mid < S_max and T_mid < T_max
+function oklab.get_ST_mid(a_, b_)
+    local S = 0.11516993
+    local s_denom = 7.4477897 + 4.1590124 * b_
+        + a_ * (-2.19557347 + 1.75198401 * b_
+        + a_ * (-2.13704948 - 10.02301043 * b_
+        + a_ * (-4.24894561 + 5.38770819 * b_ + 4.69891013 * a_)))
+    if s_denom ~= 0.0 then
+        S = 0.11516993 + 1.0 / s_denom
+    end
+
+    local T = 0.11239642
+    local t_denom = 1.6132032 - 0.68124379 * b_
+        + a_ * (0.40370612 + 0.90148123 * b_
+        + a_ * (-0.27087943 + 0.6122399 * b_
+        + a_ * (0.00299215 - 0.45399568 * b_ - 0.14661872 * a_)))
+	if t_denom ~= 0.0 then
+        T = 0.11239642 + 1.0 / t_denom
+    end
+
+	return { S = S, T = T }
+end
+
+function oklab.linear_srgb_to_oklab(c)
+    local l = 0.4122214708 * c.r
+            + 0.5363325363 * c.g
+            + 0.0514459929 * c.b
+	local m = 0.2119034982 * c.r
+            + 0.6806995451 * c.g
+            + 0.1073969566 * c.b
+	local s = 0.0883024619 * c.r
+            + 0.2817188376 * c.g
+            + 0.6299787005 * c.b
+
+    local l_ = l ^ 0.3333333333333333
+    local m_ = m ^ 0.3333333333333333
+    local s_ = s ^ 0.3333333333333333
+
+    return {
+        L = 0.2104542553 * l_
+          + 0.793617785 * m_
+          - 0.0040720468 * s_,
+        a = 1.9779984951 * l_
+          - 2.428592205 * m_
+          + 0.4505937099 * s_,
+        b = 0.0259040371 * l_
+          + 0.7827717662 * m_
+          - 0.808675766 * s_ }
+end
+
+function oklab.okhsl_to_oklab(hsl)
+	local l = hsl.l
+    if l >= 1.0 then return { L = 1.0, a = 0.0, b = 0.0 } end
+    if l <= 0.0 then return { L = 0.0, a = 0.0, b = 0.0 } end
+
+    local s = hsl.s
+    if s < 0.0 then s = 0.0 end
+    if s > 1.0 then s = 1.0 end
+
+    local h = hsl.h
+    local h_rad = h * 6.283185307179586
+    local a_ = math.cos(h_rad)
+    local b_ = math.sin(h_rad)
+    local L = oklab.toe_inv(l)
+
+    local cs = oklab.get_Cs(L, a_, b_)
+    local C_0 = cs.C_0
+	local C_mid = cs.C_mid
+	local C_max = cs.C_max
+
+    local mid = 0.8
+	local mid_inv = 1.25
+
+    local C = 0.0
+    local t = 0.0
+    local k_0 = 0.0
+    local k_1 = 0.0
+    local k_2 = 0.0
+    if s < mid then
+        t = mid_inv * s
+
+		k_1 = mid * C_0
+        if C_mid ~= 0.0 then
+		    k_2 = 1.0 - k_1 / C_mid
+        end
+
+        local k_denom = 1.0 - k_2 * t
+		if k_denom ~= 0.0 then
+            C = t * k_1 / k_denom
+        end
+    else
+        local t_denom = 1.0 - mid
+        if t_denom ~= 0.0 then
+            t = (s - mid) / t_denom
+        end
+
+		k_0 = C_mid
+        if C_0 ~= 0.0 then
+		    k_1 = (1.0 - mid) * C_mid * C_mid * mid_inv * mid_inv / C_0
+        end
+
+        local C_denom = C_max - C_mid
+		k_2 = 1.0
+        if C_denom ~= 0.0 then
+            k_2 = 1.0 - k_1 / C_denom
+        end
+
+        local k_denom = 1.0 - k_2 * t
+        if k_denom ~= 0.0 then
+		    C = k_0 + t * k_1 / k_denom
+        end
+    end
+
+    return {
+        L = L,
+        a = C * a_,
+        b = C * b_ }
+end
+
+function oklab.okhsl_to_srgb(hsl)
+    return oklab.oklab_to_srgb(oklab.okhsl_to_oklab(hsl))
+end
+
+function oklab.okhsv_to_oklab(hsv)
+	local v = hsv.v
+    if v <= 0.0 then return { L = 0.0, a = 0.0, b = 0.0 } end
+    if v > 1.0 then v = 1.0 end
+
+    local s = hsv.s
+    if s < 0.0 then s = 0.0 end
+    if s > 1.0 then s = 1.0 end
+
+    local h = hsv.h
+    local h_rad = h * 6.283185307179586
+    local a_ = math.cos(h_rad)
+    local b_ = math.sin(h_rad)
+
+    local cusp = oklab.find_cusp(a_, b_)
+	local ST_max = oklab.to_ST(cusp)
+	local S_max = ST_max.S
+	local T_max = ST_max.T
+	local S_0 = 0.5
+    local k = 1.0
+    if S_max ~= 0.0 then
+	    k = 1.0 - S_0 / S_max
+    end
+
+    -- first we compute L and V as if the gamut is a perfect triangle:
+
+	-- L, C when v==1:
+    local v_denom = S_0 + T_max - T_max * k * s
+    local L_v = 1.0
+    local C_v = 0.0
+    if v_denom ~= 0.0 then
+        L_v = 1.0 - s * S_0 / v_denom
+	    C_v = s * T_max * S_0 / v_denom
+    end
+
+    local L = v * L_v
+	local C = v * C_v
+
+    --then we compensate for both toe and the curved top part of the triangle:
+    local L_vt = oklab.toe_inv(L_v)
+    local C_vt = 0.0
+    if L_v ~= 0.0 then
+        C_vt = C_v * L_vt / L_v
+    end
+
+    local L_new = oklab.toe_inv(L)
+    if L ~= 0.0 then
+        C = C * L_new / L
+    end
+    L = L_new
+
+    local rgb_scale = oklab.oklab_to_linear_srgb({
+        L = L_vt,
+        a = a_ * C_vt,
+        b = b_ * C_vt })
+    local max_comp = math.max(
+        rgb_scale.r,
+        rgb_scale.g,
+        rgb_scale.b, 0.0)
+    local scale_L = 0.0
+    if max_comp ~= 0.0 then
+        scale_L = (1.0 / max_comp) ^ 0.3333333333333333
+    end
+
+	C = C * scale_L
+    return {
+        L = L * scale_L,
+        a = C * a_,
+        b = C * b_ }
+end
+
+function oklab.okhsv_to_srgb(hsv)
+    return oklab.oklab_to_srgb(oklab.okhsv_to_oklab(hsv))
+end
+
+function oklab.oklab_to_linear_srgb(lab)
+    local l_ = lab.L
+        + 0.3963377774 * lab.a
+        + 0.2158037573 * lab.b
+	local m_ = lab.L
+        - 0.1055613458 * lab.a
+        - 0.0638541728 * lab.b
+	local s_ = lab.L
+        - 0.0894841775 * lab.a
+        - 1.291485548 * lab.b
+
+    local l = l_ * l_ * l_
+    local m = m_ * m_ * m_
+    local s = s_ * s_ * s_
+
+    return {
+        r = 4.0767416621 * l
+          - 3.3077115913 * m
+          + 0.2309699292 * s,
+        g = -1.2684380046 * l
+           + 2.6097574011 * m
+           - 0.3413193965 * s,
+        b = -0.0041960863 * l
+           - 0.7034186147 * m
+           + 1.707614701 * s }
+end
+
+function oklab.oklab_to_okhsl(lab)
+    local L = lab.L
+    if L >= 1.0 then return { h = 0.0, s = 0.0, l = 1.0 } end
+    if L <= 0.0 then return { h = 0.0, s = 0.0, l = 0.0 } end
+
+    local Csq = lab.a * lab.a + lab.b * lab.b
+    if Csq > 0.0 then
+        local C = math.sqrt(Csq)
+        local a_ = lab.a / C
+        local b_ = lab.b / C
+
+        -- 1.0 / math.pi = 0.3183098861837907
+        local h = 0.5 + 0.5 * math.atan(-lab.b, -lab.a) * 0.3183098861837907
+
+        local cs = oklab.get_Cs(L, a_, b_)
+        local C_0 = cs.C_0
+        local C_mid = cs.C_mid
+        local C_max = cs.C_max
+
+        -- Inverse of the interpolation in okhsl_to_srgb:
+        local mid = 0.8
+        local mid_inv = 1.25
+
+        local s = 0.0
+        if C < C_mid then
+            local k_1 = mid * C_0
+            local k_2 = 1.0
+            if C_mid ~= 0.0 then
+                k_2 = (1.0 - k_1 / C_mid)
+            end
+
+            local t_denom = k_1 + k_2 * C
+            local t = 0.0
+            if t_denom ~= 0.0 then
+                t = C / t_denom
+            end
+
+            s = t * mid
+        else
+            local k_0 = C_mid
+            local k_1 = 0.0
+            if C_0 ~= 0.0 then
+                k_1 = (1.0 - mid) * C_mid * C_mid * mid_inv * mid_inv / C_0
+            end
+
+            local C_denom = C_max - C_mid
+            local k_2 = 1.0
+            if C_denom ~= 0.0 then
+                k_2 = 1.0 - k_1 / C_denom
+            end
+
+            local t_denom = k_1 + k_2 * (C - k_0)
+            local t = 0.0
+            if t_denom ~= 0.0 then
+                t = (C - k_0) / t_denom
+            end
+
+            s = mid + (1.0 - mid) * t
+        end
+
+        return { h = h, s = s, l = oklab.toe(L) }
+    else
+        return { h = 0.0, s = 0.0, l = L }
+    end
+end
+
+function oklab.oklab_to_okhsv(lab)
+    local L = lab.L
+    if L >= 1.0 then return { h = 0.0, s = 0.0, v = 1.0 } end
+    if L <= 0.0 then return { h = 0.0, s = 0.0, v = 0.0 } end
+
+    local Csq = lab.a * lab.a + lab.b * lab.b
+    if Csq > 0.0 then
+        local C = math.sqrt(Csq)
+        local a_ = lab.a / C
+        local b_ = lab.b / C
+
+        -- 1.0 / math.pi = 0.3183098861837907
+        local h = 0.5 + 0.5 * math.atan(-lab.b, -lab.a) * 0.3183098861837907
+
+        local cusp = oklab.find_cusp(a_, b_)
+        local ST_max = oklab.to_ST(cusp)
+        local S_max = ST_max.S
+        local T_max = ST_max.T
+        local S_0 = 0.5
+        local k = 1.0
+        if S_max ~= 0.0 then
+            k = 1.0 - S_0 / S_max
+        end
+
+        -- first we find L_v, C_v, L_vt and C_vt
+        local t_denom = C + L * T_max
+        local t = 0.0
+        if t_denom ~= 0.0 then
+            t = T_max / t_denom
+        end
+        local L_v = t * L
+        local C_v = t * C
+
+        local L_vt = oklab.toe_inv(L_v)
+        local C_vt = 0.0
+        if L_v ~= 0.0 then
+            C_vt = C_v * L_vt / L_v
+        end
+
+        -- we can then use these to invert the step that compensates for the toe and the curved top part of the triangle:
+        local rgb_scale = oklab.oklab_to_linear_srgb({
+            L = L_vt,
+            a = a_ * C_vt,
+            b = b_ * C_vt })
+        local scale_denom = math.max(
+            rgb_scale.r,
+            rgb_scale.g,
+            rgb_scale.b, 0.0)
+        local scale_L = 0.0
+        if scale_denom ~= 0.0 then
+            scale_L = (1.0 / scale_denom) ^ 0.3333333333333333
+            L = L / scale_L
+            C = C / scale_L
+        end
+
+        local toel = oklab.toe(L)
+        C = C * toel / L
+        L = toel
+
+        -- we can now compute v and s:
+        local v = 0.0
+        if L_v ~= 0.0 then v = L / L_v end
+
+        local s = 0.0
+        local s_denom = ((T_max * S_0) + T_max * k * C_v)
+        if s_denom ~= 0.0 then
+            s = (S_0 + T_max) * C_v / s_denom
+        end
+
+        return { h = h, s = s, v = v }
+    else
+        return { h = 0.0, s = 0.0, v = L }
+    end
+end
+
+function oklab.oklab_to_srgb(lab)
+    local lrgb = oklab.oklab_to_linear_srgb(lab)
+	return {
+		r = oklab.srgb_transfer_function(lrgb.r),
+		g = oklab.srgb_transfer_function(lrgb.g),
+		b = oklab.srgb_transfer_function(lrgb.b) }
+end
+
+function oklab.srgb_to_okhsl(rgb)
+    return oklab.oklab_to_okhsl(oklab.srgb_to_oklab(rgb))
+end
+
+function oklab.srgb_to_okhsv(rgb)
+    return oklab.oklab_to_okhsv(oklab.srgb_to_oklab(rgb))
+end
+
+function oklab.srgb_to_oklab(srgb)
+    return oklab.linear_srgb_to_oklab({
+		r = oklab.srgb_transfer_function_inv(srgb.r),
+		g = oklab.srgb_transfer_function_inv(srgb.g),
+		b = oklab.srgb_transfer_function_inv(srgb.b) })
+end
+
+function oklab.srgb_transfer_function(a)
+    if 0.0031308 >= a then
+        return 12.92 * a
+    else
+        return 1.055 * (a ^ 0.4166666666666667) - 0.055
+    end
+end
+
+function oklab.srgb_transfer_function_inv(a)
+    if 0.04045 < a then
+        return ((a + 0.055) * 0.9478672985781991) ^ 2.4
+    else
+        return a * 0.07739938080495357
+    end
+end
+
+function oklab.to_ST(cusp)
+	local L = cusp.L
+    local C = cusp.C
+    if L ~= 0.0 and L ~= 1.0 then
+        return { S = C / L, T = C / (1.0 - L) }
+    elseif L ~= 0.0 then
+        return { S = C / L, T = 0.0 }
+    elseif L ~= 1.0 then
+        return { S = 0.0, T = C / (1.0 - L) }
+    else
+        return { S = 0.0, T = 0.0 }
+    end
+end
+
+function oklab.toe(x)
+    local y = 1.170873786407767 * x - 0.206
+	return 0.5 * (y + math.sqrt(y * y + 0.14050485436893204 * x))
+end
+
+function oklab.toe_inv(x)
+    local denom = 1.170873786407767 * (x + 0.03)
+    if denom ~= 0.0 then
+    	return (x * x + 0.206 * x) / denom
+    else
+        return 0.0
+    end
+end
+
+return oklab
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGNyZWF0ZWQ9IjIwMjQtMDQtMDMgMDY6MTM6NDQiLGhpZGRl
+bj17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5f
+dG9nZ2xlcz17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxsb2NrZWQ9e1swXT10cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMDMgMTA6MTc6NTgiLHJldmlzaW9uPTEzMSx0ZXN0X2N1YmVf
+Y29sb3JzPXtbMF09ezE1LDMxLDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1
+LDI0fSx7OCwyNCwyfSx7MjYsMTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDN9LHsy
+OCwxMiwxNn0sezEyLDE2LDF9LHsyMywyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezE1LDIz
+LDE0fSx7MjMsMTQsMTN9LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUsMjF9LHsx
+LDEsMX0sezEsMSwxfSx7MSwxLDF9fV1dbHo0AB0BAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwi
+MAEAwDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFl
+OAgAQDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2NhYTAw
+MWM1ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5QADw
+A2FjYzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBkYWJA
+AF84NTZkMAEA1vAJM2UwYjQxMDBlYTdkMzQwMDZkNjQ0ZCIp
+:: pal/1.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj01LGNyZWF0ZWQ9IjIwMjQtMDQtMDMgMDY6MTY6NDYiLGhpZGRl
+bj17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5f
+dG9nZ2xlcz17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxsb2NrZWQ9e1swXT10cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsZmFsc2UsZmFsc2UsdHJ1ZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMDMgMTA6MTI6MTAiLHJldmlzaW9uPTMwLHRlc3RfY3Vi
+ZV9jb2xvcnM9e1swXT17MTUsMzEsNH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0sezks
+MjUsMjR9LHs4LDI0LDJ9LHsyNiwxMSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcsM30s
+ezI4LDEyLDE2fSx7MTIsMTYsMX0sezIzLDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7MTUs
+MjMsMTR9LHsyMywxNCwxM30sezE0LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0s
+ezEsMSwxfSx7MSwxLDF9LHsxLDEsMX19XV1sejQACQEAABUCAAD1BXVzZXJkYXRhKCJpMzIiLDY0
+LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1ZjU3NGYwMGMyYzNjNzAwZmZm
+MWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4Mzc2OWMgADE3N2E4AMBjY2Fh
+MDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYyOTAwNDkyZDM4MDBhMjg4NzlA
+APADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2NGRmZjYwMGJkiQAAlgBAMGRh
+YkAAXzg1NmQwAQDpUDAwMCIp
+:: pal/lost-century.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGNyZWF0ZWQ9IjIwMjQtMDQtMDMgMTA6MTc6NDkiLGhpZGRl
+bj17WzBdPXRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
+dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZX0saGlkZGVuX3RvZ2dsZXM9e1swXT10cnVlLHRydWUsZmFsc2UsZmFs
+c2V9LGxvY2tlZD17WzBdPXRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxzZSxmYWxz
+ZSxmYWxzZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxtb2RpZmllZD0iMjAyNC0wNC0wMyAxMDoxOToy
+NyIscmV2aXNpb249Nix0ZXN0X2N1YmVfY29sb3JzPXtbMF09ezMyLDMzLDM0fSx7MzMsMzQsMzV9
+LHszNCwzNSwzNn0sezMyLDM3LDM4fSx7MzcsMzgsMzl9LHswLDAsMH0sezQyLDQxLDQwfSx7NDEs
+NDAsMzl9LHs0MCwzOSwzNn0sezQyLDQzLDQ0fSx7NDMsNDQsNDV9LHsxLDEsMX0sezQ3LDQ2LDQ1
+fSx7MSwxLDF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9
+LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9LHsxLDEsMX19XV1sejQAhwEAABUCAAD1BXVzZXJkYXRh
+KCJpMzIiLDY0LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1ZjU3NGYwMGMy
+YzNjNzAwZmZmMWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4Mzc2OWMgADE3
+N2E4AMBjY2FhMDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYyOTAwNDkyZDM4
+MDBhMjg4NzlAAPADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2NGRmZjYwMGJk
+iQAAlgBAMGRhYkAA8AQ4NTZkMDBkMWIxODcwMGM3N2I1YADwDGU1ZDQwMDA3OTQ0NGEwMDRiM2Q0
+NDAwYmE5MSAAYDkyNzQ0MfQAMDQ1M6AA8Aw3NzQzYjAwYjNhNTU1MDBkMmM5YTUwMDhjYWLQAPAH
+NGI3MjZlMDA1NzQ4NTIwMDg0Nzg3NVgBXzliOGUwAQBpUDAwMCIp
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
+:: palette.lua
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-03 10:19:27",revision=1852]]
+function set_color(c, code)
+	poke4(0x5000 + 4 * c, code)
+end
+
+
+function get_color(c)
+	return peek4(0x5000 + 4 * c)
+end
+
+
+function color_to_hex(c)
+	return string.format("%06x", c)
+end
+
+
+function rebuild_pal(c)
+	for c = 0, 63 do
+		change_color_code(c)
+	end
+end
+
+
+function change_color_code(c)
+	pal_code[c] = get_color(c)
+	pal_okhsl[c] = oklab.color_to_okhsl(pal_code[c])
+end
+
+
+function change_color(c, hue, sat, lum)
+	local hsl = {
+		h = hue or pal_okhsl[c].h,
+		s = sat or pal_okhsl[c].s,
+		l = lum or pal_okhsl[c].l,
+	}
+	hsl.h = mid(-1.0, hsl.h, 1.0)
+	hsl.s = mid(0.0, hsl.s, 1.0)
+	hsl.l = mid(0.0, hsl.l, 1.0)
+	local code = oklab.okhsl_to_color(hsl)
+	pal_code[c] = code
+	pal_okhsl[c] = hsl
+	set_color(c, code)
+end
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMiAxNDo0NDozNSIscmV2aXNpb249MTgxM11dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wMyAxMDoxOToyNyIscmV2aXNpb249MTkyOF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -1951,10 +2073,13 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAyIDE0OjQ0OjM1Iix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzE3
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJndWkubHVhIzY2MCIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9u
-PSJtYXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29y
-a3NwYWNlX2luZGV4PTR9fV1dbHo0AAQAAAADAAAAMG5pbA==
+KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAzIDEwOjE5OjI3Iix0aXRsZT0i
+T2tQQUwiLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzEw
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnbG9iYWxzLmx1YSMxMyIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0icGFsZXR0ZS5sdWEjMSIsd29ya3NwYWNlX2luZGV4PTF9LHts
+b2NhdGlvbj0iZ3VpLmx1YSMxIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5n
+ZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2lu
+ZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH0se2xvY2F0aW9u
+PSJwYWwvbG9zdC1jZW50dXJ5LnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: [eoc]
