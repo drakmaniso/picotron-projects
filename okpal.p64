@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMyAxODoxMDozNyIscmV2aXNpb249MjI3N11dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
+NC0wNCAxMDowNTozOSIscmV2aXNpb249MjgxMF1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -172,10 +172,11 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-03 18:10:37",revision=2732]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-04 10:05:39",revision=3377]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
+include "src/remap.lua"
 include "src/gui.lua"
 
 
@@ -196,6 +197,7 @@ function _init()
 	on_event("save_file", update_filename)
 	on_event("save_file_as", update_filename)
 	on_event("drop_items", handle_drop_items)
+	on_event("okpal_hexdialog_confirm", handle_okpal_hexdialog_confirm)
 	
 	-- Initialize globals
 	load_metadata({})
@@ -235,10 +237,50 @@ function handle_drop_items(msg)
 	for i = 1, #msg.items do
 		local item = msg.items[i]
 		if item.pod_type == "file_reference" and item.attrib == "file" then
-			update_filename({filename = item.fullpath})
-			send_message(pid(), {event = "open_file", filename = item.fullpath})
+			local ext = item.fullpath:ext()
+			if ext == "hex" or ext == "txt" then
+				local metadata = fetch_metadata(item.fullpath) or {}
+				if metadata.okpal_version then
+					current_filename = item.fullpath
+					current_import_choice = "overwrite"
+					send_message(pid(), {event = "open_file", filename = item.fullpath})
+				else
+					create_process(
+						"src/hexdialog.lua",
+						{
+							okpal_filename = item.fullpath,
+							okpal_parent_pid = pid(),
+							path = path, 
+							window_attribs = { 
+								workspace = "current",
+								autoclose = true, -- ???
+								give_focus = nil, -- ???
+								show_in_workspace = nil, -- ???
+								corun_program = nil, -- ???
+								unique_location = nil, -- ???
+								has_frame = true,
+								x = nil, y = nil, z = nil,
+								moveable = true,
+								resizeable = false,
+								desktop_filenav = nil, -- ???
+							}
+						}
+					)
+				end
+			else
+				-- TODO: dialog for unknown file extensions?
+				current_filename = item.fullpath
+				send_message(pid(), {event = "open_file", filename = item.fullpath})
+			end
 		end
 	end
+end
+
+
+function handle_okpal_hexdialog_confirm(msg)
+	current_filename = msg.okpal_filename
+	current_import_choice = msg.okpal_hexdialog_choice
+	send_message(pid(), { event = "open_file", filename = msg.okpal_filename })
 end
 
 
@@ -271,19 +313,22 @@ end
 function load_working_file(data, metadata)
 	local ext = current_filename:ext()
 	if ext == "hex" or ext == "txt" then
-		load_hex_file(data)
+		load_hex_file(data, metadata or {})
 	else
 		if ext != "pal" then
 			notify("unkown file extension: loaded using default file format")
 		end
-		load_pal_file(data)
+		load_pal_file(data, metadata or {})
 	end
-	load_metadata(metadata)
 end
+
+
+-- Metadata ----------------------------------------------------------------------
 
 
 function create_metadata()
 	local metadata = {}
+	metadata.okpal_version = okpal_version
 	metadata.bg_color = bg_color
 	metadata.hidden_toggles = hidden_toggles
 	metadata.hidden = hidden
@@ -341,7 +386,7 @@ function load_metadata(metadata)
 end
 
 
--- Load and save .pal files -------------------------------------------------------
+-- Load and save pal files -------------------------------------------------------
 
 
 function load_pal_file(data)
@@ -357,6 +402,7 @@ function load_pal_file(data)
 		end
 	end
 	rebuild_pal()
+	load_metadata(metadata)
 end
 
 
@@ -372,22 +418,28 @@ end
 -- Load and save hex files ---------------------------------------------------------
 
 
-function load_hex_file(item)
-	if type(item) == "string" then
-		local lines = split(item, "\n", false)
+function load_hex_file(data, metadata)
+	if type(data) == "string" then
+		local lines = split(data, "\n", false)
 		local codes = {}
 		for l in all(lines) do
 			local code = tonum("0x" .. l:gsub("%s",""))
 			if type(code) == "number" then
 				codes[#codes + 1] = code
-			else
+			elseif code then
 				notify("error importing hex file")
 			end
 		end
 		local start = 0
-		if #codes <= 32 then
-			-- TODO: initialize to the default palette?
+		if current_import_choice == "dont_clobber" then
+			-- TODO: put in separate function and add menu item
+			for c = 0, 32 do
+				set_color(c, peek4(0x5000 + 4 * (64 + c)))
+			end
 			start = 32
+		end
+		if #codes > 64 - start then
+			notify("*** not enough space to import all the colors ***")
 		end
 		for c = start, 63 do
 			if codes[c - start + 1] then
@@ -396,20 +448,39 @@ function load_hex_file(item)
 				set_color(c, 0x000000)
 			end
 		end
-		notify("imported " .. #codes .. " colors from .hex file")
 		rebuild_pal()
-	elseif item then
-		notify("import hex file: unkown type: " .. type(item))
+		if current_import_choice == "remap" then
+			remap_colors()
+		end		
+	elseif data then
+		notify("import hex file: unkown type: " .. type(data))
+	end
+
+	load_metadata(metadata)
+	if current_import_choice == "dont_clobber" then
+		active_color = nil
+		for c = 0, 31 do
+			hidden[c] = true
+			locked[c] = true
+		end
+		hidden_toggles[0] = true
+		hidden_toggles[1] = true
 	end
 end
 
 
 function save_hex_file(filename)
+	-- Don't export trailing black colors
+	local fin = 63
+	while fin > 0 and get_color(fin) == 0 do
+		fin -= 1
+	end
+	
 	local output = ""
-	for c = 0, 63 do
+	for c = 0, fin do
 		output ..= color_to_hex(get_color(c)) .. "\n"
 	end
-	return output, {}
+	return output, create_metadata()
 end
 
 
@@ -460,41 +531,31 @@ function paste_color()
 		notify("unable to paste: type not supported (" .. type(cb) .. ")")
 	end
 end
+:: manual.txt
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-04 10:05:39",revision=150,stored="2024-04-04 06:56:33"]]
+# OkPal
+A palette editor.
+
+## Features
+- perceptually uniform color space (oklab);
+- two file formats: ".hex" and ".pal"
+- can reorder colors to match the default picotron
+  palette
+
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMyAxODoxMDozNyIscmV2aXNpb249MjE1Nl1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wNCAxMDowNTozOSIscmV2aXNpb249MjY4N11dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
-:: pal/0.pal
-b64$LS1bW3BvZCxiZ19jb2xvcj0wLGNyZWF0ZWQ9IjIwMjQtMDQtMDMgMTg6MDg6NTUiLGhpZGRl
-bj17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5f
-dG9nZ2xlcz17WzBdPWZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxsb2NrZWQ9e30sbW9kaWZpZWQ9
-IjIwMjQtMDQtMDMgMTg6MDk6MDMiLHJldmlzaW9uPTEsdGVzdF9jdWJlX2NvbG9ycz17WzBdPXsx
-NSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1fSx7OSwyNSwyNH0sezgsMjQsMn0s
-ezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwxNywxOX0sezI4LDEyLDE2fSx7MTIs
-MTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9LHs3LDIzLDE0fSx7MjMsMTQsMTN9
-LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUsMjF9LHsxLDEsMX0sezEsMSwxfSx7
-MSwxLDF9fV1dbHo0AAkBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwiMAEAwDFkMmI1MzAwN2Uy
-NQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFlOAgAQDAwNGQIABFhNgBg
-ZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2NhYTAwMWM1ZWFjMADwHWE1YTEw
-MDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5QADwA2FjYzUwMGMzMDA0YzAw
-ZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBkYWJAAF84NTZkMAEA6VAwMDAi
-KQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wMyAxODoxMDozNyIscmV2aXNpb249MjEyM11dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wNCAxMDowNTozOSIscmV2aXNpb249MjY1Ml1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -504,8 +565,10 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-03 18:06:39",revision=315]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-04 10:05:39",revision=653]]
+okpal_version = "0.0.4"
 current_filename = "/ram/cart/pal/0.pal"
+current_import_choice = "dont_clobber"
 
 active_color = nil
 bg_color = 0
@@ -560,7 +623,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-03 18:06:39",revision=3193]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-04 10:05:39",revision=3705]]
 local slider_size = 170
 local slider_border = 6
 local slider_inner = slider_size - 2 * slider_border
@@ -579,7 +642,7 @@ function generate_gui()
 	end
 	local h_slider = create_hue_slider{ x = 6, y = 68 }
 	gui:attach(h_slider)
-	h_slider:attach(create_hue_sat_slider {})
+	h_slider:attach(create_hue_sat_slider { x = slider_border, y = slider_border })
 	local sl_slider = create_sat_lum_slider{ x = 192, y = 68 }
 	gui:attach(create_sat_slider { x = sl_slider.x, y = sl_slider.y + sl_slider.height })
 	gui:attach(create_lum_slider { x = sl_slider.x + sl_slider.width, y = sl_slider.y })
@@ -701,7 +764,7 @@ function create_color_preview(el)
 			print("\014saturation: " .. string.format("%3.0f", pal_okhsl[active_color].s * 100.0) .. "%")
 			print("\014 luminance: " .. string.format("%3.0f", pal_okhsl[active_color].l * 100.0) .. "%")
 		else
-			print("\^pOkPal\^-p\014\|o 0.0.3", 8, 16, 7)
+			print("\^pOkPal\^-p\014\|o 0.0.4", 8, 16, 7)
 			print("\014\|4- 'save as' to create a new palette")
 			print("\014- 'open' to drag-n-drop a file")
 		end
@@ -728,7 +791,7 @@ function create_color_preview(el)
 		if msg.mx >= self.height + 4 and msg.mx <= self.height + 4 + 3 * size and msg.my <= size then
 			self.cursor = "pointer"
 		else
-			self.cursor = false
+			self.cursor = 1
 		end
 	end
 	
@@ -758,7 +821,7 @@ function create_test_cube(el)
 		if msg.mx > 2 and msg.my > 2 and msg.mx < self.width - 2 and msg.my < self.height - 2 then
 			el.cursor = "crosshair"
 		else
-			el.cursor = false
+			el.cursor = 1
 		end
 	end
 	
@@ -786,8 +849,8 @@ end
 
 
 function create_hue_sat_slider(el)
-	el.x = slider_border -- 240 - slider_size - 8
-	el.y = slider_border -- 74
+	---el.x = slider_border -- 240 - slider_size - 8
+	---el.y = slider_border -- 74
 	el.width = slider_size
 	el.height = slider_size
 	el.drag_delta = nil
@@ -847,7 +910,7 @@ function create_hue_sat_slider(el)
 			if dx <= 5 and dy <= 5 then
 				self.cursor = "grab"
 			else
-				self.cursor = false
+				self.cursor = 1
 			end
 		end
 		return true
@@ -950,7 +1013,7 @@ function create_sat_lum_slider(el)
 			if dx < 6 and dy < 6 then
 				self.cursor = "grab"
 			else
-				self.cursor = false
+				self.cursor = 1
 			end
 		end
 	end
@@ -1038,7 +1101,7 @@ function create_hue_slider(el)
 			then
 				self.cursor = "grab"
 			else
-				self.cursor = false
+				self.cursor = 1
 			end
 		end
 		--]]
@@ -1103,7 +1166,7 @@ function create_sat_slider(el)
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
 				self.cursor = "grab"
 			else
-				self.cursor = false
+				self.cursor = 1
 			end
 		end
 	end
@@ -1161,7 +1224,7 @@ function create_lum_slider(el)
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
 				self.cursor = "grab"
 			else
-				self.cursor = false
+				self.cursor = 1
 			end
 		end
 	end
@@ -1271,6 +1334,106 @@ function coords_h(x, y)
 	dy = (2.0 * dy) / r
 	local sat = sqrt(dx * dx + dy * dy)
 	return hue, sat
+end
+:: src/hexdialog.lua
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-04 10:05:39",revision=648]]
+gui_state = {
+	choice = "dont_clobber"
+}
+
+
+function _init()
+	window {
+	    width = 208,
+	    height = 124,
+	    title = "Import Hex File",
+	    resizeable = false,
+	}
+	
+	gui = create_gui()
+	
+	local x, y = 16, 16
+	local line_height = 12
+	local line_gap = 2
+	gui:attach(create_radio_button {
+		x = x, y = y, 
+		label = "Don't overwrite Picotron palette\n(only use last 32 colors)",
+		group = "choice",
+		key = "dont_clobber",
+	})
+	y += 2 * line_height + line_gap
+	gui:attach(create_radio_button {
+		x = x, y = y, 
+		label = "Overwrite but reorder colors\nto match Picotron palette",
+		group = "choice",
+		key = "remap",
+	})
+	y += 2 * line_height + line_gap
+	gui:attach(create_radio_button {
+		x = x, y = y, 
+		label = "Overwrite *without* reordering\n(may render GUI hard to use!)",
+		group = "choice",
+		key = "overwrite",
+	})
+	
+	y += 2 * line_height + 12
+	x = 150
+	
+	gui:attach_button {
+		x = x, y = y,
+		label = "Import",
+		bgcol = 0x060d,
+		fgcol = 0x0101,
+		tap = handle_confirm,
+	}
+end
+
+
+function _draw()
+	cls(7)
+	gui:draw_all()
+end
+
+
+function _update()
+	gui:update_all()
+end
+
+
+function handle_confirm()
+	send_message(
+		env().okpal_parent_pid,
+		{
+			event = "okpal_hexdialog_confirm",
+			okpal_filename = env().okpal_filename,
+			okpal_hexdialog_choice = gui_state.choice,
+		}
+	)
+	exit(0)
+end
+
+
+-- Widgets ------------------------------------------------------------------------
+
+
+function create_radio_button(el)
+	el.width = 188
+	el.height = 80 -- TODO: count the lines?
+	el.cursor = "pointer"
+	
+	function el:draw()
+		oval(0, 0, 8, 8, 1)
+		if gui_state[el.group] == el.key then
+			ovalfill(2, 2, 6, 6, 1)
+		end
+		print(el.label, 15, 1, 13)
+	end
+	
+	function el:tap()
+		gui_state[el.group] = el.key
+	end
+	
+	return el
 end
 :: src/oklab.lua
 --[[pod_format="raw",created="2024-03-31 09:08:26",modified="2024-04-02 08:53:32",revision=979]]
@@ -1986,7 +2149,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-03 18:06:39",revision=2061]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-04 10:05:39",revision=2277]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2029,11 +2192,133 @@ function change_color(c, hue, sat, lum)
 	pal_okhsl[c] = hsl
 	set_color(c, code)
 end
+:: src/remap.lua
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-04 10:05:39",revision=286]]
+-- Color remapping ---------------------------------------------------------------
+
+
+-- assumes `pal_okhsl` is up to date
+function remap_colors()
+	local new_pal_code = {}
+	local picotron_okhsl = {}
+	local remaining_pico_c = {}
+	local remaining_new_c = { 0 }
+	for pico_c = 0, 31 do
+		local code = peek4(0x5000 + 4 * (64 + pico_c))
+		picotron_okhsl[pico_c] = oklab.color_to_okhsl(code)
+		add(remaining_pico_c, pico_c)
+	end	
+	for c = 1, 63 do
+		if pal_code[c] != 0x000000 then
+			add(remaining_new_c, c)
+		end
+	end
+
+		
+	-- Choose colors 0 (black) and 7 (white) first
+	local min_lum = 1.0
+	local best_black = 0
+	local max_lum = 0.0
+	local best_white = 1
+	for c = 0, 63 do
+		if pal_okhsl[c].l < min_lum then
+			best_black = c
+			min_lum = pal_okhsl[c].l
+		end
+		if pal_okhsl[c].l > max_lum then
+			best_white = c
+			max_lum = pal_okhsl[c].l
+		end
+	end
+	new_pal_code[0] = pal_code[best_black]
+	remove_value(remaining_pico_c, 0)
+	remove_value(remaining_new_c, best_black)
+	new_pal_code[7] = pal_code[best_white]
+	remove_value(remaining_pico_c, 7)
+	remove_value(remaining_new_c, best_white)
+		
+	-- Find best match for the other colors
+	local deltas = {}
+	for c = 0, 63 do
+		deltas[c] = {}
+		for pico_c = 0, 31 do
+			local delta_sat = pal_okhsl[c].s - picotron_okhsl[pico_c].s
+			local delta_lum = pal_okhsl[c].l - picotron_okhsl[pico_c].l
+			-- TODO: should ignore hue if sat or lum is low
+			local delta_hue = pal_okhsl[c].h - picotron_okhsl[pico_c].h
+			if delta_hue > 360.0 then
+				delta_hue -= 360.0
+			elseif delta_hue < -360.0 then
+				delta_hue += 360.0
+			end
+
+			delta_hue *= 2.0 * picotron_okhsl[pico_c].s * pal_okhsl[c].s
+			delta_sat *= 0.5
+
+			deltas[c][pico_c] =
+				math.sqrt(
+					(delta_hue * delta_hue)
+					+ (delta_sat * delta_sat)
+					+ (delta_lum * delta_lum)
+				)
+		end
+	end
+	
+	while #remaining_pico_c > 0 and #remaining_new_c > 0  do
+		local min_delta = 1000.0
+		local match_c = nil
+		local match_pico_c = nil
+		for i = 1, #remaining_new_c do
+			local c = remaining_new_c[i]
+			for j = 1, #remaining_pico_c do
+				local pico_c = remaining_pico_c[j]
+				local d = deltas[c][pico_c]
+				if d and d < min_delta then
+					min_delta = d
+					match_c = c
+					match_pico_c = pico_c
+				end
+			end
+		end
+		if match_c then
+			new_pal_code[match_pico_c] = pal_code[match_c]
+			remove_value(remaining_new_c, match_c)
+			remove_value(remaining_pico_c, match_pico_c)
+		end
+	end
+
+	-- Add remaining colors
+	for c = 0, 63 do
+		if pal_code[c] then
+			local dest = 1
+			while new_pal_code[dest] do
+				dest += 1
+			end
+			new_pal_code[dest] = pal_code[c]
+			dest += 1
+		end
+	end
+	
+	for c = 0, 63 do
+		set_color(c, new_pal_code[c] or 0x000000)
+	end
+	rebuild_pal()
+end
+
+
+function remove_value(t, val)
+	for i = 1, #t do
+		if t[i] == val then
+			table.remove(t, i)
+			break
+		end
+	end
+end
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0IixzdG9yZWQ9IjIwMjQtMDQt
 MDMgMTg6MDc6MzQiXV1sejQABAAAAAMAAAAwbmls
 :: todo.txt
---[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-03 18:06:39",revision=467]]
+--[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-04 10:05:39",revision=862]]
 - text entry for hex code
 - "New Empty Palette" in menu;
 - right click for fine-tuning colors;
@@ -2041,13 +2326,16 @@ MDMgMTg6MDc6MzQiXV1sejQABAAAAAMAAAAwbmls
 - accept drag-and-drop (or copy/pasting) of gfx;
 - import the palette from an image saved by
   the #paint cartridge;
+- write manual, and add it to menu;
 
 Maybe:
 - reorder colors by drag-and-drop (i.e. swap two
   colors)
 - multi-selection (ability to move a group of
   colors in the sliders)
-
+- Add another tab in the test zone, with the 
+  hue/sat circle and sat/lum square, but filles
+  with color zones instead of dots.
 :: .info.pod
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
 MDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcw
@@ -2059,9 +2347,14 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iIixydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjEwOjM3Iix0aXRsZT0i
-T2tQQUwiLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzQi
-LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4
-PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJz
-ZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
+KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDQg
+MTA6MDU6NDAiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMzUzIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
+Lmx1YSMxNDEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVh
+IzMwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjMSIsd29y
+a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzI3Iix3b3Jrc3BhY2Vf
+aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzYiLHdvcmtzcGFjZV9pbmRleD0xfSx7
+bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAu
+bWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9p
+bmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
