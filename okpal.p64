@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxMDowNTozOSIscmV2aXNpb249MjgxMF1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
+NC0wNCAxNjoyNzowMyIscmV2aXNpb249Mjk3NF1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -172,7 +172,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-04 10:05:39",revision=3377]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-04 16:27:03",revision=3606]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -203,6 +203,8 @@ function _init()
 	load_metadata({})
 	rebuild_pal()
 	
+	undo_stack = create_undo_stack(undo_save_state, undo_load_state)
+	
 	generate_gui()
 end
 
@@ -217,15 +219,46 @@ function _update()
 	gui:update_all()
 	
 	if key("ctrl") then
-		if keyp("c") then
-			copy_color()
+		if (keyp("c")) copy_color()
+		if (keyp("x")) cut_color()
+		if (keyp("v")) paste_color()
+		if (keyp("z")) undo_stack:undo()
+		if (keyp("y")) undo_stack:redo()
+	end
+end
+
+
+-- Undo ---------------------------------------------------------------------------
+
+
+function undo_save_state(_item)
+	return {
+		pal_okhsl = copy(pal_okhsl),
+		pal_code = copy(pal_code),
+		test_cube_colors = copy(test_cube_colors),
+	}
+end
+
+
+function undo_load_state(state, _item)
+	pal_okhsl = state.pal_okhsl
+	pal_code = state.pal_code
+	test_cube_colors = state.test_cube_colors
+	for c = 0, 63 do
+		set_color(c, pal_code[c])
+	end
+end
+
+
+function copy(t)
+	if type(t) == "table" then
+		local new = {}
+		for k, v in pairs(t) do
+			new[k] = copy(v)
 		end
-		if keyp("x") then
-			cut_color()
-		end
-		if keyp("v") then
-			paste_color()
-		end
+		return new
+	else
+		return t
 	end
 end
 
@@ -320,6 +353,7 @@ function load_working_file(data, metadata)
 		end
 		load_pal_file(data, metadata or {})
 	end
+	if (undo_stack) undo_stack:reset()
 end
 
 
@@ -330,10 +364,12 @@ function create_metadata()
 	local metadata = {}
 	metadata.okpal_version = okpal_version
 	metadata.bg_color = bg_color
+	metadata.blackest_color = blackest_color
+	metadata.whitest_color = whitest_color
 	metadata.hidden_toggles = hidden_toggles
-	metadata.hidden = hidden
-	metadata.locked = locked
-	metadata.test_cube_colors = test_cube_colors
+	metadata.hidden = copy(hidden)
+	metadata.locked = copy(locked)
+	metadata.test_cube_colors = copy(test_cube_colors)
 	return metadata
 end
 
@@ -341,6 +377,8 @@ end
 function load_metadata(metadata)
 	metadata = metadata or {}
 	bg_color = metadata.bg_color or 0
+	blackest_color = metadata.blackest_color or 0
+	whitest_color = metadata.whitest_color or 7
 	
 	if type(metadata.hidden_toggles) == "table" then
 		hidden_toggles = metadata.hidden_toggles
@@ -364,7 +402,7 @@ function load_metadata(metadata)
 		locked = metadata.locked
 	else
 		locked = {}
-		if current_filename == "/ram/cart/0.pal" then
+		if current_filename == "/ram/cart/pal/0.pal" then
 			-- This only occurs when a default starting file
 			-- is created.
 			for c = 0, 63 do
@@ -389,7 +427,7 @@ end
 -- Load and save pal files -------------------------------------------------------
 
 
-function load_pal_file(data)
+function load_pal_file(data, metadata)
 	if type(data) != "userdata" then
 		if data then
 			notify("unable to load working file")
@@ -451,7 +489,7 @@ function load_hex_file(data, metadata)
 		rebuild_pal()
 		if current_import_choice == "remap" then
 			remap_colors()
-		end		
+		end	
 	elseif data then
 		notify("import hex file: unkown type: " .. type(data))
 	end
@@ -466,6 +504,10 @@ function load_hex_file(data, metadata)
 		hidden_toggles[0] = true
 		hidden_toggles[1] = true
 	end
+	local best_black, best_white = find_blackest_and_whitest()
+	blackest_color = metadata.blackest_color or best_black
+	whitest_color = metadata.whitest_color or best_white
+	bg_color = metadata.bg_color or best_black
 end
 
 
@@ -544,18 +586,46 @@ A palette editor.
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxMDowNTozOSIscmV2aXNpb249MjY4N11dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wNCAxNjoyNzowMyIscmV2aXNpb249Mjg1MV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0w
+NCAxNTowNjoyOSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
+dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5fdG9nZ2xlcz17WzBdPXRy
+dWUsdHJ1ZSxmYWxzZSxmYWxzZX0sbG9ja2VkPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0
+LTA0LTA0IDE2OjI3OjAzIixva3BhbF92ZXJzaW9uPSIwLjAuNCIscmV2aXNpb249MTIxLHRlc3Rf
+Y3ViZV9jb2xvcnM9e1swXT17MTUsMzEsNH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0s
+ezksMjUsMjR9LHs4LDI0LDJ9LHsyNiwxMSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcs
+MTl9LHsyOCwxMiwxNn0sezEyLDE2LDF9LHs2LDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7
+NywyMywxNH0sezIzLDE0LDEzfSx7MTQsMzAsMTh9LHs3LDYsMjJ9LHs2LDIyLDV9LHsyMiw1LDIx
+fSx7MSwxLDF9LHsxLDEsMX0sezEsMSwxfX0sd2hpdGVzdF9jb2xvcj03XV1sejQAKQEAABUCAAD1
+BXVzZXJkYXRhKCJpMzIiLDY0LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1
+ZjU3NGYwMGMyYzNjNzAwZmZmMWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4
+Mzc2OWMgADE3N2E4AMBjY2FhMDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYy
+OTAwNDkyZDM4MDBhMjg4NzlAAPADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2
+NGRmZjYwMGJkiQAAlgBAMGRhYkAAXzg1NmQwAQC_EGI-AfEBMjAwNTFjYjhkMDAxOWExORABWDgx
+OGUwAQBQMDAwIik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxMDowNTozOSIscmV2aXNpb249MjY1Ml1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wNCAxNjoyNzowMyIscmV2aXNpb249MjgwOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -565,21 +635,35 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-04 10:05:39",revision=653]]
-okpal_version = "0.0.4"
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-04 16:27:03",revision=830]]
 current_filename = "/ram/cart/pal/0.pal"
 current_import_choice = "dont_clobber"
 
-active_color = nil
-bg_color = 0
+undo_stack = nil
+
+
+-- Saved in undo stack ----------------------------------------------------------
+
 
 pal_okhsl = {}
 pal_code = {}
 
+-- and also `test_cube_colors`
+
+
+-- Saved in metadata --------------------------------------------------------------
+
+
+okpal_version = "0.0.4"
+
+active_color = nil
+bg_color = 0
+blackest_color = 0
+whitest_color = 7
+
 hidden_toggles = {}
 hidden = {}
 locked = {}
-
 
 test_cube_colors = {}
 
@@ -623,7 +707,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-04 10:05:39",revision=3705]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-04 16:27:03",revision=3913]]
 local slider_size = 170
 local slider_border = 6
 local slider_inner = slider_size - 2 * slider_border
@@ -668,9 +752,9 @@ function create_palette(el)
 				ovalfill(x + 2, y + 2, x + size - 3, y + size - 3, 0)
 			end
 			if c == active_color then
-				local contrast_color = 0
+				local contrast_color = blackest_color
 				if pal_okhsl[active_color].l < 0.5 then
-					contrast_color = 7
+					contrast_color = whitest_color
 				end
 				rect(x + 1, y + 1, x + size - 2, y + size - 2, contrast_color)
 			end
@@ -732,9 +816,9 @@ function create_color_preview(el)
 		if active_color then
 			---rect(0, 0, self.height - 1, self.height - 1, 0)
 			rectfill(1, 1, self.height - 2, self.height - 2, active_color)
-			local contrast_color = 0
+			local contrast_color = blackest_color
 			if pal_okhsl[active_color].l < 0.5 then
-				contrast_color = 7
+				contrast_color = whitest_color
 			end
 			print(string.format("%d", active_color), 4, 4, contrast_color)
 			local c = get_color(active_color)
@@ -764,7 +848,7 @@ function create_color_preview(el)
 			print("\014saturation: " .. string.format("%3.0f", pal_okhsl[active_color].s * 100.0) .. "%")
 			print("\014 luminance: " .. string.format("%3.0f", pal_okhsl[active_color].l * 100.0) .. "%")
 		else
-			print("\^pOkPal\^-p\014\|o 0.0.4", 8, 16, 7)
+			print("\^pOkPal\^-p\014\|o 0.0.4", 8, 16, outline_color())
 			print("\014\|4- 'save as' to create a new palette")
 			print("\014- 'open' to drag-n-drop a file")
 		end
@@ -779,8 +863,12 @@ function create_color_preview(el)
 		elseif msg.mx < self.height + 4 + 2 * size then
 			hidden[active_color] = not hidden[active_color]
 		elseif msg.mx < self.height + 4 + 3 * size then
-			if bg_color == active_color then
-				bg_color = 0
+			if key("shift") and bg_color != active_color then
+				whitest_color = active_color
+			elseif key("ctrl") then
+				blackest_color = active_color
+			elseif bg_color == active_color then
+				bg_color = blackest_color
 			else
 				bg_color = active_color
 			end
@@ -835,6 +923,7 @@ function create_test_cube(el)
 			end
 		end
 		if msg.mb == 1 then
+			undo_stack:checkpoint()
 			test_cube_colors[self.test_id][face] = active_color or 1
 		elseif msg.mb == 2 then
 			active_color = test_cube_colors[self.test_id][face]
@@ -917,6 +1006,7 @@ function create_hue_sat_slider(el)
 	end
 	
 	function el:click(msg)
+		undo_stack:checkpoint()
 		local _, r = coords_hs(msg.mx, msg.my)
 		if r > 1.02 then
 			return false
@@ -1019,6 +1109,7 @@ function create_sat_lum_slider(el)
 	end
 	
 	function el:click(msg)
+		undo_stack:checkpoint()
 		if active_color and not hidden[active_color] then
 			local ax, ay = sl_coords(active_color)
 			local dx = abs(ax - msg.mx)
@@ -1108,6 +1199,7 @@ function create_hue_slider(el)
 	end
 
 	function el:click(msg)
+		undo_stack:checkpoint()
 		if active_color and not hidden[active_color] then
 			local ax, ay = h_coords(active_color)
 			--[[
@@ -1172,6 +1264,7 @@ function create_sat_slider(el)
 	end
 
 	function el:click(msg)
+		undo_stack:checkpoint()
 		if active_color and not hidden[active_color] then
 			local ax, _ = sl_coords(active_color)
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
@@ -1230,6 +1323,7 @@ function create_lum_slider(el)
 	end
 
 	function el:click(msg)
+		undo_stack:checkpoint()
 		if active_color and not hidden[active_color] then
 			local _, ay = sl_coords(active_color)
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
@@ -1259,9 +1353,9 @@ end
 
 function outline_color()
 	if pal_okhsl[bg_color].l < 0.5 then
-		return 7
+		return whitest_color
 	else
-		return 0
+		return blackest_color
 	end
 end
 
@@ -1336,7 +1430,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-04 10:05:39",revision=648]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-04 16:27:03",revision=819]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2149,7 +2243,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-04 10:05:39",revision=2277]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-04 16:27:03",revision=2457]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2191,9 +2285,10 @@ function change_color(c, hue, sat, lum)
 	pal_code[c] = code
 	pal_okhsl[c] = hsl
 	set_color(c, code)
+	return
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-04 10:05:39",revision=286]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-04 16:27:03",revision=471]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2216,26 +2311,13 @@ function remap_colors()
 
 		
 	-- Choose colors 0 (black) and 7 (white) first
-	local min_lum = 1.0
-	local best_black = 0
-	local max_lum = 0.0
-	local best_white = 1
-	for c = 0, 63 do
-		if pal_okhsl[c].l < min_lum then
-			best_black = c
-			min_lum = pal_okhsl[c].l
-		end
-		if pal_okhsl[c].l > max_lum then
-			best_white = c
-			max_lum = pal_okhsl[c].l
-		end
-	end
+	local best_black, best_white = find_blackest_and_whitest()
 	new_pal_code[0] = pal_code[best_black]
-	remove_value(remaining_pico_c, 0)
-	remove_value(remaining_new_c, best_black)
+	del(remaining_pico_c, 0)
+	del(remaining_new_c, best_black)
 	new_pal_code[7] = pal_code[best_white]
-	remove_value(remaining_pico_c, 7)
-	remove_value(remaining_new_c, best_white)
+	del(remaining_pico_c, 7)
+	del(remaining_new_c, best_white)
 		
 	-- Find best match for the other colors
 	local deltas = {}
@@ -2282,21 +2364,20 @@ function remap_colors()
 		end
 		if match_c then
 			new_pal_code[match_pico_c] = pal_code[match_c]
-			remove_value(remaining_new_c, match_c)
-			remove_value(remaining_pico_c, match_pico_c)
+			del(remaining_new_c, match_c)
+			del(remaining_pico_c, match_pico_c)
 		end
 	end
 
 	-- Add remaining colors
-	for c = 0, 63 do
-		if pal_code[c] then
-			local dest = 1
-			while new_pal_code[dest] do
-				dest += 1
-			end
-			new_pal_code[dest] = pal_code[c]
+	for i = 1, #remaining_new_c do
+		local c = remaining_new_c[i]
+		local dest = 1
+		while new_pal_code[dest] do
 			dest += 1
 		end
+		new_pal_code[dest] = pal_code[c]
+		dest += 1
 	end
 	
 	for c = 0, 63 do
@@ -2306,13 +2387,22 @@ function remap_colors()
 end
 
 
-function remove_value(t, val)
-	for i = 1, #t do
-		if t[i] == val then
-			table.remove(t, i)
-			break
+function find_blackest_and_whitest()
+	local min_lum = 1.0
+	local best_black = 0
+	local max_lum = 0.0
+	local best_white = 1
+	for c = 0, 63 do
+		if pal_okhsl[c].l < min_lum then
+			best_black = c
+			min_lum = pal_okhsl[c].l
+		end
+		if pal_okhsl[c].l > max_lum then
+			best_white = c
+			max_lum = pal_okhsl[c].l
 		end
 	end
+	return best_black, best_white
 end
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0IixzdG9yZWQ9IjIwMjQtMDQt
@@ -2348,13 +2438,14 @@ MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
 KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDQg
-MTA6MDU6NDAiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMzUzIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
-Lmx1YSMxNDEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVh
-IzMwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjMSIsd29y
-a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzI3Iix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzYiLHdvcmtzcGFjZV9pbmRleD0xfSx7
-bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAu
-bWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9p
-bmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
+MTY6Mjc6MDMiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjNjAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWku
+bHVhIzYyMCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEj
+MzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9nbG9iYWxzLmx1YSMxMyIsd29y
+a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzM5Iix3b3Jrc3BhY2Vf
+aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
+e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
+Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
+aW5kZXg9NH0se2xvY2F0aW9uPSJwYWwvMC5wYWwiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAE
+AAAAAwAAADBuaWw=
 :: [eoc]
