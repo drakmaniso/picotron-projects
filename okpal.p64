@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMDowODo0NCIscmV2aXNpb249MzE4OV1dbHo0APoBAADzMgAA9iN7WzBdPXtibXA9cHh1
+NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzI4NV1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -16,8 +16,8 @@ cAA7YC0HcAcQB9wAH1BiAEDxBgkJBDAHYAcNB0AHLQcgB00HAAdtFwIASwcAZwBoABMwWgASMEoA
 HThKAGE3MAc9BxBGABBdQgAhB10OAG8gBz0HMDdOAB0pEEeQAAFQAF9NByBHEEgAGf8KGBgE8Cja
 gNoPGXDaHmDaLlDaPkDaTjDZXgMABP8CTkDZPlDZLmDZHnDZDoDZ8ChtAAsN8AL-CPAbB7AHsAdQ
 ZzAHAEdABxAnUAcgB-AMswAZB0YAAfEBTwAHIAdKACPzAgsLBCBHQAdOByAHbgcAB44XAgDPBwAH
-bgcgB04HQEcgUAAcc9BOQG4gjhACAF8gbkBO0EIAGV8QEATw8DEA------------------------
--------------------------------------4lQbT04fX0=
+bgcgB04HQEcgUAAcc9BOQG4gjhACAF8gbkBO0EIAGVwQEATw8DEARC4xMjU1AAEMAA85AP------
+-----------------------------------------------------------------whQbT04fX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
@@ -173,7 +173,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-05 10:08:43",revision=3831]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-05 12:22:48",revision=3966]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -206,6 +206,26 @@ function _init()
 	rebuild_pal()
 	
 	undo_stack = create_undo_stack(undo_save_state, undo_load_state)
+
+	menuitem { id = "okpal_div1", label = "", divider = true, action = function() end }
+	menuitem {
+		id = "okpal_reset_colors",
+		label = "\^:0000000000000000 Picotron palette",
+		shortcut = "Ctrl-P",
+		action = function() undo_stack:checkpoint(); restore_default_palette() end
+	}
+	menuitem {
+		id = "okpal_clear_colors",
+		label = "\^:0000000000000000 Empty palette",
+		action = function() undo_stack:checkpoint(); clear_colors() end
+	}
+	menuitem { id = "okpal_div2", label = "", divider = true, action = function() end }
+	menuitem {
+		id = "okpal_manual",
+		label = "\^:0000000000000000 Help",
+		shortcut = "F1",
+		action = open_manual
+	}
 	
 	generate_gui()
 end
@@ -230,7 +250,27 @@ function _update()
 		if (keyp("v")) paste_color()
 		if (keyp("z")) undo_stack:undo()
 		if (keyp("y")) undo_stack:redo()
+		if (keyp("p")) then
+			undo_stack:checkpoint()
+			restore_default_palette()
+		end
 	end
+	
+	if (key("f1")) open_manual()
+end
+
+
+function open_manual()
+	create_process(
+		"/system/apps/notebook.p64",
+		{
+			argv = { "/ram/cart/manual.txt" } ,
+			window_attribs = {
+				workspace = "current",
+				autoclose = true,
+			}
+		}
+	)
 end
 
 
@@ -420,7 +460,7 @@ function load_metadata(metadata)
 	if type(metadata.test_cube_colors) == "table" then
 		test_cube_colors = metadata.test_cube_colors
 	else
-		test_cube_colors = default_test_cube_colors
+		test_cube_colors = copy(default_test_cube_colors)
 		if current_filename != "/ram/cart/pal/0.pal" then
 			for k, _ in pairs(test_cube_colors) do
 				test_cube_colors[k] = { 1, 1, 1 }
@@ -578,19 +618,23 @@ function paste_color()
 	end
 end
 :: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-04 10:05:39",revision=150,stored="2024-04-04 06:56:33"]]
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-05 12:07:16",revision=161,stored="2024-04-04 06:56:33"]]
 # OkPal
+
 A palette editor.
 
 ## Features
-- perceptually uniform color space (oklab);
+
+- perceptually uniform color space (oklab)
+- choose color by hue, saturation and lightness
+- reorder color by drag-and-drop
 - two file formats: ".hex" and ".pal"
-- can reorder colors to match the default picotron
-  palette
+- multiple import methods (keep default palette
+  or overwrite it)
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMDowODo0NCIscmV2aXNpb249MzA2Ml1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzE1NF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
@@ -601,7 +645,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMDowODo0NCIscmV2aXNpb249MzAxOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzEwOF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -611,7 +655,7 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-05 10:08:43",revision=1045]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-05 12:22:48",revision=1142]]
 current_filename = "/ram/cart/pal/0.pal"
 current_import_choice = "dont_clobber"
 
@@ -686,7 +730,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-05 10:08:43",revision=4208]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-05 12:22:48",revision=4303]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -1049,7 +1093,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-05 10:08:44",revision=243]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-05 12:22:48",revision=337]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1482,7 +1526,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-05 10:08:43",revision=1031]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-05 12:22:48",revision=1126]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2295,7 +2339,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-05 10:08:44",revision=2679]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-05 12:22:48",revision=2798]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2349,8 +2393,51 @@ function swap_colors(c1, c2)
 	set_color(c1, pal_code[c1])
 	set_color(c2, pal_code[c2])
 end
+
+
+function clear_colors()
+	for c = 0, 63 do
+		local code, lum
+		if c == 7 then
+			code = 0xffffff
+			lum = 1.0
+		else
+			code = 0x000000
+			lum = 0.0
+		end
+		pal_code[c] = code
+		pal_okhsl[c] = { h = 0.0, s = 0.0, l = lum }
+		set_color(c, code)
+		locked[c] = (c == 0) or (c == 7)
+		hidden[c] = false
+		for row = 0, 3 do hidden_toggles[row] = false end
+		for i = 0, #test_cube_colors - 1 do
+			test_cube_colors[i] = { 1, 1, 1 }
+		end
+	end
+	bg_color = 0
+	blackest_color = 0
+	whitest_color = 7
+end
+
+
+function restore_default_palette()
+	for c = 0, 63 do
+		code = peek4(0x5000 + 4 * (64 + c))
+		set_color(c, code)
+		pal_code[c] = code
+		pal_okhsl[c] = oklab.color_to_okhsl(code)
+		locked[c] = c <= 31
+		hidden[c] = false
+		for row = 0, 3 do hidden_toggles[row] = false end
+		test_cube_colors = copy(default_test_cube_colors)
+	end
+	bg_color = 0
+	blackest_color = 0
+	whitest_color = 7
+end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-05 10:08:44",revision=685]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-05 12:22:48",revision=783]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2500,14 +2587,14 @@ MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
 KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDUg
-MTA6MDg6NDQiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjgwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
-Lmx1YSMyMDQiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5s
+MTI6MjI6NDgiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMjg3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
+Lmx1YSMyODAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5s
 dWEjNDIiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVhIzMw
 Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjNiIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzYiLHdvcmtzcGFjZV9pbmRl
-eD0xfSx7bG9jYXRpb249InNyYy9yZW1hcC5sdWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFw
-Iix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRl
-eD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzkxIix3b3Jrc3BhY2VfaW5k
+ZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
+Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
+cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
+ZXg9NH19XV1sejQABAAAAAMAAAAwbmls
 :: [eoc]
