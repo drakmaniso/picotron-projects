@@ -8,15 +8,16 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxNjoyNzowMyIscmV2aXNpb249Mjk3NF1dbHo0AMIBAADDMgAA9iN7WzBdPXtibXA9cHh1
+NC0wNSAxMDowODo0NCIscmV2aXNpb249MzE4OV1dbHo0APoBAADzMgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
 cAA7YC0HcAcQB9wAH1BiAEDxBgkJBDAHYAcNB0AHLQcgB00HAAdtFwIASwcAZwBoABMwWgASMEoA
 HThKAGE3MAc9BxBGABBdQgAhB10OAG8gBz0HMDdOAB0pEEeQAAFQAF9NByBHEEgAGf8KGBgE8Cja
 gNoPGXDaHmDaLlDaPkDaTjDZXgMABP8CTkDZPlDZLmDZHnDZDoDZ8ChtAAsN8AL-CPAbB7AHsAdQ
-ZzAHAEdABxAnUAcgB-AMswAZB0YAAfEBTwAHIAdKACNfEBAE8PAxAP----------------------
----------------------------------------rUG09OH19
+ZzAHAEdABxAnUAcgB-AMswAZB0YAAfEBTwAHIAdKACPzAgsLBCBHQAdOByAHbgcAB44XAgDPBwAH
+bgcgB04HQEcgUAAcc9BOQG4gjhACAF8gbkBO0EIAGV8QEATw8DEA------------------------
+-------------------------------------4lQbT04fX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
@@ -172,12 +173,13 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-04 16:27:03",revision=3606]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-05 10:08:43",revision=3831]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
 include "src/remap.lua"
 include "src/gui.lua"
+include "src/gui_sliders.lua"
 
 
 function _init()	
@@ -216,6 +218,10 @@ end
 
 
 function _update()
+	if padlock_flashing then
+		padlock_flashing_time += 1
+	end
+	
 	gui:update_all()
 	
 	if key("ctrl") then
@@ -406,7 +412,7 @@ function load_metadata(metadata)
 			-- This only occurs when a default starting file
 			-- is created.
 			for c = 0, 63 do
-				locked[c] = c < 33
+				locked[c] = c <= 31
 			end
 		end
 	end
@@ -540,8 +546,7 @@ function cut_color()
 	if active_color then
 		set_clipboard("#" .. color_to_hex(get_color(active_color)))
 		if not locked[active_color] then
-			set_color(active_color, 0x000000)
-			change_color_code(active_color)
+			change_color_code(active_color, 0x000000)
 		end
 	end
 end
@@ -564,8 +569,7 @@ function paste_color()
 		end
 		local code = tonumber("0x" .. hex)
 		if type(code) == "number" then
-			set_color(active_color, code)
-			change_color_code(active_color)
+			change_color_code(active_color, code)
 		else
 			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
 		end
@@ -586,46 +590,18 @@ A palette editor.
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxNjoyNzowMyIscmV2aXNpb249Mjg1MV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wNSAxMDowODo0NCIscmV2aXNpb249MzA2Ml1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
-:: pal/0.pal
-b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0w
-NCAxNTowNjoyOSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
-ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
-dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
-dWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5fdG9nZ2xlcz17WzBdPXRy
-dWUsdHJ1ZSxmYWxzZSxmYWxzZX0sbG9ja2VkPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
-LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
-cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
-ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
-ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
-ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0
-LTA0LTA0IDE2OjI3OjAzIixva3BhbF92ZXJzaW9uPSIwLjAuNCIscmV2aXNpb249MTIxLHRlc3Rf
-Y3ViZV9jb2xvcnM9e1swXT17MTUsMzEsNH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0s
-ezksMjUsMjR9LHs4LDI0LDJ9LHsyNiwxMSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcs
-MTl9LHsyOCwxMiwxNn0sezEyLDE2LDF9LHs2LDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7
-NywyMywxNH0sezIzLDE0LDEzfSx7MTQsMzAsMTh9LHs3LDYsMjJ9LHs2LDIyLDV9LHsyMiw1LDIx
-fSx7MSwxLDF9LHsxLDEsMX0sezEsMSwxfX0sd2hpdGVzdF9jb2xvcj03XV1sejQAKQEAABUCAAD1
-BXVzZXJkYXRhKCJpMzIiLDY0LCIwAQDAMWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1
-ZjU3NGYwMGMyYzNjNzAwZmZmMWU4CABAMDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4
-Mzc2OWMgADE3N2E4AMBjY2FhMDAxYzVlYWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYy
-OTAwNDkyZDM4MDBhMjg4NzlAAPADYWNjNTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2
-NGRmZjYwMGJkiQAAlgBAMGRhYkAAXzg1NmQwAQC_EGI-AfEBMjAwNTFjYjhkMDAxOWExORABWDgx
-OGUwAQBQMDAwIik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNCAxNjoyNzowMyIscmV2aXNpb249MjgwOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wNSAxMDowODo0NCIscmV2aXNpb249MzAxOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -635,11 +611,14 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-04 16:27:03",revision=830]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-05 10:08:43",revision=1045]]
 current_filename = "/ram/cart/pal/0.pal"
 current_import_choice = "dont_clobber"
 
 undo_stack = nil
+
+padlock_flashing = false
+padlock_flashing_time = 0
 
 
 -- Saved in undo stack ----------------------------------------------------------
@@ -707,12 +686,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-04 16:27:03",revision=3913]]
-local slider_size = 170
-local slider_border = 6
-local slider_inner = slider_size - 2 * slider_border
-
-
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-05 10:08:43",revision=4208]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -741,7 +715,7 @@ function create_palette(el)
 	el.width = (nb_columns * size) + 1
 	el.height = (nb_rows * size) + 1
 
-	function el:draw()
+	function el:draw(msg)
 		clip()
 		rect(0, 0, self.width, self.height, outline_color())
 		for c = 0, 63 do
@@ -749,28 +723,84 @@ function create_palette(el)
 			local y = 1 + ((c \ nb_columns) * size)
 			rectfill(x, y, x + size - 1, y + size - 1, c)
 			if hidden[c] then
-				ovalfill(x + 2, y + 2, x + size - 3, y + size - 3, 0)
+				ovalfill(
+					x + 2, y + 2,
+					x + size - 3, y + size - 3,
+					0
+				)
 			end
 			if c == active_color then
-				local contrast_color = blackest_color
-				if pal_okhsl[active_color].l < 0.5 then
-					contrast_color = whitest_color
-				end
-				rect(x + 1, y + 1, x + size - 2, y + size - 2, contrast_color)
+				rect(
+					x + 1, y + 1,
+					x + size - 2, y + size - 2,
+					contrast_color(active_color)
+				)
 			end
 		end	
+		if self.drag_pos then
+			local col = (msg.mx - 1) \ size
+			local row = (msg.my - 1) \ size
+			local c = col + row * nb_columns
+			if 0 <= c and c <= 63 then
+				local x = 1 + col * size
+				local y = 1 + row * size
+				if c != active_color and not locked[c] then
+					oval(
+						x + 2, y + 2,
+						x + size - 3, y + size - 3,
+						contrast_color(c)
+					)
+				end
+			end
+			local mx, my = self.drag_pos.x, self.drag_pos.y
+			rectfill(mx, my, mx + 8, my + 8, active_color)		
+		end
 	end
 
 	function el:click(msg)
-		local x = min(nb_columns - 1, (msg.mx - 1) \ size)
-		local y = min(nb_rows - 1, (msg.my - 1) \ size)
-		local c = x + y * nb_columns
+		local col = min(nb_columns - 1, (msg.mx - 1) \ size)
+		local row = min(nb_rows - 1, (msg.my - 1) \ size)
+		local c = col + row * nb_columns
 		if msg.mb == 1 then
 			active_color = c
+			self.click_pos = { x = msg.mx, y = msg.my }
 		elseif msg.mb == 2 then
 			hidden[c] = not hidden[c]
 		end
 	end	
+	
+	function el:drag(msg)
+		if self.click_pos and not self.drag_pos then
+			local dx = abs(self.click_pos.x - msg.mx)
+			local dy = abs(self.click_pos.y - msg.my)
+			if dx > 1 or dy > 1 then
+				if locked[active_color] then
+					padlock_flashing = true
+				else
+					self.drag_pos = {}
+				end
+			end
+		end
+		if self.drag_pos then
+			self.drag_pos = { x = msg.mx, y = msg.my }
+		end
+	end
+	
+	function el:release(msg)
+		if self.drag_pos then
+			local col = (msg.mx - 1) \ size
+			local row = (msg.my - 1) \ size
+			local c = col + row * nb_columns
+			if 0 <= c and c <= 63 and not locked[c] then
+				swap_colors(active_color, c)
+				active_color = c
+			end			
+		end
+		self.click_pos = nil
+		self.drag_pos = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
 
 	return el
 end
@@ -816,16 +846,14 @@ function create_color_preview(el)
 		if active_color then
 			---rect(0, 0, self.height - 1, self.height - 1, 0)
 			rectfill(1, 1, self.height - 2, self.height - 2, active_color)
-			local contrast_color = blackest_color
-			if pal_okhsl[active_color].l < 0.5 then
-				contrast_color = whitest_color
-			end
-			print(string.format("%d", active_color), 4, 4, contrast_color)
+			print(string.format("%d", active_color), 4, 4, contrast_color(active_color))
 			local c = get_color(active_color)
-			print("#" .. color_to_hex(c), 7, self.height - 10, contrast_color)
+			print("#" .. color_to_hex(c), 7, self.height - 10, contrast_color(active_color))
 			pal(7, outline_color())
 			if locked[active_color] then
-				spr(2, self.height + 4, 1)
+				if padlock_flashing_time % 18 < 10 then
+					spr(2, self.height + 4, 1)
+				end
 			else
 				spr(1, self.height + 4, 1)
 			end
@@ -934,420 +962,6 @@ function create_test_cube(el)
 end
 
 
--- 2D Sliders -----------------------------------------------------------------------
-
-
-function create_hue_sat_slider(el)
-	---el.x = slider_border -- 240 - slider_size - 8
-	---el.y = slider_border -- 74
-	el.width = slider_size
-	el.height = slider_size
-	el.drag_delta = nil
-	
-	function el:draw()
-		clip()
-		oval(
-			slider_border - 1, slider_border - 1,
-			slider_border + slider_inner + 1, slider_border + slider_inner + 1,
-			outline_color()
-		)
-		if false then
-			ovalfill(
-				slider_border - 1, slider_border - 1,
-				slider_border + slider_inner + 1, slider_border + slider_inner + 1,
-				outline_color()
-			)			ovalfill(
-				slider_border, slider_border,
-				slider_border + slider_inner,
-				slider_border + slider_inner,
-				0
-			)
-		end
-		fillp(0b0101101001011010)
-		rectfill(slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, slider_size \ 2, 7)
-		rectfill(slider_size \ 2, slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, 7)
-		fillp()
-		for c = 0, 63 do
-			-- TODO: put nb_columns in global constant
-			if not hidden[c] and pal_okhsl[c].l != 0 then
-				local x, y = hs_coords(c)
-				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
-			end
-		end
-		if active_color and not hidden[active_color] then
-			local x, y = hs_coords(active_color)
-			if self.drag_delta then
-				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-			else
-				oval(x - 6, y - 6, x + 6, y + 6, 7)
-				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-			end
-		end
-	end	
-	
-	function el:hover(msg)
-		if (not msg.mx or not msg.my) return false
-		local _, r = coords_hs(msg.mx, msg.my)
-		if r > 1.02 then
-			return false
-		end
-		if active_color and not hidden[active_color] then
-			local ax, ay = hs_coords(active_color)
-			local dx = abs(ax - msg.mx)
-			local dy = abs(ay - msg.my)
-			if dx <= 5 and dy <= 5 then
-				self.cursor = "grab"
-			else
-				self.cursor = 1
-			end
-		end
-		return true
-	end
-	
-	function el:click(msg)
-		undo_stack:checkpoint()
-		local _, r = coords_hs(msg.mx, msg.my)
-		if r > 1.02 then
-			return false
-		end
-		if active_color and not hidden[active_color] then
-			local ax, ay = hs_coords(active_color)
-			local dx = abs(ax - msg.mx)
-			local dy = abs(ay - msg.my)
-			if dx <= 5 and dy <= 5 then
-				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
-				return true
-			end
-		end
-		active_color = nil
-		-- In reverse order to prioritize colors on top
-		for c = 63, 0, -1 do
-			local cx, cy = hs_coords(c)
-			local dx = abs(cx - msg.mx)
-			local dy = abs(cy - msg.my)
-			if dx <= 3 and dy <= 3 and not hidden[c] and pal_okhsl[c].l != 0 then
-				active_color = c
-				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
-				self.cursor = "grab"
-				return true
-			end
-		end
-		self.drag_delta = nil
-		return true
-	end
-	
-	function el:release(msg)
-		self.drag_delta = nil
-	end
-	
-	function el:drag(msg)
-		if active_color and self.drag_delta and not locked[active_color] then
-			local ax = msg.mx + self.drag_delta.x
-			local ay = msg.my + self.drag_delta.y
-			local hue, sat = coords_hs(ax, ay)
-			change_color(active_color, hue, sat, nil)
-			return true
-		end
-	end
-		
-	return el
-end
-
-
-function create_sat_lum_slider(el)
-	--el.x = 240 + 8
-	--el.y = 74
-	el.width = slider_size
-	el.height = slider_size
-	el.drag_delta = nil
-		
-	function el:draw()
-		clip()
-		rect(
-			slider_border - 1, slider_border - 1, 
-			slider_border + slider_inner + 1, slider_border + slider_inner + 1, 
-			outline_color()
-		)
-		if false then
-			rectfill(
-				slider_border, slider_border, 
-				slider_border + slider_inner, slider_border + slider_inner,
-				0
-			)
-		end
-		for c = 0, 63 do
-			if not hidden[c] and pal_okhsl[c].l != 0 then
-				local x, y = sl_coords(c)
-				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
-			end
-		end
-		if active_color and not hidden[active_color] then
-			local x, y = sl_coords(active_color)
-			if self.drag_delta then
-				-- ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-			else
-				ovalfill(x - 6, y - 6, x + 6, y + 6, 7)
-				ovalfill(x - 5, y - 5, x + 5, y + 5, active_color)
-			end
-		end
-	end	
-
-	
-	function el:hover(msg)
-		if active_color and not hidden[active_color] then
-			local ax, ay = sl_coords(active_color)
-			local dx = abs(ax - msg.mx)
-			local dy = abs(ay - msg.my)
-			if dx < 6 and dy < 6 then
-				self.cursor = "grab"
-			else
-				self.cursor = 1
-			end
-		end
-	end
-	
-	function el:click(msg)
-		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local ax, ay = sl_coords(active_color)
-			local dx = abs(ax - msg.mx)
-			local dy = abs(ay - msg.my)
-			if dx < 6 and dy < 6 then
-				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
-				return
-			end
-		end
-		active_color = nil
-		-- In reverse order to prioritize colors on top
-		for c = 63, 0, -1 do
-			local cx, cy = sl_coords(c)
-			local dx = abs(cx - msg.mx)
-			local dy = abs(cy - msg.my)
-			if dx < 3 and dy < 3 and not hidden[c] and pal_okhsl[c].l != 0 then
-				active_color = c
-				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
-				self.cursor = "grab"
-				return
-			end
-		end
-		self.drag_delta = nil
-	end
-	
-	function el:release(msg)
-		self.drag_delta = nil
-	end
-	
-	function el:drag(msg)
-		if active_color and self.drag_delta and not locked[active_color] then
-			local ax = msg.mx + self.drag_delta.x
-			local ay = msg.my + self.drag_delta.y
-			local sat, lum = coords_sl(ax, ay)
-			change_color(active_color, nil, sat, lum)
-		end
-	end
-	
-	return el
-end
-
-
--- 1D Sliders ----------------------------------------------------------------------
-
-
-function create_hue_slider(el)
-	el.width = slider_size + 2 * slider_border
-	el.height = slider_size + 2 * slider_border
-
-	function el:draw()
-		clip()
-		for c = 0, 63 do
-			if not hidden[c] and pal_okhsl[c].l != 0 then
-				cx1, cy1 = h_coords(c, -2)
-				cx2, cy2 = h_coords(c, 18)
-				line(cx1, cy1, cx2, cy2, c)
-			end
-		end
-		if active_color and not hidden[active_color] then
-			local ax, ay = h_coords(active_color)
-			pal(7, outline_color())
-			pal(13, active_color)
-			spr(7, ax - 4, ay - 4)
-			pal(13, 13)
-			pal(7, 7)
-		end
-	end	
-
-	function el:hover(msg)
-		-- I think there is a bug in Picotron's handling of mouse coords
-		-- when one widget is on top of another.
-		--[[
-		if (not msg.mx or not msg.my) return
-		if active_color then
-			local ax, ay = h_coords(active_color)
-			--printh(string.format("%.0f %.0f - %.0f %.0f", ax, ay, msg.mx, msg.my))
-			if
-				msg.mx >= ax - 6 and msg.mx <= ax + 6
-				and msg.my >= ay - 6 and msg.my <= ay + 6
-			then
-				self.cursor = "grab"
-			else
-				self.cursor = 1
-			end
-		end
-		--]]
-	end
-
-	function el:click(msg)
-		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local ax, ay = h_coords(active_color)
-			--[[
-			if
-				msg.mx >= ax - 6 and msg.mx <= ax + 6
-				and msg.my >= ay - 6 and msg.my <= ay + 6
-			then
-			]]
-				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
-			-- end
-		end
-	end
-	
-	function el:release(msg)
-		self.drag_delta = nil
-	end
-	
-	function el:drag(msg)
-		if active_color and self.drag_delta and not locked[active_color] then
-			local ax = msg.mx + self.drag_delta.x
-			local ay = msg.my + self.drag_delta.y
-			local hue = coords_h(ax, ay)
-			change_color(active_color, hue, nil, nil)
-		end
-	end
-	
-	return el
-end
-
-
-function create_sat_slider(el)
-	el.width = slider_size
-	el.height = 16
-	
-	function el:draw()
-		clip()
-		for c = 0, 63 do
-			if not hidden[c] and pal_okhsl[c].l != 0 then
-				local ax, _ = sl_coords(c)
-				line(ax, 0, ax, self.height - 9, c)
-			end
-		end
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
-			pal(7, outline_color())
-			pal(13, active_color)
-			spr(5, ax - 4, self.height - 9)
-			pal(13, 13)
-			pal(7, 7)
-		end
-	end	
-	
-	function el:hover(msg)
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
-			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
-				self.cursor = "grab"
-			else
-				self.cursor = 1
-			end
-		end
-	end
-
-	function el:click(msg)
-		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
-			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
-				self.drag_delta_x = ax - msg.mx
-			end
-		end
-	end
-	
-	function el:release(msg)
-		self.drag_delta_x = nil
-	end
-	
-	function el:drag(msg)
-		if active_color and self.drag_delta_x and not locked[active_color] then
-			local ax = msg.mx + self.drag_delta_x
-			local sat, lum = coords_sl(ax, 0)
-			change_color(active_color, nil, sat, nil)
-		end
-	end
-		
-	return el
-end
-
-
-function create_lum_slider(el)
-	el.width = 16
-	el.height = slider_size
-	
-	function el:draw()
-		clip()
-		for c = 0, 63 do
-			if not hidden[c] and pal_okhsl[c].l != 0 then
-				local _, ay = sl_coords(c)
-				line(0, ay, self.width - 9, ay, c)
-			end
-		end
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
-			pal(7, outline_color())
-			pal(13, active_color)
-			spr(6, self.width - 9, ay - 4)
-			pal(13, 13)
-			pal(7, 7)
-		end
-	end	
-	
-	function el:hover(msg)
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
-			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
-				self.cursor = "grab"
-			else
-				self.cursor = 1
-			end
-		end
-	end
-
-	function el:click(msg)
-		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
-			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
-				self.drag_delta_y = ay - msg.my
-			end
-		end
-	end
-	
-	function el:release(msg)
-		self.drag_delta_y = nil
-	end
-	
-	function el:drag(msg)
-		if active_color and self.drag_delta_y and not locked[active_color] then
-			local ay = msg.my + self.drag_delta_y
-			local sat, lum = coords_sl(0, ay)
-			change_color(active_color, nil, nil, lum)
-		end
-	end
-		
-	return el
-end
-
-
 -- Utility functions ----------------------------------------------------------------
 
 
@@ -1357,6 +971,11 @@ function outline_color()
 	else
 		return blackest_color
 	end
+end
+
+
+function contrast_color(c)
+	return (pal_okhsl[c].l < 0.5) and whitest_color or blackest_color
 end
 
 
@@ -1429,8 +1048,441 @@ function coords_h(x, y)
 	local sat = sqrt(dx * dx + dy * dy)
 	return hue, sat
 end
+:: src/gui_sliders.lua
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-05 10:08:44",revision=243]]
+slider_size = 170
+slider_border = 6
+slider_inner = slider_size - 2 * slider_border
+
+
+-- Hue / saturation slider ----------------------------------------------------------
+
+
+function create_hue_sat_slider(el)
+	el.width = slider_size
+	el.height = slider_size
+	el.drag_delta = nil
+	
+	function el:draw()
+		clip()
+		oval(
+			slider_border - 1, slider_border - 1,
+			slider_border + slider_inner + 1, slider_border + slider_inner + 1,
+			outline_color()
+		)
+		fillp(0b0101101001011010)
+		rectfill(slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, slider_size \ 2, 7)
+		rectfill(slider_size \ 2, slider_size \ 2 - 24, slider_size \ 2, slider_size \ 2 + 24, 7)
+		fillp()
+		for c = 0, 63 do
+			-- TODO: put nb_columns in global constant
+			if not hidden[c] and pal_okhsl[c].l != 0 then
+				local x, y = hs_coords(c)
+				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
+			local x, y = hs_coords(active_color)
+			pal(7, whitest_color)
+			pal(14, active_color)
+			spr(
+				self.drag_delta and 12 or 11,
+				x - 5, y - 5,
+				x + 5, y + 5
+			)
+			pal(14, 14)
+			pal(7, 7)
+		end
+	end	
+	
+	function el:hover(msg)
+		if (not msg.mx or not msg.my) return false
+		local _, r = coords_hs(msg.mx, msg.my)
+		if r > 1.02 then
+			return false
+		end
+		if active_color and not hidden[active_color] then
+			local ax, ay = hs_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx <= 5 and dy <= 5 then
+				self.cursor = "grab"
+			else
+				self.cursor = 1
+			end
+		end
+		return true
+	end
+	
+	function el:click(msg)
+		undo_stack:checkpoint()
+		local _, r = coords_hs(msg.mx, msg.my)
+		if r > 1.02 then
+			return false
+		end
+		if active_color and not hidden[active_color] then
+			local ax, ay = hs_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx <= 5 and dy <= 5 then
+				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
+				return true
+			end
+		end
+		active_color = nil
+		-- In reverse order to prioritize colors on top
+		for c = 63, 0, -1 do
+			local cx, cy = hs_coords(c)
+			local dx = abs(cx - msg.mx)
+			local dy = abs(cy - msg.my)
+			if dx <= 3 and dy <= 3 and not hidden[c] and pal_okhsl[c].l != 0 then
+				active_color = c
+				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+				self.cursor = "grab"
+				return true
+			end
+		end
+		self.drag_delta = nil
+		return true
+	end
+	
+	function el:drag(msg)
+		if (not active_color) return
+		if (not self.drag_delta) return
+		if locked[active_color] then
+			padlock_flashing = true
+		else
+			local ax = msg.mx + self.drag_delta.x
+			local ay = msg.my + self.drag_delta.y
+			local hue, sat = coords_hs(ax, ay)
+			change_color(active_color, hue, sat, nil)
+			return true
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
+
+	return el
+end
+
+
+-- Saturation / luminance slider ----------------------------------------------------
+
+
+function create_sat_lum_slider(el)
+	el.width = slider_size
+	el.height = slider_size
+	el.drag_delta = nil
+		
+	function el:draw()
+		clip()
+		rect(
+			slider_border - 1, slider_border - 1, 
+			slider_border + slider_inner + 1, slider_border + slider_inner + 1, 
+			outline_color()
+		)
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l != 0 then
+				local x, y = sl_coords(c)
+				ovalfill(x - 3, y - 3, x + 3, y + 3, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
+			local x, y = sl_coords(active_color)
+			pal(7, whitest_color)
+			pal(14, active_color)
+			spr(
+				self.drag_delta and 12 or 11,
+				x - 5, y - 5,
+				x + 5, y + 5
+			)
+			pal(14, 14)
+			pal(7, 7)
+		end
+	end	
+	
+	function el:hover(msg)
+		if active_color and not hidden[active_color] then
+			local ax, ay = sl_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 6 and dy < 6 then
+				self.cursor = "grab"
+			else
+				self.cursor = 1
+			end
+		end
+	end
+	
+	function el:click(msg)
+		undo_stack:checkpoint()
+		if active_color and not hidden[active_color] then
+			local ax, ay = sl_coords(active_color)
+			local dx = abs(ax - msg.mx)
+			local dy = abs(ay - msg.my)
+			if dx < 6 and dy < 6 then
+				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
+				return
+			end
+		end
+		active_color = nil
+		-- In reverse order to prioritize colors on top
+		for c = 63, 0, -1 do
+			local cx, cy = sl_coords(c)
+			local dx = abs(cx - msg.mx)
+			local dy = abs(cy - msg.my)
+			if dx < 3 and dy < 3 and not hidden[c] and pal_okhsl[c].l != 0 then
+				active_color = c
+				self.drag_delta = { x = cx - msg.mx, y = cy - msg.my }
+				self.cursor = "grab"
+				return
+			end
+		end
+		self.drag_delta = nil
+	end
+	
+	function el:drag(msg)
+		if (not active_color) return
+		if (not self.drag_delta) return
+		if locked[active_color] then
+			padlock_flashing = true
+		else
+			local ax = msg.mx + self.drag_delta.x
+			local ay = msg.my + self.drag_delta.y
+			local sat, lum = coords_sl(ax, ay)
+			change_color(active_color, nil, sat, lum)
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
+
+	return el
+end
+
+
+-- 1D Sliders ----------------------------------------------------------------------
+
+
+function create_hue_slider(el)
+	el.width = slider_size + 2 * slider_border
+	el.height = slider_size + 2 * slider_border
+
+	function el:draw()
+		clip()
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l != 0 then
+				cx1, cy1 = h_coords(c, -2)
+				cx2, cy2 = h_coords(c, 18)
+				line(cx1, cy1, cx2, cy2, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
+			local ax, ay = h_coords(active_color)
+			pal(7, outline_color())
+			pal(13, active_color)
+			spr(7, ax - 4, ay - 4)
+			pal(13, 13)
+			pal(7, 7)
+		end
+	end	
+
+	function el:hover(msg)
+		-- I think there is a bug in Picotron's handling of mouse coords
+		-- when one widget is on top of another.
+		--[[
+		if (not msg.mx or not msg.my) return
+		if active_color then
+			local ax, ay = h_coords(active_color)
+			--printh(string.format("%.0f %.0f - %.0f %.0f", ax, ay, msg.mx, msg.my))
+			if
+				msg.mx >= ax - 6 and msg.mx <= ax + 6
+				and msg.my >= ay - 6 and msg.my <= ay + 6
+			then
+				self.cursor = "grab"
+			else
+				self.cursor = 1
+			end
+		end
+		--]]
+	end
+
+	function el:click(msg)
+		undo_stack:checkpoint()
+		if active_color and not hidden[active_color] then
+			local ax, ay = h_coords(active_color)
+			--[[
+			if
+				msg.mx >= ax - 6 and msg.mx <= ax + 6
+				and msg.my >= ay - 6 and msg.my <= ay + 6
+			then
+			]]
+				self.drag_delta = { x = ax - msg.mx, y = ay - msg.my }
+			-- end
+		end
+	end
+	
+	function el:drag(msg)
+		if (not active_color) return
+		if (not self.drag_delta) return
+		if locked[active_color] then
+			padlock_flashing = true
+		else
+			local ax = msg.mx + self.drag_delta.x
+			local ay = msg.my + self.drag_delta.y
+			local hue = coords_h(ax, ay)
+			change_color(active_color, hue, nil, nil)
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
+
+	return el
+end
+
+
+function create_sat_slider(el)
+	el.width = slider_size
+	el.height = 16
+	
+	function el:draw()
+		clip()
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l != 0 then
+				local ax, _ = sl_coords(c)
+				line(ax, 0, ax, self.height - 9, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
+			local ax, _ = sl_coords(active_color)
+			pal(7, outline_color())
+			pal(13, active_color)
+			spr(5, ax - 4, self.height - 9)
+			pal(13, 13)
+			pal(7, 7)
+		end
+	end	
+	
+	function el:hover(msg)
+		if active_color and not hidden[active_color] then
+			local ax, _ = sl_coords(active_color)
+			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
+				self.cursor = "grab"
+			else
+				self.cursor = 1
+			end
+		end
+	end
+
+	function el:click(msg)
+		undo_stack:checkpoint()
+		if active_color and not hidden[active_color] then
+			local ax, _ = sl_coords(active_color)
+			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 and msg.my >= self.height - 9 then
+				self.drag_delta_x = ax - msg.mx
+			end
+		end
+	end
+	
+	function el:drag(msg)
+		if (not active_color) return
+		if (not self.drag_delta_x) return
+		if locked[active_color] then
+			padlock_flashing = true
+		else
+			local ax = msg.mx + self.drag_delta_x
+			local sat, lum = coords_sl(ax, 0)
+			change_color(active_color, nil, sat, nil)
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta_x = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
+			
+	return el
+end
+
+
+function create_lum_slider(el)
+	el.width = 16
+	el.height = slider_size
+	
+	function el:draw()
+		clip()
+		for c = 0, 63 do
+			if not hidden[c] and pal_okhsl[c].l != 0 then
+				local _, ay = sl_coords(c)
+				line(0, ay, self.width - 9, ay, c)
+			end
+		end
+		if active_color and not hidden[active_color] then
+			local _, ay = sl_coords(active_color)
+			pal(7, outline_color())
+			pal(13, active_color)
+			spr(6, self.width - 9, ay - 4)
+			pal(13, 13)
+			pal(7, 7)
+		end
+	end	
+	
+	function el:hover(msg)
+		if active_color and not hidden[active_color] then
+			local _, ay = sl_coords(active_color)
+			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
+				self.cursor = "grab"
+			else
+				self.cursor = 1
+			end
+		end
+	end
+
+	function el:click(msg)
+		undo_stack:checkpoint()
+		if active_color and not hidden[active_color] then
+			local _, ay = sl_coords(active_color)
+			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 and msg.mx >= self.width - 9 then
+				self.drag_delta_y = ay - msg.my
+			end
+		end
+	end
+	
+	function el:drag(msg)
+		if (not active_color) return
+		if (not self.drag_delta_y) return
+		if locked[active_color] then
+			padlock_flashing = true
+		else
+			local ay = msg.my + self.drag_delta_y
+			local sat, lum = coords_sl(0, ay)
+			change_color(active_color, nil, nil, lum)
+		end
+	end
+	
+	function el:release(msg)
+		self.drag_delta_y = nil
+		padlock_flashing = false
+		padlock_flashing_time = 0
+	end
+			
+	return el
+end
+
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-04 16:27:03",revision=819]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-05 10:08:43",revision=1031]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2243,7 +2295,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-04 16:27:03",revision=2457]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-05 10:08:44",revision=2679]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2261,14 +2313,16 @@ end
 
 function rebuild_pal(c)
 	for c = 0, 63 do
-		change_color_code(c)
+		pal_code[c] = get_color(c)
+		pal_okhsl[c] = oklab.color_to_okhsl(pal_code[c])
 	end
 end
 
 
-function change_color_code(c)
-	pal_code[c] = get_color(c)
+function change_color_code(c, code)
+	pal_code[c] = code
 	pal_okhsl[c] = oklab.color_to_okhsl(pal_code[c])
+	set_color(c, code)
 end
 
 
@@ -2287,8 +2341,16 @@ function change_color(c, hue, sat, lum)
 	set_color(c, code)
 	return
 end
+
+
+function swap_colors(c1, c2)
+	pal_code[c1], pal_code[c2] = pal_code[c2], pal_code[c1]
+	pal_okhsl[c1], pal_okhsl[c2] = pal_okhsl[c2], pal_okhsl[c1]
+	set_color(c1, pal_code[c1])
+	set_color(c2, pal_code[c2])
+end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-04 16:27:03",revision=471]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-05 10:08:44",revision=685]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2437,15 +2499,15 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDQg
-MTY6Mjc6MDMiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjNjAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWku
-bHVhIzYyMCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEj
-MzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9nbG9iYWxzLmx1YSMxMyIsd29y
-a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzM5Iix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
-Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
-aW5kZXg9NH0se2xvY2F0aW9uPSJwYWwvMC5wYWwiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAE
-AAAAAwAAADBuaWw=
+KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDUg
+MTA6MDg6NDQiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMjgwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
+Lmx1YSMyMDQiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5s
+dWEjNDIiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVhIzMw
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjNiIsd29ya3Nw
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzYiLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249InNyYy9yZW1hcC5sdWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFw
+Iix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRl
+eD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
