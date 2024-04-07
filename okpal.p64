@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzI4NV1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+NC0wNyAwNzowOToxNSIscmV2aXNpb249MzUxNF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -173,7 +173,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-05 12:22:48",revision=3966]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-07 07:09:15",revision=4230]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -187,6 +187,8 @@ function _init()
 		tabbed = true,
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA=="),
 	}
+	
+	find_gfx_map_pids()
 
 	mkdir("/ram/cart/pal")
 	wrangle_working_file(
@@ -195,28 +197,26 @@ function _init()
 		"/ram/cart/pal/0.pal" -- default
 	)
 	
+	rebuild_pal()
+		
 	on_event("open_file", update_filename)
 	on_event("save_file", update_filename)
 	on_event("save_file_as", update_filename)
 	on_event("drop_items", handle_drop_items)
 	on_event("okpal_hexdialog_confirm", handle_okpal_hexdialog_confirm)
 	
-	-- Initialize globals
-	load_metadata({})
-	rebuild_pal()
-	
 	undo_stack = create_undo_stack(undo_save_state, undo_load_state)
 
 	menuitem { id = "okpal_div1", label = "", divider = true, action = function() end }
 	menuitem {
 		id = "okpal_reset_colors",
-		label = "\^:0000000000000000 Picotron palette",
+		label = "\^:0000000000000000 Picotron Palette",
 		shortcut = "Ctrl-P",
 		action = function() undo_stack:checkpoint(); restore_default_palette() end
 	}
 	menuitem {
 		id = "okpal_clear_colors",
-		label = "\^:0000000000000000 Empty palette",
+		label = "\^:0000000000000000 Empty Palette",
 		action = function() undo_stack:checkpoint(); clear_colors() end
 	}
 	menuitem { id = "okpal_div2", label = "", divider = true, action = function() end }
@@ -227,6 +227,7 @@ function _init()
 		action = open_manual
 	}
 	
+	test_cube_colors = copy(default_test_cube_colors)
 	generate_gui()
 end
 
@@ -274,6 +275,32 @@ function open_manual()
 end
 
 
+function find_gfx_map_pids()
+	local processes = fetch "/ram/system/processes.pod"
+	for i = 1, #processes do
+		if processes[i].name == "gfx" then
+			picotron_gfx_pid = processes[i].id
+		elseif processes[i].name == "map" then
+			picotron_map_pid = processes[i].id
+		end
+	end
+end
+
+
+function send_palette()
+	local palette = userdata("i32", 64)
+	for c = 0, 63 do
+		palette:set(c, get_color(c))
+	end
+	if picotron_gfx_pid then
+		send_message(picotron_gfx_pid, { event = "set_palette", palette = palette })
+	end
+	if picotron_map_pid then
+		send_message(picotron_map_pid, { event = "set_palette", palette = palette })
+	end
+end
+
+
 -- Undo ---------------------------------------------------------------------------
 
 
@@ -293,6 +320,7 @@ function undo_load_state(state, _item)
 	for c = 0, 63 do
 		set_color(c, pal_code[c])
 	end
+	send_palette()
 end
 
 
@@ -400,6 +428,7 @@ function load_working_file(data, metadata)
 		load_pal_file(data, metadata or {})
 	end
 	if (undo_stack) undo_stack:reset()
+	send_palette()
 end
 
 
@@ -446,25 +475,26 @@ function load_metadata(metadata)
 	
 	if type(metadata.locked) == "table" then
 		locked = metadata.locked
+	elseif current_filename == "/ram/cart/pal/0.pal" then
+		-- This only occurs when a default starting file
+		-- is created.
+		for c = 0, 63 do
+			locked[c] = c <= 31
+		end
 	else
 		locked = {}
-		if current_filename == "/ram/cart/pal/0.pal" then
-			-- This only occurs when a default starting file
-			-- is created.
-			for c = 0, 63 do
-				locked[c] = c <= 31
-			end
+		for c = 0, 63 do
+			locked[c] = false
 		end
 	end
 	
 	if type(metadata.test_cube_colors) == "table" then
 		test_cube_colors = metadata.test_cube_colors
-	else
+	elseif current_filename == "/ram/cart/pal/0.pal" then
 		test_cube_colors = copy(default_test_cube_colors)
-		if current_filename != "/ram/cart/pal/0.pal" then
-			for k, _ in pairs(test_cube_colors) do
-				test_cube_colors[k] = { 1, 1, 1 }
-			end
+	else
+		for i = 0, 23 do
+			test_cube_colors[i] = { 1, 1, 1 }
 		end
 	end
 end
@@ -474,15 +504,16 @@ end
 
 
 function load_pal_file(data, metadata)
-	if type(data) != "userdata" then
-		if data then
+	if data then
+		if type(data) == "userdata" and data:width() == 64 then
+			for c = 0, 63 do
+				if data[c] then
+					set_color(c, data[c])
+				end
+			end
+		else
 			notify("unable to load working file")
-		end
-		return
-	end
-	for c = 0, 63 do
-		if data[c] then
-			set_color(c, data[c])
+			return
 		end
 	end
 	rebuild_pal()
@@ -549,11 +580,15 @@ function load_hex_file(data, metadata)
 		end
 		hidden_toggles[0] = true
 		hidden_toggles[1] = true
+		blackest_color = 0
+		whitest_color = 7
+		bg_color = 0
+	else
+		local best_black, best_white = find_blackest_and_whitest()
+		blackest_color = metadata.blackest_color or best_black
+		whitest_color = metadata.whitest_color or best_white
+		bg_color = metadata.bg_color or blackest_color
 	end
-	local best_black, best_white = find_blackest_and_whitest()
-	blackest_color = metadata.blackest_color or best_black
-	whitest_color = metadata.whitest_color or best_white
-	bg_color = metadata.bg_color or best_black
 end
 
 
@@ -618,23 +653,209 @@ function paste_color()
 	end
 end
 :: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-05 12:07:16",revision=161,stored="2024-04-04 06:56:33"]]
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-06 09:05:12",revision=198,stored="2024-04-04 06:56:33"]]
 # OkPal
 
-A palette editor.
+Okpal is a tool to create and edit color palettes.
+You can easily use those palettes in your programs,
+and even directly in Picotron's sprite and map
+editors.
+
 
 ## Features
 
-- perceptually uniform color space (oklab)
-- choose color by hue, saturation and lightness
-- reorder color by drag-and-drop
-- two file formats: ".hex" and ".pal"
-- multiple import methods (keep default palette
-  or overwrite it)
+- Any change to the palette is propagated to
+  Picotron's sprite and map editors.
+- Use a perceptually uniform color space (oklab).
+- Choose colors by hue, saturation and lightness.
+- Reorder colors by drag-and-drop.
+- Undo/redo.
+- Supports two file formats: ".hex" and ".pal"
+- Multiple options for importing external palettes
+  (keep default palette, overwrite it, or try to 
+  match it)
+
+
+## Usage
+
+The tool shows you four different views of the 64
+colors in the current palette:
+
+- at the top-left of the screen, the colors are
+  shown in palette order (same as in sprite editor
+  first tab);
+- below, on the left, the colors are shown inside
+  a circle picker: the angle correspond to the hue,
+  and the distance from the center correspond to the
+  saturation;
+- in the middle the colors are shown as inside a
+  square picker: the X axis correspond to the
+  saturation, and the Y axis correspond to the
+  lightness;
+- finally, on the right is a "test zone", where
+  you can use 24 paintable cubes to test color
+  combinations.
+
+To modify a color, you must first select it. You can
+do that either by clicking in the palette overview
+at the top of the screen, or by clicking directly on
+one of the color dots in the circle picker or in the
+square picker.
+
+Once selected, some information about the color are
+displayed on the right of the palette overview:
+
+- the color number;
+- the hex code corresponding to the RGB values of
+  the color;
+- a padlock icon: if the padlock is closed, the color
+  is "locked" and cannot be edited; click on the icon
+  to lock/unlock it;
+- an eye icon: if the eye is closed, the color is only
+  shown in the palette overview; it is hidden in the
+  circle and square pickers.
+- a paint bucket icon: you can click on it to change
+  the color background to the current selected color;
+  click again to go back to a black background.
+
+You can copy the current color by using Ctrl-C, and
+paste a copied color onto the current one by using
+Ctrl-V. This also works outside OkPal: the color is
+stored in the clipboard as a hex code ("#ffacc5").
+
+There is five different ways to adjust the selected
+color:
+
+- a small colored circle *outside* the circle picker
+  allows you to change the hue of the color;
+- a small colored circle *inside* the circle picker
+  allows you to change at the same time the hue and
+  the saturation;
+- a small colored triangle below the square picker
+  allows you to change just the saturation;
+- a small colored triangle at the right of the square
+  picker allows you to change the lightness;
+- finally, a small colored circle inside the square
+  picker allows you to change at the same time the
+  saturation and the lightness.
+
+Any change you make can be reverted by hitting
+Ctrl-Z for undo. Use Ctrl-Y for redo.
+
+Once you have several colors in you palettes, you can
+reorder them in the palette overview: just drag one
+color onto another, they will swap their positions.
+Note that both colors must be unlocked.
+
+
+## Using the palette in cartridges
+
+By default, the palette you edit is saved in the
+cart you're working on, alongside your sprite sheets
+and maps.
+
+The default path is "/ram/cart/pal/0.pal"
+
+In order to use a palette in your programs, you just
+need to copy it in memory:
+
+```
+poke4(0x5000, get(fetch"/ram/cart/pal/0.pal"))
+```
+
+
+## Loading and saving
+
+If you only need one palette for your cart, you
+don't need to do anything special to save it. It is
+saved alongside the rest of your assets each time
+you hit Ctrl-S.
+
+It's possible to work with multiple palettes, but it
+is a little clumsy, because it's not yet possible to
+fully integrate third-party tools with Picotron's
+interface.
+
+In order to create a new palette, you *cannot* yet
+use the '+' button at the right of the tabs. Instead,
+you need to use "Save File As" in the menu, and choose
+the name of your new palette, for example "1.pal".
+If you need to start from scratch for this new
+palette, use "Empty Palette" or "Picotron Palette"
+from the menu.
+
+To switch to another already created palette, choose
+"Open File" in the menu, but **do not double-click**
+on the file you want to open, as this do not work
+yet. Instead, you can drag and drop the file from the
+dialog onto OkPal's window, and it will open it.
+
+
+## Importing and exporting
+
+You can import palettes from external tools. Currently
+the only supported format is ".hex" files, which are
+simple text files with one line per color, represented
+by their RGB code in hex format (without "#" or "0x"
+, just the hexadecimal numbers).
+
+To import a palette, choose "Open File" from the menu,
+but **do not double-click** on the file. Instead,
+drag-and-drop the hex file onto OkPal's window. If
+this is the first time you open this external palette
+in OkPal, a dialog will appear to let you choose how
+to arrange the colors in the palette. You can either:
+
+- Keep default Picotron palette in the first 32 colors,
+  and put the imported colors in the last 32 slots.
+- Completely remove the Picotron palette and import
+  the whole palette, but reorder the colors to try
+  to match the default colors.
+- Or simply import the palette as is. Note that this
+  will affect the interface and probably make it
+  difficult to use the menu, the sprite editor and
+  the map editor.
+
+
+## Changelog
+
+2024-04-06: version 1.0.0 (release #okpal-3)
+
+- propagate palette to sprite and map editors;
+- undo/redo;
+- reorder colors by drag-and-drop;
+- import dialog;
+- reorder imported colors to match default colors;
+- added a manual;
+- menu entries to initialize the palette and open
+  the manual;
+- flash padlock icon when trying to edit a locked
+  color;
+- shift-click paint-bucket icon to change the "white"
+  color used in the interface, and ctrl-click the
+  icon to change the "black" (useful when importing
+  external palettes);
+
+2024-04-02: version 0.0.3 (release #okpal-2)
+
+- Added the ability to change the background color (by clicking on the small paint bucket icon), and switched the default background to black.
+- Added the ability to import ".hex" files (using drag and drop from the "Open File" dialog); to actually create the ".pal" file, you need to save.
+- Improved the color pickers.
+- Added the ability to copy/paste colors (using a hex string starting with #).
+- Added the ability to show/hide individual colors (right click on a color in the palette).
+
+2024-04-01: v0.0.1 (release #okpal-1)
+
+- Added the ability to lock colors, to avoid accidentally modifying them. By default the first 33 colors are locked (click on the padlock to unlock)
+- Added the ability to hide specific rows of color from the two color pickers.
+- Added sliders to change the individual components (hue, saturation and luminance).
+- Added the ability to select a color by clicking on their dot in the color pickers.
+- Added a test zone, with 24 paintable cubes (click on a cube face to change its color).
+
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzE1NF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wNyAwNzowOToxNSIscmV2aXNpb249MzM2NV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
@@ -645,7 +866,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNSAxMjoyMjo0OCIscmV2aXNpb249MzEwOF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wNyAwNzowOToxNSIscmV2aXNpb249MzMwMl1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -655,7 +876,10 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-05 12:22:48",revision=1142]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-07 07:09:15",revision=1357]]
+picotron_gfx_pid = nil
+picotron_map_pid = nil
+
 current_filename = "/ram/cart/pal/0.pal"
 current_import_choice = "dont_clobber"
 
@@ -687,8 +911,9 @@ whitest_color = 7
 hidden_toggles = {}
 hidden = {}
 locked = {}
-
-test_cube_colors = {}
+for i = 0, 63 do locked[i] = i <= 32 end
+		
+test_cube_colors = nil
 
 
 -- Constants ----------------------------------------------------------------------
@@ -730,7 +955,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-05 12:22:48",revision=4303]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-07 07:09:15",revision=4538]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -836,8 +1061,10 @@ function create_palette(el)
 			local row = (msg.my - 1) \ size
 			local c = col + row * nb_columns
 			if 0 <= c and c <= 63 and not locked[c] then
+				undo_stack:checkpoint()
 				swap_colors(active_color, c)
 				active_color = c
+				send_palette()
 			end			
 		end
 		self.click_pos = nil
@@ -920,9 +1147,8 @@ function create_color_preview(el)
 			print("\014saturation: " .. string.format("%3.0f", pal_okhsl[active_color].s * 100.0) .. "%")
 			print("\014 luminance: " .. string.format("%3.0f", pal_okhsl[active_color].l * 100.0) .. "%")
 		else
-			print("\^pOkPal\^-p\014\|o 0.0.4", 8, 16, outline_color())
-			print("\014\|4- 'save as' to create a new palette")
-			print("\014- 'open' to drag-n-drop a file")
+			print("\^pOkPal\^-p\014\|o 1.0.0", 8, 16, outline_color())
+			print("\014\|6\-ipress f1 for help")
 		end
 	end
 	
@@ -964,9 +1190,6 @@ function create_test_cube(el)
 	el.height = 24 + 4
 
 	function el:draw()
-		if false then
-			rectfill(0, 0, self.width, self.width, 0)
-		end
 		local colors = test_cube_colors[self.test_id]
 		pal(10, colors[1])
 		pal(9, colors[2])
@@ -1093,7 +1316,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-05 12:22:48",revision=337]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-07 07:09:15",revision=543]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1205,6 +1428,7 @@ function create_hue_sat_slider(el)
 	end
 	
 	function el:release(msg)
+		send_palette()
 		self.drag_delta = nil
 		padlock_flashing = false
 		padlock_flashing_time = 0
@@ -1303,6 +1527,7 @@ function create_sat_lum_slider(el)
 	end
 	
 	function el:release(msg)
+		send_palette()
 		self.drag_delta = nil
 		padlock_flashing = false
 		padlock_flashing_time = 0
@@ -1387,6 +1612,7 @@ function create_hue_slider(el)
 	end
 	
 	function el:release(msg)
+		send_palette()
 		self.drag_delta = nil
 		padlock_flashing = false
 		padlock_flashing_time = 0
@@ -1452,6 +1678,7 @@ function create_sat_slider(el)
 	end
 	
 	function el:release(msg)
+		send_palette()
 		self.drag_delta_x = nil
 		padlock_flashing = false
 		padlock_flashing_time = 0
@@ -1517,6 +1744,7 @@ function create_lum_slider(el)
 	end
 	
 	function el:release(msg)
+		send_palette()
 		self.drag_delta_y = nil
 		padlock_flashing = false
 		padlock_flashing_time = 0
@@ -1526,7 +1754,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-05 12:22:48",revision=1126]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-07 07:09:15",revision=1328]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2339,7 +2567,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-05 12:22:48",revision=2798]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-07 07:09:15",revision=3002]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2437,7 +2665,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-05 12:22:48",revision=783]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-07 07:09:15",revision=998]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2586,15 +2814,15 @@ NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iQSBwYWxldHRlIGVkaXRvci4iLHJ1bnRpbWU9NSxzdG9yZWQ9IjIwMjQtMDQtMDUg
-MTI6MjI6NDgiLHRpdGxlPSJPa1BBTCIsdmVyc2lvbj0iMC4wLjQiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjg3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3Vp
-Lmx1YSMyODAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5s
-dWEjNDIiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVhIzMw
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjNiIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3BhbGV0dGUubHVhIzkxIix3b3Jrc3BhY2VfaW5k
-ZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAubHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
-Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
-cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
-ZXg9NH19XV1sejQABAAAAAMAAAAwbmls
+KSxub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0byBvcGVuIHRoZSBtYW51YWwpIixy
+dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTA3IDA3OjA5OjE1Iix0aXRsZT0iT2tQQUwiLHZlcnNp
+b249IjEuMC4wIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzMzMSIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
+e2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9LHts
+b2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRp
+b249InNyYy9nbG9iYWxzLmx1YSMzNSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+L3BhbGV0dGUubHVhIzkxIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAu
+bHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFj
+ZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2Nh
+dGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH19XV1sejQABAAAAAMAAAAwbmls
 :: [eoc]
