@@ -7,7 +7,7 @@ version 2
 :: src/
 :: pal/
 :: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-10 08:40:53",revision=719]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-10 09:18:59",revision=725]]
 
 -- A 'require' function similar to standard Lua.
 -- Idea from elgopher on the BBS
@@ -99,15 +99,19 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAwODo0MDo1MyIscmV2aXNpb249NzAwXV1sejQAygEAANsyAADzJXtbMF09e2JtcD1weHUA
-QyAICAQwB2AXUAcAB0AHAAcgJzA3QBewLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSxCAHMQ
-EATwIRcAAgATEAgAQwAX8AIJAA8VACQfEYUACx03hQDVKyeQV2BXEAdgJ0AHYAIA-wFAJ2AHMDdA
-J0AXQDfAF-AbVgAd9gckF8AHEAewBxAHoAcwB5AHMAeAFwAHAgATgBYAE6AmAE-AF-AUZAAd8gUi
-viDeEE4HfhBOF24QTideEE43TggAIRduGABf3iC_8BJWAB0f8DEAe-8FCwYEACdgByAHUAeQB5AH
-IAdgJ2BAAB4RIHQBUSAHAFdQCgCfQFcgBxAHAAcQTAAeEjeLAAcEAB83QwAeBo4AAoYACQwAD08A
-HmBHUAeQJ3AdAS9HUDsAIEAHkDdgBgAPOwAdExBJAQFRASM3EFkBH5DbASYgEBdOAT9gN1DdAS4k
-EBdNAT8QN1CQACRFIAdQR_IBD5IAKAPVARVHCgAOUAAPcwIULjdgcQIPogMWDzEA------------
-------------------------------------------------MVBtPTd9fQ==
+NC0xMCAxNDoyOTowMSIscmV2aXNpb249MTA2NV1dbHo0AKACAAB7MwAA8yV7WzBdPXtibXA9cHh1
+AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgBz
+EBAE8CEXAAIAExAIAEMAF-ACCQAPFQAkHxGFAAsdOYUA1SsnkFdgVxAHYCdAB2ACAP8BQCdgBzA3
+QCdAF0A3wBfwG1YAHfYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOgJgBPwBfwFGQAHfIF
+Iq4wziBOB24gThdeIE4nTiBONz4IACEXXhgAX84wrvATVgAiXc4gPkc_BAAfzlIAIx-wMQBK-wUL
+BgQAJ2AHIAdQB5AHkAcgB2AnYEAACx43QAARIJUBUSAHAFdQCgCfQFcgBxAHAAcQTAAeEjeLAAcE
+AB83QwAeBo4AAoYACQwAD08AHmBHUAeQJ3AdAS9HUDsAIEAHkDdgBgAPOwAdExBJAQFRASM3EFkB
+H5CbAR4E2wEgEBdOAT9gN1DdAS4kEBdNAT8QN1CQACRFIAdQR_IBD5IAKAPVARVHCgAOUAAPcwIU
+LzdgcQIjDnEDDzEAn58THQT-GJvw-201AByP8Jv-GE-w-w43AB1v_v8YdfCINgAdX-_A-xiIOQEe
+DzEArIIHBwRyTzsSTgIAH3I7AAsvMTE8AAFyDi8RDhIOLQQAD0MADw-hAB4PMQDv8AUJCQTAB3AX
+YCcgZxAHECcgBxAXMJUID0QAHv8CEAcwFxAHICcQBxBnICdgF3BEAB43kGcQAgAfkGsCHP8BMA8W
+QB4wLiA_MC5AHlAOED8AHP8BEA8WUB5ALjA_IC4wHkAOMKYBHg8xAP----------------------
+------------------------------9jUG09N319
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
@@ -1170,9 +1174,10 @@ fa-1LokjiRzpXII9nYF3BzqOfUT33a29_WboqgQG6EdnR89XwJ0BzAMUn4FrUDtpx9edAkXrvXWu
 f0x6N8Q6ebd5gubCde6g7vFD5P8HJ8CrmS6g1gAAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHjWbbB
 AAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-10 08:40:53",revision=1028]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-10 14:29:01",revision=1425]]
 include "drak.lua"
 local file = require "src/file"
+local tracker = require "src/tracker"
 
 
 local gui
@@ -1197,6 +1202,9 @@ end
 
 
 function _update()
+	if keyp("space") then
+		play_or_pause()
+	end
 	if refresh_gui then
 		generate_gui()
 		refresh_gui = false
@@ -1208,7 +1216,7 @@ end
 function _draw()
 	cls()
 	gui:draw_all()
-	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 20, 6, 7)
+	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 462, 250, 7)
 end
 
 
@@ -1216,9 +1224,12 @@ function generate_gui()
 	local cell_width = 14
 	local cell_height = 29
 	gui = create_gui()
-	attach_top_panel (gui, { x = 0, y = 0 })
+	local top_panel = attach_top_panel(gui, { x = 0, y = 0 })
 	if current_view == "tracker" then
-		attach_tracker(gui, { x = 16, y = 16 })
+		tracker.attach_pattern_info(top_panel, { x = 32, y = 0})
+		tracker.attach_pattern_selector(top_panel, { x = 128, y = 0})
+		tracker.attach_tracker(gui, { x = 16, y = 16 })
+		tracker.attach_channel_panel(gui, { x = 0, y = 16})
 	elseif current_view == "piano-roll" then
 	end
 end
@@ -1247,7 +1258,11 @@ function attach_play_button(parent, el)
 	parent:attach(el)
 
 	function el:draw()
-		spr(4, 0, 0)
+		spr(stat(464) == 0 and 4 or 5, 0, 0)
+	end
+	
+	function el:click()
+		play_or_pause()
 	end
 	
 	return el
@@ -1261,11 +1276,11 @@ function attach_view_selector(parent, el)
 	parent:attach(el)
 	
 	function el:draw()
-		if current_view == "synth" then pal(7, 7) else pal(7, 13) end
+		if current_view == "synth" then pal(7, 17) else pal(7, 59) end
 		spr(3, 0, 0)
-		if current_view == "piano-roll" then pal(7, 7) else pal(7, 13) end
+		if current_view == "piano-roll" then pal(7, 17) else pal(7, 59) end
 		spr(2, 16 + 4, 0)
-		if current_view == "tracker" then pal(7, 7) else pal(7, 13) end
+		if current_view == "tracker" then pal(7, 17) else pal(7, 59) end
 		spr(1, 2 * 16 + 2 * 4, 0)
 		pal(7, 7)
 	end
@@ -1285,133 +1300,24 @@ function attach_view_selector(parent, el)
 end
 
 
-function attach_tracker(parent, el)
-	el.width = 480
-	el.height = 260
-	el.x_start = 0
-	el.drag_start = nil
-	parent:attach(el)
-	
-	local ruler_height = 9
-	local cell_width = 20
-	local cell_height = 29
-	
-	function el:draw()
-		-- Ruler background
-		rectfill(0, 0, self.width, ruler_height - 2, 21)
-		line(0, ruler_height - 1, self.width, ruler_height - 1, 5)
-		local step_start = self.x_start \ cell_width
-		local delta_x = - (self.x_start % cell_width)
-		if step_start < 0 then
-			step_start = 0
-			self.x_start = max(- cell_width, self.x_start)
-			delta_x = - self.x_start
-		end
-		for channel = 0, 7 do
-			local oy = ruler_height + channel * cell_height
-			rectfill(
-				0, oy, self.width,
-				oy + cell_height - 1,
-				((channel % 2) == 0) and 63 or 62
-			)
-			for step = 0, 24 do
-				if step_start + step > 63 then break end
-				-- TODO: support track length > 64
-				local base_addr = 0x50000 + 8 + (channel * 328) + step_start + step
-				local ox = delta_x + step * cell_width + 1
-				local freq = peek(base_addr)
-				local inst = peek(base_addr + 64)
-				local vol  = peek(base_addr + (2 * 64))
-				local fx   = peek(base_addr + (3 * 64))
-				local fxp  = peek(base_addr + (4 * 64))
-				-- Note and octave
-				if freq != 0xff then
-					local note = freq % 12
-					spr(8 + note, ox + 2, oy + 2)
-					local is_sharp = (note == 1) or (note == 3) or (note == 6)
-						or (note == 8) or (note == 10)
-					local x_oct = is_sharp and (ox + 14) or (ox + 8)
-					if (freq \ 12) <= 9 then
-						print("\014" .. tostr(freq \ 12), x_oct, oy + 3, 22) 
-					else
-						print("\014?", ox + 14, oy + 3, 22) 
-					end
-				else
-					print("\014...", ox + 2, oy + 3, 7)
-				end
-				-- Volume
-				if vol != 0xff then
-					local w_vol = (vol / 64) * (cell_width - 4)
-					w_vol = min(w_vol, cell_width - 4)
-					if w_vol == 0 and vol != 0 then
-						w_vol = 1
-					end
-					rectfill(ox + 2, oy + 10, ox + w_vol, oy + 12, 22)
-					rectfill(ox + w_vol + 1, oy + 10, ox + cell_width - 4, oy + 12, 5)
-				else
-					print("\014...", ox + 2, oy + 8, 22)
-				end
-				-- Instrument
-				if inst != 0xff then
-					print("\014" .. string.format("%02x", inst), ox + 2, oy + 15, 26)
-				else
-					print("\014..", ox + 2, oy + 15, 22)
-				end
-				-- Effect
-				if false then
-					print("\014" .. fx, ox + 2, oy + 22, 22)
-				else
-					print("\014...", ox + 2, oy + 22, 22)
-				end
-			end
-		end
-		-- Bar lines
-		for step = 0, 24 do
-			if step_start + step > 63 + 1 then break end
-			local ox = delta_x + (step * cell_width)
-			local bar = (step_start + step) \ (4 * 4) + 1
-			local beat = ((step_start + step) \ 4) % 4 + 1
-			if (step_start + step) % 4 == 0 then
-				if ((step_start + step) \ 4) % 4 == 0 then
-					line(ox, 0, ox, self.height, 22)
-					print("\014" .. bar .. "." .. beat, ox + 2, 2, 22)
-				else
-					line(ox, 0, ox, self.height, 5)
-					print("\014" .. bar .. "." .. beat, ox + 2, 2, 5)
-				end
-			else
-				poke(0x550b, 0x3f)
-				fillp(0b0000000011111111)
-				line(ox, ruler_height, ox, self.height, 5)
-				fillp()
-				poke(0x550b, 0x00)
-			end
-		end
+function play_or_pause()
+	-- is `stat(464)` enough?
+	if stat(464) == 0 then
+		music(0)
+	else
+		note()
 	end
-	
-	function el:click(msg)
-		if msg.mb == 4 then
-			self.drag_start = self.x_start + msg.mx
-			self.cursor = "grab"
-		end
-	end
-	
-	function el:drag(msg)
-		if self.drag_start then
-			self.x_start = self.drag_start - msg.mx
-		end
-	end
-	
-	function el:release(msg)
-		self.drag_start = nil
-		self.cursor = 1
-	end
-	
-	return el
+end
+
+-- Copied from /system/apps/sfx.p64/track.lua in Picotron 0.0.1e
+-- by sfx_index; could do by channel later esp
+-- if playing same sfx on two diffrent channels
+function playing_row(channel)
+	if (stat(400 + channel, 12) == sfx_index) return stat(400 + channel, 9)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAwODo0MDo1MyIscmV2aXNpb249NjU3XV1sejQAZwAAAFYQAADwCHt7Ym1wPXVzZXJkYXRh
+NC0xMCAxNDoyOTowMSIscmV2aXNpb249OTYzXV1sejQAZwAAAFYQAADwCHt7Ym1wPXVzZXJkYXRh
 KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
 CADCeT0wLHRpbGVfaD04CQDAdz04LHpvb209MX19
 :: map/.info.pod
@@ -1433,37 +1339,37 @@ LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
 ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTAgMDU6MDA6NDciLG9rcGFs
-X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj03LHRlc3RfY3ViZV9jb2xvcnM9e1swXT17MTUsMzEs
-NH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0sezksMjUsMjR9LHs4LDI0LDJ9LHsyNiwx
-MSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcsMTl9LHsyOCwxMiwxNn0sezEyLDE2LDF9
-LHs2LDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7NywyMywxNH0sezIzLDE0LDEzfSx7MTQs
-MzAsMTh9LHs3LDYsMjJ9LHs2LDIyLDV9LHsyMiw1LDIxfSx7MSwxLDF9LHsxLDEsMX0sezEsMSwx
-fX0sd2hpdGVzdF9jb2xvcj03XV1sejQAGAEAABUCAAD1BXVzZXJkYXRhKCJpMzIiLDY0LCIwAQDA
-MWQyYjUzMDA3ZTI1CADwFzAwODc1MTAwYWI1MjM2MDA1ZjU3NGYwMGMyYzNjNzAwZmZmMWU4CABA
-MDA0ZAgAEWE2AGBmZmVjMjcKACBlNDgAQDI5YWQkAGA4Mzc2OWMgADE3N2E4AMBjY2FhMDAxYzVl
-YWMwAPAdYTVhMTAwNzU0ZTk3MDAxMjUzNTkwMDc0MmYyOTAwNDkyZDM4MDBhMjg4NzlAAPADYWNj
-NTAwYzMwMDRjMDBlYjZiRgBgOTBlYzQyCgAgYjLAAKA2NGRmZjYwMGJkiQAAlgBAMGRhYkAAXzg1
-NmQwAQDWETMBADEwMDIBAKAwMDE2MTYxNiIp
+ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTAgMTQ6Mjg6MzkiLG9rcGFs
+X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj05OCx0ZXN0X2N1YmVfY29sb3JzPXtbMF09ezE1LDMx
+LDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0fSx7OCwyNCwyfSx7MjYs
+MTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7MjgsMTIsMTZ9LHsxMiwxNiwx
+fSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9LHsyMywxNCwxM30sezE0
+LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwxfSx7MSwxLDF9LHsxLDEs
+MX19LHdoaXRlc3RfY29sb3I9N11dbHo0ACcBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwiMAEA
+wDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFlOAgA
+QDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2NhYTAwMWM1
+ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5QADwA2Fj
+YzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBkYWJAAF84
+NTZkMAEAxrAxZTM3M2MwMDM3NCcBITAzAQAxMDAyAQCgMDAxNjE2MTYiKQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAwODo0MDo1MyIscmV2aXNpb249ODk3XV1sejQAvgEAANwIAADwOnB4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAg--kAgJCgsPDA8NDw4PDwAP-5ANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD-OR--AQDc
-ZPgPQAANQL4DDLoDQQ8wD-8EAAC2A-8gNw--AC4PDC4PGC4PJC4PMC4PPC4PSC4PVC4PYC4PbC4P
-eC4BDg8PkQ4ADiEOAS4CAAG-LA58D2AuLzgOAy4CAAEi8HCOAG80Dg85DzcHAFY-AQ4hAgAKTxED
-DiMCAAoUE7kAWxgODxwOBgArHxwRAA8XAB4QBAgAgwIODwMOAg4FBAAWFQsADw8ADzkCDgMCAD8j
-DgMOABQjAw7bAF-_sPBwBwgA-8wf-wEAl1D-----Hw==
+NC0xMCAxNDoyOTowMiIscmV2aXNpb249MTQ0M11dbHo0AMMBAADVCAAA8DpweHUAAygAAAMABA9A
+EAIOAAGgASACoA4ADxAADfDKAQIDAQUGBwIPP5AICQoLDwwPDQ8ODw8AD-_QDQ8RDxIPEw8UDxUP
+Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
+Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-JloBEAYP
+IBABIAEgAfAAAhACDBABIA8hIAEwDvDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMLwD-Mh--AQDc
+hPgOAA4ADxMguAMMtANBDzAP-wQAALAD-yA3D-8AJA8MJA8YJA8kJA8wJA88JA9IJA9UJA9gJA9s
+JA94JAEED__RBAAEIQQBJAIAAb8sBHwPYCQvOAQDJAIAAf8A8HAOAA0ADSAPNAQPOQ83BwBWPwEE
+IQIACk8RAwQjAgAKERO6AHtADxgEDxwEBgArHxwRAA8XAB4QBQgAgwIEDwMEAgQHBAAWFwsADw8A
+DzkCBAMCAD8jBAMOABQiAwTaAC-0sAgA-88f-wEAl1D-----Hw==
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-10 08:40:53",revision=425]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-10 14:29:01",revision=736]]
 local M = {}
 
 
@@ -1642,7 +1548,7 @@ end
 
 return M
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-10 08:40:53",revision=619]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-10 09:18:59",revision=625]]
 local M = {}
 
 
@@ -1683,15 +1589,389 @@ end
 
 
 return M
+:: src/tracker.lua
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-10 14:29:01",revision=468]]
+local M = {}
+
+	
+local ruler_height <const> = 9
+local cell_width <const> = 20
+local cell_height <const> = 29
+
+
+local function channel_is_muted(pattern, channel)
+	local channel_mutes = peek(0x30100 + (pattern * 20) + 9)
+	local muted = (channel_mutes & (1 << channel)) == 0
+	return muted
+end
+
+
+function M.attach_tracker(parent, el)
+	el.width = 480
+	el.height = 270 - 11 - 16 - 1
+	el.x_start = 0
+	el.drag_start = nil
+	parent:attach(el)
+	
+	local current_position = nil
+	
+	function el:draw()
+		-- Ruler background
+		rectfill(0, 0, self.width, ruler_height - 2, 21)
+		line(0, ruler_height - 1, self.width, ruler_height - 1, 5)
+		local step_start = self.x_start \ cell_width
+		local delta_x = - (self.x_start % cell_width)
+		if step_start < 0 then
+			step_start = 0
+			self.x_start = max(- (cell_width \ 2) , self.x_start)
+			delta_x = - self.x_start
+		end
+		local pattern = 0 -- TODO
+		for channel = 0, 7 do
+			local oy = ruler_height + channel * cell_height
+			rectfill(
+				0, oy, self.width,
+				oy + cell_height - 1,
+				((channel % 2) == 0) and 63 or 62
+			)
+			if channel_is_muted(pattern, channel) then
+				goto continue
+			end
+			for step = 0, 24 do
+				if step_start + step > 63 then break end
+				local ox = delta_x + step * cell_width + 1
+				if stat(464) != 0 and stat(400 + channel, 9) == step_start + step then
+					rectfill(ox, oy, ox + cell_width - 2, oy + cell_height - 1, 19)
+				end
+				if
+					current_position and current_position.channel == channel
+						and current_position.step == step_start + step
+				then
+					spr(24 + current_position.part, ox, oy)
+				end
+				-- TODO: support track length > 64
+				local base_addr = 0x50000 + 8 + (channel * 328) + step_start + step
+				local freq = peek(base_addr)
+				local inst = peek(base_addr + 64)
+				local vol  = peek(base_addr + (2 * 64))
+				local fx   = peek(base_addr + (3 * 64))
+				local fxp  = peek(base_addr + (4 * 64))
+				-- Note and octave
+				if freq != 0xff then
+					local note = freq % 12
+					spr(8 + note, ox + 2, oy + 2)
+					local is_sharp = (note == 1) or (note == 3) or (note == 6)
+						or (note == 8) or (note == 10)
+					local x_oct = is_sharp and (ox + 14) or (ox + 8)
+					if (freq \ 12) <= 9 then
+						print("\014" .. tostr(freq \ 12), x_oct, oy + 3, 22) 
+					else
+						print("\014?", ox + 14, oy + 3, 22) 
+					end
+				else
+					print("\014...", ox + 2, oy + 3, 7)
+				end
+				-- Volume
+				if vol != 0xff then
+					local w_vol = (vol / 64) * (cell_width - 4)
+					w_vol = min(w_vol, cell_width - 4)
+					if w_vol == 0 and vol != 0 then
+						w_vol = 1
+					end
+					rectfill(ox + 2, oy + 10, ox + w_vol, oy + 12, 22)
+					rectfill(ox + w_vol + 1, oy + 10, ox + cell_width - 4, oy + 12, 5)
+				else
+					print("\014...", ox + 2, oy + 8, 22)
+				end
+				-- Instrument
+				if inst != 0xff then
+					print("\014" .. string.format("%02x", inst), ox + 2, oy + 15, 26)
+				else
+					print("\014..", ox + 2, oy + 15, 22)
+				end
+				-- Effect
+				if false then
+					print("\014" .. fx, ox + 2, oy + 22, 22)
+				else
+					print("\014...", ox + 2, oy + 22, 22)
+				end
+			end
+			::continue::
+		end
+		-- Bar lines
+		for step = 0, 24 do
+			if step_start + step > 63 + 1 then break end
+			local ox = delta_x + (step * cell_width)
+			local bar = (step_start + step) \ (4 * 4) + 1
+			local beat = ((step_start + step) \ 4) % 4 + 1
+			if (step_start + step) % 4 == 0 then
+				if ((step_start + step) \ 4) % 4 == 0 then
+					line(ox, 0, ox, self.height - 2, 22)
+					print("\014" .. bar .. "." .. beat, ox + 2, 2, 22)
+				else
+					line(ox, 0, ox, self.height - 2, 5)
+					print("\014" .. bar .. "." .. beat, ox + 2, 2, 5)
+				end
+			else
+				poke(0x550b, 0x3f)
+				fillp(0b0000000011111111)
+				line(ox, ruler_height, ox, self.height - 2, 5)
+				fillp()
+				poke(0x550b, 0x00)
+			end
+		end
+	end
+	
+
+	function el:hover(msg)
+		if msg.my <= ruler_height then
+			self.cursor = "grab"
+		else
+			self.cursor = 1
+		end
+	end
+	
+
+	function el:click(msg)
+		if msg.my < ruler_height or msg.mb == 4 then
+			self.drag_start = self.x_start + msg.mx
+			self.cursor = "grab"
+		elseif msg.mb == 1 then
+			local step = (msg.mx + self.x_start) \ cell_width
+			local channel = (msg.my - ruler_height) \ cell_height
+			if
+				(0 <= channel) and (channel <= 7)
+					and (0 <= step) and (step <= 63) -- TODO: handle track length
+			then
+				current_position = { part = 0 }
+				local y = (msg.my - ruler_height) % cell_height
+				if y > 20 then
+					current_position.part = 3
+				elseif y > 14 then
+					current_position.part = 2
+				elseif y > 8 then
+					current_position.part = 1
+				end
+				goto_channel(channel)
+				goto_step(step)
+			else
+				current_position = nil
+			end
+		end
+	end
+	
+
+	function el:drag(msg)
+		if self.drag_start then
+			self.x_start = self.drag_start - msg.mx
+		end
+	end
+	
+
+	function el:release(msg)
+		self.drag_start = nil
+		self.cursor = 1
+	end
+	
+	
+	function el:mousewheel(msg)
+		self.x_start -= msg.wheel_y * cell_width
+	end
+	
+
+	function el:update(msg)
+		if true then
+			if (keyp("y")) goto_previous_channel()
+			if (keyp("h")) goto_next_channel()
+			if (keyp("i")) goto_previous_part()
+			if (keyp("k")) goto_next_part()
+			if (keyp("j")) goto_previous_step()
+			if (keyp("l")) goto_next_step()
+		end
+		
+		if (keyp("page up")) goto_previous_channel()
+		if (keyp("page down")) goto_next_channel()
+		if (keyp("up")) goto_previous_part()
+		if (keyp("down")) goto_next_part()
+		if (keyp("left")) goto_previous_step()
+		if (keyp("right")) goto_next_step()		
+	end
+
+
+	function goto_previous_part()
+		if not current_position then
+			goto_start()
+		elseif current_position.part > 0 then
+			current_position.part -= 1
+		elseif current_position.channel > 0 then
+			current_position.part = 3
+			goto_previous_channel()
+		end
+	end
+
+
+	function goto_next_part()
+		if not current_position then
+			goto_start()
+		elseif current_position.part < 3 then
+			current_position.part += 1
+		elseif current_position.channel < 7 then
+			current_position.part = 0
+			goto_next_channel()
+		end
+	end
+	
+	
+	function goto_previous_channel()
+		if not current_position then
+			goto_start()
+		elseif current_position.channel > 0 then
+			goto_channel(current_position.channel - 1)
+		end
+	end
+	
+	
+	function goto_next_channel()
+		if not current_position then
+			goto_start()
+		elseif current_position.channel < 7 then
+			goto_channel(current_position.channel + 1)
+		end
+	end	
+
+	
+
+	function goto_previous_step()
+		if not current_position then
+			goto_start()
+		elseif current_position.step > 0 then
+			goto_step(current_position.step - 1)
+		end
+	end
+		
+
+	function goto_next_step()
+		if not current_position then
+			goto_start()
+		elseif current_position.step < 63 then -- TODO: handle track length
+			goto_step(current_position.step + 1)
+		end
+	end
+	
+
+	function goto_start()
+		current_position = { part = 0 }
+		goto_channel(0)
+		goto_step(0)
+	end
+
+
+	function goto_channel(c)
+		current_position.channel = c
+	end
+	
+
+	function goto_step(s)
+		current_position.step = s
+	end
+	
+
+	return el
+end
+
+
+-- Channel panel -------------------------------------------------------------------
+
+
+function M.attach_channel_panel(parent, el)
+	el.width = 16
+	el.height = 270 - 11 - 16 - 2
+	parent:attach(el)
+	
+	function el:draw()
+		rectfill(0, 0, self.width, self.height, 21)
+		line(self.width - 1, ruler_height - 1, self.width - 1, self.height, 5)
+		local pattern = 0 -- TODO
+		for channel = 0, 7 do
+			local oy = ruler_height + channel * cell_height
+			local track_id = peek(0x30100 + pattern * 20 + channel)
+			print(string.format("\014%03d", track_id), 2, oy + 3, 5)
+			print(string.format("\014% 3d", track_id), 2, oy + 3, 22)
+			spr(channel_is_muted(pattern, channel) and 32 or 33, 4, oy + 12)
+		end
+	end
+	
+	return el
+end
+
+
+function M.attach_pattern_info(parent, el)
+	el.width = 36 + 1
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	local pattern = 0
+	function el:draw()
+--		rectfill(0, 0, self.width, self.height, 0)
+		if (peek(0x30100 + (pattern * 20) + 8) & 0x01) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(40, 2, 4)
+		if (peek(0x30100 + (pattern * 20) + 8) & 0x02) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(41, 2 + 12, 4)
+		if (peek(0x30100 + (pattern * 20) + 8) & 0x04) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(42, 2 + 24, 4)
+		pal(7, 7)
+	end	
+
+	return el
+end
+
+
+function M.attach_pattern_selector(parent, el)
+	el.width = 19 * 14
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		for p = 0, 18 do
+			if p == 0 then
+				spr(43, 5, 5)
+			elseif p < 18 then
+				rectfill(p * 14, 4, 14 + p * 14, 12, 59)
+				print(string.format("\014%02d", p - 1), 3 + p * 14, 6, 22)
+			else
+				spr(44, 3 + p * 14, 5)
+			end
+		end
+	end	
+
+	return el
+end
+
+
+return M
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixzdG9yZWQ9IjIwMjQtMDQt
 MDcgMDg6MTQ6MDAiXV1sejQABAAAAAMAAAAwbmls
 :: .info.pod
-b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTEwIDA4OjQwOjUzIix3b3Jrc3Bh
-Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzE4NSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlv
-bj0ic3JjL3NmeC5sdWEjMzYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImRyYWsubHVh
-IzEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9maWxlLmx1YSM0Iix3b3Jrc3Bh
-Y2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9j
-YXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4
-Iix3b3Jrc3BhY2VfaW5kZXg9NH19XV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTEwIDE0OjI5OjAyIix3b3Jrc3Bh
+Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzEwMiIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlv
+bj0ic3JjL3RyYWNrZXIubHVhIzMyNyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+L2ZpbGUubHVhIzQiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29y
+a3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30s
+e2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBu
+aWw=
 :: [eoc]
