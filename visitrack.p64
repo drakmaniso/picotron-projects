@@ -6,8 +6,12 @@ version 2
 :: sfx/
 :: src/
 :: pal/
+:: todo.txt
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2024-04-10 20:46:41",revision=1]]
+- add 4/4 config
+
 :: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-10 18:33:56",revision=773]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-10 20:46:48",revision=864]]
 
 -- A 'require' function similar to standard Lua.
 -- Idea from elgopher on the BBS
@@ -75,6 +79,12 @@ end
 -- Char utilities -----------------------------------------------------------------
 
 
+function is_num_char(c)
+	if (not c) return
+	return ("0" <= c) and (c <= "9")
+end
+
+
 function is_hexa_char(c)
 	if (not c) return
 	local is_num = ("0" <= c) and (c <= "9")
@@ -110,7 +120,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAxODozMzo1NiIscmV2aXNpb249MTI3NV1dbHo0AKACAAB7MwAA8yV7WzBdPXtibXA9cHh1
+NC0xMCAyMDo0Njo0OCIscmV2aXNpb249MTM2NF1dbHo0AKACAAB7MwAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgBz
 EBAE8CEXAAIAExAIAEMAF-ACCQAPFQAkHxGFAAsdOYUA1SsnkFdgVxAHYCdAB2ACAP8BQCdgBzA3
 QCdAF0A3wBfwG1YAHfYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOgJgBPwBfwFGQAHfIF
@@ -1185,7 +1195,7 @@ fa-1LokjiRzpXII9nYF3BzqOfUT33a29_WboqgQG6EdnR89XwJ0BzAMUn4FrUDtpx9edAkXrvXWu
 f0x6N8Q6ebd5gubCde6g7vFD5P8HJ8CrmS6g1gAAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHjWbbB
 AAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-10 18:33:56",revision=1659]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-10 20:46:48",revision=1752]]
 include "drak.lua"
 local globals = require "src/globals"
 local file = require "src/file"
@@ -1240,6 +1250,7 @@ function generate_gui()
 	gui = create_gui()
 	local top_panel = attach_top_panel(gui, { x = 0, y = 0 })
 	if current_view == "tracker" then
+		tracker.attach_note_attributes(top_panel, { x = 30, y = 0})
 		tracker.attach_pattern_flow_toggles(top_panel, { x = 100, y = 0})
 		tracker.attach_pattern_selector(top_panel, { x = 142, y = 0})
 		tracker.attach_tracker(gui, { x = 16, y = 16 })
@@ -1334,7 +1345,7 @@ function playing_row(channel)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAxODozMzo1NiIscmV2aXNpb249MTE3NF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xMCAyMDo0Njo0OCIscmV2aXNpb249MTI2Ml1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -1373,15 +1384,16 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAxODozMzo1NiIscmV2aXNpb249MTc3MF1dbHo0ANEBAADVCAAA8U5weHUAAygAAAMABA9A
+NC0xMCAyMDo0Njo0OSIscmV2aXNpb249MTg2Ml1dbHo0AOABAADuCAAA8U5weHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAEGBwAPP5AICQoLDwwPDQ8ODw8CD-_QDQ8RDxIPEw8UDxUP
 Fg8XAA--kA8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-JloBEAYP
 IBABIAEgAfAAAhACDBABIA8hIAEwDvDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMLwD-Mh--AQDc
-_gH4DgAOAA8TIB8kDzAPLQ80sgNBDzAP-wQAAK4D-yE3D-8AJQ8MJQ8YJQ8kJQ8wJQ88JQ9IJQ9U
-JQ9gJQ9sJQ94JQECDwMEgQUABSEFASUCAAG-LAV8D2AlLzgFAyUCAAH-APBwDgANAA0gDzQFDzkP
-NwcAVj8BBSECAAq-EQ0FLQUtBR0DBSMCAAQRE7sAe0APGAUPHAUGACsfHBEADxcAHhAHCACDAgUP
-AwUCBQgEABYYCwAPDwAPOQIFAwIAPyMFAw4AFCIDBdoAL-WwCAD-zx--AQCXUP----8f
+-wH4DgAOAA8TIA8oDyQPKw8kCAAGALAD8BY3D-8AJQ8MJQ8YJQ8kJQ8wJQ88JQ9IJQ9UJQ9gJQ9s
+JQ94JQECAgCPYQUABSEFASUCAAGFD0QPIg8zDxEIABE4EASfEQ9gJS84BQMlAgAB8gTwcA4ADQAN
+IA80BQ85DzcPNA8oCAAfBQcATD8BBSECAAq-EQ0FLQUtBR0DBSMCAAQRE7wAe0APGAUPHAUGACsf
+HBEADxcAHhAECACDAgUPAwUCBQcEABYXCwAPDwAPOQIFAwIAPyMFAw4AFCIDBdoAL-WwCAD-zx--
+AQCXUP----8f
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDE2OjE5OjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMCAxNjoyOToyMCIscmV2aXNpb249OF1dbHo0AMMBAADVCAAA8U5weHUAAygAAAMABA9AEAIO
@@ -1576,8 +1588,21 @@ end
 
 return M
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-10 15:52:04",modified="2024-04-10 18:33:56",revision=156]]
+--[[pod_format="raw",created="2024-04-10 15:52:04",modified="2024-04-10 20:46:48",revision=247]]
 local M = {}
+
+
+M.piano_keys = {
+	[0] = "z", "s", "x", "d",
+	"c", "v", "g", "b",
+	"h", "n", "j", "m",
+	"q", "2", "w", "3",
+	"e", "r", "5", "t",
+	"6", "y", "7", "u",
+}
+
+
+M.piano_keys_unspec = "."
 
 
 M.isomorphic_keys = {
@@ -1588,6 +1613,9 @@ M.isomorphic_keys = {
 	"j", "k", "l", ";",
 	"u", "i", "o", "p",
 }
+
+
+M.isomorphic_keys_unspec = "'"
 
 
 M.hexa_keys = {
@@ -1660,7 +1688,7 @@ end
 
 return M
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-10 16:59:09",revision=93]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-10 20:46:48",revision=178]]
 local globals = require "src/globals"
 
 local M = {}
@@ -1677,8 +1705,8 @@ function M.attach_synth(parent, el)
 	
 	function el:update()
 		local pitch = nil
-		for i = 0, #globals.isomorphic_keys do
-			local k = globals.isomorphic_keys[i]
+		for i = 0, #globals.piano_keys do
+			local k = globals.piano_keys[i]
 			if key(k) then
 				pitch = 36 + i -- TODO: current_octave
 			end
@@ -1703,7 +1731,7 @@ end
 
 return M
 :: src/tracker.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-10 18:33:56",revision=769]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-10 20:46:48",revision=923]]
 local globals = require "src/globals"
 
 
@@ -1717,6 +1745,10 @@ local cell_height <const> = 29
 
 local current_pattern = 0
 local current_position = nil
+
+local base_note = 48
+local base_volume = 0x32
+local base_instrument = 01
 
 local input_buffer = ""
 
@@ -1766,7 +1798,7 @@ function M.attach_tracker(parent, el)
 				if pattern_is_playing and stat(400 + channel, 9) == step_start + step then
 					rectfill(ox, oy, ox + cell_width - 2, oy + cell_height - 1, 19)
 				end
-				if
+				if self:has_keyboard_focus() and
 					current_position and current_position.channel == channel
 						and current_position.step == step_start + step
 				then
@@ -1858,7 +1890,7 @@ function M.attach_tracker(parent, el)
 	
 
 	function el:click(msg)
-		input_buffer = ""
+		self:kbd_focus()
 		if msg.my < ruler_height or msg.mb == 4 then
 			self.drag_start = self.x_start + msg.mx
 			self.cursor = "grab"
@@ -1915,30 +1947,31 @@ function M.attach_tracker(parent, el)
 			if (keyp("l")) goto_next_step()
 		end
 		
-		if (keyp("pageup")) input_buffer = ""; goto_previous_channel()
-		if (keyp("pagedown")) input_buffer = ""; goto_next_channel()
-		if (keyp("up")) input_buffer = ""; goto_previous_part()
-		if (keyp("down")) input_buffer = ""; goto_next_part()
-		if (keyp("left")) input_buffer = ""; goto_previous_step()
-		if (keyp("right")) input_buffer = ""; goto_next_step()
+		if (keyp("pageup")) self:kbd_focus(); goto_previous_channel()
+		if (keyp("pagedown")) self:kbd_focus(); goto_next_channel()
+		if (keyp("up")) self:kbd_focus(); goto_previous_part()
+		if (keyp("down")) self:kbd_focus(); goto_next_part()
+		if (keyp("left")) self:kbd_focus(); goto_previous_step()
+		if (keyp("right")) self:kbd_focus(); goto_next_step()
 
 		if current_position then
 			self:handle_positioned_key()
 		end
+	end
+	
+
+	function el:kbd_focus()
+		self:set_keyboard_focus(true)
+		input_buffer = ""
 	end
 
 
 	function el:handle_positioned_key()
 		local track = peek(0x30100 + current_pattern * 20 + current_position.channel)
 		local base_addr = 0x50000 + 8 + (track * 328) + current_position.step
-		local freq = peek(base_addr)
-		local inst = peek(base_addr + 64)
-		local vol  = peek(base_addr + (2 * 64))
-		local fx   = peek(base_addr + (3 * 64))
-		local fxp  = peek(base_addr + (4 * 64))
 		local pitch_key = nil
-		for i = 0, #globals.isomorphic_keys do
-			local k = globals.isomorphic_keys[i]
+		for i = 0, #globals.piano_keys do
+			local k = globals.piano_keys[i]
 			if keyp(k) then
 				pitch_key = i
 			end
@@ -1954,6 +1987,9 @@ function M.attach_tracker(parent, el)
 				input_buffer = ""
 			end
 		end
+		if #input_buffer == 1 and keyp("enter") then
+			input_buffer = "0" .. input_buffer
+		end
 		if #input_buffer >= 2 then
 			local v = tonum("0x" .. sub(input_buffer, 1, 2))
 			hexa_val = min(v, 0xff)
@@ -1961,24 +1997,62 @@ function M.attach_tracker(parent, el)
 		end
 				
 		if current_position.part == 0 then
-			if pitch_key then
-				poke(base_addr, pitch_key + 36) -- TODO current_octave
-				goto_next_step()
-			elseif keyp("'") then
-				poke(base_addr, 0xff)
+			local note = peek(base_addr) % 12
+			if key("shift") then
+				if keyp("0") then
+					poke(base_addr, note)
+					goto_next_step()
+				elseif keyp("1") then
+					poke(base_addr, note + 12)
+					goto_next_step()
+				elseif keyp("2") then
+					poke(base_addr, note + 24)
+					goto_next_step()
+				elseif keyp("3") then
+					poke(base_addr, note + 36)
+					goto_next_step()
+				elseif keyp("4") then
+					poke(base_addr, note + 48)
+					goto_next_step()
+				elseif keyp("5") then
+					poke(base_addr, note + 60)
+					goto_next_step()
+				elseif keyp("6") then
+					poke(base_addr, note + 72)
+					goto_next_step()
+				elseif keyp("7") then
+					poke(base_addr, note + 84)
+					goto_next_step()
+				elseif keyp("8") then
+					poke(base_addr, note + 96)
+					goto_next_step()
+				elseif keyp("9") then
+					poke(base_addr, note + 108)
+					goto_next_step()
+				elseif keyp("a") then
+					poke(base_addr, note + 120)
+					goto_next_step()
+				end
+			else
+				if pitch_key then
+					poke(base_addr, pitch_key + 36) -- TODO current_octave
+					goto_next_step()
+				elseif keyp(globals.piano_keys_unspec) then
+					poke(base_addr, 0xff)
+				end
 			end
 		elseif current_position.part == 1 then
 			if hexa_val then
 				poke(base_addr + (2 * 64), hexa_val)
 				goto_next_step()
-			elseif keyp("'") then
+			elseif keyp(globals.piano_keys_unspec) then
 				poke(base_addr + (2 * 64), 0xff)
 			end
 		elseif current_position.part == 2 then
 			if hexa_val then
 				poke(base_addr + (1 * 64), hexa_val)
 				goto_next_step()
-			elseif keyp("'") then
+			elseif keyp(globals.piano_keys_unspec) then
 				poke(base_addr + (1 * 64), 0xff)
 			end
 		--[[
@@ -1986,7 +2060,7 @@ function M.attach_tracker(parent, el)
 			if hexa_val then
 				poke(base_addr + (4 * 64), hexa_val)
 				goto_next_step()
-			elseif keyp("'") then
+			elseif keyp(globals.piano_keys_unspec) then
 				poke(base_addr + (4 * 64), 0xff)
 			end
 		]]
@@ -2096,6 +2170,10 @@ function M.attach_channel_panel(parent, el)
 		end
 	end
 	
+	function el:click()
+		self:set_keyboard_focus(true)
+	end
+	
 	return el
 end
 
@@ -2107,7 +2185,6 @@ function M.attach_pattern_flow_toggles(parent, el)
 	parent:attach(el)
 
 	function el:draw()
---		rectfill(0, 0, self.width, self.height, 0)
 		if (peek(0x30100 + (current_pattern * 20) + 8) & 0x01) == 0 then
 			pal(7, 59)
 		else
@@ -2131,6 +2208,42 @@ function M.attach_pattern_flow_toggles(parent, el)
 
 	return el
 end
+
+
+-- Default note attributes -------------------------------------------------------
+
+
+function M.attach_note_attributes(parent, el)
+	el.width = 60
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+--		rectfill(0, 0, self.width, self.height, 0)
+		local note = base_note % 12
+		local octave = base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		pal(7, 22)
+		if is_sharp then
+			spr(8 + note, 2, 6)
+		else
+			spr(8 + note, 8, 6)
+		end
+		pal(7, 7)
+		print("\014" .. string.format("%1x", octave), 2 + 12, 7, 22)
+		local x = 20
+		rectfill(x, 8, x + 20, 10, 59)
+		rectfill(x, 8, x + min(20 * (base_volume / 64), 20), 10, 22)
+		print("\014" .. string.format("%02x", base_instrument), 44, 7, 26)
+	end	
+
+	return el
+end
+
+
+-- Pattern selector ----------------------------------------------------------------
 
 
 function M.attach_pattern_selector(parent, el)
@@ -2181,11 +2294,13 @@ return M
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixzdG9yZWQ9IjIwMjQtMDQt
 MDcgMDg6MTQ6MDAiXV1sejQABAAAAAMAAAAwbmls
 :: .info.pod
-b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTEwIDE4OjMzOjU2Iix3b3Jrc3Bh
-Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzIiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
-InNyYy90cmFja2VyLmx1YSMyODYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9n
-bG9iYWxzLmx1YSMxOSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZHJhay5sdWEjNjki
-LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4
-PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJz
-ZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD02fX1dXWx6NAAEAAAAAwAAADBuaWw=
+b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTEwIDIwOjQ2OjQ5Iix3b3Jrc3Bh
+Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzU1Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9u
+PSJzcmMvdHJhY2tlci5sdWEjMTUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9n
+bG9iYWxzLmx1YSMyNyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZHJhay5sdWEjNjgi
+LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjMTgiLHdvcmtzcGFj
+ZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2Nh
+dGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngi
+LHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2luZGV4
+PTd9fV1dbHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
