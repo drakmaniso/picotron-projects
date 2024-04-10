@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNyAwNzowOToxNSIscmV2aXNpb249MzUxNF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+NC0wOCAwODoyMTo0NiIscmV2aXNpb249MzUzM11dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -173,7 +173,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-07 07:09:15",revision=4230]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-08 08:21:46",revision=4250]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -653,10 +653,10 @@ function paste_color()
 	end
 end
 :: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-06 09:05:12",revision=198,stored="2024-04-04 06:56:33"]]
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-08 08:19:41",revision=208,stored="2024-04-04 06:56:33"]]
 # OkPal
 
-Okpal is a tool to create and edit color palettes.
+OkPal is a tool to create and edit color palettes.
 You can easily use those palettes in your programs,
 and even directly in Picotron's sprite and map
 editors.
@@ -793,11 +793,12 @@ dialog onto OkPal's window, and it will open it.
 
 ## Importing and exporting
 
-You can import palettes from external tools. Currently
-the only supported format is ".hex" files, which are
-simple text files with one line per color, represented
-by their RGB code in hex format (without "#" or "0x"
-, just the hexadecimal numbers).
+You can import and export palettes for use with
+external tools. Currently the only supported format
+is ".hex" files, which are simple text files with one
+line per color, represented by their RGB code in hex
+format (without "#" or "0x", just the hexadecimal
+numbers).
 
 To import a palette, choose "Open File" from the menu,
 but **do not double-click** on the file. Instead,
@@ -816,8 +817,17 @@ to arrange the colors in the palette. You can either:
   difficult to use the menu, the sprite editor and
   the map editor.
 
+To export a palette, choose "Save File As" in the
+menu. In the save dialog, enter a file name ending
+in ".hex".
+
 
 ## Changelog
+2024-04-??: version 1.0.1 (release #okpal-4)
+
+- fixed: picotron's palette was not locked in the
+  default file on first opening;
+- explain how to export to .hex in the manual;
 
 2024-04-06: version 1.0.0 (release #okpal-3)
 
@@ -855,7 +865,7 @@ to arrange the colors in the palette. You can either:
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNyAwNzowOToxNSIscmV2aXNpb249MzM2NV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0wOCAwODoyMTo0NiIscmV2aXNpb249MzM4NF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
@@ -866,7 +876,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wNyAwNzowOToxNSIscmV2aXNpb249MzMwMl1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0wOCAwODoyMTo0NyIscmV2aXNpb249MzMyMF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -876,7 +886,7 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-07 07:09:15",revision=1357]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-08 08:21:46",revision=1377]]
 picotron_gfx_pid = nil
 picotron_map_pid = nil
 
@@ -955,7 +965,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-07 07:09:15",revision=4538]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-08 08:21:46",revision=4558]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -1316,7 +1326,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-07 07:09:15",revision=543]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-08 08:21:46",revision=563]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1754,7 +1764,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-07 07:09:15",revision=1328]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-08 08:21:46",revision=1348]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2567,7 +2577,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-07 07:09:15",revision=3002]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-08 08:21:46",revision=3022]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2665,7 +2675,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-07 07:09:15",revision=998]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-08 08:21:46",revision=1020]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2815,7 +2825,7 @@ MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
 KSxub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0byBvcGVuIHRoZSBtYW51YWwpIixy
-dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTA3IDA3OjA5OjE1Iix0aXRsZT0iT2tQQUwiLHZlcnNp
+dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTA4IDA4OjIxOjQ3Iix0aXRsZT0iT2tQQUwiLHZlcnNp
 b249IjEuMC4wIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzMzMSIsd29ya3NwYWNl
 X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
 e2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9LHts
