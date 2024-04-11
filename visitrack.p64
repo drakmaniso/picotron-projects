@@ -6,12 +6,8 @@ version 2
 :: sfx/
 :: src/
 :: pal/
-:: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2024-04-10 20:46:41",revision=1]]
-- add 4/4 config
-
 :: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-10 20:46:48",revision=864]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-11 06:21:14",revision=890]]
 
 -- A 'require' function similar to standard Lua.
 -- Idea from elgopher on the BBS
@@ -120,7 +116,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAyMDo0Njo0OCIscmV2aXNpb249MTM2NF1dbHo0AKACAAB7MwAA8yV7WzBdPXtibXA9cHh1
+NC0xMSAwNzoyMzo0OCIscmV2aXNpb249MTUwOF1dbHo0AKACAAB7MwAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgBz
 EBAE8CEXAAIAExAIAEMAF-ACCQAPFQAkHxGFAAsdOYUA1SsnkFdgVxAHYCdAB2ACAP8BQCdgBzA3
 QCdAF0A3wBfwG1YAHfYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOgJgBPwBfwFGQAHfIF
@@ -1195,11 +1191,12 @@ fa-1LokjiRzpXII9nYF3BzqOfUT33a29_WboqgQG6EdnR89XwJ0BzAMUn4FrUDtpx9edAkXrvXWu
 f0x6N8Q6ebd5gubCde6g7vFD5P8HJ8CrmS6g1gAAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHjWbbB
 AAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-10 20:46:48",revision=1752]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-11 07:23:48",revision=1904]]
 include "drak.lua"
-local globals = require "src/globals"
+local constants = require "src/constants"
 local file = require "src/file"
 local tracker = require "src/tracker"
+local tracker_grid = require "src/tracker_grid"
 local piano_roll = require "src/piano_roll"
 local synth = require "src/synth"
 
@@ -1253,8 +1250,8 @@ function generate_gui()
 		tracker.attach_note_attributes(top_panel, { x = 30, y = 0})
 		tracker.attach_pattern_flow_toggles(top_panel, { x = 100, y = 0})
 		tracker.attach_pattern_selector(top_panel, { x = 142, y = 0})
-		tracker.attach_tracker(gui, { x = 16, y = 16 })
 		tracker.attach_channel_panel(gui, { x = 0, y = 16})
+		tracker_grid.attach(gui, { x = 16, y = 16 })
 	elseif current_view == "piano_roll" then
 		piano_roll.attach_piano_roll(gui, { x = 0, y = 16 })
 	elseif current_view == "synth" then
@@ -1345,7 +1342,7 @@ function playing_row(channel)
 end
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAyMDo0Njo0OCIscmV2aXNpb249MTI2Ml1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xMSAwNzoyMzo0OCIscmV2aXNpb249MTQwNl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -1384,16 +1381,16 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMCAyMDo0Njo0OSIscmV2aXNpb249MTg2Ml1dbHo0AOABAADuCAAA8U5weHUAAygAAAMABA9A
+NC0xMSAwNzoyMzo0OCIscmV2aXNpb249MjAxOV1dbHo0AOMBAADpCAAA8U5weHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAEGBwAPP5AICQoLDwwPDQ8ODw8CD-_QDQ8RDxIPEw8UDxUP
 Fg8XAA--kA8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-JloBEAYP
 IBABIAEgAfAAAhACDBABIA8hIAEwDvDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMLwD-Mh--AQDc
--wH4DgAOAA8TIA8oDyQPKw8kCAAGALAD8BY3D-8AJQ8MJQ8YJQ8kJQ8wJQ88JQ9IJQ9UJQ9gJQ9s
-JQ94JQECAgCPYQUABSEFASUCAAGFD0QPIg8zDxEIABE4EASfEQ9gJS84BQMlAgAB8gTwcA4ADQAN
-IA80BQ85DzcPNA8oCAAfBQcATD8BBSECAAq-EQ0FLQUtBR0DBSMCAAQRE7wAe0APGAUPHAUGACsf
-HBEADxcAHhAECACDAgUPAwUCBQcEABYXCwAPDwAPOQIFAwIAPyMFAw4AFCIDBdoAL-WwCAD-zx--
-AQCXUP----8f
+-gT4DgAOAA8TIA88LyQPKA8kDysPCAAArAPwFjcP-wAlDwwlDxglDyQlDzAlDzwlD0glD1QlD2Al
+D2wlD3glAQICAI9hBQAFIQUBJQIAAZMODyIPMw8RD0QIABE4CwSfEQ9gJS84BQMlAgAB8gTwcA4A
+DQANIA80BQ85DzcPNA8oCAAfBQcATD8BBSECAAq-EQ0FLQUtBR0DBSMCAAQRE7wAe0APGAUPHAUG
+ACsfHBEADxcAHhAECACDAgUPAwUCBQcEABYXCwAPDwAPOQIFAwIAPyMFAw4AFCIDBdoAL-WwCAD-
+zx--AQCXUP----8f
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDE2OjE5OjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMCAxNjoyOToyMCIscmV2aXNpb249OF1dbHo0AMMBAADVCAAA8U5weHUAAygAAAMABA9AEAIO
@@ -1408,6 +1405,45 @@ BQMCAD8jBQMOABQiAwXaAC-1sAgA-88f-wEAl1D-----Hw==
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: src/constants.lua
+--[[pod_format="raw",created="2024-04-10 15:52:04",modified="2024-04-11 06:19:01",revision=268]]
+local M = {}
+
+
+M.piano_keys = {
+	[0] = "z", "s", "x", "d",
+	"c", "v", "g", "b",
+	"h", "n", "j", "m",
+	"q", "2", "w", "3",
+	"e", "r", "5", "t",
+	"6", "y", "7", "u",
+}
+
+
+M.piano_keys_unspec = "."
+
+
+M.isomorphic_keys = {
+	[0] = "z", "x", "c", "v",
+	"a", "s", "d", "f",
+	"q", "w", "e", "r",
+	"m", ",", ".", "/",
+	"j", "k", "l", ";",
+	"u", "i", "o", "p",
+}
+
+
+M.isomorphic_keys_unspec = "'"
+
+
+M.hexa_keys = {
+	[0] = "0", "1", "2", "3",
+	"4", "5", "6", "7",
+	"8", "9", "a", "b",
+	"c", "d", "e", "f",
+}
+
+return M
 :: src/file.lua
 --[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-10 16:19:15",revision=830]]
 local M = {}
@@ -1587,45 +1623,6 @@ end
 
 
 return M
-:: src/globals.lua
---[[pod_format="raw",created="2024-04-10 15:52:04",modified="2024-04-10 20:46:48",revision=247]]
-local M = {}
-
-
-M.piano_keys = {
-	[0] = "z", "s", "x", "d",
-	"c", "v", "g", "b",
-	"h", "n", "j", "m",
-	"q", "2", "w", "3",
-	"e", "r", "5", "t",
-	"6", "y", "7", "u",
-}
-
-
-M.piano_keys_unspec = "."
-
-
-M.isomorphic_keys = {
-	[0] = "z", "x", "c", "v",
-	"a", "s", "d", "f",
-	"q", "w", "e", "r",
-	"m", ",", ".", "/",
-	"j", "k", "l", ";",
-	"u", "i", "o", "p",
-}
-
-
-M.isomorphic_keys_unspec = "'"
-
-
-M.hexa_keys = {
-	[0] = "0", "1", "2", "3",
-	"4", "5", "6", "7",
-	"8", "9", "a", "b",
-	"c", "d", "e", "f",
-}
-
-return M
 :: src/piano_roll.lua
 --[[pod_format="raw",created="2024-04-10 15:48:56",modified="2024-04-10 16:19:15",revision=44]]
 local M = {}
@@ -1646,8 +1643,8 @@ end
 
 return M
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-10 09:18:59",revision=625]]
-local M = {}
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-11 06:39:59",revision=678]]
+local sfx = {}
 
 
 local sfx_index = 0x030000
@@ -1665,7 +1662,7 @@ local tracks_addr = 0
 local patterns_addr = 0
 
 
-function M.read_header()
+function sfx.read_header()
 	num_instruments = peek2(sfx_index)
 	num_tracks = peek2(sfx_index + 2)
 	num_patterns = peek2(sfx_index + 4)
@@ -1681,15 +1678,17 @@ function M.read_header()
 end
 
 
-function M.track_addr(track_id)
-	
+function sfx.channel_is_muted(pattern, channel)
+	local channel_mutes = peek(0x30100 + (pattern * 20) + 9)
+	local muted = (channel_mutes & (1 << channel)) == 0
+	return muted
 end
 
 
-return M
+return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-10 20:46:48",revision=178]]
-local globals = require "src/globals"
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-11 06:22:48",revision=185]]
+local constants = require "src/constants"
 
 local M = {}
 
@@ -1705,8 +1704,8 @@ function M.attach_synth(parent, el)
 	
 	function el:update()
 		local pitch = nil
-		for i = 0, #globals.piano_keys do
-			local k = globals.piano_keys[i]
+		for i = 0, #constants.piano_keys do
+			local k = constants.piano_keys[i]
 			if key(k) then
 				pitch = 36 + i -- TODO: current_octave
 			end
@@ -1731,46 +1730,201 @@ end
 
 return M
 :: src/tracker.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-10 20:46:48",revision=923]]
-local globals = require "src/globals"
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-11 07:23:48",revision=1113]]
+local constants = require "src/constants"
+local sfx = require "src/sfx"
 
 
-local M = {}
+local tracker = {}
 
-	
+
+-- (Also in tracker_grid.lua)
 local ruler_height <const> = 9
+local channel_panel_width <const> = 16
 local cell_width <const> = 20
 local cell_height <const> = 29
 
 
-local current_pattern = 0
-local current_position = nil
+tracker.pattern = 0
 
-local base_note = 48
-local base_volume = 0x32
-local base_instrument = 01
+tracker.base_note = 48
+tracker.base_volume = 0x32
+tracker.base_instrument = 01
 
-local input_buffer = ""
+tracker.input_buffer = ""
 
 
-local function channel_is_muted(pattern, channel)
-	local channel_mutes = peek(0x30100 + (pattern * 20) + 9)
-	local muted = (channel_mutes & (1 << channel)) == 0
-	return muted
+-- Channel panel -------------------------------------------------------------------
+
+
+function tracker.attach_channel_panel(parent, el)
+	el.width = channel_panel_width
+	el.height = 270 - 11 - 16 - 2
+	parent:attach(el)
+	
+	function el:draw()
+		rectfill(0, 0, self.width, self.height, 21)
+		line(self.width - 1, ruler_height - 1, self.width - 1, self.height, 5)
+		for channel = 0, 7 do
+			local oy = ruler_height + channel * cell_height
+			local track_id = peek(0x30100 + tracker.pattern * 20 + channel)
+			print(string.format("\014%03d", track_id), 2, oy + 3, 5)
+			print(string.format("\014% 3d", track_id), 2, oy + 3, 22)
+			spr(sfx.channel_is_muted(tracker.pattern, channel) and 32 or 33, 4, oy + 12)
+		end
+	end
+	
+	function el:click()
+		self:set_keyboard_focus(true)
+	end
+	
+	return el
 end
 
 
-function M.attach_tracker(parent, el)
-	el.width = 480
+function tracker.attach_pattern_flow_toggles(parent, el)
+	el.width = 36 + 1
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		if (peek(0x30100 + (tracker.pattern * 20) + 8) & 0x01) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(40, 2, 4)
+		if (peek(0x30100 + (tracker.pattern * 20) + 8) & 0x02) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(41, 2 + 12, 4)
+		if (peek(0x30100 + (tracker.pattern * 20) + 8) & 0x04) == 0 then
+			pal(7, 59)
+		else
+			pal(7, 17)
+		end
+		spr(42, 2 + 24, 4)
+		pal(7, 7)
+	end	
+
+	return el
+end
+
+
+-- Default note attributes -------------------------------------------------------
+
+
+function tracker.attach_note_attributes(parent, el)
+	el.width = 60
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+--		rectfill(0, 0, self.width, self.height, 0)
+		local note = tracker.base_note % 12
+		local octave = tracker.base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		pal(7, 22)
+		if is_sharp then
+			spr(8 + note, 2, 6)
+		else
+			spr(8 + note, 8, 6)
+		end
+		pal(7, 7)
+		print("\014" .. string.format("%1x", octave), 2 + 12, 7, 22)
+		local x = 20
+		rectfill(x, 8, x + 20, 10, 59)
+		rectfill(x, 8, x + min(20 * (tracker.base_volume / 64), 20), 10, 22)
+		print("\014" .. string.format("%02x", tracker.base_instrument), 44, 7, 26)
+	end	
+
+	return el
+end
+
+
+-- Pattern selector ----------------------------------------------------------------
+
+
+function tracker.attach_pattern_selector(parent, el)
+	el.width = 19 * 14
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		local playing_pattern = stat(466)
+		for p = 0, 18 do
+			if p == 0 then
+				spr(43, 5, 5)
+			elseif p < 18 then
+				rectfill(
+					p * 14, 4,
+					14 + p * 14, 12, 
+					(p - 1) == playing_pattern and 17 or 59
+				)
+				print(
+					string.format("\014%02d", p - 1),
+					3 + p * 14, 6,
+					(p - 1) == tracker.pattern and 7 or 22
+				)
+			else
+				spr(44, 3 + p * 14, 5)
+			end
+		end
+	end	
+	
+	function el:click(msg)
+		local p = msg.mx \ 14
+		if p == 0 then
+			-- TODO
+		elseif p < 18 then
+			tracker.pattern = p - 1
+		else
+			-- TODO
+		end
+	end
+
+	return el
+end
+
+
+return tracker
+:: src/tracker_grid.lua
+--[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-11 07:23:48",revision=126]]
+local constants = require "src/constants"
+local sfx = require "src/sfx"
+local tracker = require "src/tracker"
+
+
+local tracker_grid = {}
+
+
+-- (Also in tracker.lua)
+local ruler_height <const> = 9
+local channel_panel_width <const> = 16
+local cell_width <const> = 20
+local cell_height <const> = 29
+
+
+function tracker_grid.attach(parent, el)
+	el.width = 480 - channel_panel_width
 	el.height = 270 - 11 - 16 - 1
-	el.x_start = 0
-	el.drag_start = nil
 	parent:attach(el)
 	
-	input_buffer = ""
+	el.x_start = -(cell_width \ 2)
+	el.drag_start = nil
+	el.selection = { channel = 0, step = 0, part = 0 }
 	
+	el:set_keyboard_focus(true)
+	tracker.input_buffer = ""
+
 	function el:draw()
-		local pattern_is_playing = (stat(464) != 0)  and (stat(466) == current_pattern)
+		local pattern_is_playing = (stat(464) != 0)  and (stat(466) == tracker.pattern)
 		-- Ruler background
 		rectfill(0, 0, self.width, ruler_height - 2, 21)
 		line(0, ruler_height - 1, self.width, ruler_height - 1, 5)
@@ -1788,10 +1942,10 @@ function M.attach_tracker(parent, el)
 				oy + cell_height - 1,
 				((channel % 2) == 0) and 63 or 62
 			)
-			if channel_is_muted(current_pattern, channel) then
+			if sfx.channel_is_muted(tracker.pattern, channel) then
 				goto continue
 			end
-			local track = peek(0x30100 + current_pattern * 20 + channel)
+			local track = peek(0x30100 + tracker.pattern * 20 + channel)
 			for step = 0, 24 do
 				if step_start + step > 63 then break end
 				local ox = delta_x + step * cell_width + 1
@@ -1799,10 +1953,10 @@ function M.attach_tracker(parent, el)
 					rectfill(ox, oy, ox + cell_width - 2, oy + cell_height - 1, 19)
 				end
 				if self:has_keyboard_focus() and
-					current_position and current_position.channel == channel
-						and current_position.step == step_start + step
+					self.selection and self.selection.channel == channel
+						and self.selection.step == step_start + step
 				then
-					spr(24 + current_position.part, ox, oy)
+					spr(24 + self.selection.part, ox, oy)
 				end
 				-- TODO: support track length > 64
 				local base_addr = 0x50000 + 8 + (track * 328) + step_start + step
@@ -1837,6 +1991,7 @@ function M.attach_tracker(parent, el)
 					if w_vol > 0 then
 						rectfill(ox + 2, oy + 10, ox + 2 + w_vol, oy + 12, 22)
 					end
+					-- TODO: support vol > 64
 				else
 					print("\014...", ox + 2, oy + 8, 22)
 				end
@@ -1890,30 +2045,30 @@ function M.attach_tracker(parent, el)
 	
 
 	function el:click(msg)
-		self:kbd_focus()
 		if msg.my < ruler_height or msg.mb == 4 then
 			self.drag_start = self.x_start + msg.mx
 			self.cursor = "grab"
 		elseif msg.mb == 1 then
+			self:kbd_focus()
 			local step = (msg.mx + self.x_start) \ cell_width
 			local channel = (msg.my - ruler_height) \ cell_height
 			if
 				(0 <= channel) and (channel <= 7)
 					and (0 <= step) and (step <= 63) -- TODO: handle track length
 			then
-				current_position = { part = 0 }
+				self.selection = { part = 0 }
 				local y = (msg.my - ruler_height) % cell_height
 				if y > 20 then
-					current_position.part = 3
+					self.selection.part = 3
 				elseif y > 14 then
-					current_position.part = 2
+					self.selection.part = 2
 				elseif y > 8 then
-					current_position.part = 1
+					self.selection.part = 1
 				end
-				goto_channel(channel)
-				goto_step(step)
+				self:goto_channel(channel)
+				self:goto_step(step)
 			else
-				current_position = nil
+				self.selection = nil
 			end
 		end
 	end
@@ -1938,40 +2093,38 @@ function M.attach_tracker(parent, el)
 	
 
 	function el:update()
+		if not self:has_keyboard_focus() then
+			self.selection = nil
+		end	
+
 		if false then
-			if (keyp("y")) goto_previous_channel()
-			if (keyp("h")) goto_next_channel()
-			if (keyp("i")) goto_previous_part()
-			if (keyp("k")) goto_next_part()
-			if (keyp("j")) goto_previous_step()
-			if (keyp("l")) goto_next_step()
+			if (keyp("y")) self:goto_previous_channel()
+			if (keyp("h")) self:goto_next_channel()
+			if (keyp("i")) self:goto_previous_part()
+			if (keyp("k")) self:goto_next_part()
+			if (keyp("j")) self:goto_previous_step()
+			if (keyp("l")) self:goto_next_step()
 		end
 		
-		if (keyp("pageup")) self:kbd_focus(); goto_previous_channel()
-		if (keyp("pagedown")) self:kbd_focus(); goto_next_channel()
-		if (keyp("up")) self:kbd_focus(); goto_previous_part()
-		if (keyp("down")) self:kbd_focus(); goto_next_part()
-		if (keyp("left")) self:kbd_focus(); goto_previous_step()
-		if (keyp("right")) self:kbd_focus(); goto_next_step()
+		if (keyp("pageup")) self:kbd_focus(); self:goto_previous_channel()
+		if (keyp("pagedown")) self:kbd_focus(); self:goto_next_channel()
+		if (keyp("up")) self:kbd_focus(); self:goto_previous_part()
+		if (keyp("down")) self:kbd_focus(); self:goto_next_part()
+		if (keyp("left")) self:kbd_focus(); self:goto_previous_step()
+		if (keyp("right")) self:kbd_focus(); self:goto_next_step()
 
-		if current_position then
+		if self.selection then
 			self:handle_positioned_key()
 		end
-	end
-	
-
-	function el:kbd_focus()
-		self:set_keyboard_focus(true)
-		input_buffer = ""
 	end
 
 
 	function el:handle_positioned_key()
-		local track = peek(0x30100 + current_pattern * 20 + current_position.channel)
-		local base_addr = 0x50000 + 8 + (track * 328) + current_position.step
+		local track = peek(0x30100 + tracker.pattern * 20 + self.selection.channel)
+		local base_addr = 0x50000 + 8 + (track * 328) + self.selection.step
 		local pitch_key = nil
-		for i = 0, #globals.piano_keys do
-			local k = globals.piano_keys[i]
+		for i = 0, #constants.piano_keys do
+			local k = constants.piano_keys[i]
 			if keyp(k) then
 				pitch_key = i
 			end
@@ -1982,167 +2135,191 @@ function M.attach_tracker(parent, el)
 		while peektext() do
 			local k = readtext()
 			if is_hexa_char(k) then
-				input_buffer ..= k
+				tracker.input_buffer ..= k
 			else
-				input_buffer = ""
+				tracker.input_buffer = ""
 			end
 		end
-		if #input_buffer == 1 and keyp("enter") then
-			input_buffer = "0" .. input_buffer
+		if #tracker.input_buffer == 1 and keyp("enter") then
+			tracker.input_buffer = "0" .. tracker.input_buffer
 		end
-		if #input_buffer >= 2 then
-			local v = tonum("0x" .. sub(input_buffer, 1, 2))
+		if #tracker.input_buffer >= 2 then
+			local v = tonum("0x" .. sub(tracker.input_buffer, 1, 2))
 			hexa_val = min(v, 0xff)
-			input_buffer = sub(input_buffer, 3, -1)
+			tracker.input_buffer = sub(tracker.input_buffer, 3, -1)
 		end
 				
-		if current_position.part == 0 then
+		if self.selection.part == 0 then
 			local note = peek(base_addr) % 12
 			if key("shift") then
 				if keyp("0") then
 					poke(base_addr, note)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("1") then
 					poke(base_addr, note + 12)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("2") then
 					poke(base_addr, note + 24)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("3") then
 					poke(base_addr, note + 36)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("4") then
 					poke(base_addr, note + 48)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("5") then
 					poke(base_addr, note + 60)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("6") then
 					poke(base_addr, note + 72)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("7") then
 					poke(base_addr, note + 84)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("8") then
 					poke(base_addr, note + 96)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("9") then
 					poke(base_addr, note + 108)
-					goto_next_step()
+					self:goto_next_step()
 				elseif keyp("a") then
 					poke(base_addr, note + 120)
-					goto_next_step()
+					self:goto_next_step()
 				end
 			else
 				if pitch_key then
 					poke(base_addr, pitch_key + 36) -- TODO current_octave
-					goto_next_step()
-				elseif keyp(globals.piano_keys_unspec) then
+					self:goto_next_step()
+				elseif keyp(constants.piano_keys_unspec) then
 					poke(base_addr, 0xff)
+					self:goto_next_step()
 				end
 			end
-		elseif current_position.part == 1 then
+		elseif self.selection.part == 1 then
 			if hexa_val then
 				poke(base_addr + (2 * 64), hexa_val)
-				goto_next_step()
-			elseif keyp(globals.piano_keys_unspec) then
+				self:goto_next_step()
+			elseif keyp(constants.piano_keys_unspec) then
 				poke(base_addr + (2 * 64), 0xff)
+				self:goto_next_step()
 			end
-		elseif current_position.part == 2 then
+		elseif self.selection.part == 2 then
 			if hexa_val then
 				poke(base_addr + (1 * 64), hexa_val)
-				goto_next_step()
-			elseif keyp(globals.piano_keys_unspec) then
+				self:goto_next_step()
+			elseif keyp(constants.piano_keys_unspec) then
 				poke(base_addr + (1 * 64), 0xff)
+				self:goto_next_step()
 			end
 		--[[
-		elseif current_position.part == 3 then
+		elseif self.selection.part == 3 then
 			if hexa_val then
 				poke(base_addr + (4 * 64), hexa_val)
-				goto_next_step()
-			elseif keyp(globals.piano_keys_unspec) then
+				self:goto_next_step()
+			elseif keyp(constants.piano_keys_unspec) then
 				poke(base_addr + (4 * 64), 0xff)
+				self:goto_next_step()
 			end
 		]]
 		end
 	end
 
 
-	function goto_previous_part()
-		if not current_position then
-			goto_start()
-		elseif current_position.part > 0 then
-			current_position.part -= 1
-		elseif current_position.channel > 0 then
-			current_position.part = 3
-			goto_previous_channel()
+	function el:kbd_focus()
+		self:set_keyboard_focus(true)
+		tracker.input_buffer = ""
+	end
+	
+
+	function el:goto_previous_part()
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.part > 0 then
+			self.selection.part -= 1
+		elseif self.selection.channel > 0 then
+			self.selection.part = 3
+			self:goto_previous_channel()
 		end
 	end
 
 
-	function goto_next_part()
-		if not current_position then
-			goto_start()
-		elseif current_position.part < 3 then
-			current_position.part += 1
-		elseif current_position.channel < 7 then
-			current_position.part = 0
-			goto_next_channel()
+	function el:goto_next_part()
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.part < 3 then
+			self.selection.part += 1
+		elseif self.selection.channel < 7 then
+			self.selection.part = 0
+			self:goto_next_channel()
 		end
 	end
 	
 	
-	function goto_previous_channel()
-		if not current_position then
-			goto_start()
-		elseif current_position.channel > 0 then
-			goto_channel(current_position.channel - 1)
+	function el:goto_previous_channel()
+		-- TODO: skip muted
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.channel > 0 then
+			self:goto_channel(self.selection.channel - 1)
 		end
 	end
 	
 	
-	function goto_next_channel()
-		if not current_position then
-			goto_start()
-		elseif current_position.channel < 7 then
-			goto_channel(current_position.channel + 1)
+	function el:goto_next_channel()
+		-- TODO: skip muted
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.channel < 7 then
+			self:goto_channel(self.selection.channel + 1)
 		end
 	end	
 
 	
 
-	function goto_previous_step()
-		if not current_position then
-			goto_start()
-		elseif current_position.step > 0 then
-			goto_step(current_position.step - 1)
+	function el:goto_previous_step()
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.step > 0 then
+			self:goto_step(self.selection.step - 1)
 		end
 	end
 		
 
-	function goto_next_step()
-		if not current_position then
-			goto_start()
-		elseif current_position.step < 63 then -- TODO: handle track length
-			goto_step(current_position.step + 1)
+	function el:goto_next_step()
+		if not self.selection then
+			self:goto_start()
+		elseif self.selection.step < 63 then -- TODO: handle track length
+			self:goto_step(self.selection.step + 1)
 		end
 	end
 	
 
-	function goto_start()
-		current_position = { part = 0 }
-		goto_channel(0)
-		goto_step(0)
+	function el:goto_start()
+		self.selection = { part = 0 }
+		self:goto_channel(0)
+		self:goto_step(0)
 	end
 
 
-	function goto_channel(c)
-		current_position.channel = c
+	function el:goto_channel(c)
+		-- TODO check if channel is muted
+		self.selection.channel = c
 	end
 	
 
-	function goto_step(s)
-		current_position.step = s
+	function el:goto_step(s)
+		local offset = 2 -- cell_width \ 2
+		self.selection.step = s
+		-- TODO: pagination by bars?
+		if
+			self.x_start > ((self.selection.step * cell_width) - offset)
+		then
+			self.x_start = self.selection.step * cell_width - offset
+		elseif
+			self.x_start + self.width < ((self.selection.step + 1) * cell_width) + offset
+		then
+			self.x_start = ((self.selection.step + 1) * cell_width) + offset - self.width
+		end
 	end
 	
 
@@ -2150,157 +2327,20 @@ function M.attach_tracker(parent, el)
 end
 
 
--- Channel panel -------------------------------------------------------------------
-
-
-function M.attach_channel_panel(parent, el)
-	el.width = 16
-	el.height = 270 - 11 - 16 - 2
-	parent:attach(el)
-	
-	function el:draw()
-		rectfill(0, 0, self.width, self.height, 21)
-		line(self.width - 1, ruler_height - 1, self.width - 1, self.height, 5)
-		for channel = 0, 7 do
-			local oy = ruler_height + channel * cell_height
-			local track_id = peek(0x30100 + current_pattern * 20 + channel)
-			print(string.format("\014%03d", track_id), 2, oy + 3, 5)
-			print(string.format("\014% 3d", track_id), 2, oy + 3, 22)
-			spr(channel_is_muted(current_pattern, channel) and 32 or 33, 4, oy + 12)
-		end
-	end
-	
-	function el:click()
-		self:set_keyboard_focus(true)
-	end
-	
-	return el
-end
-
-
-function M.attach_pattern_flow_toggles(parent, el)
-	el.width = 36 + 1
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		if (peek(0x30100 + (current_pattern * 20) + 8) & 0x01) == 0 then
-			pal(7, 59)
-		else
-			pal(7, 17)
-		end
-		spr(40, 2, 4)
-		if (peek(0x30100 + (current_pattern * 20) + 8) & 0x02) == 0 then
-			pal(7, 59)
-		else
-			pal(7, 17)
-		end
-		spr(41, 2 + 12, 4)
-		if (peek(0x30100 + (current_pattern * 20) + 8) & 0x04) == 0 then
-			pal(7, 59)
-		else
-			pal(7, 17)
-		end
-		spr(42, 2 + 24, 4)
-		pal(7, 7)
-	end	
-
-	return el
-end
-
-
--- Default note attributes -------------------------------------------------------
-
-
-function M.attach_note_attributes(parent, el)
-	el.width = 60
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
---		rectfill(0, 0, self.width, self.height, 0)
-		local note = base_note % 12
-		local octave = base_note \ 12
-		local is_sharp = (note == 1) or (note == 3) or (note == 6)
-			or (note == 8) or (note == 10)
-		pal(7, 22)
-		if is_sharp then
-			spr(8 + note, 2, 6)
-		else
-			spr(8 + note, 8, 6)
-		end
-		pal(7, 7)
-		print("\014" .. string.format("%1x", octave), 2 + 12, 7, 22)
-		local x = 20
-		rectfill(x, 8, x + 20, 10, 59)
-		rectfill(x, 8, x + min(20 * (base_volume / 64), 20), 10, 22)
-		print("\014" .. string.format("%02x", base_instrument), 44, 7, 26)
-	end	
-
-	return el
-end
-
-
--- Pattern selector ----------------------------------------------------------------
-
-
-function M.attach_pattern_selector(parent, el)
-	el.width = 19 * 14
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		local playing_pattern = stat(466)
-		for p = 0, 18 do
-			if p == 0 then
-				spr(43, 5, 5)
-			elseif p < 18 then
-				rectfill(
-					p * 14, 4,
-					14 + p * 14, 12, 
-					(p - 1) == playing_pattern and 17 or 59
-				)
-				print(
-					string.format("\014%02d", p - 1),
-					3 + p * 14, 6,
-					(p - 1) == current_pattern and 7 or 22
-				)
-			else
-				spr(44, 3 + p * 14, 5)
-			end
-		end
-	end	
-	
-	function el:click(msg)
-		local p = msg.mx \ 14
-		if p == 0 then
-			-- TODO
-		elseif p < 18 then
-			current_pattern = p - 1
-		else
-			-- TODO
-		end
-	end
-
-	return el
-end
-
-
-return M
+return tracker_grid
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixzdG9yZWQ9IjIwMjQtMDQt
 MDcgMDg6MTQ6MDAiXV1sejQABAAAAAMAAAAwbmls
+:: todo.txt
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2024-04-10 20:46:41",revision=1]]
+- add 4/4 config
+
 :: .info.pod
-b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTEwIDIwOjQ2OjQ5Iix3b3Jrc3Bh
-Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzU1Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9u
-PSJzcmMvdHJhY2tlci5sdWEjMTUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9n
-bG9iYWxzLmx1YSMyNyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZHJhay5sdWEjNjgi
-LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjMTgiLHdvcmtzcGFj
-ZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2Nh
-dGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngi
-LHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2luZGV4
-PTd9fV1dbHo0AAQAAAADAAAAMG5pbA==
+b64$LS1bW3BvZCxydW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTExIDA3OjIzOjQ4Iix3b3Jrc3Bh
+Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
+InNyYy90cmFja2VyLmx1YSMyOCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3Ry
+YWNrZXJfZ3JpZC5sdWEjMTM3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5n
+ZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2lu
+ZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH0se2xvY2F0aW9u
+PSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
