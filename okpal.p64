@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wOCAwODoyMTo0NiIscmV2aXNpb249MzUzM11dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzU0MF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -173,7 +173,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-08 08:21:46",revision=4250]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-11 05:57:19",revision=4259]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -621,6 +621,7 @@ function cut_color()
 	if active_color then
 		set_clipboard("#" .. color_to_hex(get_color(active_color)))
 		if not locked[active_color] then
+			 undo_stack:checkpoint()
 			change_color_code(active_color, 0x000000)
 		end
 	end
@@ -644,6 +645,7 @@ function paste_color()
 		end
 		local code = tonumber("0x" .. hex)
 		if type(code) == "number" then
+			undo_stack:checkpoint()
 			change_color_code(active_color, code)
 		else
 			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
@@ -865,7 +867,7 @@ in ".hex".
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0wOCAwODoyMTo0NiIscmV2aXNpb249MzM4NF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzM5MV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
@@ -876,7 +878,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0wOCAwODoyMTo0NyIscmV2aXNpb249MzMyMF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzMyN11dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -886,7 +888,7 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-08 08:21:46",revision=1377]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-11 05:57:19",revision=1385]]
 picotron_gfx_pid = nil
 picotron_map_pid = nil
 
@@ -965,7 +967,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-08 08:21:46",revision=4558]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-11 05:57:19",revision=4566]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -1326,7 +1328,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-08 08:21:46",revision=563]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-11 05:57:19",revision=571]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1764,7 +1766,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-08 08:21:46",revision=1348]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-11 05:57:19",revision=1356]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2577,7 +2579,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-08 08:21:46",revision=3022]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-11 05:57:19",revision=3030]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2675,7 +2677,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-08 08:21:46",revision=1020]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-11 05:57:19",revision=1029]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2825,8 +2827,8 @@ MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
 KSxub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0byBvcGVuIHRoZSBtYW51YWwpIixy
-dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTA4IDA4OjIxOjQ3Iix0aXRsZT0iT2tQQUwiLHZlcnNp
-b249IjEuMC4wIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzMzMSIsd29ya3NwYWNl
+dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTExIDA1OjU3OjE5Iix0aXRsZT0iT2tQQUwiLHZlcnNp
+b249IjEuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzQ3MiIsd29ya3NwYWNl
 X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
 e2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9LHts
 b2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRp
