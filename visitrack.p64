@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMzo1NDo0OCIscmV2aXNpb249MjY2NV1dbHo0AMsCAACeMwAA8yV7WzBdPXtibXA9cHh1
+NC0xMiAyMToxNDoyOCIscmV2aXNpb249Mjk5OF1dbHo0AMsCAACeMwAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgBz
 EBAE8CEXAAIAExAIAEMAF-ACCQAPFQAkHxGFAAsdOYUA1SsnkFdgVxAHYCdAB2ACAP8BQCdgBzA3
 QCdAF0A3wBfwG1YAHfYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOgJgBPwBfwFGQAHfIG
@@ -277,7 +277,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-12 13:54:48",revision=3205]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-12 21:14:28",revision=3553]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -288,6 +288,7 @@ local ed_inst = require "src/ed_inst"
 local ed_trak = require "src/ed_trak"
 local ed_patt = require "src/ed_patt"
 local note_grid = require "src/note_grid"
+local synth = require "src/synth" -- TODO: temporary, remove
 
 
 function _init()
@@ -334,7 +335,6 @@ function generate_gui()
 	local top_panel = attach_top_panel(app.gui, { x = 0, y = 0 })
 	if app.view == "patt" then
 		ed_patt.attach_pattern_selector(top_panel, { x = 98, y = 0})
-		ed_patt.attach_note_attributes(top_panel, { x = 380, y = 0})
 		ed_patt.attach_channel_panel(app.gui, { x = 0, y = 16})
 		note_grid.attach(app.gui, { x = app.channels_width, y = 16 })
 	elseif app.view == "trak" then
@@ -356,7 +356,8 @@ function attach_top_panel(parent, el)
 	attach_view_selector(el, { x = 22, y = 0 })
 	attach_play_button(el, { x = 1, y = 0 })
 	attach_detail_button(el, { x = 480 - 16, y = 0})
-	
+	attach_note_attributes(el, { x = 380, y = 0})
+		
 	function el:draw()
 		rectfill(0, 0, el.width, el.height, 2)
 	end	
@@ -399,9 +400,9 @@ function attach_view_selector(parent, el)
 		spr(1, 2 * 16 + 2 * 4, 0)
 		pal(7, 7)
 		--]]
-		print("\014inst", 2, 6, app.view == "inst" and 7 or 62)
-		print("\014trak", 2 + 20, 6, app.view == "trak" and 7 or 62)
-		print("\014patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
+		print("inst", 2, 6, app.view == "inst" and 7 or 62)
+		print("trak", 2 + 20, 6, app.view == "trak" and 7 or 62)
+		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
 	end
 	
 	function el:click(msg)
@@ -413,6 +414,114 @@ function attach_view_selector(parent, el)
 			app.view = "patt"
 		end
 		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+-- Default note attributes -------------------------------------------------------
+
+
+function attach_note_attributes(parent, el)
+	el.width = 78
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		---rectfill(0, 0, self.width, self.height, 0)
+		local note = app.base_note % 12
+		local octave = app.base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		pal(7, self.dragged_note and 7 or 7)
+		if is_sharp then
+			spr(8 + note, 2, 6)
+		else
+			spr(8 + note, 8, 6)
+		end
+		pal(7, 7)
+		print(
+			"\014" .. string.format("%1x", octave),
+			2 + 12, 7,
+			self.dragged_note and 7 or 22
+		)
+		local x = 20
+		rectfill(x, 8, x + 20, 10, 59)
+		rectfill(
+			x, 8,
+			x + min(20 * (app.base_volume / 64), 20), 10,
+			self.dragged_volume and 7 or 17
+		)
+		if self.dragged_volume then
+			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
+		end
+		print(
+			"\014inst " .. string.format("%d", app.base_instrument),
+			44, 7,
+			self.dragged_instrument and 7 or 14 -- col 26
+		)
+	end	
+	
+	function el:click(msg)
+		-- TODO: replace with pull-down menus
+		if msg.mx < 18 then
+			self.dragged_note = {
+				y0 = msg.my,
+				start = app.base_note
+			}
+		elseif msg.mx < 42 then
+			self.dragged_volume = {
+				y0 = msg.my,
+				start = app.base_volume
+			}
+		else
+			self.dragged_instrument = {
+				y0 = msg.my,
+				start = app.base_instrument
+			}
+		end
+	end
+	
+	function el:drag(msg)
+		if self.dragged_note then
+			local delta = msg.my - self.dragged_note.y0
+			if (delta == 0) return -- or else double click doesn't work
+			local new_val = self.dragged_note.start - (((delta + 3) \ 6) * 12)
+			app.base_note = mid(0, new_val, 120)
+		elseif self.dragged_volume then
+			local delta = msg.my - self.dragged_volume.y0
+			if (delta == 0) return -- or else double click doesn't work
+			local new_val = self.dragged_volume.start - (((delta + 1) \ 2) * 1)
+			app.base_volume = mid(0, new_val, 0x40) -- TODO: handle vol > 64
+		elseif self.dragged_instrument then
+			local delta = msg.my - self.dragged_instrument.y0
+			if (delta == 0) return -- or else double click doesn't work
+			local new_val = self.dragged_instrument.start - (((delta + 3) \ 6) * 1)
+			app.base_instrument = mid(0, new_val, 0xfe) -- TODO: handle vol > 64
+			-- TODO: temporary, remove
+			app.instrument = app.base_instrument
+			synth.refresh_nodes()
+		end
+	end
+	
+	function el:release(msg)
+		self.dragged_note = nil
+		self.dragged_volume = nil
+		self.dragged_instrument = nil
+	end
+
+	function el:doubleclick(msg)
+		if msg.mx < 18 then
+			notify("***")
+			app.base_note = 48
+		elseif msg.mx < 42 then
+			app.base_volume = 0x32
+		else
+			app.base_instrument = 01
+		end
 	end
 	
 	return el
@@ -442,7 +551,7 @@ end
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMzo1NDo0OCIscmV2aXNpb249MjU0Nl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xMiAyMToxNDoyOCIscmV2aXNpb249Mjg3OV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -481,25 +590,32 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTExIDE3OjI1OjAxIixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMzo1NDo0OCIscmV2aXNpb249NzAwXV1sejQAlwEAAOUIAADwJ3B4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8lWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPZvDDDyjwxw-4Cg--D4AP9w8NAfAJARAGDC4AAjd-kAEQAHgJ
-IA_AEA1gEwAhD-cUAE-wgA8UVQAWEECDAE8P--DGMAD--2wf-wEAzOPoD0AADUAPHA--DxwPGggA
-HhgQAGL--x8BDiECAJ-_Hw85Dg8kDw4HAARB-h-wcFcA8BEODysPJC4PKw8oHg8rDyYPKA4D-iIR
-LhEeIQ4B-iIPOR0AQDkPJB4FAGMPOQ4E-iE5AF-_sPBwBQgA-9Qf-wEAl1D-----Hw==
+NC0xMiAyMToxNDoyOSIscmV2aXNpb249MTA1Ml1dbHo0ABoCAAA8CQAA8CdweHUAAygAAAMABA9A
+EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
+Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
+Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-JVoBEAYP
+IBABIAEgAfAAAhACDBABIA8hIAEwD2bwww8o8McP_AoP-w_AD-cPDQHwCQEQBgwuAAI3f5ABEAB4
+CSAPgBANYBMAIQ-3FABP8IAPFFUADCMPQDMA-w-gAQggD5XwCgEKIA_zIA-4AA9AQA8t8IcPKA--
+8MZEABMwMAGQPwBAsiAP-z8AIA7QVAA-lPCTRAAQGA6HAEft8AoBFABfMA-C8INEAAM1BA83RQA1
+IA8uRQAAlgAVIz8AP0-wo4MAEBQMMAAVDl8BEwORADfg8AoTAF8wD7-wY1EAFAAvAD8O8MMuAP9x
+H-8BAMzT6A4ADUAPHA--DxwPGggAHhgQAGL--x8BBSECAJ-1Hw85BQ8kDw4HAARA9R-wcFYA8BEF
+DysPJCUPKw8oFQ8rDyYPKAUH9SIRJREVIQUB9SIPOR0AQDkPJBUFAGIPOQUL9SE4AC-1sAgA-9cf
+-wEAl1D-----Hw==
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQyOjE4Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMzo1NDo0OCIscmV2aXNpb249NjcwXV1sejQAyQEAADQJAADxTnB4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAg8-kAgJCgsPDA8NDw4PDwQP-5ANDxEPEg8TDxQPFQ8W
-DxcAD-_QDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8lWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPZvDDDyjwxw-4Cg--D4AP9w8NAfAJARAGDC4AAjd-kAEQAHgJ
-IA_AEA1gEwAhD-cUAE-wgA8UVQAWEECDAE8P--DGMAD--2wf-wEAzPMB6A9AAA0ADSAPHA--DxwP
-GggAHhgQAGL--x8BDiECAL-_Hw8yDg8kDw4POQcAAkH_H-BwWQDyAQwgDzQPKw8kDg80Dg8rDygH
-AFAmDygOAxMAGAUCAPoA-hEAEQ4ADhEADiEOAQ4AAgBg-hEPQA85SQAgMg4IACIPPQcAcTkODysO
-D0AGAAB_AAEgABEcDwAyFf4RhgBvQP6w8HAHCAD-1B--AQCXUP----8f
+NC0xMiAyMToxNDoyOSIscmV2aXNpb249MTA2Ml1dbHo0AJ4CAACZCgAA8U9weHUAAygAAAMABA9A
+EAIOAAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8V
+DxYPFwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywP
+LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr9xxaARAG
+DyAQASABIAHwAAIQAgwQASAPISABMA9mkA8RAiAMUAEgAeABCPAPHQA04A8kGgD-DgUK8A8J8BcP
+KPDHD-gKD-8PgA-3Dw0B8AkBEAYMWAACN3_QARAAeAkgD4AQDWATACEP9xQAT-CADxRVABYZQFUA
+IuASDABmDiAB4AMCDAAXBAwAFwUMABYGDACP8AgPKA--8MZ4AA4RDncAF6A6AB8ADAAoD3YAGwXt
+ABoO7AAHCwAfAesABB8FdQAlBrcBHQ62AR8OtQEZJA9AowD_BwggD5XwCgEKIA_zIA-4AA9AQA8t
+8IeVAA9DAAYwMAGQPgBAsiAP-z4AIAfQUwA-lPCTQwAQFweFAEbt8AoBEwBfMA-C8INCABATDC8A
+GQeOAQBQABLgUAAFOwE-v-BjUAAZL-DDLgDmH-8BAMzzAOgHAA0ADSAPHA--DxwPGggAHhgQAGL-
+-x8BCyECAL-7Hw8yCw8kDw4POQcAAkD7H-BwWADyAQwgDzQPKw8kCw80Cw8rDygHAFAmDygLAxMA
+GAQCAPoA_xEAEQsACxEACyELAQsAAgBQ_xEHDzlIACAyCwgAIg89BwCROQsPKwsHCwULegABHgAQ
+HA4AMRX7EYEAP0D7sAgA-9cf-wEAl1D-----Hw==
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMiAwNjo0NDo0OCIscmV2aXNpb249NV1dbHo0AJ0BAADpCAAA8CdweHUAAygAAAMABA9AEAIO
@@ -514,7 +630,7 @@ AB4YEABi--8fAQ4hAgCf-h8POQ4PJA8OBwAEQf4f8HBZAPATDCAODysPJC4PKw8oHg8rDyYPKA4D
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-12 13:54:48",revision=570]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-12 21:14:28",revision=907]]
 local app = {}
 
 
@@ -534,7 +650,7 @@ app.base_instrument = 01
 app.refresh_gui = true
 app.gui = nil
 
-app.view = "patt" -- or "track" or "inst"
+app.view = "inst" -- "patt" or "trk" or "inst"
 app.detail = true
 
 
@@ -585,7 +701,7 @@ constants.isomorphic_keys = {
 
 return constants
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-12 13:54:48",revision=746]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-12 16:43:28",revision=801]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
@@ -609,7 +725,7 @@ end
 
 function detail.attach_panel(parent, el)
 	el.width = 64
-	el.height = 270 - 11 - 16 - 1
+	el.height = 270 - 11 - 16
 	parent:attach(el)
 	if app.view == "patt" or app.view == "trak" then
 		detail.attach_section_pattern(el, { x = 1, y = app.ruler_height })
@@ -619,7 +735,6 @@ function detail.attach_panel(parent, el)
 
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 21)
-		line(0, app.ruler_height - 1, 0, self.height, 5)
 	end	
 	
 
@@ -879,9 +994,10 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-12 09:19:15",revision=463]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-12 21:14:28",revision=786]]
 local app = require "src/app"
 local settings = require "src/settings"
+local synth = require "src/synth"
 
 
 local ed_inst = {}
@@ -889,11 +1005,12 @@ local ed_inst = {}
 
 function ed_inst.attach(parent, el)
 	el.width = 480 - (app.detail and app.detail_width or 0)
-	el.height = 270 - 11 - 16 - 1
+	el.height = 270 - 11 - 16
 	parent:attach(el)
+	synth.attach(el, { x = 0, y = 0 })
 
 	function el:draw()
-		rectfill(0, 0, self.width, self.height, 21)
+--		rectfill(0, 0, self.width, self.height, 62)
 	end	
 	
 	function el:update()
@@ -932,7 +1049,7 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-12 13:54:48",revision=2460]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-12 17:09:46",revision=2507]]
 local app = require "src/app"
 local constants = require "src/constants"
 local sfx = require "src/sfx"
@@ -978,7 +1095,6 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 21)
-		line(self.width - 1, app.ruler_height - 1, self.width - 1, self.height, 5)
 		for channel = 0, 7 do
 			local oy = app.ruler_height + channel * app.cell_height
 			local track_id = sfx.pattern_track(app.pattern, channel)
@@ -998,6 +1114,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:hover(msg)
 		local channel = (msg.my - app.ruler_height) \ app.cell_height
+		if (channel > 7) return
 		local part = (msg.my - app.ruler_height) % app.cell_height
 		if part < 10 then
 			self.cursor = "pointer"
@@ -1009,6 +1126,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	function el:click(msg)
 		self:set_keyboard_focus(true) -- TODO
 		local channel = (msg.my - app.ruler_height) \ app.cell_height
+		if (channel > 7) return
 		local part = (msg.my - app.ruler_height) % app.cell_height
 		if part < 10 then
 			local track_id = sfx.pattern_track(app.pattern, channel)
@@ -1036,113 +1154,6 @@ function ed_patt.attach_channel_panel(parent, el)
 		self.dragged = nil
 	end
 		
-	return el
-end
-
-
-
--- Default note attributes -------------------------------------------------------
-
-
-function ed_patt.attach_note_attributes(parent, el)
-	el.width = 78
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		---rectfill(0, 0, self.width, self.height, 0)
-		local note = app.base_note % 12
-		local octave = app.base_note \ 12
-		local is_sharp = (note == 1) or (note == 3) or (note == 6)
-			or (note == 8) or (note == 10)
-		pal(7, self.dragged_note and 7 or 7)
-		if is_sharp then
-			spr(8 + note, 2, 6)
-		else
-			spr(8 + note, 8, 6)
-		end
-		pal(7, 7)
-		print(
-			"\014" .. string.format("%1x", octave),
-			2 + 12, 7,
-			self.dragged_note and 7 or 22
-		)
-		local x = 20
-		rectfill(x, 8, x + 20, 10, 59)
-		rectfill(
-			x, 8,
-			x + min(20 * (app.base_volume / 64), 20), 10,
-			self.dragged_volume and 7 or 17
-		)
-		if self.dragged_volume then
-			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
-		end
-		print(
-			"\014inst " .. string.format("%d", app.base_instrument),
-			44, 7,
-			self.dragged_instrument and 7 or 14 -- col 26
-		)
-	end	
-	
-	function el:click(msg)
-		-- TODO: replace with pull-down menus
-		if msg.mx < 18 then
-			self.dragged_note = {
-				y0 = msg.my,
-				start = app.base_note
-			}
-		elseif msg.mx < 42 then
-			self.dragged_volume = {
-				y0 = msg.my,
-				start = app.base_volume
-			}
-		else
-			self.dragged_instrument = {
-				y0 = msg.my,
-				start = app.base_instrument
-			}
-		end
-	end
-	
-	function el:drag(msg)
-		if self.dragged_note then
-			local delta = msg.my - self.dragged_note.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_note.start - (((delta + 3) \ 6) * 12)
-			app.base_note = mid(0, new_val, 120)
-		elseif self.dragged_volume then
-			local delta = msg.my - self.dragged_volume.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_volume.start - (((delta + 1) \ 2) * 1)
-			app.base_volume = mid(0, new_val, 0x40) -- TODO: handle vol > 64
-		elseif self.dragged_instrument then
-			local delta = msg.my - self.dragged_instrument.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_instrument.start - (((delta + 3) \ 6) * 1)
-			app.base_instrument = mid(0, new_val, 0xfe) -- TODO: handle vol > 64
-		end
-	end
-	
-	function el:release(msg)
-		self.dragged_note = nil
-		self.dragged_volume = nil
-		self.dragged_instrument = nil
-	end
-
-	function el:doubleclick(msg)
-		if msg.mx < 18 then
-			notify("***")
-			app.base_note = 48
-		elseif msg.mx < 42 then
-			app.base_volume = 0x32
-		else
-			app.base_instrument = 01
-		end
-	end
-	
 	return el
 end
 
@@ -1195,7 +1206,7 @@ end
 
 return ed_patt
 :: src/ed_trak.lua
---[[pod_format="raw",created="2024-04-10 15:48:56",modified="2024-04-12 09:19:15",revision=69]]
+--[[pod_format="raw",created="2024-04-10 15:48:56",modified="2024-04-12 16:25:37",revision=71]]
 local app = require "src/app"
 
 
@@ -1208,7 +1219,7 @@ function ed_trak.attach(parent, el)
 	parent:attach(el)
 
 	function el:draw()
-		rectfill(0, 0, self.width, self.height, 21)
+		rectfill(0, 0, self.width, self.height, 62)
 	end	
 
 	return el
@@ -1396,7 +1407,7 @@ end
 
 return M
 :: src/note_grid.lua
---[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-12 13:54:48",revision=1469]]
+--[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-12 17:20:20",revision=1564]]
 local app = require "src/app"
 local settings = require "src/settings"
 local sfx = require "src/sfx"
@@ -1423,13 +1434,13 @@ function note_grid.attach(parent, el)
 	function el:draw()
 		local pattern_is_playing = (stat(464) != 0)  and (stat(466) == app.pattern)
 		-- Ruler background
-		rectfill(0, 0, self.width, app.ruler_height - 2, 21)
+		rectfill(0, 0, self.width, app.ruler_height - 2, 61)
 		line(0, app.ruler_height - 1, self.width, app.ruler_height - 1, 5)
 		local step_start = note_grid.origin.x \ app.cell_width
 		local delta_x = - (note_grid.origin.x % app.cell_width)
 		if step_start < 0 then
 			step_start = 0
-			note_grid.origin.x = max(- (app.cell_width \ 2) , note_grid.origin.x)
+			note_grid.origin.x = max(- 4 , note_grid.origin.x)
 			delta_x = - note_grid.origin.x
 		end
 		for channel = 0, 7 do
@@ -1486,13 +1497,13 @@ function note_grid.attach(parent, el)
 					if w_vol == 0 and vol != 0 then
 						w_vol = 1
 					end
-					rectfill(ox + 2, oy + 10, ox + 2 + app.cell_width - 6, oy + 12, 5)
+					rectfill(ox + 2, oy + 10, ox + 2 + app.cell_width - 6, oy + 12, 60)
 					if w_vol > 0 then
 						rectfill(ox + 2, oy + 10, ox + 2 + w_vol, oy + 12, 17) -- col 22
 					end
 					-- TODO: support vol > 64
 				else
-					print("\014.", ox + 2, oy + 7, 22)
+					print("\014.", ox + 2, oy + 7, 5)
 				end
 				-- Instrument
 				local x = 8
@@ -1505,16 +1516,19 @@ function note_grid.attach(parent, el)
 					x = 2
 					print("\014" .. string.format("%d", inst), ox + x, oy + 15, 14) -- 26
 				else
-					print("\014.", ox + 2, oy + 15, 22)
+					print("\014.", ox + 2, oy + 15 - 1, 5)
 				end
 				-- Effect
 				if false then
 					print("\014" .. fx, ox + 2, oy + 22, 22)
 				else
-					print("\014.", ox + 2, oy + 22, 22)
+					print("\014.", ox + 2, oy + 22 - 1, 5)
 				end
 			end
 			::continue::
+		end
+		if self.height > app.ruler_height + 8 * app.cell_height then
+			rectfill(0, app.ruler_height + 8 * app.cell_height, self.width, self.height, 62)
 		end
 		-- Bar lines
 		for step_i = 0, 24 do
@@ -1524,10 +1538,10 @@ function note_grid.attach(parent, el)
 			local beat = ((step_start + step_i) \ 4) % 4 + 1
 			if (step_start + step_i) % 4 == 0 then
 				if ((step_start + step_i) \ 4) % 4 == 0 then
-					line(ox, 0, ox, self.height - 1, 22)
+					line(ox, 0, ox, self.height, 22)
 					print("\014" .. bar .. "." .. beat, ox + 2, 2, 22)
 				else
-					line(ox, 0, ox, self.height - 1, 5)
+					line(ox, 0, ox, self.height, 5)
 					print("\014" .. bar .. "." .. beat, ox + 2, 2, 5)
 				end
 			else
@@ -1890,7 +1904,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-12 13:54:48",revision=1240]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-12 21:14:28",revision=1578]]
 local sfx = {}
 
 
@@ -2075,7 +2089,209 @@ function sfx.set_pattern_loop_stop(pattern, bool)
 	end
 end
 
+-- Synth nodes ---------------------------------------------------------------
+
+function sfx.node_parent(instrument, node)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	return peek(node_addr + 0) & 0x7	
+end
+
+function sfx.node_type(instrument, node)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	return peek(node_addr + 1) & 0xf
+end
+
+function sfx.node_op(instrument, node)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	return peek(node_addr) >> 4
+end
+
 return sfx
+:: src/synth.lua
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-12 21:14:28",revision=504]]
+local app = require "src/app"
+local sfx = require "src/sfx"
+
+
+local synth = {}
+
+
+local node_width = 26
+local node_gap = 14
+
+
+synth.nodes = nil
+
+
+function synth.attach(parent, el)
+	el.width = parent.width
+	el.height = parent.height
+	parent:attach(el)
+	
+	synth.nodes = {}
+	for n = 0, 7 do
+		synth.nodes[n] = {
+			parent = nil, -- id of the parent
+			children = {}, -- list of direct references to the children
+			type = nil,
+		}
+	end
+	synth.root = synth.nodes[0]
+	
+	synth.refresh_nodes()
+	
+	function el:draw()
+		rectfill(0, 0, self.width, self.height, 62)
+		local ox, oy = 1, 160
+		for n = 0, 7 do
+			print("node " .. n .. " (" .. synth.nodes[n].type .. "," .. synth.nodes[n].op .. ") -> " .. synth.nodes[n].parent.id,
+				ox, oy + n * 10, 7)
+			for i = 1, #synth.nodes[n].children do
+				print("" .. synth.nodes[n].children[i].id, ox + 60 + 5 * i, oy + n * 10, 22)
+			end
+			if synth.nodes[n].height then
+				print("height=" .. synth.nodes[n].height, ox + 106, oy + n * 10, 14)
+			end
+			if synth.nodes[n].height then
+				print("depth=" .. synth.nodes[n].depth, ox + 156, oy + n * 10, 26)
+			end
+		end
+		-- tree
+		for n = 0, 7 do
+			local node = synth.nodes[n]
+			local pos = node.position
+			if pos then
+				if node != synth.root then
+					rectfill(pos.x, pos.y, pos.x + node_width, pos.y + 8, 17)
+					local str = "??? "
+					if node.type == 2 then
+						if node.op == 0 then str = "osc "
+						elseif node.op == 1 then str = "fm "
+						elseif node.op == 2 then str = "ring "
+						end
+					elseif node.type == 8 then str = "filt "
+					elseif node.type == 9 then str = "echo "
+					elseif node.type == 10 then str = "shap "
+					end
+					p8_centered_print(str .. n, pos.x + (node_width \ 2) + 1, pos.y + 2, 63)
+					local ppos = node.parent.position
+					if (node.type == 2 or node == node.parent.children[1]) then
+						line(
+							pos.x + node_width + 1, pos.y + 4,
+							pos.x + node_width + 7, pos.y + 4,
+							7
+						)
+						line(
+							pos.x + node_width + 7, pos.y + 4,
+							ppos.x - 1 - 6, ppos.y + 4,
+							7
+						)
+						line(
+							ppos.x - 1 - 6, ppos.y + 4,
+							ppos.x - 1, ppos.y + 4,
+							7
+						)
+						-- Arrow
+						line(pos.x + node_width + 2, pos.y + 3, pos.x + node_width + 2, pos.y + 5, 7)
+						line(pos.x + node_width + 3, pos.y + 2, pos.x + node_width + 3, pos.y + 6, 7)
+					else
+						local x = pos.x + node_width \ 2
+						line(x, pos.y - 1, x, pos.y - 5, 7)
+						line(x - 1, pos.y - 2, x + 1, pos.y - 2)
+						line(x - 2, pos.y - 3, x + 2, pos.y - 3)
+					end
+				end
+			end
+		end
+	end
+	
+	return el
+end
+
+
+-- Nodes -------------------------------------------------------------------------
+
+
+local function depth_walk(root, pre_fun, post_fun, depth)
+	if (not depth) depth = 0
+	if depth > 8 then
+		notify("*** Deep recursion: cycle in synth nodes? ***")
+		return
+	end
+	if (pre_fun) pre_fun(root)
+	for i = 1, #root.children do
+		local child = root.children[i]
+		if child.type != 0 then
+			depth_walk(child, pre_fun, post_fun, depth + 1)
+		end
+	end
+	if (post_fun) post_fun(root)
+end
+
+
+function synth.refresh_nodes()
+	for n = 0, 7 do
+		synth.nodes[n].id = n
+		synth.nodes[n].children = {}
+		synth.nodes[n].height = nil -- TODO: or 0?
+		synth.nodes[n].position = nil
+	end
+	for n = 0, 7 do
+		local type = sfx.node_type(app.instrument, n)
+		local op = sfx.node_op(app.instrument, n)
+		local parent_id = sfx.node_parent(app.instrument, n)
+		synth.nodes[n].parent = synth.nodes[parent_id]
+		synth.nodes[n].type = type
+		synth.nodes[n].op = op
+		if type != 0 and n != 0 then
+			add(synth.nodes[n].parent.children, synth.nodes[n])
+		end
+	end
+	
+	depth_walk(
+		synth.root,
+		nil,
+		function(node)
+			if #node.children == 0 then
+				node.height = 1
+			else
+				local h = 0
+				for i = 1, #node.children do
+					local child = node.children[i]
+					h += child.height
+				end
+				node.height = h
+			end
+		end
+	)
+
+	synth.root.position = { x = 300, y = 5 }
+	depth_walk(
+		synth.root,
+		function(node)
+			if node.id == 0 then
+				node.depth = 0
+			else
+				node.depth = 1 + node.parent.depth
+			end
+			local y = node.position.y
+			for i = 1, #node.children do
+				node.children[i].position = {
+					x = node.position.x - node_width - node_gap,
+					y = y,
+				}
+				y += node.children[i].height * 14
+			end
+		end,
+		nil
+	)
+end
+
+
+return synth
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixzdG9yZWQ9IjIwMjQtMDQt
 MDcgMDg6MTQ6MDAiXV1sejQABAAAAAMAAAAwbmls
@@ -2094,15 +2310,14 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xMiAxMzo1
-NDo0OCIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjEiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMTMzIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
-Lmx1YSMyOCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2VkX3BhdHQubHVhIzc1
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZGV0YWlsLmx1YSMxNDkiLHdvcmtz
-cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ub3RlX2dyaWQubHVhIzMzOSIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjMTI5Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
-Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
-aW5kZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAE
-AAAAAwAAADBuaWw=
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xMiAyMTox
+NDoyOSIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjEiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAu
+bHVhIzEyIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSMyMDIiLHdv
+cmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9lZF9pbnN0Lmx1YSMxNiIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSMxNTciLHdvcmtzcGFjZV9pbmRleD0x
+fSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFw
+LzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFj
+ZV9pbmRleD00fSx7bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0
+AAQAAAADAAAAMG5pbA==
 :: [eoc]
