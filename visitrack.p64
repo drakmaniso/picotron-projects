@@ -7,7 +7,7 @@ version 2
 :: src/
 :: pal/
 :: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-12 10:59:53",revision=954]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-12 11:41:04",revision=975]]
 
 -- A 'require' function similar to standard Lua.
 -- Idea from elgopher on the BBS
@@ -124,13 +124,11 @@ function is_hexa_char(c)
 end
 
 
-function digit_count(n)
-	local cap = 10
-	for i = 1, 10 do
-		if (n < cap) return i
-		cap *= 10 
-	end
+function p8_centered_print(s, x, y, col)
+	local count = #s
+	print(s, x - ((count * 4) \ 2), y, col)
 end
+
 
 
 -- Drawing -------------------------------------------------------------------------
@@ -160,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMDo1OTo1MyIscmV2aXNpb249MjQ1OF1dbHo0AMsCAACeMwAA8yV7WzBdPXtibXA9cHh1
+NC0xMiAxMzo1NDo0OCIscmV2aXNpb249MjY2NV1dbHo0AMsCAACeMwAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgBz
 EBAE8CEXAAIAExAIAEMAF-ACCQAPFQAkHxGFAAsdOYUA1SsnkFdgVxAHYCdAB2ACAP8BQCdgBzA3
 QCdAF0A3wBfwG1YAHfYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOgJgBPwBfwFGQAHfIG
@@ -279,7 +277,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-12 10:59:53",revision=2998]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-12 13:54:48",revision=3205]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -444,7 +442,7 @@ end
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMDo1OTo1MyIscmV2aXNpb249MjMzOV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xMiAxMzo1NDo0OCIscmV2aXNpb249MjU0Nl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -483,7 +481,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTExIDE3OjI1OjAxIixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMDo1OTo1MyIscmV2aXNpb249NDkxXV1sejQAlwEAAOUIAADwJ3B4dQADKAAAAwAED0AQ
+NC0xMiAxMzo1NDo0OCIscmV2aXNpb249NzAwXV1sejQAlwEAAOUIAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8lWgEQBg8g
@@ -493,14 +491,15 @@ HhgQAGL--x8BDiECAJ-_Hw85Dg8kDw4HAARB-h-wcFcA8BEODysPJC4PKw8oHg8rDyYPKA4D-iIR
 LhEeIQ4B-iIPOR0AQDkPJB4FAGMPOQ4E-iE5AF-_sPBwBQgA-9Qf-wEAl1D-----Hw==
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQyOjE4Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMiAxMDo1OTo1MyIscmV2aXNpb249NDYxXV1sejQAnQEAAOkIAADxTnB4dQADKAAAAwAED0AQ
+NC0xMiAxMzo1NDo0OCIscmV2aXNpb249NjcwXV1sejQAyQEAADQJAADxTnB4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAg8-kAgJCgsPDA8NDw4PDwQP-5ANDxEPEg8TDxQPFQ8W
 DxcAD-_QDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8lWgEQBg8g
 EAEgASAB8AACEAIMEAEgDyEgATAPZvDDDyjwxw-4Cg--D4AP9w8NAfAJARAGDC4AAjd-kAEQAHgJ
 IA_AEA1gEwAhD-cUAE-wgA8UVQAWEECDAE8P--DGMAD--2wf-wEAzPMB6A9AAA0ADSAPHA--DxwP
-GggAHhgQAGL--x8BDiECAJ-_Hw85Dg8kDw4HAARB-h-wcFkA8BMMIA4PKw8kLg8rDygeDysPJg8o
-DgP_IhEuER4hDgH_Ig85HQBAOQ8kHgUAYg85DgX_ITsAb0D_sPBwBwgA-9Qf-wEAl1D-----Hw==
+GggAHhgQAGL--x8BDiECAL-_Hw8yDg8kDw4POQcAAkH_H-BwWQDyAQwgDzQPKw8kDg80Dg8rDygH
+AFAmDygOAxMAGAUCAPoA-hEAEQ4ADhEADiEOAQ4AAgBg-hEPQA85SQAgMg4IACIPPQcAcTkODysO
+D0AGAAB_AAEgABEcDwAyFf4RhgBvQP6w8HAHCAD-1B--AQCXUP----8f
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMiAwNjo0NDo0OCIscmV2aXNpb249NV1dbHo0AJ0BAADpCAAA8CdweHUAAygAAAMABA9AEAIO
@@ -515,7 +514,7 @@ AB4YEABi--8fAQ4hAgCf-h8POQ4PJA8OBwAEQf4f8HBZAPATDCAODysPJC4PKw8oHg8rDyYPKA4D
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-12 10:59:53",revision=359]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-12 13:54:48",revision=570]]
 local app = {}
 
 
@@ -543,7 +542,7 @@ app.detail = true
 
 app.ruler_height = 9
 app.channels_width = 16
-app.detail_width = 64
+app.detail_width = 56
 app.cell_width = 20
 app.cell_height = 29
 
@@ -586,7 +585,7 @@ constants.isomorphic_keys = {
 
 return constants
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-12 10:59:53",revision=442]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-12 13:54:48",revision=746]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
@@ -595,15 +594,28 @@ local sfx = require "src/sfx"
 local detail = {}
 
 
+function detail.track()
+	if app.view == "patt" then
+		if note_grid.selection then
+			return sfx.pattern_track(app.pattern, note_grid.selection.channel)
+		else
+			return nil
+		end
+	else
+		return app.track
+	end
+end
 
 
 function detail.attach_panel(parent, el)
 	el.width = 64
 	el.height = 270 - 11 - 16 - 1
 	parent:attach(el)
-	detail.attach_section_pattern(el, { x = 1, y = app.ruler_height })
-	detail.attach_section_track(el, { x = 1, y = app.ruler_height + 30 })
-	detail.attach_section_note(el, { x = 1, y = app.ruler_height + 60 })
+	if app.view == "patt" or app.view == "trak" then
+		detail.attach_section_pattern(el, { x = 1, y = app.ruler_height })
+		detail.attach_section_track(el, { x = 1, y = app.ruler_height + 30 })
+		detail.attach_section_note(el, { x = 1, y = app.ruler_height + 80 })
+	end
 
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 21)
@@ -625,7 +637,7 @@ function detail.attach_section_pattern(parent, el)
 	detail.attach_pattern_flow_toggles(el, { x = 4, y = 10 })
 	function el:draw()
 		--- rectfill(0, 0, self.width, self.height, 2)
-		print(string.format("pattern %d", app.pattern), 3, 0, 5)
+		print(string.format("pattern %d", app.pattern), 3, 0, 22)
 		line(3, 7, self.width - 3, 7, 5)
 	end
 end
@@ -678,21 +690,55 @@ end
 
 function detail.attach_section_track(parent, el)
 	el.width = parent.width - el.x
-	el.height = 24 -- TODO
+	el.height = 48 -- TODO
 	parent:attach(el)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 12,
+			label = "speed:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_speed(detail.track()) end,
+			set = function(v) sfx.set_track_speed(detail.track(), v) end,
+		}
+	)
+	el.loop0_field = detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 22,
+			label = "length:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_loop0(detail.track()) end,
+			set = function(v) sfx.set_track_loop0(detail.track(), v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 32,
+			label = "loop end:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_loop1(detail.track()) end,
+			set = function(v) sfx.set_track_loop1(detail.track(), v) end,
+		}
+	)
 	
 	function el:draw()
-		local track = app.track
-		if app.view == "patt" then
-			if note_grid.selection then
-				track = sfx.pattern_track(app.pattern, note_grid.selection.channel)
-			else
-				return
-			end
-		end
+		local track = detail.track()
+		if (not track) return
 		--- rectfill(0, 0, self.width, self.height, 2)
-		print(string.format("track %d", track), 3, 0, 5)
+		print(string.format("track %d", track), 3, 0, 22)
 		line(3, 7, self.width - 3, 7, 5)
+	end
+	
+	function el:update()
+		local track = detail.track()
+		if (not track) return
+		if sfx.track_loop1(track) > 0 then
+			self.loop0_field.label = "l. start:"
+		else
+			self.loop0_field.label = "length:"
+		end
 	end
 end
 
@@ -702,9 +748,69 @@ end
 
 function detail.attach_section_note(parent, el)
 	el.width = parent.width - el.x
-	el.height = 24 -- TODO
+	el.height = 70 -- TODO
 	parent:attach(el)
-	
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 12,
+			label = "pitch:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_pitch(detail.track(), note_grid.selection.step) end,
+			set = function(v) sfx.set_track_pitch(detail.track(), note_grid.selection.step, v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 22,
+			label = "volume:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_volume(detail.track(), note_grid.selection.step) end,
+			set = function(v) sfx.set_track_volume(detail.track(), note_grid.selection.step, v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 32,
+			label = "inst:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_instrument(detail.track(), note_grid.selection.step) end,
+			set = function(v) sfx.set_track_instrument(detail.track(), note_grid.selection.step, v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 42,
+			label = "fx:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return sfx.track_fx(detail.track(), note_grid.selection.step) end,
+			set = function(v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 52,
+			label = "param1:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return (sfx.track_fx_params(detail.track(), note_grid.selection.step) & 0xf0) >> 4 end,
+			set = function(v) end,
+		}
+	)
+	detail.attach_num_field(
+		el,
+		{
+			x = 0, y = 62,
+			label = "param2:",
+			visible = function() return note_grid.selection != nil end,
+			get = function() return (sfx.track_fx_params(detail.track(), note_grid.selection.step) & 0xf0) end,
+			set = function(v) end,
+		}
+	)
+		
 	function el:draw()
 		local track = app.track
 		local step = 0
@@ -716,11 +822,59 @@ function detail.attach_section_note(parent, el)
 			end
 		end
 		--- rectfill(0, 0, self.width, self.height, 2)
-		print("note", 3, 0, 5)
+		print("note", 3, 0, 22)
 		line(3, 7, self.width - 3, 7, 5)
 	end
 end
 
+
+-- Widgets ------------------------------------------------------------------------
+
+
+function detail.attach_num_field(parent, el)
+	el.width = parent.width - el.x
+	el.height = 12
+	parent:attach(el)
+	if (not el.visible) el.visible = function() return true end
+	el.dragged = nil
+	function el:draw()
+		if (not el.visible()) return
+		local val = self.get()
+		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and 17 or 62)
+		print(el.label, 3, 1, 22)
+		if val then
+			print(string.format("%3d", val), self.width - 22, 1, self.dragged and 7 or 22)
+		else
+			print("-", self.width - 4, 1, self.dragged and 7 or 17)
+		end
+	end
+	function el:hover(msg)
+		if msg.mx >= self.width - 21 then
+			self.cursor = "pointer"
+		else
+			self.cursor = 1
+		end
+	end
+	function el:click(msg)
+		if (not el.visible()) return
+		if msg.mx >= self.width - 21 then
+			self.dragged = { y0 = msg.my, val0 = self.get() }
+		end
+	end
+	function el:drag(msg)
+		if (not el.visible()) return
+		if self.dragged then
+			local delta = msg.my - self.dragged.y0
+			local new = self.dragged.val0 - ((delta - 3) / 6)
+			new = mid(0, new, 0xff)
+			self.set(new)
+		end
+	end
+	function el:release(msg)
+		self.dragged = nil
+	end
+	return el
+end
 
 
 return detail
@@ -778,7 +932,7 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-12 10:59:53",revision=2233]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-12 13:54:48",revision=2460]]
 local app = require "src/app"
 local constants = require "src/constants"
 local sfx = require "src/sfx"
@@ -832,12 +986,12 @@ function ed_patt.attach_channel_panel(parent, el)
 			if is_dragged then
 				rectfill(0, oy + 1, 14, oy + 9, 17)
 			end
----			print(string.format("\014%03d", track_id), 2, oy + 3, 5)
-			print(
-				string.format("\014%d", track_id),
-				8 - ((digit_count(track_id) * 4) \ 2), oy + 3,
+			
+			p8_centered_print(
+				string.format("%d", track_id),
+				8, oy + 3,
 				is_dragged and 7 or 22
-			)
+			)			
 			spr(sfx.channel_is_muted(app.pattern, channel) and 32 or 33, 4, oy + 12)
 		end
 	end
@@ -853,6 +1007,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	end
 	
 	function el:click(msg)
+		self:set_keyboard_focus(true) -- TODO
 		local channel = (msg.my - app.ruler_height) \ app.cell_height
 		local part = (msg.my - app.ruler_height) % app.cell_height
 		if part < 10 then
@@ -890,7 +1045,7 @@ end
 
 
 function ed_patt.attach_note_attributes(parent, el)
-	el.width = 54
+	el.width = 78
 	el.height = 16
 	el.cursor = "pointer"
 	parent:attach(el)
@@ -898,7 +1053,7 @@ function ed_patt.attach_note_attributes(parent, el)
 	el.drag_start = nil
 
 	function el:draw()
---		rectfill(0, 0, self.width, self.height, 0)
+		---rectfill(0, 0, self.width, self.height, 0)
 		local note = app.base_note % 12
 		local octave = app.base_note \ 12
 		local is_sharp = (note == 1) or (note == 3) or (note == 6)
@@ -926,7 +1081,7 @@ function ed_patt.attach_note_attributes(parent, el)
 			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
 		end
 		print(
-			"\014" .. string.format("%d", app.base_instrument),
+			"\014inst " .. string.format("%d", app.base_instrument),
 			44, 7,
 			self.dragged_instrument and 7 or 14 -- col 26
 		)
@@ -1012,9 +1167,9 @@ function ed_patt.attach_pattern_selector(parent, el)
 					14 + p * 14, 12, 
 					(p - 1) == playing_pattern and 17 or 59
 				)
-				print(
-					string.format("\014%d", p - 1),
-					7 + p * 14 - ((digit_count(p - 1) * 3) \ 2), 6,
+				p8_centered_print(
+					string.format("%d", p - 1),
+					8 + p * 14, 6,
 					(p - 1) == app.pattern and 7 or 22
 				)
 			else
@@ -1241,7 +1396,7 @@ end
 
 return M
 :: src/note_grid.lua
---[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-12 10:59:53",revision=1234]]
+--[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-12 13:54:48",revision=1469]]
 local app = require "src/app"
 local settings = require "src/settings"
 local sfx = require "src/sfx"
@@ -1288,26 +1443,26 @@ function note_grid.attach(parent, el)
 				goto continue
 			end
 			local track = peek(0x30100 + app.pattern * 20 + channel)
-			for step = 0, 24 do
-				if step_start + step > 63 then break end
-				local ox = delta_x + step * app.cell_width + 1
-				if pattern_is_playing and stat(400 + channel, 9) == step_start + step then
+			for step_i = 0, 24 do
+				if step_start + step_i > 63 then break end
+				local ox = delta_x + step_i * app.cell_width + 1
+				if pattern_is_playing and stat(400 + channel, 9) == step_start + step_i then
 					rectfill(ox, oy, ox + app.cell_width - 2, oy + app.cell_height - 1, 19)
 				end
-				if self:has_keyboard_focus() and
+				if
 					note_grid.selection and note_grid.selection.channel == channel
-						and note_grid.selection.step == step_start + step
+						and note_grid.selection.step == step_start + step_i
 				then
 					-- TODO: replace with rectfill
+					-- TODO: replace with rect when no keyboard focus
 					spr(24 + note_grid.selection.part, ox, oy)
 				end
 				-- TODO: support track length > 64
-				local base_addr = 0x50000 + 8 + (track * 328) + step_start + step
-				local freq = peek(base_addr)
-				local inst = peek(base_addr + 64)
-				local vol  = peek(base_addr + (2 * 64))
-				local fx   = peek(base_addr + (3 * 64))
-				local fxp  = peek(base_addr + (4 * 64))
+				local freq = sfx.track_pitch(track, step_start + step_i)
+				local inst = sfx.track_instrument(track, step_start + step_i)
+				local vol  = sfx.track_volume(track, step_start + step_i)
+				local fx   = sfx.track_fx(track, step_start + step_i)
+				local fxp  = sfx.track_fx_params(track, step_start + step_i)
 				-- Note and octave
 				if freq != 0xff then
 					local note = freq % 12
@@ -1362,13 +1517,13 @@ function note_grid.attach(parent, el)
 			::continue::
 		end
 		-- Bar lines
-		for step = 0, 24 do
-			if step_start + step > 63 + 1 then break end
-			local ox = delta_x + (step * app.cell_width)
-			local bar = (step_start + step) \ (4 * 4) + 1
-			local beat = ((step_start + step) \ 4) % 4 + 1
-			if (step_start + step) % 4 == 0 then
-				if ((step_start + step) \ 4) % 4 == 0 then
+		for step_i = 0, 24 do
+			if step_start + step_i > 63 + 1 then break end
+			local ox = delta_x + (step_i * app.cell_width)
+			local bar = (step_start + step_i) \ (4 * 4) + 1
+			local beat = ((step_start + step_i) \ 4) % 4 + 1
+			if (step_start + step_i) % 4 == 0 then
+				if ((step_start + step_i) \ 4) % 4 == 0 then
 					line(ox, 0, ox, self.height - 1, 22)
 					print("\014" .. bar .. "." .. beat, ox + 2, 2, 22)
 				else
@@ -1449,10 +1604,6 @@ function note_grid.attach(parent, el)
 	
 
 	function el:update()
-		if not self:has_keyboard_focus() then
-			note_grid.selection = nil
-		end	
-		
 		if self.note_playing then
 			-- TODO: should be in main.lua (bug when switching view during note)
 			if self.note_playing.tick > 10 then
@@ -1583,11 +1734,6 @@ function note_grid.attach(parent, el)
 			-- poke(base_addr + (3 * 64), 0xff)
 			-- poke(base_addr + (4 * 64), 0xff)
 		end
-	end
-
-
-	function el:kbd_focus()
-		self:set_keyboard_focus(true)
 	end
 	
 
@@ -1744,7 +1890,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-12 10:59:53",revision=1009]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-12 13:54:48",revision=1240]]
 local sfx = {}
 
 
@@ -1809,7 +1955,80 @@ function sfx.pattern_track(pattern, channel)
 end
 
 
--- Pattern flow flags
+function sfx.track_speed(track)
+	return peek(0x50000 + (track * 328) + 2)
+end
+
+
+function sfx.set_track_speed(track, val)
+	return poke(0x50000 + (track * 328) + 2, val)
+end
+
+
+function sfx.track_loop0(track)
+	return peek(0x50000 + (track * 328) + 3)
+end
+
+
+function sfx.set_track_loop0(track, val)
+	return poke(0x50000 + (track * 328) + 3, val)
+end
+
+
+function sfx.track_loop1(track)
+	return peek(0x50000 + (track * 328) + 4)
+end
+
+
+function sfx.set_track_loop1(track, val)
+	return poke(0x50000 + (track * 328) + 4, val)
+end
+
+
+-- Track notes -------------------------------------------------------------
+
+
+function sfx.track_pitch(track, step)
+	return peek(0x50000 + 8 + (track * 328) + step)
+end
+function sfx.set_track_pitch(track, step, v)
+	return poke(0x50000 + 8 + (track * 328) + step, v)
+end
+
+
+function sfx.track_instrument(track, step)
+	return peek(0x50000 + 8 + (track * 328) + step + 64)
+end
+function sfx.set_track_instrument(track, step, v)
+	return poke(0x50000 + 8 + (track * 328) + step + 64, v)
+end
+
+
+function sfx.track_volume(track, step)
+	return peek(0x50000 + 8 + (track * 328) + step + (2 * 64))
+end
+function sfx.set_track_volume(track, step, v)
+	return poke(0x50000 + 8 + (track * 328) + step + (2 * 64), v)
+end
+
+
+function sfx.track_fx(track, step)
+	return peek(0x50000 + 8 + (track * 328) + step + (3 * 64))
+end
+function sfx.set_track_fx(track, step, v)
+	return poke(0x50000 + 8 + (track * 328) + step + (3 * 64), v)
+end
+
+
+function sfx.track_fx_params(track, step)
+	return peek(0x50000 + 8 + (track * 328) + step + (3 * 64))
+end
+function sfx.set_track_fx_params(track, step, v)
+	return poke(0x50000 + 8 + (track * 328) + step + (3 * 64), v)
+end
+
+
+-- Pattern flow flags ------------------------------------------------------
 
 
 function sfx.pattern_loop_start(pattern)
@@ -1875,15 +2094,15 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xMiAxMDo1
-OTo1MyIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjEiLHdvcmtzcGFjZXM9e3tsb2Nh
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xMiAxMzo1
+NDo0OCIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjEiLHdvcmtzcGFjZXM9e3tsb2Nh
 dGlvbj0ibWFpbi5sdWEjMTMzIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
-Lmx1YSMyMCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2VkX3BhdHQubHVhIzIz
-MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL25vdGVfZ3JpZC5sdWEjNDM4Iix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZGV0YWlsLmx1YSMxNyIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjNjEiLHdvcmtzcGFjZV9pbmRleD0xfSx7
-bG9jYXRpb249ImRyYWsubHVhIzEyMSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4
-LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJtYXAvMC5tYXAiLHdvcmtzcGFj
-ZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2luZGV4PTR9LHtsb2Nh
-dGlvbj0ic2Z4LzEuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9N319XV1sejQABAAAAAMAAAAwbmls
+Lmx1YSMyOCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2VkX3BhdHQubHVhIzc1
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZGV0YWlsLmx1YSMxNDkiLHdvcmtz
+cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9ub3RlX2dyaWQubHVhIzMzOSIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjMTI5Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
+e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
+Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
+aW5kZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAE
+AAAAAwAAADBuaWw=
 :: [eoc]
