@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxNDozMTozMyIscmV2aXNpb249NDUzOV1dbHo0AFQEAADFNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNCAxOToyMzozNiIscmV2aXNpb249NDY1N11dbHo0AFQEAADFNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -284,7 +284,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-14 14:31:33",revision=5050]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-14 19:23:36",revision=5181]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -563,13 +563,12 @@ function attach_detail_button(parent, el)
 	return el
 end
 
-
 :: manual.txt
 --[[pod_format="raw",created="2024-04-14 09:49:39",modified="2024-04-14 09:49:39",revision=0]]
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxNDozMTozMyIscmV2aXNpb249NDM0N11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNCAxOToyMzozNiIscmV2aXNpb249NDQ2NV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -607,39 +606,23 @@ ODU2ZDABAK4gNjICAB0wAQCwMWUzNzNjMDAzNzQnASEwMwEAMTAwMgEAoDAwMTYxNjE2Iik=
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTExIDE3OjI1OjAxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxNDozMTozMyIscmV2aXNpb249MjU3N11dbHo0AIYCAACsCQAA8CdweHUAAygAAAMABA9A
-EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
-Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
-Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOvxHFoBEAYP
-IBABIAEgAfAAAhACDBABIA8hIAEwD2aQDxECIAyQAeAPIgIgDFAiAP8QCPAPCfAPCvA3Dyjwxw-4
-Cg--D4AP9w8NAfAJARAGDEkAAjd-kAEQAHQJIA_AEA1gEwBjDAIQAQ-3FAD-AghQBPAHAQnwDgEK
-8C4CcA8UZAAMIw9AVQD-D_ABCCAPlfAKAQogD7MgD-gAD0BADy3whw8oD--wxkQAEzAwAZA-AECy
-IA--PwAgDtBUAD_U8JNEABAYDocAR_3wCgEUAF8wD8Lwg0QAAzUEDzdFADUgDy5FAACWABUjPwA-
-T-CjgwAQFAwwABUObgETA5EAN_DwChMAXzAPv-BjUQAUAC8APw7wwy4AYBsOXgESA6ABBg4AYOAC
-CiAPXKwBdw4AD0UgDuAbABcEDACPDwUIIA-k8DPEAEcCJwOPUAIPvhAB8KhoABsPLgBcH-8BAMzT
-6A4ADUAPHA--DxwPGggAHhgQAGL--x8BBSECAJ-1Hw85BQ8kDw4HAARA9R-wcFYA8BEFDysPJCUP
-Kw8oFQ8rDyYPKAUH9SIRJREVIQUB9SIPOR0AQDkPJBUFAGIPOQUL9SE4AC-1sAgA-9cf-wEAl1D-
-----Hw==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE4OjEzOjQ2Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNCAxOToxNzozNyIscmV2aXNpb249NV1dbHo0ADEBAADaCAAA8CdweHUAAygAAAMABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
+EwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8tDy4P
+LxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYPIBAB
+IAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAAA0egCPAPEgAj
+4AMNABcOKwAADAAfSFcAFB4OhgAPLwD--1of-wEAzL-oD0AADUD--7DwcAoA--9kH-8BAJdQ----
+-x8=
 :: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQyOjE4Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxNDozMTozMyIscmV2aXNpb249MjY1OF1dbHo0AHkDAACDCwAA8U9weHUAAygAAAMABA9A
-EAIOAAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8V
-DxYPFwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywP
-LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DxaAQQA
-Bg8gEAEgASAB8AACEAIPIgAPHwEPvgAPHw8uBQABBRACBBADAA8aD39ADxECIA8jDxMQD08QAg9y
-DgABkA9gMAEIYA808Ac8AABJAPopDyEgAeAPJAIgDyBQASAB4AUKIA9dAA6ADyTgCSAPWCAPp-AP
-Dyjwxw-4Cg--D4AP9w8NAfAJARCHABMMSgBXMA9-kAEQAHgJIA_AEA1gEwAhD-cUAE-wgA8UVgAA
-HwxVAAEVDlQAVgcgAeASCwAXAxcAFwQMABcFDAAWBgwAj-AIDygP--DGdgAOEAd1ABegOQAfAAwA
-KA91ABoP6gAFBwsAHwHpAAQfBXQAJCgPgHUAlwkgCxANCg-2QBQAIw-3FQAl8H61AR8LVQADQw8w
-AAunAPcIDwggD5LwCgEKIA_zIA8zIA9XIA8v8IeaAAdEACcPIkUAFA6aACAPkD4AoawgD8EADkAP
-DdBUAD_U8JNEAAQTF0QAHuggAA9xARMBYABI4PAKAR8BP7-wY1AAFhngOgAps5APACGYkGAAG6Ng
-AMCfkAUJIA9eIA_E8AcgAD-I8BNwADMSXXAAG5ZwABGXcAB-ayAPnvAGAXEAFhcOcQAkDzZMAKOF
-kAIJIA_dIA_3TAA-3-BzTAADHg5MAEcwAZABWgD3AQIKIA9cIA--AA4AD0UgDuAbABcEDAAQBWcA
-P_TwM7MADxQM5AEv8MMtACwf-wEAzPMA6A4ADQANIA8cD-8PHA8aCAAeGBAAYv--HwEIIQIAv-gf
-DzIIDyQPDg85BwACQPgf8HBYAPIBDCAPNA8rDyQIDzQIDysPKAcAUCYPKAgDEwAYCQIA_gH4EQ8I
-EQgECBEECCEIAQgEAgBQ_BEODzlJACAyCAgAIg89BwCROQgPKwgOCAUIewABHgAQHA4AMRX4EYIA
-P0D4sAgA-9cf-wEAl1D-----Hw==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE3OjU5OjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNCAxOToyMDowMSIscmV2aXNpb249MTldXWx6NAA5AQAA7wgAAPAncHh1AAMoAAADAAQPQBAC
+DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PEADwAA0PEQ8SDxMPFA8VDxYP
+FxMA8QEPGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywPLQ8u
+Dy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8A1aARAGDzUQ
+ASABIAHwAAIQAg8sEAEgDyEgAeABDgBmFxABD9kQEAAVIB4AOAjwDxEA8AfwSA8oD--wxg-4Cg--
+D4AP9w8NAfAJXgAXIF4AEwwuAF8wD0DwwzEABB8MMAD--4of-wEAzL-oD0AADUD--7DwcAoA--9k
+H-8BAJdQ-----x8=
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMyAwODowMToyOCIscmV2aXNpb249Nl1dbHo0AJ0BAADpCAAA8CdweHUAAygAAAMABA9AEAIO
@@ -650,11 +633,29 @@ IAEgAfAAAhACDBABIA8hIAEwD2bwww8o8McP_AoP-w_AD-cPDQHwCQEQBgwuAAI3f5ABEAB4CSAP
 gBANYBMAIQ-3FABP8IAPFFUAFhBAgwBPD--wxjAA--9sH-8BAMzzAegPQAANAA0gDxwP-w8cDxoI
 AB4YEABi--8fAQ4hAgCf-h8POQ4PJA8OBwAEQf4f8HBZAPATDCAODysPJC4PKw8oHg8rDyYPKA4D
 -iIRLhEeIQ4B-iIPOR0AQDkPJB4FAGIPOQ4E-iE7AG9A-rDwcAUIAP-UH-8BAJdQ-----x8=
+:: sfx/old-1.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE3OjU3OjU3Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNCAxNzo1Nzo1NyIscmV2aXNpb249MF1dbHo0AF0DAABZCwAA8U9weHUAAygAAAMABA9AEAIO
+AAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8VDxYP
+FwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywPLQ8u
+Dy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DxaAQQABg8g
+EAEgASAB8AACEAIPIgAPHwEPvgAPHw8uBQABBRACBBADAA8aD39ADxECIA8jDxMQD08QAg9yDgAB
+kA9gMAEIYA808Ac8AABJAPopDyEgAeAPJAIgDyBQASAB4AUKIA9dAA6ADyTgCSAPWCAPp-APDyjw
+xw-4Cg--D4AP9w8NAfAJARCHABMMSgBXMA9-kAEQAHgJIA_AEA1gEwAhD-cUAE-wgA8UVgAAHwxV
+AAEVDlQAVgcgAeASCwAXAxcAFwQMABcFDAAWBgwAj-AIDygP--DGdgAOEAd1ABegOQAfAAwAKA91
+ABoP6gAFBwsAHwHpAAQfBXQAIy-wyIkBDlMPMAAPgH0A-wcIIA_S8AoBCiAPsyAPMyAPVyAPL-CH
+bwAEJw8iRgASDnAAQDAPD5A-AKCsIA-BAA5ADw3QVAA-lPCTRAAFExdEAB-oSAEmAGEAN_DwChMA
+XzAPv-BjUAAXGeA7ACmzkA8AIJiQYAAbo2AA-wOfkAUJIA9eIA_E8AcIIA-I8BNvADQRXW8AG5Zv
+ABGXbwB-ayAPnvAGAXAAFhcOcAAkDzZMAKKFkAIJIA_dIA_3TAA-3-BzTAAEHg5MAEcwAZABWgD3
+AQIKIA9cIA--AA4AD0UgDuAbABcEDAB-BQggD_TwM7MAEBQM4gEv8MMuAC4f-wEAzPMA6A4ADQAN
+IA8cD-8PHA8aCAAeGBAAYv--HwELIQIAv-sfDzILDyQPDg85BwACQPsf8HBYAPIBDCAPNA8rDyQL
+DzQLDysPKAcAUCYPKAsDEwAYCQIA_gD7EQgRCwgLEQgLIQsBCwgCAFD7EQ4POUgAIDILCAAiDz0H
+AJE5Cw8rCw4LBAt6AAEeABAcDgAxFfsRgQA-QPuwCAD-1x--AQCXUP----8f
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-14 14:31:33",revision=2422]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-14 19:23:36",revision=2544]]
 local app = {}
 
 
@@ -662,7 +663,7 @@ local app = {}
 
 app.pattern = 0 -- opened in pattern editor
 app.track = 0 -- opened in track editor
-app.instrument = 5 -- opened in instrument editor
+app.instrument = 0 -- opened in instrument editor
 
 app.node = nil -- selected in instrument editor
 
@@ -1038,7 +1039,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-14 14:31:33",revision=2412]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-14 19:23:36",revision=2553]]
 local app = require "src/app"
 local settings = require "src/settings"
 local routing = require "src/routing"
@@ -1057,6 +1058,7 @@ function ed_inst.attach(parent, el)
 
 	ed_inst.attach_instr_chooser(el, { x = 4, y = 4 })
 	routing.attach(el, { x = 480 - 311, y = 0 })
+	routing.attach_node_chooser(el, { x = 360, y = 46 })
 
 	local dx = app.synth_width + app.synth_gap
 	local dy = app.synth_height + app.synth_gap
@@ -1077,7 +1079,7 @@ function ed_inst.attach(parent, el)
 		end
 		synth.attach_env_panel(el, { x = 480 - app.env_width - 4, y = oy + row * dy })
 	end
-	
+
 	function el:draw()
 		---rectfill(0, 0, self.width, 106, app.editor_bg)
 		fillp(0b0000111100001111)
@@ -1988,12 +1990,15 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-14 14:31:33",revision=1243]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-14 19:23:36",revision=1446]]
 local app = require "src/app"
+local sfx = require "src/sfx"
 local synth = require "src/synth"
 
 
 local routing = {}
+
+-- Routing display -------------------------------------------------------------
 
 local node_width = 26
 local node_height = 16
@@ -2111,6 +2116,100 @@ function routing.attach(parent, el)
 end
 
 
+-- Node chooser ----------------------------------------------------------------
+
+
+local node_choice = {
+	[0] = {
+		[0] = { label = "osc", color = 17, node_type = 0x2, node_op = 0x0 },
+		{ label = "fm", color = 27, node_type = 0x2, node_op = 0x1 },
+		{ label = "ring", color = 22, node_type = 0x2, node_op = 0x2 },
+	},
+	{
+		[0] = { label = "filt", color = 14, node_type = 0x8, node_op = 0x0 },
+		{ label = "echo", color = 31, node_type = 0x9, node_op = 0x0 },
+		{ label = "shap", color = 9, node_type = 0x0a, node_op = 0x0 },
+	},
+}
+
+
+function routing.attach_node_chooser(parent, el)
+	el.width = 118
+	el.height = 50
+	parent:attach(el)
+	
+	function el:update()
+		self.hidden = true
+		if app.node and sfx.node_type(app.instrument, app.node) < 8 then
+			self.hidden = false
+		end
+	end
+
+	function el:draw()
+		--- rectfill(0, 0, self.width - 1, self.height - 1, 0)
+		print("add child node:", 4, 2, 22)
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				local col = node_choice[row][column].color
+				rectfill(x, y, x + (node_width - 6), y + 8, col)
+				p8_centered_print(
+					node_choice[row][column].label,
+					x + ((node_width - 6) \ 2) + 1,
+					y + 2,
+					63
+				)
+			end
+		end
+	end
+	
+	function el:hover(msg)
+		self.cursor = 1
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				if
+					x <= msg.mx and msg.mx <= x + (node_width - 6)
+					and y <= msg.my and msg.my <= y + 8
+				then
+					self.cursor = "pointer"
+				end
+			end
+		end
+	end
+
+	
+	function el:tap(msg)
+		if (not app.node) return
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				if
+					x <= msg.mx and msg.mx <= x + (node_width - 6)
+					and y <= msg.my and msg.my <= y + 8
+				then
+					synth.add_node(
+						app.node,
+						node_choice[row][column].node_type,
+						node_choice[row][column].node_op
+					)
+					app.refresh_gui = true
+				end
+			end
+		end
+	end
+	
+
+	return el
+end
+
+
 return routing
 :: src/settings.lua
 --[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-13 03:08:09",revision=735]]
@@ -2137,7 +2236,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-14 14:31:33",revision=3081]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-14 19:23:36",revision=3212]]
 local sfx = {}
 
 
@@ -2336,6 +2435,18 @@ function sfx.delete_node(instrument, node_id)
 end
 
 
+function sfx.insert_node(instrument, node_id, parent_id)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node_id * 0x20
+	-- move everything down
+	for j = 7, node_id + 1, -1 do
+		memcpy(inst_addr + j * 0x20, inst_addr + ( j - 1) * 0x20, 0x20)
+	end
+	memset(node_addr, 0, 0x20)
+	poke(node_addr, parent_id)
+end
+
+
 function sfx.node_parent(instrument, node)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
@@ -2348,10 +2459,24 @@ function sfx.node_op(instrument, node)
 	return peek(node_addr) >> 4
 end
 
+function sfx.set_node_op(instrument, node, op)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	local previous = peek(node_addr)
+	poke(node_addr, (previous & 0x0f) | (op << 4))
+end
+
 function sfx.node_type(instrument, node)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr + 1) & 0xf
+end
+
+function sfx.set_node_type(instrument, node, type)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	local previous = peek(node_addr + 1)
+	poke(node_addr + 1, (previous & 0xf0) | (type & 0x0f))
 end
 
 function sfx.node_osc_wavetable(instrument, node)
@@ -2408,7 +2533,7 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-14 14:31:33",revision=2842]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-14 19:23:36",revision=3002]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2502,6 +2627,58 @@ function synth.refresh_nodes()
 		end,
 		nil
 	)
+end
+
+
+function synth.add_node(parent_id, node_type, node_op)
+	local parent = synth.nodes[parent_id]
+	
+	if parent.type >= 8 then
+		return
+	end
+
+	local target = parent
+	local depth = 0
+
+	while #target.children != 0 and depth < 10 do
+		target = target.children[#target.children]
+		depth += 1
+	end
+	local target_id = target.id + 1
+	
+	if node_type == 2 and node_op != 0 then
+		-- modulating oscillators are always the first child
+		target_id = parent.id + 1 
+		local first_child_op = sfx.node_op(app.instrument, target_id)
+		if first_child_op > 0 then
+			-- already a node with a modulating operator: refuse to create
+			return
+		end
+	end
+	
+	if target_id >= 8 then
+		-- no room!
+		return
+	end	
+
+	sfx.insert_node(app.instrument, target_id, parent_id)
+	
+	if node_type == 0x2 and node_op != 0 then
+		sfx.set_node_op(app.instrument, target_id, node_op)
+		sfx.set_node_type(app.instrument, target_id, node_type)
+		sfx.set_node_param_val1(app.instrument, target_id, 0, 0x20) -- volume
+		sfx.set_node_param_flags(app.instrument, target_id, 2, 0x01) -- not quantized, and relation + for tune
+		sfx.set_node_param_flags(app.instrument, target_id, 3, 0x01) -- relation + for bend
+	elseif node_type == 0x2 then
+		sfx.set_node_type(app.instrument, target_id, node_type)
+		sfx.set_node_param_val1(app.instrument, target_id, 0, 0x20) -- volume
+		sfx.set_node_param_flags(app.instrument, target_id, 0, 0x02) -- relation * for volume
+		sfx.set_node_param_flags(app.instrument, target_id, 1, 0x01) -- relation + for pan
+		sfx.set_node_param_flags(app.instrument, target_id, 2, 0x21) -- quantized, and relation + for tune
+		sfx.set_node_param_flags(app.instrument, target_id, 3, 0x01) -- relation + for bend
+	else
+		sfx.set_node_type(app.instrument, target_id, node_type)
+	end
 end
 
 
@@ -2914,6 +3091,7 @@ function synth.attach_knob(parent, el)
 		elseif msg.mx <= 24 and msg.mb == 2 then
 			self.show_val0 = true
 		end
+		return true -- don't pass to parent to avoid selection
 	end
 	
 	function el:tap(msg)
@@ -3124,6 +3302,9 @@ function synth.attach_close_button(parent, el)
 		return true -- don't pass to panel to avoid selection
 	end
 	function el:tap()
+		if app.node and app.node >= self.node_id then
+			app.node = nil
+		end
 		sfx.delete_node(app.instrument, self.node_id)
 		app.refresh_gui = true
 	end
@@ -3149,15 +3330,15 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNCAxNDoz
-MTozMyIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjMwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
-Lmx1YSM4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZWRfaW5zdC5sdWEjMTEx
-Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGgubHVhIzYwNyIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjMTg5Iix3b3Jrc3BhY2VfaW5kZXg9
-MX0se2xvY2F0aW9uPSJzcmMvcm91dGluZy5sdWEjODYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFw
-Iix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRl
-eD00fSx7bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAAD
-AAAAMG5pbA==
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNCAxOToy
+MzozNiIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjNzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAu
+bHVhIzgiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9lZF9pbnN0Lmx1YSM0OCIs
+d29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSMxMDIiLHdvcmtzcGFj
+ZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzIwMyIsd29ya3NwYWNlX2luZGV4PTF9
+LHtsb2NhdGlvbj0ic3JjL3JvdXRpbmcubHVhIzE0NyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2Nh
+dGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJtYXAvMC5tYXAi
+LHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4
+PTZ9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9N319XV1sejQABAAAAAMA
+AAAwbmls
 :: [eoc]
