@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMzoxNjozMCIscmV2aXNpb249NDQzOF1dbHo0AFQEAADFNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNCAxNDozMTozMyIscmV2aXNpb249NDUzOV1dbHo0AFQEAADFNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -284,7 +284,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-14 13:16:30",revision=4948]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-14 14:31:33",revision=5050]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -514,6 +514,7 @@ function attach_note_attributes(parent, el)
 			app.base_instrument = mid(0, new_val, 0xfe) -- TODO: handle vol > 64
 			-- TODO: temporary, remove
 			app.instrument = app.base_instrument
+			app.node = 0
 		end
 	end
 	
@@ -568,7 +569,7 @@ end
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMzoxNjozMCIscmV2aXNpb249NDI0N11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNCAxNDozMTozMyIscmV2aXNpb249NDM0N11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -607,7 +608,7 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTExIDE3OjI1OjAxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMzoxNjozMCIscmV2aXNpb249MjQ3Nl1dbHo0AIYCAACsCQAA8CdweHUAAygAAAMABA9A
+NC0xNCAxNDozMTozMyIscmV2aXNpb249MjU3N11dbHo0AIYCAACsCQAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOvxHFoBEAYP
@@ -622,22 +623,23 @@ Kw8oFQ8rDyYPKAUH9SIRJREVIQUB9SIPOR0AQDkPJBUFAGIPOQUL9SE4AC-1sAgA-9cf-wEAl1D-
 ----Hw==
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQyOjE4Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMzoxNjozMCIscmV2aXNpb249MjU2MV1dbHo0AFwDAAB9CwAA8U9weHUAAygAAAMABA9A
+NC0xNCAxNDozMTozMyIscmV2aXNpb249MjY1OF1dbHo0AHkDAACDCwAA8U9weHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8V
 DxYPFwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywP
-LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DhaAQQA
-Bg8gEAEgASAB8AACEAIPJAAPHwEP0AAPHw8uEAEFEAIEEAMADxoPf0APEQIgDygPExAPSBACD3YO
-AAGQD2AwAQjwDzgAAEUA_ikPISAB4A8kAiAPIFABIAHgBQogD1cADoAPJOAJIA9jIA_n8A8PKPDH
-D-gKD-8PgA-3Dw0B8AkBEIMAEwxKAFcwD3_QARAAeAkgD4AQDWATACEP9xQAT-CADxRWAAAfDFUA
-ARUOVABWByAB4BILABcDFwAXBAwAFwUMABYGDACP8AgPKA--8MZ2AA4QB3UAF6A5AB8ADAAoD3UA
-Gg-qAAUHCwAfAekABB8FdAAkB7MBHQeyAR8HsQEZUw8wAA_ApQD-BwggD5LwCgEKIA_zIA8zIA9X
-IA8v8IeXAAQnDyJGABQOmAAgD5A-AKCsIA-BAA5ADw3QVAA-lPCTRAAFExdEAB-ocAEmAGEASODw
-CgEdAT_-8GNQABcZ4DsAKbOQDwAgmJBgABujYAD-A5_QBQkgD14gD4TwBwggD8jwE28ANBFdbwAb
-lm8AEZdvAH9rIA_e8AYBcAAWFw5wACQPNkwAooWQAgkgD50gD7dMAD-f8HNMAAQeDkwARzABkAFa
-APcBAgogD1wgD-8ADgAPRSAO4BsAFwQMAH8FCCAP5PAzswAQFAziAS-wwy4ALh--AQDM8wDoDgAN
-AA0gDxwP-w8cDxoIAB4YEABi--8fAQshAgC-_x8PMgsPJA8ODzkHAAJA_x-wcFgA8gEMIA80DysP
-JAsPNAsPKw8oBwBQJg8oCwMTABgJAgD6APsRCBELCAsRCAshCwELCAIAUPsRDg85SAAgMgsIACIP
-PQcAkTkLDysLDgsEC3oAAR4AEBwOADEV_xGBAD9A_7AIAP-XH-8BAJdQ-----x8=
+LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DxaAQQA
+Bg8gEAEgASAB8AACEAIPIgAPHwEPvgAPHw8uBQABBRACBBADAA8aD39ADxECIA8jDxMQD08QAg9y
+DgABkA9gMAEIYA808Ac8AABJAPopDyEgAeAPJAIgDyBQASAB4AUKIA9dAA6ADyTgCSAPWCAPp-AP
+Dyjwxw-4Cg--D4AP9w8NAfAJARCHABMMSgBXMA9-kAEQAHgJIA_AEA1gEwAhD-cUAE-wgA8UVgAA
+HwxVAAEVDlQAVgcgAeASCwAXAxcAFwQMABcFDAAWBgwAj-AIDygP--DGdgAOEAd1ABegOQAfAAwA
+KA91ABoP6gAFBwsAHwHpAAQfBXQAJCgPgHUAlwkgCxANCg-2QBQAIw-3FQAl8H61AR8LVQADQw8w
+AAunAPcIDwggD5LwCgEKIA_zIA8zIA9XIA8v8IeaAAdEACcPIkUAFA6aACAPkD4AoawgD8EADkAP
+DdBUAD_U8JNEAAQTF0QAHuggAA9xARMBYABI4PAKAR8BP7-wY1AAFhngOgAps5APACGYkGAAG6Ng
+AMCfkAUJIA9eIA_E8AcgAD-I8BNwADMSXXAAG5ZwABGXcAB-ayAPnvAGAXEAFhcOcQAkDzZMAKOF
+kAIJIA_dIA_3TAA-3-BzTAADHg5MAEcwAZABWgD3AQIKIA9cIA--AA4AD0UgDuAbABcEDAAQBWcA
+P_TwM7MADxQM5AEv8MMtACwf-wEAzPMA6A4ADQANIA8cD-8PHA8aCAAeGBAAYv--HwEIIQIAv-gf
+DzIIDyQPDg85BwACQPgf8HBYAPIBDCAPNA8rDyQIDzQIDysPKAcAUCYPKAgDEwAYCQIA_gH4EQ8I
+EQgECBEECCEIAQgEAgBQ_BEODzlJACAyCAgAIg89BwCROQgPKwgOCAUIewABHgAQHA4AMRX4EYIA
+P0D4sAgA-9cf-wEAl1D-----Hw==
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMyAwODowMToyOCIscmV2aXNpb249Nl1dbHo0AJ0BAADpCAAA8CdweHUAAygAAAMABA9AEAIO
@@ -652,7 +654,7 @@ AB4YEABi--8fAQ4hAgCf-h8POQ4PJA8OBwAEQf4f8HBZAPATDCAODysPJC4PKw8oHg8rDyYPKA4D
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-14 13:16:30",revision=2307]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-14 14:31:33",revision=2422]]
 local app = {}
 
 
@@ -660,7 +662,9 @@ local app = {}
 
 app.pattern = 0 -- opened in pattern editor
 app.track = 0 -- opened in track editor
-app.instrument = 0 -- opened in instrument editor
+app.instrument = 5 -- opened in instrument editor
+
+app.node = nil -- selected in instrument editor
 
 app.base_note = 48
 app.base_volume = 0x32
@@ -683,9 +687,6 @@ app.channels_width = 16
 app.detail_width = 56
 app.cell_width = 20
 app.cell_height = 29
-
-app.node_width = 26
-app.node_gap = 14
 
 app.synth_width = 84
 app.synth_height = 72
@@ -1037,7 +1038,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-14 13:16:30",revision=2310]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-14 14:31:33",revision=2412]]
 local app = require "src/app"
 local settings = require "src/settings"
 local routing = require "src/routing"
@@ -1148,6 +1149,7 @@ function ed_inst.attach_instr_chooser(parent, el)
 		click = function(self, msg)
 			app.instrument = msg.my \ 8
 			app.base_instrument = app.instrument -- TODO: temporary, remove
+			app.node = nil
 			app.refresh_gui = true
 		end
 	}
@@ -1986,13 +1988,16 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-14 13:16:30",revision=1110]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-14 14:31:33",revision=1243]]
 local app = require "src/app"
 local synth = require "src/synth"
 
 
 local routing = {}
 
+local node_width = 26
+local node_height = 16
+local node_gap = 14
 
 function routing.attach(parent, el)
 	el.width = 311
@@ -2000,22 +2005,49 @@ function routing.attach(parent, el)
 	parent:attach(el)
 	
 	function el:draw()
-		---rectfill(0, 0, self.width, self.height, 62)
-		-- Routing arrows
+		--- rectfill(0, 0, self.width, self.height, 62)
 		for n = 0, 7 do
 			local node = synth.nodes[n]
 			local pos = node.position
-			if pos and node != synth.root then
+			if pos then
+				-- Coordinates from logical position
+				pos.x = 4 + pos.column * (node_width + node_gap)
+				pos.y = 4 + pos.row * node_height
 				local ppos = node.parent.position
-				if node.type == 2 or not node.older_sibling then
+				ppos.x = 4 + ppos.column * (node_width + node_gap)
+				ppos.y = 4 + ppos.row * node_height
+
+				if app.node == n then
+					rect(pos.x - 1, pos.y - 1, pos.x + node_width + 1, pos.y + 8 + 1, 24)
+				end
+				
+				if node.type >= 8 and node.older_sibling then
+					-- Horizontal bracket
+					local col = 6
+					local x = pos.x + node_width \ 2
+					local orig = node.older_sibling
+					local depth = 0
+					while #orig.children > 0 and depth < 8 do
+						orig = orig.children[#orig.children]
+						depth += 1
+					end
+					local orig_x = orig.position.x + node_width
+					line(x, pos.y - 2, x - 3, pos.y - 5, col)
+					line(x - 3, pos.y - 5, x - (node_width \ 2) - 3, pos.y - 5, col)
+					line(x - (node_width \ 2) - 3, pos.y - 5, x - (node_width \ 2) - 3 - 2, pos.y - 7, col)
+					line(x, pos.y - 2, x + 3, pos.y - 5, col)
+					line(x + 3, pos.y - 5, orig_x + 3, pos.y - 5, col)
+					line(orig_x + 3, pos.y - 5, orig_x + 3 + 2, pos.y - 7, col)
+				elseif node != synth.root then
+					-- Arrow
 					line(
-						ppos.x + app.node_width + 7, ppos.y + 4,
-						ppos.x + app.node_width + 1, ppos.y + 4,
+						ppos.x + node_width + 7, ppos.y + 4,
+						ppos.x + node_width + 1, ppos.y + 4,
 						7
 					)
 					line(
 						pos.x - 7, pos.y + 4,
-						ppos.x + app.node_width + 7, ppos.y + 4,
+						ppos.x + node_width + 7, ppos.y + 4,
 						7
 					)
 					line(
@@ -2023,33 +2055,11 @@ function routing.attach(parent, el)
 						pos.x - 7, pos.y + 4,
 						7
 					)
-					-- Arrow head
 					line(pos.x - 2, pos.y + 3, pos.x - 2, pos.y + 5, 7)
 					line(pos.x - 3, pos.y + 2, pos.x - 3, pos.y + 6, 7)
-				else
-					local col = 6
-					local x = pos.x + app.node_width \ 2
-					local orig = node.older_sibling
-					local depth = 0
-					while #orig.children > 0 and depth < 8 do
-						orig = orig.children[#orig.children]
-						depth += 1
-					end
-					local orig_x = orig.position.x + app.node_width
-					line(x, pos.y - 2, x - 3, pos.y - 5, col)
-					line(x - 3, pos.y - 5, x - (app.node_width \ 2) - 3, pos.y - 5, col)
-					line(x - (app.node_width \ 2) - 3, pos.y - 5, x - (app.node_width \ 2) - 3 - 2, pos.y - 7, col)
-					line(x, pos.y - 2, x + 3, pos.y - 5, col)
-					line(x + 3, pos.y - 5, orig_x + 3, pos.y - 5, col)
-					line(orig_x + 3, pos.y - 5, orig_x + 3 + 2, pos.y - 7, col)
 				end
-			end
-		end
-		-- Node boxes
-		for n = 0, 7 do
-			local node = synth.nodes[n]
-			local pos = node.position
-			if pos then
+				
+				-- Node boxes
 				local str = "??? "
 				local fg = 63
 				local bg = 30
@@ -2063,8 +2073,36 @@ function routing.attach(parent, el)
 				elseif node.type == 9 then str = "echo " .. n; bg = 31
 				elseif node.type == 10 then str = "shap " .. n; bg = 9
 				end
-				rectfill(pos.x, pos.y, pos.x + app.node_width, pos.y + 8, bg)
-				p8_centered_print(str, pos.x + (app.node_width \ 2) + 1, pos.y + 2, fg)
+				rectfill(pos.x, pos.y, pos.x + node_width, pos.y + 8, bg)
+				p8_centered_print(str, pos.x + (node_width \ 2) + 1, pos.y + 2, fg)
+			end
+		end
+	end
+	
+	function el:hover(msg)
+		self.cursor = 1
+		for n = 0, 7 do
+			local node = synth.nodes[n]
+			local pos = node.position
+			if
+				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
+				and pos.y <= msg.my and msg.my <= pos.y + 10
+			then
+				self.cursor = "pointer"
+			end
+		end
+	end
+
+	function el:tap(msg)
+		app.node = nil
+		for n = 0, 7 do
+			local node = synth.nodes[n]
+			local pos = node.position
+			if
+				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
+				and pos.y <= msg.my and msg.my <= pos.y + 10
+			then
+				app.node = n
 			end
 		end
 	end
@@ -2099,7 +2137,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-14 13:16:30",revision=2981]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-14 14:31:33",revision=3081]]
 local sfx = {}
 
 
@@ -2370,7 +2408,7 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-14 13:16:30",revision=2700]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-14 14:31:33",revision=2842]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2449,17 +2487,17 @@ function synth.refresh_nodes()
 		end
 	)
 
-	synth.root.position = { x = 2, y = 2 }
+	synth.root.position = { row = 0, column = 0 }
 	depth_walk(
 		synth.root,
 		function(node)
-			local y = node.position.y
+			local row = node.position.row
 			for i = 1, #node.children do
 				node.children[i].position = {
-					x = node.position.x + app.node_width + app.node_gap,
-					y = y,
+					column = node.position.column + 1,
+					row = row,
 				}
-				y += node.children[i].height * 16
+				row += node.children[i].height
 			end
 		end,
 		nil
@@ -2504,6 +2542,9 @@ function synth.attach_root(parent, el)
 		synth.draw_corners(self)
 		print("synthesizer", 2, 2, 22)
 	end
+	function el:click()
+		app.node = self.node_id
+	end
 	return el
 end
 
@@ -2537,9 +2578,12 @@ function synth.attach_osc(parent, el)
 	synth.attach_knob(el, { label = "bend", param = 3, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "wave", param = 4, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "phase", param = 5, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 17)
-		rectfill(0, 9, self.width, self.height, 6)
+		rectfill(0, 9, self.width, self.height, app.node == self.node_id and 6 or 6)
 		synth.draw_corners(self)
 	end
 	return el
@@ -2557,6 +2601,9 @@ function synth.attach_fm(parent, el)
 	synth.attach_knob(el, { label = "bend", param = 3, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "wave", param = 4, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "phase", param = 5, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 27)
 		rectfill(0, 9, self.width, self.height, 6)
@@ -2577,6 +2624,9 @@ function synth.attach_ring(parent, el)
 	synth.attach_knob(el, { label = "bend", param = 3, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "wave", param = 4, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "phase", param = 5, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 22)
 		rectfill(0, 9, self.width, self.height, 6)
@@ -2594,6 +2644,9 @@ function synth.attach_filt(parent, el)
 	synth.attach_knob(el, { label = "low", param = 0, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "high", param = 1, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "res", param = 2, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 14)
 		rectfill(0, 9, self.width, self.height, 6)
@@ -2610,6 +2663,9 @@ function synth.attach_echo(parent, el)
 	synth.attach_close_button(el, { node_id = el.node_id })
 	synth.attach_knob(el, { label = "delay", param = 0, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "vol", param = 1, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 31)
 		rectfill(0, 9, self.width, self.height, 6)
@@ -2628,6 +2684,9 @@ function synth.attach_shap(parent, el)
 	synth.attach_knob(el, { label = "elbow", param = 1, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "cut", param = 2, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "mix", param = 3, node_id = el.node_id } )
+	function el:click()
+		app.node = self.node_id
+	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 9)
 		rectfill(0, 9, self.width, self.height, 6)
@@ -2650,10 +2709,20 @@ function synth.attach_unknown(parent, el)
 end
 	
 function synth.draw_corners(el)
-	pset(0, 0, app.editor_bg)
-	pset(el.width - 1, 0, app.editor_bg)
-	pset(0, el.height - 1, app.editor_bg)
-	pset(el.width - 1, el.height - 1, app.editor_bg)
+	local col = app.editor_bg
+	if app.node and app.node == el.node_id then 
+		clip()
+		rect(-1, -1, el.width, el.height, 24)
+		pset(-1, -1, app.editor_bg)
+		pset(el.width, -1, app.editor_bg)
+		pset(-1, el.height, app.editor_bg)
+		pset(el.width, el.height, app.editor_bg)
+		col = 24
+	end
+	pset(0, 0, col)
+	pset(el.width - 1, 0, col)
+	pset(0, el.height - 1, col)
+	pset(el.width - 1, el.height - 1, col)
 end
 						
 
@@ -2831,6 +2900,7 @@ function synth.attach_knob(parent, el)
 	end
 	
 	function el:click(msg)
+		app.node = self.node_id
 		if 32 <= msg.mx and msg.mx <= 64 then
 			local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 			self.dragged = {
@@ -2940,8 +3010,10 @@ function synth.attach_knob(parent, el)
 
 	function el:doubleclick(msg)
 		if 32 <= msg.mx and msg.mx <= 64 then
+			local init = 0
+			if (self.label == "vol") init = 32
 			if msg.mb == 1 then
-				sfx.set_node_param_val1(app.instrument, self.node_id, self.param, 0)
+				sfx.set_node_param_val1(app.instrument, self.node_id, self.param, init)
 			else
 				sfx.set_node_param_val0(app.instrument, self.node_id, self.param, 0)
 			end
@@ -3017,6 +3089,9 @@ function synth.attach_mute_toggle(parent, el)
 			line(1, 3, 3 + 4 * #label, 3, 24)
 		end
 	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
+	end
 	function el:tap()
 		self.muted = not self.muted
 		local flags = sfx.node_flags(app.instrument, self.node_id)
@@ -3038,11 +3113,15 @@ function synth.attach_close_button(parent, el)
 	el.y = 2
 	el.width = 12
 	el.height = 9
+	el.cursor = "pointer"
 	parent:attach(el)
 	function el:draw()
 		pal(7, 60)
 		spr(36, 0, 0)
 		pal(7, 7)
+	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
 	end
 	function el:tap()
 		sfx.delete_node(app.instrument, self.node_id)
@@ -3070,15 +3149,15 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNCAxMzox
-NjozMCIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjQwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
-Lmx1YSMzNiIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2VkX2luc3QubHVhIzEw
-MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSM2MzkiLHdvcmtz
-cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzE4OSIsd29ya3NwYWNlX2luZGV4
-PTF9LHtsb2NhdGlvbj0ic3JjL3JvdXRpbmcubHVhIzY3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
-Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
-cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
-ZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAA
-AwAAADBuaWw=
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNCAxNDoz
+MTozMyIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMjMwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
+Lmx1YSM4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZWRfaW5zdC5sdWEjMTEx
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGgubHVhIzYwNyIsd29ya3Nw
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjMTg5Iix3b3Jrc3BhY2VfaW5kZXg9
+MX0se2xvY2F0aW9uPSJzcmMvcm91dGluZy5sdWEjODYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFw
+Iix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRl
+eD00fSx7bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAAD
+AAAAMG5pbA==
 :: [eoc]
