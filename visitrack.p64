@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMyAyMDo1MDoxNyIscmV2aXNpb249Mzk4NF1dbHo0AAkDAACwMwAA8yV7WzBdPXtibXA9cHh1
+NC0xNCAwOTo1NjozNSIscmV2aXNpb249NDI1OV1dbHo0ANwDAABkNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -171,8 +171,12 @@ ARVHCgAOUAAPcwIULzdgcQIjDnEDDzEAn58THQT-GJvw-201AByP8Jv-GE-w-w43AB1v_v8YdfCI
 NgAdX-_A-xiIOQEeDzEArIIHBwRyTzsSTgIAH3I7AAsvMTE8AAFyDi8RDhIOLQQAD0MADw-hAB4P
 MQDv8AQJCQTAB3AXYCcgZxAHECcgBxAXgAkfwEQAHkAQBzAXpAmfEAcQZyAnYBdwRAAeN5BnEAIA
 H5BrAhz-ATAPFkAeMC4gPjAuQB5QDhA-ABz-ARAPFlAeQC4wPiAuMB5ADjA-ABn-BwoMBNAH8AIX
-gAeAB3An8ApHUCdwB0BCACh-DAdwJ1BHICoCHg8xAP----------------------------------
-------------------8BUG09N319
+gAeAB3An8ApHUCdwB0BCACh-DAdwJ1BHIPkBPCkxMDIA8RkXFwTw_QHwBQEHAfAEARcB8AMBJwEA
+AfAAATcBBwHgARcRJwHgEQcRHwASBx8AIPADCgBPBQHwDAQMGQpqAARLABACBQCwAQFHAfAAIQch
+8AIZAB9VVwAdE25XAAJSAFURBxHwA2YARQQh8AQNABADHAABcwAEwwAfbmwAGZAZGQTw-yoB8Ac9
+AHAGAQcRAAEQKwEAEAAAIwHwA9ARRwEnAbABBwFHEQcRwAFXEUMBYDdB8AAxAEIBEAV-ADMEASev
+AD8HATB_AAwP3QEfDzIA----------------------------------------------------t1A9
+MTB9fQ==
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
@@ -278,7 +282,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-13 20:50:17",revision=4551]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-14 09:56:35",revision=4789]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -428,7 +432,8 @@ end
 function attach_note_attributes(parent, el)
 	el.width = 78
 	el.height = 16
-	el.cursor = "pointer"
+	--- el.cursor = "pointer"
+	el.cursor = get_spr(50)
 	parent:attach(el)
 	
 	el.drag_start = nil
@@ -486,6 +491,7 @@ function attach_note_attributes(parent, el)
 				start = app.base_instrument
 			}
 		end
+		self.cursor = 0
 	end
 	
 	function el:drag(msg)
@@ -516,6 +522,7 @@ function attach_note_attributes(parent, el)
 			app.refresh_gui = true
 		end
 		self.dragged_instrument = nil
+		self.cursor = get_spr(50)
 	end
 
 	function el:doubleclick(msg)
@@ -554,9 +561,12 @@ function attach_detail_button(parent, el)
 end
 
 
+:: manual.txt
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2024-04-14 09:49:39",revision=0]]
+
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMyAyMDo1MDoxNyIscmV2aXNpb249Mzg1Nl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNCAwOTo1NjozNSIscmV2aXNpb249NDA4OV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -578,8 +588,8 @@ LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
 ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTAgMTY6NTY6NDUiLG9rcGFs
-X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0xODAsdGVzdF9jdWJlX2NvbG9ycz17WzBdPXsxNSwz
+ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTQgMDk6NDk6NDUiLG9rcGFs
+X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0xODIsdGVzdF9jdWJlX2NvbG9ycz17WzBdPXsxNSwz
 MSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2
 LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwxNywxOX0sezI4LDEyLDE2fSx7MTIsMTYs
 MX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsx
@@ -595,36 +605,37 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTExIDE3OjI1OjAxIixtb2RpZmllZD0iMjAyNC0w
-NC0xMyAyMDo1MDoxNyIscmV2aXNpb249MjA3NF1dbHo0AHYCAACfCQAA8CdweHUAAygAAAMABA9A
+NC0xNCAwOToxNzo0MCIscmV2aXNpb249MjMxNl1dbHo0AIYCAACsCQAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOvxHFoBEAYP
 IBABIAEgAfAAAhACDBABIA8hIAEwD2aQDxECIAyQAeAPIgIgDFAiAP8QCPAPCfAPCvA3Dyjwxw-4
-Cg--D4AP9w8NAfAJARAGDEkAAjd-kAEQAHgJIA_AEA1gEwAhD-cUAG-wdwJwDxRXAAwjD0A1AP8P
-4AEIIA_V8AoBCiAPsyAP_AAPQEAPLfCHDygP--DGRAATMDABkD8AQLIgD-8-ACAO0FQAP5Twk0QA
-EBgOhwBH7fAKARQAXzAPwvCDRAADNQQPN0UANSAPLkUAAJYAFSM-AD9P8KODABAUDDAAFQ5hARMD
-kQA34PAKEwBfMA_-8GNRABQALwA-DvDDLgBgGw5eARIDoAEGDgBg4AIKIA9crAF3DgAPRSAO4BsA
-FwQMAI8PBQggD_TwM8QARwIaA49QAg__EAHwqGgAGw8uAFwf-wEAzNPoDgANQA8cD-8PHA8aCAAe
-GBAAYv--HwEFIQIAn-UfDzkFDyQPDgcABED1H-BwVgDwEQUPKw8kJQ8rDygVDysPJg8oBQf1IhEl
-ERUhBQH1Ig85HQBAOQ8kFQUAYg85BQv1ITgAL-WwCAD-1x--AQCXUP----8f
+Cg--D4AP9w8NAfAJARAGDEkAAjd-kAEQAHQJIA_AEA1gEwBjDAIQAQ-3FAD-AghQBPAHAQnwDgEK
+8C4CcA8UZAAMIw9AVQD-D_ABCCAPlfAKAQogD7MgD-gAD0BADy3whw8oD--wxkQAEzAwAZA-AECy
+IA--PwAgDtBUAD_U8JNEABAYDocAR_3wCgEUAF8wD8Lwg0QAAzUEDzdFADUgDy5FAACWABUjPwA-
+T-CjgwAQFAwwABUObgETA5EAN_DwChMAXzAPv-BjUQAUAC8APw7wwy4AYBsOXgESA6ABBg4AYOAC
+CiAPXKwBdw4AD0UgDuAbABcEDACPDwUIIA-k8DPEAEcCJwOPUAIPvhAB8KhoABsPLgBcH-8BAMzT
+6A4ADUAPHA--DxwPGggAHhgQAGL--x8BBSECAJ-1Hw85BQ8kDw4HAARA9R-wcFYA8BEFDysPJCUP
+Kw8oFQ8rDyYPKAUH9SIRJREVIQUB9SIPOR0AQDkPJBUFAGIPOQUL9SE4AC-1sAgA-9cf-wEAl1D-
+----Hw==
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQyOjE4Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMyAyMDo1MDoxNyIscmV2aXNpb249MjE0M11dbHo0AEwDAACMCwAA8U9weHUAAygAAAMABA9A
+NC0xNCAwOTo0OTo1MyIscmV2aXNpb249MjM4OV1dbHo0AGADAACYCwAA8U9weHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8V
 DxYPFwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywP
-LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DZaARAG
-DyAQASABIAHwAAIQAg8rEAEP1BAPJQ9DAAEFEAIEEAMADxoPf0APEQIgDyAgD-YQAg_CDzUAARAO
-YA9gMAEI8A83AABEAHAPISAB4A8kKAD8D1ABIAHgBQrwDwnwFw8o8McP_AoP-w_AD-cPDQHwCXUA
-Eww9AFcwD3_QARAAeAkgD4AQDWATACEP9xQAT-CADxRWAAAfDFUAARUOVABWByAB4BILABcDFwAX
-BAwAFwUMABYGDACP8AgPKA--8MZ2AA4QB3UAF6A5AB8ADAAoD3UAGg-qAAUHCwAfAekABB8FdAAk
-B7MBHQeyAR8HsQEZFA6iAP8GCCAPlfAKAQogD7MgD-gADkAPLfCHkwAELg8iQgBAMA8PkD4AQKwg
-D8E_ACAN0FMAP5Twk0QABRcXRAAXDIYASO3wCgHrAD__8IOOASYAUAAb4FAAP7-wY1AAFxngOwAp
-s5APACCYkGAAG6NgAP8Dn5AFCSAPXiAPhPAHCCAPyPATbwA0EV1vABuWbwARl28Af2sgD57wBgFw
-ABYXDnAAJA82TACihZACCSAPnSAPt0wAP9-wc0wABB4OTABHMAGQAVoA9wECCiAPXCAP-wAOAA9F
-IA7gGwAXBAwAfwUIIA-k8DOzABAUDOIBL-DDLgAuH-8BAMzzAOgOAA0ADSAPHA--DxwPGggAHhgQ
-AGL--x8BCyECAL-7Hw8yCw8kDw4POQcAAkD7H-BwWADyAQwgDzQPKw8kCw80Cw8rDygHAFAmDygL
-AxMAGAkCAPoA_xEIEQsICxEICyELAQsIAgBQ_xEODzlIACAyCwgAIg89BwCROQsPKwsOCwQLegAB
-HgAQHA4AMRX7EYEAP0D7sAgA-9cf-wEAl1D-----Hw==
+LQ8uDy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8D1aAQQA
+Bg8gEAEgASAB8AACEAIPJAAPXwEP0AAPnw8uEA-BBRAPYgQQD6MADxoPfw-gMA8REhAPJg8TEA9I
+EAIPdg4AAZAPYDABCPAPPQAASgD6HA8hIAHgDyQCIA8gUAEgAeAFCvAPCfAXDyjwxw-4Cg--D4AP
+9w8NAfAJARB7ABMMPQBXMA9-kAEQAHgJIA_AEA1gEwAhD-cUAE-wgA8UVgAAHwxVAAEVDlQAVgMg
+AeASCwAnDwMYABcEDAAXBQwAFgYMAI-wCA8oD--wxncADhADdgAXoDkAHwAMACgPdQAaD_sABQcL
+AB8B6QAEHwV0ACQHtAEdA7MBHwOyARlTDzAAD4ClAP8HCCAPkvAKAQogD7MgDzMgD1cgDy-wh5cA
+BCcPIkYAFA6YACAPkD8AoKwgD8EADkAPDdBUAD_U8JNEAAUXF0QAJgwQhwBI7fAKAe8AP77wg5IB
+JgBQABvgUAA-v-BjUAAXGeA7ACmzkA8AIJiQYAAbo2AA-wOfkAUJIA9eIA_E8AcIIA-I8BNvADQR
+XW8AG5ZvABGXbwB-ayAPnvAGAXAAFhcOcAAkDzZMAKKFkAIJIA_dIA_3TAA-3-BzTAAEHg5MAEcw
+AZABWgD3AQIKIA9cIA--AA4AD0UgDuAbABcEDAB-BQggD_TwM7MAEBQM4gEv8MMuAC4f-wEAzPMA
+6A4ADQANIA8cD-8PHA8aCAAeGBAAYv--HwEHIQIAv-cfDzIHDyQPDg85BwACQPcf8HBYAPIBDCAP
+NA8rDyQHDzQHDysPKAcAUCYPKAcLEwAYCQIA_gD3EQgRBwgHEQgHIQcBBwgCAFD3EQ4POUgAIDIH
+CAAiDz0HAJE5Bw8rBw4HBAd6AAEeABAcDgAxFfcRgQA-QPewCAD-1x--AQCXUP----8f
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xMyAwODowMToyOCIscmV2aXNpb249Nl1dbHo0AJ0BAADpCAAA8CdweHUAAygAAAMABA9AEAIO
@@ -639,7 +650,7 @@ AB4YEABi--8fAQ4hAgCf-h8POQ4PJA8OBwAEQf4f8HBZAPATDCAODysPJC4PKw8oHg8rDyYPKA4D
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-13 20:50:17",revision=1915]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-14 09:56:35",revision=2148]]
 local app = {}
 
 
@@ -726,7 +737,7 @@ constants.isomorphic_keys = {
 
 return constants
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-13 20:50:17",revision=862]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-14 07:57:29",revision=887]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
@@ -993,7 +1004,8 @@ function detail.attach_num_field(parent, el)
 	end
 	function el:hover(msg)
 		if msg.mx >= self.width - 21 then
-			self.cursor = "pointer"
+			--- self.cursor = "pointer"
+			self.cursor = get_spr(50)
 		else
 			self.cursor = 1
 		end
@@ -1002,6 +1014,7 @@ function detail.attach_num_field(parent, el)
 		if (not el.visible()) return
 		if msg.mx >= self.width - 21 then
 			self.dragged = { y0 = msg.my, val0 = self.get() }
+			self.cursor = 0 -- TODO: capture mouse
 		end
 	end
 	function el:drag(msg)
@@ -1022,7 +1035,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-13 20:50:17",revision=1918]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-14 09:56:35",revision=2151]]
 local app = require "src/app"
 local settings = require "src/settings"
 local routing = require "src/routing"
@@ -1143,7 +1156,7 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-13 06:46:50",revision=2509]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-14 07:57:29",revision=2517]]
 local app = require "src/app"
 local constants = require "src/constants"
 local sfx = require "src/sfx"
@@ -1160,33 +1173,6 @@ function ed_patt.attach_channel_panel(parent, el)
 	el.height = 270 - 11 - 16
 	parent:attach(el)
 
-	--[[
-	el.fields = {}
-	for channel = 0, 7 do
-		local oy = app.ruler_height + channel * app.cell_height
-		local track_id = peek(0x30100 + app.pattern * 20 + channel)
-		el.fields[channel] = el:attach_text_editor {
-			x = 1, y = oy,
-			width = 14,
-			height = 10,
-			max_lines = 1,
-			syntax_highlighting = false,
-			show_line_numbers   = false,
-			markup     = false,
-			embed_pods = false,
-			has_search = false,
-			bgcol = 59,	
-			fgcol = 22,
-			key_callback = {
-				enter = function() return true end
-			},
-			click = function() return true end,
-			tap = function() return true end
-		}
-		el.fields[channel]:set_text(string.format("%d", track_id))
-	end
-	--]]
-	
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 21)
 		for channel = 0, 7 do
@@ -1211,7 +1197,8 @@ function ed_patt.attach_channel_panel(parent, el)
 		if (channel > 7) return
 		local part = (msg.my - app.ruler_height) % app.cell_height
 		if part < 10 then
-			self.cursor = "pointer"
+			--- self.cursor = "pointer"
+			self.cursor = get_spr(50)
 		else
 			self.cursor = 1
 		end
@@ -1225,6 +1212,7 @@ function ed_patt.attach_channel_panel(parent, el)
 		if part < 10 then
 			local track_id = sfx.pattern_track(app.pattern, channel)
 			self.dragged = { channel = channel, y0 = msg.my, id0 =  track_id}
+			self.cursor = 0 -- TODO: capture mouse
 		elseif part < 20 then
 			sfx.mute_channel(
 				app.pattern,
@@ -1996,7 +1984,7 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-13 20:50:17",revision=708]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-14 09:56:35",revision=945]]
 local app = require "src/app"
 local synth = require "src/synth"
 
@@ -2066,7 +2054,7 @@ function routing.attach(parent, el)
 				elseif node.type == 2 then
 					if node.op == 0 then str = "osc " .. n; bg = 17
 					elseif node.op == 1 then str = "fm " .. n; bg = 27
-					elseif node.op == 2 then str = "ring " .. n; bg = 4
+					elseif node.op == 2 then str = "ring " .. n; bg = 22
 					end
 				elseif node.type == 8 then str = "filt " .. n; bg = 14
 				elseif node.type == 9 then str = "echo " .. n; bg = 31
@@ -2108,7 +2096,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-13 20:50:17",revision=2579]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-14 09:56:35",revision=2820]]
 local sfx = {}
 
 
@@ -2337,6 +2325,12 @@ function sfx.node_param(instrument, node, p)
 	return flags, val1, val0, env
 end
 
+function sfx.set_node_param_flags(instrument, node, p, flags)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	poke(node_addr + 4 + (4 * p), flags)
+end
+
 function sfx.set_node_param_val1(instrument, node, p, val1)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
@@ -2349,9 +2343,15 @@ function sfx.set_node_param_val0(instrument, node, p, val0)
 	poke(node_addr + 4 + (4 * p) + 2, val0)
 end
 
+function sfx.set_node_param_env(instrument, node, p, env)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	poke(node_addr + 4 + (4 * p) + 3, env)
+end
+
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-13 20:50:17",revision=2036]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-14 09:56:35",revision=2417]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2546,7 +2546,7 @@ function synth.attach_ring(parent, el)
 	synth.attach_knob(el, { x = 0, y = 45, label = "wave", param = 4, node_id = el.node_id } )
 	synth.attach_knob(el, { x = 0, y = 54, label = "phase", param = 5, node_id = el.node_id } )
 	function el:draw()
-		rectfill(0, 0, self.width, self.height, 4)
+		rectfill(0, 0, self.width, self.height, 22)
 		synth.draw_corners(self)
 		print("ring " .. self.node_id, 2, 2, 63)
 	end
@@ -2664,6 +2664,7 @@ function synth.attach_knob(parent, el)
 
 	function el:draw()
 		local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+		local node_type = sfx.node_type(app.instrument, self.node_id)
 		if el.label == "tune" and flags & 0x3 == 2 then
 			self.min_val = 0
 			self.max_val = 255
@@ -2674,17 +2675,20 @@ function synth.attach_knob(parent, el)
 		end
 		print(self.label, 24 - (4 * #self.label), 1, self.node_id == 0 and 61 or 7)
 		-- Relationship to parent
-		if flags & 0x3 > 0 then
-			local letter = "?"
-			if (flags & 0x3 == 0x1) letter = "\-d\^:2070200000000000" -- +
-			if (flags & 0x3 == 0x2) letter = "\-d\^:5020500000000000" -- *
-			print(letter, 26, 2, 59)
-		else
-			print("\-d\^:0020000000000000", 26, 2, 5) -- .
+		if node_type < 8 then	-- (only oscillators have relationships)
+			if flags & 0x3 > 0 then
+				local letter = "\-h\|f?"
+				if (flags & 0x3 == 0x1) letter = "\-d\^:2070200000000000" -- +
+				if (flags & 0x3 == 0x2) letter = "\-d\^:5020500000000000" -- *
+				print(letter, 26, 2, 59)
+			else
+				print("\-d\^:0020000000000000", 26, 2, 5) -- .
+			end
 		end
-		-- Field for the main value
+		-- Slider
 		local range = self.max_val - self.min_val
 		rectfill(32, 0, 32 + 32, 6, self.dragged and 59 or 59)
+		local x_zero = mid(0, ((- self.min_val) * 32) \ range, 32)
 		local x0 = mid(0, ((val0 - self.min_val) * 32) \ range, 32)
 		local x1 = mid(0, ((val1 - self.min_val) * 32) \ range, 32)
 		-- Ensure that small values are visible
@@ -2694,7 +2698,16 @@ function synth.attach_knob(parent, el)
 		else
 			if (val1 > 0 and x1 == 0) x1 = 1
 		end
-		rectfill(32 + x1, 0, 32 + x0, 6, (self.dragged and self.show_val0) and 5 or 2)
+		if val0 != val1 and x0 == x1 then
+			if (val0 < val1) x0 = max(0, x1 - 1)
+			if (val0 > val1) x0 = min(x1 + 1, 32)
+		end
+		rectfill(32 + x_zero, 0, 32 + x1, 6, 2)
+		-- Notches for val1 and val0
+		if (flags & 0x4) > 0 or (flags & 0x10) > 0 or self.show_val0 then
+			line(32 + x0, 3, 32 + x1, 3, (self.dragged and self.show_val0) and 22 or 22)
+			line(32 + x0, 2, 32 + x0, 4, (self.dragged and self.show_val0) and 7 or 22)
+		end
 		line(32 + x1, 0, 32 + x1, 6, (self.dragged and self.show_val1) and 7 or 15)
 		-- Numerical value
 		local str = ""
@@ -2708,7 +2721,7 @@ function synth.attach_knob(parent, el)
 				str = tostr(val0)
 			end
 			col = 29
-		elseif self.show_val1 then
+		elseif self.show_val1 or key("shift") then
 			if el.label == "tune" and flags & 0x3 == 2 then
 				local num1 = 1 + val1 % 16
 				local den1 = 1 + val1 \ 16
@@ -2728,10 +2741,10 @@ function synth.attach_knob(parent, el)
 			str2 = (env & 0x20 == 0) and 
 				"\^:5020500000000000" or  -- *
 				"\^:4020100000000000"     -- /
-			if (env & 0xc0 == 0x40) str2 ..= "\-c\^:5070400000000000" -- 4
-			if (env & 0xc0 == 0x80) str2 ..= "\^:1372770000000000" -- 16
-			if (env & 0xc0 == 0xc0) str2 ..= "\^:5177470000000000" -- 64
-			print(str2, 63, 2, 59)
+			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
+			if (env & 0xc0 == 0x80) str2 = "\-e" .. str2 .. "\^:1372770000000000" -- 16
+			if (env & 0xc0 == 0xc0) str2 = "\-e" .. str2 .. "\^:5177470000000000" -- 64
+			print(str2, 63, 2, 24)
 		else
 			print("\^:0020000000000000", 63, 2, 5) -- .
 		end
@@ -2741,9 +2754,9 @@ function synth.attach_knob(parent, el)
 			rectfill(mx - 1, 0, mx + 3, 6, 59)
 			rectfill(mx - 2, 1, mx + 4, 5, 59)
 			if flags & 0x8 > 0 then
-				-- what is it?
-				print(env & 0xf, ms, 1, 29)
-				print("\^:1500000000000000", mx - 1, 7, 29) -- 3 dots
+				-- continuation
+				print(env & 0xf, mx, 0, 29)
+				print("\^:1500000000000000", mx - 1, 6, 29) -- 3 dots
 			else
 				print(env & 0xf, mx, 1, 29)
 			end
@@ -2758,15 +2771,26 @@ function synth.attach_knob(parent, el)
 	end
 	
 	function el:hover(msg)
-		if 32 <= msg.mx and msg.mx <= 64 then
+		if msg.mx <= 24 then
+			-- on label
+			self.cursor = 1
+		elseif msg.mx <= 32 then
+			-- on relationship
+			self.cursor = "pointer"
+		elseif msg.mx <= 64 then
+			-- on slider
+			self.cursor = get_spr(50)
+		elseif msg.mx <= 72 then
+			-- on multiplier
 			self.cursor = "pointer"
 		else
-			self.cursor = 1
+			-- on modulator
+			self.cursor = "pointer"
 		end
 	end
 	
 	function el:click(msg)
-		if msg.mx < 26 or (32 <= msg.mx and msg.mx <= 64) then
+		if 32 <= msg.mx and msg.mx <= 64 then
 			local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 			self.dragged = {
 				y0 = msg.my,
@@ -2775,15 +2799,106 @@ function synth.attach_knob(parent, el)
 			}
 			self.show_val1 = msg.mb == 1
 			self.show_val0 = msg.mb != 1
-		elseif msg.mb == 1 then
-			self.show_val1 = true
-		elseif msg.mb == 2 then
+			self.cursor = 0 -- TODO: capture mouse
+		elseif msg.mx <= 24 and msg.mb == 2 then
 			self.show_val0 = true
+		end
+	end
+	
+	function el:tap(msg)
+		local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+		local node_type = sfx.node_type(app.instrument, self.node_id)
+		if msg.mx <= 24 then
+			-- Tap on label
+			
+		elseif msg.mx <= 32 then
+			-- Tap on relationship symbol -----------------
+			if node_type >= 8 then
+				-- effects don't have relationships
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+			elseif self.label == "tune" then
+				if flags & 0x3 == 0x0 then
+					self.min_val, self.max_val = -128, 127
+					-- set bit: add parent
+					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+				elseif flags & 0x3 == 0x1 then
+					self.min_val, self.max_val = 0, 255
+					-- set bit: mul parent
+					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+				else
+					-- either `flags & 0x3 == 0x2` or inconsistent state
+					self.min_val, self.max_val = -128, 127
+					-- set bit: replace parent
+					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+				end
+			elseif flags & 0x3 > 0 then
+				-- set bit: replace parent
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+			elseif self.label == "vol" or self.label == "mix" then
+				-- set bit: mul parent
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x2)
+			else
+				-- set bit: add parent
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+			end
+									
+		elseif msg.mx <= 64 then
+			-- Tap on slider ----------------------------
+		
+		elseif msg.mx <= 72 then
+			-- Tap on multiplier ----------------------------------
+			local mult = env & 0xe0
+			if msg.last_mb == 1 then
+				if     mult == 0x00 | 0x00 then mult = 0x00 | 0x40 -- *4
+				elseif mult == 0x00 | 0x40 then mult = 0x00 | 0x80 -- *16
+				elseif mult == 0x00 | 0x80 then mult = 0x00 | 0xc0 -- *64
+				elseif mult == 0x00 | 0xc0 then mult = 0x20 | 0xc0 -- /64
+				elseif mult == 0x20 | 0xc0 then mult = 0x20 | 0x80 -- /16
+				elseif mult == 0x20 | 0x80 then mult = 0x20 | 0x40 -- / 4
+				elseif mult == 0x20 | 0x40 then mult = 0x00 | 0x00 -- .
+				else -- mult == 0x20 | 0x00
+					mult = 0x00 | 0x40
+				end
+			else
+				if     mult == 0x00 | 0x00 then mult = 0x20 | 0x40 -- /4
+				elseif mult == 0x20 | 0x40 then mult = 0x20 | 0x80 -- /16
+				elseif mult == 0x20 | 0x80 then mult = 0x20 | 0xc0 -- /64
+				elseif mult == 0x20 | 0xc0 then mult = 0x00 | 0xc0 -- *64
+				elseif mult == 0x00 | 0xc0 then mult = 0x00 | 0x80 -- *16
+				elseif mult == 0x00 | 0x80 then mult = 0x00 | 0x40 -- * 4
+				elseif mult == 0x00 | 0x40 then mult = 0x00 | 0x00 -- .
+				else -- mult == 0x20 | 0x00
+					mult = 0x00 | 0x00
+				end
+			end
+			sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | mult)
+			
+			--[[
+			local ctrl_held = key("ctrl")
+			local val = env & 0xe0
+			if (val == 0)        then val = 0x00 | 0x40 -- *4
+			elseif (val == 0x40) then val = 0x20 | 0x40 -- /4
+			elseif (val == 0x60 and ctrl_held) then val = 0x00 | 0x80 -- *16
+			elseif (val == 0x80 and ctrl_held) then val = 0x20 | 0x80 -- /16
+			elseif (val == 0xa0 and ctrl_held) then val = 0x00 | 0xc0 -- *64
+			elseif (val == 0xc0 and ctrl_held) then val = 0x20 | 0xc0 -- /64
+			else val = 0 end
+			sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | val)
+			]]
+		else
+			-- Tap on modulator -------------------------------
+			if flags & 0x4 > 1 or msg.last_mb == 1 then
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ (msg.last_mb == 1 and 0x4 or 0x8))
+			else
+				-- toggle rng
+				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ 0x10)
+			end
+			
 		end
 	end
 
 	function el:doubleclick(msg)
-		if msg.mx < 26 or (32 <= msg.mx and msg.mx <= 64) then
+		if 32 <= msg.mx and msg.mx <= 64 then
 			if msg.mb == 1 then
 				sfx.set_node_param_val1(app.instrument, self.node_id, self.param, 0)
 			else
@@ -2824,6 +2939,7 @@ function synth.attach_knob(parent, el)
 		self.show_val0 = false
 		self.show_val1 = false
 	end
+	
 	function el:update()
 		---[[ show values on hover?
 		local mx, my, mb = mouse()
@@ -2861,16 +2977,15 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xMyAyMDo1
-MDoxNyIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjM2Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNCAwOTo1
+NjozNSIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
+dGlvbj0ibWFpbi5sdWEjMjQwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBw
 Lmx1YSMzNiIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2VkX2luc3QubHVhIzEw
-MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSM0NDciLHdvcmtz
-cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzIzMiIsd29ya3NwYWNlX2luZGV4
-PTF9LHtsb2NhdGlvbj0ic3JjL3JvdXRpbmcubHVhIzE0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
-Y2F0aW9uPSJzcmMvZGV0YWlsLmx1YSMyODIiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
-ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jr
-c3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7
-bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5p
-bA==
+MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSMxOTUiLHdvcmtz
+cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzI1MCIsd29ya3NwYWNlX2luZGV4
+PTF9LHtsb2NhdGlvbj0ic3JjL3JvdXRpbmcubHVhIzcwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
+Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
+cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
+ZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAA
+AwAAADBuaWw=
 :: [eoc]
