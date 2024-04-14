@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzU0MF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzU1M11dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -173,7 +173,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-11 05:57:19",revision=4259]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-14 10:29:05",revision=4279]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -262,10 +262,11 @@ end
 
 
 function open_manual()
+	local filepath = fullpath("manual.txt")
 	create_process(
 		"/system/apps/notebook.p64",
 		{
-			argv = { "/ram/cart/manual.txt" } ,
+			argv = { filepath } ,
 			window_attribs = {
 				workspace = "current",
 				autoclose = true,
@@ -867,18 +868,46 @@ in ".hex".
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzM5MV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzQwNF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
+NCAxMDoyNDo1NCIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2V9LGhpZGRlbl90b2dnbGVzPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LGxv
+Y2tlZD17WzBdPXRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTQgMTA6Mjk6MDUiLG9rcGFs
+X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0yMix0ZXN0X2N1YmVfY29sb3JzPXtbMF09ezE1LDMx
+LDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0fSx7OCwyNCwyfSx7MjYs
+MTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7MjgsMTIsMTZ9LHsxMiwxNiwx
+fSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9LHsyMywxNCwxM30sezE0
+LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwxfSx7MSwxLDF9LHsxLDEs
+MX19LHdoaXRlc3RfY29sb3I9N11dbHo0AAkBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwiMAEA
+wDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFlOAgA
+QDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2NhYTAwMWM1
+ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5QADwA2Fj
+YzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBkYWJAAF84
+NTZkMAEA6VAwMDAiKQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0xMSAwNTo1NzoxOSIscmV2aXNpb249MzMyN11dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzMzOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -888,7 +917,7 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-11 05:57:19",revision=1385]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-14 10:29:05",revision=1399]]
 picotron_gfx_pid = nil
 picotron_map_pid = nil
 
@@ -967,7 +996,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-11 05:57:19",revision=4566]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-14 10:29:05",revision=4580]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -1328,7 +1357,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-11 05:57:19",revision=571]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-14 10:29:05",revision=585]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1766,7 +1795,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-11 05:57:19",revision=1356]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-14 10:29:05",revision=1370]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2579,7 +2608,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-11 05:57:19",revision=3030]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-14 10:29:05",revision=3044]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2677,7 +2706,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-11 05:57:19",revision=1029]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-14 10:29:05",revision=1044]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2827,14 +2856,15 @@ MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
 KSxub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0byBvcGVuIHRoZSBtYW51YWwpIixy
-dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTExIDA1OjU3OjE5Iix0aXRsZT0iT2tQQUwiLHZlcnNp
-b249IjEuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzQ3MiIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9LHts
-b2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRp
-b249InNyYy9nbG9iYWxzLmx1YSMzNSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
-L3BhbGV0dGUubHVhIzkxIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvcmVtYXAu
-bHVhIzk3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFj
-ZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2Nh
-dGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH19XV1sejQABAAAAAMAAAAwbmls
+dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTE0IDEwOjMwOjA0Iix0aXRsZT0iT2tQQUwiLHZlcnNp
+b249IjEuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzg5Iix3b3Jrc3BhY2Vf
+aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3VpLmx1YSMyNzgiLHdvcmtzcGFjZV9pbmRleD0xfSx7
+bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5sdWEjNDI4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
+Y2F0aW9uPSJzcmMvaGV4ZGlhbG9nLmx1YSMzMCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlv
+bj0ic3JjL2dsb2JhbHMubHVhIzM1Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMv
+cGFsZXR0ZS5sdWEjOTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9yZW1hcC5s
+dWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNl
+X2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0
+aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8wLnBhbCIs
+d29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
