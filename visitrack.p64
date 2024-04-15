@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNSAxMzowMTo1NCIscmV2aXNpb249NTAyNl1dbHo0AGUEAADQNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNSAxOTo1NzowNSIscmV2aXNpb249NTE2NF1dbHo0AGUEAADQNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -284,7 +284,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-15 13:01:54",revision=5553]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-15 19:57:05",revision=5693]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -568,7 +568,7 @@ end
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNSAxMzowMTo1NCIscmV2aXNpb249NDgzMF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNSAxOTo1NzowNSIscmV2aXNpb249NDk2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -607,23 +607,22 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE4OjEzOjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNSAxMzowMTo1MSIscmV2aXNpb249Mzc4XV1sejQAPAEAANYIAADwJ3B4dQADKAAAAwAED0AQ
+NC0xNSAxOTo1NjowMSIscmV2aXNpb249NTIwXV1sejQAVQEAAF4IAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxABw3MQBSJQ86ABEz
-AP0INA--0A0ADxQPHQYQAQkADzVfOlAB8KBFAB8MdQALDzAA--9sH-8BAMy-6A9AAA1A--_w8HAK
-AP--ZB--AQCXUP----8f
+EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxABM3MQD9FegPNA--
+0A0ADxQPHQYQAQkADzVfOlABAAoADwxgD0kAD3jwkj4AHwxuAAsPMAD--2wf-wEAzPEI6A9AAA1A
+DyQPJg8o--8tIf4tLP4t8HAWAF-_sPBwAwgA-9wf-wEAl1D-----Hw==
 :: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE3OjU5OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNSAxMzowMTo1MSIscmV2aXNpb249NDAyXV1sejQAZwEAAGMIAADwJ3B4dQADKAAAAwAED0AQ
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE1IDE1OjE0OjQxIixtb2RpZmllZD0iMjAyNC0w
+NC0xNSAxOTo1NDoyNSIscmV2aXNpb249MTU2XV1sejQAVwEAAOkIAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-EfWgEQBg8f
-EAEgASAB8AACEAYPIA8WAwEgDyEgAeAPEQIgDyAQDQ8pD9QAAg8YECMARAIPIBAhABATIQDwDVAC
-Dw4QAeAECCAPk-AKAfAPAfAYDzoPm-AdDyJjARW9XgAGOwDwCTAO8MMPKA--8MYP_AoP-w_AD-cP
-DQHwCY8AJiAQMQAfDDAADx8MLwD--00f-wEAzKDoDgANQP--sPBwCQAf9QgA-_Af-wEAl1D-----
-Hw==
+Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-MMWgEQBg8g
+EAEgASAB8AACEAIMEAEgDyEgAeABDQAXDhkA_ycOIAHgDxICIAxQAiAB8GgPLA--wAGgDypgD2rg
+DxSgAaAD8HwP_AoP-w_AD-cPDQHwCQEQBgxeAMAMIAEwD0CQDgIgDJAYAH_kDygP--DGOAAOEQ44
+AC-wwy8A--9lH-8BAMy-6A9AAA1A--_w8HAKAP--ZB--AQCXUP----8f
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xNSAxMToyMzo0NSIscmV2aXNpb249MTBdXWx6NAA1AQAA0QgAAPAncHh1AAMoAAADAAQPQBAC
@@ -655,7 +654,7 @@ AJE5Cw8rCw4LBAt6AAEeABAcDgAxFfsRgQA-QPuwCAD-1x--AQCXUP----8f
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-15 13:01:54",revision=2941]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-15 19:57:05",revision=3083]]
 local app = {}
 
 
@@ -756,7 +755,6 @@ function app.open_menu(menu)
 			end
 		end,
 		click = function(self)
-			if (menu.onclose) menu.onclose()
 			if modal then
 				modal:detach()
 			end
@@ -766,6 +764,7 @@ function app.open_menu(menu)
 			then
 				menu.items[self.highlighted].action()
 			end
+			if (menu.onclose) menu.onclose()
 		end
 	}
 end
@@ -818,7 +817,7 @@ constants.isomorphic_keys = {
 
 return constants
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-14 07:57:29",revision=887]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-15 19:57:05",revision=889]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
@@ -1116,7 +1115,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-15 13:01:54",revision=2943]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-15 19:57:05",revision=3083]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -1411,7 +1410,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-15 13:01:54",revision=499]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-15 19:57:05",revision=695]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -1424,20 +1423,60 @@ local envelopes = {}
 
 
 local env_type_names = { [0] = "adsr", "lfo", "custom" }
+local lfo_shape_names = { [0] = "sine", "tri", "saw", "isaw", "square", "pulse" }
+
+
+function envelopes.make_label(env_id)
+	local env_type = sfx.env_type(app.instrument, env_id)
+	return env_type_names[env_type] .. " " .. env_id
+end
 
 
 function envelopes.attach_panel(parent, el)
 	el.width = app.mod_width
 	el.height = app.mod_height
 	parent:attach(el)
-	envelopes.attach_menu_button(el, { x = 2, y = 0, env_id = el.env_id })
+	envelopes.attach_menu_button(el, {
+		x = 2, y = 0, 
+		env_id = el.env_id,
+		get_label = function()
+			return envelopes.make_label(el.env_id)
+		end,
+		fg = 7,
+		highlight = 29,
+		items = {
+			{ label = "adsr", action = function() sfx.set_env_type(app.instrument, el.env_id, 0); app.refresh_gui = true end },
+			{ label = "lfo", action = function() sfx.set_env_type(app.instrument, el.env_id, 1); app.refresh_gui = true end },
+			{ label = "custom", action = function() sfx.set_env_type(app.instrument, el.env_id, 2); app.refresh_gui = true end },
+		}
+	})
 
 	local env_type = sfx.env_type(app.instrument, el.env_id)	
 	if env_type == 0 then
 		local labels = { [0] = "a", "d", "s", "r" }
 		for i = 0, 3 do
-			envelopes.attach_slider(el, { x = 3 + 13 * i, y = 16, env_id = el.env_id, param = i, label = labels[i] })
+			envelopes.attach_slider(el, { x = 3 + 13 * i, y = 16, slider_height = 40, env_id = el.env_id, param = i, label = labels[i] })
 		end
+	elseif env_type == 1 then
+		local items = {}
+		for i = 0, #lfo_shape_names do
+			add(items, { label = lfo_shape_names[i], action = function() sfx.set_env_param(app.instrument, el.env_id, 5, i) end })
+		end
+		--[[ not yet implemented?
+		envelopes.attach_menu_button(el, {
+			x = 14, y = 12, 
+			env_id = el.env_id,
+			get_label = function()
+				local shape = sfx.env_param(app.instrument, el.env_id, 5)
+				return lfo_shape_names[shape] or "???"
+			end,
+			fg = 5,
+			highlight = 29,
+			items = items,
+		})
+		]]--
+		envelopes.attach_slider(el, { x = 8, y = 16, slider_height = 40, env_id = el.env_id, param = 4, label = "freq" })
+		envelopes.attach_slider(el, { x = 34, y = 16, slider_height = 40, env_id = el.env_id, param = 6, label = "phase" })
 	end
 	
 	function el:draw()
@@ -1457,66 +1496,60 @@ function envelopes.draw_corners(el)
 	pset(0, el.height - 1, col)
 	pset(el.width - 1, el.height - 1, col)
 end
-
+	
 
 function envelopes.attach_menu_button(parent, el)
-	local function make_label(env_id)
-		local env_type = sfx.env_type(app.instrument, el.env_id)
-		return env_type_names[env_type] .. " " .. el.env_id
-	end
-	local label = make_label(env_id)
+	local label = el.get_label()
 	el.width = (4 * #label) + 12
 	el.height = 9
 	el.cursor = "pointer"
 	parent:attach(el)
 	el.opened = false
 	function el:draw()
-		local label = make_label(el.env_id)
-		print(label, 2, 2, 7)
+		local label = self:get_label()
+		print(label, 2, 2, self.fg or 7)
+		pal(7, self.fg or 7)
 		spr(self.opened and 38 or 37, self.width - 7, 2)
+		pal(7, 7)
 	end
 	function el:tap()
 		self.opened = true
 		app.open_menu {
 			x = self.sx, y = self.sy + 9,
-			highlight = 29,
+			highlight = self.highlight,
 			onclose = function()
 				self.opened = false
+				local label = el.get_label()
+				self.width = (4 * #label) + 12
 			end,
-			items = {
-				{ label = "adsr", action = function() sfx.set_env_type(app.instrument, self.env_id, 0); app.refresh_gui = true end },
-				{ label = "lfo", action = function() sfx.set_env_type(app.instrument, self.env_id, 1); app.refresh_gui = true end },
-				{ label = "custom", action = function() sfx.set_env_type(app.instrument, self.env_id, 2); app.refresh_gui = true end },
-			}
+			items = self.items,
 		}
 	end
 	return el
 end
 
 
-local vslider_height = 40
-
-
 function envelopes.attach_slider(parent, el)
 	el.width = 13
-	el.height = vslider_height + 12
+	el.height = el.slider_height + 12
 	el.cursor = get_spr(50)
 	parent:attach(el)
 	function el:draw()
 		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		rectfill(4, 0, 4 + 5 - 1, vslider_height - 1, 59)
+		rectfill(4, 0, 4 + 5 - 1, el.slider_height - 1, 59)
 		local val = sfx.env_param(app.instrument, self.env_id, self.param)
-		local h = math.floor(0.5 + (val / 255) * (vslider_height - 1))
-		rectfill(4, (vslider_height - 1) - h, 4 + 5 - 1, vslider_height - 1, 18)
+		local h = math.floor(0.5 + (val / 255) * (el.slider_height - 1))
+		rectfill(4, (el.slider_height - 1) - h, 4 + 5 - 1, el.slider_height - 1, 18)
 		line(
-			4, (vslider_height - 1) - h,
-			4 + 5 - 1, (vslider_height - 1) - h,
+			4, (el.slider_height - 1) - h,
+			4 + 5 - 1, (el.slider_height - 1) - h,
 			self.dragged and 7 or 15
 		)
+		clip()
 		if self.hovered then
 			p8_centered_print(tostr(val), 4 + 3, self.height - 7, 59)
 		else
-			print(self.label, 4 + 1, self.height - 7, 5)
+			p8_centered_print(self.label, 4 + 3, self.height - 7, 5)
 		end
 	end
 	function el:update(msg)
@@ -2477,7 +2510,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-15 13:01:54",revision=3620]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-15 19:57:05",revision=3760]]
 local sfx = {}
 
 
@@ -2957,8 +2990,9 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-15 13:01:54",revision=3430]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-15 19:57:05",revision=3602]]
 local app = require "src/app"
+local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
 
 
@@ -3381,33 +3415,83 @@ function synth.attach_knob(parent, el)
 			
 		elseif msg.mx <= 32 then
 			-- Tap on relationship symbol -----------------
-			if node_type >= 8 then
-				-- effects don't have relationships
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
-			elseif self.label == "tune" then
-				if flags & 0x3 == 0x0 then
-					self.min_val, self.max_val = -128, 127
-					-- set bit: add parent
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
-				elseif flags & 0x3 == 0x1 then
-					self.min_val, self.max_val = 0, 255
-					-- set bit: mul parent
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
-				else
-					-- either `flags & 0x3 == 0x2` or inconsistent state
-					self.min_val, self.max_val = -128, 127
-					-- set bit: replace parent
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
-				end
-			elseif flags & 0x3 > 0 then
-				-- set bit: replace parent
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+			if node_type == 0x2 and self.label == "tune" then
+				app.open_menu {
+					x = self.sx + 20, y = self.sy + 7,
+					items = {
+						{
+							label = "set",
+							action = function()
+								self.min_val, self.max_val = -128, 127
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: replace parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+							 end,
+						},
+						{
+							label = "add",
+							action = function()
+								self.min_val, self.max_val = -128, 127
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: add parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+							 end,
+						},
+						{
+							label = "mult",
+							action = function()
+								self.min_val, self.max_val = 0, 255
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: mul parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+							 end,
+						},
+					}
+				}
 			elseif self.label == "vol" or self.label == "mix" then
-				-- set bit: mul parent
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x2)
+				app.open_menu {
+					x = self.sx + 20, y = self.sy + 7,
+					items = {
+						{
+							label = "set",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: replace parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+							 end,
+						},
+						{
+							label = "mult",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: mul parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+							 end,
+						},
+					}
+				}
 			else
-				-- set bit: add parent
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+				app.open_menu {
+					x = self.sx + 20, y = self.sy + 7,
+					items = {
+						{
+							label = "set",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: replace parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+							 end,
+						},
+						{
+							label = "add",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: add parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+							 end,
+						},
+					}
+				}
 			end
 									
 		elseif msg.mx <= 64 then
@@ -3415,48 +3499,39 @@ function synth.attach_knob(parent, el)
 		
 		elseif msg.mx <= 72 then
 			-- Tap on multiplier ----------------------------------
-			local mult = env & 0xe0
-			if msg.last_mb == 1 then
-				if     mult == 0x00 | 0x00 then mult = 0x00 | 0x40 -- *4
-				elseif mult == 0x00 | 0x40 then mult = 0x00 | 0x80 -- *16
-				elseif mult == 0x00 | 0x80 then mult = 0x00 | 0xc0 -- *64
-				elseif mult == 0x00 | 0xc0 then mult = 0x20 | 0xc0 -- /64
-				elseif mult == 0x20 | 0xc0 then mult = 0x20 | 0x80 -- /16
-				elseif mult == 0x20 | 0x80 then mult = 0x20 | 0x40 -- / 4
-				elseif mult == 0x20 | 0x40 then mult = 0x00 | 0x00 -- .
-				else -- mult == 0x20 | 0x00
-					mult = 0x00 | 0x40
-				end
-			else
-				if     mult == 0x00 | 0x00 then mult = 0x20 | 0x40 -- /4
-				elseif mult == 0x20 | 0x40 then mult = 0x20 | 0x80 -- /16
-				elseif mult == 0x20 | 0x80 then mult = 0x20 | 0xc0 -- /64
-				elseif mult == 0x20 | 0xc0 then mult = 0x00 | 0xc0 -- *64
-				elseif mult == 0x00 | 0xc0 then mult = 0x00 | 0x80 -- *16
-				elseif mult == 0x00 | 0x80 then mult = 0x00 | 0x40 -- * 4
-				elseif mult == 0x00 | 0x40 then mult = 0x00 | 0x00 -- .
-				else -- mult == 0x20 | 0x00
-					mult = 0x00 | 0x00
-				end
+			local mult_options = { 
+				[0] = 
+				{ label = "none", val = 0x00 | 0x00 },
+				{ label = "x4", val = 0x00 | 0x40 },
+				{ label = "/4", val = 0x20 | 0x40 },
+				{ label = "x16", val = 0x00 | 0x80 },
+				{ label = "/16", val = 0x20 | 0x80 },
+				{ label = "x64", val = 0x00 | 0xc0 },
+				{ label = "/64", val = 0x20 | 0xc0 },
+			}
+			local mult_menu_items = {}
+			for i = 0, #mult_options do
+				add(mult_menu_items, 
+					{
+						label = mult_options[i].label,
+						fg = i == 0 and 6 or 24,
+						action = function()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+							sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | mult_options[i].val)
+						 end,
+					}
+				)
 			end
-			sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | mult)
-			
-			--[[
-			local ctrl_held = key("ctrl")
-			local val = env & 0xe0
-			if (val == 0)        then val = 0x00 | 0x40 -- *4
-			elseif (val == 0x40) then val = 0x20 | 0x40 -- /4
-			elseif (val == 0x60 and ctrl_held) then val = 0x00 | 0x80 -- *16
-			elseif (val == 0x80 and ctrl_held) then val = 0x20 | 0x80 -- /16
-			elseif (val == 0xa0 and ctrl_held) then val = 0x00 | 0xc0 -- *64
-			elseif (val == 0xc0 and ctrl_held) then val = 0x20 | 0xc0 -- /64
-			else val = 0 end
-			sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | val)
-			]]
+
+			app.open_menu {
+				x = self.sx + 56, y = self.sy + 7,
+				items = mult_menu_items,
+			}
+
 		else
 			-- Tap on modulator -------------------------------
 			app.open_menu {
-				x = self.sx + 76, y = self.sy + 7,
+				x = self.sx + 60, y = self.sy + 7,
 				items = {
 					{
 						label = "none",
@@ -3467,7 +3542,7 @@ function synth.attach_knob(parent, el)
 						 end,
 					},
 					{
-						label = "env 0",
+						label = envelopes.make_label(0),
 						fg = 18,
 						action = function()
 							local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
@@ -3476,7 +3551,7 @@ function synth.attach_knob(parent, el)
 						 end,
 					},
 					{
-						label = "env 1",
+						label = envelopes.make_label(1),
 						fg = 18,
 						action = function()
 							local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
@@ -3484,7 +3559,7 @@ function synth.attach_knob(parent, el)
 							sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 1)						 end,
 					},
 					{
-						label = "env 2",
+						label = envelopes.make_label(2),
 						fg = 18,
 						action = function()
 							local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
@@ -3492,7 +3567,7 @@ function synth.attach_knob(parent, el)
 							sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 2)						 end,
 					},
 					{
-						label = "env 3",
+						label = envelopes.make_label(3),
 						fg = 18,
 						action = function()
 							local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
@@ -3676,15 +3751,15 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNSAxMzow
-MTo1NSIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNSAxOTo1
+NzowNSIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
 dGlvbj0ibWFpbi5sdWEjNzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9lZF9p
-bnN0Lmx1YSM1MCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSM1
-NTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzQ0NSIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjNDUiLHdvcmtzcGFjZV9pbmRleD0x
-fSx7bG9jYXRpb249InNyYy9lbnZlbG9wZXMubHVhIzEwOSIsd29ya3NwYWNlX2luZGV4PTF9LHts
-b2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJtYXAvMC5t
-YXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2lu
-ZGV4PTR9LHtsb2NhdGlvbj0ic2Z4LzEuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9N319XV1sejQABAAA
-AAMAAAAwbmls
+bnN0Lmx1YSM1MCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bnRoLmx1YSM4
+Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSM0NDUiLHdvcmtzcGFj
+ZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAubHVhIzExMCIsd29ya3NwYWNlX2luZGV4PTF9
+LHtsb2NhdGlvbj0ic3JjL2VudmVsb3Blcy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9kZXRhaWwubHVhIzEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249Imdm
+eC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3Bh
+Y2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9j
+YXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
