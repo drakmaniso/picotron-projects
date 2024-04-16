@@ -158,7 +158,7 @@ end
 
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMDoyMTowMyIscmV2aXNpb249NTM4M11dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNiAxMToyNTozNSIscmV2aXNpb249NTQxNV1dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -284,7 +284,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-16 10:21:03",revision=5908]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-16 11:25:35",revision=5940]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -568,7 +568,7 @@ end
 
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMDoyMTowMyIscmV2aXNpb249NTE3NF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNiAxMToyNTozNSIscmV2aXNpb249NTIwNl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
@@ -607,24 +607,24 @@ b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
 MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE4OjEzOjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMDoyMTowMyIscmV2aXNpb249NzI5XV1sejQAbAEAAIIIAADwJ3B4dQADKAAAAwAED0AQ
+NC0xNiAxMToyNDoyNiIscmV2aXNpb249NzYxXV1sejQAgwEAAHgIAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
 EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxAB83MQAC8AaAkA8R
-AiAPH1ACBRAB8KANAA86D2SvAf0SH9ACDQAPFA8dBhABCQAPNV86UAEACgAPDGAPSQAPePCSYgAf
-DJIACw8wAP--bB--AQDM8QjoD0AADUAPJA8mDyj--y0h-i0s-i3wcBYAX-6w8HADCAD-3B--AQCX
-UP----8f
+AiAPH1ACBRAB8KANAA86D2SvAf4SH9ACDQAPFA8dBhABCQAPNV86UAEACgAPDGAPSQAPePCSYgAX
+QGIAFg5iAM3wuw0EAA8SMA8U8Mc1AB8MlgABHg7GAA8vAP--Jh--AQDM8AfoDgANQA8kDyYPKP--
+LSHzLSzzLfBwFQAv87AIAP-fH-8BAJdQ-----x8=
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE1IDE1OjE0OjQxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMDoyMTowMyIscmV2aXNpb249NDI0XV1sejQAjgEAAHgIAADwJ3B4dQADKAAAAwAED0AQ
+NC0xNiAxMToyNDozNSIscmV2aXNpb249NDYxXV1sejQAigEAAH0IAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-MNWgEQBg8g
-AAIBIAEgAfAAAhACDBABIA8hIAHgAQ0AFw4ZAPY6DiAB4A8SAiAMUAIgAfBgDRAPEw8REAcPM9AB
-oA8qYA9qIAIBDw5AD-8AD0YAD2ygAaAPFPB8D-gKD-8PgA-3Dw0B8AkBEAYMEHAAIg8vWAD-IDAP
-wPDDDygP-8ACYAMP5A-PD7kPlA9-D2oPWg9KDz8PNR8vDyoPJQ8V8KEP_AoDTwAFFAxOABBATgA-
-A-DGLQD--0Qf-wEAzL-oD0AADUDzsPBwBAgA-_Qf-wEAl1D-----Hw==
+Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-gNWgEQBg4A
+AgEgASAB8AACEAIPIBABIA8hIAHgAQ4ACxwA8TMPEgIgDyBQAiAB8GMPEw8REAcPM9ABoA8qYA9q
+IAIBDw5AD-8AD0YAD2ygAaAPFPB8D-gKD-8PgA-3Dw0B8AkBEAZMAAV1ABMvWQD-IDAPwPDDDygP
+-8ACYAwP5A-PD7kPlA9-D2oPWg9KDz8PNR8vDyoPJQ8V8KEP_AoMUQAGFANQABAOTwA8DPDGLgAf
+Ay0A--8zH-8BAMyf6A4ADUD8sPBwCAD-5R--AQCXUP----8f
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xNSAxMToyMzo0NSIscmV2aXNpb249MTBdXWx6NAA1AQAA0QgAAPAncHh1AAMoAAADAAQPQBAC
@@ -656,7 +656,7 @@ AJE5Cw8rCw4LBAt6AAEeABAcDgAxFfsRgQA-QPuwCAD-1x--AQCXUP----8f
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
 MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-16 10:21:03",revision=3350]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-16 11:25:35",revision=3386]]
 local app = {}
 
 
@@ -701,6 +701,38 @@ app.detail = false
 app.env_advanced = { [0] = false, false, false, false }
 
 local modal = nil
+
+
+function app.attach_menu_button(parent, el)
+	local label = el.get_label()
+	el.width = (4 * #label) + 12
+	el.height = 9
+	el.cursor = "pointer"
+	parent:attach(el)
+	el.opened = false
+	function el:draw()
+		local label = self:get_label()
+		print(label, 2, 2, self.fg or 7)
+		pal(7, self.fg or 7)
+		spr(self.opened and 38 or 37, self.width - 7, 2)
+		pal(7, 7)
+	end
+	function el:tap()
+		self.opened = true
+		app.open_menu {
+			x = self.sx, y = self.sy + 9,
+			highlight = self.highlight,
+			onclose = function()
+				self.opened = false
+				local label = el.get_label()
+				self.width = (4 * #label) + 12
+			end,
+			items = self.items,
+		}
+	end
+	return el
+end
+
 
 function app.open_menu(menu)
 	local entry_height = 9
@@ -785,7 +817,9 @@ function app.attach_checkbox(parent, el)
 	el.height = 7
 	el.cursor = "pointer"
 	parent:attach(el)
+	if (not el.visible) el.visible = function() return true end
 	function el:draw()
+		if (not self:visible()) return
 		rect(0, 0, 6, 6,  el.ckeck_border or 59)
 --		rectfill(1, 1, 5, 5, el.check_bg or 61)
 		if self.get() then
@@ -794,6 +828,7 @@ function app.attach_checkbox(parent, el)
 		print(el.label, 10, 1, el.fg or 5)
 	end
 	function el:tap()
+		if (not self:visible()) return
 		self.set(not self.get())
 	end
 	return el
@@ -813,7 +848,7 @@ function app.attach_num_field(parent, el)
 		local field_fg = self.field_fg or 22
 		local dragged_fg = self.dragged_fg or 7
 		local field_bg = self.field_bg or 59
-		if (not el.visible()) return
+		if (not self.visible()) return
 		local val = self.get()
 		rectfill(self.width - 24, 0, self.width - 10, 6, field_bg)
 		print(el.label, 3, 1, label_fg)
@@ -832,7 +867,7 @@ function app.attach_num_field(parent, el)
 		end
 	end
 	function el:click(msg)
-		if (not el.visible()) return
+		if (not self.visible()) return
 		if msg.mx >= self.width - 21 then
 			self.dragged = { y0 = msg.my, val0 = self.get() }
 			self.cursor = 0 -- TODO: capture mouse
@@ -1152,7 +1187,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-16 10:21:03",revision=3291]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-16 11:25:35",revision=3323]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -1447,7 +1482,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-16 10:21:03",revision=1021]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-16 11:25:35",revision=1067]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -1474,7 +1509,7 @@ function envelopes.attach_panel(parent, el)
 	el.height = app.mod_height
 	parent:attach(el)
 
-	envelopes.attach_menu_button(el, {
+	app.attach_menu_button(el, {
 		x = 2, y = 0, 
 		env_id = el.env_id,
 		get_label = function()
@@ -1561,6 +1596,7 @@ function envelopes.attach_panel(parent, el)
 				x = 4, y = 12,
 				label = "loop",
 				check_fg = 18,
+				visible = function() return sfx.env_type(app.instrument, el.env_id) != 2 end,
 				get = function() return
 					(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
 				end,
@@ -1576,7 +1612,7 @@ function envelopes.attach_panel(parent, el)
 				x = 0, y = 22,
 				label = "speed:",
 				field_fg = 29,
-				visible = function() return true end,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_speed(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
 			}
@@ -1585,31 +1621,9 @@ function envelopes.attach_panel(parent, el)
 			el,
 			{
 				x = 0, y = 32,
-				label = "loop0:",
-				field_fg = 29,
-				visible = function() return true end,
-				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
-				x = 0, y = 42,
-				label = "loop1:",
-				field_fg = 29,
-				visible = function() return true end,
-				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
-				x = 0, y = 52,
 				label = "start:",
 				field_fg = 29,
-				visible = function() return true end,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_start(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
 			}
@@ -1617,8 +1631,9 @@ function envelopes.attach_panel(parent, el)
 		app.attach_checkbox(
 			el,
 			{
-				x = 4, y = 62,
+				x = 4, y = 42,
 				label = "rnd start",
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return
 					(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
 				end,
@@ -1626,6 +1641,28 @@ function envelopes.attach_panel(parent, el)
 					local flags = sfx.env_flags(app.instrument, el.env_id)
 					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
 				end,
+			}
+		)
+		app.attach_num_field(
+			el,
+			{
+				x = 0, y = 52,
+				label = "loop0:",
+				field_fg = 29,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
+			}
+		)
+		app.attach_num_field(
+			el,
+			{
+				x = 0, y = 62,
+				label = "loop1:",
+				field_fg = 29,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
 			}
 		)
 	end
@@ -1646,37 +1683,6 @@ function envelopes.draw_corners(el)
 	pset(el.width - 1, 0, col)
 	pset(0, el.height - 1, col)
 	pset(el.width - 1, el.height - 1, col)
-end
-	
-
-function envelopes.attach_menu_button(parent, el)
-	local label = el.get_label()
-	el.width = (4 * #label) + 12
-	el.height = 9
-	el.cursor = "pointer"
-	parent:attach(el)
-	el.opened = false
-	function el:draw()
-		local label = self:get_label()
-		print(label, 2, 2, self.fg or 7)
-		pal(7, self.fg or 7)
-		spr(self.opened and 38 or 37, self.width - 7, 2)
-		pal(7, 7)
-	end
-	function el:tap()
-		self.opened = true
-		app.open_menu {
-			x = self.sx, y = self.sy + 9,
-			highlight = self.highlight,
-			onclose = function()
-				self.opened = false
-				local label = el.get_label()
-				self.width = (4 * #label) + 12
-			end,
-			items = self.items,
-		}
-	end
-	return el
 end
 
 
@@ -2725,7 +2731,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-16 10:21:03",revision=3971]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-16 11:25:35",revision=4005]]
 local sfx = {}
 
 
@@ -3131,6 +3137,13 @@ function sfx.node_osc_wavetable(instrument, node)
 	return peek(node_addr + 1) >> 4
 end
 
+function sfx.set_node_osc_wavetable(instrument, node, wt)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local node_addr = inst_addr + node * 0x20
+	local previous = peek(node_addr + 1)
+	poke(node_addr + 1, (previous & 0x0f) | (wt << 4)
+end
+
 function sfx.node_flags(instrument, node)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
@@ -3265,7 +3278,7 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-16 10:21:03",revision=3813]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-16 11:25:35",revision=3869]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
@@ -3347,6 +3360,22 @@ function synth.attach_osc(parent, el)
 	synth.attach_knob(el, { label = "tune", param = 2, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "bend", param = 3, node_id = el.node_id } )
 	synth.attach_knob(el, { label = "wave", param = 4, node_id = el.node_id } )
+	local wt_labels = { [0] = "wt0", "wt1", "wt2", "wt3" }
+	app.attach_menu_button(el, {
+		x = 2, y = 11 + 4 * 10, 
+		get_label = function()
+			local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+			return wt_labels[wt] or "wt?"
+		end,
+		fg = 5,
+		highlight = 15,
+		items = {
+			{ label = "wt 0", action = function() end },
+			{ label = "wt 1", action = function()  end },
+			{ label = "wt 3", action = function()  end },
+			{ label = "wt 4", action = function()  end },
+		}
+	})
 	synth.attach_knob(el, { label = "phase", param = 5, node_id = el.node_id } )
 	function el:click()
 		app.node = self.node_id
@@ -3548,7 +3577,10 @@ function synth.attach_knob(parent, el)
 			if (val1 >= 128) val1 -= 256
 			if (val0 >= 128) val0 -= 256
 		end
-		print(self.label, 24 - (4 * #self.label), 1, 5)
+		-- Label
+		if self.label != "wave" then
+			print(self.label, 24 - (4 * #self.label), 1, 5)
+		end
 		-- Relationship to parent
 		if node_type < 8 then	-- (only oscillators have relationships)
 			if flags & 0x3 > 0 then
@@ -4026,13 +4058,13 @@ NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
 MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
 NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNiAxMDoy
-MTowMyIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
+KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNiAxMToy
+NTozNiIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
 dGlvbj0ibWFpbi5sdWEjMjY3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZWRf
 aW5zdC5sdWEjNTAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEj
-OCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjNTIzIix3b3Jrc3Bh
-Y2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMxNjQiLHdvcmtzcGFjZV9pbmRleD0x
-fSx7bG9jYXRpb249InNyYy9lbnZlbG9wZXMubHVhIzgxIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
+ODYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzQxMCIsd29ya3Nw
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjNDciLHdvcmtzcGFjZV9pbmRleD0x
+fSx7bG9jYXRpb249InNyYy9lbnZlbG9wZXMubHVhIzI3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
 Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
 cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
 ZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAA
