@@ -6,159 +6,9 @@ version 2
 :: sfx/
 :: src/
 :: pal/
-:: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-13 06:43:38",revision=982]]
-
--- A 'require' function similar to standard Lua.
--- Idea from elgopher on the BBS
-function require(name)
-	if (_modules == nil) _modules = {}
-
-	local cached = _modules[name]
-	if (cached) return cached
-
-	local filename = fullpath(name .. '.lua')
-	local src = fetch(filename) 
-
-	if (type(src) != "string") panic("could not include " .. filename)
-
-	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
-	-- chunk name (for error reporting)
-	-- mode ("t" for text only -- no binary chunk loading)
-	-- _ENV upvalue
-	-- @ is a special character that tells debugger the string is a filename
-	local func, err = load(src, "@" .. filename, "t", _ENV)
-	if (not func) panic("Syntax error:", tostr(err))
-
-	local module = func()
-	_modules[name] = module
-
-	return module
-end
-
-
-function panic(...)
-	local args = { ... }
-	foreach(
-		args,
-		function(str)
-			send_message(3, { event = "report_error", content = str })
-		end
-	)
-	stop()
-end
-
-
--- Table utility functions --------------------------------------------------------
-
-
-function tostrrec(t)
-	if type(t) != "table" then
-		return tostr(t)
-	end
-	
-	local s = nil
-	for k, v in pairs(t) do
-		if not(s) then
-			s = "{ "
-		else
-			s ..= ", "
-		end
-		s ..= tostr(k) .. " = " .. tostrrec(v)
-	end
-	s ..= " }"
-
-	return s
-end
-
-
--- Char utilities -----------------------------------------------------------------
-
-
-function keyp_num()
-	if (keyp("9")) return 9
-	if (keyp("8")) return 8
-	if (keyp("7")) return 7
-	if (keyp("6")) return 6
-	if (keyp("5")) return 5
-	if (keyp("4")) return 4
-	if (keyp("3")) return 3
-	if (keyp("2")) return 2
-	if (keyp("1")) return 1
-	if (keyp("0")) return 0
-	return nil
-end
-
-
-function keyp_hex()
-	if (keyp("f")) return 0xf
-	if (keyp("e")) return 0xe
-	if (keyp("d")) return 0xd
-	if (keyp("c")) return 0xc
-	if (keyp("b")) return 0xb
-	if (keyp("a")) return 0xa
-	if (keyp("9")) return 0x9
-	if (keyp("8")) return 0x8
-	if (keyp("7")) return 0x7
-	if (keyp("6")) return 0x6
-	if (keyp("5")) return 0x5
-	if (keyp("4")) return 0x4
-	if (keyp("3")) return 0x3
-	if (keyp("2")) return 0x2
-	if (keyp("1")) return 0x1
-	if (keyp("0")) return 0x0
-	return nil
-end
-
-function is_num_char(c)
-	if (not c) return
-	return ("0" <= c) and (c <= "9")
-end
-
-
-function is_hexa_char(c)
-	if (not c) return
-	local is_num = ("0" <= c) and (c <= "9")
-	local is_hex_alpha = ("a" <= c) and (c <= "f")
-	return is_num or is_hex_alpha
-end
-
-
-function p8_centered_print(s, x, y, col)
-	local count = #s
-	print(s, x - ((count * 4) \ 2), y, col)
-end
-
-
-
--- Drawing -------------------------------------------------------------------------
-
-
--- From Sophie on the discord
-function get_drawspace()
-    return {
-        cam_x=peek4(0x5510),
-        cam_y=peek4(0x5514),
-        clip_l=peek2(0x5528),
-        clip_t=peek2(0x552a),
-        clip_r=peek2(0x552c),
-        clip_b=peek2(0x552e),
-    }
-end
-
-
-function set_drawspace(drawspace)
-    poke4(0x5510,drawspace.cam_x)
-    poke4(0x5514,drawspace.cam_y)
-    poke2(0x5528,drawspace.clip_l)
-    poke2(0x552a,drawspace.clip_t)
-    poke2(0x552c,drawspace.clip_r)
-    poke2(0x552e,drawspace.clip_b)
-end
-
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMToyNTozNSIscmV2aXNpb249NTQxNV1dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNiAxNTowOTozNCIscmV2aXNpb249NTQ5Nl1dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -180,400 +30,18 @@ AQAQAAAjAfAD0BFHAScBsAEHAUcRBxHAAVcRQwFgN0HwADEAQgEQBX8AMwQBJ68APwcBMH4ADA-c
 AR0vMTAyAP-v-wMHBwRXAGcwBwA3ADcABzBnAFcJBg0PowAfDzIA------------------------
 -------------------------11QPTEwfX0=
 :: gfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
-:: label.png
-b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAV60lEQVR4Ae2dX2gkx53He9oN
-pweBQXDdDws67tbyQ8MsCCwYLRZkCJwZMMZ-sohhHCyjXUEwVkCIcCw_79gx_5AIBcsYg2SxAnsY
-hBc7mIBIXsYgI0EmIFiBHrLRQRYEHgUEC-uweTB7D3X09nWPWt3V-7s-Hxqpuqe_9avfr6q_9Vp5
-8vAHBQAAsoeWcLzvn72e2Vq8_PBz0fjis499Sn7_i1_yhwAgJipPHv5gf3d7U4QeFNSdhWP6VAXq
-7DGIf3fGowHciBMkzoW97dHZ0d--sfLZ37_tnXf8L5zPF599-PNf-FL89e_HwrU80PyUIFAyURnW
-iw8-F25rNfx0BoCMuLNofPHZx4Fsy6cjB7Uae_fzXDgMQd3Zp0c7DdqRhojqJ_eYOG-21ne3Lwdy
-dgCASC4MiftDeJSHRzsN2gogRve_aob_GqFrnzd7h-OKDuJvfI7sfVcBQIRO5-9UZmHyjmlEaBRO
-g7Y70YXJx12d89zWcm3RQbxanR2-RrgAeDRAHO5mP1b_T5nVzb8RXThyMo5vtyZhVgEMWuTgKJn-
-bJPM0O7L9oQ9fpW_3nFngNwR9Mye1z9CWwtkSk6DDmRDsXrx989eF3eLlY-deSVSTXilAUqIMJAv
-PvtYmIM4Nd5G4ThZsR40n5Zl7_ZnPoHm7PYxDypPHv6Q2OIl6adyvPjw86D7I9ZbCgDKjEoJAACy
-SeX9iTeoAgBABlEpAQAABg0AAAHQip3eh_1XvDu83-6WTQAA2aTy-sQbpXXnODx6a2zAroJiMHdm
-UIR00cqT6pOXX6r84Y_RD-vc-PN-2-wrOwmKTch9vjU2uNDurT7uzltjg3LeH--PoL-88UA03nxm
-UrTffGbS-pP13f7TedqhbeuvXfvBXz4VjVsvvOOnnR2Pfm7__fN__vuf7orGv-3nz_xtd8_PXpsR
-jfe_2RXt977ZHTqmu_d5naV7Wn_jHfO8KiWQ0YU9xU9Be3qvkdyYPnteuEZyY6br0UMtOEIiMZDk
-Ue0vwjct97TsVViq-VeHww7VOn7yxl41qy0a7r9hePLySwm4s9uOh1qzhXU8Ljwn9p7enSV6Xoi9
-p-ewEmMGmmckPR0-_ewZKLT-MaMt5oXD_h8z0J6-0KPTcudbL7wjHuHUIpGQ6QyP9fq1D16-FtVo
-ms9_wqn9WK3V3_ostO7vQ_83RzsOnrz8UuUPf4zbnePmo9dm4ugctKefc_6-Z7oZsUZ_ej43--zf
-Nv8q7chbY4O5M_O8PnE7taIot154Z_j3D9uvBBpnfG3D-moldevrryI0aNVPpzefmfRvzZbE8mW7
-1v7dUTWrcOdVMCrCu7OiKP73aHy8982uT9fz3y3ynpFbc0wZsUYx7fy5M8PuyA53dnwRnd194uC5
-_edTP8LBDFpYp9tAv-zx4MsfD4J6dDaJxJ197tS--_nu0Labj16bsTesV4_eou2np3c373CRjBl5
-9KjGdFT7wmK6--oZ009PP0vpJynpMX1WLKg7e3ixn_9x8MFfPhWJhMwlIb96f_KNAtjuUD5sv2J-
-ffLyS0Pd_f32tyHvYftKb40NilpPKBt233Tsc59sjQ3EIFbDT_ehP4W0deHLiqLceuGdkEldEOj1
-a-8X6OuvMOgABn0eIQ3az04CyLtBQyoU2aD9eHS07gwAgEEDABQflRIAAGSTSqNai3C4Zqve7fTK
-Uz7dNE6PBuRLvsWA85s1VO4oAIASGXSzVW_26v6-F_Ae1k3jvO9DfyLfYuRr-S0S4py6j2qxz697
-HbOwn7U4Bu12ekMX8rzveef0aDB0FU_PBoU8wORbbLqdnrDj8pzfofs2C-s5FoMG6wYmZfLNHYV0
-YYlFzMLiYtBJXM6lyrc8Hi0Wt5D5djs9zmkWzq8a3w1s3cOORvHuZ3FErYNqP7G6aRTvAJ_XbyGT
-9V7fotJs1ctzfh1bN1Pnt9Ko1qJd11LdvbpppH7Hki-5cn6Lur5a0Hwi6VOwNSZf8iVf8k3foBVF
-2ente-z600nz_vaPclN5Q-9z7la3UZ-2LkjBIN9i89NJk-XNFGqpbksAgByhxTTuiw8-t9rfP3s9
-sXwG9_9ZbWPiirQ8qDZk3LTyjSR0SWolnW8e1zfFfQV2VPFPNw3xONrNVl08EkN--_x18Qiz-u5X
-r4on7pSMiSviEZvs3bnb4vGzKd1a669EXP-aaPNNIG7ktfK5RjndG7lb3xTXCOxoVuv0aCBM2dHu
-dnpyBu3mJ7-5faDzH1WSn2zdTKCUYh_LnS3nd-mKGy3_1yine6MA65vMGqEdbtAJ8N2vXvVp09G6
-hrj2-Wwv6zA4tH6w5mxVXEIrQVpxw9QqzBrlem-kaH3TWiO0dtTE3Pknv-m9H2uOnE_2bvq-_Y2J
-K_KR0IaJm1a_YShbrSLMNxfrm5G4JUezWrppDG03W3W5oV98_LlofP-sdUVRvvvVq8mkNLh-z341
-iWs-_biJkVbcAqxRYnELsK9yUaviUWlUa-5766ax09v36LCyNP-v-3UoN5U39D-nrnyN_rR3QQoG
-_RablaX55dVN1jc7aJGPmEefBQAohUELTn-3W_8Ob337tdWO8BILEzctLXVmzkVaX4gQNZvTWlma
-L9UypJVvHuvMnIsdF60dzf4y9fiSu0d-5CT5BV5e3SyVQaeVbx7rzJyLHRetnUqjWrMb9NbYwP7z
-3JlhN2jdNHZ6_963Qam8tVGf9i4I_ZJvjuD8Zg3N-enB4g3RGF-bKM9SAQDkwKAjYfD2mqIoxp3F
-hPMJEzctLXVmzsSFoagxjZvW0oaJm5aWOjNn4sJQNPen8bUN6gIAkDmDnjszKAoAQBaoNKo1-711
-09jp7Xt0WFmaX17dVBRl8Paa_GLcWZSYljVOUMLEldA26tOiIHnMVyJuJPnmqFZlW9-Uz2-CWmt9
-MztnLSbjl1tXC_lsw8RNS5tWvnmsM3Mudly0DtSYDBoAAEKCQQMAYNAAAIBBAwBg0AAAkEODXlma
-R4sWLVq00tpKo1rzP5ZuGju9fe9gy6ub5bnfGvVp74KQL-nmCM5v1lDLsxgAAPlCCyoYHR0N2aFg
-kC-5ki-5xoTKHQUAkE20guVzfLBntS9PXk0ldJJx08qXuOxnSM6gddMQjdOjgb3dbNUVRel2ejlK
-ydpPxwd7lyevvv2zm_L1zt3bse7mVOKmlS9xix03xf0MdlSrdXo0cLfDWLP98k9S6_DO3dv_txRx
-iUvcdOOitaMlcPMnrHVjXf6xxnUU2n-QaPMtW9zE1rdsdU5rP6NNyKCzw527twNtr5CFtnb2nbu3
-08q3bHETWN_y1Tk7_7nMPDVo3TTc7WarLv52O728pGTtJ7HDUjm6AhE67m3tyLdscRNb37LVOa39
-DHYqjWrNf2-dNHb7hx4d2guz7fXt8pRvZqrqXRDyJd8cwfnNGip3FABANtEKls---PqWd4e3vv3a
-akd4eRKXuMSFyFHjG7q9MJuKNq05E5e4xE337BdPq9lfph5fcvfoj5xIBl7flp90CG2ojUVc4hI3
-1bhozzVoRVG2xgb217kzI5UFluY--vsD7w67xCUucbMaFy4waEVRHizeEI3xtQ0KBACQIYPONcfX
-biuKcvmrm8QlLnFzFxccqAXLJ60tRVziEhciR3N-Gl-boC4AAJkz6Lkzg6IAAGQB1f7SHzlxP9JD
-txdmk9ceX7tt-SUucYmbr7hoHVQa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8yTdHcH6zhlqexQAA
-yBcYNAAABg0AABg0AAAGDQAAOTTo9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8
-yTdHcH6zhlqexQAAyBdaUMGjR49CdigY5Eu_5Eu_MaFyRwEAZBMtpnEH9_9ZbWPiSi60dnnCcVPB
-Pueg005xjSJJOS97I4-7CiJEFf900xCPo91s1cUjMbQxcUU8YpO9O3fb_ptN7eD_PbdWPHHPOS2s
-OYvDn-01CunO0usb_d4o9r6CqNCs1unRQJiyvd3t9IRNl60uwrA_2bqZzGEQ5z8VrZVsXgiTrwO5
-9Q2-N8qwr9BGon1q0EOJ1prD7MgktXbbSiZuGMeJVpv9NQqTr1jZfO2NYuwrtHJa9UJ9t9Prdnrh
-3fmTrZufbN3MhdZeslTmnBY5WiPpwyAe6fWNZG_UbV_BNJrV0k1jaLvZqgubDjr04P496eslFa0x
-ccXSCt6du53MnNPCnm-Qaae1vhHif32j3RuF31cQFZVGtea-t24aO719jw4rS-PLq5vlKV_jPu1d
-EPIl3xzB_c0aKncUAEA20WIa9-R3v-Xu8Na3X1ttxyVWNm1alK1W7CvIHSolyAIrS-OpaMtWK-YV
-2nxpNfvL1ONL7h79kRM2etwsr26moi1brdhXaPOlrTSqNbtBb40N7D-PnRl2g9ZNY6e3730blOr8
-NOrT3gUhX-LNEZzfrKG5Pz1YvCEa42sb5VkqAIAcGHQkDN5eUxTFuLOINrOUrVbsK8gdakzjhtlS
-ZdOmRdlqxb6C3KG5P42vbVAXAIDMGfTcmUFRAACyQKVRrfnvrZvGTm-fo8PK0vzy6qaiKIO318QX
-485i0DnlSNuoT4uChIlrr1uS2rTyTatWecw34VrZ_6eyJxPWWuub2TlrMRm-3H4qp1ZRFOnVDaMt
-W63YV2hzp1VjMmgAAAgJBg0AgEEDAAAGDQCAQQMAQA4NemVpHi1atGjRSmsrjWrN-1i6aez09r2D
-La9ulud_a9SnvQtCvuSbIzi-WUMtz2IAAOQLLahgdHQ0ZIeCQb7kS77kGxMqdxQAAAYNAADBDVo3
-DfE42s1WXTxUCgAgHYNWFOX0aOBudzu9bqcnN-TxwZ70tNCiRYsW7VODPo9mqy4X_PLkVelJo0WL
-Fi3aiw262_lJxwYAAGk0q6WbhrvdbNWpEQBAmgZ9ejSwPtnb3U6PGgEApIJKCQAAMGgAAMiGQbcX
-ZtGiRYsWrbS20qjWrJepx5fcPfojJ1ZbN43d-qF3sPb6dnnut5mpqndByJd8cwTnN2tojvetsYH9
-de7MKM9qAQBk2qAVRXmweEM0xtc2KBAAQFqolAAAAIMGAIAAaO5P42sb1AUAIHMGPXdmUBQAgCyg
-2l-6IyfuR3ro9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8yTdHcH6zhlqexQAA
-yBcYNAAABg0AABg0AAAGDQAAOTTo9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8
-yTdHcH6zhlqexQAAyBdaUMGjR49CdigY5Eu_5Eu_MaFyRwEAYNAAUFL_5V9nKIK8QeumIR5Hu9mq
-W38BAOTc_cHep3i0vEErinJ6NBjalmZw-x5atGjRCnx6NLUabtDn0WzV5QIbE1ekJ40WLdriaf14
-NLUKYNDdTq-b6UnHBgAI6tFgoVkt3TSGtgEAImH86juKovzzH7uUIphBnx4NrE-2tqDb6VEpAJDj
-n--YFdb8YO9T0YBgBg0AEKtHK4piTFyhFIFQKQEAQOkMemVpHi1atGjRSmsrjWrNepl6fMndoz9y
-YrV109jp7XsHW17dLM-91qhPexeEfMk3R3B_s4bmeN8aG9hf586M8qwWAECmDVpRlAeLN0RjfG2D
-AgEApIVKCQAAMGgAAAiA5v40vrZBXQAAMmfQc2cGRQEAyAKq-aU-cuJ_pIdeWZpHixYtWrTS2kqj
-WvM-lm4aO71972DLq5vlud8a9WnvgpAv_eYIzm-WUMuzGAAA_QKDBgDAoAEAAIMGAMCgAQAghwa9
-sjSPFi1atGiltZVGteZ-LN00dnr73sGWVzfLc7816tPeBSFf8s0RnN_soZZnMQAA8oUWVDA6Ohqy
-Q8EgX-IlX-KNCZU7CgAAgwYAgOAGrZuGeBztZqsuHioFAJCOQSuKcno0GNrudnrdTk9i6OODPelp
-oUWLFi3apwZ9Hs1WvdmqSwS_PHlVetJo0aJFi1bzFnc7PeHR0uEBAECOpwatm4a7jTUDAKRs0KdH
-A_uTvd3t9KgRAEAqqJQAAACDBgCAbBh0e2EWLVq0aNFKayuNas16mXp8yd2jP3JitXXT2O0fegdr
-r2_X536bmap6F4R8yTdHcH6zhuZ43xob2F-nzozyrBYAQKYNWlGUB4s3RGN8bYMCAQCkhUoJAAAw
-aAAACIDm-jS_tkFdAAAyZ9BzZwZFAQDIAqr9pT9y4n6kh24vzKJFixYtWmltpVGt_R9LN43d-qF3
-sPb6dnnut5mpqndByJd8cwTnN2uo5VkMAIB8gUEDAGDQAACAQQMAYNAAAJBDg24vzKJFixYtWmlt
-pVGt_R9LN43d-qF3sPb6dnnut5mpqndByJd8cwTnN2uo5VkMAIB8oQUVPHr0KGSHgkG_5Eu_5BsT
-KncUAAAGDQAAwQ1aNw3xONrNVp0aAQCkadCKopweDYa2pRncv4cWLVq0aKW1Tw36PJqterNVlwhs
-TFyRnjRatGjRor3YoLudnnRsAACQ5qlB66YxtN1s1SkTAEDyaOLf6dHA_mRvdzs9agQAkAoqJQAA
-wKABACAbBr2yNI8WLVq0aKW1lUa1Zr1MPb7k7tEfObHaumns9Pa9gy2vbpbnfmvUp70LQr7kmyM4
-v1lDc7xvjQ3sr3NnRnlWCwAg0watKMqDxRuiMb62QYEAANJCpQQAABg0AAAEQHN-Gl-boC4AAJkz
-6Lkzg6IAAGQB1f7SHzlxP9JDryzNo0WLFi1aaW2lUa35H0s3jZ3evnew5dXN8txvjfq0d0HIl3xz
-BOc3a6jlWQwAgHyBQQMAYNAAAIBBAwBg0AAAkEODXlmaR4sWLVq00tpKo1rzP5ZuGju9fe9gy6ub
-5bnfGvVp74KQL-nmCM5v1lDLsxgAAPlCCyoYHR0N2aFgkC-5ki-5xoTKHQUAgEEDAEBwg9ZNQzyO
-drNVFw_VAgBIx6AVRTk9Grjb3U6v2_nJDX18sCc9LbRo0aJF_9SgI_fy5FW0aNGiRSutjdGgAQAg
-DE8NWjeNoW0AAEgFTfw7PRpYn_xtQbfTo1IAAAmjUgIAAAwaAACyYdDthVm0aNGiRSutrTSqNetl
-6vEld4-_yInV1k1jt3-oHay9vl2e_21mqupdEPIl3xzB_c0amuN9a2xgf507M8qzWgAAmTZoRVEe
-LN4QjfG1DQoEAJAWKiUAAMCgAQAgAJr70-jaBnUBAMicQc_dGRQFACALqPaX-siJ_5Eeur0wixYt
-WrRopbWVRrXmfyzdNHb7h97B2uvb5bnfZqaq3gUhX-LNEZzfrKGWZzEAAPKFRgkAAJLk_GBPNC5P
-XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
-LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
-AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
-:: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-16 11:25:35",revision=5940]]
-include "drak.lua"
-local app = require "src/app"
-local settings = require "src/settings"
-local sfx = require "src/sfx"
-local file = require "src/file"
-local detail = require "src/detail"
-local ed_inst = require "src/ed_inst"
-local ed_trak = require "src/ed_trak"
-local ed_patt = require "src/ed_patt"
-local note_grid = require "src/note_grid"
-local synth = require "src/synth" -- TODO: temporary, remove
-
-
-function _init()
-	window {
-		tabbed = true,
-		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
-	}
-
-	wrangle_working_file(
-		file.save,
-		file.load,
-		file.default_filename
-	)
-	
-	on_event("drop_items", file.handle_drop_items)
-	
-	poke(0x4000, get(fetch("/system/fonts/p8.font")))
-	
-	poke4(0x5000, get(fetch("pal/0.pal")))
-end
-
-
-function _update()
-	if keyp(settings.keys.play) then
-		sfx.play_or_pause()
-	end
-	if app.refresh_gui then
-		generate_gui()
-		app.refresh_gui = false
-	end
-	app.gui:update_all()
-end
-
-
-function _draw()
-	cls()
-	app.gui:draw_all()
-	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 464, 253, 7)
-end
-
-
-function generate_gui()
-	local cell_width = 14
-	local cell_height = 29
-	app.gui = create_gui()
-	local top_panel = attach_top_panel(app.gui, { x = 0, y = 0 })
-	if app.view == "patt" then
-		ed_patt.attach_pattern_selector(top_panel, { x = 98, y = 0})
-		ed_patt.attach_channel_panel(app.gui, { x = 0, y = 16})
-		note_grid.attach(app.gui, { x = app.channels_width, y = 16 })
-	elseif app.view == "trak" then
-		ed_trak.attach(app.gui, { x = 0, y = 16 })
-	elseif app.view == "inst" then
-		ed_inst.attach(app.gui, { x = 0, y = 16 })
-	end
-	if app.detail then
-		detail.attach_panel(app.gui, { x = 480 - app.detail_width, y = 16})
-	end
-end
-
-
-function attach_top_panel(parent, el)
-	el.width = 480
-	el.height = 16
-	parent:attach(el)
-
-	attach_view_selector(el, { x = 22, y = 0 })
-	attach_play_button(el, { x = 1, y = 0 })
-	attach_detail_button(el, { x = 480 - 16, y = 0})
-	attach_note_attributes(el, { x = 380, y = 0})
-		
-	function el:draw()
-		rectfill(0, 0, el.width, el.height, 2)
-	end	
-
-	return el
-end
-
-
-function attach_play_button(parent, el)
-	el.width = 16
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		spr(stat(464) == 0 and 4 or 5, 0, 0)
-	end
-	
-	function el:click()
-		sfx.play_or_pause()
-	end
-	
-	return el
-end
-
-
-function attach_view_selector(parent, el)
-	el.width = 3 * 20
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		--[[
-		if app.view == "inst" then pal(7, 17) else pal(7, 59) end
-		spr(3, 0, 0)
-		if app.view == "trak" then pal(7, 17) else pal(7, 59) end
-		spr(2, 16 + 4, 0)
-		if app.view == "patt" then pal(7, 17) else pal(7, 59) end
-		spr(1, 2 * 16 + 2 * 4, 0)
-		pal(7, 7)
-		--]]
-		print("inst", 2, 6, app.view == "inst" and 7 or 62)
-		print("trak", 2 + 20, 6, app.view == "trak" and 7 or 62)
-		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
-	end
-	
-	function el:click(msg)
-		if msg.mx < 20 then
-			app.view = "inst"
-		elseif msg.mx < 2 * 20 then
-			app.view = "trak"
-		else
-			app.view = "patt"
-		end
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
--- Default note attributes -------------------------------------------------------
-
-
-function attach_note_attributes(parent, el)
-	el.width = 78
-	el.height = 16
-	--- el.cursor = "pointer"
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		---rectfill(0, 0, self.width, self.height, 0)
-		local note = app.base_note % 12
-		local octave = app.base_note \ 12
-		local is_sharp = (note == 1) or (note == 3) or (note == 6)
-			or (note == 8) or (note == 10)
-		pal(7, self.dragged_note and 7 or 7)
-		if is_sharp then
-			spr(8 + note, 2, 6)
-		else
-			spr(8 + note, 8, 6)
-		end
-		pal(7, 7)
-		print(
-			"\014" .. string.format("%1x", octave),
-			2 + 12, 7,
-			self.dragged_note and 7 or 22
-		)
-		local x = 20
-		rectfill(x, 8, x + 20, 10, 59)
-		rectfill(
-			x, 8,
-			x + min(20 * (app.base_volume / 64), 20), 10,
-			self.dragged_volume and 7 or 17
-		)
-		if self.dragged_volume then
-			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
-		end
-		print(
-			"\014inst " .. string.format("%d", app.base_instrument),
-			44, 7,
-			self.dragged_instrument and 7 or 14 -- col 26
-		)
-	end	
-	
-	function el:click(msg)
-		-- TODO: replace with pull-down menus
-		if msg.mx < 18 then
-			self.dragged_note = {
-				y0 = msg.my,
-				start = app.base_note
-			}
-		elseif msg.mx < 42 then
-			self.dragged_volume = {
-				y0 = msg.my,
-				start = app.base_volume
-			}
-		else
-			self.dragged_instrument = {
-				y0 = msg.my,
-				start = app.base_instrument
-			}
-		end
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		if self.dragged_note then
-			local delta = msg.my - self.dragged_note.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_note.start - (((delta + 3) \ 6) * 12)
-			app.base_note = mid(0, new_val, 120)
-		elseif self.dragged_volume then
-			local delta = msg.my - self.dragged_volume.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_volume.start - (((delta + 1) \ 2) * 1)
-			app.base_volume = mid(0, new_val, 0x40) -- TODO: handle vol > 64
-		elseif self.dragged_instrument then
-			local delta = msg.my - self.dragged_instrument.y0
-			if (delta == 0) return -- or else double click doesn't work
-			local new_val = self.dragged_instrument.start - (((delta + 3) \ 6) * 1)
-			app.base_instrument = mid(0, new_val, 0xfe) -- TODO: handle vol > 64
-			-- TODO: temporary, remove
-			app.instrument = app.base_instrument
-			app.node = 0
-		end
-	end
-	
-	function el:release(msg)
-		self.dragged_note = nil
-		self.dragged_volume = nil
-		if self.dragged_instrument and app.view == "inst" then
-			app.refresh_gui = true
-		end
-		self.dragged_instrument = nil
-		self.cursor = get_spr(50)
-	end
-
-	function el:doubleclick(msg)
-		if msg.mx < 18 then
-			notify("***")
-			app.base_note = 48
-		elseif msg.mx < 42 then
-			app.base_volume = 0x32
-		else
-			app.base_instrument = 01
-		end
-	end
-	
-	return el
-end
-
-
-function attach_detail_button(parent, el)
-	el.width = 16
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		pal(7, app.detail and 7 or 62)
-		spr(45, 1, 3)
-		pal(7, 7)		
-	end	
-	
-	function el:tap()
-		app.detail = not app.detail
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-:: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2024-04-14 09:49:39",revision=0]]
-
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNiAxNTowOTozNCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMToyNTozNSIscmV2aXNpb249NTIwNl1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNiAxNTowOTozNCIscmV2aXNpb249NTI4N11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNiAxNTowOTozNCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
@@ -603,28 +71,30 @@ NWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANh
 Y2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQABf
 ODU2ZDABAK4gNjICAB0wAQCwMWUzNzNjMDAzNzQnASEwMwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixzdG9yZWQ9IjIwMjQtMDQt
-MTAgMDQ6NTI6NTEiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
+NC0xNiAxNTowOTozNCIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE4OjEzOjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMToyNDoyNiIscmV2aXNpb249NzYxXV1sejQAgwEAAHgIAADwJ3B4dQADKAAAAwAED0AQ
+NC0xNiAxNTowOTozNCIscmV2aXNpb249ODQ4XV1sejQAfgEAAG4IAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxAB83MQAC8AaAkA8R
-AiAPH1ACBRAB8KANAA86D2SvAf4SH9ACDQAPFA8dBhABCQAPNV86UAEACgAPDGAPSQAPePCSYgAX
-QGIAFg5iAM3wuw0EAA8SMA8U8Mc1AB8MlgABHg7GAA8vAP--Jh--AQDM8AfoDgANQA8kDyYPKP--
-LSHzLSzzLfBwFQAv87AIAP-fH-8BAJdQ-----x8=
+EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxABw3MQD_JSUPIgAR
+MA_A8L0POg9kMA8fD--AARAPFA8dBhABCQAPNR86AC5QAQAKAA8MYA9JAA948JJXABdAVwAVA4gA
+7YDwuw0PBAAPEjAPFPDHNgAfDL0AAR4DvAAPLwD--yYf-wEAzPAH6AMADUAPJA8mDyj--y0h9C0s
+9C3wcBUAL-SwCAD-3x--AQCXUP----8f
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE1IDE1OjE0OjQxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAxMToyNDozNSIscmV2aXNpb249NDYxXV1sejQAigEAAH0IAADwJ3B4dQADKAAAAwAED0AQ
+NC0xNiAxNTowOTozNCIscmV2aXNpb249NTQ5XV1sejQAzAEAALAIAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-gNWgEQBg4A
-AgEgASAB8AACEAIPIBABIA8hIAHgAQ4ACxwA8TMPEgIgDyBQAiAB8GMPEw8REAcPM9ABoA8qYA9q
-IAIBDw5AD-8AD0YAD2ygAaAPFPB8D-gKD-8PgA-3Dw0B8AkBEAZMAAV1ABMvWQD-IDAPwPDDDygP
--8ACYAwP5A-PD7kPlA9-D2oPWg9KDz8PNR8vDyoPJQ8V8KEP_AoMUQAGFANQABAOTwA8DPDGLgAf
-Ay0A--8zH-8BAMyf6A4ADUD8sPBwCAD-5R--AQCXUP----8f
+Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-IYWgEQBg4A
+AgEgASAB8AACEAIPIBABIA8hIAEwD4CQAQ8SEAYPIAACEwAKIQDwReAPEgIgDyBQAg8XEAHwYw8T
+DxEgD0sPJMABoA8qYA9qIAIBDw5AD-8P2Q_5D58Pkw95D2YPUw4PLQ8gDxMWEAGgDxTwfA-4Cg--
+D4AP9w8NAfAJAW4AFxCNABAvbAD-KiUPLwACATAPwPDDDygP-8ACYAwP5A-PD7kPlA9-D2oPWg9K
+Dz8PNR8vDyoPJQ8VAaAPRvCUD-gKDFgABhMDwwAgMA5TADwM8MYuAB8DLQD--zMf-wEAzFDoDgAN
+QIYF8AUMDzIPLvwrEAwQ-CsfMgwU-CvwcBwAL-ywCAD-3x--AQCXUP----8f
 :: sfx/2.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
 NC0xNSAxMToyMzo0NSIscmV2aXNpb249MTBdXWx6NAA1AQAA0QgAAPAncHh1AAMoAAADAAQPQBAC
@@ -653,10 +123,11 @@ IA8cD-8PHA8aCAAeGBAAYv--HwELIQIAv-sfDzILDyQPDg85BwACQPsf8HBYAPIBDCAPNA8rDyQL
 DzQLDysPKAcAUCYPKAsDEwAYCQIA_gD7EQgRCwgLEQgLIQsBCwgCAFD7EQ4POUgAIDILCAAiDz0H
 AJE5Cw8rCw4LBAt6AAEeABAcDgAxFfsRgQA-QPuwCAD-1x--AQCXUP----8f
 :: sfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MjQgMDA6NDg6MDYiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNiAxNTowOTozNCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-16 11:25:35",revision=3386]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-16 15:09:34",revision=3472]]
 local app = {}
 
 
@@ -869,21 +340,21 @@ function app.attach_num_field(parent, el)
 	function el:click(msg)
 		if (not self.visible()) return
 		if msg.mx >= self.width - 21 then
-			self.dragged = { y0 = msg.my, val0 = self.get() }
+			self.dragged = true
 			self.cursor = 0 -- TODO: capture mouse
 		end
 	end
 	function el:drag(msg)
 		if (not el.visible()) return
 		if self.dragged then
-			local delta = msg.my - self.dragged.y0
-			local new = self.dragged.val0 - ((delta - 3) / 6)
-			new = mid(0, new, 0xff)
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			new = mid(0, self.get() - delta, 0xff)
 			self.set(new)
 		end
 	end
 	function el:release(msg)
 		self.dragged = nil
+		mouselock(false)
 	end
 	return el
 end
@@ -1187,7 +658,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-16 11:25:35",revision=3323]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-16 15:09:34",revision=3405]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -1328,7 +799,7 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-14 07:57:29",revision=2517]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-16 15:09:34",revision=2526]]
 local app = require "src/app"
 local constants = require "src/constants"
 local sfx = require "src/sfx"
@@ -1383,7 +854,7 @@ function ed_patt.attach_channel_panel(parent, el)
 		local part = (msg.my - app.ruler_height) % app.cell_height
 		if part < 10 then
 			local track_id = sfx.pattern_track(app.pattern, channel)
-			self.dragged = { channel = channel, y0 = msg.my, id0 =  track_id}
+			self.dragged = { channel = channel }
 			self.cursor = 0 -- TODO: capture mouse
 		elseif part < 20 then
 			sfx.mute_channel(
@@ -1396,9 +867,9 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:drag(msg)
 		if self.dragged then
-			local delta = msg.my - self.dragged.y0
-			local track_id = self.dragged.id0 - math.floor(0.5 + ((delta + 3) \ 6))
-			track_id = mid(0, track_id, 0xff)
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			local track_id = peek(0x30100 + app.pattern * 20 + self.dragged.channel)
+			track_id = mid(0, track_id - delta, 0xff)
 			-- TODO: move to sfx
 			poke(0x30100 + app.pattern * 20 + self.dragged.channel, track_id)
 		end
@@ -1406,6 +877,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:release(msg)
 		self.dragged = nil
+		mouselock(false)
 	end
 		
 	return el
@@ -1482,7 +954,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-16 11:25:35",revision=1067]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-16 15:09:34",revision=1159]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -1722,17 +1194,19 @@ function envelopes.attach_slider(parent, el)
 	function el:click(msg)
 		self.cursor = 0
 		local val = sfx.env_param(app.instrument, self.env_id, self.param)
-		self.dragged = { y0 = msg.my, val0 = val }
+		self.dragged = true
 	end
 	function el:drag(msg)
 		if self.dragged then
-			local delta = msg.my - self.dragged.y0
-			local new = self.dragged.val0 - delta
+			local _, delta = mouselock(true, key("shift") and 0.1 or 0.5, 0)
+			local old = sfx.env_param(app.instrument, self.env_id, self.param)
+			local new = old - delta
 			new = mid(0, new, 255)
 			sfx.set_env_param(app.instrument, self.env_id, self.param, new)
 		end
 	end
 	function el:release(msg)
+		mouselock(false)
 		self.cursor = get_spr(50)
 		self.dragged = nil
 	end
@@ -2731,7 +2205,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-16 11:25:35",revision=4005]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-16 15:09:34",revision=4090]]
 local sfx = {}
 
 
@@ -3141,7 +2615,7 @@ function sfx.set_node_osc_wavetable(instrument, node, wt)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local previous = peek(node_addr + 1)
-	poke(node_addr + 1, (previous & 0x0f) | (wt << 4)
+	poke(node_addr + 1, (previous & 0x0f) | (wt << 4))
 end
 
 function sfx.node_flags(instrument, node)
@@ -3278,7 +2752,7 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-16 11:25:35",revision=3869]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-16 15:09:34",revision=3996]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
@@ -3370,10 +2844,10 @@ function synth.attach_osc(parent, el)
 		fg = 5,
 		highlight = 15,
 		items = {
-			{ label = "wt 0", action = function() end },
-			{ label = "wt 1", action = function()  end },
-			{ label = "wt 3", action = function()  end },
-			{ label = "wt 4", action = function()  end },
+			{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+			{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+			{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+			{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 		}
 	})
 	synth.attach_knob(el, { label = "phase", param = 5, node_id = el.node_id } )
@@ -3700,11 +3174,7 @@ function synth.attach_knob(parent, el)
 		app.node = self.node_id
 		if 32 <= msg.mx and msg.mx <= 64 then
 			local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-			self.dragged = {
-				y0 = msg.my,
-				val10 = val1,
-				val00 = val0,
-			}
+			self.dragged = true
 			self.show_val1 = msg.mb == 1
 			self.show_val0 = msg.mb != 1
 			self.cursor = 0 -- TODO: capture mouse
@@ -3902,14 +3372,6 @@ function synth.attach_knob(parent, el)
 					},
 				}
 			}
-			--[[
-			if flags & 0x4 > 1 or msg.last_mb == 1 then
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ (msg.last_mb == 1 and 0x4 or 0x8))
-			else
-				-- toggle rng
-				sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ 0x10)
-			end
-			]]
 		end
 	end
 
@@ -3928,18 +3390,17 @@ function synth.attach_knob(parent, el)
 	
 	function el:drag(msg)
 		if self.dragged then
-			local flags, _val1, _val0, _env = sfx.node_param(app.instrument, self.node_id, self.param)
-			local delta = msg.my - self.dragged.y0
-			if key("shift") then
-				delta = (delta - 3) / 6
-			end
-			local val0 = self.dragged.val00
-			local val1 = self.dragged.val10
+			local flags, val1, val0, _env = sfx.node_param(app.instrument, self.node_id, self.param)
 			-- Handle signed i8s
 			if (el.max_val < 128) then
 				if (val0 >= 128) val0 -= 256
 				if (val1 >= 128) val1 -= 256
 			end
+			local sensitivity = key("shift") and 0.1 or 0.5
+			if self.label == "vol" then
+				sensitivity = key("shift") and 0.025 or 0.125
+			end
+			local _, delta = mouselock(true, sensitivity, 0)
 			if msg.mb == 1 then
 				local new = val1 - delta
 				new = mid(self.min_val, new, self.max_val)
@@ -3953,6 +3414,7 @@ function synth.attach_knob(parent, el)
 	end
 	
 	function el:release(msg)
+		mouselock(false)
 		self.dragged = nil
 		self.show_val0 = false
 		self.show_val1 = false
@@ -4041,30 +3503,552 @@ end
 
 return synth
 :: src/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixzdG9yZWQ9IjIwMjQtMDQt
-MDcgMDg6MTQ6MDAiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
+NC0xNiAxNTowOTozNCIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
+MG5pbA==
+:: drak.lua
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-13 06:43:38",revision=982]]
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name .. '.lua')
+	local src = fetch(filename) 
+
+	if (type(src) != "string") panic("could not include " .. filename)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("Syntax error:", tostr(err))
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+function panic(...)
+	local args = { ... }
+	foreach(
+		args,
+		function(str)
+			send_message(3, { event = "report_error", content = str })
+		end
+	)
+	stop()
+end
+
+
+-- Table utility functions --------------------------------------------------------
+
+
+function tostrrec(t)
+	if type(t) != "table" then
+		return tostr(t)
+	end
+	
+	local s = nil
+	for k, v in pairs(t) do
+		if not(s) then
+			s = "{ "
+		else
+			s ..= ", "
+		end
+		s ..= tostr(k) .. " = " .. tostrrec(v)
+	end
+	s ..= " }"
+
+	return s
+end
+
+
+-- Char utilities -----------------------------------------------------------------
+
+
+function keyp_num()
+	if (keyp("9")) return 9
+	if (keyp("8")) return 8
+	if (keyp("7")) return 7
+	if (keyp("6")) return 6
+	if (keyp("5")) return 5
+	if (keyp("4")) return 4
+	if (keyp("3")) return 3
+	if (keyp("2")) return 2
+	if (keyp("1")) return 1
+	if (keyp("0")) return 0
+	return nil
+end
+
+
+function keyp_hex()
+	if (keyp("f")) return 0xf
+	if (keyp("e")) return 0xe
+	if (keyp("d")) return 0xd
+	if (keyp("c")) return 0xc
+	if (keyp("b")) return 0xb
+	if (keyp("a")) return 0xa
+	if (keyp("9")) return 0x9
+	if (keyp("8")) return 0x8
+	if (keyp("7")) return 0x7
+	if (keyp("6")) return 0x6
+	if (keyp("5")) return 0x5
+	if (keyp("4")) return 0x4
+	if (keyp("3")) return 0x3
+	if (keyp("2")) return 0x2
+	if (keyp("1")) return 0x1
+	if (keyp("0")) return 0x0
+	return nil
+end
+
+function is_num_char(c)
+	if (not c) return
+	return ("0" <= c) and (c <= "9")
+end
+
+
+function is_hexa_char(c)
+	if (not c) return
+	local is_num = ("0" <= c) and (c <= "9")
+	local is_hex_alpha = ("a" <= c) and (c <= "f")
+	return is_num or is_hex_alpha
+end
+
+
+function p8_centered_print(s, x, y, col)
+	local count = #s
+	print(s, x - ((count * 4) \ 2), y, col)
+end
+
+
+
+-- Drawing -------------------------------------------------------------------------
+
+
+-- From Sophie on the discord
+function get_drawspace()
+    return {
+        cam_x=peek4(0x5510),
+        cam_y=peek4(0x5514),
+        clip_l=peek2(0x5528),
+        clip_t=peek2(0x552a),
+        clip_r=peek2(0x552c),
+        clip_b=peek2(0x552e),
+    }
+end
+
+
+function set_drawspace(drawspace)
+    poke4(0x5510,drawspace.cam_x)
+    poke4(0x5514,drawspace.cam_y)
+    poke2(0x5528,drawspace.clip_l)
+    poke2(0x552a,drawspace.clip_t)
+    poke2(0x552c,drawspace.clip_r)
+    poke2(0x552e,drawspace.clip_b)
+end
+
+:: label.png
+b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAV60lEQVR4Ae2dX2gkx53He9oN
+pweBQXDdDws67tbyQ8MsCCwYLRZkCJwZMMZ-sohhHCyjXUEwVkCIcCw_79gx_5AIBcsYg2SxAnsY
+hBc7mIBIXsYgI0EmIFiBHrLRQRYEHgUEC-uweTB7D3X09nWPWt3V-7s-Hxqpuqe_9avfr6q_9Vp5
+8vAHBQAAsoeWcLzvn72e2Vq8_PBz0fjis499Sn7_i1_yhwAgJipPHv5gf3d7U4QeFNSdhWP6VAXq
+7DGIf3fGowHciBMkzoW97dHZ0d--sfLZ37_tnXf8L5zPF599-PNf-FL89e_HwrU80PyUIFAyURnW
+iw8-F25rNfx0BoCMuLNofPHZx4Fsy6cjB7Uae_fzXDgMQd3Zp0c7DdqRhojqJ_eYOG-21ne3Lwdy
+dgCASC4MiftDeJSHRzsN2gogRve_aob_GqFrnzd7h-OKDuJvfI7sfVcBQIRO5-9UZmHyjmlEaBRO
+g7Y70YXJx12d89zWcm3RQbxanR2-RrgAeDRAHO5mP1b_T5nVzb8RXThyMo5vtyZhVgEMWuTgKJn-
+bJPM0O7L9oQ9fpW_3nFngNwR9Mye1z9CWwtkSk6DDmRDsXrx989eF3eLlY-deSVSTXilAUqIMJAv
+PvtYmIM4Nd5G4ThZsR40n5Zl7_ZnPoHm7PYxDypPHv6Q2OIl6adyvPjw86D7I9ZbCgDKjEoJAACy
+SeX9iTeoAgBABlEpAQAABg0AAAHQip3eh_1XvDu83-6WTQAA2aTy-sQbpXXnODx6a2zAroJiMHdm
+UIR00cqT6pOXX6r84Y_RD-vc-PN-2-wrOwmKTch9vjU2uNDurT7uzltjg3LeH--PoL-88UA03nxm
+UrTffGbS-pP13f7TedqhbeuvXfvBXz4VjVsvvOOnnR2Pfm7__fN__vuf7orGv-3nz_xtd8_PXpsR
+jfe_2RXt977ZHTqmu_d5naV7Wn_jHfO8KiWQ0YU9xU9Be3qvkdyYPnteuEZyY6br0UMtOEIiMZDk
+Ue0vwjct97TsVViq-VeHww7VOn7yxl41qy0a7r9hePLySwm4s9uOh1qzhXU8Ljwn9p7enSV6Xoi9
+p-ewEmMGmmckPR0-_ewZKLT-MaMt5oXD_h8z0J6-0KPTcudbL7wjHuHUIpGQ6QyP9fq1D16-FtVo
+ms9_wqn9WK3V3_ostO7vQ_83RzsOnrz8UuUPf4zbnePmo9dm4ugctKefc_6-Z7oZsUZ_ej43--zf
+Nv8q7chbY4O5M_O8PnE7taIot154Z_j3D9uvBBpnfG3D-moldevrryI0aNVPpzefmfRvzZbE8mW7
+1v7dUTWrcOdVMCrCu7OiKP73aHy8982uT9fz3y3ynpFbc0wZsUYx7fy5M8PuyA53dnwRnd194uC5
+_edTP8LBDFpYp9tAv-zx4MsfD4J6dDaJxJ197tS--_nu0Labj16bsTesV4_eou2np3c373CRjBl5
+9KjGdFT7wmK6--oZ009PP0vpJynpMX1WLKg7e3ixn_9x8MFfPhWJhMwlIb96f_KNAtjuUD5sv2J-
+ffLyS0Pd_f32tyHvYftKb40NilpPKBt233Tsc59sjQ3EIFbDT_ehP4W0deHLiqLceuGdkEldEOj1
+a-8X6OuvMOgABn0eIQ3az04CyLtBQyoU2aD9eHS07gwAgEEDABQflRIAAGSTSqNai3C4Zqve7fTK
+Uz7dNE6PBuRLvsWA85s1VO4oAIASGXSzVW_26v6-F_Ae1k3jvO9DfyLfYuRr-S0S4py6j2qxz697
+HbOwn7U4Bu12ekMX8rzveef0aDB0FU_PBoU8wORbbLqdnrDj8pzfofs2C-s5FoMG6wYmZfLNHYV0
+YYlFzMLiYtBJXM6lyrc8Hi0Wt5D5djs9zmkWzq8a3w1s3cOORvHuZ3FErYNqP7G6aRTvAJ_XbyGT
+9V7fotJs1ctzfh1bN1Pnt9Ko1qJd11LdvbpppH7Hki-5cn6Lur5a0Hwi6VOwNSZf8iVf8k3foBVF
+2ente-z600nz_vaPclN5Q-9z7la3UZ-2LkjBIN9i89NJk-XNFGqpbksAgByhxTTuiw8-t9rfP3s9
+sXwG9_9ZbWPiirQ8qDZk3LTyjSR0SWolnW8e1zfFfQV2VPFPNw3xONrNVl08EkN--_x18Qiz-u5X
+r4on7pSMiSviEZvs3bnb4vGzKd1a669EXP-aaPNNIG7ktfK5RjndG7lb3xTXCOxoVuv0aCBM2dHu
+dnpyBu3mJ7-5faDzH1WSn2zdTKCUYh_LnS3nd-mKGy3_1yine6MA65vMGqEdbtAJ8N2vXvVp09G6
+hrj2-Wwv6zA4tH6w5mxVXEIrQVpxw9QqzBrlem-kaH3TWiO0dtTE3Pknv-m9H2uOnE_2bvq-_Y2J
+K_KR0IaJm1a_YShbrSLMNxfrm5G4JUezWrppDG03W3W5oV98_LlofP-sdUVRvvvVq8mkNLh-z341
+iWs-_biJkVbcAqxRYnELsK9yUaviUWlUa-5766ax09v36LCyNP-v-3UoN5U39D-nrnyN_rR3QQoG
+_RablaX55dVN1jc7aJGPmEefBQAohUELTn-3W_8Ob337tdWO8BILEzctLXVmzkVaX4gQNZvTWlma
+L9UypJVvHuvMnIsdF60dzf4y9fiSu0d-5CT5BV5e3SyVQaeVbx7rzJyLHRetnUqjWrMb9NbYwP7z
+3JlhN2jdNHZ6_963Qam8tVGf9i4I_ZJvjuD8Zg3N-enB4g3RGF-bKM9SAQDkwKAjYfD2mqIoxp3F
+hPMJEzctLXVmzsSFoagxjZvW0oaJm5aWOjNn4sJQNPen8bUN6gIAkDmDnjszKAoAQBaoNKo1-711
+09jp7Xt0WFmaX17dVBRl8Paa_GLcWZSYljVOUMLEldA26tOiIHnMVyJuJPnmqFZlW9-Uz2-CWmt9
+MztnLSbjl1tXC_lsw8RNS5tWvnmsM3Mudly0DtSYDBoAAEKCQQMAYNAAAIBBAwBg0AAAkEODXlma
+R4sWLVq00tpKo1rzP5ZuGju9fe9gy6ub5bnfGvVp74KQL-nmCM5v1lDLsxgAAPlCCyoYHR0N2aFg
+kC-5ki-5xoTKHQUAkE20guVzfLBntS9PXk0ldJJx08qXuOxnSM6gddMQjdOjgb3dbNUVRel2ejlK
+ydpPxwd7lyevvv2zm_L1zt3bse7mVOKmlS9xix03xf0MdlSrdXo0cLfDWLP98k9S6_DO3dv_txRx
+iUvcdOOitaMlcPMnrHVjXf6xxnUU2n-QaPMtW9zE1rdsdU5rP6NNyKCzw527twNtr5CFtnb2nbu3
+08q3bHETWN_y1Tk7_7nMPDVo3TTc7WarLv52O728pGTtJ7HDUjm6AhE67m3tyLdscRNb37LVOa39
+DHYqjWrNf2-dNHb7hx4d2guz7fXt8pRvZqrqXRDyJd8cwfnNGip3FABANtEKls---PqWd4e3vv3a
+akd4eRKXuMSFyFHjG7q9MJuKNq05E5e4xE337BdPq9lfph5fcvfoj5xIBl7flp90CG2ojUVc4hI3
+1bhozzVoRVG2xgb217kzI5UFluY--vsD7w67xCUucbMaFy4waEVRHizeEI3xtQ0KBACQIYPONcfX
+biuKcvmrm8QlLnFzFxccqAXLJ60tRVziEhciR3N-Gl-boC4AAJkz6Lkzg6IAAGQB1f7SHzlxP9JD
+txdmk9ceX7tt-SUucYmbr7hoHVQa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8yTdHcH6zhlqexQAA
+yBcYNAAABg0AABg0AAAGDQAAOTTo9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8
+yTdHcH6zhlqexQAAyBdaUMGjR49CdigY5Eu_5Eu_MaFyRwEAZBMtpnEH9_9ZbWPiSi60dnnCcVPB
+Pueg005xjSJJOS97I4-7CiJEFf900xCPo91s1cUjMbQxcUU8YpO9O3fb_ptN7eD_PbdWPHHPOS2s
+OYvDn-01CunO0usb_d4o9r6CqNCs1unRQJiyvd3t9IRNl60uwrA_2bqZzGEQ5z8VrZVsXgiTrwO5
+9Q2-N8qwr9BGon1q0EOJ1prD7MgktXbbSiZuGMeJVpv9NQqTr1jZfO2NYuwrtHJa9UJ9t9Prdnrh
+3fmTrZufbN3MhdZeslTmnBY5WiPpwyAe6fWNZG_UbV_BNJrV0k1jaLvZqgubDjr04P496eslFa0x
+ccXSCt6du53MnNPCnm-Qaae1vhHif32j3RuF31cQFZVGtea-t24aO719jw4rS-PLq5vlKV_jPu1d
+EPIl3xzB_c0aKncUAEA20WIa9-R3v-Xu8Na3X1ttxyVWNm1alK1W7CvIHSolyAIrS-OpaMtWK-YV
+2nxpNfvL1ONL7h79kRM2etwsr26moi1brdhXaPOlrTSqNbtBb40N7D-PnRl2g9ZNY6e3730blOr8
+NOrT3gUhX-LNEZzfrKG5Pz1YvCEa42sb5VkqAIAcGHQkDN5eUxTFuLOINrOUrVbsK8gdakzjhtlS
+ZdOmRdlqxb6C3KG5P42vbVAXAIDMGfTcmUFRAACyQKVRrfnvrZvGTm-fo8PK0vzy6qaiKIO318QX
+485i0DnlSNuoT4uChIlrr1uS2rTyTatWecw34VrZ_6eyJxPWWuub2TlrMRm-3H4qp1ZRFOnVDaMt
+W63YV2hzp1VjMmgAAAgJBg0AgEEDAAAGDQCAQQMAQA4NemVpHi1atGjRSmsrjWrN-1i6aez09r2D
+La9ulud_a9SnvQtCvuSbIzi-WUMtz2IAAOQLLahgdHQ0ZIeCQb7kS77kGxMqdxQAAAYNAADBDVo3
+DfE42s1WXTxUCgAgHYNWFOX0aOBudzu9bqcnN-TxwZ70tNCiRYsW7VODPo9mqy4X_PLkVelJo0WL
+Fi3aiw262_lJxwYAAGk0q6WbhrvdbNWpEQBAmgZ9ejSwPtnb3U6PGgEApIJKCQAAMGgAAMiGQbcX
+ZtGiRYsWrbS20qjWrJepx5fcPfojJ1ZbN43d-qF3sPb6dnnut5mpqndByJd8cwTnN2tojvetsYH9
+de7MKM9qAQBk2qAVRXmweEM0xtc2KBAAQFqolAAAAIMGAIAAaO5P42sb1AUAIHMGPXdmUBQAgCyg
+2l-6IyfuR3ro9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8yTdHcH6zhlqexQAA
+yBcYNAAABg0AABg0AAAGDQAAOTTo9sIsWrRo0aKV1lYa1Zr-sXTT2O0fegdrr2_X536bmap6F4R8
+yTdHcH6zhlqexQAAyBdaUMGjR49CdigY5Eu_5Eu_MaFyRwEAYNAAUFL_5V9nKIK8QeumIR5Hu9mq
+W38BAOTc_cHep3i0vEErinJ6NBjalmZw-x5atGjRCnx6NLUabtDn0WzV5QIbE1ekJ40WLdriaf14
+NLUKYNDdTq-b6UnHBgAI6tFgoVkt3TSGtgEAImH86juKovzzH7uUIphBnx4NrE-2tqDb6VEpAJDj
+n--YFdb8YO9T0YBgBg0AEKtHK4piTFyhFIFQKQEAQOkMemVpHi1atGjRSmsrjWrNepl6fMndoz9y
+YrV109jp7XsHW17dLM-91qhPexeEfMk3R3B_s4bmeN8aG9hf586M8qwWAECmDVpRlAeLN0RjfG2D
+AgEApIVKCQAAMGgAAAiA5v40vrZBXQAAMmfQc2cGRQEAyAKq-aU-cuJ_pIdeWZpHixYtWrTS2kqj
+WvM-lm4aO71972DLq5vlud8a9WnvgpAv_eYIzm-WUMuzGAAA_QKDBgDAoAEAAIMGAMCgAQAghwa9
+sjSPFi1atGiltZVGteZ-LN00dnr73sGWVzfLc7816tPeBSFf8s0RnN_soZZnMQAA8oUWVDA6Ohqy
+Q8EgX-IlX-KNCZU7CgAAgwYAgOAGrZuGeBztZqsuHioFAJCOQSuKcno0GNrudnrdTk9i6OODPelp
+oUWLFi3apwZ9Hs1WvdmqSwS_PHlVetJo0aJFi1bzFnc7PeHR0uEBAECOpwatm4a7jTUDAKRs0KdH
+A_uTvd3t9KgRAEAqqJQAAACDBgCAbBh0e2EWLVq0aNFKayuNas16mXp8yd2jP3JitXXT2O0fegdr
+r2_X536bmap6F4R8yTdHcH6zhuZ43xob2F-nzozyrBYAQKYNWlGUB4s3RGN8bYMCAQCkhUoJAAAw
+aAAACIDm-jS_tkFdAAAyZ9BzZwZFAQDIAqr9pT9y4n6kh24vzKJFixYtWmltpVGt_R9LN43d-qF3
+sPb6dnnut5mpqndByJd8cwTnN2uo5VkMAIB8gUEDAGDQAACAQQMAYNAAAJBDg24vzKJFixYtWmlt
+pVGt_R9LN43d-qF3sPb6dnnut5mpqndByJd8cwTnN2uo5VkMAIB8oQUVPHr0KGSHgkG_5Eu_5BsT
+KncUAAAGDQAAwQ1aNw3xONrNVp0aAQCkadCKopweDYa2pRncv4cWLVq0aKW1Tw36PJqterNVlwhs
+TFyRnjRatGjRor3YoLudnnRsAACQ5qlB66YxtN1s1SkTAEDyaOLf6dHA_mRvdzs9agQAkAoqJQAA
+wKABACAbBr2yNI8WLVq0aKW1lUa1Zr1MPb7k7tEfObHaumns9Pa9gy2vbpbnfmvUp70LQr7kmyM4
+v1lDc7xvjQ3sr3NnRnlWCwAg0watKMqDxRuiMb62QYEAANJCpQQAABg0AAAEQHN-Gl-boC4AAJkz
+6Lkzg6IAAGQB1f7SHzlxP9JDryzNo0WLFi1aaW2lUa35H0s3jZ3evnew5dXN8txvjfq0d0HIl3xz
+BOc3a6jlWQwAgHyBQQMAYNAAAIBBAwBg0AAAkEODXlmaR4sWLVq00tpKo1rzP5ZuGju9fe9gy6ub
+5bnfGvVp74KQL-nmCM5v1lDLsxgAAPlCCyoYHR0N2aFgkC-5ki-5xoTKHQUAgEEDAEBwg9ZNQzyO
+drNVFw_VAgBIx6AVRTk9Grjb3U6v2_nJDX18sCc9LbRo0aJF_9SgI_fy5FW0aNGiRSutjdGgAQAg
+DE8NWjeNoW0AAEgFTfw7PRpYn_xtQbfTo1IAAAmjUgIAAAwaAACyYdDthVm0aNGiRSutrTSqNetl
+6vEld4-_yInV1k1jt3-oHay9vl2e_21mqupdEPIl3xzB_c0amuN9a2xgf507M8qzWgAAmTZoRVEe
+LN4QjfG1DQoEAJAWKiUAAMCgAQAgAJr70-jaBnUBAMicQc_dGRQFACALqPaX-siJ_5Eeur0wixYt
+WrRopbWVRrXmfyzdNHb7h97B2uvb5bnfZqaq3gUhX-LNEZzfrKGWZzEAAPKFRgkAAJLk_GBPNC5P
+XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
+LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
+AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
+:: main.lua
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-16 15:09:34",revision=6037]]
+include "drak.lua"
+local app = require "src/app"
+local settings = require "src/settings"
+local sfx = require "src/sfx"
+local file = require "src/file"
+local detail = require "src/detail"
+local ed_inst = require "src/ed_inst"
+local ed_trak = require "src/ed_trak"
+local ed_patt = require "src/ed_patt"
+local note_grid = require "src/note_grid"
+local synth = require "src/synth" -- TODO: temporary, remove
+
+
+function _init()
+	window {
+		tabbed = true,
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
+	}
+
+	wrangle_working_file(
+		file.save,
+		file.load,
+		file.default_filename
+	)
+	
+	on_event("drop_items", file.handle_drop_items)
+	
+	poke(0x4000, get(fetch("/system/fonts/p8.font")))
+	
+	poke4(0x5000, get(fetch("pal/0.pal")))
+end
+
+
+function _update()
+	if keyp(settings.keys.play) then
+		sfx.play_or_pause()
+	end
+	if app.refresh_gui then
+		generate_gui()
+		app.refresh_gui = false
+	end
+	app.gui:update_all()
+end
+
+
+function _draw()
+	cls()
+	app.gui:draw_all()
+	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 464, 253, 7)
+end
+
+
+function generate_gui()
+	local cell_width = 14
+	local cell_height = 29
+	app.gui = create_gui()
+	local top_panel = attach_top_panel(app.gui, { x = 0, y = 0 })
+	if app.view == "patt" then
+		ed_patt.attach_pattern_selector(top_panel, { x = 98, y = 0})
+		ed_patt.attach_channel_panel(app.gui, { x = 0, y = 16})
+		note_grid.attach(app.gui, { x = app.channels_width, y = 16 })
+	elseif app.view == "trak" then
+		ed_trak.attach(app.gui, { x = 0, y = 16 })
+	elseif app.view == "inst" then
+		ed_inst.attach(app.gui, { x = 0, y = 16 })
+	end
+	if app.detail then
+		detail.attach_panel(app.gui, { x = 480 - app.detail_width, y = 16})
+	end
+end
+
+
+function attach_top_panel(parent, el)
+	el.width = 480
+	el.height = 16
+	parent:attach(el)
+
+	attach_view_selector(el, { x = 22, y = 0 })
+	attach_play_button(el, { x = 1, y = 0 })
+	attach_detail_button(el, { x = 480 - 16, y = 0})
+	attach_note_attributes(el, { x = 380, y = 0})
+		
+	function el:draw()
+		rectfill(0, 0, el.width, el.height, 2)
+	end	
+
+	return el
+end
+
+
+function attach_play_button(parent, el)
+	el.width = 16
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		spr(stat(464) == 0 and 4 or 5, 0, 0)
+	end
+	
+	function el:click()
+		sfx.play_or_pause()
+	end
+	
+	return el
+end
+
+
+function attach_view_selector(parent, el)
+	el.width = 3 * 20
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw()
+		--[[
+		if app.view == "inst" then pal(7, 17) else pal(7, 59) end
+		spr(3, 0, 0)
+		if app.view == "trak" then pal(7, 17) else pal(7, 59) end
+		spr(2, 16 + 4, 0)
+		if app.view == "patt" then pal(7, 17) else pal(7, 59) end
+		spr(1, 2 * 16 + 2 * 4, 0)
+		pal(7, 7)
+		--]]
+		print("inst", 2, 6, app.view == "inst" and 7 or 62)
+		print("trak", 2 + 20, 6, app.view == "trak" and 7 or 62)
+		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
+	end
+	
+	function el:click(msg)
+		if msg.mx < 20 then
+			app.view = "inst"
+		elseif msg.mx < 2 * 20 then
+			app.view = "trak"
+		else
+			app.view = "patt"
+		end
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+-- Default note attributes -------------------------------------------------------
+
+
+function attach_note_attributes(parent, el)
+	el.width = 78
+	el.height = 16
+	--- el.cursor = "pointer"
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		---rectfill(0, 0, self.width, self.height, 0)
+		local note = app.base_note % 12
+		local octave = app.base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		pal(7, self.dragged_note and 7 or 7)
+		if is_sharp then
+			spr(8 + note, 2, 6)
+		else
+			spr(8 + note, 8, 6)
+		end
+		pal(7, 7)
+		print(
+			"\014" .. string.format("%1x", octave),
+			2 + 12, 7,
+			self.dragged_note and 7 or 22
+		)
+		local x = 20
+		rectfill(x, 8, x + 20, 10, 59)
+		rectfill(
+			x, 8,
+			x + min(20 * (app.base_volume / 64), 20), 10,
+			self.dragged_volume and 7 or 17
+		)
+		if self.dragged_volume then
+			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
+		end
+		print(
+			"\014inst " .. string.format("%d", app.base_instrument),
+			44, 7,
+			self.dragged_instrument and 7 or 14 -- col 26
+		)
+	end	
+	
+	function el:click(msg)
+		-- TODO: replace with pull-down menus
+		if msg.mx < 18 then
+			self.dragged_note = true
+		elseif msg.mx < 42 then
+			self.dragged_volume = true
+		else
+			self.dragged_instrument = true
+		end
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		if self.dragged_note then
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			app.base_note = mid(0, app.base_note - (12 * delta), 120)
+		elseif self.dragged_volume then
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			app.base_volume = mid(0, app.base_volume - delta, 0x40) -- TODO: handle vol > 64
+		elseif self.dragged_instrument then
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			app.base_instrument = mid(0, app.base_instrument - delta, 0xfe)
+			-- TODO: temporary, remove
+			app.instrument = app.base_instrument
+			app.node = 0
+		end
+	end
+	
+	function el:release(msg)
+		mouselock(false)
+		self.cursor = get_spr(50)
+		self.dragged_note = nil
+		self.dragged_volume = nil
+		if self.dragged_instrument and app.view == "inst" then
+			app.refresh_gui = true
+		end
+		self.dragged_instrument = nil
+	end
+
+	function el:doubleclick(msg)
+		if msg.mx < 18 then
+			app.base_note = 48
+		elseif msg.mx < 42 then
+			app.base_volume = 0x32
+		else
+			app.base_instrument = 01
+		end
+	end
+	
+	return el
+end
+
+
+function attach_detail_button(parent, el)
+	el.width = 16
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw()
+		pal(7, app.detail and 7 or 62)
+		spr(45, 1, 3)
+		pal(7, 7)		
+	end	
+	
+	function el:tap()
+		app.detail = not app.detail
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+:: manual.txt
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2024-04-14 09:49:39",revision=0]]
+
 :: todo.txt
 --[[pod_format="raw",created="2024-04-10 20:46:30",modified="2024-04-10 20:46:41",revision=1]]
 - add 4/4 config
 
 :: .info.pod
-b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
-MDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcw
-NzAxMDAwMDAwMDEwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAwMDEwNzBkMGQwZDBkMGQwZDA3
-MGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMDcwNzBkMGQwZDBkMDcwMTAxMDcwZDBkMGQw
-ZDBkMGQwNzBkMDcwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMGQwZDA3MGQwNzBkMGQwZDA3MDEwMTA3
-MGQwZDBkMGQwNzA3MDcwZDBkMGQwZDBkMDcwMTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQw
-NzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
-MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
-NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
-MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iTXVzaWMgVHJhY2tlciIscnVudGltZT01LHN0b3JlZD0iMjAyNC0wNC0xNiAxMToy
-NTozNiIsdGl0bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjIiLHdvcmtzcGFjZXM9e3tsb2Nh
-dGlvbj0ibWFpbi5sdWEjMjY3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZWRf
-aW5zdC5sdWEjNTAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEj
-ODYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZngubHVhIzQxMCIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjNDciLHdvcmtzcGFjZV9pbmRleD0x
-fSx7bG9jYXRpb249InNyYy9lbnZlbG9wZXMubHVhIzI3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
+b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjQtMDQtMTYgMTM6MzU6
+MTMiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
+MDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAwMDEwNzBkMGQwZDBkMGQwZDBk
+MGQwZDBkMDcwMTAwMDEwNzBkMGQwZDBkMGQwZDA3MGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQw
+ZDBkMDcwNzBkMGQwZDBkMDcwMTAxMDcwZDBkMGQwZDBkMGQwNzBkMDcwZDBkMGQwNzAxMDEwNzBk
+MGQwZDBkMGQwZDA3MGQwNzBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwNzA3MDcwZDBkMGQwZDBkMDcw
+MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
+MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
+ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
+MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0xNiAxNTow
+OTozNCIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
+MTE6Mzc6NTEiLHRpdGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4yIix3b3Jrc3BhY2VzPXt7
+bG9jYXRpb249Im1haW4ubHVhIzE5OSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+L2VkX2luc3QubHVhIzUwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGgu
+bHVhIzY0NCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjNDEwIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMyMjAiLHdvcmtzcGFjZV9p
+bmRleD0xfSx7bG9jYXRpb249InNyYy9lbnZlbG9wZXMubHVhIzI0NCIsd29ya3NwYWNlX2luZGV4
+PTF9LHtsb2NhdGlvbj0ic3JjL2VkX3BhdHQubHVhIzcwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
 Y2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1h
 cCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5k
 ZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAA
