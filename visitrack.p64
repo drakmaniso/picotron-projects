@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMSIscmV2aXNpb249NTU5NF1dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
+NC0xNyAwODozMjoyOCIscmV2aXNpb249NTc2Ml1dbHo0AGQEAADUNQAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEMAdgF1AHAAdABwAHICcwN0AXsCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -31,16 +31,16 @@ AR0vMTAyAP-v-wMHBwRXAGcwBwA3ADcABzBnAFcJBg0PowAfDzIA------------------------
 -------------------------11QPTEwfX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0xNyAwODozMjoyOCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMSIscmV2aXNpb249NTM4M11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0xNyAwODozMjoyOCIscmV2aXNpb249NTU1MF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0xNyAwODozMjoyOCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
@@ -58,77 +58,57 @@ LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
 ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
 YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTQgMTI6NTc6NDkiLG9rcGFs
-X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0xODYsdGVzdF9jdWJlX2NvbG9ycz17WzBdPXsxNSwz
+ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTcgMDc6MTg6MjYiLG9rcGFs
+X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0yODEsdGVzdF9jdWJlX2NvbG9ycz17WzBdPXsxNSwz
 MSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2
 LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwxNywxOX0sezI4LDEyLDE2fSx7MTIsMTYs
 MX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsx
 NCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUsMjF9LHsxLDEsMX0sezEsMSwxfSx7MSwx
-LDF9fSx3aGl0ZXN0X2NvbG9yPTddXWx6NAAwAQAAFQIAAPUFdXNlcmRhdGEoImkzMiIsNjQsIjAB
+LDF9fSx3aGl0ZXN0X2NvbG9yPTddXWx6NAAnAQAAFQIAAPUFdXNlcmRhdGEoImkzMiIsNjQsIjAB
 AMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUyMzYwMDVmNTc0ZjAwYzJjM2M3MDBmZmYxZTgI
 AEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlhZCQAYDgzNzY5YyAAMTc3YTgAwGNjYWEwMDFj
 NWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQyZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANh
 Y2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQABf
-ODU2ZDABAK4gNjICAB0wAQCwMWUzNzNjMDAzNzQnASEwMwEAMTAwMgEAoDAwMTYxNjE2Iik=
+ODU2ZDABAMawMWUzNzNjMDAzNzQnASEwMwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
+NC0xNyAwODozMjoyOCIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE4OjEzOjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMSIscmV2aXNpb249OTQ1XV1sejQAfgEAAG4IAADwJ3B4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxABw3MQD_JSUPIgAR
-MA_A8L0POg9kMA8fD--AARAPFA8dBhABCQAPNR86AC5QAQAKAA8MYA9JAA948JJXABdAVwAVA4gA
-7YDwuw0PBAAPEjAPFPDHNgAfDL0AAR4DvAAPLwD--yYf-wEAzPAH6AMADUAPJA8mDyj--y0h9C0s
-9C3wcBUAL-SwCAD-3x--AQCXUP----8f
-:: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE1IDE1OjE0OjQxIixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIscmV2aXNpb249Njk3XV1sejQA4AEAALsIAADwJ3B4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-QaWgEQBg4A
-AgEgASAB8AACEAIPIBABIA8hIAEwD14gD-RQAQIQBg8gAAIVAEhQIAhgJwDwReAPEgIgDyBQAg8X
-EAHwYw8TDxEgD0YPJMABoA8oYA9qIAIBDw5AD-8P2Q_5D58Pkw95D2YPUw4PLQ8gDxMWEAGgDxTw
-fA-4Cg--D4AP9w8NAfAJAXIAFxCTABAvbAD-KiUPLwACATAPwPDDDygP-8ACYAwP5A-PD7kPlA9-
-D2oPWg9KDz8PNR8vDyoPJQ8VAaAPRvCUD-gKDFgABxU36wCvXyAH8L8PKAzwxjIAChQDMQA-DvDD
-LgACHwMtAP--Bh--AQDMUOgOAA1AkQXwBQwPMg8u-CsQDBD8Kx8yDBT8K-BwHAAv-LAIAP-fH-8B
-AJdQ-----x8=
-:: sfx/2.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEyIDA2OjQzOjAwIixtb2RpZmllZD0iMjAyNC0w
-NC0xNSAxMToyMzo0NSIscmV2aXNpb249MTBdXWx6NAA1AQAA0QgAAPAncHh1AAMoAAADAAQPQBAC
-DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PEADwAA0PEQ8SDxMPFA8VDxYP
-FxMA8QEPGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywPLQ8u
-Dy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr-ydaARAGDyAQ
-ASABIAHwAAIQAgwQASAPISABMA9A8MMPKA--8MYP_AoP-w_AD-cPDQHwCQEQBgwwAAP_CZAPEQIg
-DFABIAHgAQjwlw80D0zwFQHwoEAAD3AACw8wAP--bB--AQDMv_gPQAANQP--sPBwCgD--2Qf-wEA
-l1D-----Hw==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjMyOjI4Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNyAwODozMjoyOCIscmV2aXNpb249MV1dbHo0AMYBAACkCAAA8CdweHUAAygAAAMABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
+EwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8tDy4P
+LxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOvwI1oBEAYPIBAB
+IAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJMQAcNzEA-iUlDyIAETAP
+gPC9DzoPZDAPHw--wAEQDxQPHQYQAQkADzUfOgAuUAEACgAPDGAPSQAPePCSVwAXQFcAFQOIAP0Z
+gPC7DQ8EAA8SMA8U0AINCw8DCSAP9A_0D4oPag9PDzUPJQ8aCgXwp1AAGwymAGIfJQARMAPWAP8P
+wAIQBgkgD_kPzw_qD48Pfw9vD1oPTw4PJQ8PCvClSwAOAZoAHgMhAQ8vAP-2H-8BAMzwB_gDAA1A
+DyQPJg8o--8tIfQtLPQt8HAVAC-0sAgA-98f-wEAl1D-----Hw==
 :: sfx/old-1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE0IDE3OjU3OjU3Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxNzo1Nzo1NyIscmV2aXNpb249MF1dbHo0AF0DAABZCwAA8U9weHUAAygAAAMABA9AEAIO
-AAGgASACoA4ADxAADfDJAgEAAwQFBgcCDz_QCAkKCw8MDw0PDg8PBA--kA0PEQ8SDxMPFA8VDxYP
-FwAP-5APGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywPLQ8u
-Dy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8DxaAQQABg8g
-EAEgASAB8AACEAIPIgAPHwEPvgAPHw8uBQABBRACBBADAA8aD39ADxECIA8jDxMQD08QAg9yDgAB
-kA9gMAEIYA808Ac8AABJAPopDyEgAeAPJAIgDyBQASAB4AUKIA9dAA6ADyTgCSAPWCAPp-APDyjw
-xw-4Cg--D4AP9w8NAfAJARCHABMMSgBXMA9-kAEQAHgJIA_AEA1gEwAhD-cUAE-wgA8UVgAAHwxV
-AAEVDlQAVgcgAeASCwAXAxcAFwQMABcFDAAWBgwAj-AIDygP--DGdgAOEAd1ABegOQAfAAwAKA91
-ABoP6gAFBwsAHwHpAAQfBXQAIy-wyIkBDlMPMAAPgH0A-wcIIA_S8AoBCiAPsyAPMyAPVyAPL-CH
-bwAEJw8iRgASDnAAQDAPD5A-AKCsIA-BAA5ADw3QVAA-lPCTRAAFExdEAB-oSAEmAGEAN_DwChMA
-XzAPv-BjUAAXGeA7ACmzkA8AIJiQYAAbo2AA-wOfkAUJIA9eIA_E8AcIIA-I8BNvADQRXW8AG5Zv
-ABGXbwB-ayAPnvAGAXAAFhcOcAAkDzZMAKKFkAIJIA_dIA_3TAA-3-BzTAAEHg5MAEcwAZABWgD3
-AQIKIA9cIA--AA4AD0UgDuAbABcEDAB-BQggD_TwM7MAEBQM4gEv8MMuAC4f-wEAzPMA6A4ADQAN
-IA8cD-8PHA8aCAAeGBAAYv--HwELIQIAv-sfDzILDyQPDg85BwACQPsf8HBYAPIBDCAPNA8rDyQL
-DzQLDysPKAcAUCYPKAsDEwAYCQIA_gD7EQgRCwgLEQgLIQsBCwgCAFD7EQ4POUgAIDILCAAiDz0H
-AJE5Cw8rCw4LBAt6AAEeABAcDgAxFfsRgQA-QPuwCAD-1x--AQCXUP----8f
+NC0xNyAwNjo1MjowNyIscmV2aXNpb249OTBdXWx6NABnAwAAcQsAAPFPcHh1AAMoAAADAAQPQBAC
+DgABoAEgAqAOAA8QAA3wyQIBAAMEBQYHAg8-kAgJCgsPDA8NDw4PDwQP-5ANDxEPEg8TDxQPFQ8W
+DxcAD-_QDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
+Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-A8WgEEAAYP
+IBABIAEgAfAAAhACDyIADx8BD74ADx8PLgUAAQUQAgQQAwAPGg9-QA8RAiAPIw8TEA9PEAIPcg4A
+AZAPYDABCGAPNPAHPAAASQD6KQ8hIAHgDyQCIA8gUAEgAeAFCiAPXQAOgA8k4AkgD1ggD6fwDw8o
+8McP_AoP-w_AD-cPDQHwCQEQhwATDEoAVzAPf5ABEAB4CSAPgBANYBMAIQ-3FABP8IAPFFYAAB8M
+VQABFQ5UAFYHIAHgEgsAFwMXABcEDAAXBQwAFgYMAI-wCA8oD--wxnYADhAHdQAXoDkAHwAMACgP
+dQAaD_oABQcLAB8B6QAEHwV0ACMv8MiJAQ5TDzAAD4B9AP8HCCAPkvAKAQogD7MgDzMgD1cgDy-w
+h28ABCcPIkYAEg5wAEAwDw_QPwCgrCAPwQAOQA8N0FQAP5Twk0QABR4XtABAMA-OkDYAb4lgDzjw
+q2ABJgBDAEjg8AoBWQA-v-BjUAAXGeA7ACmzkA8AEZijABujYAD-A5_QBQkgD14gD4TwBwggD8jw
+E28ANBFdbwAblm8AEZdvAH9rIA_e8AYBcAAWFw5wACQPNkwAooWQAgkgD50gD7dMAD-f8HNMAAQe
+DkwARzABkAFaAPcBAgogD1wgD-8ADgAPRSAO4BsAFwQMAH8FCCAP5PAzswAQFAziAS-wwy4ALh--
+AQDM8wDoDgANAA0gDxwP-w8cDxoIAB4YEABi--8fAQshAgC-_x8PMgsPJA8ODzkHAAJA_x-wcFgA
+8gEMIA80DysPJAsPNAsPKw8oBwBQJg8oCwMTABgJAgD6APsRCBELCAsRCAshCwELCAIAUPsRDg85
+SAAgMgsIACIPPQcAkTkLDysLDgsEC3oAAR4AEBwOADEV_xGBAD9A_7AIAP-XH-8BAJdQ-----x8=
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0xNyAwODozMjoyOCIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-16 20:05:01",revision=3572]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-17 08:32:28",revision=3750]]
 local app = {}
 
 
@@ -320,9 +300,10 @@ function app.attach_num_field(parent, el)
 		local field_fg = self.field_fg or 22
 		local dragged_fg = self.dragged_fg or 7
 		local field_bg = self.field_bg or 59
+		local dragged_bg = self.dragged_bg or 59
 		if (not self.visible()) return
 		local val = self.get()
-		rectfill(self.width - 24, 0, self.width - 10, 6, field_bg)
+		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and dragged_bg or field_bg)
 		print(el.label, 3, 1, label_fg)
 		if val then
 			print(string.format("%3d", val), self.width - 22, 1, self.dragged and dragged_fg or field_fg)
@@ -340,6 +321,7 @@ function app.attach_num_field(parent, el)
 	end
 	function el:click(msg)
 		if (not self.visible()) return
+		if (self.onclick) self.onclick(msg)
 		if msg.mx >= self.width - 21 then
 			self.dragged = true
 			self.cursor = 0 -- TODO: capture mouse
@@ -356,6 +338,7 @@ function app.attach_num_field(parent, el)
 	function el:release(msg)
 		self.dragged = nil
 		mouselock(false)
+		if (self.onrelease) self.onrelease(msg)
 	end
 	return el
 end
@@ -659,7 +642,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-16 20:05:01",revision=3502]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-17 08:32:28",revision=3668]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -955,9 +938,10 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-16 18:17:30",revision=1165]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-17 08:32:28",revision=1271]]
 local app = require "src/app"
 local sfx = require "src/sfx"
+local visual = require "src/visual"
 
 
 local envelopes = {}
@@ -1095,7 +1079,9 @@ function envelopes.attach_panel(parent, el)
 			{
 				x = 0, y = 32,
 				label = "start:",
-				field_fg = 29,
+				field_fg = 28,
+				onclick = function() visual.open_custom_envelope(el.env_id) end,
+				onrelease = function() visual.close() end,
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_start(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
@@ -1106,6 +1092,7 @@ function envelopes.attach_panel(parent, el)
 			{
 				x = 4, y = 42,
 				label = "rnd start",
+				check_fg = 18,
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return
 					(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
@@ -1121,7 +1108,9 @@ function envelopes.attach_panel(parent, el)
 			{
 				x = 0, y = 52,
 				label = "loop0:",
-				field_fg = 29,
+				field_fg = 26,
+				onclick = function() visual.open_custom_envelope(el.env_id) end,
+				onrelease = function() visual.close() end,
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
@@ -1132,7 +1121,9 @@ function envelopes.attach_panel(parent, el)
 			{
 				x = 0, y = 62,
 				label = "loop1:",
-				field_fg = 29,
+				field_fg = 10,
+				onclick = function() visual.open_custom_envelope(el.env_id) end,
+				onrelease = function() visual.close() end,
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
@@ -1238,24 +1229,8 @@ function envelopes.attach_custom_editor(parent, el)
 	el.height = 42
 	el.cursor = "crosshair"
 	parent:attach(el)
-	function el:draw()
-		rectfill(1, 1, self.width - 2, self.height - 2, 59)
-		for i = 0, 15 do
-			local val = sfx.env_param(app.instrument, parent.env_id, i)
-			local h = (val * (self.height - 2)) \ 255
-			rectfill(
-				1 + (3 * i), self.height - 1,
-				3 + (3 * i), self.height - h - 1,
-				(i % 2 == 0) and 29 or 18
-			)
-		rect(0, 0, self.width - 1, self.height - 1, 5)
-		end
-		if self.selected then
-			local val = sfx.env_param(app.instrument, parent.env_id, self.selected)
-			local str = tostr(val)
-			print(str, self.width - 3 - (4 * #str), 3, 7)
-		end
-	end
+	el.env_id = parent.env_id
+	el.draw = visual.draw_custom_envelope
 	function el:drag(msg)
 		local param = mid(0, (msg.mx - 1) \ 3, 15)
 		local val = ((self.height - 1 - msg.my) * 255) / (self.height - 2)
@@ -2205,7 +2180,7 @@ settings.keys = {
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-16 20:05:01",revision=4203]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-17 08:32:28",revision=4371]]
 local sfx = {}
 
 
@@ -2764,7 +2739,7 @@ end
 
 return sfx
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-16 20:05:01",revision=4112]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-17 08:32:28",revision=4287]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
@@ -3228,16 +3203,33 @@ function synth.attach_knob(parent, el)
 								self.min_val, self.max_val = -128, 127
 								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 								-- set bit: add parent
-								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x1)
 							 end,
 						},
 						{
-							label = "mult",
+							label = "multiply",
 							action = function()
 								self.min_val, self.max_val = 0, 255
 								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 								-- set bit: mul parent
 								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+							 end,
+						},
+						{ divider = true },
+						{
+							label = "quantized",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: mul parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x20)
+							 end,
+						},
+						{
+							label = "not quant.",
+							action = function()
+								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+								-- set bit: mul parent
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x20)
 							 end,
 						},
 					}
@@ -3255,7 +3247,7 @@ function synth.attach_knob(parent, el)
 							 end,
 						},
 						{
-							label = "mult",
+							label = "multiply",
 							action = function()
 								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 								-- set bit: mul parent
@@ -3281,7 +3273,7 @@ function synth.attach_knob(parent, el)
 							action = function()
 								local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
 								-- set bit: add parent
-								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags | 0x1)
+								sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x1)
 							 end,
 						},
 					}
@@ -3521,7 +3513,7 @@ end
 
 return synth
 :: src/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-04-16 20:05:01",revision=161]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-04-17 08:32:28",revision=437]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -3532,7 +3524,20 @@ local visual = {}
 local overlay = nil
 
 
+function visual.close()
+	if overlay then
+		overlay:detach()
+		overlay = nil
+	end
+end
+
+
+-- Wavetables ----------------------------------------------------------------
+
+
 function visual.open_wavetable(node)
+	if (overlay) visual.close()
+	
 	overlay = app.gui:attach {
 		x = (480 \ 2) - (200 \ 2), y = 10,
 		width = 200, height = 90,
@@ -3544,40 +3549,132 @@ function visual.open_wavetable(node)
 		local _, wave, _, _ = sfx.node_param(app.instrument, node, 4)
 		local _, phase, _, _ = sfx.node_param(app.instrument, node, 5)
 		local pos_addr = wt_addr + (wave * wt_height >> 8) * wt_width * 2
-		local last_h = nil
 		local oy = self.height \ 2
+		---[[
+		local last_h = nil
+		line()
 		for i = 0, (self.width - 1) do
 			local sample = i / self.width
 			sample += (phase / 256.0) % 1.0
-			sample = flr(sample * wt_width)
+			sample = flr(0.5 + sample * wt_width)
 			local val = peek2(pos_addr + sample * 2)
-			local h = (val * self.height) / 72000
+			local h = flr(0.5 + ((val * self.height) / 72000))
 			if last_h then
-				line(i, oy - last_h, i, oy - h, 17)
-			else
-	 			pset(i, oy - h, 17)
-	 		end
+				line(i, oy - last_h, i, oy - h, 19)
+			end
+ 			pset(i, oy - h, 17)
  			last_h = h
 		end
+		--]]
+		
+		--[[
+		local last_sample = 0
+		for i = 0, (self.width - 1) do
+			local sample = i / self.width
+			sample += (phase / 256.0) % 1.0
+			sample = flr(0.5 + sample * wt_width)
+			local min_val = peek2(pos_addr + last_sample * 2)
+			local max_val = min_val
+			for s = last_sample, sample do
+				min_val = min(min_val, peek2(pos_addr + s * 2))
+				max_val = max(max_val, peek2(pos_addr + s * 2))
+			end
+			local min_h = flr(0.5 + ((min_val * self.height) / 72000))
+			local max_h = flr(0.5 + ((max_val * self.height) / 72000))
+			line(i, oy - min_h, i, oy - max_h, 17)
+ 			last_sample = sample
+		end
+		--]]
+
 		-- Border
 		clip()
-		rect(-1, -1, self.width, self.height, 5)
+		color(22)
+		line()
+		line(1, -1)
+		line(self.width - 2, -1)
+		line(self.width, 1)
+		line(self.width, self.height - 2)
+		line(self.width - 2, self.height)
+		line(1, self.height)
+		line(-1, self.height - 2)
+		line(-1, 1)
+		line(1, -1)
 	end
 end
 
 
-function visual.close()
-	if overlay then
-		overlay:detach()
-		overlay = nil
+-- Custom envelopes ----------------------------------------------------
+
+
+
+
+function visual.open_custom_envelope(env_id)
+	if (overlay) visual.close()
+	
+	local env_type = sfx.env_type(app.instrument, env_id)
+	if (env_type != 2) return
+	
+	overlay = app.gui:attach {
+		x = (480 \ 2) - (128 \ 2), y = 10,
+		width = 128, height = 90,
+		env_id = env_id,
+	}
+	
+	function overlay:draw()
+		visual.draw_custom_envelope(overlay)
+		rect(0, 0, self.width - 1, self.height - 1, 22)
 	end
+end
+
+
+function visual.draw_custom_envelope(self)
+	local bar_width = self.width \ 16
+	rectfill(1, 1, self.width - 2, self.height - 2, 59)
+	local start = sfx.env_start(app.instrument, self.env_id)
+	local loop0 = sfx.env_loop0(app.instrument, self.env_id)
+	local loop1 = sfx.env_loop1(app.instrument, self.env_id)
+	for i = 0, 15 do
+		local val = sfx.env_param(app.instrument, self.env_id, i)
+		local h = (val * (self.height - 2)) \ 255
+		local col = (i % 2 == 0) and 29 or 18
+		if loop0 <= i and i < loop1 then
+			col = (i % 2 == 0) and 23 or 14
+		end
+		rectfill(
+			1 + (bar_width * i), self.height - 1,
+			bar_width + (bar_width * i), self.height - h - 1,
+			col
+		)
+	end
+	fillp(0b1111000011110000)
+	poke(0x550b,0x3f)
+	if start > 0 then
+		local x = 1 + (bar_width * start)
+		line(x, 1, x, self.height - 2, 28)
+	end
+	if loop0 > 0 then
+		local x = 1 + (bar_width * loop0)
+		line(x, 1, x, self.height - 2, 26)
+	end
+	if loop1 > 0 then
+		local x = bar_width + (bar_width * (loop1 - 1))
+		line(x, 1, x, self.height - 2, 10)
+	end
+	fillp()
+	palt()
+	if self.selected then
+		local val = sfx.env_param(app.instrument, self.env_id, self.selected)
+		local str = tostr(val)
+		print(str, self.width - 3 - (4 * #str), 3, 7)
+	end
+	rect(0, 0, self.width - 1, self.height - 1, 5)
 end
 
 
 return visual
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
-NC0xNiAyMDowNTowMiIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
+NC0xNyAwODozMjoyOCIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: drak.lua
 --[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-13 06:43:38",revision=982]]
@@ -3831,7 +3928,7 @@ XnW0rb-io0qxAACS5PLkVcuCHW1HT41iAQAkzPHBnqNhvdptWqVSAAAJY3fhy5NXxavDneM16PbC
 LFq0aNGidXB8sHd8sOfxarUrjWrN-7i6aez2D70n2l7fLs81ODNV9S4I_ZJvjuD8Zg21PIsBAAAA
 AAAAAMXlfwEsAA7jlHGMXgAAABB0RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-16 20:05:01",revision=6134]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-17 08:32:28",revision=6300]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -4113,16 +4210,16 @@ MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0xNiAyMDow
-NTowMiIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0xNyAwODoz
+MjoyOCIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
 MTE6Mzc6NTEiLHRpdGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4yIix3b3Jrc3BhY2VzPXt7
 bG9jYXRpb249Im1haW4ubHVhIzE5OSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
 L2VkX2luc3QubHVhIzUwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGgu
-bHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjMjIwIix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSM0MzEiLHdvcmtzcGFjZV9p
-bmRleD0xfSx7bG9jYXRpb249InNyYy92aXN1YWwubHVhIzEzIix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
-Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
-aW5kZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAE
-AAAAAwAAADBuaWw=
+bHVhIzUzNCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjMjMwIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSMzMzUiLHdvcmtzcGFjZV9p
+bmRleD0xfSx7bG9jYXRpb249InNyYy92aXN1YWwubHVhIzQ5Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
+e2xvY2F0aW9uPSJzcmMvZW52ZWxvcGVzLmx1YSMxMTUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFw
+Iix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRl
+eD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
