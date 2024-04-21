@@ -7,9 +7,18 @@ version 2
 :: src/
 :: pal/
 :: vgfx/
+:: vgfx/0.vgfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjQ4OjQ1Iixtb2RpZmllZD0iMjAyNC0w
+NC0xNyAwODo0ODo0NSIscmV2aXNpb249MF1dbHo0AI4AAADRAAAAsHt7e2NvbF9hPTEsCADwK2I9
+MTYsZmlsbD00MzY5MCxuYW1lPSIiLG91dGxpbmU9LTEscG9pbnRzPXt7NDAsLTQwfSx7LTEwLDEJ
+APMOMCw0MH19LHNob3c9dHJ1ZSx0eXBlPSJlYXIifSxoABM4aAASMmcATzM3NzRnAAsVLWgAPzEz
+LGYAClByIn19fQ==
+:: vgfx/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjQ4OjQ1Iixtb2RpZmllZD0iMjAyNC0w
+NC0yMSAyMDoxNToxNyJdXWx6NAAEAAAAAwAAADBuaWw=
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIscmV2aXNpb249ODI3M11dbHo0ADcGAACjNwAA8yV7WzBdPXtibXA9cHh1
+NC0yMSAyMDozMTozMiIscmV2aXNpb249ODM1Ml1dbHo0AKcFAAChNwAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -30,26 +39,24 @@ H1VXAB0TblcAAlIAVREHEfADZgBFBCHwBA0AEAMcAAFzAATDAB9ubAAZkBkZBPD-KgHwBz0AcAYB
 BxEAARArAQAQAAAjAfAD0BFHAScBsAEHAUcRBxHAAVcRQwFgN0HwADEAQgEQBX8AMwQBJ68APwcB
 MH4ADA-dAR4fMDIAkPwsHx8E8B4H8EMH8AEH8AIPPE87DzzwBg6POw7wA83wAe3g-QFwBzAO-QEO
 MAdg-QMPOpAO-QMOkP0FDIAEAAAZAKAMQAcw-QMcEAdgMwD-Fwyw-QEcwO0c4M0cwAcgDo0OHAAH
-oAdADA5NDiwgB4AHcGxQB-BwsAALHDavAGDgDz3wDg4DAFYkDvABDrUA8AkNjzsN8APM8AHs4PwB
-cA4wDfwBDTAOYPy1AJwN-AMNkPwFC4AEAAAZAKALQA4w-AMbEA5gMwD-Dwuw-AEbwOwb4Mwb8AEN
-jA0b8AMLDUwNK8AOcGtQDq8AGwCkAsAVDz3wAg6gDvAZTzutAPMPbzsPPOCvO4AOIM0gDmAPPM0M
-kO0POnD9AXD9AQtgBAD-HDAOEP0BCwAOUO0bcAzNDAuQzRugrRvADG0MG6AOIAtNKwAOgA5QSzAO
-8D8YBRmhGRkEsAfwCAfwAhEFDJMA8wcHIM4gB2APPM4NkO4POnD_AXD_AQxgBAD-GTAHEP4BDAAH
-UO4ccA3ODQyQzhygrhzADW4NHKAHIAxOLAAH8ABM8ESQABn-AQkHBPAFTzogbhBuEG4gTgC7AhrQ
-CQcEoE87IG4QDk8PDj8AH6AsAz4MlAb-AFcAZzAHADcANwAHMGcAV9gHDQ_cAx8PMgD---------
-----------------------------------------XVA9MTB9fQ==
+oAdADA5NDiwgB4AHcGxQB-BwsAALHDavAEHgB-AOAwAfJLQATSDwAbMAIfADsAAfwK4AIACjArAV
+B-ACB6AH8BlPO6wA8w9vOw884K87gAcgziAHYA88zg2Q7g86cP4BcP4BDGAEAPASMAcQ-gEMAAdQ
+7hxwDc4NDJDOHKCuHMANbg0coAcgDE4sGQ9vUEwwB-A-FgUZcBkZBLAH8AiRAAAPBQ_TAD1f8ABM
+8ESQABn-AQkHBPAFTzogbhBuEG4gTgC5AhrQCQcEoE87IG4QDk8PDj8AH6AqAz4Mkgb-AFcAZzAH
+ADcANwAHMGcAV9YHDQ_aAx8PMgD-------------------------------------------------
+XVA9MTB9fQ==
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMSAyMDozMTozMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIscmV2aXNpb249Nzk1N11dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0yMSAyMDozMTozMiIscmV2aXNpb249ODAzNF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMSAyMDozMTozMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
@@ -81,11 +88,11 @@ oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
 MwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
+NC0yMSAyMDozMTozMiIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjMyOjI4Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIscmV2aXNpb249MjQyNl1dbHo0AN4BAAC4CAAA8CdweHUAAygAAAMABA9A
+NC0yMSAyMDozMTozMiIscmV2aXNpb249MjUwNV1dbHo0AN4BAAC4CAAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOvwI1oBEAYP
@@ -95,21 +102,12 @@ SQAPePCSYwAXQGMAFQOUAP0ZgPC7DQ8EAA8SMA8U0AINCw8DCSAP9A_0D4oPag9PDzUPJQ8aCgXw
 p1AAGwzjAGIfJQARMAPiAP8PwAIQBgkgD_kPzw_qD48Pfw9vD1oPTw4PJQ8PCvClSwAOAZoAHgMt
 AQ8vAP-2H-8BAMz-FegDAA0ADwQgDyQPJg8o--8tDwwCDwP--y0s9C3wcAMADUD0sAgA-98f-wEA
 l1D-----Hw==
-:: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIxIDE2OjE1OjEzIixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIscmV2aXNpb249MV1dbHo0AEcBAAD1CAAA8CdweHUAAygAAAMABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
-EwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8tDy4P
-LxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv2JloBEAYPIBAB
-IAEgAfAAAhACDBABIA8hIAUABAMAD0CQDxECIAxQAgEQAeACCCAPtmAPmfADJwBAAeAPJCEA-hQB
-IAHgBQrwDwnwFw8oD--wxg-4Cg--D4AP9w8NAfAJARAGDGQAbwEwD0DwwzAA--_iH-8BAMy-6A9A
-AA1A--_w8HAKAP--ZB--AQCXUP----8f
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMSAyMDozMTozMiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-21 16:15:13",revision=6015]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-21 20:16:26",revision=6095]]
 local app = {}
 
 
@@ -253,7 +251,7 @@ function app.open_menu(menu)
 				modal:detach()
 			end
 			modal = nil
-			if self.highlighted
+			if self.highlighted and menu.items[self.highlighted]
 				and menu.items[self.highlighted].action
 			then
 				menu.items[self.highlighted].action()
@@ -297,7 +295,7 @@ end
 
 
 function app.attach_num_field(parent, el)
-	el.width = parent.width - el.x
+	el.width = el.width or parent.width - el.x
 	el.height = 12
 	parent:attach(el)
 	if (not el.visible) el.visible = function() return true end
@@ -609,7 +607,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-20 20:31:31",revision=3973]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-21 20:16:26",revision=3985]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -770,8 +768,9 @@ function ed_inst.attach_instr_chooser(parent, el)
 		click = function(self, msg)
 			app.instrument = msg.my \ 8
 			app.base_instrument = app.instrument -- TODO: temporary, remove
-			app.node = nil
+			app.node = 0
 			app.refresh_gui = true
+			return true
 		end
 	}
 	container:attach_scrollbars()
@@ -963,7 +962,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-21 16:15:13",revision=1985]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-21 20:31:32",revision=2073]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local visual = require "src/visual"
@@ -1041,6 +1040,7 @@ function envelopes.attach_panel(parent, el)
 			]]--
 			envelopes.attach_slider(el, { x = 8, y = 12, slider_height = 40, env_id = el.env_id, param = 4, label = "freq" })
 			envelopes.attach_slider(el, { x = 34, y = 12, slider_height = 40, env_id = el.env_id, param = 6, label = "phase" })
+			
 
 		else
 			-- Custom -------------------------------------
@@ -1064,6 +1064,7 @@ function envelopes.attach_panel(parent, el)
 				el,
 				{
 					x = 4, y = 63,
+					width = 56,
 					label = "speed:",
 					field_fg = 29,
 					visible = function() return true end,
@@ -1494,7 +1495,7 @@ end
 
 return file
 :: src/knob.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-21 16:15:13",revision=2124]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-21 20:31:32",revision=2218]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local synth_menus = require "src/synth_menus"
@@ -1515,25 +1516,24 @@ local function attach_knob(parent, el)
 		el.cx, el.cy, el.r = 15, 15, 9
 		el.sprite = 56
 	end
-	if el.min_val < 0 then
-		el.sprite += 1
-	end
 	el.cursor = get_spr(50)
 	parent:attach(el)
 	
 
 	function el:draw()
-		spr(self.sprite, 0, 0)	
-		local range = self.max_val - self.min_val
+		local sprite = (self.parent.min_val < 0)
+			and (self.sprite + 1) or self.sprite
+		spr(sprite, 0, 0)	
+		local range = self.parent.max_val - self.parent.min_val
 		-- primary value
 		local val = self:get()
-		local a = ((val - self.min_val) / range) * 0.75
+		local a = ((val - self.parent.min_val) / range) * 0.75
 		local x = self.cx + flr(0.5 + self.r * cos(0.625 - a))
 		local y = self.cy + flr(0.5 + self.r * sin(0.625 - a))
 		-- secondary value: arc and needle
 		if self:has_secondary() then
 			local val2 = self:get_secondary()
-			local a2 = ((val2 - self.min_val) / range) * 0.75
+			local a2 = ((val2 - self.parent.min_val) / range) * 0.75
 			local r = self.small and 6 or 7.75
 			local incr = self.small and 0.01 or 0.01
 			local function line_to(aa, col)
@@ -1567,7 +1567,7 @@ local function attach_knob(parent, el)
 		self.dragged = msg.mb == 1
 		self.dragged_secondary = msg.mb == 2
 		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or 1
+		sensitivity *= self.parent.sensitivity or 1
 		mouselock(0x4|0x8, sensitivity, 0.0)
 		return true
 	end
@@ -1575,9 +1575,9 @@ local function attach_knob(parent, el)
 
 	function el:doubleclick(msg)
 		if msg.mb == 1 then
-			self:set(self.init_val)
+			self:set(self.parent.init_val)
 		elseif msg.mb == 2 then
-			self:set_secondary(self.init_val)
+			self:set_secondary(self.parent.init_val)
 		end
 		return true
 	end
@@ -1585,7 +1585,7 @@ local function attach_knob(parent, el)
 
 	function el:drag(msg)
 		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or 1
+		sensitivity *= self.parent.sensitivity or 1
 		local _, delta = mouselock(0x4|0x8, sensitivity, 0.0)
 
 		local old = self:get()
@@ -1704,7 +1704,7 @@ local function attach_field(parent, el)
 		self.cursor = 0
 		self.dragged = true
 		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or 1
+		sensitivity *= self.sensitivity or self.parent.sensitivity or 1
 		mouselock(0x4|0x8, sensitivity, 0.0)
 		return true
 	end
@@ -1716,7 +1716,7 @@ local function attach_field(parent, el)
 
 	function el:drag(msg)
 		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or 1
+		sensitivity *= self.sensitivity or self.parent.sensitivity or 1
 		local _, delta = mouselock(0x4|0x8, sensitivity, 0.0)
 		local old = self:get()
 		local new = old - delta
@@ -1742,7 +1742,7 @@ local function attach_relationship(parent, el)
 	el.cursor = "pointer"
 	parent:attach(el)
 	function el:draw()
-		local flags, _, _, _ = sfx.node_param(app.instrument, self.node_id, self.param)
+		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
 		if flags & 0x03 == 0x01 then
 			print("\^:2070200000000000", -1, 2, 60)
@@ -1766,7 +1766,7 @@ local function attach_multiplier(parent, el)
 	el.cursor = "pointer"
 	parent:attach(el)
 	function el:draw()
-		local flags, _, _, env = sfx.node_param(app.instrument, self.node_id, self.param)
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
 		if self.mini then
 			if (env & 0xc0 > 0) then
@@ -1802,7 +1802,7 @@ local function attach_envelope(parent, el)
 	parent:attach(el)
 	function el:draw()
 		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		local flags, _, _, env = sfx.node_param(app.instrument, self.node_id, self.param)
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 		if flags & 0x04 > 0 then
 			line(1, 0, self.width - 1 - 1, 0, 18)
 			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 18)
@@ -1830,8 +1830,8 @@ end
 
 
 local function get_val1(self)
-	local _, val1, _, _ = sfx.node_param(app.instrument, self.node_id, self.param)
-	if (self.max_val < 128) then
+	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
 		if (val1 >= 128) val1 -= 256
 	end
 	return val1
@@ -1839,14 +1839,14 @@ end
 
 
 local function set_val1(self, val)
-	val = mid(self.min_val, val, self.max_val)
-	sfx.set_node_param_val1(app.instrument, self.node_id, self.param, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
 end
 
 
 local function get_val0(self)
-	local _, _, val0, _ = sfx.node_param(app.instrument, self.node_id, self.param)
-	if (self.max_val < 128) then
+	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
 		if (val0 >= 128) val0 -= 256
 	end
 	return val0
@@ -1854,21 +1854,21 @@ end
 
 
 local function set_val0(self, val)
-	val = mid(self.min_val, val, self.max_val)
-	sfx.set_node_param_val0(app.instrument, self.node_id, self.param, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
 end
 
 
 local function has_env(self)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.node_id, self.param)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 	return flags & (0x4 | 0x10) > 0
 end
 
 
 local function smart_str(self, val)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.node_id, self.param)
-	local node_type = sfx.node_type(app.instrument, self.node_id)
-	if node_type == 0x02 and self.param == 0x02 and (flags & 0x03 == 0x02) then
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
 		local num = 1 + val % 16
 		local den = 1 + val \ 16
 		return num .. "/" .. den
@@ -1892,9 +1892,6 @@ function knob.attach(parent, x, y, el, style)
 		{
 			x = 2, y = 10,
 			small = style.small,
-			node_id = el.node_id, param = el.param,
-			min_val = el.min_val, max_val = el.max_val, init_val = el.init_val,
-			sensitivity = el.sensitivity,
 			get = get_val1,
 			set = set_val1,
 			has_secondary = has_env,
@@ -1906,7 +1903,6 @@ function knob.attach(parent, x, y, el, style)
 		el,
 		{
 			x = 0, y = 41,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	attach_field(
@@ -1914,8 +1910,6 @@ function knob.attach(parent, x, y, el, style)
 		{
 			x = 8, y = 41,
 			centered = true,
-			node_id = el.node_id, param = el.param,
-			min_val = el.min_val, max_val = el.max_val, init_val = el.init_val,
 			sensitivity = 0.125,
 			get = get_val1,
 			set = set_val1,
@@ -1926,7 +1920,6 @@ function knob.attach(parent, x, y, el, style)
 		el,
 		{
 			x = 28, y = 41,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	attach_field(
@@ -1934,8 +1927,6 @@ function knob.attach(parent, x, y, el, style)
 		{
 			x = 8, y = 51,
 			fg = 18, centered = true,
-			node_id = el.node_id, param = el.param,
-			min_val = el.min_val, max_val = el.max_val, init_val = el.init_val,
 			visible = has_env,
 			sensitivity = 0.125,
 			get = get_val0,
@@ -1947,7 +1938,6 @@ function knob.attach(parent, x, y, el, style)
 		el,
 		{
 			x = 28, y = 51,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	
@@ -1985,15 +1975,12 @@ function knob.attach_mini(parent, el)
 		el,
 		{
 			x = 24, y = 0,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	attach_field(
 		el,
 		{
 			x = 24 + 7, y = 0,
-			node_id = el.node_id, param = el.param,
-			min_val = el.min_val, max_val = el.max_val, init_val = el.init_val,
 			sensitivity = 0.125,
 			get = get_val1,
 			set = set_val1,
@@ -2005,7 +1992,6 @@ function knob.attach_mini(parent, el)
 		{
 			x = 24 + 7 + 20, y = 0,
 			mini = true,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	attach_field(
@@ -2013,8 +1999,6 @@ function knob.attach_mini(parent, el)
 		{
 			x = 24 + 7 + 20 + 4, y = 0,
 			fg = 18,
-			node_id = el.node_id, param = el.param,
-			min_val = el.min_val, max_val = el.max_val, init_val = el.init_val,
 			visible = has_env,
 			sensitivity = 0.125,
 			get = get_val0,
@@ -2026,7 +2010,6 @@ function knob.attach_mini(parent, el)
 		el,
 		{
 			x = 24 + 7 + 20 + 4 + 20, y = 0,
-			node_id = el.node_id, param = el.param,
 		}
 	)
 	function el:draw()
@@ -2935,7 +2918,7 @@ end
 
 return routing
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-20 11:45:00",revision=1831]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-21 20:31:32",revision=1840]]
 local settings = {}
 
 local settings_filepath = "/appdata/drakmaniso/visitrack/settings.pod"
@@ -2962,15 +2945,15 @@ settings.isomorphic_keys = { pitched = {
 		[0] = "z", "x", "c", "v", "b", "n", "m", ",", ".", "/",
 	},
 	{
-		offset = -6,
+		offset = -7,
 		[0] = "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'",
 	},
 	{
-	offset = 0,
+	offset = -2,
 		[0] = "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\",
 	},
 	{
-	offset = 6,
+	offset = 3,
 		[0] = "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
 	}
 }}
@@ -3008,7 +2991,7 @@ end
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-21 14:25:47",revision=6243]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-21 19:42:39",revision=6244]]
 local sfx = {}
 
 
@@ -3610,7 +3593,7 @@ end
 
 return sfx
 :: src/slider.lua
---[[pod_format="raw",created="2024-04-19 14:52:31",modified="2024-04-21 16:15:13",revision=1707]]
+--[[pod_format="raw",created="2024-04-19 14:52:31",modified="2024-04-21 20:31:32",revision=1786]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
@@ -3898,7 +3881,7 @@ end
 
 return slider
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-21 16:15:13",revision=7186]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-21 20:31:32",revision=7266]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local knob = require "src/knob"
@@ -4449,7 +4432,7 @@ end
 
 return synth
 :: src/synth_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2024-04-21 16:15:13",revision=1344]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2024-04-21 20:31:32",revision=1427]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
@@ -4462,10 +4445,10 @@ local synth_menus = {}
 
 
 function synth_menus.open_relationship(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-	local node_type = sfx.node_type(app.instrument, self.node_id)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
 	
-	if node_type == 0x2 and self.param == 2 then
+	if node_type == 0x2 and self.parent.param == 2 then
 		app.open_menu {
 			x = self.sx - 10, y = self.sy + 7,
 			width = 55,
@@ -4475,10 +4458,10 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
 					action = function()
-						self.min_val, self.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
 					 end,
 				},
 				{
@@ -4486,10 +4469,10 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h add"
 						or "\|f\^:1c22414141221c00\|h add",
 					action = function()
-						self.min_val, self.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x1)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
 					 end,
 				},
 				{
@@ -4497,10 +4480,10 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h multiply"
 						or "\|f\^:1c22414141221c00\|h multiply",
 					action = function()
-						self.min_val, self.max_val = 0, 255
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						self.parent.min_val, self.parent.max_val = 0, 255
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
 					 end,
 				},
 				{ divider = true },
@@ -4510,15 +4493,15 @@ function synth_menus.open_relationship(self)
 							and "\|f\^:7f415d5d5d417f00\|h quantized"
 							or "\|f\^:7f41414141417f00\|h quantized",
 					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ 0x20)
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
 					 end,
 				},
 			}
 		}
 	elseif
-		(node_type == 0x02 and self.param == 0)
-		or (node_type == 10 and self.param == 3)
+		(node_type == 0x02 and self.parent.param == 0)
+		or (node_type == 10 and self.parent.param == 3)
 	then
 		app.open_menu {
 			x = self.sx - 10, y = self.sy + 7,
@@ -4529,9 +4512,9 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
 					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
 					 end,
 				},
 				{
@@ -4539,9 +4522,9 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h multiply"
 						or "\|f\^:1c22414141221c00\|h multiply",
 					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x2)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
 					 end,
 				},
 			}
@@ -4556,9 +4539,9 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
 					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~0x3)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
 					 end,
 				},
 				{
@@ -4566,9 +4549,9 @@ function synth_menus.open_relationship(self)
 						and "\|f\^:1c225d5d5d221c00\|h add"
 						or "\|f\^:1c22414141221c00\|h add",
 					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x3) | 0x1)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
 					 end,
 				},
 			}
@@ -4581,7 +4564,7 @@ end
 
 
 function synth_menus.open_multiplier(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 	
 	local mult_options = { 
 		[0] = 
@@ -4602,8 +4585,8 @@ function synth_menus.open_multiplier(self)
 					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
 				fg = i == 0 and 5 or 24,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & ~0xe0) | mult_options[i].val)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
 				 end,
 			}
 		)
@@ -4621,7 +4604,7 @@ end
 
 
 function synth_menus.open_envelope(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
 	local has_env = flags & 0x04 > 0
 	local has_free_run = flags & 0x08 > 0
 	local has_random = flags & 0x10 > 0
@@ -4636,8 +4619,8 @@ function synth_menus.open_envelope(self)
 					or "\|f\^:1c22414141221c00\|h none",
 				fg = 5,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags & ~(0x4 | 0x8 | 0x10))
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
 				 end,
 			},
 			{
@@ -4646,9 +4629,9 @@ function synth_menus.open_envelope(self)
 					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
 				fg = 18,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 0)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
 				 end,
 			},
 			{
@@ -4657,9 +4640,9 @@ function synth_menus.open_envelope(self)
 					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
 				fg = 18,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 1)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
 				 end,
 			},
 			{
@@ -4668,9 +4651,9 @@ function synth_menus.open_envelope(self)
 					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
 				fg = 18,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 2)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
 				end,
 			},
 			{
@@ -4679,9 +4662,9 @@ function synth_menus.open_envelope(self)
 					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
 				fg = 18,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.node_id, self.param, (env & 0xf0) | 3)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
 				end,
 			},
 			{
@@ -4690,8 +4673,8 @@ function synth_menus.open_envelope(self)
 						or "\|f\^:1c22414141221c00\|h random",
 				fg = 30,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, (flags & ~0x4) | 0x10)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
 				 end,
 			},
 			{
@@ -4703,8 +4686,8 @@ function synth_menus.open_envelope(self)
 							or "\|f\^:7f41414141417f00\|h free run",
 				fg = 5,
 				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.node_id, self.param)
-					sfx.set_node_param_flags(app.instrument, self.node_id, self.param, flags ^^ 0x08)
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
 				 end,
 			},
 		}
@@ -4881,17 +4864,8 @@ end
 return visual
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
+NC0yMSAyMDozMTozMiIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
 MG5pbA==
-:: vgfx/0.vgfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjQ4OjQ1Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNyAwODo0ODo0NSIscmV2aXNpb249MF1dbHo0AI4AAADRAAAAsHt7e2NvbF9hPTEsCADwK2I9
-MTYsZmlsbD00MzY5MCxuYW1lPSIiLG91dGxpbmU9LTEscG9pbnRzPXt7NDAsLTQwfSx7LTEwLDEJ
-APMOMCw0MH19LHNob3c9dHJ1ZSx0eXBlPSJlYXIifSxoABM4aAASMmcATzM3NzRnAAsVLWgAPzEz
-LGYAClByIn19fQ==
-:: vgfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTE3IDA4OjQ4OjQ1Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMSAxNjoxNToxMyJdXWx6NAAEAAAAAwAAADBuaWw=
 :: drak.lua
 --[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-19 11:56:33",revision=1102]]
 
@@ -5268,7 +5242,7 @@ Y6xAuy8Wi1R7zQ__VXLfop3DB-iQmg_gs8n5UP-wd-UPf_f9gkTnYrHIXNd1XbdcLnMBDQ0NDZ2C
 Xrtzkzfq51p8MjgFDQ0Nbab_f9FYN1d06tYoAAAAEHRFWHRMb2RlUE5HADIwMTEwMjIx41m2wQAA
 AABJRU5ErkJggg==
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-21 16:15:13",revision=8769]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-21 20:31:32",revision=8853]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -5562,17 +5536,16 @@ MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yMSAxNjox
-NToxMyIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yMSAyMDoz
+MTozMiIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
 MTE6Mzc6NTEiLHRpdGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4yIix3b3Jrc3BhY2VzPXt7
-bG9jYXRpb249Im1haW4ubHVhIzE0OCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+bG9jYXRpb249Im1haW4ubHVhIzIyNyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
 L3N5bnRoLmx1YSM3NyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2tub2IubHVh
-IzU0MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NsaWRlci5sdWEjMTAwIix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGhfbWVudXMubHVhIzk5Iix3b3Jr
-c3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMxMCIsd29ya3NwYWNlX2luZGV4
-PTF9LHtsb2NhdGlvbj0ic3JjL2VudmVsb3Blcy5sdWEjMjQzIix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8w
-Lm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2Vf
-aW5kZXg9NH0se2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1dXWx6NAAE
-AAAAAwAAADBuaWw=
+IzIyMSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NsaWRlci5sdWEjMTAwIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGhfbWVudXMubHVhIzU1Iix3b3Jr
+c3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZW52ZWxvcGVzLmx1YSM3NyIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NldHRpbmdzLmx1YSMzNSIsd29ya3NwYWNlX2luZGV4
+PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJt
+YXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3Nw
+YWNlX2luZGV4PTR9fV1dbHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
