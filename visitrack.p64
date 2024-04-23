@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIscmV2aXNpb249ODk2MF1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
+NC0yMyAxMjozNzoyOSIscmV2aXNpb249OTE3N11dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -40,16 +40,16 @@ BD0cNoYH-wBXAGcwBwA3ADcABzBnAFfKCA0P8gQfDzIA--------------------------------
 -----------------11QPTEwfX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMyAxMjozNzoyOSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIscmV2aXNpb249ODYyMV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NC0yMyAxMjozNzoyOSIscmV2aXNpb249ODgzOF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMyAxMjozNzoyOSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
@@ -81,11 +81,11 @@ oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
 MwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
+NC0yMyAxMjozNzoyOSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDE5OjMzOjQyIixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIscmV2aXNpb249MTIyXV1sejQAwAEAAP8IAADwJ3B4dQADKAAAAwAED0AQ
+NC0yMyAxMjozNzoyOSIscmV2aXNpb249MzQzXV1sejQAwAEAAP8IAADwJ3B4dQADKAAAAwAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
 DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
 Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
@@ -96,14 +96,16 @@ jw9-D28PWg9PDg8lDw8K8KVMAA4OaAEPMAD--wkf-wEAzPAP6A9AAA0ABCAPJA8mDyj--y0PDAIP
 A---LSzzLfBwHQBvQPOw8HAFCAD-3B--AQCXUP----8f
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NC0yMyAxMjozNzoyOSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: src/ui/
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDExOjQ2OjM0Iixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSJdXWx6NAAEAAAAAwAAADBuaWw=
+NC0yMyAxMjozNzoyOSJdXWx6NAAEAAAAAwAAADBuaWw=
 :: src/ui/knob.lua
---[[pod_format="raw",created="2024-04-22 11:46:43",modified="2024-04-22 19:19:14",revision=209]]
+--[[pod_format="raw",created="2024-04-22 11:46:43",modified="2024-04-23 11:34:51",revision=305]]
+local ui = require "src/ui"
+
 local knob = {}
 
 
@@ -179,9 +181,7 @@ function knob.attach(parent, el)
 		self.cursor = 0
 		self.dragged = msg.mb == 1
 		self.dragged_secondary = msg.mb == 2
-		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= target.sensitivity or 1
-		mouselock(0x4|0x8, sensitivity, 0.0)
+		ui.mouselock(target.sensitivity)
 		return true
 	end
 	
@@ -199,9 +199,7 @@ function knob.attach(parent, el)
 
 	function el:drag(msg)
 		local target = self.min_val and self or self.parent
-		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= target.sensitivity or 1
-		local _, delta = mouselock(0x4|0x8, sensitivity, 0.0)
+		local delta = ui.mouselock(target.sensitivity)
 
 		local old = self:get()
 		local new = old - delta
@@ -261,7 +259,7 @@ function knob.attach(parent, el)
 		self.cursor = get_spr(50)
 		self.dragged = false
 		self.dragged_secondary = false
-		mouselock(false)
+		ui.mouseunlock()
 		self.up_barrier = nil
 		self.down_barrier = nil
 	end
@@ -273,7 +271,7 @@ end
 
 return knob
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-23 08:25:31",revision=6341]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-23 12:37:29",revision=6507]]
 local app = {}
 
 
@@ -317,7 +315,8 @@ app.view = "inst" -- "patt" or "trak" or "inst" or "song"
 app.detail = false
 app.env_advanced = { [0] = false, false, false, false }
 
-local modal = nil
+
+local popup = false
 
 
 function app.attach_menu_button(parent, el)
@@ -328,6 +327,9 @@ function app.attach_menu_button(parent, el)
 	parent:attach(el)
 	el.opened = false
 	function el:draw()
+		if self.bg then
+			rectfill(0, 0, self.width - 1, self.height - 1, self.bg)
+		end
 		local label = self:get_label()
 		print(label, 2, 2, self.fg or 7)
 		pal(7, self.fg or 7)
@@ -375,7 +377,7 @@ function app.open_menu(menu)
 	end
 
 	-- Modal layer	
-	modal = app.gui:attach {
+	popup = app.gui:attach {
 		x = 0, y = 0,
 		width = app.gui.width, height = app.gui.height,
 		draw = function(self)
@@ -413,10 +415,10 @@ function app.open_menu(menu)
 			end
 		end,
 		click = function(self)
-			if modal then
-				modal:detach()
+			if popup then
+				popup:detach()
 			end
-			modal = nil
+			popup = nil
 			if self.highlighted and menu.items[self.highlighted]
 				and menu.items[self.highlighted].action
 			then
@@ -428,8 +430,40 @@ function app.open_menu(menu)
 end
 
 
+-----------------------------------------------------------------------------
+
+
+local modal = false
+
+
+function app.open_modal(el)
+	modal = app.gui:attach {
+		x = 0, y = 0,
+		width = app.gui.width, height = app.gui.height,
+		draw = function(self)
+			poke(0x550b, 0x3f)
+			---fillp(0b0101101001011010)
+			---fillp(0b0001001001001000)
+			---fillp(0b1110110110110111)
+			fillp(0b0011011011001001)
+			rectfill(0, 0, self.width - 1, self.height - 1, 61)
+			fillp()
+			poke(0x550b, 0x00)
+		end,
+		click = function(self)
+			if modal then
+				modal:detach()
+			end
+			modal = false
+		end
+	}
+	modal:attach(el)
+	return el
+end
+
+
 function app.has_modal()
-	return modal != nil
+	return modal or popup
 end
 
 
@@ -510,6 +544,20 @@ function app.attach_num_field(parent, el)
 		self.dragged = nil
 		mouselock(false)
 		if (self.onrelease) self.onrelease(msg)
+	end
+	return el
+end
+
+
+--------------------------------------------
+
+
+function app.attach_label(parent, el)
+	el.width = 4 * #el.label + 4
+	el.height = 5
+	parent:attach(el)
+	function el:draw()
+		print(el.label, 0, 0, el.fg or 5)
 	end
 	return el
 end
@@ -773,7 +821,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-23 08:25:31",revision=4561]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-23 11:34:51",revision=4646]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local knob = require "src/ui/knob"
@@ -917,6 +965,8 @@ function ed_inst.attach(parent, el)
 	end	
 	
 	function el:update()
+		-- Keys
+		if (app.has_modal()) return
 		local pitch_key = nil
 		for i = 1, #settings.keys.pitched do
 			local offset = settings.keys.pitched[i].offset
@@ -1027,9 +1077,10 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-17 10:30:04",revision=2602]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-23 12:37:29",revision=2668]]
 local app = require "src/app"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 
 
 local ed_patt = {}
@@ -1094,7 +1145,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:drag(msg)
 		if self.dragged then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			local delta = ui.mouselock(0.125)
 			local track_id = peek(0x30100 + app.pattern * 20 + self.dragged.channel)
 			track_id = mid(0, track_id - delta, 0xff)
 			-- TODO: move to sfx
@@ -1104,7 +1155,7 @@ function ed_patt.attach_channel_panel(parent, el)
 	
 	function el:release(msg)
 		self.dragged = nil
-		mouselock(false)
+		ui.mouseunlock()
 	end
 		
 	return el
@@ -1209,9 +1260,10 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-22 19:19:14",revision=2488]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-23 11:34:51",revision=2631]]
 local app = require "src/app"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 local visual = require "src/visual"
 
 
@@ -1478,7 +1530,7 @@ function envelopes.attach_slider(parent, el)
 	end
 	function el:drag(msg)
 		if self.dragged then
-			local _, delta = mouselock(true, key("shift") and 0.1 or 0.5, 0)
+			local delta = ui.mouselock()
 			local old = sfx.env_param(app.instrument, self.env_id, self.param)
 			local new = old - delta
 			new = mid(0, new, 255)
@@ -1486,7 +1538,7 @@ function envelopes.attach_slider(parent, el)
 		end
 	end
 	function el:release(msg)
-		mouselock(false)
+		ui.mouseunlock()
 		self.cursor = get_spr(50)
 		self.dragged = nil
 	end
@@ -1544,7 +1596,7 @@ end
 
 return envelopes
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-23 08:25:31",revision=1340]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-23 09:28:30",revision=1347]]
 local app = require "src/app"
 
 
@@ -1747,10 +1799,11 @@ end
 
 return file
 :: src/note_grid.lua
---[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-17 20:26:17",revision=1697]]
+--[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-23 12:37:29",revision=1767]]
 local app = require "src/app"
 local settings = require "src/settings"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 
 
 local note_grid = {}
@@ -1917,7 +1970,7 @@ function note_grid.attach(parent, el)
 		if msg.my < app.ruler_height or msg.mb == 4 then
 			self.panned = true
 			self.cursor = "grab"
-			mouselock(true, 1, 1)
+			ui.mouselock()
 		elseif msg.mb == 1 then
 			self:set_keyboard_focus(true)
 			local step = (msg.mx + note_grid.origin.x) \ app.cell_width
@@ -1946,14 +1999,14 @@ function note_grid.attach(parent, el)
 	function el:drag(msg)
 		if (msg.dx == 0 and msg.dy == 0) return
 		if self.panned then
-			local delta, _ = mouselock(true, 0.25, 0.25)
+			local delta, _ = mouselock(true, 0.25, 0.25) -- TODO
 			note_grid.origin.x -= delta
 		elseif not note_grid.selection then
 			-- nothing
 		elseif note_grid.selection.part == 0 then
 			self.dragged_pitch = true
 			self.cursor = 0
-			local _, delta = mouselock(true, 0.25 / 2, 0)
+			local delta = ui.mouselock(0.125)
 			local track = sfx.pattern_track(app.pattern, note_grid.selection.channel)
 			local pitch = sfx.track_pitch(track, note_grid.selection.step)
 			if pitch == 0xff then
@@ -1965,7 +2018,7 @@ function note_grid.attach(parent, el)
 		elseif note_grid.selection.part == 1 then
 			self.dragged_volume = true
 			self.cursor = 0
-			local _, delta = mouselock(true, 0.25, 0)
+			local delta = ui.mouselock(0.25)
 			local track = sfx.pattern_track(app.pattern, note_grid.selection.channel)
 			local vol = sfx.track_volume(track, note_grid.selection.step)
 			if vol == 0xff then
@@ -1977,7 +2030,7 @@ function note_grid.attach(parent, el)
 		elseif note_grid.selection.part == 2 then
 			self.dragged_instrument = true
 			self.cursor = 0
-			local _, delta = mouselock(true, 0.25 / 2, 0)
+			local delta = ui.mouselock(0.125)
 			local track = sfx.pattern_track(app.pattern, note_grid.selection.channel)
 			local instr = sfx.track_instrument(track, note_grid.selection.step)
 			if instr == 0xff then
@@ -1996,7 +2049,7 @@ function note_grid.attach(parent, el)
 		self.dragged_volume = false
 		self.dragged_instrument = false
 		self.cursor = 1
-		mouselock(false)
+		ui.mouseunlock()
 	end
 	
 	
@@ -2285,7 +2338,7 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-23 08:25:31",revision=2510]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-23 09:28:31",revision=2516]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2720,11 +2773,14 @@ end
 
 return routing
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-23 08:25:31",revision=1892]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-23 12:37:29",revision=2204]]
+local app = require "src/app"
+
 local settings = {}
 
-local settings_filepath = "/appdata/drakmaniso/visitrack/settings.pod"
-local keys_filepath = "/appdata/drakmaniso/visitrack/keys.pod"
+local settings_folder = "/appdata/visitrack/"
+local settings_filepath = "/appdata/visitrack/settings.pod"
+local keys_filepath = "/appdata/visitrack/keys.pod"
 
 
 settings.piano_keys = { pitched = {
@@ -2787,15 +2843,29 @@ settings.keys = {
 }
 
 
+settings.user = {
+	pitched_layout = "piano-like",
+	drag_horizontal = false,
+	drag_sensitivity = 0.5,
+	drag_sensitivity_precise = 0.125,
+}
+
+
 function settings.load()
-	mkdir("/appdata/drakmaniso/")
-	mkdir("/appdata/drakmaniso/visitrack/")
-	--local user_settings = fetch "/appdata/drakmaniso/settings.pod"
+	mkdir(settings_folder)
 	local user_keys = fetch(keys_filepath)
 	if user_keys then
 		for k, v in pairs(settings.keys) do
 			if user_keys[k] then
 				settings.keys[k] = user_keys[k]
+			end
+		end
+	end
+	local user_settings = fetch(settings_filepath)
+	if user_settings then
+		for k, v in pairs(settings.user) do
+			if user_settings[k] then
+				settings.user[k] = user_settings[k]
 			end
 		end
 	end
@@ -2810,9 +2880,114 @@ function settings.change_keys(t)
 end
 
 
+function settings.change_user(t)
+	for k, v in pairs(t) do
+		settings.user[k] = v
+	end
+	store(settings_filepath, settings.user)
+end
+
+
+-- GUI -----------------------------------------------------------------------
+
+
+function settings.open_ui()
+	local el = { x = 100, y = 12, width = 480 - 200, height = 270 - 11 - 24 }
+	app.open_modal(el)
+	app.attach_label(el, { x = 80, y = 20, label = "pitched keys layout:", fg = 5})
+	app.attach_menu_button(el, {
+		x = 164, y = 18,
+		bg = 7,
+		get_label = function()
+			return settings.user.pitched_layout
+		end,
+		fg = 59,
+		highlight = 15,
+		items = {
+			{
+				label = "piano-like",
+				action = function()
+					settings.change_keys(settings.piano_keys)
+					settings.change_user { pitched_layout = "piano-like" }
+				end
+			},
+			{
+				label = "guitar-like",
+				action = function()
+					settings.change_keys(settings.isomorphic_keys)
+					settings.change_user { pitched_layout = "guitar-like" }
+				end
+			},
+			{
+				label = "chromatic",
+				action = function()
+					settings.change_keys(settings.chromatic_keys)
+					settings.change_user { pitched_layout = "chromatic" }
+				end
+			},
+		}		
+	})
+	app.attach_label(el, { x = 80, y = 60, label = "mouse-drag direction:", fg = 5})
+	app.attach_menu_button(el, {
+		x = 168, y = 58,
+		bg = 7,
+		get_label = function()
+			return settings.user.drag_horizontal and "horizontal" or "vertical"
+		end,
+		fg = 59,
+		highlight = 15,
+		items = {
+			{
+				label = "vertical",
+				action = function()
+					settings.change_user { drag_horizontal = false }
+				end
+			},
+			{
+				label = "horizontal",
+				action = function()
+					settings.change_user { drag_horizontal = true }
+				end
+			},
+		}		
+	})	
+	app.attach_label(el, { x = 80, y = 80, label = "mouse-drag sensitivity:", fg = 5})
+	el:attach_field {
+		x = 176, y = 80 - 1,
+		width = 30, height = 7,
+		get = function() return settings.user.drag_sensitivity end,
+		set = function(self, val)
+			local v = mid(0.0, tonum(val), 8.0)
+			settings.change_user { drag_sensitivity = v }
+		end
+	}
+	app.attach_label(el, { x = 80, y = 100, label = "mouse-drag precise sensitivity:", fg = 5})
+	el:attach_field {
+		x = 208, y = 100 - 1,
+		width = 30, height = 7,
+		get = function() return settings.user.drag_sensitivity_precise end,
+		set = function(self, val)
+			local v = mid(0.0, tonum(val), 8.0)
+			settings.change_user { drag_sensitivity_precise = v }
+		end
+	}
+	
+	function el:draw()
+		rect(0, 0, self.width - 1, self.height - 1, 61)
+		rect(1, 1, self.width - 2, self.height - 2, 22)
+		rect(2, 2, self.width - 3, self.height - 3, 6)
+		rectfill(3, 3, self.width - 4, self.height - 4, 6)
+	end
+	
+	function el:click()
+		return true
+	end
+end
+
+
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-23 08:25:31",revision=6616]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-23 09:28:31",revision=6622]]
 local sfx = {}
 
 
@@ -3671,11 +3846,12 @@ end
 
 return syn_menus
 :: src/syn_param.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-23 06:42:27",revision=2764]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-23 11:33:38",revision=2837]]
 local app = require "src/app"
 local knob = require "src/ui/knob"
 local sfx = require "src/sfx"
 local syn_menus = require "src/syn_menus"
+local ui = require "src/ui"
 
 
 local syn_param = {}
@@ -3727,9 +3903,7 @@ local function attach_field(parent, el)
 		end
 		self.cursor = 0
 		self.dragged = true
-		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or self.parent.sensitivity or 1
-		mouselock(0x4|0x8, sensitivity, 0.0)
+		ui.mouselock(1.0, true)
 		if self.onclick then
 			self:onclick(msg)
 		elseif self.parent.onclick then
@@ -3744,9 +3918,7 @@ local function attach_field(parent, el)
 	
 
 	function el:drag(msg)
-		local sensitivity = key("shift") and 0.1 or 0.5
-		sensitivity *= self.sensitivity or self.parent.sensitivity or 1
-		local _, delta = mouselock(0x4|0x8, sensitivity, 0.0)
+		local delta = ui.mouselock(1.0, true)
 		local old = self:get()
 		local new = old - delta
 		self:set(new)
@@ -3756,7 +3928,7 @@ local function attach_field(parent, el)
 	function el:release()
 		self.cursor = get_spr(50)
 		self.dragged = false
-		mouselock(false)
+		ui.mouseunlock()
 		self.up_barrier = nil
 		self.down_barrier = nil
 		if self.onrelease then
@@ -3948,7 +4120,6 @@ function syn_param.attach(parent, x, y, el, style)
 		{
 			x = 8, y = 41,
 			centered = true,
-			sensitivity = 0.125,
 			get = get_val1,
 			set = set_val1,
 			to_str = smart_str,
@@ -3966,7 +4137,6 @@ function syn_param.attach(parent, x, y, el, style)
 			x = 8, y = 51,
 			fg = 18, centered = true,
 			visible = has_env,
-			sensitivity = 0.125,
 			get = get_val0,
 			set = set_val0,
 			to_str = smart_str,
@@ -4019,7 +4189,6 @@ function syn_param.attach_mini(parent, el)
 		el,
 		{
 			x = 24 + 7, y = 0,
-			sensitivity = 0.125,
 			get = get_val1,
 			set = set_val1,
 			to_str = smart_str,
@@ -4038,7 +4207,6 @@ function syn_param.attach_mini(parent, el)
 			x = 24 + 7 + 20 + 4, y = 0,
 			fg = 18,
 			visible = has_env,
-			sensitivity = 0.125,
 			get = get_val0,
 			set = set_val0,
 			to_str = smart_str,
@@ -4062,7 +4230,7 @@ end
 
 return syn_param
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-23 08:25:31",revision=7983]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-23 09:28:31",revision=7989]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local syn_param = require "src/syn_param"
@@ -4652,6 +4820,33 @@ function synth.attach_close_button(parent, el)
 end
 
 return synth
+:: src/ui.lua
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2024-04-23 12:37:29",revision=164]]
+local settings = require "src/settings"
+
+local ui = {}
+
+
+function ui.mouselock(sensitivity, precise)
+	local s = settings.user.drag_sensitivity
+	if precise or key("shift") then
+		s = settings.user.drag_sensitivity_precise
+	end
+	s *= sensitivity or 1
+	local dx, dy = mouselock(0x4|0x8, s, 0.0)
+	if settings.user.drag_horizontal then
+		return -dx
+	end
+	return dy
+end
+
+
+function ui.mouseunlock()
+	mouselock(false)
+end
+
+
+return ui
 :: src/visual.lua
 --[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-04-23 06:13:55",revision=1269]]
 local app = require "src/app"
@@ -4869,7 +5064,7 @@ end
 return visual
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
-NC0yMyAwODoyNTozMSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
+NC0yMyAxMjozNzoyOSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: drak.lua
 --[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-19 11:56:33",revision=1102]]
@@ -5217,7 +5412,7 @@ nZG5_Fva2KHyNnKb9o4T27ETkq-0Cy3ZTIoGre0OjVvbHdpOW1rbHZuCbrc7Ln5gd0cDAHiJL8q7
 hJAYygQAAN6TzaSYnWnAyzqbSZ2-WOu73-oclQIAgEBx-mJt939f--8fG4pl8z1Y7wAAABB0RVh0
 TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-23 08:25:31",revision=9458]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-23 12:37:29",revision=9692]]
 include "drak.lua"
 local app = require "src/app"
 local settings = require "src/settings"
@@ -5231,6 +5426,7 @@ local ed_song = require "src/ed_song"
 local note_grid = require "src/note_grid"
 local routing = require "src/routing"
 local synth = require "src/synth" -- TODO: temporary, remove
+local ui = require "src/ui"
 
 
 function _init()
@@ -5246,23 +5442,13 @@ function _init()
 	)
 		
 	on_event("drop_items", file.handle_drop_items)
-	
-	menuitem { divider = true, id = "keys_divider", label = "" }
+
+	menuitem { divider = true, id = "settings_divider", label = "" }
 	menuitem {
-		id = "piano_keys",
-		label = "\^:0000000000000000 Piano keys",
-		action = function() settings.change_keys(settings.piano_keys) end,
-	}
-	menuitem {
-		id = "isomorphic_keys",
-		label = "\^:0000000000000000 Isomorphic keys",
-		action = function() settings.change_keys(settings.isomorphic_keys) end,
-	}
-	menuitem {
-		id = "chromatic_keys",
-		label = "\^:0000000000000000 Chromatic keys",
-		action = function() settings.change_keys(settings.isomorphic_keys) end,
-	}
+		id = "settings",
+		label = "\^:0000000000000000 Settings",
+		action = function() settings.open_ui() end,
+	}	
 		
 	settings.load()
 	
@@ -5444,13 +5630,13 @@ function attach_note_attributes(parent, el)
 	
 	function el:drag(msg)
 		if self.dragged_note then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			local delta = ui.mouselock(0.125)
 			app.base_note = mid(0, app.base_note - (12 * delta), 120)
 		elseif self.dragged_volume then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			local delta = ui.mouselock(0.125)
 			app.base_volume = mid(0, app.base_volume - delta, 0x40) -- TODO: handle vol > 64
 		elseif self.dragged_instrument then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			local delta = ui.mouselock(0.125)
 			app.base_instrument = mid(0, app.base_instrument - delta, 0xfe)
 			-- TODO: temporary, remove
 			app.instrument = app.base_instrument
@@ -5460,7 +5646,7 @@ function attach_note_attributes(parent, el)
 	end
 	
 	function el:release(msg)
-		mouselock(false)
+		ui.mouseunlock()
 		self.cursor = get_spr(50)
 		self.dragged_note = nil
 		self.dragged_volume = nil
@@ -5522,17 +5708,15 @@ MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yMyAwODoy
-NTozMSIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yMyAxMjoz
+NzoyOSIsbm90ZXM9Ik11c2ljIFRyYWNrZXIiLHJ1bnRpbWU9NixzdG9yZWQ9IjIwMjQtMDQtMTYg
 MTE6Mzc6NTEiLHRpdGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4yIix3b3Jrc3BhY2VzPXt7
-bG9jYXRpb249Im1haW4ubHVhIzQzIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMv
-ZWRfaW5zdC5sdWEjMjUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAubHVh
-IzEwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc3ludGgubHVhIzU4MSIsd29y
-a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3JvdXRpbmcubHVhIzI3OCIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NmeC5sdWEjMzg2Iix3b3Jrc3BhY2VfaW5kZXg9MX0s
-e2xvY2F0aW9uPSJzcmMvc2V0dGluZ3MubHVhIzM1Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0
-aW9uPSJzcmMvZmlsZS5sdWEjNyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4LzAu
-Z2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJtYXAvMC5tYXAiLHdvcmtzcGFjZV9p
-bmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2luZGV4PTR9fV1dbHo0AAQA
-AAADAAAAMG5pbA==
+bG9jYXRpb249Im1haW4ubHVhIzIxOCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+L3NldHRpbmdzLmx1YSM4MCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3VpLmx1
+YSMxMyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2FwcC5sdWEjMTgzIix3b3Jr
+c3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZWRfcGF0dC5sdWEjNjgiLHdvcmtzcGFjZV9p
+bmRleD0xfSx7bG9jYXRpb249InNyYy9ub3RlX2dyaWQubHVhIzIwMCIsd29ya3NwYWNlX2luZGV4
+PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJt
+YXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3Nw
+YWNlX2luZGV4PTR9fV1dbHo0AAQAAAADAAAAMG5pbA==
 :: [eoc]
