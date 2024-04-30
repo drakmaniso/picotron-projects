@@ -8,7 +8,7 @@ version 2
 :: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzU1M11dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzU2OF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -19,909 +19,39 @@ ZzAHAEdABxAnUAcgB-AMswAZB0YAAfEBTwAHIAdKACPzAgsLBCBHQAdOByAHbgcAB44XAgDPBwAH
 bgcgB04HQEcgUAAcc9BOQG4gjhACAF8gbkBO0EIAGVwQEATw8DEARC4xMjU1AAEMAA85AP------
 -----------------------------------------------------------------whQbT04fX0=
 :: gfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
-:: label.png
-b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAg5ElEQVR4Ae2de2wc13X-z12s
-28CoMoAgAlOYDCAUgqoSroGCIazIlBHrVyQC9Ci1pB4VRKEpI0BhhOjX_iFGtQjJUSnZ_sOGshHg
-MEVJQtCDXDGi1MpGIwURLVumGbeuIDOGEigIqWIcsSomTJWgBnyb4q5Gw5nZmTu7897vB4PF2btn
-78yce8-n-su4rhEAAIDkkY-4fm8p3YmtxVP6gAiGT7wm_Zcdu7_BPQQACAnGdc383e6mAB1UhZ2F
-NP3_sbp-iT-K2xmOBsCO6CDRF_bYJdmSL99WkvnyWqvU-p7PM3zitR27vyE_AyxmXqYEvl4mwOd7
-Sh8QkjUC_ZNAOBoAEJedRTB84rUAtWV2jq85zcmVLFwLknau5LFKvrIK2vIa4q4y7xwejo9uDBov
-LEZ8eRwAAII6MPyeH3aJeQvauIGY3f2ocfw1WGs-pQ_8pXQ7Olq8lUiwfw3phMSOBCAC08l3ZRIe
-3vIYAYrCKmiziTxfPoLqyNvWUeLBLgAcDUAYzWVuK-kuM9LkReQ5cwROM0wlIzcHQYt3sJRM-m0j
-O9PEe4qXfEofMIKQjnfYGYDU4bdnK_VHpjUPQfvSUNgP-ZbSbbawWcSW88fItBhc5owKaaUBqEOE
-QIZPvCbkILrGXRSWzgq10SSVZU6TeR5fz_xLSozrWmSLF6Aug5WveVq-_yOuoxUAkHlyKX3uMOwM
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYYH7-wHUNVQO1bjtFRREA8CQfUnc1NRc8c-7qf7zvdegr
-n3rmjLx3xzPn4iN-6Jnz11-f55nT9qdLvR9a_ap3zvAF75y1y73X4reKZ86Kd9-1zPnLd7-nmfN3
-7A_8n7kz552zbHWlXw4s8942UXLoVgmOACkTdIAcnCq6-NrX0oMVAgBA0A-humbETFHDfoJKFnZ3
-NwDxYrSJS49E3Eoge_RctpT9KwCRcXCqmNhDmusaU1RxVeoRv62EXgMegnbcItg3IBY797X09LX0
-JNbRVdjWvZVcXA8g6PLuYYpqbBfjE-sGRExfS0-C5ct1TVz2Bqm6leBoYCFv2R-20x6bBsTFwali
-kk3trlrJVnIcMf8d1DM5__ltOfmxXQDs7Glhy7hkKzk2F9oNOAjasrFgZwA71_Ju_VYyj6PdgJl8
-pY2F7QJid7QIEmtqc6e4OFqmlUQy2g14CDp6KRt9CIBBYqXsq0E8M80JsDOQEjT6EAAA0iroxq5R
-z5yZL-23Z85vztz3zFk8ddUz592fzXvm-PLTnGfOz6_Ne_a0fbzOM_ct4p45f3zdu84n1z7mnfS_
-4pmy6s9_45nzhf9c45lz52_nPHMe_6z3etGy1Wg8AMISNAAAxAKfOiuZyVo2y855eI-snPuPS2aO
-bGqVzOw8N_lP0FzXHj6QomJPAADSZefRvz8WuJ2fO-uDwO38D7dy7gnWn812tn8FAADYORo7WwXt
-qGM4GgAAO0dv5wWCFiJmiiq_ikB8wtEAANg5YjsvELTZzmYpmwcBAAB2jsbORJQ325nrGlNUERhq
-FoPYKACAqO18eA_9OSFl5x_-K29SyeR3fzYvOeezT6yQTL75qeKrAgtcblYz7AwAAPGSt3w3HG18
-RY0AACARgoaUAQAgIeRQAgAASCb5Kv4zO9ThnTTknfJKQO9wLKB5Lu277pnTRf3B3Kwok3MlkFsN
-0KMSOQGx3zuFf10iCQBAlEMJAAAgmeTtQ1zXjJgpKmoEAACxkHOxs-0rAAAkn85zk4HPeeyD6cDn
-vHTjug9BO_oYjgYAwM7R25mI8hYRM0U1B_JTBFh4AMLAaDT7p0hw6T5zTqUYdk6pnYkoZ-5iXsu6
-XWAAkgNTVKMBjZaslGD_ahmHndNoZyLKm5dWnNvG8SsWWAyiVQAID0f5WrqvUhua-2t0bqUJYecU
-2ZmIcpbT2Fhg2BmAyKjUZebxSs41G9ycb-kKO6fOzkSUty_2eR-AzgBEbGpzA4pYtKFjM9qTHf_b
-1mrsP163KncWNKQMQPRSNvedPfD8r3sM0ouDoAEALnBdEwYUgWNs-qyU4xjb55dXrczzYPnSRQ4l
-AMCXnZmiGqazBI4GNA865ps-LRo1q9YIKmF_MPu9QBrJowQA_HW02aeSTpeUrLt-azxXsHapI_e4
-lsaFAgFgsaTZdDLWY4pqtFKNkoWd6428_ybA0oKkcXCqaMR9LT2VEsRPlmT7f83J8pZ0bwqzkeXn
-NHqtUtP57UT0ctYE7birsK4gURgyNdvWbGfDvCKwyNf81Z7sibkXRGyM2H_y5FTKd-yjPV8S_7_q
-mwckS9DCzsbhLwLxCUeDGBH2dHGoMLWjjiVdXx3mvjCaxeggczdZOstoN-u4vRPl3epyX_Mz7ZuB
-zy2XPaiWfCQ757D04bdD_jlpveycdMHl15z97LUvNhwBYrSz5dNsbSMQBrf-KmLLT-avNZrarf0U
-1dxElbRrjAuNmvMt4na-l_MfM9PC8nae6wvezm-tWBe4nfuW-Z57wkNB209y46iHo0FcCHWaPy3_
-dXSu8atwt6Fvy1djxPz3AL3s0cZewrXk_J3TEqe9i_vQzgsEbXE07AySgFCn_dNR4uKyu1tm8riQ
-6SxzjozQzflGDDun1M5ElLcvsN9DG4Dw6GvpEc6tZF7xkxGbtev_kzlB3unWhtQ10SaWxrEkyCvS
-mEfkm2PPGcwPYH_Y9Gq6bu1MRKyKHQlrg5r6rfIWOrCskKhHPXSrhPVKqZ0bymdxkHZuo4uB29l9
-j_WxAwAACbXzMNGlBdqtaOfrsnPe7ZFN-klxgZ1dmKB1bxGXyfyXZb-vqwLVCJrrGrYOCINDt0oo
-AgDVC5opKqoGAAARkEMJAAAAggYAAABBAwAABA0AAACCBgAACBo84NknVjiO88N7UBwAEktDMfg5
-2_hi4HMeulWCoKNmZFMrigAA7FyjnetL0JzWY_8CADunxc71JWgAAOycIjtD0MEzsqm189wk6gAA
-7FyjnTMl6Ala557A6AKn9djHAMDOqbDz77SVx9L6hR-ew-YfD3bOuz2h7DAAUg3bUb8qF_Qys5Zt
-dHGC1mFPAwAyQ3YEnV7u9lhP9aEjvSgLAACCDpKRTa2d5yZRBwAABG2ljS5O0DqXBEYXOK1P1DPf
-7aGG4oKRoSO9Xfv6zSN86ix2KgB1SB4lcOHYB9MOlt9-HJWpBNc1FCHbMEVFEepa0PyF0-T5Jtax
-KnXV7Dw36Sv-bg81FBeMDB3p7drXv6AaU2dZy2Y0MMABXIfkktjhR7fSezN89FoV-22jixO0zm1y
-uoBVBwCkgjxKEBd3e6ihuGBk6Ehv175_8wifOstaNqNWAAhenXtGMnPvkiuyk862ymY2TspmjrfL
-Zm4YS5_g2dGt-IXTfPQa61jl979tdDGkp_KH95Qfb-9xtAqoH7iupczObyvB23n4scDtvHjwM-dc
-ExIq6BC3Gq0vS5YuVGdnEdfu6Ibigq9DR3q79vUvuOPUWdayGXYAsHNW7eyZw_It_trHn7x043rF
-nfHCafp8E_tYFbidHR3tthG-fdhh8Ov7maIG9WzZEDTXtQBrApJp5_iXuBo7bxgL3s69XnP6t-O9
-0imXtHy8y3-pxnV3R1fHBK0TQRtdrGTn8oj_XZltxw-vcdymAW7fDNgZQN9hGLwaO3tShZ098W9n
-T2IT9IFlhUO3Su6OZke38hdO89FrrGNVFXYWsdnRge8kx7_bd60l4W5POWgoortB6glWxLBzggR9
-6FbJcHSAmO1sjDylDxARKV_tfiPuP84P77GMyOxas6znvvlw-G6Ph6NZy2b0P0iCgs17OBopm026
-97e-lsp8349J35fLvCn9nP3tksmLp3zYmYhySdgEl25cX-v4k8774_hWem_Gj16rcZMxRWV0wTpu
-G3F3tIydnW_tqGY7G44OlZ1bNsIvIBBHExF98nT5AhGSj-Heh26VDiwrHJwqup-P7OhWyQm5rr2l
-dLttNbrAaX0Vdvbr5djZuWXj4Jnz2N8gGExe5nPL2ZKPUJLsC5qIDk4V_1p6LJK1O1pGzYbcJ2id
-_ac2umhxdHKqb35sPnW2-IQtm2FnkKBdOrfcPgJHZ1-QXNcsdiaivpaeSo7mo9fKCutY5eg4w8iG
-oy12jpGGIt1d_K4NRaKiWn6FW1cfvtHU2VocbbEzHya2A-scROTucodC3xkQtL_t8MDOImYdq_xq
-Njs6ga9gdnRD0fSDyc6BOBp2BtEAEYdNLnV2fuhoRXW0c5JpKJavkNi5ZePgmfOwMwjVwvAyBF3v
-cF2DnUECHQ07p17Qs4tGUFkfu79ls32EKSrXNXlNm_0MQBiOZks_okd_lI7H3TAW-Jy9wc95r3Qq
-BkE3znfKOJop6sGpomXw4FSRKao19b0Z75GsONqImaIKTfu1Mx8mtgNKAfVKVuxMRPmQSiQc3Tjf
-6eloi4Asdha-MkXlL5ymzzcZdmZHt2ZsU5kd7Vgih3PrAbAzCBU_dRZ2jt7ORJQLr1DC0d5iUlTz
-ZbGzMciObqX3ZsSVPTvLlMhykjk3EuwMQrXzrauwc2R2JiIWdsVmF400znf63hO6JsSE9khXWcSZ
-ipXKpp0Na7Rsjuj2s62yme8-Jmvn8XbZOW9K27lfds7FU5_Rt-PvDJ1Hk6cIURbUByRZ35Ea3EDS
-zr6QtLMffNk5CkE3znfOLhppnO_EnQPUNNc1Gi9Xie1ASUBMWzFsETdO1q3KIxK0vKO5rgn7YN97
-88DORMSH4WhQDa-OPSOCvUuuuCiYT52NVMrARC6a2whHu9uZKSrsLAMf9h4BQNLOltjR0Q_-LFuN
-0mVQ0MLR7nbGYgAQBt2374vLxciejhYXihkx_difAHYGIFQ7m_OBpY8GOHklre9dcgWVT72gZxeN
-ENGdxgksgy-YDuLDthGcc8DVzmE4GiLOrKCFnY24cb4zXYUb2dQqgs5zk-E6mu0gImKKCkcDebG_
-OveMvGr56DXJA0AQ4BlQ57DY7WyQIkcbdo7R0c6NFLejcUgkCkeBGvY0HO3LzqxjFQoLQcfPs0_s
-EMGxD6Zd7AxHu9-96sQ7IljdthL9FrujDTvLLuhCO8fuaMcjxxH5Nw1jzhUlLpk5XXCTcD6WHr7T
-OJHwbW3YWcQWRyf6yFXUeB3taGcRw9HRM7D0UUNAfu1cnb7DM7gPk57eHvicb-T9c_B2-vWBDveE
-XPR2ZoraON9pGbePJMTOlUaS7_hE2bnSCIjG0eIKfqd1rHK8YOdA7ExE_ejtbBh5dtFIAu3sSee5
-yZFNrZaRZDraqDYAVSuYj16zjHieuKvbVsLOtds5UkHbfVGjl7muWZQUi6MTaGc4GoTl6D--o1BF
-DDvHJujAdd-X0uN_AFTNsQ_mn31ihWXE7mi0rjur21ZenXgn_n4GATPbyuj-l_P5qG9ez3YmIhaZ
-T4Oyp6OdBQenigHexXC03c7pOskCrEkVtzMcDTun1M4Og42TEd395KBs5i__bx3pHavRpPPnS9Zi
-DDm7tbFrVFa4Pz5lGZm5ab2LmXxm7ExEfS09Ad4r1V5_uCEUNWJHW4CXswcfJrajsr6jNHjWCV3Q
-kdk5DEdng9gdDTJr6h86i5ihNGkRNAAgxTRO0mxrJSmzHShQuOTCPWB1jSkqqhw7TFG5rqEOoEpH
-L7QzvBwZedi5rhyNFQHVOZoPP9hIsHOE5FACAID3Ab_D2A6iDRpKESX5kOblusYUNfhdoqhc1-pa
-eiolHJwqhnHfjPSYooa0LiDb8MN7UITsCDpUC7g4GnaGoxPI5ddvi2DNrqWpt-O3D6fjoXvHAp9y
-dqgj8DlnbpbcE3IptczBqSLsDFJkZ0ucSjtXGIGdQ7IzEeWDX1Fdi0CUTFG5rllGoAP50qFcEdvZ
-GFmza2lmXrCSrNn_47Bz7XYORdBRigYKACBGrjT8TYVfYhJ0tuwcvKC5rsGbqTjbsFJAil_tos9e
-s4488O_aXUsT9KiZszMR5bADAQgJu7_SZTSZs-zoVvrVKrOd2dGtSXzQLNqZiFiA9_a6xhQVbZkW
-wlgv7AE7l1_-nVI7E9GKEieiDyfPiK9-0rqFiKYLQXoDuJBHCQAIlTR62YLwciV924HBEydormtM
-UVHQFMEUFasGagEiDpscSgAAkFcwpJw_QXNdY4qKaqYOpqhc11AHIOnoD--fxyhIlORRAgCArKNx
-nEdLrvYpuK4xRUUpUwpTVI6uAyCR5FECAIAnd3v_zxdz31RRCggaAJAkxtsbhKbfHLvbQw3F2B6E
-j16TzGQdqyQzL79_WzJzza6lkpkvPT8gmfniy90uv_ZqrZeuMQWHarphisp1zd_6zy3nc8tRujqx
-sxE2fKmdiO72JN3O35qcDtzOb1x8I3A7v-5Pl9wT8th_gM8tp0_e5nPL2ZKPvDOF070yQfbsbDj6
-7ptjIq5k6oYi7ByAnetU0Gsff1IEl25cl9oZusYUNct2NsWO5k2Ol4eO9Iqga18-5Bk7DV_y6rtM
-sWxw2LkWOxNRrqaqpdBchp0tsQt1YmfHET63XFhbXAmxsyUGUXu5_CDaMOZ8wc5B2LlWQacOu5Fl
-HM11rW5bMQlermRkODoK5v-CbeTkoPMFOwdhZyLKYwd6S0pRUQRQ145e9H1HXw-N-MTxH10B3fny
-67ev3JPKfPunl_VNKpn8q598IjnncxtOSCaf-tkPfFUAgpY4w3Utq45mSz7ic8stI1hx8JDtO_nk
-4AIvb9-5UMT7_lGhUKle0GnU1qUb19c_-qRlxNtiGbWzg6Mf_RFRQl_2a1--0JFeywgaOGw4raft
-o_xkR-nr9lGi9YwuoDJJF3RKMTtaxs72o8jQRGYEwZZ89OBNE-2cZkfDzhEwu2jkTtnLQxX17bij
-YHAIuhZH_-OXk51FDE1E72gUITI7G-GdRV2PzTs4GiIOmxxK4AnXNbudK40AkDE7G46GlKMnX7Wz
-mKLWSY3q6k3ramWBb-Tvkml72D0uaJzvRKkCE-Tl129bRtfsWorS1OdplAFeen5ABC__3I1qBHl_
-0wUOEUcvaLuOLcquc18bdu7a1z90pNf8U9e_fuyhZNpZxHB0dTTOd84uGkmvi8NY91fGdwc_58zN
-kntCznF0za6l5qvONyvXNUcjw85JtnOlESDvaNg5XjsTUR4b0ROmqOav8DKoQ0dLnojhKbIO7Zxc
-QV9_-bYI3rj4Rng1koTrmuHonVs2imDwzHk0MKhzYhRxPdiZiHJJtjMRfXndl0Xw3IYTcT2P3c6W
-GCS2P5NmEAA7y9u5SkFzXTOcFaqdE_JormuORs6ko5miivfNQJfCzrBzqu1MRHksrYyzUIQ671UQ
-C2t2La1blQty2ASecF1DEUBd099evkC0JE7Q9jPzjYtvhH1MucMUlYgGz5y3jNtHAKiRkU2t4kqW
-nY1e_E48PQhBJ9TRtdj5pecHxFXj83BdsxsZdgZh2NkxToidK46A0Mgn87HMjq4Os5dfen7gxZe7
-q56KKSq8DKK0szHSeW4y0Q9dSda9Y1jQYARtFpkjtagtLuwv5cvRVyfeEcHqtpVExHXN7GgAQPkI
-ee_O43gnShOUoNPo31Ax7Czi1W0rYWdQv-SOUX-7RO8n4ltb-yPUO-ZQxOcmUaFQydXV23Jdc-80
-29lwtOe-fH0C4IhddgnRn2FnSwwiIJ-Jt3rx5e6Xnh_wjBARU1T3T7ugZf7l6xMAF0ePbGpNlp1p
-nX2kjS7G9Tx86qxkJmvZLDvn6DXZOTtWyc75wmnZOY9urTtBWxwt7Fz9ntA1uBVE5ugUPa1d34KQ
-DC5vZxr5NHA7f2tyOnA7Pz-9X_4JmRV0dV5e3bby6sQ7lhFYA0jy3IYTInhlfHc9vG9IIoadDXJo
-KrujLTHXNZQFyNvZEmdMwVFKuc7tDEFXdLS4xFemqKgJkLdzhh39lD4AO0dmZyLKo7W8665rcDRI
-I41doyKYHeoIxNFc7hB6ZXw37Fy7nSFoKWBnkGo7i7hGR4ct4oom-blc6nszPkwql-wt-mvJOWcX
-jdz5jlTma1_c81WBHPax94rqGooA-KoqbHnJ27nSCEg_1QiaKWpdOYspal2dRnX1viE5Ol47R3kM
-OF7YDEGRRwngrBjZuWWjCAbPnM_Yo_uB2aEO7OFQyaEEnsDOYdvZEoMw1AmZQtDZhOsaihCqneHo
-sB0NO6eUPErgCVNUFAGk3dHRnLKCwTPnUXwIOiK4rsHRAEDEEHQSyZKdX517RgR7l1yJvbd3btmI
-bq8E17WsbsIoevbo1sDnfPHl7sDnfGV8dyiCZorKda1ONk1m3tSws4jtjo74Tc2Ohp0tC9HX0pPJ
-TQg7y9u5ekHX13pnzs4ujo4YeFnGzkTU19KTRkdzXYu4j7JkZwhadpNlw9EgpXZOqaMt7xLBw2fM
-zkSUQ0t4rzrsDOK2s9nR2XgX2DlcQTNFjXivNDUXxBX9VstA8_9dcsV9hOsajqJUs7iwTVywczbs
-TET5tGw_s5ebmgszN0vRrX1WtLV3yZVX556p5GsQC88_sUIExz6YrtHO5vhe6VQED39g2cOuNDg4
-VQzKzqxjVSpU3jjfGVKF0yFos52jdzTXtSw5Gk5MoJ0tcS12jtLRh2459OAhpcR1LShH1znpEHS8
-ZMbOVfDq3DMwewR2Tin2g8FoGTg6fkGLZci8v_r5HQ0vG6aGr8PjudVffGXqhy5eOzhVTNRW-MpP
--81x-BgcnQRBR8bMzVJTc8EyEtndM29nGSxGNnwNUwe_2Sp5zcXO90qnFhe2WUYieNpjH0x7vgv6
-qBZyaXlQs5GjtDOo5GtxoRQB2k2MMEU9OFWUt7PdyNHYWfK8MS6seDUFrH0KrmuofqoJcAWxGfzy
-7BMrHH3Ndc1iuoxtFSBDHiUAIEYsXk6akQEEDQAAUnBdk8yUP_GuTrwjmbm6baVk5tCRXsnMrn39
-Lr-mai8ZU1T5qoFEMNtavoi4rslvZQBSYefhE68FbufvfftI4HY_dfKH7gkBCBqkz86OMQCwc5Ls
-HJigmaLKlw8kxc5i7eY3ZP6l1z7_pLiw-rBziuwcmKABSLKdHWMAOyfczkEKmimqfB0BiN7OcDTs
-nC47E1Heb73Eu61uW4mtk0oaJ2m21ToCQEDnn_DSjeuBzH914p2Jf78tk-nza_PyJpVMvvyvH0rO
-uXPLRsnkX374sa8K_BC0p5qZonJdY4qKjZsaR8POoAaCEjGoSdCeagYpYLy9HGwYo8bJikfpbGuW
-rH3pxvW1jz8Jp4BsCtqvmpmiVux8kAQ7E9F4O3-6RMU1apyk2dZykDlHR2-npuaCCGZulrANQWCC
-9qtmkA47i3P0R7vd8oWaM6Tp6L1ssbOI4Wjgl1ylH1a3razOzkxRua6hsqmncZIaJ2m2tWxqUIOd
-K40AUKWgAYCmgech5HihMkGRD2NSpqhc15ii_rZB16gIZoc6sDaBsWGMxtutI341TUSzreUAACIi
-mrlZQhFCJRfSvMLR1dnZEoNgHF21nS2aBtXKCzqLjK59-YHPOXjmfOBzXrpxPR5B__59m5Hh6MAd
-zZ8_Ub2dQW2Ohp1hZ792JqJ8IHdqai7Y9x9TVK5rTFGxY_Khv70c9I4RkdtajLdD3BE4GsDOvuwc
-gKCbmgsuuxCOjt-ORNTfzr92wm0VNozReHs5AAB2ToadaxV0U3Ohkpr9MjvU0dg1ahnBhgvAzuKk
--M5uj78INY_3w9EAdk6InYkoV7WaJe3MFJXrmqSjYeeY2TBG4_00bvU7ALBz9Haukqbmgt_-SDoa
-BEN-u8Pli2o1jYXONljfiMlXoeaZmyW-t2GKynWNKSoqHgW9Y1Yj9475m2HDWFnTIgAAJFzQTc2F
-KtQM4ne0XztbNA0AiImcfGqNdmaKynUNFY8M-rUT1DtWvZ0BACkSdO3A0dHZWdeYoqIOAEDQcHR6
-7NzfjvoAAEHD0cmzMxH1jsHRAEDQcHTy7Gx2NDQNQOLJx3Vj4Whvm4Bg7Ww4moj628sBACmhqbkg
-mTlzs5SBOXMx1lo4GnsuajubNd3fjtKB7Nk5M3PGKWg4Ok47mx0NTQPYOZFzRiToxq7RbDh6cWGb
-uLJgZ8PRQtMAwM4JmzMKQTd2jc4OdbgkpMXRZi8nxNG12tmsaQBg54TNmY-dzhZHG7pZUeIimC6w
-pNnZGLlXOhWjms3lAgB2zticRJRLgp0NRxuaNuxsiYFhZ1EulALAzlm1c4iCbuwa9WVns6btRo7Y
-0d2374sryXZG9wKQefIh2bkKNScEs5e7b98fWPqoiO_VTi0ubDNn3iudil7N4gzDxgWgHsjBzpXs
-bB8xGzkWOzNFhZ0BqB-yCbTzdIGtKHHLSELqFb2XhZqJCGoGoN7IBTtd7Xa2G3m6wISh6hOua0xR
-YWcA6pB8Yp-M7GimqMLRYXtqYOmj3bfvW0ZiVHMErwwAgKBrRXgqAmeZHR2XnaFmAECaBB2lpuPy
-MtQMQCDM3CxlY84kCnpFiU8XWOyaDpKTg_Vg_06oGQDYWXLOxAna087p07RhZxHbHA01AwA7p0PQ
-fkm6ps12tjk6k2oWLwUA7Fz7nMkS9IoSny6wGjWdfOWl5TmrXggAYOdA5kyQoKu2s90OCTcgLAYA
-7CzliiwJ2o5h6ri0yHWNXXxzwdD2nWgnAECaBB2GneOStcONTg7CzgCAVAo6Aju7OLQWawc1T7a5
-OvHO6raVlX7duWXj4Jnz8rMNHent2tfvnvPS8wMvvtxtHln7_JOXblyP4GWf23DilfHd5pGm5sI-
-fuPYml1LK-3l2SdWHPtg2vg6sqm189ykiA8sKxy6VZK-__LCtnulU_aRxq7R2aGO7tv3B5Y_as9-
-de6ZvUuuuEw4u2ikcb6TiPjhPXP-cbyhiO0cKfk6PZecHOpo2yrmAQCAjAh6RYlPF1hirQ0AAHGR
-i-0JEmJnAACAoOuek4OoAQAAggYAAAgaAAAABJ16tu_kk4MoA5Dh4FQRRQBgAd2373vmLC5sq-4G
-EDSQgOvagWUFrmsoRd2SQwkASKad_1p6iKivpQeOhqABAImzswCOhqABAEm0MxwNQYNo2b6TTg6i
-DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
-0MzNElbfQg4lACCBjrZf2X7lX7xdbGouYOkt5FECAEC8fO4LPUQ0c7OEUgBvum-fl0lbXNiGWgFQ
-C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
-WbbBAAAAAElFTkSuQmCC
-:: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-14 10:29:05",revision=4279]]
-include "src/globals.lua"
-include "src/oklab.lua"
-include "src/palette.lua"
-include "src/remap.lua"
-include "src/gui.lua"
-include "src/gui_sliders.lua"
-
-
-function _init()	
-	window {
-		tabbed = true,
-		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA=="),
-	}
-	
-	find_gfx_map_pids()
-
-	mkdir("/ram/cart/pal")
-	wrangle_working_file(
-		save_working_file,
-		load_working_file,
-		"/ram/cart/pal/0.pal" -- default
-	)
-	
-	rebuild_pal()
-		
-	on_event("open_file", update_filename)
-	on_event("save_file", update_filename)
-	on_event("save_file_as", update_filename)
-	on_event("drop_items", handle_drop_items)
-	on_event("okpal_hexdialog_confirm", handle_okpal_hexdialog_confirm)
-	
-	undo_stack = create_undo_stack(undo_save_state, undo_load_state)
-
-	menuitem { id = "okpal_div1", label = "", divider = true, action = function() end }
-	menuitem {
-		id = "okpal_reset_colors",
-		label = "\^:0000000000000000 Picotron Palette",
-		shortcut = "Ctrl-P",
-		action = function() undo_stack:checkpoint(); restore_default_palette() end
-	}
-	menuitem {
-		id = "okpal_clear_colors",
-		label = "\^:0000000000000000 Empty Palette",
-		action = function() undo_stack:checkpoint(); clear_colors() end
-	}
-	menuitem { id = "okpal_div2", label = "", divider = true, action = function() end }
-	menuitem {
-		id = "okpal_manual",
-		label = "\^:0000000000000000 Help",
-		shortcut = "F1",
-		action = open_manual
-	}
-	
-	test_cube_colors = copy(default_test_cube_colors)
-	generate_gui()
-end
-
-
-function _draw()
-	cls(bg_color)
-	gui:draw_all()
-end
-
-
-function _update()
-	if padlock_flashing then
-		padlock_flashing_time += 1
-	end
-	
-	gui:update_all()
-	
-	if key("ctrl") then
-		if (keyp("c")) copy_color()
-		if (keyp("x")) cut_color()
-		if (keyp("v")) paste_color()
-		if (keyp("z")) undo_stack:undo()
-		if (keyp("y")) undo_stack:redo()
-		if (keyp("p")) then
-			undo_stack:checkpoint()
-			restore_default_palette()
-		end
-	end
-	
-	if (key("f1")) open_manual()
-end
-
-
-function open_manual()
-	local filepath = fullpath("manual.txt")
-	create_process(
-		"/system/apps/notebook.p64",
-		{
-			argv = { filepath } ,
-			window_attribs = {
-				workspace = "current",
-				autoclose = true,
-			}
-		}
-	)
-end
-
-
-function find_gfx_map_pids()
-	local processes = fetch "/ram/system/processes.pod"
-	for i = 1, #processes do
-		if processes[i].name == "gfx" then
-			picotron_gfx_pid = processes[i].id
-		elseif processes[i].name == "map" then
-			picotron_map_pid = processes[i].id
-		end
-	end
-end
-
-
-function send_palette()
-	local palette = userdata("i32", 64)
-	for c = 0, 63 do
-		palette:set(c, get_color(c))
-	end
-	if picotron_gfx_pid then
-		send_message(picotron_gfx_pid, { event = "set_palette", palette = palette })
-	end
-	if picotron_map_pid then
-		send_message(picotron_map_pid, { event = "set_palette", palette = palette })
-	end
-end
-
-
--- Undo ---------------------------------------------------------------------------
-
-
-function undo_save_state(_item)
-	return {
-		pal_okhsl = copy(pal_okhsl),
-		pal_code = copy(pal_code),
-		test_cube_colors = copy(test_cube_colors),
-	}
-end
-
-
-function undo_load_state(state, _item)
-	pal_okhsl = state.pal_okhsl
-	pal_code = state.pal_code
-	test_cube_colors = state.test_cube_colors
-	for c = 0, 63 do
-		set_color(c, pal_code[c])
-	end
-	send_palette()
-end
-
-
-function copy(t)
-	if type(t) == "table" then
-		local new = {}
-		for k, v in pairs(t) do
-			new[k] = copy(v)
-		end
-		return new
-	else
-		return t
-	end
-end
-
-
--- Drag-and-drop ------------------------------------------------------------------
-
-
-function handle_drop_items(msg)
-	for i = 1, #msg.items do
-		local item = msg.items[i]
-		if item.pod_type == "file_reference" and item.attrib == "file" then
-			local ext = item.fullpath:ext()
-			if ext == "hex" or ext == "txt" then
-				local metadata = fetch_metadata(item.fullpath) or {}
-				if metadata.okpal_version then
-					current_filename = item.fullpath
-					current_import_choice = "overwrite"
-					send_message(pid(), {event = "open_file", filename = item.fullpath})
-				else
-					create_process(
-						"src/hexdialog.lua",
-						{
-							okpal_filename = item.fullpath,
-							okpal_parent_pid = pid(),
-							path = path, 
-							window_attribs = { 
-								workspace = "current",
-								autoclose = true, -- ???
-								give_focus = nil, -- ???
-								show_in_workspace = nil, -- ???
-								corun_program = nil, -- ???
-								unique_location = nil, -- ???
-								has_frame = true,
-								x = nil, y = nil, z = nil,
-								moveable = true,
-								resizeable = false,
-								desktop_filenav = nil, -- ???
-							}
-						}
-					)
-				end
-			else
-				-- TODO: dialog for unknown file extensions?
-				current_filename = item.fullpath
-				send_message(pid(), {event = "open_file", filename = item.fullpath})
-			end
-		end
-	end
-end
-
-
-function handle_okpal_hexdialog_confirm(msg)
-	current_filename = msg.okpal_filename
-	current_import_choice = msg.okpal_hexdialog_choice
-	send_message(pid(), { event = "open_file", filename = msg.okpal_filename })
-end
-
-
--- Loading and saving -------------------------------------------------------------
-
-
-function update_filename(msg)
-	-- TODO: maybe add `or "/ram/cart/pal/0.pal"`?
-	if msg.filename then
-		-- Clicking on the disabled 'Save File (auto)' menu entry
-		-- sends a msg with no filename, so we need to ignore it.
-		current_filename = msg.filename
-	end
-end
-
-
-function save_working_file()
-	local ext = current_filename:ext()
-	if ext == "hex" or ext == "txt" then
-		return save_hex_file()
-	else
-		if ext != "pal" then
-			notify("unknown file extension: saved using default file format")
-		end
-		return save_pal_file()
-	end
-end
-
-
-function load_working_file(data, metadata)
-	local ext = current_filename:ext()
-	if ext == "hex" or ext == "txt" then
-		load_hex_file(data, metadata or {})
-	else
-		if ext != "pal" then
-			notify("unkown file extension: loaded using default file format")
-		end
-		load_pal_file(data, metadata or {})
-	end
-	if (undo_stack) undo_stack:reset()
-	send_palette()
-end
-
-
--- Metadata ----------------------------------------------------------------------
-
-
-function create_metadata()
-	local metadata = {}
-	metadata.okpal_version = okpal_version
-	metadata.bg_color = bg_color
-	metadata.blackest_color = blackest_color
-	metadata.whitest_color = whitest_color
-	metadata.hidden_toggles = hidden_toggles
-	metadata.hidden = copy(hidden)
-	metadata.locked = copy(locked)
-	metadata.test_cube_colors = copy(test_cube_colors)
-	return metadata
-end
-
-
-function load_metadata(metadata)
-	metadata = metadata or {}
-	bg_color = metadata.bg_color or 0
-	blackest_color = metadata.blackest_color or 0
-	whitest_color = metadata.whitest_color or 7
-	
-	if type(metadata.hidden_toggles) == "table" then
-		hidden_toggles = metadata.hidden_toggles
-	else
-		hidden_toggles = {}
-		for row = 0, 3 do
-			hidden_toggles[row] = false
-		end
-	end
-	
-	if type(metadata.hidden) == "table" then
-		hidden = metadata.hidden
-	else
-		hidden = {}
-		for c = 0, 63 do
-			hidden[c] = false
-		end
-	end
-	
-	if type(metadata.locked) == "table" then
-		locked = metadata.locked
-	elseif current_filename == "/ram/cart/pal/0.pal" then
-		-- This only occurs when a default starting file
-		-- is created.
-		for c = 0, 63 do
-			locked[c] = c <= 31
-		end
-	else
-		locked = {}
-		for c = 0, 63 do
-			locked[c] = false
-		end
-	end
-	
-	if type(metadata.test_cube_colors) == "table" then
-		test_cube_colors = metadata.test_cube_colors
-	elseif current_filename == "/ram/cart/pal/0.pal" then
-		test_cube_colors = copy(default_test_cube_colors)
-	else
-		for i = 0, 23 do
-			test_cube_colors[i] = { 1, 1, 1 }
-		end
-	end
-end
-
-
--- Load and save pal files -------------------------------------------------------
-
-
-function load_pal_file(data, metadata)
-	if data then
-		if type(data) == "userdata" and data:width() == 64 then
-			for c = 0, 63 do
-				if data[c] then
-					set_color(c, data[c])
-				end
-			end
-		else
-			notify("unable to load working file")
-			return
-		end
-	end
-	rebuild_pal()
-	load_metadata(metadata)
-end
-
-
-function save_pal_file()
-	local output = userdata("i32", 64)
-	for c = 0, 63 do
-		output:set(c, get_color(c))
-	end
-	return output, create_metadata()
-end
-
-
--- Load and save hex files ---------------------------------------------------------
-
-
-function load_hex_file(data, metadata)
-	if type(data) == "string" then
-		local lines = split(data, "\n", false)
-		local codes = {}
-		for l in all(lines) do
-			local code = tonum("0x" .. l:gsub("%s",""))
-			if type(code) == "number" then
-				codes[#codes + 1] = code
-			elseif code then
-				notify("error importing hex file")
-			end
-		end
-		local start = 0
-		if current_import_choice == "dont_clobber" then
-			-- TODO: put in separate function and add menu item
-			for c = 0, 32 do
-				set_color(c, peek4(0x5000 + 4 * (64 + c)))
-			end
-			start = 32
-		end
-		if #codes > 64 - start then
-			notify("*** not enough space to import all the colors ***")
-		end
-		for c = start, 63 do
-			if codes[c - start + 1] then
-				set_color(c, codes[c - start + 1])
-			else
-				set_color(c, 0x000000)
-			end
-		end
-		rebuild_pal()
-		if current_import_choice == "remap" then
-			remap_colors()
-		end	
-	elseif data then
-		notify("import hex file: unkown type: " .. type(data))
-	end
-
-	load_metadata(metadata)
-	if current_import_choice == "dont_clobber" then
-		active_color = nil
-		for c = 0, 31 do
-			hidden[c] = true
-			locked[c] = true
-		end
-		hidden_toggles[0] = true
-		hidden_toggles[1] = true
-		blackest_color = 0
-		whitest_color = 7
-		bg_color = 0
-	else
-		local best_black, best_white = find_blackest_and_whitest()
-		blackest_color = metadata.blackest_color or best_black
-		whitest_color = metadata.whitest_color or best_white
-		bg_color = metadata.bg_color or blackest_color
-	end
-end
-
-
-function save_hex_file(filename)
-	-- Don't export trailing black colors
-	local fin = 63
-	while fin > 0 and get_color(fin) == 0 do
-		fin -= 1
-	end
-	
-	local output = ""
-	for c = 0, fin do
-		output ..= color_to_hex(get_color(c)) .. "\n"
-	end
-	return output, create_metadata()
-end
-
-
--- Copy and paste ----------------------------------------------------------------
-
-
-function copy_color()
-	if active_color then
-		set_clipboard("#" .. color_to_hex(get_color(active_color)))
-	end
-end
-
-
-function cut_color()
-	if active_color then
-		set_clipboard("#" .. color_to_hex(get_color(active_color)))
-		if not locked[active_color] then
-			 undo_stack:checkpoint()
-			change_color_code(active_color, 0x000000)
-		end
-	end
-end
-
-
-function paste_color()
-	if not active_color then
-		notify("unable to paste: no selected color")
-		return
-	end
-	if locked[active_color] then
-		notify("unable to paste: selected color is locked")
-		return
-	end
-	local cb = get_clipboard()
-	if type(cb) == "string" then
-		local hex = string.gsub(cb, "%s", "")
-		if sub(hex, 1, 1) == "#" then
-			hex = sub(hex, 2, -1)
-		end
-		local code = tonumber("0x" .. hex)
-		if type(code) == "number" then
-			undo_stack:checkpoint()
-			change_color_code(active_color, code)
-		else
-			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
-		end
-	else
-		notify("unable to paste: type not supported (" .. type(cb) .. ")")
-	end
-end
-:: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-08 08:19:41",revision=208,stored="2024-04-04 06:56:33"]]
-# OkPal
-
-OkPal is a tool to create and edit color palettes.
-You can easily use those palettes in your programs,
-and even directly in Picotron's sprite and map
-editors.
-
-
-## Features
-
-- Any change to the palette is propagated to
-  Picotron's sprite and map editors.
-- Use a perceptually uniform color space (oklab).
-- Choose colors by hue, saturation and lightness.
-- Reorder colors by drag-and-drop.
-- Undo/redo.
-- Supports two file formats: ".hex" and ".pal"
-- Multiple options for importing external palettes
-  (keep default palette, overwrite it, or try to 
-  match it)
-
-
-## Usage
-
-The tool shows you four different views of the 64
-colors in the current palette:
-
-- at the top-left of the screen, the colors are
-  shown in palette order (same as in sprite editor
-  first tab);
-- below, on the left, the colors are shown inside
-  a circle picker: the angle correspond to the hue,
-  and the distance from the center correspond to the
-  saturation;
-- in the middle the colors are shown as inside a
-  square picker: the X axis correspond to the
-  saturation, and the Y axis correspond to the
-  lightness;
-- finally, on the right is a "test zone", where
-  you can use 24 paintable cubes to test color
-  combinations.
-
-To modify a color, you must first select it. You can
-do that either by clicking in the palette overview
-at the top of the screen, or by clicking directly on
-one of the color dots in the circle picker or in the
-square picker.
-
-Once selected, some information about the color are
-displayed on the right of the palette overview:
-
-- the color number;
-- the hex code corresponding to the RGB values of
-  the color;
-- a padlock icon: if the padlock is closed, the color
-  is "locked" and cannot be edited; click on the icon
-  to lock/unlock it;
-- an eye icon: if the eye is closed, the color is only
-  shown in the palette overview; it is hidden in the
-  circle and square pickers.
-- a paint bucket icon: you can click on it to change
-  the color background to the current selected color;
-  click again to go back to a black background.
-
-You can copy the current color by using Ctrl-C, and
-paste a copied color onto the current one by using
-Ctrl-V. This also works outside OkPal: the color is
-stored in the clipboard as a hex code ("#ffacc5").
-
-There is five different ways to adjust the selected
-color:
-
-- a small colored circle *outside* the circle picker
-  allows you to change the hue of the color;
-- a small colored circle *inside* the circle picker
-  allows you to change at the same time the hue and
-  the saturation;
-- a small colored triangle below the square picker
-  allows you to change just the saturation;
-- a small colored triangle at the right of the square
-  picker allows you to change the lightness;
-- finally, a small colored circle inside the square
-  picker allows you to change at the same time the
-  saturation and the lightness.
-
-Any change you make can be reverted by hitting
-Ctrl-Z for undo. Use Ctrl-Y for redo.
-
-Once you have several colors in you palettes, you can
-reorder them in the palette overview: just drag one
-color onto another, they will swap their positions.
-Note that both colors must be unlocked.
-
-
-## Using the palette in cartridges
-
-By default, the palette you edit is saved in the
-cart you're working on, alongside your sprite sheets
-and maps.
-
-The default path is "/ram/cart/pal/0.pal"
-
-In order to use a palette in your programs, you just
-need to copy it in memory:
-
-```
-poke4(0x5000, get(fetch"/ram/cart/pal/0.pal"))
-```
-
-
-## Loading and saving
-
-If you only need one palette for your cart, you
-don't need to do anything special to save it. It is
-saved alongside the rest of your assets each time
-you hit Ctrl-S.
-
-It's possible to work with multiple palettes, but it
-is a little clumsy, because it's not yet possible to
-fully integrate third-party tools with Picotron's
-interface.
-
-In order to create a new palette, you *cannot* yet
-use the '+' button at the right of the tabs. Instead,
-you need to use "Save File As" in the menu, and choose
-the name of your new palette, for example "1.pal".
-If you need to start from scratch for this new
-palette, use "Empty Palette" or "Picotron Palette"
-from the menu.
-
-To switch to another already created palette, choose
-"Open File" in the menu, but **do not double-click**
-on the file you want to open, as this do not work
-yet. Instead, you can drag and drop the file from the
-dialog onto OkPal's window, and it will open it.
-
-
-## Importing and exporting
-
-You can import and export palettes for use with
-external tools. Currently the only supported format
-is ".hex" files, which are simple text files with one
-line per color, represented by their RGB code in hex
-format (without "#" or "0x", just the hexadecimal
-numbers).
-
-To import a palette, choose "Open File" from the menu,
-but **do not double-click** on the file. Instead,
-drag-and-drop the hex file onto OkPal's window. If
-this is the first time you open this external palette
-in OkPal, a dialog will appear to let you choose how
-to arrange the colors in the palette. You can either:
-
-- Keep default Picotron palette in the first 32 colors,
-  and put the imported colors in the last 32 slots.
-- Completely remove the Picotron palette and import
-  the whole palette, but reorder the colors to try
-  to match the default colors.
-- Or simply import the palette as is. Note that this
-  will affect the interface and probably make it
-  difficult to use the menu, the sprite editor and
-  the map editor.
-
-To export a palette, choose "Save File As" in the
-menu. In the save dialog, enter a file name ending
-in ".hex".
-
-
-## Changelog
-2024-04-??: version 1.0.1 (release #okpal-4)
-
-- fixed: picotron's palette was not locked in the
-  default file on first opening;
-- explain how to export to .hex in the manual;
-
-2024-04-06: version 1.0.0 (release #okpal-3)
-
-- propagate palette to sprite and map editors;
-- undo/redo;
-- reorder colors by drag-and-drop;
-- import dialog;
-- reorder imported colors to match default colors;
-- added a manual;
-- menu entries to initialize the palette and open
-  the manual;
-- flash padlock icon when trying to edit a locked
-  color;
-- shift-click paint-bucket icon to change the "white"
-  color used in the interface, and ctrl-click the
-  icon to change the "black" (useful when importing
-  external palettes);
-
-2024-04-02: version 0.0.3 (release #okpal-2)
-
-- Added the ability to change the background color (by clicking on the small paint bucket icon), and switched the default background to black.
-- Added the ability to import ".hex" files (using drag and drop from the "Open File" dialog); to actually create the ".pal" file, you need to save.
-- Improved the color pickers.
-- Added the ability to copy/paste colors (using a hex string starting with #).
-- Added the ability to show/hide individual colors (right click on a color in the palette).
-
-2024-04-01: v0.0.1 (release #okpal-1)
-
-- Added the ability to lock colors, to avoid accidentally modifying them. By default the first 33 colors are locked (click on the padlock to unlock)
-- Added the ability to hide specific rows of color from the two color pickers.
-- Added sliders to change the individual components (hue, saturation and luminance).
-- Added the ability to select a color by clicking on their dot in the color pickers.
-- Added a test zone, with 24 paintable cubes (click on a cube face to change its color).
-
-
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzQwNF1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzQxOV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
-:: pal/0.pal
-b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
-NCAxMDoyNDo1NCIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
-ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
-ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
-ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2V9LGhpZGRlbl90b2dnbGVzPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LGxv
-Y2tlZD17WzBdPXRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
-dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
-LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDQtMTQgMTA6Mjk6MDUiLG9rcGFs
-X3ZlcnNpb249IjAuMC40IixyZXZpc2lvbj0yMix0ZXN0X2N1YmVfY29sb3JzPXtbMF09ezE1LDMx
-LDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0fSx7OCwyNCwyfSx7MjYs
-MTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7MjgsMTIsMTZ9LHsxMiwxNiwx
-fSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9LHsyMywxNCwxM30sezE0
-LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwxfSx7MSwxLDF9LHsxLDEs
-MX19LHdoaXRlc3RfY29sb3I9N11dbHo0AAkBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwiMAEA
-wDFkMmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFlOAgA
-QDAwNGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOADAY2NhYTAwMWM1
-ZWFjMADwHWE1YTEwMDc1NGU5NzAwMTI1MzU5MDA3NDJmMjkwMDQ5MmQzODAwYTI4ODc5QADwA2Fj
-YzUwMGMzMDA0YzAwZWI2YkYAYDkwZWM0MgoAIGIywACgNjRkZmY2MDBiZIkAAJYAQDBkYWJAAF84
-NTZkMAEA6VAwMDAiKQ==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: pal/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2IixzdG9yZWQ9IjIwMjQtMDMt
-MzEgMTk6NDc6NDYiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Iixtb2RpZmllZD0iMjAyNC0w
+NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0xNCAxMDoyOTowNSIscmV2aXNpb249MzMzOV1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzM1NF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
 IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
 3L-4D0AADUD--7DwcAoA--9kH-8BAJdQ-----x8=
 :: sfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2IixzdG9yZWQ9IjIwMjQtMDMt
-MzEgMDU6MzM6MDYiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
+NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
+MG5pbA==
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-14 10:29:05",revision=1399]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-27 12:46:04",revision=1418]]
 picotron_gfx_pid = nil
 picotron_map_pid = nil
 
-current_filename = "/ram/cart/pal/0.pal"
 current_import_choice = "dont_clobber"
 
 undo_stack = nil
@@ -996,7 +126,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-14 10:29:05",revision=4580]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-27 12:46:04",revision=4596]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -1357,7 +487,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-14 10:29:05",revision=585]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-27 12:46:04",revision=601]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -1795,7 +925,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-14 10:29:05",revision=1370]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-27 12:46:04",revision=1386]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -2608,7 +1738,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-14 10:29:05",revision=3044]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-27 12:46:04",revision=3060]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -2706,7 +1836,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-14 10:29:05",revision=1044]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-27 12:46:04",revision=1061]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -2823,8 +1953,841 @@ function find_blackest_and_whitest()
 	return best_black, best_white
 end
 :: src/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0IixzdG9yZWQ9IjIwMjQtMDQt
-MDMgMTg6MDc6MzQiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Iixtb2RpZmllZD0iMjAyNC0w
+NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Il1dbHo0AAQAAAADAAAA
+MG5pbA==
+:: label.png
+b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAg5ElEQVR4Ae2de2wc13X-z12s
+28CoMoAgAlOYDCAUgqoSroGCIazIlBHrVyQC9Ci1pB4VRKEpI0BhhOjX_iFGtQjJUSnZ_sOGshHg
+MEVJQtCDXDGi1MpGIwURLVumGbeuIDOGEigIqWIcsSomTJWgBnyb4q5Gw5nZmTu7897vB4PF2btn
+78yce8-n-su4rhEAAIDkkY-4fm8p3YmtxVP6gAiGT7wm_Zcdu7_BPQQACAnGdc383e6mAB1UhZ2F
+NP3_sbp-iT-K2xmOBsCO6CDRF_bYJdmSL99WkvnyWqvU-p7PM3zitR27vyE_AyxmXqYEvl4mwOd7
+Sh8QkjUC_ZNAOBoAEJedRTB84rUAtWV2jq85zcmVLFwLknau5LFKvrIK2vIa4q4y7xwejo9uDBov
+LEZ8eRwAAII6MPyeH3aJeQvauIGY3f2ocfw1WGs-pQ_8pXQ7Olq8lUiwfw3phMSOBCAC08l3ZRIe
+3vIYAYrCKmiziTxfPoLqyNvWUeLBLgAcDUAYzWVuK-kuM9LkReQ5cwROM0wlIzcHQYt3sJRM-m0j
+O9PEe4qXfEofMIKQjnfYGYDU4bdnK_VHpjUPQfvSUNgP-ZbSbbawWcSW88fItBhc5owKaaUBqEOE
+QIZPvCbkILrGXRSWzgq10SSVZU6TeR5fz_xLSozrWmSLF6Aug5WveVq-_yOuoxUAkHlyKX3uMOwM
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYYH7-wHUNVQO1bjtFRREA8CQfUnc1NRc8c-7qf7zvdegr
+n3rmjLx3xzPn4iN-6Jnz11-f55nT9qdLvR9a_ap3zvAF75y1y73X4reKZ86Kd9-1zPnLd7-nmfN3
+7A_8n7kz552zbHWlXw4s8942UXLoVgmOACkTdIAcnCq6-NrX0oMVAgBA0A-humbETFHDfoJKFnZ3
+NwDxYrSJS49E3Eoge_RctpT9KwCRcXCqmNhDmusaU1RxVeoRv62EXgMegnbcItg3IBY797X09LX0
+JNbRVdjWvZVcXA8g6PLuYYpqbBfjE-sGRExfS0-C5ct1TVz2Bqm6leBoYCFv2R-20x6bBsTFwali
+kk3trlrJVnIcMf8d1DM5__ltOfmxXQDs7Glhy7hkKzk2F9oNOAjasrFgZwA71_Ju_VYyj6PdgJl8
+pY2F7QJid7QIEmtqc6e4OFqmlUQy2g14CDp6KRt9CIBBYqXsq0E8M80JsDOQEjT6EAAA0iroxq5R
+z5yZL-23Z85vztz3zFk8ddUz592fzXvm-PLTnGfOz6_Ne_a0fbzOM_ct4p45f3zdu84n1z7mnfS_
+4pmy6s9_45nzhf9c45lz52_nPHMe_6z3etGy1Wg8AMISNAAAxAKfOiuZyVo2y855eI-snPuPS2aO
+bGqVzOw8N_lP0FzXHj6QomJPAADSZefRvz8WuJ2fO-uDwO38D7dy7gnWn812tn8FAADYORo7WwXt
+qGM4GgAAO0dv5wWCFiJmiiq_ikB8wtEAANg5YjsvELTZzmYpmwcBAAB2jsbORJQ325nrGlNUERhq
+FoPYKACAqO18eA_9OSFl5x_-K29SyeR3fzYvOeezT6yQTL75qeKrAgtcblYz7AwAAPGSt3w3HG18
+RY0AACARgoaUAQAgIeRQAgAASCb5Kv4zO9ThnTTknfJKQO9wLKB5Lu277pnTRf3B3Kwok3MlkFsN
+0KMSOQGx3zuFf10iCQBAlEMJAAAgmeTtQ1zXjJgpKmoEAACxkHOxs-0rAAAkn85zk4HPeeyD6cDn
+vHTjug9BO_oYjgYAwM7R25mI8hYRM0U1B_JTBFh4AMLAaDT7p0hw6T5zTqUYdk6pnYkoZ-5iXsu6
+XWAAkgNTVKMBjZaslGD_ahmHndNoZyLKm5dWnNvG8SsWWAyiVQAID0f5WrqvUhua-2t0bqUJYecU
+2ZmIcpbT2Fhg2BmAyKjUZebxSs41G9ycb-kKO6fOzkSUty_2eR-AzgBEbGpzA4pYtKFjM9qTHf_b
+1mrsP163KncWNKQMQPRSNvedPfD8r3sM0ouDoAEALnBdEwYUgWNs-qyU4xjb55dXrczzYPnSRQ4l
+AMCXnZmiGqazBI4GNA865ps-LRo1q9YIKmF_MPu9QBrJowQA_HW02aeSTpeUrLt-azxXsHapI_e4
+lsaFAgFgsaTZdDLWY4pqtFKNkoWd6428_ybA0oKkcXCqaMR9LT2VEsRPlmT7f83J8pZ0bwqzkeXn
+NHqtUtP57UT0ctYE7birsK4gURgyNdvWbGfDvCKwyNf81Z7sibkXRGyM2H_y5FTKd-yjPV8S_7_q
+mwckS9DCzsbhLwLxCUeDGBH2dHGoMLWjjiVdXx3mvjCaxeggczdZOstoN-u4vRPl3epyX_Mz7ZuB
+zy2XPaiWfCQ757D04bdD_jlpveycdMHl15z97LUvNhwBYrSz5dNsbSMQBrf-KmLLT-avNZrarf0U
+1dxElbRrjAuNmvMt4na-l_MfM9PC8nae6wvezm-tWBe4nfuW-Z57wkNB209y46iHo0FcCHWaPy3_
+dXSu8atwt6Fvy1djxPz3AL3s0cZewrXk_J3TEqe9i_vQzgsEbXE07AySgFCn_dNR4uKyu1tm8riQ
+6SxzjozQzflGDDun1M5ElLcvsN9DG4Dw6GvpEc6tZF7xkxGbtev_kzlB3unWhtQ10SaWxrEkyCvS
+mEfkm2PPGcwPYH_Y9Gq6bu1MRKyKHQlrg5r6rfIWOrCskKhHPXSrhPVKqZ0bymdxkHZuo4uB29l9
+j_WxAwAACbXzMNGlBdqtaOfrsnPe7ZFN-klxgZ1dmKB1bxGXyfyXZb-vqwLVCJrrGrYOCINDt0oo
+AgDVC5opKqoGAAARkEMJAAAAggYAAABBAwAABA0AAACCBgAACBo84NknVjiO88N7UBwAEktDMfg5
+2_hi4HMeulWCoKNmZFMrigAA7FyjnetL0JzWY_8CADunxc71JWgAAOycIjtD0MEzsqm189wk6gAA
+7FyjnTMl6Ala557A6AKn9djHAMDOqbDz77SVx9L6hR-ew-YfD3bOuz2h7DAAUg3bUb8qF_Qys5Zt
+dHGC1mFPAwAyQ3YEnV7u9lhP9aEjvSgLAACCDpKRTa2d5yZRBwAABG2ljS5O0DqXBEYXOK1P1DPf
+7aGG4oKRoSO9Xfv6zSN86ix2KgB1SB4lcOHYB9MOlt9-HJWpBNc1FCHbMEVFEepa0PyF0-T5Jtax
+KnXV7Dw36Sv-bg81FBeMDB3p7drXv6AaU2dZy2Y0MMABXIfkktjhR7fSezN89FoV-22jixO0zm1y
+uoBVBwCkgjxKEBd3e6ihuGBk6Ehv175_8wifOstaNqNWAAhenXtGMnPvkiuyk862ymY2TspmjrfL
+Zm4YS5_g2dGt-IXTfPQa61jl979tdDGkp_KH95Qfb-9xtAqoH7iupczObyvB23n4scDtvHjwM-dc
+ExIq6BC3Gq0vS5YuVGdnEdfu6Ibigq9DR3q79vUvuOPUWdayGXYAsHNW7eyZw_It_trHn7x043rF
+nfHCafp8E_tYFbidHR3tthG-fdhh8Ov7maIG9WzZEDTXtQBrApJp5_iXuBo7bxgL3s69XnP6t-O9
+0imXtHy8y3-pxnV3R1fHBK0TQRtdrGTn8oj_XZltxw-vcdymAW7fDNgZQN9hGLwaO3tShZ098W9n
+T2IT9IFlhUO3Su6OZke38hdO89FrrGNVFXYWsdnRge8kx7_bd60l4W5POWgoortB6glWxLBzggR9
+6FbJcHSAmO1sjDylDxARKV_tfiPuP84P77GMyOxas6znvvlw-G6Ph6NZy2b0P0iCgs17OBopm026
+97e-lsp8349J35fLvCn9nP3tksmLp3zYmYhySdgEl25cX-v4k8774_hWem_Gj16rcZMxRWV0wTpu
+G3F3tIydnW_tqGY7G44OlZ1bNsIvIBBHExF98nT5AhGSj-Heh26VDiwrHJwqup-P7OhWyQm5rr2l
+dLttNbrAaX0Vdvbr5djZuWXj4Jnz2N8gGExe5nPL2ZKPUJLsC5qIDk4V_1p6LJK1O1pGzYbcJ2id
+_ac2umhxdHKqb35sPnW2-IQtm2FnkKBdOrfcPgJHZ1-QXNcsdiaivpaeSo7mo9fKCutY5eg4w8iG
+oy12jpGGIt1d_K4NRaKiWn6FW1cfvtHU2VocbbEzHya2A-scROTucodC3xkQtL_t8MDOImYdq_xq
+Njs6ga9gdnRD0fSDyc6BOBp2BtEAEYdNLnV2fuhoRXW0c5JpKJavkNi5ZePgmfOwMwjVwvAyBF3v
+cF2DnUECHQ07p17Qs4tGUFkfu79ls32EKSrXNXlNm_0MQBiOZks_okd_lI7H3TAW-Jy9wc95r3Qq
+BkE3znfKOJop6sGpomXw4FSRKao19b0Z75GsONqImaIKTfu1Mx8mtgNKAfVKVuxMRPmQSiQc3Tjf
+6eloi4Asdha-MkXlL5ymzzcZdmZHt2ZsU5kd7Vgih3PrAbAzCBU_dRZ2jt7ORJQLr1DC0d5iUlTz
+ZbGzMciObqX3ZsSVPTvLlMhykjk3EuwMQrXzrauwc2R2JiIWdsVmF400znf63hO6JsSE9khXWcSZ
+ipXKpp0Na7Rsjuj2s62yme8-Jmvn8XbZOW9K27lfds7FU5_Rt-PvDJ1Hk6cIURbUByRZ35Ea3EDS
+zr6QtLMffNk5CkE3znfOLhppnO_EnQPUNNc1Gi9Xie1ASUBMWzFsETdO1q3KIxK0vKO5rgn7YN97
+88DORMSH4WhQDa-OPSOCvUuuuCiYT52NVMrARC6a2whHu9uZKSrsLAMf9h4BQNLOltjR0Q_-LFuN
+0mVQ0MLR7nbGYgAQBt2374vLxciejhYXihkx_difAHYGIFQ7m_OBpY8GOHklre9dcgWVT72gZxeN
+ENGdxgksgy-YDuLDthGcc8DVzmE4GiLOrKCFnY24cb4zXYUb2dQqgs5zk-E6mu0gImKKCkcDebG_
+OveMvGr56DXJA0AQ4BlQ57DY7WyQIkcbdo7R0c6NFLejcUgkCkeBGvY0HO3LzqxjFQoLQcfPs0_s
+EMGxD6Zd7AxHu9-96sQ7IljdthL9FrujDTvLLuhCO8fuaMcjxxH5Nw1jzhUlLpk5XXCTcD6WHr7T
+OJHwbW3YWcQWRyf6yFXUeB3taGcRw9HRM7D0UUNAfu1cnb7DM7gPk57eHvicb-T9c_B2-vWBDveE
+XPR2ZoraON9pGbePJMTOlUaS7_hE2bnSCIjG0eIKfqd1rHK8YOdA7ExE_ejtbBh5dtFIAu3sSee5
+yZFNrZaRZDraqDYAVSuYj16zjHieuKvbVsLOtds5UkHbfVGjl7muWZQUi6MTaGc4GoTl6D--o1BF
+DDvHJujAdd-X0uN_AFTNsQ_mn31ihWXE7mi0rjur21ZenXgn_n4GATPbyuj-l_P5qG9ez3YmIhaZ
+T4Oyp6OdBQenigHexXC03c7pOskCrEkVtzMcDTun1M4Og42TEd395KBs5i__bx3pHavRpPPnS9Zi
+DDm7tbFrVFa4Pz5lGZm5ab2LmXxm7ExEfS09Ad4r1V5_uCEUNWJHW4CXswcfJrajsr6jNHjWCV3Q
+kdk5DEdng9gdDTJr6h86i5ihNGkRNAAgxTRO0mxrJSmzHShQuOTCPWB1jSkqqhw7TFG5rqEOoEpH
+L7QzvBwZedi5rhyNFQHVOZoPP9hIsHOE5FACAID3Ab_D2A6iDRpKESX5kOblusYUNfhdoqhc1-pa
+eiolHJwqhnHfjPSYooa0LiDb8MN7UITsCDpUC7g4GnaGoxPI5ddvi2DNrqWpt-O3D6fjoXvHAp9y
+dqgj8DlnbpbcE3IptczBqSLsDFJkZ0ucSjtXGIGdQ7IzEeWDX1Fdi0CUTFG5rllGoAP50qFcEdvZ
+GFmza2lmXrCSrNn_47Bz7XYORdBRigYKACBGrjT8TYVfYhJ0tuwcvKC5rsGbqTjbsFJAil_tos9e
+s4488O_aXUsT9KiZszMR5bADAQgJu7_SZTSZs-zoVvrVKrOd2dGtSXzQLNqZiFiA9_a6xhQVbZkW
+wlgv7AE7l1_-nVI7E9GKEieiDyfPiK9-0rqFiKYLQXoDuJBHCQAIlTR62YLwciV924HBEydormtM
+UVHQFMEUFasGagEiDpscSgAAkFcwpJw_QXNdY4qKaqYOpqhc11AHIOnoD--fxyhIlORRAgCArKNx
+nEdLrvYpuK4xRUUpUwpTVI6uAyCR5FECAIAnd3v_zxdz31RRCggaAJAkxtsbhKbfHLvbQw3F2B6E
+j16TzGQdqyQzL79_WzJzza6lkpkvPT8gmfniy90uv_ZqrZeuMQWHarphisp1zd_6zy3nc8tRujqx
+sxE2fKmdiO72JN3O35qcDtzOb1x8I3A7v-5Pl9wT8th_gM8tp0_e5nPL2ZKPvDOF070yQfbsbDj6
+7ptjIq5k6oYi7ByAnetU0Gsff1IEl25cl9oZusYUNct2NsWO5k2Ol4eO9Iqga18-5Bk7DV_y6rtM
+sWxw2LkWOxNRrqaqpdBchp0tsQt1YmfHET63XFhbXAmxsyUGUXu5_CDaMOZ8wc5B2LlWQacOu5Fl
+HM11rW5bMQlermRkODoK5v-CbeTkoPMFOwdhZyLKYwd6S0pRUQRQ145e9H1HXw-N-MTxH10B3fny
+67ev3JPKfPunl_VNKpn8q598IjnncxtOSCaf-tkPfFUAgpY4w3Utq45mSz7ic8stI1hx8JDtO_nk
+4AIvb9-5UMT7_lGhUKle0GnU1qUb19c_-qRlxNtiGbWzg6Mf_RFRQl_2a1--0JFeywgaOGw4raft
+o_xkR-nr9lGi9YwuoDJJF3RKMTtaxs72o8jQRGYEwZZ89OBNE-2cZkfDzhEwu2jkTtnLQxX17bij
+YHAIuhZH_-OXk51FDE1E72gUITI7G-GdRV2PzTs4GiIOmxxK4AnXNbudK40AkDE7G46GlKMnX7Wz
+mKLWSY3q6k3ramWBb-Tvkml72D0uaJzvRKkCE-Tl129bRtfsWorS1OdplAFeen5ABC__3I1qBHl_
+0wUOEUcvaLuOLcquc18bdu7a1z90pNf8U9e_fuyhZNpZxHB0dTTOd84uGkmvi8NY91fGdwc_58zN
+kntCznF0za6l5qvONyvXNUcjw85JtnOlESDvaNg5XjsTUR4b0ROmqOav8DKoQ0dLnojhKbIO7Zxc
+QV9_-bYI3rj4Rng1koTrmuHonVs2imDwzHk0MKhzYhRxPdiZiHJJtjMRfXndl0Xw3IYTcT2P3c6W
+GCS2P5NmEAA7y9u5SkFzXTOcFaqdE_JormuORs6ko5miivfNQJfCzrBzqu1MRHksrYyzUIQ671UQ
+C2t2La1blQty2ASecF1DEUBd099evkC0JE7Q9jPzjYtvhH1MucMUlYgGz5y3jNtHAKiRkU2t4kqW
+nY1e_E48PQhBJ9TRtdj5pecHxFXj83BdsxsZdgZh2NkxToidK46A0Mgn87HMjq4Os5dfen7gxZe7
+q56KKSq8DKK0szHSeW4y0Q9dSda9Y1jQYARtFpkjtagtLuwv5cvRVyfeEcHqtpVExHXN7GgAQPkI
+ee_O43gnShOUoNPo31Ax7Czi1W0rYWdQv-SOUX-7RO8n4ltb-yPUO-ZQxOcmUaFQydXV23Jdc-80
+29lwtOe-fH0C4IhddgnRn2FnSwwiIJ-Jt3rx5e6Xnh_wjBARU1T3T7ugZf7l6xMAF0ePbGpNlp1p
+nX2kjS7G9Tx86qxkJmvZLDvn6DXZOTtWyc75wmnZOY9urTtBWxwt7Fz9ntA1uBVE5ugUPa1d34KQ
+DC5vZxr5NHA7f2tyOnA7Pz-9X_4JmRV0dV5e3bby6sQ7lhFYA0jy3IYTInhlfHc9vG9IIoadDXJo
+KrujLTHXNZQFyNvZEmdMwVFKuc7tDEFXdLS4xFemqKgJkLdzhh39lD4AO0dmZyLKo7W8665rcDRI
+I41doyKYHeoIxNFc7hB6ZXw37Fy7nSFoKWBnkGo7i7hGR4ct4oom-blc6nszPkwql-wt-mvJOWcX
+jdz5jlTma1_c81WBHPax94rqGooA-KoqbHnJ27nSCEg_1QiaKWpdOYspal2dRnX1viE5Ol47R3kM
+OF7YDEGRRwngrBjZuWWjCAbPnM_Yo_uB2aEO7OFQyaEEnsDOYdvZEoMw1AmZQtDZhOsaihCqneHo
+sB0NO6eUPErgCVNUFAGk3dHRnLKCwTPnUXwIOiK4rsHRAEDEEHQSyZKdX517RgR7l1yJvbd3btmI
+bq8E17WsbsIoevbo1sDnfPHl7sDnfGV8dyiCZorKda1ONk1m3tSws4jtjo74Tc2Ohp0tC9HX0pPJ
+TQg7y9u5ekHX13pnzs4ujo4YeFnGzkTU19KTRkdzXYu4j7JkZwhadpNlw9EgpXZOqaMt7xLBw2fM
+zkSUQ0t4rzrsDOK2s9nR2XgX2DlcQTNFjXivNDUXxBX9VstA8_9dcsV9hOsajqJUs7iwTVywczbs
+TET5tGw_s5ebmgszN0vRrX1WtLV3yZVX556p5GsQC88_sUIExz6YrtHO5vhe6VQED39g2cOuNDg4
+VQzKzqxjVSpU3jjfGVKF0yFos52jdzTXtSw5Gk5MoJ0tcS12jtLRh2459OAhpcR1LShH1znpEHS8
+ZMbOVfDq3DMwewR2Tin2g8FoGTg6fkGLZci8v_r5HQ0vG6aGr8PjudVffGXqhy5eOzhVTNRW-MpP
+-81x-BgcnQRBR8bMzVJTc8EyEtndM29nGSxGNnwNUwe_2Sp5zcXO90qnFhe2WUYieNpjH0x7vgv6
+qBZyaXlQs5GjtDOo5GtxoRQB2k2MMEU9OFWUt7PdyNHYWfK8MS6seDUFrH0KrmuofqoJcAWxGfzy
+7BMrHH3Ndc1iuoxtFSBDHiUAIEYsXk6akQEEDQAAUnBdk8yUP_GuTrwjmbm6baVk5tCRXsnMrn39
+Lr-mai8ZU1T5qoFEMNtavoi4rslvZQBSYefhE68FbufvfftI4HY_dfKH7gkBCBqkz86OMQCwc5Ls
+HJigmaLKlw8kxc5i7eY3ZP6l1z7_pLiw-rBziuwcmKABSLKdHWMAOyfczkEKmimqfB0BiN7OcDTs
+nC47E1Heb73Eu61uW4mtk0oaJ2m21ToCQEDnn_DSjeuBzH914p2Jf78tk-nza_PyJpVMvvyvH0rO
+uXPLRsnkX374sa8K_BC0p5qZonJdY4qKjZsaR8POoAaCEjGoSdCeagYpYLy9HGwYo8bJikfpbGuW
+rH3pxvW1jz8Jp4BsCtqvmpmiVux8kAQ7E9F4O3-6RMU1apyk2dZykDlHR2-npuaCCGZulrANQWCC
+9qtmkA47i3P0R7vd8oWaM6Tp6L1ssbOI4Wjgl1ylH1a3razOzkxRua6hsqmncZIaJ2m2tWxqUIOd
+K40AUKWgAYCmgech5HihMkGRD2NSpqhc15ii_rZB16gIZoc6sDaBsWGMxtutI341TUSzreUAACIi
+mrlZQhFCJRfSvMLR1dnZEoNgHF21nS2aBtXKCzqLjK59-YHPOXjmfOBzXrpxPR5B__59m5Hh6MAd
+zZ8_Ub2dQW2Ohp1hZ792JqJ8IHdqai7Y9x9TVK5rTFGxY_Khv70c9I4RkdtajLdD3BE4GsDOvuwc
+gKCbmgsuuxCOjt-ORNTfzr92wm0VNozReHs5AAB2ToadaxV0U3Ohkpr9MjvU0dg1ahnBhgvAzuKk
+-M5uj78INY_3w9EAdk6InYkoV7WaJe3MFJXrmqSjYeeY2TBG4_00bvU7ALBz9Haukqbmgt_-SDoa
+BEN-u8Pli2o1jYXONljfiMlXoeaZmyW-t2GKynWNKSoqHgW9Y1Yj9475m2HDWFnTIgAAJFzQTc2F
+KtQM4ne0XztbNA0AiImcfGqNdmaKynUNFY8M-rUT1DtWvZ0BACkSdO3A0dHZWdeYoqIOAEDQcHR6
+7NzfjvoAAEHD0cmzMxH1jsHRAEDQcHTy7Gx2NDQNQOLJx3Vj4Whvm4Bg7Ww4moj628sBACmhqbkg
+mTlzs5SBOXMx1lo4GnsuajubNd3fjtKB7Nk5M3PGKWg4Ok47mx0NTQPYOZFzRiToxq7RbDh6cWGb
+uLJgZ8PRQtMAwM4JmzMKQTd2jc4OdbgkpMXRZi8nxNG12tmsaQBg54TNmY-dzhZHG7pZUeIimC6w
+pNnZGLlXOhWjms3lAgB2zticRJRLgp0NRxuaNuxsiYFhZ1EulALAzlm1c4iCbuwa9WVns6btRo7Y
+0d2374sryXZG9wKQefIh2bkKNScEs5e7b98fWPqoiO_VTi0ubDNn3iudil7N4gzDxgWgHsjBzpXs
+bB8xGzkWOzNFhZ0BqB-yCbTzdIGtKHHLSELqFb2XhZqJCGoGoN7IBTtd7Xa2G3m6wISh6hOua0xR
+YWcA6pB8Yp-M7GimqMLRYXtqYOmj3bfvW0ZiVHMErwwAgKBrRXgqAmeZHR2XnaFmAECaBB2lpuPy
+MtQMQCDM3CxlY84kCnpFiU8XWOyaDpKTg_Vg_06oGQDYWXLOxAna087p07RhZxHbHA01AwA7p0PQ
+fkm6ps12tjk6k2oWLwUA7Fz7nMkS9IoSny6wGjWdfOWl5TmrXggAYOdA5kyQoKu2s90OCTcgLAYA
+7CzliiwJ2o5h6ri0yHWNXXxzwdD2nWgnAECaBB2GneOStcONTg7CzgCAVAo6Aju7OLQWawc1T7a5
+OvHO6raVlX7duWXj4Jnz8rMNHent2tfvnvPS8wMvvtxtHln7_JOXblyP4GWf23DilfHd5pGm5sI-
+fuPYml1LK-3l2SdWHPtg2vg6sqm189ykiA8sKxy6VZK-__LCtnulU_aRxq7R2aGO7tv3B5Y_as9-
+de6ZvUuuuEw4u2ikcb6TiPjhPXP-cbyhiO0cKfk6PZecHOpo2yrmAQCAjAh6RYlPF1hirQ0AAHGR
+i-0JEmJnAACAoOuek4OoAQAAggYAAAgaAAAABJ16tu_kk4MoA5Dh4FQRRQBgAd2373vmLC5sq-4G
+EDSQgOvagWUFrmsoRd2SQwkASKad_1p6iKivpQeOhqABAImzswCOhqABAEm0MxwNQYNo2b6TTg6i
+DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
+0MzNElbfQg4lACCBjrZf2X7lX7xdbGouYOkt5FECAEC8fO4LPUQ0c7OEUgBvum-fl0lbXNiGWgFQ
+C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
+WbbBAAAAAElFTkSuQmCC
+:: main.lua
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-27 12:46:04",revision=4299]]
+include "src/globals.lua"
+include "src/oklab.lua"
+include "src/palette.lua"
+include "src/remap.lua"
+include "src/gui.lua"
+include "src/gui_sliders.lua"
+
+
+function _init()	
+	window {
+		tabbed = true,
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA=="),
+	}
+	
+	find_gfx_map_pids()
+
+	mkdir("/ram/cart/pal")
+	wrangle_working_file(
+		save_working_file,
+		load_working_file,
+		"/ram/cart/pal/0.pal" -- default
+	)
+	
+	rebuild_pal()
+		
+	on_event("drop_items", handle_drop_items)
+	on_event("okpal_hexdialog_confirm", handle_okpal_hexdialog_confirm)
+	
+	undo_stack = create_undo_stack(undo_save_state, undo_load_state)
+
+	menuitem { id = "okpal_div1", label = "", divider = true, action = function() end }
+	menuitem {
+		id = "okpal_reset_colors",
+		label = "\^:0000000000000000 Picotron Palette",
+		shortcut = "Ctrl-P",
+		action = function() undo_stack:checkpoint(); restore_default_palette() end
+	}
+	menuitem {
+		id = "okpal_clear_colors",
+		label = "\^:0000000000000000 Empty Palette",
+		action = function() undo_stack:checkpoint(); clear_colors() end
+	}
+	menuitem { id = "okpal_div2", label = "", divider = true, action = function() end }
+	menuitem {
+		id = "okpal_manual",
+		label = "\^:0000000000000000 Help",
+		shortcut = "F1",
+		action = open_manual
+	}
+	
+	test_cube_colors = copy(default_test_cube_colors)
+	generate_gui()
+end
+
+
+function _draw()
+	cls(bg_color)
+	gui:draw_all()
+end
+
+
+function _update()
+	if padlock_flashing then
+		padlock_flashing_time += 1
+	end
+	
+	gui:update_all()
+	
+	if key("ctrl") then
+		if (keyp("c")) copy_color()
+		if (keyp("x")) cut_color()
+		if (keyp("v")) paste_color()
+		if (keyp("z")) undo_stack:undo()
+		if (keyp("y")) undo_stack:redo()
+		if (keyp("p")) then
+			undo_stack:checkpoint()
+			restore_default_palette()
+		end
+	end
+	
+	if (key("f1")) open_manual()
+end
+
+
+function open_manual()
+	local filepath = fullpath("manual.txt")
+	create_process(
+		"/system/apps/notebook.p64",
+		{
+			argv = { filepath } ,
+			window_attribs = {
+				workspace = "current",
+				autoclose = true,
+			}
+		}
+	)
+end
+
+
+function find_gfx_map_pids()
+	local processes = fetch "/ram/system/processes.pod"
+	for i = 1, #processes do
+		if processes[i].name == "gfx" then
+			picotron_gfx_pid = processes[i].id
+		elseif processes[i].name == "map" then
+			picotron_map_pid = processes[i].id
+		end
+	end
+end
+
+
+function send_palette()
+	local palette = userdata("i32", 64)
+	for c = 0, 63 do
+		palette:set(c, get_color(c))
+	end
+	if picotron_gfx_pid then
+		send_message(picotron_gfx_pid, { event = "set_palette", palette = palette })
+	end
+	if picotron_map_pid then
+		send_message(picotron_map_pid, { event = "set_palette", palette = palette })
+	end
+end
+
+
+-- Undo ---------------------------------------------------------------------------
+
+
+function undo_save_state(_item)
+	return {
+		pal_okhsl = copy(pal_okhsl),
+		pal_code = copy(pal_code),
+		test_cube_colors = copy(test_cube_colors),
+	}
+end
+
+
+function undo_load_state(state, _item)
+	pal_okhsl = state.pal_okhsl
+	pal_code = state.pal_code
+	test_cube_colors = state.test_cube_colors
+	for c = 0, 63 do
+		set_color(c, pal_code[c])
+	end
+	send_palette()
+end
+
+
+function copy(t)
+	if type(t) == "table" then
+		local new = {}
+		for k, v in pairs(t) do
+			new[k] = copy(v)
+		end
+		return new
+	else
+		return t
+	end
+end
+
+
+-- Drag-and-drop ------------------------------------------------------------------
+
+
+function handle_drop_items(msg)
+	for i = 1, #msg.items do
+		local item = msg.items[i]
+		if item.pod_type == "file_reference" and item.attrib == "file" then
+			local ext = item.fullpath:ext()
+			if ext == "hex" or ext == "txt" then
+				local metadata = fetch_metadata(item.fullpath) or {}
+				if metadata.okpal_version then
+					current_import_choice = "overwrite"
+					send_message(pid(), {event = "open_file", filename = item.fullpath})
+				else
+					create_process(
+						"src/hexdialog.lua",
+						{
+							okpal_filename = item.fullpath,
+							okpal_parent_pid = pid(),
+							path = path, 
+							window_attribs = { 
+								workspace = "current",
+								autoclose = true, -- ???
+								give_focus = nil, -- ???
+								show_in_workspace = nil, -- ???
+								corun_program = nil, -- ???
+								unique_location = nil, -- ???
+								has_frame = true,
+								x = nil, y = nil, z = nil,
+								moveable = true,
+								resizeable = false,
+								desktop_filenav = nil, -- ???
+							}
+						}
+					)
+				end
+			else
+				-- TODO: dialog for unknown file extensions?
+				send_message(pid(), {event = "open_file", filename = item.fullpath})
+			end
+		end
+	end
+end
+
+
+function handle_okpal_hexdialog_confirm(msg)
+---	current_filename = msg.okpal_filename
+	current_import_choice = msg.okpal_hexdialog_choice
+	send_message(pid(), { event = "open_file", filename = msg.okpal_filename })
+end
+
+
+-- Loading and saving -------------------------------------------------------------
+
+
+function save_working_file()
+	local ext = pwf():ext()
+	if ext == "hex" or ext == "txt" then
+		return save_hex_file()
+	else
+		if ext != "pal" then
+			notify("unknown file extension: saved using default file format")
+		end
+		return save_pal_file()
+	end
+end
+
+
+function load_working_file(data, metadata)
+	local ext = pwf():ext()
+	if ext == "hex" or ext == "txt" then
+		load_hex_file(data, metadata or {})
+	else
+		if ext != "pal" then
+			notify("unkown file extension: loaded using default file format")
+		end
+		load_pal_file(data, metadata or {})
+	end
+	if (undo_stack) undo_stack:reset()
+	send_palette()
+end
+
+
+-- Metadata ----------------------------------------------------------------------
+
+
+function create_metadata()
+	local metadata = {}
+	metadata.okpal_version = okpal_version
+	metadata.bg_color = bg_color
+	metadata.blackest_color = blackest_color
+	metadata.whitest_color = whitest_color
+	metadata.hidden_toggles = hidden_toggles
+	metadata.hidden = copy(hidden)
+	metadata.locked = copy(locked)
+	metadata.test_cube_colors = copy(test_cube_colors)
+	return metadata
+end
+
+
+function load_metadata(metadata)
+	metadata = metadata or {}
+	bg_color = metadata.bg_color or 0
+	blackest_color = metadata.blackest_color or 0
+	whitest_color = metadata.whitest_color or 7
+	
+	if type(metadata.hidden_toggles) == "table" then
+		hidden_toggles = metadata.hidden_toggles
+	else
+		hidden_toggles = {}
+		for row = 0, 3 do
+			hidden_toggles[row] = false
+		end
+	end
+	
+	if type(metadata.hidden) == "table" then
+		hidden = metadata.hidden
+	else
+		hidden = {}
+		for c = 0, 63 do
+			hidden[c] = false
+		end
+	end
+	
+	if type(metadata.locked) == "table" then
+		locked = metadata.locked
+	elseif pwf() == "/ram/cart/pal/0.pal" then
+		-- This only occurs when a default starting file
+		-- is created.
+		for c = 0, 63 do
+			locked[c] = c <= 31
+		end
+	else
+		locked = {}
+		for c = 0, 63 do
+			locked[c] = false
+		end
+	end
+	
+	if type(metadata.test_cube_colors) == "table" then
+		test_cube_colors = metadata.test_cube_colors
+	elseif pwf() == "/ram/cart/pal/0.pal" then
+		test_cube_colors = copy(default_test_cube_colors)
+	else
+		for i = 0, 23 do
+			test_cube_colors[i] = { 1, 1, 1 }
+		end
+	end
+end
+
+
+-- Load and save pal files -------------------------------------------------------
+
+
+function load_pal_file(data, metadata)
+	if data then
+		if type(data) == "userdata" and data:width() == 64 then
+			for c = 0, 63 do
+				if data[c] then
+					set_color(c, data[c])
+				end
+			end
+		else
+			notify("unable to load working file")
+			return
+		end
+	end
+	rebuild_pal()
+	load_metadata(metadata)
+end
+
+
+function save_pal_file()
+	local output = userdata("i32", 64)
+	for c = 0, 63 do
+		output:set(c, get_color(c))
+	end
+	return output, create_metadata()
+end
+
+
+-- Load and save hex files ---------------------------------------------------------
+
+
+function load_hex_file(data, metadata)
+	if type(data) == "string" then
+		local lines = split(data, "\n", false)
+		local codes = {}
+		for l in all(lines) do
+			local code = tonum("0x" .. l:gsub("%s",""))
+			if type(code) == "number" then
+				codes[#codes + 1] = code
+			elseif code then
+				notify("error importing hex file")
+			end
+		end
+		local start = 0
+		if current_import_choice == "dont_clobber" then
+			-- TODO: put in separate function and add menu item
+			for c = 0, 32 do
+				set_color(c, peek4(0x5000 + 4 * (64 + c)))
+			end
+			start = 32
+		end
+		if #codes > 64 - start then
+			notify("*** not enough space to import all the colors ***")
+		end
+		for c = start, 63 do
+			if codes[c - start + 1] then
+				set_color(c, codes[c - start + 1])
+			else
+				set_color(c, 0x000000)
+			end
+		end
+		rebuild_pal()
+		if current_import_choice == "remap" then
+			remap_colors()
+		end	
+	elseif data then
+		notify("import hex file: unkown type: " .. type(data))
+	end
+
+	load_metadata(metadata)
+	if current_import_choice == "dont_clobber" then
+		active_color = nil
+		for c = 0, 31 do
+			hidden[c] = true
+			locked[c] = true
+		end
+		hidden_toggles[0] = true
+		hidden_toggles[1] = true
+		blackest_color = 0
+		whitest_color = 7
+		bg_color = 0
+	else
+		local best_black, best_white = find_blackest_and_whitest()
+		blackest_color = metadata.blackest_color or best_black
+		whitest_color = metadata.whitest_color or best_white
+		bg_color = metadata.bg_color or blackest_color
+	end
+end
+
+
+function save_hex_file(filename)
+	-- Don't export trailing black colors
+	local fin = 63
+	while fin > 0 and get_color(fin) == 0 do
+		fin -= 1
+	end
+	
+	local output = ""
+	for c = 0, fin do
+		output ..= color_to_hex(get_color(c)) .. "\n"
+	end
+	return output, create_metadata()
+end
+
+
+-- Copy and paste ----------------------------------------------------------------
+
+
+function copy_color()
+	if active_color then
+		set_clipboard("#" .. color_to_hex(get_color(active_color)))
+	end
+end
+
+
+function cut_color()
+	if active_color then
+		set_clipboard("#" .. color_to_hex(get_color(active_color)))
+		if not locked[active_color] then
+			 undo_stack:checkpoint()
+			change_color_code(active_color, 0x000000)
+		end
+	end
+end
+
+
+function paste_color()
+	if not active_color then
+		notify("unable to paste: no selected color")
+		return
+	end
+	if locked[active_color] then
+		notify("unable to paste: selected color is locked")
+		return
+	end
+	local cb = get_clipboard()
+	if type(cb) == "string" then
+		local hex = string.gsub(cb, "%s", "")
+		if sub(hex, 1, 1) == "#" then
+			hex = sub(hex, 2, -1)
+		end
+		local code = tonumber("0x" .. hex)
+		if type(code) == "number" then
+			undo_stack:checkpoint()
+			change_color_code(active_color, code)
+		else
+			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
+		end
+	else
+		notify("unable to paste: type not supported (" .. type(cb) .. ")")
+	end
+end
+:: manual.txt
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-27 12:43:17",revision=210,stored="2024-04-04 06:56:33"]]
+# OkPal
+
+OkPal is a tool to create and edit color palettes.
+You can easily use those palettes in your programs,
+and even directly in Picotron's sprite and map
+editors.
+
+
+## Features
+
+- Any change to the palette is propagated to
+  Picotron's sprite and map editors.
+- Use a perceptually uniform color space (oklab).
+- Choose colors by hue, saturation and lightness.
+- Reorder colors by drag-and-drop.
+- Undo/redo.
+- Supports two file formats: ".hex" and ".pal"
+- Multiple options for importing external palettes
+  (keep default palette, overwrite it, or try to 
+  match it)
+
+
+## Usage
+
+The tool shows you four different views of the 64
+colors in the current palette:
+
+- at the top-left of the screen, the colors are
+  shown in palette order (same as in sprite editor
+  first tab);
+- below, on the left, the colors are shown inside
+  a circle picker: the angle correspond to the hue,
+  and the distance from the center correspond to the
+  saturation;
+- in the middle the colors are shown as inside a
+  square picker: the X axis correspond to the
+  saturation, and the Y axis correspond to the
+  lightness;
+- finally, on the right is a "test zone", where
+  you can use 24 paintable cubes to test color
+  combinations.
+
+To modify a color, you must first select it. You can
+do that either by clicking in the palette overview
+at the top of the screen, or by clicking directly on
+one of the color dots in the circle picker or in the
+square picker.
+
+Once selected, some information about the color are
+displayed on the right of the palette overview:
+
+- the color number;
+- the hex code corresponding to the RGB values of
+  the color;
+- a padlock icon: if the padlock is closed, the color
+  is "locked" and cannot be edited; click on the icon
+  to lock/unlock it;
+- an eye icon: if the eye is closed, the color is only
+  shown in the palette overview; it is hidden in the
+  circle and square pickers.
+- a paint bucket icon: you can click on it to change
+  the color background to the current selected color;
+  click again to go back to a black background.
+
+You can copy the current color by using Ctrl-C, and
+paste a copied color onto the current one by using
+Ctrl-V. This also works outside OkPal: the color is
+stored in the clipboard as a hex code ("#ffacc5").
+
+There is five different ways to adjust the selected
+color:
+
+- a small colored circle *outside* the circle picker
+  allows you to change the hue of the color;
+- a small colored circle *inside* the circle picker
+  allows you to change at the same time the hue and
+  the saturation;
+- a small colored triangle below the square picker
+  allows you to change just the saturation;
+- a small colored triangle at the right of the square
+  picker allows you to change the lightness;
+- finally, a small colored circle inside the square
+  picker allows you to change at the same time the
+  saturation and the lightness.
+
+Any change you make can be reverted by hitting
+Ctrl-Z for undo. Use Ctrl-Y for redo.
+
+Once you have several colors in you palettes, you can
+reorder them in the palette overview: just drag one
+color onto another, they will swap their positions.
+Note that both colors must be unlocked.
+
+
+## Using the palette in cartridges
+
+By default, the palette you edit is saved in the
+cart you're working on, alongside your sprite sheets
+and maps.
+
+The default path is "/ram/cart/pal/0.pal"
+
+In order to use a palette in your programs, you just
+need to copy it in memory:
+
+```
+poke4(0x5000, get(fetch"/ram/cart/pal/0.pal"))
+```
+
+
+## Loading and saving
+
+If you only need one palette for your cart, you
+don't need to do anything special to save it. It is
+saved alongside the rest of your assets each time
+you hit Ctrl-S.
+
+It's possible to work with multiple palettes, but it
+is a little clumsy, because it's not yet possible to
+fully integrate third-party tools with Picotron's
+interface.
+
+In order to create a new palette, you *cannot* yet
+use the '+' button at the right of the tabs. Instead,
+you need to use "Save File As" in the menu, and choose
+the name of your new palette, for example "1.pal".
+If you need to start from scratch for this new
+palette, use "Empty Palette" or "Picotron Palette"
+from the menu.
+
+To switch to another already created palette, choose
+"Open File" in the menu, but **do not double-click**
+on the file you want to open, as this do not work
+yet. Instead, you can drag and drop the file from the
+dialog onto OkPal's window, and it will open it.
+
+
+## Importing and exporting
+
+You can import and export palettes for use with
+external tools. Currently the only supported format
+is ".hex" files, which are simple text files with one
+line per color, represented by their RGB code in hex
+format (without "#" or "0x", just the hexadecimal
+numbers).
+
+To import a palette, choose "Open File" from the menu,
+but **do not double-click** on the file. Instead,
+drag-and-drop the hex file onto OkPal's window. If
+this is the first time you open this external palette
+in OkPal, a dialog will appear to let you choose how
+to arrange the colors in the palette. You can either:
+
+- Keep default Picotron palette in the first 32 colors,
+  and put the imported colors in the last 32 slots.
+- Completely remove the Picotron palette and import
+  the whole palette, but reorder the colors to try
+  to match the default colors.
+- Or simply import the palette as is. Note that this
+  will affect the interface and probably make it
+  difficult to use the menu, the sprite editor and
+  the map editor.
+
+To export a palette, choose "Save File As" in the
+menu. In the save dialog, enter a file name ending
+in ".hex".
+
+
+## Changelog
+2024-04-27: version 1.0.1 (release #okpal-4)
+
+- fixed: picotron's palette was not locked in the
+  default file on first opening;
+- fixed: saving a ".pal" file from an imported
+  ".hex" file was not working;
+- explain how to export to .hex in the manual;
+
+2024-04-06: version 1.0.0 (release #okpal-3)
+
+- propagate palette to sprite and map editors;
+- undo/redo;
+- reorder colors by drag-and-drop;
+- import dialog;
+- reorder imported colors to match default colors;
+- added a manual;
+- menu entries to initialize the palette and open
+  the manual;
+- flash padlock icon when trying to edit a locked
+  color;
+- shift-click paint-bucket icon to change the "white"
+  color used in the interface, and ctrl-click the
+  icon to change the "black" (useful when importing
+  external palettes);
+
+2024-04-02: version 0.0.3 (release #okpal-2)
+
+- Added the ability to change the background color (by clicking on the small paint bucket icon), and switched the default background to black.
+- Added the ability to import ".hex" files (using drag and drop from the "Open File" dialog); to actually create the ".pal" file, you need to save.
+- Improved the color pickers.
+- Added the ability to copy/paste colors (using a hex string starting with #).
+- Added the ability to show/hide individual colors (right click on a color in the palette).
+
+2024-04-01: v0.0.1 (release #okpal-1)
+
+- Added the ability to lock colors, to avoid accidentally modifying them. By default the first 33 colors are locked (click on the padlock to unlock)
+- Added the ability to hide specific rows of color from the two color pickers.
+- Added sliders to change the individual components (hue, saturation and luminance).
+- Added the ability to select a color by clicking on their dot in the color pickers.
+- Added a test zone, with 24 paintable cubes (click on a cube face to change its color).
+
+
 :: todo.txt
 --[[pod_format="raw",created="2024-03-31 20:08:43",modified="2024-04-04 10:05:39",revision=862]]
 - text entry for hex code
@@ -2845,26 +2808,26 @@ Maybe:
   hue/sat circle and sat/lum square, but filles
   with color zones instead of dots.
 :: .info.pod
-b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwi
-MDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcw
-NzAxMDAwMDAwMDEwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAwMDEwNzBkMGQwZDBkMGQwZDBk
-MGQwZDBkMGQwZDA3MDEwMTA3MGQwZDAxMDEwNjA2MDcwNzA2MDYwZDBkMDcwMTAxMDcwZDBkMDEw
-MTA2MDYwNzA3MDYwNjBkMGQwNzAxMDEwNzBkMGQwNjA2MGQwZDAxMDEwNzA3MGQwZDA3MDEwMTA3
-MGQwZDA2MDYwZDBkMDEwMTA3MDcwZDBkMDcwMTAxMDcwZDBkMDcwNzA2MDYwNzA3MDEwMTBkMGQw
-NzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAxMGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBk
-MGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcw
-NzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2
-MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAi
-KSxub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0byBvcGVuIHRoZSBtYW51YWwpIixy
-dW50aW1lPTUsc3RvcmVkPSIyMDI0LTA0LTE0IDEwOjMwOjA0Iix0aXRsZT0iT2tQQUwiLHZlcnNp
-b249IjEuMC4xIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzg5Iix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3VpLmx1YSMyNzgiLHdvcmtzcGFjZV9pbmRleD0xfSx7
-bG9jYXRpb249InNyYy9ndWlfc2xpZGVycy5sdWEjNDI4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xv
-Y2F0aW9uPSJzcmMvaGV4ZGlhbG9nLmx1YSMzMCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlv
-bj0ic3JjL2dsb2JhbHMubHVhIzM1Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMv
-cGFsZXR0ZS5sdWEjOTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9yZW1hcC5s
-dWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNl
-X2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0
-aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8wLnBhbCIs
-d29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5pbA==
+b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjQtMDQtMjcgMTI6MzA6
+NTQiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
+MDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAwMDEwNzBkMGQwZDBkMGQwZDBk
+MGQwZDBkMDcwMTAwMDEwNzBkMGQwZDBkMGQwZDBkMGQwZDBkMGQwZDA3MDEwMTA3MGQwZDAxMDEw
+NjA2MDcwNzA2MDYwZDBkMDcwMTAxMDcwZDBkMDEwMTA2MDYwNzA3MDYwNjBkMGQwNzAxMDEwNzBk
+MGQwNjA2MGQwZDAxMDEwNzA3MGQwZDA3MDEwMTA3MGQwZDA2MDYwZDBkMDEwMTA3MDcwZDBkMDcw
+MTAxMDcwZDBkMDcwNzA2MDYwNzA3MDEwMTBkMGQwNzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAx
+MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
+ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
+MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yNyAxMjo0
+NjowNCIsbm90ZXM9IlBhbGV0dGUgRWRpdG9yXG4odXNlIG1lbnUgdG8gb3BlbiB0aGUgbWFudWFs
+KSIscnVudGltZT02LHN0b3JlZD0iMjAyNC0wNC0xNCAxMDozMDowNCIsdGl0bGU9Ik9rUEFMIix2
+ZXJzaW9uPSIxLjAuMSIsd29ya3NwYWNlcz17e2xvY2F0aW9uPSJtYWluLmx1YSM2OCIsd29ya3Nw
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9
+MX0se2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9
+LHtsb2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9nbG9iYWxzLmx1YSM0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJz
+cmMvcGFsZXR0ZS5sdWEjOTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9yZW1h
+cC5sdWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3Nw
+YWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xv
+Y2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
 :: [eoc]
