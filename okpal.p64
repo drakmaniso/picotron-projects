@@ -2,13 +2,9 @@ picotron cartridge // www.picotron.net
 version 2
 
 :: gfx/
-:: map/
-:: pal/
-:: sfx/
-:: src/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzU2OF1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
+OC0yMyAxODoyMjo0NSIscmV2aXNpb249MzY3MV1dbHo0AA8CAACLOgAA9iN7WzBdPXtibXA9cHh1
 AEMgCAgEcLcgRyAXIEcgt3AsZmxhZ3M9MCxwYW5feD0tMS44MwEAETcXABB5FwAnNDICAKcsem9v
 bT0xMX0sWQDxCAwMBDAncAcgB2AHoAegB5BnQGdAJwAnBAA7Z-ALagBGNi4xNgEAFDNpADcwLjMB
 ACIyN2oAHDdpACPwDGoAPyAHUGgAS-8SN2BXQHcgFwAXAAcAFxAHEDcQByAHEBcQB0AHMAdgN-AM
@@ -20,35 +16,72 @@ bgcgB04HQEcgUAAcc9BOQG4gjhACAF8gbkBO0EIAGVwQEATw8DEARC4xMjU1AAEMAA85AP------
 -----------------------------------------------------------------whQbT04fX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+OC0yMyAxODoyMjo0NSIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1d
+:: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzQxOV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
+OC0yMyAxODoyMjo0NSIscmV2aXNpb249MzUxOV1dbHo0AGkAAABYEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkA4Hc9OCx6b29tPTAuNX19
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+OC0yMyAxODoyMjo0NSIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1d
+:: pal/
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wOC0y
+MyAxODoxMzowMSIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2V9LGhpZGRlbl90b2dnbGVzPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LGlj
+b249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMTAxMDEwMTAxMDEwMTAxMDEwMTAwMDAwMDAwMDAw
+MDAxMDcwNzA3MDcwNzA3MDcwNzA2MDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDYwNjAx
+MDAwMDAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNjA2MDYwMTAwMDAwMDAxMDcwNzA3MDcwNzA3MDcw
+NzA2MDYwNjA2MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTA3MDcwNzA3
+MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAxMDcwNzA2MDYwMTAxMGQwZDAxMDEwNzA3MDEwMDAwMDEw
+NzA3MDYwNjAxMDEwZDBkMDEwMTA3MDcwMTAwMDAwMTA3MDcwMTAxMDcwNzA2MDYwZDBkMDcwNzAx
+MDAwMDAxMDcwNzAxMDEwNzA3MDYwNjBkMGQwNzA3MDEwMDAwMDEwNzA3MGQwZDAxMDEwZDBkMDYw
+NjA3MDcwMTAwMDAwMTA3MDcwZDBkMDEwMTBkMGQwNjA2MDcwNzAxMDAwMDAxMDcwNzA3MDcwNzA3
+MDcwNzA3MDcwNzA3MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTAxMDEw
+MTAxMDEwMTAxMDEwMTAxMDEwMTAxMDAiKSxsb2NrZWQ9e1swXT10cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVk
+PSIyMDI0LTA4LTIzIDE4OjIyOjQ1Iixva3BhbF92ZXJzaW9uPSIwLjAuNCIscmV2aXNpb249MTIs
+dGVzdF9jdWJlX2NvbG9ycz17WzBdPXsxNSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5
+LDI1fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsy
+OCwxNywxOX0sezI4LDEyLDE2fSx7MTIsMTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4
+LDF9LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIy
+LDUsMjF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9fSx3aGl0ZXN0X2NvbG9yPTddXWx6NAAPAQAA
+FQIAAPUFdXNlcmRhdGEoImkzMiIsNjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUy
+MzYwMDVmNTc0ZjAwYzJjM2M3MDBmZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlh
+ZCQAYDgzNzY5YyAAMTc3YTgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAw
+NzQyZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBi
+MsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQAAwODU2uABfYWVjZjABAOJQMDAwIik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+OC0yMyAxODoyMjo0NSIsc3RvcmVkPSIyMDI0LTAzLTMxIDE5OjQ3OjQ2Il1d
+:: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIscmV2aXNpb249MzM1NF1dbHo0ABABAABRBwAA8CdweHUAAygAAAMABA9A
+OC0yMyAxODoyMjo0NSIscmV2aXNpb249MzQ1Nl1dbHo0ABEBAABSCAAA8CdweHUAAygAAAQABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
 IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA-zkf-wEA
-3L-4D0AADUD--7DwcAoA--9kH-8BAJdQ-----x8=
+3L-4D0AADUD--7DwcAoA--9kH-8BAP_ZUP----8g
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+OC0yMyAxODoyMjo0NSIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1d
+:: src/
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-04-27 12:46:04",revision=1418]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2024-08-23 18:22:45",revision=1451]]
 picotron_gfx_pid = nil
 picotron_map_pid = nil
 
@@ -72,7 +105,7 @@ pal_code = {}
 -- Saved in metadata --------------------------------------------------------------
 
 
-okpal_version = "0.0.4"
+okpal_version = "1.0.3"
 
 active_color = nil
 bg_color = 0
@@ -126,7 +159,7 @@ default_test_cube_colors = {
 	--
 }
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-04-27 12:46:04",revision=4596]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2024-08-23 18:22:45",revision=4714]]
 function generate_gui()
 	gui = create_gui()
 	local pal_el = create_palette{ x = 16, y = 6 }
@@ -318,8 +351,16 @@ function create_color_preview(el)
 			print("\014saturation: " .. string.format("%3.0f", pal_okhsl[active_color].s * 100.0) .. "%")
 			print("\014 luminance: " .. string.format("%3.0f", pal_okhsl[active_color].l * 100.0) .. "%")
 		else
-			print("\^pOkPal\^-p\014\|o 1.0.0", 8, 16, outline_color())
-			print("\014\|6\-ipress f1 for help")
+			---print("\^pOkPal\^-p\014\|o 1.0.2", 8, 16, outline_color())
+			print("\^pOkPal", 8, 16, outline_color())
+			local ppid = env().parent_pid
+			if not ppid then
+				print("\014\|b\-gpress f1 for help")
+			elseif ppid == 1 then
+				print("\014\|b\-gpress f1 for help.")
+			else
+				print("\014\|b\-g(press f1 for help)")
+			end
 		end
 	end
 	
@@ -487,7 +528,7 @@ function coords_h(x, y)
 	return hue, sat
 end
 :: src/gui_sliders.lua
---[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-04-27 12:46:04",revision=601]]
+--[[pod_format="raw",created="2024-04-05 07:49:07",modified="2024-05-03 07:20:34",revision=630]]
 slider_size = 170
 slider_border = 6
 slider_inner = slider_size - 2 * slider_border
@@ -925,7 +966,7 @@ function create_lum_slider(el)
 end
 
 :: src/hexdialog.lua
---[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-04-27 12:46:04",revision=1386]]
+--[[pod_format="raw",created="2024-04-03 19:36:00",modified="2024-08-23 18:22:45",revision=1456]]
 gui_state = {
 	choice = "dont_clobber"
 }
@@ -996,6 +1037,8 @@ function handle_confirm()
 			event = "okpal_hexdialog_confirm",
 			okpal_filename = env().okpal_filename,
 			okpal_hexdialog_choice = gui_state.choice,
+			okpal_data = env().okpal_data,
+			okpal_metadata = env().okpal_metadata,
 		}
 	)
 	exit(0)
@@ -1738,7 +1781,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-04-27 12:46:04",revision=3060]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2024-05-03 07:18:27",revision=3088]]
 function set_color(c, code)
 	poke4(0x5000 + 4 * c, code)
 end
@@ -1836,7 +1879,7 @@ function restore_default_palette()
 	whitest_color = 7
 end
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-04-27 12:46:04",revision=1061]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2024-05-03 07:18:27",revision=1092]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -1954,8 +1997,7 @@ function find_blackest_and_whitest()
 end
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNyAxMjo0NjowNCIsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+OC0yMyAxODoyMjo0NSIsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Il1d
 :: label.png
 b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAg5ElEQVR4Ae2de2wc13X-z12s
 28CoMoAgAlOYDCAUgqoSroGCIazIlBHrVyQC9Ci1pB4VRKEpI0BhhOjX_iFGtQjJUSnZ_sOGshHg
@@ -2108,7 +2150,7 @@ DAA0NRdQBAgaAJBEO--i7SIcDUEHz73SqcWFbagDADUCR7uQRwniYftO1AA4whSV65rjeIYd-bkv
 C03NhabmAte1puYCqgEAAAAAAACojf8FAw-_VsLf1HEAAAAQdEVYdExvZGVQTkcAMjAxMTAyMjHj
 WbbBAAAAAElFTkSuQmCC
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-04-27 12:46:04",revision=4299]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2024-08-23 18:22:45",revision=4435]]
 include "src/globals.lua"
 include "src/oklab.lua"
 include "src/palette.lua"
@@ -2118,19 +2160,27 @@ include "src/gui_sliders.lua"
 
 
 function _init()	
+	local ppid = env().parent_pid
+	printh(ppid)
+	local bbs_mode = (not ppid) or (ppid == 1)
+
 	window {
-		tabbed = true,
+		tabbed = not bbs_mode,
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABYAAAAUAAAA8AVweHUAQyAICARwtyBHIBcgRyC3cA=="),
 	}
 	
 	find_gfx_map_pids()
 
-	mkdir("/ram/cart/pal")
-	wrangle_working_file(
-		save_working_file,
-		load_working_file,
-		"/ram/cart/pal/0.pal" -- default
-	)
+	-- Temptative fix for bbs bug
+	-- (location is nil in /system/lib/fs.lua:304)
+	if not bbs_mode then
+		mkdir("/ram/cart/pal")
+		wrangle_working_file(
+			save_working_file,
+			load_working_file,
+			"/ram/cart/pal/0.pal" -- default
+		)
+	end
 	
 	rebuild_pal()
 		
@@ -2277,48 +2327,9 @@ function handle_drop_items(msg)
 	for i = 1, #msg.items do
 		local item = msg.items[i]
 		if item.pod_type == "file_reference" and item.attrib == "file" then
-			local ext = item.fullpath:ext()
-			if ext == "hex" or ext == "txt" then
-				local metadata = fetch_metadata(item.fullpath) or {}
-				if metadata.okpal_version then
-					current_import_choice = "overwrite"
-					send_message(pid(), {event = "open_file", filename = item.fullpath})
-				else
-					create_process(
-						"src/hexdialog.lua",
-						{
-							okpal_filename = item.fullpath,
-							okpal_parent_pid = pid(),
-							path = path, 
-							window_attribs = { 
-								workspace = "current",
-								autoclose = true, -- ???
-								give_focus = nil, -- ???
-								show_in_workspace = nil, -- ???
-								corun_program = nil, -- ???
-								unique_location = nil, -- ???
-								has_frame = true,
-								x = nil, y = nil, z = nil,
-								moveable = true,
-								resizeable = false,
-								desktop_filenav = nil, -- ???
-							}
-						}
-					)
-				end
-			else
-				-- TODO: dialog for unknown file extensions?
-				send_message(pid(), {event = "open_file", filename = item.fullpath})
-			end
+			send_message(pid(), { event = "open_file", filename = item.fullpath })
 		end
 	end
-end
-
-
-function handle_okpal_hexdialog_confirm(msg)
----	current_filename = msg.okpal_filename
-	current_import_choice = msg.okpal_hexdialog_choice
-	send_message(pid(), { event = "open_file", filename = msg.okpal_filename })
 end
 
 
@@ -2341,7 +2352,37 @@ end
 function load_working_file(data, metadata)
 	local ext = pwf():ext()
 	if ext == "hex" or ext == "txt" then
-		load_hex_file(data, metadata or {})
+		local metadata = fetch_metadata(pwf()) or {}
+		if metadata.okpal_version then
+			current_import_choice = "overwrite"
+			load_hex_file(data, metadata or {})
+		else
+			create_process(
+				"src/hexdialog.lua",
+				{
+					okpal_filename = pwf(),
+					okpal_parent_pid = pid(),
+					okpal_data = data,
+					okpal_metadata = metadata,
+					path = path, 
+					window_attribs = { 
+						workspace = "current",
+						autoclose = true, -- ???
+						give_focus = nil, -- ???
+						show_in_workspace = nil, -- ???
+						corun_program = nil, -- ???
+						unique_location = nil, -- ???
+						has_frame = true,
+						x = nil, y = nil, z = nil,
+						moveable = true,
+						resizeable = false,
+						desktop_filenav = nil, -- ???
+					}
+				}
+			)
+		end
+		-- The actual loading will occur in the dialog's callback.
+		-- See `handle_okpal_hexdialog_confirm`.
 	else
 		if ext != "pal" then
 			notify("unkown file extension: loaded using default file format")
@@ -2353,12 +2394,19 @@ function load_working_file(data, metadata)
 end
 
 
+function handle_okpal_hexdialog_confirm(msg)
+	current_import_choice = msg.okpal_hexdialog_choice
+	load_hex_file(msg.okpal_data, msg.okpal_metadata or {})
+end
+
+
 -- Metadata ----------------------------------------------------------------------
 
 
 function create_metadata()
 	local metadata = {}
 	metadata.okpal_version = okpal_version
+	metadata.icon = userdata("u8",16,16,"0001010101010101010101000000000000010707070707070707060100000000000107070707070707070606010000000001070707070707070706060601000000010707070707070707060606060100000107070707070707070707070701000001070707070707070707070707010000010707060601010d0d01010707010000010707060601010d0d010107070100000107070101070706060d0d07070100000107070101070706060d0d07070100000107070d0d01010d0d060607070100000107070d0d01010d0d060607070100000107070707070707070707070701000001070707070707070707070707010000010101010101010101010101010100")
 	metadata.bg_color = bg_color
 	metadata.blackest_color = blackest_color
 	metadata.whitest_color = whitest_color
@@ -2411,12 +2459,8 @@ function load_metadata(metadata)
 	
 	if type(metadata.test_cube_colors) == "table" then
 		test_cube_colors = metadata.test_cube_colors
-	elseif pwf() == "/ram/cart/pal/0.pal" then
-		test_cube_colors = copy(default_test_cube_colors)
 	else
-		for i = 0, 23 do
-			test_cube_colors[i] = { 1, 1, 1 }
-		end
+		test_cube_colors = copy(default_test_cube_colors)
 	end
 end
 
@@ -2576,7 +2620,7 @@ function paste_color()
 	end
 end
 :: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-04-27 12:43:17",revision=210,stored="2024-04-04 06:56:33"]]
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),modified="2024-08-23 18:20:53",revision=219,stored="2024-04-04 06:56:33"]]
 # OkPal
 
 OkPal is a tool to create and edit color palettes.
@@ -2683,7 +2727,7 @@ In order to use a palette in your programs, you just
 need to copy it in memory:
 
 ```
-poke4(0x5000, get(fetch"/ram/cart/pal/0.pal"))
+poke4(0x5000, get(fetch"pal/0.pal"))
 ```
 
 
@@ -2694,24 +2738,14 @@ don't need to do anything special to save it. It is
 saved alongside the rest of your assets each time
 you hit Ctrl-S.
 
-It's possible to work with multiple palettes, but it
-is a little clumsy, because it's not yet possible to
-fully integrate third-party tools with Picotron's
-interface.
+In order to create a new palette, use the '+' button
+at the right of the tabs and choose the name of your
+new palette, for example "1.pal". If you need to
+start from scratch for this new palette, use
+"Empty Palette" or "Picotron Palette" from the menu.
 
-In order to create a new palette, you *cannot* yet
-use the '+' button at the right of the tabs. Instead,
-you need to use "Save File As" in the menu, and choose
-the name of your new palette, for example "1.pal".
-If you need to start from scratch for this new
-palette, use "Empty Palette" or "Picotron Palette"
-from the menu.
-
-To switch to another already created palette, choose
-"Open File" in the menu, but **do not double-click**
-on the file you want to open, as this do not work
-yet. Instead, you can drag and drop the file from the
-dialog onto OkPal's window, and it will open it.
+You can load a previously created palette by using
+"Open File" in the menu.
 
 
 ## Importing and exporting
@@ -2723,12 +2757,11 @@ line per color, represented by their RGB code in hex
 format (without "#" or "0x", just the hexadecimal
 numbers).
 
-To import a palette, choose "Open File" from the menu,
-but **do not double-click** on the file. Instead,
-drag-and-drop the hex file onto OkPal's window. If
-this is the first time you open this external palette
-in OkPal, a dialog will appear to let you choose how
-to arrange the colors in the palette. You can either:
+To import a palette, choose "Open File" from the
+menu, and select the ".hex" file. If this is the first
+time you open this external palette in OkPal, a
+dialog will appear to let you choose how to arrange
+the colors in the palette. You can either:
 
 - Keep default Picotron palette in the first 32 colors,
   and put the imported colors in the last 32 slots.
@@ -2746,6 +2779,22 @@ in ".hex".
 
 
 ## Changelog
+
+2024-08-23: version 1.0.3 (release #okpal-6)
+
+- added: add file icon to saved palettes;
+- changed: can load and import palettes by
+  double-clicking in the file dialog (no need
+  to drag-and-drop anymore);
+- fixed: bug in BBS;
+
+2024-05-03: version 1.0.2 (release #okpal-5)
+
+- fixed: bug while using "+" button in Picotron
+  0.1.0g;
+- changed: disabled tabs in BBS, as it prevents
+  the cart from running;
+
 2024-04-27: version 1.0.1 (release #okpal-4)
 
 - fixed: picotron's palette was not locked in the
@@ -2807,6 +2856,9 @@ Maybe:
 - Add another tab in the test zone, with the 
   hue/sat circle and sat/lum square, but filles
   with color zones instead of dots.
+:: untitled.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjA2OjE2Iixtb2RpZmllZD0iMjAyNC0w
+OC0yMyAxODowNjo0MSIscmV2aXNpb249MV1dbHo0AAMAAAACAAAAIHt9
 :: .info.pod
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjQtMDQtMjcgMTI6MzA6
 NTQiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
@@ -2818,16 +2870,14 @@ MTAxMDcwZDBkMDcwNzA2MDYwNzA3MDEwMTBkMGQwNzAxMDEwNzBkMGQwNzA3MDYwNjA3MDcwMTAx
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yNyAxMjo0
-NjowNCIsbm90ZXM9IlBhbGV0dGUgRWRpdG9yXG4odXNlIG1lbnUgdG8gb3BlbiB0aGUgbWFudWFs
-KSIscnVudGltZT02LHN0b3JlZD0iMjAyNC0wNC0xNCAxMDozMDowNCIsdGl0bGU9Ik9rUEFMIix2
-ZXJzaW9uPSIxLjAuMSIsd29ya3NwYWNlcz17e2xvY2F0aW9uPSJtYWluLmx1YSM2OCIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2d1aS5sdWEjMjc4Iix3b3Jrc3BhY2VfaW5kZXg9
-MX0se2xvY2F0aW9uPSJzcmMvZ3VpX3NsaWRlcnMubHVhIzQyOCIsd29ya3NwYWNlX2luZGV4PTF9
-LHtsb2NhdGlvbj0ic3JjL2hleGRpYWxvZy5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249InNyYy9nbG9iYWxzLmx1YSM0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJz
-cmMvcGFsZXR0ZS5sdWEjOTEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9yZW1h
-cC5sdWEjOTciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3Nw
-YWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xv
-Y2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1dXWx6NAAEAAAAAwAAADBuaWw=
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wOC0yMyAxODoy
+Mjo0NSIsbm90ZXM9IlBhbGV0dGUgRWRpdG9yXG4odXNlIG1lbnUgdG8gb3BlbiB0aGUgbWFudWFs
+KSIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDQtMTQgMTA6MzA6MDQiLHRpdGxlPSJPa1BBTCIs
+dmVyc2lvbj0iMS4wLjMiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMjU2Iix3b3Jr
+c3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZ3VpLmx1YSMyMDAiLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249InNyYy9oZXhkaWFsb2cubHVhIzcyIix3b3Jrc3BhY2VfaW5kZXg9MX0s
+e2xvY2F0aW9uPSJzcmMvZ2xvYmFscy5sdWEjMjQiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRp
+b249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3
+b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00
+fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1d
 :: [eoc]
