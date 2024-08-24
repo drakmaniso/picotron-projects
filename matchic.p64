@@ -4,57 +4,484 @@ version 2
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-My0zMCAwNjo1NDoyNCIscmV2aXNpb249N11dbHo0AEoEAABmNwAA-TN7WzBdPXtibXA9cHh1AEMg
-GhoE8BN-F-AAHp8OsB7NDxKADv0ADGAOPRetHFAO-QIMQA4tB_0cMA79AxwgDv0ELBAFACkDPAUA
-8x4CTCD9Ajww-QFMQO1MUAy9bGAcbYyA-ACwvPAAfPATLGZsYWdzPTAscGFuX3gIAMx5PTAsem9v
-bT01fSydAP0defAAGZ8ZsBnODxKACf4ADWAJPheuHVAJ-gINQAkuB_4dMAn_Ax0gCf4ELRAFACkD
-PQUA-w4CTSD_Aj0w-gFNQO5NUA2_bWAdbo2A-QCwvfAAfZwAIJB-D-AAHpqwHso4Af0Q_gANYA46
-F6odUA76Ag1ADioH6h0wDvoDHSAO_gQtEAUAKQM9BQD-BQJNIPoCPTD6AU1A6k1QDbptYB1qnAAq
-gBrwAB6bsB7LnAAQ_5wAcDsXqx1QDvucAHArB_sdMA77nAAQ_40ADAUAKQM9BQD-BQJNIPsCPTD7
-AU1A601QDbttYB1rnAAqgBzwAB6csB7MnAAQ-JwAcDwXrB1QDvycAHAsB_wdMA78nAAQ-I0ADAUA
-KQM9BQD-BQJNIPwCPTD8AU1A7E1QDbxtYB1snAApEH4MAx8eDAN_XxAQBPDwMQALHzcxACsE-gDy
-CL6w-gCA-gJg-gRQ-gRA-gYw-gYg-ggQAwCUrh8erhCuHa4QEgARICEAEUAtAN9g-gKA-gCwvvAA
-fvATewAe8gt58AC5sPkAgPkCYPkEUPkEQPkGMPkGIPkIEAMAlKkfGakQqR6pEBIAESAhABFALQC-
-YPkCgPkAsLnwAHl7ACDyC3rwALqw_gCA_gJg_gRQ_gRA_gYw_gYg_ggQAwAxqhmqBAAEEQARICAA
-EUAsAL9g_gKA_gCwuvAAenoAIC9-GnEBDSEbrgQAD3ABPy9-HHsADSEcrgQAD3sAQB8dewANLx8S
-ZwIzD0QDZpDuDx6A-gENYE6tBlD_Aw1APqsGif4EHSD_BS0QBAAmBD0EAB8DogYpHzFVAwT5D_kP
-GYD5AQ5gSRepHlD5Aw5AOQfpHjD5BB4g_QUuEAQAJgQ_BAD_BgNOIPkCPjD5AU5A6U5QDrluYB5p
-jnoBD4wAFgFmA-kO6gmA_gEJYEoXqhlQ_gMJQDoH6hkw_gQZIPoFKRAEACYEOQQA-gYDSSD6Ajkw
-_gFJQOpJUAm6aWAZaonxAw_LABYCdwNg7guA-gELowFQG1D_AwujAakbMP4EGyD_BSsQBAAmBDsE
-AP8OA0sg-gI7MP4BS0DuS1ALvmtgG26LgPsAsLvwAHuMACEBiANg7gyA-gEMjABQHFD_AwyMAKkc
-MP4EHCD_BSwQBAAmBDwEAP4FA0wg-gI8MP4BTEDuTFAMvmxgHG5hBg_MABgSHbwCHxK8AmwPqgMR
-DzEA----------------------------------------------------------_vUG09N319
+OC0yNCAxNjowMjoxNyIscmV2aXNpb249MjY0XV1sejQAKgQAAD02AADzF3tbMF09e2JtcD1weHUA
+QyAdHQTw----PCxmbGFncz0wLHBhbl94CADLeT0wLHpvb209NH0sNADwJDVs8AQcahvwABy6CcAM
+2gkIoAwqHyqqCQiADCouqhkIcAwqHhxKHDoJCA81UAxKDBkMKgQA8AwZCFAMOgw5DAoMOQwaGQgN
+MAxKDEkMSQwaKQgLABCpCQCBDSAMWgyJDCoKAFVqDGkMOhQALBo5CgAQOU0AwEkIDTALWgwZDAoM
+GRoA-ygdMAtqHCocGkkIDVDqSQgdUBmqaQgNcAgZankIHYAI6QgdoBipGB3ADRhpGC3wAA1oLfAE
+bfAXBAEe8RBvEfAEHm8PHxDwAB6-Dw8OwA7fDw8ODw2gDi8PHyqvDADRgA4vDy8qrw8fDg8NcBgA
+QB8PLn0aAPAXDzVQDn0OHw4ObRwPDVAOjQ4cDl0cCw81MA6dDiwOTSwLMA6NDjwJACcKIAoANX0O
+TAoATDwOTTwKAMAsDk1MCwowDxB9DhwVADAaMAlbAP8hLUwLClCdLh1MCxpQHK1sCwpwCxxtfAsa
+gAvsCxqgG6wbGsAKG2wbKvAACmsq8ARqDwEhEBYPATAUHxUPAfEDFA8TwA7fFA8TDxKgDi8UHyqv
+DADRgA4vFC8qrxQfEw8ScBgAEc8YAAANATD-FAMXAHFQDo8ULm0fFQAAAwGELxMOXSwPEjD6AJEP
+NSAObQ5sDj0FAQoKACQtPCMBIj08NwExLA49DwEyFY0uDQEg-QAKAR-tCAFJEBsIATAZHxoIAfED
+GQ8YwA7fGQ8YDxegDi8ZHyqvDADRgA4vGS8qrxkfGA8XcBgAQC8ZLm0aAAIXAqAvGA5dHA8XUA5t
+9QACFwIDAAFiMA5tHkwe9ABRXQ6MDi0KAFVNDqwOHQoAKg08CgCRXQ4sDgwOLA4NDAFjGl0_DD4d
+GwIRDCEBT1CNLi0TAUkQIBMBMB4fHxMB8QMeDx3ADt8eDx0PHKAOLx4fKq8MAPAHgA4vHi8qLx4O
+bR8dDxxwDi0fKj0OfRoAABMBMJ0OfRcAACgDIA8dMwMSHCoDZAwObSwPHAoAAR0CAPUBEV0LAQYK
+AAYTAgoKABEtEQEQH2YBES0RAQBBAx8tEQFQECURATAjHyQRAfEDIw8iwA7fIw8iDyGgDi8jHyqv
+DADRgA4vIy8qryMfIg8hcBgAEc8YAAAPAUB-Iz5tGAAAIQIgLyIQARAhEAGRbQ4sDn0sDyEw8gES
+jRABAAsARD0eLSwJAkQtDgwODgBkPC4cDh08SwIkHTxJAxEdGAEXJBgBL04tOANIXxAQBPDwMQAL
+HzExAP----_WXh0dBP83UQsPNQAPHjg1AA-MABAPMQD---------------------------------
+----------------------_AUG09MX19
 :: gfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0IixzdG9yZWQ9IjIwMjQtMDMt
-MzAgMDU6Mzk6MzQiXV1sejQABAAAAAMAAAAwbmls
-:: main.lua
---[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-03-30 06:54:24",revision=3]]
-
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-My0zMCAwNjo1NDoyNCIscmV2aXNpb249MV1dbHo0AFQAAABEEAAA8Ah7e2JtcD11c2VyZGF0YSgi
-aTE2IiwzMgMALyIwAQD--------------------7oSIpLHBhbl94PTAIANJ5PTAsdGlsZV9oPTE2
-CgBgdz0xNn19
+OC0yNCAxNjowMjoxNyIscmV2aXNpb249MjQ0XV1sejQAwQAAAFkQAADwCHt7Ym1wPXVzZXJkYXRh
+KCJpMTYiLDMyAwAvIjABAP-------7HTMjAwMDMwMDA0MDAwNgwALzUwgABbEzEIABM1gAAvNjAB
+AFsXNvwAEzEMAA8BAFUEfAEAAAETMAwAD4ABWRMxdAATMHgAFzGMAA8AAVUTNoQABAwALzUwAQD-
+------_e8QkiKSxoaWRkZW49ZmFsc2UscGFuX3g9NDcJANJ5PTAsdGlsZV9oPTI5CgAQdwoAgHpv
+b209MX19
 :: map/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0IixzdG9yZWQ9IjIwMjQtMDMt
-MzAgMDU6Mzk6MzQiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+:: pal/
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wOC0y
+MyAxODo1OTowOSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
+dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZX0saGlkZGVuX3RvZ2dsZXM9e1swXT10cnVlLHRydWUsdHJ1ZSx0cnVlfSxpY29uPXVzZXJkYXRh
+KCJ1OCIsMTYsMTYsIjAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDAwMTA3MDcwNzA3
+MDcwNzA3MDcwNjAxMDAwMDAwMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA2MDYwMTAwMDAwMDAwMDEw
+NzA3MDcwNzA3MDcwNzA3MDYwNjA2MDEwMDAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNjA2MDYwNjAx
+MDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcw
+NzA3MDcwMTAwMDAwMTA3MDcwNjA2MDEwMTBkMGQwMTAxMDcwNzAxMDAwMDAxMDcwNzA2MDYwMTAx
+MGQwZDAxMDEwNzA3MDEwMDAwMDEwNzA3MDEwMTA3MDcwNjA2MGQwZDA3MDcwMTAwMDAwMTA3MDcw
+MTAxMDcwNzA2MDYwZDBkMDcwNzAxMDAwMDAxMDcwNzBkMGQwMTAxMGQwZDA2MDYwNzA3MDEwMDAw
+MDEwNzA3MGQwZDAxMDEwZDBkMDYwNjA3MDcwMTAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNzA3MDcw
+NzAxMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDEwMDAwMDEwMTAxMDEwMTAxMDEwMTAx
+MDEwMTAxMDEwMTAwIiksbG9ja2VkPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA4LTI0IDE2OjAyOjE3Iixva3BhbF92ZXJzaW9u
+PSIxLjAuMyIscmV2aXNpb249MjUzLHRlc3RfY3ViZV9jb2xvcnM9e1swXT17MTUsMzEsNH0sezMx
+LDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0sezksMjUsMjR9LHs4LDI0LDJ9LHsyNiwxMSwyN30s
+ezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcsMTl9LHsyOCwxMiwxNn0sezEyLDE2LDF9LHs2LDI5
+LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7NywyMywxNH0sezIzLDE0LDEzfSx7MTQsMzAsMTh9
+LHs3LDYsMjJ9LHs2LDIyLDV9LHsyMiw1LDIxfSx7MSwxLDF9LHsxLDEsMX0sezEsMSwxfX0sd2hp
+dGVzdF9jb2xvcj03XV1sejQA9QEAABUCAAD1BXVzZXJkYXRhKCJpMzIiLDY0LCIwAQDxIjQ4MzM1
+NTAwNGM0NTMzMDA3MzRiNDYwMDgzNTU0ZjAwZTdhMTNkMDBlZWM1NzEwMGYBAPAwMDA3NDFmNjUw
+MGE4MjU5MjAwZTI0OWJhMDBlZjgzYzUwMGY4YmJkOTAwNzcyYzE2MDBhMjMyMTkwMGQ1NGYySADw
+LDM4MjU3MDBmY2JjOWMwMDY3NDkxMzAwOWM3MTFhMDBkNmEyMjUwMGVkYzQ1NDAwZmJlMTk5MDAy
+ZDUzGADwFTMxNmUzMjAwNTBhMzJjMDA4N2Q0NTYwMGJmZjI5NTAwMTY1ONgA8A4xNzc5N2QwMDIw
+YjRiMzAwNWNkOGQyMDBhY2Y2ZgABsDcyMjg2MDA1ZTI2IADQOGQzYmVkMDBhZTgxZrAAQDhjNGag
+ABBlAgBAMDBiNwIAQDAwZTMCAEAwMGY0AgAAyAAAAgBAMDAxZAIAQDAwMmUCAEAwMDQ2AgBAMDA5
+YgIAQDAwYzECAHAwMDZkNmE2aAHQMjdkN2EwMDk0OTA4YygBIDllKABQYjliNWLgAJA4NTk1ZDAw
+NjgCAFEwMDZmNrkAETcBAHEwMDg2ODM4yABAMzQzNTAAsDQyNDIwMDYwNDg0MAAQOaEA8AMwMDg4
+NmQ2ZDAwMDAwMDAwIik=
+:: pal/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjU0OjE5Iixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyJdXQ==
 :: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM1Iixtb2RpZmllZD0iMjAyNC0w
-My0zMCAwNjo1NDoyNCIscmV2aXNpb249Ml1dbHo0ABkBAABRBwAA8CdweHUAAygAAAMABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
-EwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8tDy4P
-LxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYPIBAB
-IAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAAAh9EMAAcH0Aw
-APIf-wEA3L-4D0AADUD--7DwcAoA--9kH-8BAJdQ-----x8=
+OC0yNCAxNjowMjoxNyIscmV2aXNpb249MjQyXV1sejQAGgEAAFIIAADwJ3B4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
+DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
+Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-8nWgEQBg8g
+EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAACH0QwABwf
+QDAA8h--AQDcv-gPQAANQP--sPBwCgD--2Qf-wEA-5lQ-----yA=
 :: sfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0IixzdG9yZWQ9IjIwMjQtMDMt
-MzAgMDU6Mzk6MzQiXV1sejQABAAAAAMAAAAwbmls
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+:: src/
+:: src/board.lua
+--[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-08-24 16:02:17",revision=83]]
+local board = {}
+
+
+-- Global Constants -----------------------------------------------
+
+
+board.gem_air = 0x01
+board.gem_fire = 0x02
+board.gem_day = 0x03
+board.gem_earth = 0x04
+board.gem_water = 0x05
+board.gem_night = 0x06
+board.gem_rainbow = 0x07
+board.gem_bomb = 0x08
+board.gem_cat = 0x09
+board.gem_gift = 0x0a
+
+board.rock_full = 0x10
+board.rock_cracked = 0x20
+board.rock_broken = 0x30
+
+board.cell_good = 0x01
+board.cell_bad = 0x02
+
+
+return board
+:: src/graphics.lua
+--[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-08-24 16:02:17",revision=180]]
+local graphics = {}
+
+
+local board = require "src/board"
+
+
+function graphics.draw_cells(cells)
+	local function draw_cell(p, cell)
+		local x = p.x * 29
+		local y = p.y * 29
+		local sprite = 32
+		if (p.x + p.y) % 2 != 0 then
+			sprite = 33
+		end
+		spr(sprite, x, y)	
+	end
+	cells:foreachpos(draw_cell)
+end
+
+
+function graphics.draw_gems(gems)
+	local function draw_gem(p, gem)
+		local x = p.x * 29
+		local y = p.y * 29
+		local sprite = 0 + gem
+		spr(sprite, x, y)	
+	end
+	gems:foreachpos(draw_gem)
+end
+
+
+return graphics
+:: src/logic.lua
+--[[pod_format="raw",created="2024-08-24 08:12:55",modified="2024-08-24 16:02:17",revision=252]]
+local logic = {}
+
+
+local board = require "src/board"
+
+
+local function random_gem()
+	return board.gem_air + flr(rnd(board.gem_rainbow - board.gem_air))
+end
+
+
+function logic.is_match(gem1, gem2)
+	if (not gem1) or (not gem2) then
+		return false
+	end
+
+	-- Gems encased in rock behave like regular gems
+	-- when matching.
+	gem1 &= 0x0f
+	gem2 &= 0x0f
+	
+	-- Only colored gems and rainbow gems can match.
+	if (gem1 < board.gem_air) or (gem1 > board.gem_rainbow) then
+		return false
+	end
+	if (gem2 < board.gem_air) or (gem2 > board.gem_rainbow) then
+		return false
+	end
+
+	return (gem1 == gem2) or (gem1 == board.gem_rainbow)
+		or (gem2 == board.gem_rainbow)
+end
+
+
+function logic.fill_gems(cells, gems)
+	local function fill_gem(p, _cell)
+		local gem = gems:get(p)
+		if not gem then
+			gem = random_gem()
+		end
+		gems:set(p, gem)
+	end
+
+	cells:foreachpos(fill_gem)
+end
+
+
+return logic
+:: src/sgrid.lua
+--[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-08-24 16:02:17",revision=326]]
+local sgrid = {}
+
+
+--- The origin of the grid, `pos(0, 0)`, is at the top left.
+
+
+-- Local Constants --------------------------------------------------------
+
+
+local max_width <const> = 12
+local max_height <const> = 9
+
+
+-- Square Grid Methods ----------------------------------------------------
+
+
+local metatable = {}
+
+
+function metatable.new(self)
+	local grid = {}
+	setmetatable(grid, { __index = metatable })
+	return grid
+end
+
+
+function metatable.get(self, pos)
+	return self[pos.x + (pos.y * max_width)]
+end
+
+
+function metatable.set(self, pos, value)
+	self[pos.x + (pos.y * max_width)] = value
+end
+
+
+function metatable.del(self, pos)
+	self[pos.x + (pos.y * max_width)] = nil
+end
+
+
+function metatable.foreachpos(self, func)
+local s = ""
+	local p = pos(0, 0)
+	while p.y < max_height do
+		while p.x < max_width do
+			local item = self:get(p)
+			if item then
+				func(p, item)
+			end
+			p.x += 1
+		end
+		p.x = 0
+		p.y += 1
+	end
+end	
+
+
+-- Constructors -----------------------------------------------------------
+
+
+function sgrid.new()
+	return metatable.new()
+end
+
+
+function sgrid.new_cells(size)
+	local grid = sgrid.new()
+	local p = pos(0, 0)
+	while p.y < size.y do
+		while p.x < size.x do
+			grid:set(p, 33)
+			p.x += 1
+		end
+		p.x = 0
+		p.y += 1
+	end
+	return grid
+end
+
+
+return sgrid
+:: src/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI0IDA3OjE3OjA5Iixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyJdXQ==
+:: debug.lua
+--[[pod_format="raw",created="2024-08-24 12:45:09",modified="2024-08-24 16:02:17",revision=51]]
+-- Detect uninitialized globals and typos
+-- from @snowkittykira from the BBS
+
+
+-- if you're using include(), include this after including everything else,
+-- since most included modules will need to assign global variables on load
+
+-- these globals are needed by picotron
+_init = _init or false
+_draw = _draw or false
+_update = _update or false
+-- these are used by the picotron terminal
+cproj_draw = cproj_draw or false
+cproj_update = cproj_update or false
+_ = _ or false
+_is_terminal_command = _is_terminal_command or false
+k = k or false
+res = res or false
+-- gui needs these
+drag_t = drag_t or false
+
+local function unknown_variable (t, k)
+  error (debug.traceback ('unknown variable ' .. tostring (k), 2))
+end
+
+setmetatable (_G, {
+  __index = unknown_variable,
+  __newindex = unknown_variable,
+})
+:: drakma.lua
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-08-24 12:51:02",revision=1288]]
+_modules = {}
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name .. '.lua')
+	local src = fetch(filename) 
+
+	if (type(src) != "string") panic("could not include " .. filename)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("Syntax error:", tostr(err))
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+function panic(...)
+	local args = { ... }
+	foreach(
+		args,
+		function(str)
+			send_message(3, { event = "report_error", content = str })
+		end
+	)
+	stop()
+end
+
+
+-- Table utility functions --------------------------------------------------------
+
+
+function table_deep_copy(t, already)
+	if (not already) already = {}
+	if type(t) == "table" then
+		if already and already[t] then
+			return already[t]
+		end
+		local new = {}
+		already[t] = new
+		for k, v in pairs(t) do
+			new[k] = table_deep_copy(v, already)
+		end
+		return new
+	else
+		return t
+	end
+end
+
+
+function tostrrec(t)
+	if type(t) != "table" then
+		return tostr(t)
+	end
+	
+	local s = nil
+	for k, v in pairs(t) do
+		if not(s) then
+			s = "{ "
+		else
+			s ..= ", "
+		end
+		s ..= tostr(k) .. " = " .. tostrrec(v)
+	end
+	s ..= " }"
+
+	return s
+end
+
+
+-- Pos --------------------------------------------------------------------------
+
+
+function pos(x, y)
+	local p = userdata("i16", 2)
+	p.x = x
+	p.y = y
+	return p
+end
+
+
+-- Drawing -------------------------------------------------------------------------
+
+
+-- From Sophie on the discord
+function get_drawspace()
+    return {
+        cam_x=peek4(0x5510),
+        cam_y=peek4(0x5514),
+        clip_l=peek2(0x5528),
+        clip_t=peek2(0x552a),
+        clip_r=peek2(0x552c),
+        clip_b=peek2(0x552e),
+    }
+end
+
+
+function set_drawspace(drawspace)
+    poke4(0x5510,drawspace.cam_x)
+    poke4(0x5514,drawspace.cam_y)
+    poke2(0x5528,drawspace.clip_l)
+    poke2(0x552a,drawspace.clip_t)
+    poke2(0x552c,drawspace.clip_r)
+    poke2(0x552e,drawspace.clip_b)
+end
+
+:: main.lua
+--[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-08-24 16:02:17",revision=358]]
+include "drakma.lua"
+include "debug.lua"
+
+local sgrid = require "src/sgrid"
+local logic = require "src/logic"
+local graphics = require "src/graphics"
+
+
+local cells = nil
+local gems = nil
+
+
+function _init()
+	cells = sgrid.new_cells(pos(9, 9))
+	gems = sgrid.new()
+	logic.fill_gems(cells, gems)
+end
+
+
+function _draw()
+	fetch("pal/0.pal"):poke(0x5000)
+	cls(1)
+	graphics.draw_cells(cells)
+	graphics.draw_gems(gems)
+end
 :: .info.pod
-b64$LS1bW3BvZCxydW50aW1lPTQsc3RvcmVkPSIyMDI0LTAzLTMwIDA2OjU0OjI0Iix3b3Jrc3Bh
-Y2VzPXt7bG9jYXRpb249Im1haW4ubHVhIzEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
-ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jr
-c3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fX1d
-XWx6NAAEAAAAAwAAADBuaWw=
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjQ1OjEzIixtb2RpZmllZD0iMjAyNC0w
+OC0yNCAxNjowMjoxNyIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
+cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMjMiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9zZ3JpZC5sdWEjMyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3Jj
+L2dyYXBoaWNzLmx1YSMyNiIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2xvZ2lj
+Lmx1YSM0MSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2JvYXJkLmx1YSMyMyIs
+d29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZGVidWcubHVhIzIzIix3b3Jrc3BhY2VfaW5k
+ZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249
+Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jr
+c3BhY2VfaW5kZXg9NH0se2xvY2F0aW9uPSJwYWwvMC5wYWwiLHdvcmtzcGFjZV9pbmRleD03fX1d
+XQ==
 :: [eoc]
