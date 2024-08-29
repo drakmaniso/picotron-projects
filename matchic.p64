@@ -4,11 +4,11 @@ version 2
 :: docs/
 :: docs/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI2IDE0OjAzOjI1Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCJdXQ==
+OC0yOSAxNjoyNDozMyJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIscmV2aXNpb249MjEzM11dbHo0AE0SAADFUAAA8xd7WzBdPXtibXA9cHh1
+OC0yOSAxNjoyNDozMyIscmV2aXNpb249MjQ2OF1dbHo0AAUTAAAgWwAA8xd7WzBdPXtibXA9cHh1
 AEMgHR0E8P---zwsZmxhZ3M9MCxwYW5feAgAy3k9MCx6b29tPTJ9LDQA8CQ1bPAEHGob8AAcugnA
 DNoJCKAMKh8qqgkIgAwqLqoZCHAMKh4cShw6CQgPNVAMSgwZDCoEAPAMGQhQDDoMOQwKDDkMGhkI
 DTAMSgxJDEkMGikICwAQqQkAgQ0gDFoMiQwqCgBVagxpDDoUACwaOQoAEDlNAMBJCA0wC1oMGQwK
@@ -60,51 +60,55 @@ vwGAXA4wDkwOG4DLANAwDjw_QD48DhswDkwdDwAgHUzLAUBMDhtABQAjUA4PACELcO4AAAUAcHAO
 LD4gPixlAvICLB0OCxAOHSwOG5AOPA4bIA57AgBsAhAwKwAQgLYCEBxMAEAcDguApAJQDD4APgxE
 ABMNsAFxDhwdDgsOHSAAEhzSAQEzAABzASQbgPQBABMAEAsuA6ALoA5cDhwuHA4bCQAQDDgGUA4L
 wA5crwIQGwgAAakBAIsDEEwHABBchgCP8ACeG-ACm7BbARlfEBAE8PAxAP--_l8dHQT-N74UDx0x
-NQAfODUAIHGPPA89DzuvBgARTwYAMv88AAcAEAEHABHPFAAXfyAAER8GABePDAAX7wYAAjAAJF88
-NAARLwYAFQ80ABMvZAAWBFcAFx8pAASDABAHBwAX3xMAEZ8GABE-BgAYvyUAF28lACZfPFYANv88
-Eg0ALD88KwAdHxgANv88CA0AE58TABYCLAAXfz4AA3wABV0AJztPIwATHyMAFhYTABd-uAAIEgAX
-zzoBAiQBGd9DABYTkgAIqwAP5AH--g5jBA8xAJ-xJiMgBHD-NgPg-gXQ-gXA-gew-geg-gmQ-gmA
--gtw-gtg-g1Q-g1A-g8w-g8g-hEQ-hEA-jYACQARIBUAEUAhABFgLQARgDkAEaBFABHAUQBP4P4D
-cI4AHh83jgB6HziOAHkEvwITn8sCIOBuCAAwvtAuBwAQjgUA8ABOwP4GDz2wDQ87-gANDC6wAKBO
-DQw_DQyODQwOuADxBS4NDP4GYJ4NDF4NDC4NDD5QDP4LxQDBPg0M7g0MfiAODQzOLwDyAD4Qng0M
--gINDA4ADP4EDQQAEAM2ABAARQBCDBD_AFoAUSAMbg0MbwAD9QBBvg0Mfl4AEWBuABBwHAAQjgIB
-AUAAkR4NoF4NDO6wDiYAIZ7AOgC-0F4NDM7grg0MTg0WAf--SA9OBU8Arw7wEhW-NA8x0N80LzGg
-3zRPMYBfNF8yDzEPMA80XzFgTzR-MgsA8AkvMk8xQE80jzIPMU8yTzEwPzT-MgE-MSAIAEEDPzEQ
-CAC-HzEfMBAvNP8yBS8IABlxLzIPMf8yAQwAch8xDzD-MgIMADIwDzQMABAfGAAADABQPzAQPzFy
-ACAwIAgA8Q4BPzAwTzF-Mg8xXzJPMEBPMW8yHzE-Mk8wYF8xP8UA-wYvMl8wgE8x3zCgLzHfMNAP
-Mb8w8BUiAQsfNSIBBFCfNA8yLyYBAA4AHw8qARBCMA80PywBEZ8NACFPMjEBYb8yDzBfMjQBEa8-
-ABA-HgATMj0BYA8yDzGPMvsAAL0AAV4AJDIvGQASfxEAYDQfMg8wLwoAEjEpAQH4AAJ9ABAvdgAB
-FQAQMloAAFYAABcAIA8wEgACLgAjMh9vAEUfNJ8yggFULzAfNL8iAABnAEEfNC8wEQAhDzQPABIx
-xABFDzCvMp8BFF8PAAKiAaFvMg8wTzIPMT8yqQExfzIfxAAhTzKwAQAgARMvHgARMKwBEjD-AAG7
-AQBLAVIfMB8xH78BPw8yP78BRFZvNA8xP8MBAO0AAJYAA8cBYB80DzIfND0CEx8VAAHRAQBlASRf
-MgYBEz_sAEEwPzQP1QAyLzEvFwARMOMBER8qAEQ-MC803gEB7wEAgQEBHQAdMfUBXx8wLzRP9wEC
-AXEAH2-5AQEgHzSGAA37AQGvAQEqAAT-AREfXwAP-wEAABgCAs4ACQcCET_iAgMVAAYNAgGYAANX
-AA8XAgAC0gA0LzFPHQIRTzoAAF4ANj8wHyUCMz8yLxcAAFcAADQAAS0CYh8yHzFfMG4AAXUBADMC
-Vy8wTzQPFQABOQISHyoBBSgAAz0CLz8wOwI-8QU2TzTwAy4ADk8zDzIALsAOLzMPMg0AcA4vMw6w
-Dj3cAvAHDzFNoAw9DzIMQwwLPQxwHg0MDRuDGwsG8AZAHi0cMwUUBQQTHA4dGzAOPQsjFAUCAKID
-Cz0LMA4tCyMFEAC1BAMtCwwwDCsMEwQSAFQrHEAsIw8AYxQDLFAuEwwAdwUUAy5ADi0PAGMOLTAO
-HQsRABAfEgBDLQswLREAwgoPKhoUAx0bMAsdDBIAgjoDBAMrDEAsDgBHBRoTBF8ALwQTXwACCBAA
-Gj0PACctC34AC30AAAIAAHwAEyt7AAACAAF8AK--MAEscP81BPARlAEd8BGELzT1AS5ADg8qDg8y
-9QEuDTAuDfQBLg0gLg31Ay4NEBkAgA30Aw4MDg0QBQAxZE5kDABwLg1UXg1ULgkA8AB_Kw4Njg0Q
-rgsMDwwPCgkMAPAPnQ4LDwwfCgmtIC1TDgsqCQ1TLTAeDVQeKQ4NVB4NCwATXgkAMWRNZAgAJvQD
-BwAi-ggEAHEO-QhA-zAH2QAfS9kAYSUvENoAVBEPDw8O2wBSER8PDw7cABAvFwAD3gAfKt4AnBUV
-3gAQFnkfBN4AUxYfFA8T3gAAFwAP3gCkIxod3QBUGw8ZDxjdAFMbHxkPGN0AABcABN0AEx3cAC8e
-TdwAkRQf3ABUIA8eDx3cAFMgHx4PHdwAABcAD9wAoxQk3ABUJQ8jDyLcAFMlHyMPItwAABcAD9wA
-Wg8KDBAfNjEA-------------------------------------------------8RQbT02fX0=
+NQAfODUAIV87Df88DQYAPg_GAB0HOwAPBgA4D4YADA_nAR0cNrcATw87DzwEACEXHwwADzgA----
+----By8PO4kGHQc7AA8EABkXHwwADzgA--------By8PPIkGHHGPPA89DzuvBgARTwYAMv88AAcA
+EAEHABHPFAAXfyAAER8GABePDAAX7wYAAjAAJF88NAARLwYAFQ80ABMvZAAWBFcAFx8pAASDABAH
+BwAX3xMAEZ8GABE-BgAYvyUAF28lACZfPFYANv88Eg0ALD88KwAdHxgANv88CA0AE58TABYCLAAX
+fz4AA3wABV0AJztPIwATHyMAFhYTABd-uAAIEgAXzzoBAiQBGd9DABYTkgAIqwAP5AEZ8SYjIARw
+-zYD4P4F0P4FwP4HsP4HoP4JkP4JgP4LcP4LYP4NUP4NQP4PMP4PIP4REP4RAP42AAkAESAVABFA
+IQARYC0AEYA5ABGgRQARwFEAP_D_A8sWDB41jgAfN44Aeh84jgB68zM7A_D-PAXQ-zsFwP88B7D-
+Oweg-zwJkP87CYD-PAtw-zsLYP88DVD-Ow1A-zwPMP87DyD-PBEQ-zsRAP88E-87EwAPABMgHwAT
+QC8AE2A-ABOATwAToF8AE8BvAD-g-zyvAA4OgBEPMQB7AEIBBD0DE59JAyDgbggAML7QLgcAEI4F
+APAATsD_Bg89sA0PO-4ADQwu8gGgTg0MPg0Mjg0MDvoB8QUuDQz_BmCeDQxeDQwuDQw_UAz_CwcC
+wT4NDO4NDH4gDg0Mzi8A8gA_EJ4NDP4CDQwOAAz_BA0EABADNgAQAEUAQgwQ-gBaAFEgDG4NDG8A
+AzcCQb4NDH5eABFgbgAQcBwAEI5EAgFAAJEeDaBeDQzusA4mACGewDoAz9BeDQzO4K4NDE4NcK8T
+HPAT8BW-NA8x0N80LzGg3zRPMYBfNF8yDzEPMA80XzFgTzR-MgsA8AkvMk8xQE80jzIPMU8yTzEw
+PzT-MgE-MSAIAEEDPzEQCAC-HzEfMBAvNP8yBS8IABlxLzIPMf8yAQwAch8xDzD-MgIMADIwDzQM
+ABAfGAAADABQPzAQPzFyACAwIAgA8Q4BPzAwTzF-Mg8xXzJPMEBPMW8yHzE-Mk8wYF8xP8UA-wYv
+Ml8wgE8x3zCgLzHfMNAPMb8w8BU4AhkGIgFQnzQPMi8mAQAOAB8PKgEQQjAPND8sARGfDQAhTzIx
+AWG-Mg8wXzI0ARGvPwAQPx4AEzI9AWAPMg8xjzL7AAC9AAFeACQyLxkAEn8RAGA0HzIPMC8KABIx
+KQEB_AACfQAQL3YAARUAEDJaAABWAAAXACAPMBIAAi4AIzIfbwBFHzSfMoIBVC8wHzS-IgAAZwBB
+HzQvMBEAIQ80DwASMcQARQ8wrzKfARRfDwACogGhbzIPME8yDzE-MqkBMX8yH8QAIU8ysAEAIAET
+Lx4AETCsARIw-wABuwEASwFSHzAfMR_-AT8PMj_-AURWbzQPMT-DAQDtAACWAAPHAWAfNA8yHzQ9
+AhMfFQAB0QEAZQEkXzIGARM-rABBMD80D9UAMi8xLxcAETDjAREfKgBEPzAvNN4BAe8BAIEBAR0A
+HTH1AV8fMC80T-cBAgFxAB9v_QEBIB80hgAN_wEBrwEBKgAE-wERH18AD-8BAAAYAgLOAAkHAhE-
+ogIDFQAGDQIBmAADVwAPFwIAAtIANC8xTx0CEU86AABeADY-MB8lAjM-Mi8XAABXAAA0AAEtAmIf
+Mh8xXzBuAAF1AQAzAlcvME80DxUAATkCEh8qAQUoAAM9Ai8-MDsCP-EFNk808AMuAA5PMw8yAC7A
+Di8zDzINAHAOLzMOsA493ALwBw8xTaAMPQ8yDEMMCz0McB4NDA0bgxupBfAGQB4tHDMFFAUEExwO
+HRswDj0LIxQFAgCiAws9CzAOLQsjBRAAtQQDLQsMMAwrDBMEEgBUKxxALCMPAGMUAyxQLhMMAHcF
+FAMuQA4tDwBjDi0wDh0LEQAQHxIAQy0LMC0RAMIKDyoaFAMdGzALHQwSAII6AwQDKwxALA4ARwUa
+EwRfAC8EE18AAggQABo9DwAnLQt_AAt9AAACAAB8ABMrewAAAgABfACv-zABLHD-NQTwEZQBHfAR
+hC809QEuQA4PKg4PMvUBLg0wLg30AS4NIC4N9QMuDRAZAIAN9AMODA4NEAUAMWROZAwAcC4NVF4N
+VC4JAPAAfisODY4NEK4LDA8MDwoJDADwD50OCw8MHwoJrSAtUw4LKgkNUy0wHg1UHikODVQeDQsA
+E14JADFkTWQIACb0AwcAIv4IBABxDv0IQP8wB9kAH0vZAGElLxDaAFQRDw8PDtsAUhEfDw8O3AAQ
+LxcAA94AHyreAJwVFd4AEBbUKQTeAFMWHxQPE94AABcAD94ApCMaHd0AVBsPGQ8Y3QBTGx8ZDxjd
+AAAXAATdABMd3AAvHk3cAJEUH9wAVCAPHg8d3ABTIB8eDx3cAAAXAA-cAKMUJNwAVCUPIw8i3ABT
+JR8jDyLcAAAXAA-cAFoPIA0QHzYxAP----------------------------------------------
+---EUG09Nn19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAxNjoyNDozMyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIscmV2aXNpb249MTk1Ml1dbHo0AMEAAABZEAAA8Ah7e2JtcD11c2VyZGF0
+OC0yOSAxNjoyNDozMyIscmV2aXNpb249MjI3N11dbHo0AMEAAABZEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD-------_x0zIwMDAzMDAwNDAwMDYMAC81MIAAWxMxCAATNYAALzYw
 AQBbFzb8ABMxDAAPAQBVBHwBAAABEzAMAA_AAVkTMXQAEzB4ABcxjAAPAAFVEzaEAAQMAC81MAEA
 --------nvEJIiksaGlkZGVuPWZhbHNlLHBhbl94PTQ3CQDSeT0wLHRpbGVfaD0yOQoAEHcKAIB6
 b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAxNjoyNDozMyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: pal/
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wOC0y
@@ -131,29 +135,29 @@ c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA4LTI5IDA4
-OjMyOjEwIixva3BhbF92ZXJzaW9uPSIxLjAuMyIscmV2aXNpb249MTk0Nix0ZXN0X2N1YmVfY29s
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA4LTI5IDE2
+OjI0OjMzIixva3BhbF92ZXJzaW9uPSIxLjAuMyIscmV2aXNpb249MjI3NCx0ZXN0X2N1YmVfY29s
 b3JzPXtbMF09ezE1LDMxLDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0
 fSx7OCwyNCwyfSx7MjYsMTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7Mjgs
 MTIsMTZ9LHsxMiwxNiwxfSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9
 LHsyMywxNCwxM30sezE0LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwx
-fSx7MSwxLDF9LHsxLDEsMX19LHdoaXRlc3RfY29sb3I9N11dbHo0AOQBAAAVAgAA-wV1c2VyZGF0
-YSgiaTMyIiw2NCwiMAEABvAFODIzZjM4MDA5ODQ3M2YwMDlmNTEIAAQBABFmAQDwbzAwNzQxZjY1
-MDBhODI1OTIwMGUyNDliYTAwZWY4M2M1MDBmOGJiZDkwMDc3MmMxNjAwYTIzMjE5MDBkNTRmMjEw
-MGYzODI1NzAwZmNiYzljMDA2NzQ5MTMwMDljNzExYTAwZDZhMjI1MDBlZGM0NTQwMGZiZTE5OTAw
-MmQ1MxgA8BYzMTZlMzIwMDUwYTMyYzAwODdkNDU2MDBiZmYyOTUwMDE2NTg1CADwDDc3OTdkMDAy
-MGI0YjMwMDVjZDhkMjAwYWNmNtcAwDQ3MjI4NjAwNWUyNiAA0DhkM2JlZDAwYWU4MWawAEA4YzRm
-oAAQZQIAQDAwYjcCAEAwMGUzAgBAMDBmNAIAAMgAAAIAQDAwMWQCAEAwMDJlAgBAMDA0NgIAQDAw
-OWICAEAwMGMxAgDgMDA0ZjRiM2UwMDczNmHgAPATOWU4Zjc0MDBhYTlkODUwMGJlYjVhNDAwNTg1
-OTVkMDA2OAIAUTAwNmY2uQARNwEAUDAwODY4rwHxBjAzZjI3MmEwMDViMzczNDAwNjY0MGAAUDA0
-OTQ0KAAgNWMQAYAzNjFkNDUiKQ==
+fSx7MSwxLDF9LHsxLDEsMX19LHdoaXRlc3RfY29sb3I9N11dbHo0AOkBAAAVAgAA-wV1c2VyZGF0
+YSgiaTMyIiw2NCwiMAEABvAFODIzZjM4MDA5ODQ3M2YwMDlmNTEIACBhMwIAMTAwZgEA8G8wMDc0
+MWY2NTAwYTgyNTkyMDBlMjQ5YmEwMGVmODNjNTAwZjhiYmQ5MDA3NzJjMTYwMGEyMzIxOTAwZDU0
+ZjIxMDBmMzgyNTcwMGZjYmM5YzAwNjc0OTEzMDA5YzcxMWEwMGQ2YTIyNTAwZWRjNDU0MDBmYmUx
+OTkwMDJkNTMYAPAWMzE2ZTMyMDA1MGEzMmMwMDg3ZDQ1NjAwYmZmMjk1MDAxNjU4NQgA8Bw3Nzk3
+ZDAwMjBiNGIzMDA1Y2Q4ZDIwMGFjZjZmMDAwNDcyMjg2MDA1ZTI2IADQOGQzYmVkMDBhZTgxZrAA
+QDhjNGagABBlAgBAMDBiNwIAQDAwZTMCAEAwMGY0AgAAyAAAAgBAMDAxZAIAQDAwMmUCAEAwMDQ2
+AgBAMDA5YgIAQDAwYzECAOAwMDRmNGIzZTAwNzM2YeAA8BM5ZThmNzQwMGFhOWQ4NTAwYmViNWE0
+MDA1ODU5NWQwMDY4AgBRMDA2Zja5ABE3AQBQMDA4NjivAfEGMDNmMjcyYTAwNWIzNzM0MDA2NjQw
+YABQMDQ5NDQoACA1YxABgDM2MWQ0NSIp
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjU0OjE5Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCJdXQ==
+OC0yOSAxNjoyNDozMyJdXQ==
 :: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM1Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIscmV2aXNpb249MTk0OV1dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
+OC0yOSAxNjoyNDozMyIscmV2aXNpb249MjI3NF1dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -161,10 +165,10 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAAAh9EMAAc
 H0AwAPIf-wEA3L-4D0AADUD--7DwcAoA--9kH-8BAP_ZUP----8g
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAxNjoyNDozMyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: src/
 :: src/constants.lua
---[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-08-29 08:32:10",revision=1851]]
+--[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-08-29 16:24:33",revision=2178]]
 --- Match3 Global Constants
 
 
@@ -222,23 +226,8 @@ cell_chest_night = 0xa0
 
 rock_mask = 0xf0
 
-
--- Flags for the matching algorithm -----------------------------------------
-
-
-flag_matching_mask = 0x0f
-flag_vertical = 0x01
-flag_horizontal = 0x02
-flag_horizontal_SE = 0x02
-flag_horizontal_NE = 0x04
-flag_square = 0x08
-
-flag_counted = 0x10
-
-flag_new = 0x20
-flag_falling = 0x40
 :: src/gfx.lua
---[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-08-29 08:32:10",revision=2158]]
+--[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-08-29 16:24:33",revision=2521]]
 --- Graphics
 
 
@@ -253,17 +242,22 @@ function gfx_draw_cells(cells)
 		if cells.is_square then
 			if cell & cell_mask == cell_good then
 				sprite = 32
+				sprite += (p.x + p.y) % 2
+--			elseif cell & cell_mask == cell_bad then
+--				sprite = 39
 			elseif cell & cell_mask == cell_bad then
 				sprite = 34
+				sprite += p.y % 2
 			end
-			sprite += (p.x + p.y) % 2
 		elseif cells.is_hex then
 			if cell & cell_mask == cell_good then
 				sprite = 40
+				sprite += (p.y + (p.x * 3)) % 3
+--			elseif cell & cell_mask == cell_bad then
+--				sprite = 47
 			elseif cell & cell_mask == cell_bad then
 				sprite = 43
 			end
-			sprite += (p.y + (p.x * 3)) % 3
 		end
 		spr(sprite, x, y)
 		x, y = cells:coords_gem(p)
@@ -356,7 +350,7 @@ local function draw_exploded_gem(sprite, x, y, clock, new_clock)
 end
 
 
-function gfx_draw_gems(cells, gems, deltas, flags, clock)
+function gfx_draw_gems(cells, gems, states, clock)
 	local function draw_gem(p, gem)
 		local x, y = gems:coords_gem(p)
 		local sprite = 0 + gem
@@ -364,18 +358,16 @@ function gfx_draw_gems(cells, gems, deltas, flags, clock)
 		if cell and cell & cell_mask == cell_bad then
 			pal(53, 58)
 		end
-		local flag = flags:get(p)
-		if not flag or flag == 0 then
+		local state = states:get(p)
+		if not state then
 			spr(sprite, x, y)
-		elseif flag & flag_falling != 0 then
-			local delta = deltas:get(p) or pos(0, 0)
-			local destination = p + delta
-			local dest_x, dest_y = gems:coords_gem(destination, gem)
+		elseif state.name == "new" then
+			scaled_gem(sprite, x, y, clock)
+		elseif state.name == "matching" then
+		elseif state.name == "falling" or state.name == "swapping" then
+			local dest_x, dest_y = gems:coords_gem(state.target, gem)
 			local ix, iy = x + clock * (dest_x - x), y + clock * (dest_y - y)
 			spr(sprite, ix, iy)
-		elseif flag & flag_new != 0 then
-			scaled_gem(sprite, x, y, clock)
-		elseif flag & flag_matching_mask != 0 then
 		end
 		pal(53, 53)	
 	end
@@ -389,9 +381,8 @@ function gfx_draw_gems(cells, gems, deltas, flags, clock)
 			if cell and cell & cell_mask == cell_bad then
 				pal(53, 58)
 			end
-			local flag = flags:get(p)
-			if flag and flag & flag_matching_mask != 0 then
---				scaled_gem(sprite, x, y, 1.0 - new_clock)
+			local state = states:get(p)
+			if state and state.name == "matching" then
 				draw_exploded_gem(sprite, x, y, clock, new_clock)
 			end
 		end
@@ -399,7 +390,7 @@ function gfx_draw_gems(cells, gems, deltas, flags, clock)
 end
 
 :: src/hgrid.lua
---[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-08-29 08:32:10",revision=1837]]
+--[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-08-29 16:24:33",revision=2176]]
 --- Hex Grids
 
 --- Hex grids use the "double height" coordinate system:
@@ -502,26 +493,16 @@ function metatable:set(p, value)
 end
 
 
-function metatable:flag(p, flag)
+function metatable:merge(p, state)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
 		return false
 	end
 	local index = p.x + ((p.y // 2) * max_width)
-	if self[index] then
-		self[index] |= flag
-	else
-		self[index] = flag
+	if not self[index] then
+		self[index] = {}
 	end
-end
-
-
-function metatable:unflag(p, flag)
-	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return false
-	end
-	local index = p.x + ((p.y // 2) * max_width)
-	if self[index] then
-		self[index] &= ~flag
+	for k, v in pairs(state) do
+		self[index][k] = v
 	end
 end
 
@@ -538,7 +519,7 @@ end
 
 
 function metatable:coords_origin()
-	return 119, 7
+	return 116, 7
 end
 
 
@@ -573,6 +554,12 @@ function metatable:pos(x, y)
 end
 
 
+function metatable:distance(p0, p1)
+	-- TODO: is this correct?
+	return (abs(p0.x - p1.x) + abs(p0.y - p1.y)) // 2
+end
+
+
 -- Iterating ----------------------------------------------------------
 
 
@@ -595,32 +582,34 @@ end
 
 function metatable:neighbours(p)
 	return {
-		{ position = p + pos(1, 1), direction = flag_horizontal_SE },
-		{ position = p + pos(0, 2), direction = flag_vertical },
-		{ position = p + pos(-1, 1), direction = flag_horizontal_NE },
-		{ position = p + pos(-1, -1), direction = flag_horizontal_SE },
-		{ position = p + pos(0, -2), direction = flag_vertical },
-		{ position = p + pos(1, -1), direction = flag_horizontal_NE },
+		{ position = p + pos(1, 1), direction = "horizontal_SE" },
+		{ position = p + pos(0, 2), direction = "vertical" },
+		{ position = p + pos(-1, 1), direction = "horizontal_NE" },
+		{ position = p + pos(-1, -1), direction = "horizontal_SE" },
+		{ position = p + pos(0, -2), direction = "vertical" },
+		{ position = p + pos(1, -1), direction = "horizontal_NE" },
 	}
 end
 
 :: src/in_game.lua
---[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-08-29 08:32:10",revision=925]]
+--[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-08-29 16:24:33",revision=1331]]
 in_game = {}
 
 
 -- The Board
-local cells = {}
-local gems = {}
-local deltas = {}
-local flags = {}
+local tiling = "square"
+local gravity = pos(0, 1)
+
+local cells = false
+local gems = false
+local states = false
 
 local matches = {}
 
-local tiling = "square"
-local gravity = pos(0, 1)
+-- State Machine
 local substate = false
 local clock = 1.0
+local interaction = false
 
 
 ----------------------------------------------------------------------
@@ -637,15 +626,14 @@ function creating_the_board()
 		cells = hgrid_new_cells(pos(13, 8))
 	end
 	gems = cells:new_grid()
-	deltas = cells:new_grid()
-	flags = cells:new_grid()
+	states = cells:new_grid()
 	matches = {}
 	return creating_missing_gems
 end
 
 
 function creating_missing_gems()
-	logic_fill_gems(cells, gems, flags)
+	logic_fill_gems(cells, gems, states)
 	clock = 0.0
 	return animating_new_gems
 end
@@ -653,15 +641,30 @@ end
 
 function animating_new_gems()
 	clock += 1.0 / 8.0
-	if clock >= 1.0 then
-		flags:foreachpos(function(p, _) flags:unflag(p, flag_new) end)
-		return waiting_for_input
+	if clock < 1.0 then
+		return animating_new_gems
 	end
-	return animating_new_gems
+	-- Clean-up
+	states:foreachpos(
+		function(p, state)
+			if state.name == "new" then
+				states:del(p)
+			end
+		end
+	)
+	return waiting_for_input
 end
 
 
 function waiting_for_input()
+	local mx, my, mb, _, _ = mouse()
+	if mb == 0x1 then
+		local mp = cells:pos(mx, my)
+		if gems:get(mp) then
+			interaction = { name = "swap", position = mp, start = t() }
+			return waiting_for_swap
+		end
+	end
 	if keyp("s") then
 		tiling = "square"
 		gravity = pos(0, 1)
@@ -676,50 +679,113 @@ function waiting_for_input()
 		local mx, my = mouse()
 		local p = cells:pos(mx, my)
 		gems:set(p, nil)
-		flags = cells:new_grid()
-		matches = cells:new_grid()
+		states = cells:new_grid()
+		matches = {}
 	end
 	if keyp("r") then
 		local mx, my = mouse()
 		local p = cells:pos(mx, my)
 		gems:set(p, gem_rainbow)
-		flags = cells:new_grid()
-		matches = cells:new_grid()
+		states:set(p, { name = "new" })
+		matches = {}
 	end
 	if keyp("a") then
 		local mx, my = mouse()
 		local p = cells:pos(mx, my)
 		gems:set(p, gem_air)
-		flags = cells:new_grid()
-		matches = cells:new_grid()
+		states:set(p, { name = "new" })
+		matches = {}
 	end
 	if keyp("m") then
-		matches, flags = logic_find_matches(gems)
-		if #matches > 0 then
-			clock = 0.0
-			return animating_cleared_gems()
-		end
+		return checking_matches
 	end
 	return waiting_for_input
 end
 
 
-function animating_cleared_gems()
-	clock += 1.0 / 16.0
-	if clock >= 1.0 then
-		flags:foreachpos(function(p, _) flags:unflag(p, flag_new) end)
-		return removing_cleared_gems
+function waiting_for_swap()
+	local mx, my, mb, _, _ = mouse()
+	if mb == 0x1 then
+		local mp = cells:pos(mx, my)
+		if cells:distance(mp, interaction.position) == 1
+			and gems:get(mp)
+		then
+			interaction.target = mp
+			local gem0 = gems:get(interaction.position)
+			local gem1 = gems:get(interaction.target)
+			gems:set(interaction.position, gem1)
+			gems:set(interaction.target, gem0)
+			local m, _ = logic_find_matches(gems)
+			gems:set(interaction.position, gem0)
+			gems:set(interaction.target, gem1)
+			if #m > 0 then
+				states:set(interaction.position, {
+					name = "swapping",
+					selected = true,
+					target = mp,
+				})
+				states:set(mp, {
+					name = "swapping",
+					target = interaction.position,
+				})
+				interaction = false
+				clock = 0.0
+				return swapping_two_gems
+			end
+			interaction = false
+			return waiting_for_input
+		end
+		return waiting_for_swap
 	end
-	return animating_cleared_gems
+	interaction = false
+	return waiting_for_input
 end
 
 
-function removing_cleared_gems()
-	flags:foreachpos(
-		function(p, flag)
-			if flag != 0 then
+function swapping_two_gems()
+	clock += 1.0 / 16.0
+	if clock < 1.0 then
+		return swapping_two_gems
+	end
+	local reinsert = {}
+	states:foreachpos(
+		function(p, state)
+			if state.name == "swapping" then
+				add(reinsert, { gem = gems:get(p), position = state.target })
 				gems:del(p)
-				flags:del(p)
+				states:del(p)
+			end
+		end
+	)
+	foreach(
+		reinsert,
+		function(r) gems:set(r.position, r.gem) end
+	)
+	return checking_matches
+end
+
+
+function checking_matches()
+	matches, states = logic_find_matches(gems)
+	if #matches > 0 then
+		clock = 0.0
+		return clearing_gems
+	end
+	return creating_missing_gems
+end
+
+
+function clearing_gems()
+	clock += 1.0 / 16.0
+	if clock < 1.0 then
+		return clearing_gems
+	end
+	-- Clean-up
+	states:foreachpos(
+		function(p, state)
+			if state.name == "matching" then
+				gems:del(p)
+				states:del(p)
 			end
 		end
 	)
@@ -741,8 +807,7 @@ function applying_gravity()
 				below += gravity
 			end
 			if distance > 0 then
-				deltas:set(p, distance * gravity)
-				flags:flag(p, flag_falling)
+				states:set(p, { name = "falling", target = p + distance * gravity })
 			end
 		end
 	)
@@ -756,29 +821,27 @@ end
 
 function animating_falling_gems()
 	clock += 1.0 / 16.0
-	if clock >= 1.0 then
-		local fell_gems = {}
-		deltas:foreachpos(
-			function(p, delta)
-				if delta then
-					local new_p = p + delta
-					add(fell_gems, { gem = gems:get(p), pos = new_p })
-					gems:del(p)
-					flags:del(p)
-					deltas:del(p)
-				end
-			end
-		)
-		foreach(fell_gems,
-			function(fell_gem)
-				gems:set(fell_gem.pos, fell_gem.gem)
-				flags:del(fell_gem.pos)
-				deltas:del(fell_gem.pos)
-			end
-		)
-		return creating_missing_gems
+	if clock < 1.0 then
+		return animating_falling_gems
 	end
-	return animating_falling_gems
+	local fell_gems = {}
+	states:foreachpos(
+		function(p, state)
+			if state.name == "falling" then
+				local new_p = state.target
+				add(fell_gems, { gem = gems:get(p), pos = new_p })
+				gems:del(p)
+				states:del(p)
+			end
+		end
+	)
+	foreach(fell_gems,
+		function(fell_gem)
+			gems:set(fell_gem.pos, fell_gem.gem)
+			states:del(fell_gem.pos)
+		end
+	)
+	return checking_matches
 end
 
 
@@ -811,17 +874,12 @@ function in_game:draw()
 	)
 	-- Draw the board
 	gfx_draw_cells(cells)
-	gfx_draw_gems(cells, gems, deltas, flags, clock)
+	gfx_draw_gems(cells, gems, states, clock)
 	-- Update the cursor
 	local mx, my = mouse()
 	local cursor_pos = cells:pos(mx, my)
 	if cells:get(cursor_pos) then
 		window { cursor = "grab" }
-		local matching = flags and flags:get(cursor_pos) or nil
---		if matching and matching != 0 then
---			rectfill(mx - 10, my - 16, mx + 12, my - 8, 7)
---			print(string.format("%02x", matching), mx - 4, my - 15, 0)
---		end
 	else
 		window { cursor = "" }
 	end
@@ -831,11 +889,11 @@ function in_game:draw()
 	end
 end
 :: src/logic.lua
---[[pod_format="raw",created="2024-08-24 08:12:55",modified="2024-08-29 08:32:10",revision=2177]]
+--[[pod_format="raw",created="2024-08-24 08:12:55",modified="2024-08-29 16:24:33",revision=2543]]
 --- Match-3 Logic
 
 local function random_gem()
-	if rnd() < 0.05 then
+	if true and rnd() < 0.05 then
 		local gem = gem_rainbow + flr(rnd(6))
 		if gem == gem_robot_E then
 			gem += flr(rnd(4))
@@ -846,20 +904,35 @@ local function random_gem()
 end
 
 
-function logic_fill_gems(cells, gems, flags)
-	local function fill_gem(p, cell)
-		if (cell & cell_mask == 0) or (cell & rock_mask != 0) then
-			return
+function logic_fill_gems(cells, gems, states)
+	-- TODO: transform into a coroutine
+	cells:foreachpos(
+		function(p, cell)
+			if (cell & cell_mask == 0) or (cell & rock_mask != 0) then
+				return
+			end
+			local gem = gems:get(p)
+			if not gem then
+				local attempts = 0
+				local found = false
+				while attempts < 8 and not found do
+					gem = random_gem()
+					gems:set(p, gem)
+					-- TODO: only check matches locally?
+					local m, _ = logic_find_matches(gems)
+					if #m == 0 then
+						found = true
+					end
+					attempts += 1
+				end
+				if attempts == 8 then
+					gem = gem_gift
+					gems:set(p, gem)
+				end
+				states:set(p, { name = "new" })
+			end
 		end
-		local gem = gems:get(p)
-		if not gem then
-			gem = random_gem()
-			gems:set(p, gem)
-			flags:flag(p, flag_new)
-		end
-	end
-
-	cells:foreachpos(fill_gem)
+	)
 end
 
 
@@ -887,7 +960,7 @@ end
 --------------------------------------------------------------------------
 
 
-local function check_3_and_flag(gems, p0, p1, p2, flag, flags)
+local function check_3_and_flag(gems, p0, p1, p2, state, states)
 	local gem0 = gems:get(p0)
 	local gem1 = gems:get(p1)
 	local gem2 = gems:get(p2)
@@ -895,14 +968,14 @@ local function check_3_and_flag(gems, p0, p1, p2, flag, flags)
 		and logic_is_matching(gem0, gem2)
 		and logic_is_matching(gem1, gem2)
 	then
-		flags:flag(p0, flag)
-		flags:flag(p1, flag)
-		flags:flag(p2, flag)
+		states:merge(p0, state)
+		states:merge(p1, state)
+		states:merge(p2, state)
 	end
 end
 
 
-local function check_4_and_flag(gems, p0, p1, p2, p3, flag, flags)
+local function check_4_and_flag(gems, p0, p1, p2, p3, state, states)
 	local gem0 = gems:get(p0)
 	local gem1 = gems:get(p1)
 	local gem2 = gems:get(p2)
@@ -914,63 +987,50 @@ local function check_4_and_flag(gems, p0, p1, p2, p3, flag, flags)
 		and logic_is_matching(gem1, gem3)
 		and logic_is_matching(gem2, gem3)
 	then
-		flags:flag(p0, flag)
-		flags:flag(p1, flag)
-		flags:flag(p2, flag)
-		flags:flag(p3, flag)
+		states:merge(p0, state)
+		states:merge(p1, state)
+		states:merge(p2, state)
+		states:merge(p3, state)
 	end
 end
 
 
-local function flag_sgrid_matches_at(gems, p0, flags)
+local function flag_sgrid_matches_at(gems, p0, states)
 	check_3_and_flag( gems,
 		p0,
 		p0 + pos(0, 1),
 		p0 + pos(0, 2),
-		flag_vertical, flags )
+		{ name = "matching", vertical = true }, states )
 	check_3_and_flag( gems,
 		p0,
 		p0 + pos(1, 0),
 		p0 + pos(2, 0),
-		flag_horizontal, flags )
-	local p1 = p0 + pos(1, 0)
-	local p2 = p0 + pos(0, 1)
-	local p3 = p0 + pos(1, 1)
-	local gem0 = gems:get(p0)
-	local gem1 = gems:get(p1)
-	local gem2 = gems:get(p2)
-	local gem3 = gems:get(p3)
-	if logic_is_matching(gem0, gem1)
-		and logic_is_matching(gem0, gem2)
-		and logic_is_matching(gem0, gem3)
-		and logic_is_matching(gem1, gem2)
-		and logic_is_matching(gem1, gem3)
-		and logic_is_matching(gem2, gem3)
-	then
-		flags:flag(p0, flag_square | flag_vertical | flag_horizontal)
-		flags:flag(p1, flag_square | flag_vertical | flag_horizontal)
-		flags:flag(p2, flag_square | flag_vertical | flag_horizontal)
-		flags:flag(p3, flag_square | flag_vertical | flag_horizontal)
-	end
+		{ name = "matching", horizontal= true }, states )
+	check_4_and_flag( gems,
+		p0,
+		p0 + pos(1, 0),
+		p0 + pos(0, 1),
+		p0 + pos(1, 1),
+		{ name = "matching", vertical = true, horizontal = true }, states )
 end
 
 
-local function flag_hgrid_matches_at(gems, p0, flags)
+local function flag_hgrid_matches_at(gems, p0, states)
 	check_3_and_flag( gems,
 		p0,
 		p0 + pos(0, 2),
 		p0 + pos(0, 4),
-		flag_vertical, flags )
+		{ name = "matching", vertical = true }, states )
 	check_3_and_flag( gems,
 		p0,
 		p0 + pos(1, 1),
 		p0 + pos(2, 2),
-		flag_horizontal_SE, flags )
+		{ name = "matching", horizontal_SE = true }, states )
 	check_3_and_flag( gems,
 		p0,
 		p0 + pos(1, -1),
 		p0 + pos(2, -2),
-		flag_horizontal_NE, flags )
+		{ name = "matching", horizontal_NE = true }, states )
 	local p1 = p0 + pos(1, 1)
 	local p2 = p0 + pos(1, -1)
 	local p3 = p0 + pos(2, 0)
@@ -985,37 +1045,37 @@ local function flag_hgrid_matches_at(gems, p0, flags)
 		and logic_is_matching(gem1, gem3)
 		and logic_is_matching(gem2, gem3)
 	then
-		flags:flag(p0, flag_square | flag_vertical | flag_horizontal_NE | flag_horizontal_SE)
-		flags:flag(p1, flag_square | flag_horizontal_NE | flag_horizontal_SE)
-		flags:flag(p2, flag_square | flag_horizontal_NE | flag_horizontal_SE)
-		flags:flag(p3, flag_square | flag_vertical | flag_horizontal_NE | flag_horizontal_SE)
+		states:merge(p0, { name = "matching", vertical = true, horizontal_NE = true, horizontal_SE = true})
+		states:merge(p1, { name = "matching", vertical = true, horizontal_SE = true })
+		states:merge(p2, { name = "matching", vertical = true, horizontal_NE = true })
+		states:merge(p3, { name = "matching", vertical = true, horizontal_NE = true, horizontal_SE = true})
 	end
 end
 
 
 local function flag_all_matches(gems)
-	local flags = gems:new_grid()
+	local states = gems:new_grid()
 	if gems.is_square then
 		gems:foreachpos(
 			function(p, _gem)
-				flag_sgrid_matches_at(gems, p, flags)
+				flag_sgrid_matches_at(gems, p, states)
 			end
 		)
 	elseif gems.is_hex then
 		gems:foreachpos(
 			function(p, _gem)
-				flag_hgrid_matches_at(gems, p, flags)
+				flag_hgrid_matches_at(gems, p, states)
 			end
 		)
 	end
-	return flags
+	return states
 end
 
 
 ---------------------------------------------------------------------------
 
 
-local function count_this_match(gems, flags, p)
+local function count_this_match(gems, states, p)
 	-- A simple flood-fill algorithm to group all
 	-- intersecting linear matches together.
 	local colour = gem_rainbow
@@ -1025,8 +1085,9 @@ local function count_this_match(gems, flags, p)
 	while #remaining > 0 do
 		local current = deli(remaining)
 		local gem = gems:get(current)
-		local flag = flags:get(current)
-		if (flag & flag_counted == 0)
+		local state = states:get(current)
+		if state and state.name == "matching"
+			and (not state.counted)
 			and logic_is_matching(colour, gem)
 		then
 			if gem == gem_rainbow then
@@ -1037,17 +1098,18 @@ local function count_this_match(gems, flags, p)
 				colour = gem
 			end
 			count += 1
-			flags:flag(current, flag_counted)
+			states:merge(current, { counted = true })
 			local neighbours = gems:neighbours(current)
 			foreach(
 				neighbours,
 				function(n)
-					local f = flags:get(n.position)
-					if not f then
+					local s = states:get(n.position)
+					if not s then
 						return
 					end
-					if f and (f & flag_counted == 0)
-						and (f & n.direction != 0)
+					if s and s.name == "matching"
+						and (not s.counted)
+						and s[n.direction]
 					then
 						add(remaining, n.position)
 					end
@@ -1058,7 +1120,7 @@ local function count_this_match(gems, flags, p)
 	foreach(
 		rainbows,
 		function(p)
-			flags:unflag(p, flag_counted)
+			states:merge(p, { counted = false })
 		end
 	)
 	return { colour = colour, count = count }
@@ -1066,14 +1128,14 @@ end
 
 
 function logic_find_matches(gems)
-	local flags = flag_all_matches(gems)
+	local states = flag_all_matches(gems)
 	local matches = {}
-	flags:foreachpos(
-		function(p, flag)
-			if (flag & flag_matching_mask != 0)
-				and (flag & flag_counted == 0)
+	states:foreachpos(
+		function(p, state)
+			if state and state.name == "matching"
+				and (not state.counted)
 			then
-				local count = count_this_match(gems, flags, p)
+				local count = count_this_match(gems, states, p)
 				if count.colour == gem_rainbow then
 					-- Ignore, as this is probably a stray rainbow that was unflagged
 					-- at the end of `count_this_match`.
@@ -1085,10 +1147,10 @@ function logic_find_matches(gems)
 			end
 		end
 	)
-	return matches, flags
+	return matches, states
 end
 :: src/sgrid.lua
---[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-08-29 08:32:10",revision=2250]]
+--[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-08-29 16:24:33",revision=2589]]
 --- Square Grids
 
 --- The origin of the grid, `pos(0, 0)`, is at the top left.
@@ -1183,26 +1245,16 @@ function metatable:set(p, value)
 end
 
 
-function metatable:flag(p, flag)
+function metatable:merge(p, state)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
 		return false
 	end
 	local index = p.x + (p.y * max_width)
-	if self[index] then
-		self[index] |= flag
-	else
-		self[index] = flag
+	if not self[index] then
+		self[index] = {}
 	end
-end
-
-
-function metatable:unflag(p, flag)
-	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return false
-	end
-	local index = p.x + (p.y * max_width)
-	if self[index] then
-		self[index] &= ~flag
+	for k, v in pairs(state) do
+		self[index][k] = v
 	end
 end
 
@@ -1219,7 +1271,7 @@ end
 
 
 function metatable:coords_origin()
-	return 124, 4
+	return 121, 4
 end
 
 
@@ -1238,6 +1290,11 @@ end
 function metatable:pos(x, y)
 	local ox, oy = self:coords_origin()
 	return pos((x - ox) // 29, (y - oy) // 29)
+end
+
+
+function metatable:distance(p0, p1)
+	return abs(p0.x - p1.x) + abs(p0.y - p1.y)
 end
 
 
@@ -1262,18 +1319,18 @@ end
 
 function metatable:neighbours(p)
 	return {
-		{ position = p + pos(1, 0), direction = flag_horizontal },
-		{ position = p + pos(0, 1), direction = flag_vertical },
-		{ position = p + pos(-1, 0), direction = flag_horizontal },
-		{ position = p + pos(0, -1), direction = flag_vertical },
+		{ position = p + pos(1, 0), direction = "horizontal" },
+		{ position = p + pos(0, 1), direction = "vertical" },
+		{ position = p + pos(-1, 0), direction = "horizontal" },
+		{ position = p + pos(0, -1), direction = "vertical" },
 	}
 end
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI0IDA3OjE3OjA5Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCJdXQ==
+OC0yOSAxNjoyNDozMyJdXQ==
 :: debug.lua
---[[pod_format="raw",created="2024-08-24 12:45:09",modified="2024-08-25 08:41:10",revision=71]]
+--[[pod_format="raw",created="2024-08-24 12:45:09",modified="2024-08-29 14:45:27",revision=72]]
 -- Detect uninitialized globals and typos
 -- from @snowkittykira from the BBS
 
@@ -1423,7 +1480,7 @@ function set_drawspace(drawspace)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-08-29 08:32:10",revision=2304]]
+--[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-08-29 16:24:33",revision=2639]]
 include "drakma.lua"
 include "src/constants.lua"
 include "src/sgrid.lua"
@@ -1451,20 +1508,21 @@ end
 
 function _draw()
 	cls(63)
-	rectfill(0, 0, 116, 269, 55)
+	rectfill(0, 0, 110, 269, 55)
 	state:draw()
 	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 1, 264, 7)
 end
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjQ1OjEzIixtb2RpZmllZD0iMjAyNC0w
-OC0yOSAwODozMjoxMCIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
-cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249InNyYy9pbl9nYW1lLmx1YSM0NyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0i
-c3JjL2xvZ2ljLmx1YSMyMSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2dmeC5s
-dWEjMTM3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2dyaWQubHVhIzgxIix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvaGdyaWQubHVhIzEzMSIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2NvbnN0YW50cy5sdWEjNzIiLHdvcmtzcGFjZV9pbmRl
-eD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0i
-bWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtz
-cGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1d
+OC0yOSAxNjoyNDozMyIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
+cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMjgiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9pbl9nYW1lLmx1YSMxNDEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
+InNyYy9sb2dpYy5sdWEjMTYiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9nZngu
+bHVhIzEzNiIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3NncmlkLmx1YSMxNDIi
+LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9oZ3JpZC5sdWEjMTYyIix3b3Jrc3Bh
+Y2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvY29uc3RhbnRzLmx1YSM1NyIsd29ya3NwYWNlX2lu
+ZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9u
+PSJtYXAvMC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29y
+a3NwYWNlX2luZGV4PTR9LHtsb2NhdGlvbj0icGFsLzAucGFsIix3b3Jrc3BhY2VfaW5kZXg9N319
+XV0=
 :: [eoc]
