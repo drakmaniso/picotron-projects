@@ -4,11 +4,11 @@ version 2
 :: docs/
 :: docs/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI2IDE0OjAzOjI1Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCJdXQ==
+OC0yOSAwODozMjoxMCJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyMyIscmV2aXNpb249MTc3M11dbHo0ANUQAACYSwAA8xd7WzBdPXtibXA9cHh1
+OC0yOSAwODozMjoxMCIscmV2aXNpb249MjEzM11dbHo0AE0SAADFUAAA8xd7WzBdPXtibXA9cHh1
 AEMgHR0E8P---zwsZmxhZ3M9MCxwYW5feAgAy3k9MCx6b29tPTJ9LDQA8CQ1bPAEHGob8AAcugnA
 DNoJCKAMKh8qqgkIgAwqLqoZCHAMKh4cShw6CQgPNVAMSgwZDCoEAPAMGQhQDDoMOQwKDDkMGhkI
 DTAMSgxJDEkMGikICwAQqQkAgQ0gDFoMiQwqCgBVagxpDDoUACwaOQoAEDlNAMBJCA0wC1oMGQwK
@@ -59,96 +59,101 @@ HivwBh4r8Akb8CI1AR2wFh8rYB7wAB4PLQ6YCYEPLR6wHh0PLA0AUA0fLB5w4gORHzVgDjweQA4d
 vwGAXA4wDkwOG4DLANAwDjw_QD48DhswDkwdDwAgHUzLAUBMDhtABQAjUA4PACELcO4AAAUAcHAO
 LD4gPixlAvICLB0OCxAOHSwOG5AOPA4bIA57AgBsAhAwKwAQgLYCEBxMAEAcDguApAJQDD4APgxE
 ABMNsAFxDhwdDgsOHSAAEhzSAQEzAABzASQbgPQBABMAEAsuA6ALoA5cDhwuHA4bCQAQDDgGUA4L
-wA5crwIQGwgAAakBAIsDEEwHABBchgCP8ACeG-ACm7BbARlfEBAE8PAxAP--_l8dHQT-N74UDx02
-NQAfODUAIR88NQAhHz01AB0PBQEQHzExAI3xJiMgBHD-NgPg-gXQ-gXA-gew-geg-gmQ-gmA-gtw
--gtg-g1Q-g1A-g8w-g8g-hEQ-hEA-jYACQARIBUAEUAhABFgLQARgDkAEaBFABHAUQBP4P4DcI4A
-Hh83jgB6HziOAHofO44Aeh88jgB6Hz2OAEkPtgN7ALkJ8BIVvzQPMdDfNC8xoN80TzGAXzRfMg8x
-DzAPNF8xYE80fzILAPAJLzJPMUBPNI8yDzFPMk8xMD80-zIBPzEgCABBAz8xEAgAvx8xHzAQLzT-
-MgUvCAAZcS8yDzH-MgEMAHIfMQ8w-zICDAAyMA80DAAQHxgAAAwAUD8wED8xcgAgMCAIAPEOAT8w
-ME8xfzIPMV8yTzBATzFvMh8xPzJPMGBfMT-FAP8GLzJfMIBPMd8woC8x3zDQDzG-MPAVIgEjUJ80
-DzIvJgEADgAfDyoBEEIwDzQ-LAERnw0AIU8yMQFhvzIPMF8yNAERrz8AED8eABMyPQFgDzIPMY8y
-_wAAvQABXgAkMi8ZABJ-EQBgNB8yDzAvCgASMSkBAfgAAn0AEC92AAEVABAyWgAAVgAAFwAgDzAS
-AAIuACMyH28ARR80nzKCAVQvMB80vyIAAGcAQR80LzARACEPNA8AEjHEAEUPMK8ynwEUXw8AAqIB
-oW8yDzBPMg8xPzKpATF-Mh-EACFPMrABACABEy8eABEwrAESMP8AAbsBAEsBUh8wHzEfvwE-DzI-
-vwFEVm80DzE-wwEA7QAAlgADxwFgHzQPMh80PQITHxUAAdEBAGUBJF8yBgETP6wAQTA-NA-VADIv
-MS8XABEw4wERHyoARD8wLzTeAQHvAQCBAQEdAB0x9QFfHzAvNE-3AQIBcQAfb-kBASAfNIYADfsB
-Aa8BASoABP8BER9fAA--AQAAGAICzgAJBwIRP6ICAxUABg0CAZgAA1cADxcCAALSADQvMU8dAhFP
-OgAAXgA2PzAfJQIzPzIvFwAAVwAANAABLQJiHzIfMV8wbgABdQEAMwJXLzBPNA8VAAE5AhIfKgEF
-KAADPQIvPzA7Aj-xBTZPNPADLgAOTzMPMgAuwA4vMw8yDQBwDi8zDrAOPdwC8XMPMU2gDD0PMgxD
-DAs9DHAeDQwNG4MbDQweDUAeLRwzRBMcDh0bMA49CyOEAws9CzAOLQsjpAMtCwwwDCsME7QDKxxA
-LCPEAyxQLhPUAy5ADi0T1AMOLTAOHQsThB8UJAMtCzAtCxN0Cg8qGhQDHRswCx0ME3Q6AwQDKwxA
-LBOEGhMEPAA4lBMUPgAACAASPQcAIS0LTQAT1EoAENRFAEErDBPUQQCv-zABLHD-NQTwERwBHfAQ
-hS805C5gDg8qDg8y5C4NUC4N5C4NDzUwLg30AS4NMBkAcA30AQ4MDg22E2AMDg1UTlQHAJELIC4N
-RF4NRC4KAPEDbi8LDg1_DQsgngoMDwwPCg8JDgDwAo0OCg8MHwoPCZ0LMC1DDgovGQDhQy0LQB4N
-RB4pDg1EHg0MABReCgAyVE1UCQAo9AEIACT_BgUAnw79BgtQ_wfwZs8LDA-oAEYWEOgAVREPDw8O
-6ABUER8PDw7oAAAZAA-oADMP0AFlFhXoABAWKBoF6ABUFh8UDxPoAAAZAA-oAKskGh3nAFUbDxkP
-GOcAVBsfGQ8Y5wAAGQAF5wAUHeYALx5N5gCWFR-mAFUgDx4PHeYAVCAfHg8d5gAAGQAP5gCqFSTm
-AFUlDyMPIuYAVCUfIw8i5gAAGQAP5gBeD9MLEB82MQD---------------------------------
-----------------xFBtPTZ9fQ==
+wA5crwIQGwgAAakBAIsDEEwHABBchgCP8ACeG-ACm7BbARlfEBAE8PAxAP--_l8dHQT-N74UDx0x
+NQAfODUAIHGPPA89DzuvBgARTwYAMv88AAcAEAEHABHPFAAXfyAAER8GABePDAAX7wYAAjAAJF88
+NAARLwYAFQ80ABMvZAAWBFcAFx8pAASDABAHBwAX3xMAEZ8GABE-BgAYvyUAF28lACZfPFYANv88
+Eg0ALD88KwAdHxgANv88CA0AE58TABYCLAAXfz4AA3wABV0AJztPIwATHyMAFhYTABd-uAAIEgAX
+zzoBAiQBGd9DABYTkgAIqwAP5AH--g5jBA8xAJ-xJiMgBHD-NgPg-gXQ-gXA-gew-geg-gmQ-gmA
+-gtw-gtg-g1Q-g1A-g8w-g8g-hEQ-hEA-jYACQARIBUAEUAhABFgLQARgDkAEaBFABHAUQBP4P4D
+cI4AHh83jgB6HziOAHkEvwITn8sCIOBuCAAwvtAuBwAQjgUA8ABOwP4GDz2wDQ87-gANDC6wAKBO
+DQw_DQyODQwOuADxBS4NDP4GYJ4NDF4NDC4NDD5QDP4LxQDBPg0M7g0MfiAODQzOLwDyAD4Qng0M
+-gINDA4ADP4EDQQAEAM2ABAARQBCDBD_AFoAUSAMbg0MbwAD9QBBvg0Mfl4AEWBuABBwHAAQjgIB
+AUAAkR4NoF4NDO6wDiYAIZ7AOgC-0F4NDM7grg0MTg0WAf--SA9OBU8Arw7wEhW-NA8x0N80LzGg
+3zRPMYBfNF8yDzEPMA80XzFgTzR-MgsA8AkvMk8xQE80jzIPMU8yTzEwPzT-MgE-MSAIAEEDPzEQ
+CAC-HzEfMBAvNP8yBS8IABlxLzIPMf8yAQwAch8xDzD-MgIMADIwDzQMABAfGAAADABQPzAQPzFy
+ACAwIAgA8Q4BPzAwTzF-Mg8xXzJPMEBPMW8yHzE-Mk8wYF8xP8UA-wYvMl8wgE8x3zCgLzHfMNAP
+Mb8w8BUiAQsfNSIBBFCfNA8yLyYBAA4AHw8qARBCMA80PywBEZ8NACFPMjEBYb8yDzBfMjQBEa8-
+ABA-HgATMj0BYA8yDzGPMvsAAL0AAV4AJDIvGQASfxEAYDQfMg8wLwoAEjEpAQH4AAJ9ABAvdgAB
+FQAQMloAAFYAABcAIA8wEgACLgAjMh9vAEUfNJ8yggFULzAfNL8iAABnAEEfNC8wEQAhDzQPABIx
+xABFDzCvMp8BFF8PAAKiAaFvMg8wTzIPMT8yqQExfzIfxAAhTzKwAQAgARMvHgARMKwBEjD-AAG7
+AQBLAVIfMB8xH78BPw8yP78BRFZvNA8xP8MBAO0AAJYAA8cBYB80DzIfND0CEx8VAAHRAQBlASRf
+MgYBEz_sAEEwPzQP1QAyLzEvFwARMOMBER8qAEQ-MC803gEB7wEAgQEBHQAdMfUBXx8wLzRP9wEC
+AXEAH2-5AQEgHzSGAA37AQGvAQEqAAT-AREfXwAP-wEAABgCAs4ACQcCET_iAgMVAAYNAgGYAANX
+AA8XAgAC0gA0LzFPHQIRTzoAAF4ANj8wHyUCMz8yLxcAAFcAADQAAS0CYh8yHzFfMG4AAXUBADMC
+Vy8wTzQPFQABOQISHyoBBSgAAz0CLz8wOwI-8QU2TzTwAy4ADk8zDzIALsAOLzMPMg0AcA4vMw6w
+Dj3cAvAHDzFNoAw9DzIMQwwLPQxwHg0MDRuDGwsG8AZAHi0cMwUUBQQTHA4dGzAOPQsjFAUCAKID
+Cz0LMA4tCyMFEAC1BAMtCwwwDCsMEwQSAFQrHEAsIw8AYxQDLFAuEwwAdwUUAy5ADi0PAGMOLTAO
+HQsRABAfEgBDLQswLREAwgoPKhoUAx0bMAsdDBIAgjoDBAMrDEAsDgBHBRoTBF8ALwQTXwACCBAA
+Gj0PACctC34AC30AAAIAAHwAEyt7AAACAAF8AK--MAEscP81BPARlAEd8BGELzT1AS5ADg8qDg8y
+9QEuDTAuDfQBLg0gLg31Ay4NEBkAgA30Aw4MDg0QBQAxZE5kDABwLg1UXg1ULgkA8AB_Kw4Njg0Q
+rgsMDwwPCgkMAPAPnQ4LDwwfCgmtIC1TDgsqCQ1TLTAeDVQeKQ4NVB4NCwATXgkAMWRNZAgAJvQD
+BwAi-ggEAHEO-QhA-zAH2QAfS9kAYSUvENoAVBEPDw8O2wBSER8PDw7cABAvFwAD3gAfKt4AnBUV
+3gAQFnkfBN4AUxYfFA8T3gAAFwAP3gCkIxod3QBUGw8ZDxjdAFMbHxkPGN0AABcABN0AEx3cAC8e
+TdwAkRQf3ABUIA8eDx3cAFMgHx4PHdwAABcAD9wAoxQk3ABUJQ8jDyLcAFMlHyMPItwAABcAD9wA
+Wg8KDBAfNjEA-------------------------------------------------8RQbT02fX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyMyIscmV2aXNpb249MTY1Nl1dbHo0AMEAAABZEAAA8Ah7e2JtcD11c2VyZGF0
+OC0yOSAwODozMjoxMCIscmV2aXNpb249MTk1Ml1dbHo0AMEAAABZEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD-------_x0zIwMDAzMDAwNDAwMDYMAC81MIAAWxMxCAATNYAALzYw
 AQBbFzb8ABMxDAAPAQBVBHwBAAABEzAMAA_AAVkTMXQAEzB4ABcxjAAPAAFVEzaEAAQMAC81MAEA
 --------nvEJIiksaGlkZGVuPWZhbHNlLHBhbl94PTQ3CQDSeT0wLHRpbGVfaD0yOQoAEHcKAIB6
 b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: pal/
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wOC0y
-MyAxODo1OTowOSIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+MyAxODo1OTowOSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLHRydWUsdHJ1ZSx0cnVlLGZhbHNlLHRydWUsdHJ1ZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSx0cnVlLHRydWUsZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxzZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLGZhbHNlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZX0saGlkZGVuX3RvZ2dsZXM9e1swXT10cnVlLHRydWUsdHJ1
+ZSx0cnVlfSxpY29uPXVzZXJkYXRhKCJ1OCIsMTYsMTYsIjAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
+MDAwMDAwMDAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNjAxMDAwMDAwMDAwMDAxMDcwNzA3MDcwNzA3
+MDcwNzA2MDYwMTAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDYwNjA2MDEwMDAwMDAwMTA3MDcw
+NzA3MDcwNzA3MDcwNjA2MDYwNjAxMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDEwMDAw
+MDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTA3MDcwNjA2MDEwMTBkMGQwMTAxMDcw
+NzAxMDAwMDAxMDcwNzA2MDYwMTAxMGQwZDAxMDEwNzA3MDEwMDAwMDEwNzA3MDEwMTA3MDcwNjA2
+MGQwZDA3MDcwMTAwMDAwMTA3MDcwMTAxMDcwNzA2MDYwZDBkMDcwNzAxMDAwMDAxMDcwNzBkMGQw
+MTAxMGQwZDA2MDYwNzA3MDEwMDAwMDEwNzA3MGQwZDAxMDEwZDBkMDYwNjA3MDcwMTAwMDAwMTA3
+MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDEw
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAwIiksbG9ja2VkPXtbMF09ZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2V9LGhpZGRlbl90b2dnbGVzPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LGlj
-b249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMTAxMDEwMTAxMDEwMTAxMDEwMTAwMDAwMDAwMDAw
-MDAxMDcwNzA3MDcwNzA3MDcwNzA2MDEwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDYwNjAx
-MDAwMDAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNjA2MDYwMTAwMDAwMDAxMDcwNzA3MDcwNzA3MDcw
-NzA2MDYwNjA2MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTA3MDcwNzA3
-MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAxMDcwNzA2MDYwMTAxMGQwZDAxMDEwNzA3MDEwMDAwMDEw
-NzA3MDYwNjAxMDEwZDBkMDEwMTA3MDcwMTAwMDAwMTA3MDcwMTAxMDcwNzA2MDYwZDBkMDcwNzAx
-MDAwMDAxMDcwNzAxMDEwNzA3MDYwNjBkMGQwNzA3MDEwMDAwMDEwNzA3MGQwZDAxMDEwZDBkMDYw
-NjA3MDcwMTAwMDAwMTA3MDcwZDBkMDEwMTBkMGQwNjA2MDcwNzAxMDAwMDAxMDcwNzA3MDcwNzA3
-MDcwNzA3MDcwNzA3MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTAxMDEw
-MTAxMDEwMTAxMDEwMTAxMDEwMTAxMDAiKSxsb2NrZWQ9e1swXT1mYWxzZSxmYWxzZSxmYWxzZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
-ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
-YWxzZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjQtMDgtMjggMTE6MTE6MjMiLG9r
-cGFsX3ZlcnNpb249IjEuMC4zIixyZXZpc2lvbj0xNTUzLHRlc3RfY3ViZV9jb2xvcnM9e1swXT17
-MTUsMzEsNH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0sezksMjUsMjR9LHs4LDI0LDJ9
-LHsyNiwxMSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcsMTl9LHsyOCwxMiwxNn0sezEy
-LDE2LDF9LHs2LDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7NywyMywxNH0sezIzLDE0LDEz
-fSx7MTQsMzAsMTh9LHs3LDYsMjJ9LHs2LDIyLDV9LHsyMiw1LDIxfSx7MSwxLDF9LHsxLDEsMX0s
-ezEsMSwxfX0sd2hpdGVzdF9jb2xvcj03XV1sejQA8QEAABUCAAD9BXVzZXJkYXRhKCJpMzIiLDY0
-LCIwAQDxGjRjNDUzMzAwNzk0NTNmMDA4YjUwNDkwMGU3YTEzZDAwZWVjNTcxMDBmAQDwMDAwNzQx
-ZjY1MDBhODI1OTIwMGUyNDliYTAwZWY4M2M1MDBmOGJiZDkwMDc3MmMxNjAwYTIzMjE5MDBkNTRm
-MkgA8CwzODI1NzAwZmNiYzljMDA2NzQ5MTMwMDljNzExYTAwZDZhMjI1MDBlZGM0NTQwMGZiZTE5
-OTAwMmQ1MxgA8BYzMTZlMzIwMDUwYTMyYzAwODdkNDU2MDBiZmYyOTUwMDE2NTg1CADwDTc3OTdk
-MDAyMGI0YjMwMDVjZDhkMjAwYWNmNmb4ALA3MjI4NjAwNWUyNiAA0DhkM2JlZDAwYWU4MWawAEA4
-YzRmoAAQZQIAQDAwYjcCAEAwMGUzAgBAMDBmNAIAAMgAAAIAQDAwMWQCAEAwMDJlAgBAMDA0NgIA
-QDAwOWICAEAwMGMxAgDgMDA0ZjRiM2UwMDczNmHgAPATOWU4Zjc0MDBhYTlkODUwMGJlYjVhNDAw
-NTg1OTVkMDA2OAIAUTAwNmY2uQARNwEAcTAwODY4MzjIAEAzNDM1MACwNDI0MjAwNjA0ODQwABA5
-oQDwAzAwODg2ZDZkMDAzMjIyM2MiKQ==
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA4LTI5IDA4
+OjMyOjEwIixva3BhbF92ZXJzaW9uPSIxLjAuMyIscmV2aXNpb249MTk0Nix0ZXN0X2N1YmVfY29s
+b3JzPXtbMF09ezE1LDMxLDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0
+fSx7OCwyNCwyfSx7MjYsMTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7Mjgs
+MTIsMTZ9LHsxMiwxNiwxfSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9
+LHsyMywxNCwxM30sezE0LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwx
+fSx7MSwxLDF9LHsxLDEsMX19LHdoaXRlc3RfY29sb3I9N11dbHo0AOQBAAAVAgAA-wV1c2VyZGF0
+YSgiaTMyIiw2NCwiMAEABvAFODIzZjM4MDA5ODQ3M2YwMDlmNTEIAAQBABFmAQDwbzAwNzQxZjY1
+MDBhODI1OTIwMGUyNDliYTAwZWY4M2M1MDBmOGJiZDkwMDc3MmMxNjAwYTIzMjE5MDBkNTRmMjEw
+MGYzODI1NzAwZmNiYzljMDA2NzQ5MTMwMDljNzExYTAwZDZhMjI1MDBlZGM0NTQwMGZiZTE5OTAw
+MmQ1MxgA8BYzMTZlMzIwMDUwYTMyYzAwODdkNDU2MDBiZmYyOTUwMDE2NTg1CADwDDc3OTdkMDAy
+MGI0YjMwMDVjZDhkMjAwYWNmNtcAwDQ3MjI4NjAwNWUyNiAA0DhkM2JlZDAwYWU4MWawAEA4YzRm
+oAAQZQIAQDAwYjcCAEAwMGUzAgBAMDBmNAIAAMgAAAIAQDAwMWQCAEAwMDJlAgBAMDA0NgIAQDAw
+OWICAEAwMGMxAgDgMDA0ZjRiM2UwMDczNmHgAPATOWU4Zjc0MDBhYTlkODUwMGJlYjVhNDAwNTg1
+OTVkMDA2OAIAUTAwNmY2uQARNwEAUDAwODY4rwHxBjAzZjI3MmEwMDViMzczNDAwNjY0MGAAUDA0
+OTQ0KAAgNWMQAYAzNjFkNDUiKQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjU0OjE5Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCJdXQ==
+OC0yOSAwODozMjoxMCJdXQ==
 :: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM1Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyMyIscmV2aXNpb249MTY1M11dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
+OC0yOSAwODozMjoxMCIscmV2aXNpb249MTk0OV1dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -156,10 +161,10 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAAAh9EMAAc
 H0AwAPIf-wEA3L-4D0AADUD--7DwcAoA--9kH-8BAP_ZUP----8g
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OC0yOSAwODozMjoxMCIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: src/
 :: src/constants.lua
---[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-08-28 11:11:23",revision=1541]]
+--[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-08-29 08:32:10",revision=1851]]
 --- Match3 Global Constants
 
 
@@ -231,16 +236,14 @@ flag_square = 0x08
 flag_counted = 0x10
 
 flag_new = 0x20
-flag_falling_mask = 0xf00
-
+flag_falling = 0x40
 :: src/gfx.lua
---[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-08-28 11:11:23",revision=1760]]
+--[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-08-29 08:32:10",revision=2158]]
 --- Graphics
 
 
 local cell_width = 29
 local cell_height = 29
-
 
 
 function gfx_draw_cells(cells)
@@ -292,6 +295,38 @@ function gfx_draw_cells(cells)
 		pal(53, 53)
 	end
 	cells:foreachpos(draw_cell)
+	-- TODO: move border construction out of the hot loop
+	local function draw_borders(p, cell)
+		local x, y = cells:coords_cell(p)
+		if cells.is_square then
+			local cell_S = cells:get(p + pos(0, 1))
+			local cell_W = cells:get(p + pos(-1, 0))
+			local cell_E = cells:get(p + pos(1, 0))
+			local cell_N = cells:get(p + pos(0, -1))
+			if cell & cell_good != 0 then
+				if not cell_S or cell_S & cell_good == 0 then
+					line(x, y + 28, x + 28, y + 28, 53)
+				end
+				if not cell_E or cell_E & cell_good == 0 then
+					line(x + 28, y, x + 28, y + 28, 53)
+				end
+				if not cell_N or cell_N & cell_good == 0 then
+					line(x, y, x + 28, y, 57)
+				end
+				if not cell_W or cell_W & cell_good == 0 then
+					line(x, y, x, y + 28, 57)
+				end
+			elseif cell & cell_bad != 0 then
+				if cell_N and cell_N & cell_good != 0 then
+					line(x, y, x + 28, y, 58)
+				end
+				if cell_W and cell_W & cell_good != 0 then
+					line(x, y, x, y + 28, 58)
+				end
+			end
+		end
+	end
+	cells:foreachpos(draw_borders)
 end
 
 
@@ -305,7 +340,23 @@ local function scaled_gem(sprite, x, y, size)
 end
 
 
-function gfx_draw_gems(cells, gems, flags, clock, gravity)
+local function draw_exploded_gem(sprite, x, y, clock, new_clock)
+	local size = 32 * new_clock
+	local colour = 10 + (sprite - 1) * 5
+	oval(x - size, y - size, x + 29 + size, y + 29 + size, colour + 1)
+	if clock < 0.25 then
+		ovalfill(x + 2, y + 2, x + 25, y + 25, 7)
+	elseif clock < 0.50 then
+		ovalfill(x + 2, y + 2, x + 25, y + 25, colour + 2)
+	elseif clock < 0.75 then
+		ovalfill(x + 1, y + 1, x + 27, y + 27, colour + 1)
+	elseif clock < 1.0 then
+		ovalfill(x, y, x + 29, y + 29, colour)
+	end
+end
+
+
+function gfx_draw_gems(cells, gems, deltas, flags, clock)
 	local function draw_gem(p, gem)
 		local x, y = gems:coords_gem(p)
 		local sprite = 0 + gem
@@ -316,24 +367,39 @@ function gfx_draw_gems(cells, gems, flags, clock, gravity)
 		local flag = flags:get(p)
 		if not flag or flag == 0 then
 			spr(sprite, x, y)
-		elseif flag & flag_new != 0 then
-			scaled_gem(sprite, x, y, clock)
-		elseif flag & flag_matching_mask != 0 then
-			scaled_gem(sprite, x, y, 1.0 - clock)
-		elseif flag & flag_falling_mask != 0 then
-			local distance = (flag & flag_falling_mask) >> 8
-			local destination = p + (distance * gravity)
+		elseif flag & flag_falling != 0 then
+			local delta = deltas:get(p) or pos(0, 0)
+			local destination = p + delta
 			local dest_x, dest_y = gems:coords_gem(destination, gem)
 			local ix, iy = x + clock * (dest_x - x), y + clock * (dest_y - y)
 			spr(sprite, ix, iy)
+		elseif flag & flag_new != 0 then
+			scaled_gem(sprite, x, y, clock)
+		elseif flag & flag_matching_mask != 0 then
 		end
 		pal(53, 53)	
 	end
 	gems:foreachpos(draw_gem)
+	local new_clock = clock * clock * clock * clock
+	gems:foreachpos(
+		function(p, gem)
+			local x, y = gems:coords_gem(p)
+			local sprite = 0 + gem
+			local cell = cells:get(p)
+			if cell and cell & cell_mask == cell_bad then
+				pal(53, 58)
+			end
+			local flag = flags:get(p)
+			if flag and flag & flag_matching_mask != 0 then
+--				scaled_gem(sprite, x, y, 1.0 - new_clock)
+				draw_exploded_gem(sprite, x, y, clock, new_clock)
+			end
+		end
+	)
 end
 
 :: src/hgrid.lua
---[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-08-28 11:11:23",revision=1526]]
+--[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-08-29 08:32:10",revision=1837]]
 --- Hex Grids
 
 --- Hex grids use the "double height" coordinate system:
@@ -363,6 +429,9 @@ local metatable = {}
 function hgrid_new()
 	local grid = { is_hex = true }
 	setmetatable(grid, { __index = metatable })
+	for i = 0, max_width * max_height do
+		grid[i] = false
+	end
 	return grid
 end
 
@@ -382,10 +451,11 @@ end
 function hgrid_new_cells(size)
 	local grid = hgrid_new()
 	local p = pos(0, 0)
+	local with_bad_cells = rnd() < 0.33
 	while p.x < size.x do
 		while p.y < size.y * 2 do
 			local cell = cell_good
-			if rnd() < 0.0000033 then
+			if with_bad_cells and rnd() < 0.33 then
 				cell = cell_bad
 			end
 			if rnd() < 0.03 then
@@ -418,7 +488,7 @@ end
 
 function metatable:get(p)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return nil
+		return false
 	end
 	return self[p.x + ((p.y // 2) * max_width)]
 end
@@ -426,7 +496,7 @@ end
 
 function metatable:set(p, value)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return nil
+		return false
 	end
 	self[p.x + ((p.y // 2) * max_width)] = value
 end
@@ -434,7 +504,7 @@ end
 
 function metatable:flag(p, flag)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return nil
+		return false
 	end
 	local index = p.x + ((p.y // 2) * max_width)
 	if self[index] then
@@ -447,7 +517,7 @@ end
 
 function metatable:unflag(p, flag)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return nil
+		return false
 	end
 	local index = p.x + ((p.y // 2) * max_width)
 	if self[index] then
@@ -458,9 +528,9 @@ end
 
 function metatable:del(p)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= 2 * max_height - (p.x % 2) then
-		return nil
+		return false
 	end
-	self[p.x + ((p.y // 2) * max_width)] = nil
+	self[p.x + ((p.y // 2) * max_width)] = false
 end
 
 
@@ -535,13 +605,16 @@ function metatable:neighbours(p)
 end
 
 :: src/in_game.lua
---[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-08-28 11:11:23",revision=582]]
+--[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-08-29 08:32:10",revision=925]]
 in_game = {}
 
 
+-- The Board
 local cells = {}
 local gems = {}
+local deltas = {}
 local flags = {}
+
 local matches = {}
 
 local tiling = "square"
@@ -564,8 +637,9 @@ function creating_the_board()
 		cells = hgrid_new_cells(pos(13, 8))
 	end
 	gems = cells:new_grid()
+	deltas = cells:new_grid()
 	flags = cells:new_grid()
-	matches = cells:new_grid()
+	matches = {}
 	return creating_missing_gems
 end
 
@@ -667,8 +741,8 @@ function applying_gravity()
 				below += gravity
 			end
 			if distance > 0 then
-				local flag = flags:get(p) or 0
-				flags:set(p, flag | (distance << 8))
+				deltas:set(p, distance * gravity)
+				flags:flag(p, flag_falling)
 			end
 		end
 	)
@@ -684,14 +758,14 @@ function animating_falling_gems()
 	clock += 1.0 / 16.0
 	if clock >= 1.0 then
 		local fell_gems = {}
-		flags:foreachpos(
-			function(p, flag)
-				if flag & flag_falling_mask != 0 then
-					local distance = (flag & flag_falling_mask) >> 8
-					local new_pos = p + (distance * gravity)
-					add(fell_gems, { gem = gems:get(p), pos = new_pos })
+		deltas:foreachpos(
+			function(p, delta)
+				if delta then
+					local new_p = p + delta
+					add(fell_gems, { gem = gems:get(p), pos = new_p })
 					gems:del(p)
 					flags:del(p)
+					deltas:del(p)
 				end
 			end
 		)
@@ -699,6 +773,7 @@ function animating_falling_gems()
 			function(fell_gem)
 				gems:set(fell_gem.pos, fell_gem.gem)
 				flags:del(fell_gem.pos)
+				deltas:del(fell_gem.pos)
 			end
 		)
 		return creating_missing_gems
@@ -736,7 +811,7 @@ function in_game:draw()
 	)
 	-- Draw the board
 	gfx_draw_cells(cells)
-	gfx_draw_gems(cells, gems, flags, clock, gravity)
+	gfx_draw_gems(cells, gems, deltas, flags, clock)
 	-- Update the cursor
 	local mx, my = mouse()
 	local cursor_pos = cells:pos(mx, my)
@@ -756,7 +831,7 @@ function in_game:draw()
 	end
 end
 :: src/logic.lua
---[[pod_format="raw",created="2024-08-24 08:12:55",modified="2024-08-28 11:11:23",revision=1874]]
+--[[pod_format="raw",created="2024-08-24 08:12:55",modified="2024-08-29 08:32:10",revision=2177]]
 --- Match-3 Logic
 
 local function random_gem()
@@ -1013,7 +1088,7 @@ function logic_find_matches(gems)
 	return matches, flags
 end
 :: src/sgrid.lua
---[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-08-28 11:11:23",revision=1935]]
+--[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-08-29 08:32:10",revision=2250]]
 --- Square Grids
 
 --- The origin of the grid, `pos(0, 0)`, is at the top left.
@@ -1040,6 +1115,9 @@ end
 function sgrid_new()
 	local grid = { is_square = true }
 	setmetatable(grid, { __index = metatable })
+	for i = 0, max_width * max_height do
+		grid[i] = false
+	end
 	return grid
 end
 
@@ -1054,10 +1132,11 @@ end
 function sgrid_new_cells(size)
 	local grid = sgrid_new()
 	local p = pos(0, 0)
+	local with_bad_cells = rnd() < 0.66
 	while p.x < size.x do
 		while p.y < size.y do
 			local cell = cell_good
-			if rnd() < 0.0000033 then
+			if with_bad_cells and rnd() < 0.50 then
 				cell = cell_bad
 			end
 			if rnd() < 0.03 then
@@ -1090,7 +1169,7 @@ end
 
 function metatable:get(p)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return nil
+		return false
 	end
 	return self[p.x + (p.y * max_width)]
 end
@@ -1098,7 +1177,7 @@ end
 
 function metatable:set(p, value)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return nil
+		return false
 	end
 	self[p.x + (p.y * max_width)] = value
 end
@@ -1106,7 +1185,7 @@ end
 
 function metatable:flag(p, flag)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return nil
+		return false
 	end
 	local index = p.x + (p.y * max_width)
 	if self[index] then
@@ -1119,7 +1198,7 @@ end
 
 function metatable:unflag(p, flag)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return nil
+		return false
 	end
 	local index = p.x + (p.y * max_width)
 	if self[index] then
@@ -1130,9 +1209,9 @@ end
 
 function metatable:del(p)
 	if p.x < 0 or p.y < 0 or p.x >= max_width or p.y >= max_height then
-		return nil
+		return false
 	end
-	self[p.x + (p.y * max_width)] = nil
+	self[p.x + (p.y * max_width)] = false
 end
 
 
@@ -1192,7 +1271,7 @@ end
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI0IDA3OjE3OjA5Iixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCJdXQ==
+OC0yOSAwODozMjoxMCJdXQ==
 :: debug.lua
 --[[pod_format="raw",created="2024-08-24 12:45:09",modified="2024-08-25 08:41:10",revision=71]]
 -- Detect uninitialized globals and typos
@@ -1344,7 +1423,7 @@ function set_drawspace(drawspace)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-08-28 11:11:23",revision=1997]]
+--[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-08-29 08:32:10",revision=2304]]
 include "drakma.lua"
 include "src/constants.lua"
 include "src/sgrid.lua"
@@ -1374,16 +1453,17 @@ function _draw()
 	cls(63)
 	rectfill(0, 0, 116, 269, 55)
 	state:draw()
+	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 1, 264, 7)
 end
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjQ1OjEzIixtb2RpZmllZD0iMjAyNC0w
-OC0yOCAxMToxMToyNCIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
-cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMjkiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249InNyYy9pbl9nYW1lLmx1YSM2MCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0i
-c3JjL2xvZ2ljLmx1YSM2OSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2dmeC5s
-dWEjODciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZ3JpZC5sdWEjMTE1Iix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvaGdyaWQubHVhIzEyNCIsd29ya3NwYWNl
-X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2NvbnN0YW50cy5sdWEjNzMiLHdvcmtzcGFjZV9pbmRl
+OC0yOSAwODozMjoxMCIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
+cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMzAiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9pbl9nYW1lLmx1YSM0NyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0i
+c3JjL2xvZ2ljLmx1YSMyMSIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2dmeC5s
+dWEjMTM3Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2dyaWQubHVhIzgxIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvaGdyaWQubHVhIzEzMSIsd29ya3NwYWNl
+X2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2NvbnN0YW50cy5sdWEjNzIiLHdvcmtzcGFjZV9pbmRl
 eD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0i
 bWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtz
 cGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1d
