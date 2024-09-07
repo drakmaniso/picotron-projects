@@ -4,11 +4,11 @@ version 2
 :: docs/
 :: docs/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI2IDE0OjAzOjI1Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyJdXQ==
+OS0wNyAxMDoxMjoxNSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIscmV2aXNpb249MzY4N11dbHo0AMMXAADYYgAA8xd7WzBdPXtibXA9cHh1
+OS0wNyAxMDoxMjoxNSIscmV2aXNpb249NDIxNl1dbHo0AHgeAAB8bAAA8xd7WzBdPXtibXA9cHh1
 AEMgHR0E8P---zwsZmxhZ3M9MCxwYW5feAgAy3k9MCx6b29tPTJ9LDQA8CQ1bPAEHGob8AAcugnA
 DNoJCKAMKh8qqgkIgAwqLqoZCHAMKh4cShw6CQgPNVAMSgwZDCoEAPAMGQhQDDoMOQwKDDkMGhkI
 DTAMSgxJDEkMGikICwAQqQkAgQ0gDFoMiQwqCgBVagxpDDoUACwaOQoAEDlNAMBJCA0wC1oMGQwK
@@ -109,16 +109,46 @@ DxY-FRMAAAQAcD8VDxMPFj8tABYoBAAQPwg4AiwACBYAHxUWAAgAQgAWKQQAAUIAHxUWAAIfFhYA
 CAhYAAZCAAwWAA8sAAkI3AAB8wAfFQoBATUQDxUtAa8g-xQODxNA-g0gfgEZkwUHBAAnAAcgFwIA
 TwcAJwBAAAscOEAAkRAHIBcQBwAHMAIALxBHPwAcAX8AQgcwByACAA8-ACU-EBdAvgAkETBAAK8A
 BwAHEAcARyAHQgAdb1cwN0AHMH0AIyAXEH0AETeBAQ9AACASRzcBAsIAHyA6ASECdwAOfwAPQgAb
-EDeCAD8QFxBAABn-AgcLBAA-KhBeAB4fOh4NHg0ABQADj14NAD4dED0AhRIZ8QAHCwQQHyowLg86
-ED4NIA3dBwUDAH8QXgBeDQBdUAAcB6sAQAAdAB6mCEEQLh0AAwAPUgA0nx4dIC5AHg0eEPUAKWBA
-Hg86IC5NAHAQLg0eAB4dTQBBXg0ALfwAL0AdUgAc6F8qAF4POh5NThBeEC0engAvAE2eAB7gLyog
-Pg86AC4tAB4dIE79AB8d5QErAp4AANwABfMABQYAECDuAB8glAEnAZgAPwA_HaYALwxVAHFeDQBO
-DRAdtQAASQFfLh0gLRBUAAwPlAceDzEA-_XQZhwE8Fj1UiAF9FIDEAUAMA86AAcAHw4GAGt8EPNS
-HiD_UjoDki0wLjQ3NjE5MAYAEzXaAKExLjg5Mjg1NzE0BgAC6AAfNBkBHg8xAP--------------
--------------------------0ZQbT02fX0=
+EDeCAD8QFxBAABn-AgcLBAA-KhBeAB4fOh4NHg0ABQADf14NAD4dED2bAAwsMTRcAMEQHyowLg86
+ED4NIA3eBwUDAH8QXgBeDQBdUQAdB60AQAAdAB6oCEEQLh0AAwAPUwA1nx4dIC5AHg0eEPgAKmBA
+Hg86IC5OAHAQLg0eAB4dTgBBXg0ALf8AL0AdUwAdwl8qAF4POh5NThBeEEQABaEALwBNoQAf4C8q
+ID4POgAuLQAeHSBOAQEfHewBLAKhAADgAAX3AAUGABAg8gAfIJoBKAGaAD8APh2oADAMVgBxXg0A
+Tg0QHbcAAE0BXy4dIC0QVQAa8QEKEAQQTyowbhCOAC4vOi4NFwsPBQAQr44NAG4dEE4dME1wAAwc
+OW8A-wMgLypQPg86ME4NIF4NMB0uDVADAAFAII4AjmUAH41eABwOzQDHAC0QLg1APg0wPh0gAwAf
+MGEAMQFcACBQLlwAcTA_DUBOUA0PAC8uICEBKYEQLypgLg86ULYAQUAuHUAJACEALioEBH4BAbwA
+EU1uAF9QLg1gLWQAHPUEjyoAjg86jg0ubS4NUG4gfhCOEE0AD74AK-EFIE8qMF4POhBuDQBOPQA_
+HTAuHUBhADMALi2_AAPDAA9iACUEvAAnAD0fAQ8JAAU-YC0wQgIuAQUAfwBuHQBuDQDHADcPaAAE
+oY4NAH4NEG4NIC3GAFAwTg0QXmEAbyA_HUA9IGQAGf4GXggEEP86SiAO-ztKDz0ADv87TA8_BgAw
+AA89IQBMPiD9SsMAsS0yMy4zMTkwNDc2BgADbgCSLTAuNzE0Mjg1BgAiNjh_AApZBNBmHATwWPVS
+IAX0UgMQBQAwDzoABwAfDgYAa3wQ81IeIP5SegVTMjYuNzXfAB8zlxoBAM8A77-0UiAE81IPOxAE
+81IOBQBbD7QAIbARDgQQDxavFTAPFvtEEiAHAFIQDxbfFQQNMRRfDjIMEjoTAIMPOk8VXw4-FRIA
+AhoAFxUmABIVFAAwAA8VSQAUHwkArw86IL8THzowvhA5DBlfEQ4E8AOfABETABIABJ0AEgCcABYA
+mwASAJoAEhCPABIgBwA-ML4gjwAcDy0BA0BPFT8OYEABkgBRHw4fFB90AAAjATN-FR8vAQAKACJP
+FRYAWV8UHw5fMQEmDxUUAA89AU0PrwAEFgCuABQArQAWAKwAA0IBFgCqAA9NASrBBAQEAB87AA4f
+Og89BQA-AB0AQAALHzEFECyhFwsE8AEfO4BOUHAA-ylQHk86LiAOHQ89QA6dDiAcQA69HjA_HVxt
+Ph08UAytDFAeIBx9DFAOHQwwHD0cYA4dDFA8kBzwAHMAHFIwHzvwBHEAIU5wCADwDiAuTzoeYB89
+IA6fOg4QLjAevQ4ADz0dPm1cHQ4AeQDwAiwQDH0cIB5wHD0cMA4dDIA8hQBP8AQcQCQRHg8xAP--
+mPBJKCgE-z8WAv4FAv4uBv4dAk4C7gL_FAb_Bgb_BwL_DQL_AwL_AgIGAo4G-gwCTgL_MAL_IgJe
+At4G-lEG-gECPgL_EgLuAo4CPgJuAgYC-hMSBg8yBhL_Ew0A8AMWAv4XAv4MAv4QAv4qAv5jBr5C
+ABAQGwCBBwLeAv4RAv4mAAIrABADTQD-AD0GTgL_IwLuAl4Cngb_JLMjGcIoKASvPwL_CgIOBu5W
+AGBuAj4G-gkTACE_AggAAOEAARoAEK4VAACaAEISAv43EwAgfgbuABEGAQEzzgIelQDAIgL_AQL_
+AwZeBv5QowARLrMAYAgC-h0G3l4AMEcGviYBEn4vAIEuAk4GLgL_HjkBEDF2AJIABv4gAv4uAi5g
+AGEGAv4OBm56AB8B3AAc4W8-Bv4xAo4GjgL_GQZ_sQEgVwaKADIIAl7CAACwABAUOQEFDwCwjgL_
+QQK_Av4TAr7BAUBVBv4LIwADHQFC-gUCfrYBQRYC-iDpABELmwAxDAJOAQKBWwb_IQY_Aj4YAOEF
+Av4SBv4PAv4LBm4Cng0AHyDDABwgjz9cABEuHgEQArYAcEQCfgaOAs5bAgKzABEIewFQ-jQC-gRp
+ACH_BLgBQQYC-hwSAAKxARAtRQFB-gIGrrMCQAIC-htPADG_Ar4qABAAqwAwBgLeTwBSBQKOAi6S
+AhIeeQIxrgJOSgAwFwJ_xAEQrgcBEB3hAQDaAHEFBv4lBv4G9gEQBAQBEAq0AR_u5gAcYP8-CwL_
+b2AAMSIGnpMAExZkAUECBv4e0QARMBYCEBJzAXDuAv4zBv6DqwEQBb0AASoAQa4C-k4QAGAMAq4G
+-idHAjN_Ar5GABA0iAIASQDPLAL_DgL_UQL_HwaOpAAeE2yhAjABAp5zAxgWvQMQAdoDMQYCvqwA
+EAuOAEFCBv4OMwMQAS8BQK4G-pGxACQMAnABIf4zGgRQDAL_OgYSABUWPwAQNq4AQb4C-lJjAk8t
+Av4uqwAeEBmJAQK3AUEiAv4GpQFQBQL_DwYIAVEdAm4CrtgDEDtnAFIRAj4CBmYEAMcAEDoUAAEi
+AhBuUAQQLisAEQLMABEtgAERDFYAERymAUEJAv4EIQMQBGQBMB4Czo8CAnMBUAwGzgKOdQMxRAJe
+UABPDQL_GsgAHkI3Bv4JPAMxEAK_QQMQBswDAWEDQQMG-lx0AwH1ASH_BR0FEAEnABMWhAAArQME
+DQAR3qgAEkbWA0AEAv4ygQEEkQESBAMEFQguAFH_HwL_JkcCECDEABACQwRPKwL_HsEADA_JBh4P
+MQD-------------------------------9RUG09Nn19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OS0wNyAxMDoxMjoxNSIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
@@ -129,7 +159,7 @@ AQBbFzb8ABMxDAAPAQBVBHwBAAABEzAMAA_AAVkTMXQAEzB4ABcxjAAPAAFVEzaEAAQMAC81MAEA
 b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OS0wNyAxMDoxMjoxNSIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: pal/
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wOC0y
@@ -156,29 +186,29 @@ c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
-c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA5LTA1IDA5
-OjE1OjI3Iixva3BhbF92ZXJzaW9uPSIxLjAuMyIscmV2aXNpb249MzQ3NCx0ZXN0X2N1YmVfY29s
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVkPSIyMDI0LTA5LTA3IDEw
+OjEyOjE1Iixva3BhbF92ZXJzaW9uPSIxLjAuMyIscmV2aXNpb249MzkyMSx0ZXN0X2N1YmVfY29s
 b3JzPXtbMF09ezE1LDMxLDR9LHszMSw0LDIwfSx7NCwyMCwyMX0sezEwLDksMjV9LHs5LDI1LDI0
 fSx7OCwyNCwyfSx7MjYsMTEsMjd9LHsxMSwyNywzfSx7MjcsMywxOX0sezI4LDE3LDE5fSx7Mjgs
 MTIsMTZ9LHsxMiwxNiwxfSx7NiwyOSwxM30sezI5LDEzLDE4fSx7MTMsMTgsMX0sezcsMjMsMTR9
 LHsyMywxNCwxM30sezE0LDMwLDE4fSx7Nyw2LDIyfSx7NiwyMiw1fSx7MjIsNSwyMX0sezEsMSwx
-fSx7MSwxLDF9LHsxLDEsMX19LHdoaXRlc3RfY29sb3I9N11dbHo0AOkBAAAVAgAA-wV1c2VyZGF0
-YSgiaTMyIiw2NCwiMAEABvAFODIzZjM4MDA5ODQ3M2YwMDlmNTEIACBhMwIAMTAwZgEA8G8wMDc0
-MWY2NTAwYTgyNTkyMDBlMjQ5YmEwMGVmODNjNTAwZjhiYmQ5MDA3NzJjMTYwMGEyMzIxOTAwZDU0
-ZjIxMDBmMzgyNTcwMGZjYmM5YzAwNjc0OTEzMDA5YzcxMWEwMGQ2YTIyNTAwZWRjNDU0MDBmYmUx
-OTkwMDJkNTMYAPAWMzE2ZTMyMDA1MGEzMmMwMDg3ZDQ1NjAwYmZmMjk1MDAxNjU4NQgA8Bw3Nzk3
-ZDAwMjBiNGIzMDA1Y2Q4ZDIwMGFjZjZmMDAwNDcyMjg2MDA1ZTI2IADQOGQzYmVkMDBhZTgxZrAA
-QDhjNGagABBlAgBAMDBiNwIAQDAwZTMCAEAwMGY0AgAAyAAAAgBAMDAxZAIAQDAwMmUCAEAwMDQ2
-AgBAMDA5YgIAQDAwYzECAOAwMDRmNGIzZTAwNzM2YeAA8BM5ZThmNzQwMGFhOWQ4NTAwYmViNWE0
-MDA1ODU5NWQwMDY4AgBRMDA2Zja5ABE3AQBQMDA4NjivAfEGMDNmMjcyYTAwNWIzNzM0MDA2NjQw
-YABQMDQ5NDQoACA1YxABgDQwMmM0ZCIp
+fSx7MSwxLDF9LHsxLDEsMX19LHdoaXRlc3RfY29sb3I9N11dbHo0APABAAAVAgAA-QV1c2VyZGF0
+YSgiaTMyIiw2NCwiMAEA8A00YzM2NWEwMDgyM2YzODAwOTg0NzNmMDA5ZjUxCACRNjQ0ODc3MDBm
+AQDwODAwNzQxZjY1MDBhODI1OTIwMGUyNDliYTAwZWY4M2M1MDBmOGJiZDkwMDc3MmMxNjAwYTIz
+MjE5MDBkNTRmMjEwMGYzODI1UADwJGNiYzljMDA2NzQ5MTMwMDljNzExYTAwZDZhMjI1MDBlZGM0
+NTQwMGZiZTE5OTAwMmQ1MxgA8BYzMTZlMzIwMDUwYTMyYzAwODdkNDU2MDBiZmYyOTUwMDE2NTg1
+CADwDTc3OTdkMDAyMGI0YjMwMDVjZDhkMjAwYWNmNmb4ALA3MjI4NjAwNWUyNiAA0DhkM2JlZDAw
+YWU4MWawAEA4YzRmoAAQZQIAQDAwYjcCAEAwMGUzAgBAMDBmNAIAAMgAAAIAQDAwMWQCAEAwMDJl
+AgBAMDA0NgIAQDAwOWICAEAwMGMxAgDgMDA0ZjRiM2UwMDczNmHgAPATOWU4Zjc0MDBhYTlkODUw
+MGJlYjVhNDAwNTg1OTVkMDA2OAIAUTAwNmY2uQARNwEAUDAwODY4rwHxBjAzZjI3MmEwMDViMzcz
+NDAwNjY0MGAAUDA0OTQ0KAAgNWMQAYA0MDJjNGQiKQ==
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjU0OjE5Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyJdXQ==
+OS0wNyAxMDoxMjoxNSJdXQ==
 :: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM1Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIscmV2aXNpb249MzQ0MF1dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
+OS0wNyAxMDoxMjoxNSIscmV2aXNpb249Mzg3NF1dbHo0ABoBAABSCAAA8CdweHUAAygAAAQABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUP
 Fg8XEwDxAQ8YDxkPGg8bDxwPHQ8eDx8UAPEAIA8hDyIPIw8kDyUPJg8nFADxACgPKQ8qDysPLA8t
 Dy4PLxQA8QAwDzEPMg8zDzQPNQ82DzcUAP8FOA85DzoPOw88Dz0PPg8-AA--8P8BAOv-J1oBEAYP
@@ -186,11 +216,11 @@ IBABIAEgAfAAAhACDBABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAAAh9EMAAc
 H0AwAPIf-wEA3L-4D0AADUD--7DwcAoA--9kH-8BAP_ZUP----8g
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
+OS0wNyAxMDoxMjoxNSIsc3RvcmVkPSIyMDI0LTAzLTMwIDA1OjM5OjM0Il1d
 :: src/
 :: src/logic/
 :: src/logic/creation.lua
---[[pod_format="raw",created="2024-08-30 06:25:09",modified="2024-09-02 06:18:54",revision=847]]
+--[[pod_format="raw",created="2024-08-30 06:25:09",modified="2024-09-07 08:00:48",revision=1087]]
 --- Board Creation Logic
 
 
@@ -535,7 +565,7 @@ function logic_find_matches(cells, gems)
 	return matches, marks
 end
 :: src/logic/mechanics.lua
---[[pod_format="raw",created="2024-08-30 06:41:59",modified="2024-09-05 09:15:27",revision=1212]]
+--[[pod_format="raw",created="2024-08-30 06:41:59",modified="2024-09-07 08:00:48",revision=1568]]
 --- Core Mechanics Logic
 
 
@@ -850,20 +880,23 @@ function logic_enact_move(cells, gems, marks)
 	marks:foreachpos(function(p, _) marks:del(p) end)
 end
 :: src/logic/spells.lua
---[[pod_format="raw",created="2024-08-30 06:37:36",modified="2024-08-31 13:18:07",revision=172]]
+--[[pod_format="raw",created="2024-08-30 06:37:36",modified="2024-09-07 08:00:48",revision=511]]
 --- Spell Logic
 
 
 function logic_gain_mana(stats, matches)
+	local gained = false
 	foreach(
 		matches,
 		function(match)
 			local count = #(match.positions)
 			if count > 3 then
 				stats.mana += 10 * (count - 3)
+				gained = true
 			end
 			if stats.in_cascade then
 				stats.mana += 5
+				gained = true
 			end
 			stats.in_cascade = true
 			if match.colour == gem_rainbow then
@@ -876,11 +909,12 @@ function logic_gain_mana(stats, matches)
 			end
 		end
 	)
+	return gained
 end
 
 :: src/logic/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTMwIDA2OjI0OjM5Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyJdXQ==
+OS0wNyAxMDoxMjoxNSJdXQ==
 :: src/constants.lua
 --[[pod_format="raw",created="2024-08-24 15:17:10",modified="2024-09-02 06:18:54",revision=2655]]
 --- Match3 Global Constants
@@ -957,7 +991,7 @@ cell_chest_night = 0xa0
 rock_mask = 0xf0
 
 :: src/gfx.lua
---[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-09-05 09:15:27",revision=3809]]
+--[[pod_format="raw",created="2024-08-24 12:06:13",modified="2024-09-07 10:12:15",revision=4325]]
 --- Graphics
 
 
@@ -1134,6 +1168,7 @@ end
 
 
 function gfx_draw_turns(ox, oy, turn, anim_turn)
+	spr(64, ox, oy)
 	local hundreds = (turn // 100) % 10
 	local tens = (turn // 10) % 10
 	local ones = turn % 10
@@ -1162,12 +1197,21 @@ function gfx_draw_turns(ox, oy, turn, anim_turn)
 end
 
 
-function gfx_draw_mana(ox, oy, mana)
+function gfx_draw_mana(ox, oy, mana, zoomed)
+	local base_char
+	local char_width
+	if zoomed then
+		base_char = 85
+		char_width = 11
+		oy -= 3
+	else
+		base_char = 75
+		char_width = 8
+	end
 	local thousands = (mana // 1000) % 10
 	local hundreds = (mana // 100) % 10
 	local tens = (mana // 10) % 10
 	local ones = mana % 10
-	local char_width = 8
 	local digits = 4
 	if mana < 10 then
 		digits = 1
@@ -1180,22 +1224,37 @@ function gfx_draw_mana(ox, oy, mana)
 	end
 	ox -= (digits * char_width) // 2
 	if mana >= 1000 then
-		spr(75 + thousands, ox, oy)
+		spr(base_char + thousands, ox, oy)
 		ox += char_width
 	end
 	if mana >= 100 then
-		spr(75 + hundreds, ox, oy)
+		spr(base_char + hundreds, ox, oy)
 		ox += char_width
 	end
 	if mana >= 10 then
-		spr(75 + tens, ox, oy)
+		spr(base_char + tens, ox, oy)
 		ox += char_width
 	end
-	spr(75 + ones, ox, oy)
+	spr(base_char + ones, ox, oy)
 end
 
+
+function gfx_draw_mana_bar(ox, oy, mana)
+	spr(95, ox, oy)
+	if mana == 0 then
+		return
+	end
+	local size = min(91, flr(0.5 + 91*(mana / 250)))
+	rectfill(ox+1, oy+2, ox+1+size, oy+5, 40)
+	line(ox+1+size, oy+2, ox+1+size, oy+5, 39)
+	line(ox+1, oy+2, ox+1, oy+5, 41)
+	if size > 1 then
+		line(ox+2, oy+1, ox+1+size-1, oy+1, 41)
+		line(ox+2, oy+6, ox+1+size-1, oy+6, 39)
+	end
+end
 :: src/hgrid.lua
---[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-09-05 07:02:51",revision=2513]]
+--[[pod_format="raw",created="2024-08-25 08:16:09",modified="2024-09-07 10:12:15",revision=2551]]
 --- Hex Grids
 
 --- Hex grids use the "double height" coordinate system:
@@ -1288,8 +1347,36 @@ end
 -- Screen Coordinates ---------------------------------------------------------
 
 
+function metatable:default_origin()
+	self.origin = { x = 116, y = 7 }
+end
+
+
+function metatable:compute_origin()
+	local min_p = pos(max_width, max_height)
+	local max_p = pos(0, 0)
+	self:foreachpos(
+		function(position, cell)
+			if not cell or cell == 0 then
+				return
+			end
+			if position.x < min_p.x then min_p.x = position.x end
+			if position.y < min_p.y then min_p.y = position.y end
+			if position.x > max_p.x then max_p.x = position.x end
+			if position.y > max_p.y then max_p.y = position.y end
+		end
+	)
+	local width = 1 + max_p.x - min_p.x
+	local height = 1 + max_p.y - min_p.y
+	self.origin = {
+		x = 110 + ((480 - 110) // 2) - ((width * 27) // 2) - (min_p.x * 27) - 4,
+		y = (270 // 2) - ((height * 16) // 2) - (min_p.y * 16) - 8,
+	}
+end
+
+
 function metatable:coords_origin()
-	return 116, 7
+	return self.origin.x, self.origin.y
 end
 
 
@@ -1371,7 +1458,7 @@ function metatable:blast_radius(p)
 end
 
 :: src/in_editor.lua
---[[pod_format="raw",created="2024-08-30 08:13:35",modified="2024-09-04 20:32:33",revision=432]]
+--[[pod_format="raw",created="2024-08-30 08:13:35",modified="2024-09-07 10:12:15",revision=796]]
 in_editor = {}
 
 local tiling = "square"
@@ -1417,6 +1504,8 @@ function in_editor:enter()
 		cells = logic_new_test_cells(tiling, true)
 		gems = cells:new_grid()
 	end
+	cells:default_origin()
+	gems:default_origin()
 	marks = cells:new_grid()
 end
 
@@ -1523,7 +1612,7 @@ function in_editor:draw()
 	rect(ox + x * sx - 1, oy + y * sy - 1, ox + x * sx + 29, oy + y * sy + 29, 7)
 end
 :: src/in_game.lua
---[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-09-05 09:15:27",revision=2856]]
+--[[pod_format="raw",created="2024-08-27 17:11:11",modified="2024-09-07 10:12:15",revision=3506]]
 in_game = {}
 
 
@@ -1562,6 +1651,8 @@ local starting_stats = {
 }
 local stats = deep_copy(starting_stats)
 local anim_turn = 0
+local displayed_mana = 0
+local star_seed = 37
 
 
 -----------------------------------------------------------------------
@@ -1572,12 +1663,16 @@ local anim_turn = 0
 
 
 function creating_the_board()
-	cells = logic_new_test_cells(tiling)
-	gems = cells:new_grid()
+--	cells = logic_new_test_cells(tiling)
+--	gems = cells:new_grid()
+	cells:compute_origin()
+	gems.origin = cells.origin
 	marks = cells:new_grid()
 	matches = {}
 	stats = deep_copy(starting_stats)
-	displayed_turn = 0
+	anim_turn = 0
+	displayed_mana = 0
+	star_seed = math.random(37, 6584587)
 	return creating_missing_gems
 end
 
@@ -1720,7 +1815,7 @@ end
 function checking_matches()
 	matches, marks = logic_find_matches(cells, gems)
 	if #matches > 0 then
-		logic_gain_mana(stats, matches)
+		local _ = logic_gain_mana(stats, matches)
 		return clearing_gems
 	end
 	return creating_missing_gems
@@ -1814,7 +1909,7 @@ function in_game:load_from_editor(ed_tiling, ed_cells, ed_gems)
 	marks = cells:new_grid()
 	matches = {}
 	stats = deep_copy(starting_stats)
-	substate = creating_missing_gems
+	substate = creating_the_board
 end
 
 
@@ -1842,6 +1937,11 @@ function in_game:update()
 	if anim_turn > 0 then
 		anim_turn -= 1
 	end
+	if displayed_mana < stats.mana then
+		displayed_mana += 0.50
+	elseif displayed_mana >= stats.mana then
+		displayed_mana = stats.mana
+	end
 	if editor_requested then
 		return in_editor
 	end
@@ -1850,9 +1950,16 @@ end
 
 
 function in_game:draw()
-	cls(63)
 	if not cells then
 		return
+	end
+	-- Starry background
+	local hash = star_seed
+	for x = 0, 9 do
+		for y = 0, 6 do
+			hash = hash~(hash << 13); hash = hash~(hash >> 17); hash = hash~(hash << 5)
+			spr(120 + (hash%8), 110 + x * 40, 0 + y * 40, (x+y)%2 == 0, (x*y)%2== 0)
+		end
 	end
 	-- Draw the board
 	gfx_draw_cells(cells)
@@ -1865,12 +1972,17 @@ function in_game:draw()
 	line(110, 0, 110, 269, 58)
 	line(0, 49, 110, 49, 58)
 	line(0, 269, 110, 269, 58)
-	-- Display match counts
-	spr(64, 34, 2)
-	gfx_draw_turns(34, 2, stats.turn, anim_turn)
-	gfx_draw_mana(53, 60, stats.mana)
---	cursor(44, 60, 7)
---	print(tostr(stats.mana))
+	-- Top bar
+	spr(102, 6, 10)
+	spr(98, 14, 5)
+	gfx_draw_turns(37, 2, stats.turn, anim_turn)
+	spr(100, 79, 5)
+	spr(102, 101, 10)
+	-- Mana
+	spr(104, 16, 56)
+	gfx_draw_mana(56, 56, flr(displayed_mana), displayed_mana < stats.mana)
+	spr(105, 71, 56)
+	gfx_draw_mana_bar(8, 71, flr(displayed_mana))
 	for i = 0, 5 do
 		spr(96, 4, 84 + i * 30)
 	end
@@ -1890,7 +2002,8 @@ function in_game:draw()
 	-- Update the cursor
 	local mx, my = mouse()
 	local cursor_pos = cells:pos(mx, my)
-	if cells:get(cursor_pos) then
+	local cell = cells:get(cursor_pos)
+	if cell and cell != 0 then
 		window { cursor = "grab" }
 	else
 		window { cursor = "" }
@@ -1901,7 +2014,7 @@ function in_game:draw()
 	end
 end
 :: src/sgrid.lua
---[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-09-05 07:02:51",revision=3059]]
+--[[pod_format="raw",created="2024-08-24 07:17:45",modified="2024-09-07 10:12:15",revision=3169]]
 --- Square Grids
 
 --- The origin of the grid, `pos(0, 0)`, is at the top left.
@@ -1926,7 +2039,10 @@ end
 
 
 function sgrid_new()
-	local grid = { is_square = true }
+	local grid = {
+		is_square = true,
+	}
+	metatable.default_origin(grid)
 	setmetatable(grid, { __index = metatable })
 	for i = 0, max_width * max_height do
 		grid[i] = false
@@ -1983,11 +2099,44 @@ function metatable:del(p)
 end
 
 
+function metatable:distance(p0, p1)
+	return abs(p0.x - p1.x) + abs(p0.y - p1.y)
+end
+
+
 -- Screen Coordinates ---------------------------------------------------------
 
 
+function metatable:default_origin()
+	self.origin = { x = 121, y = 4 }
+end
+
+
+function metatable:compute_origin()
+	local min_p = pos(max_width, max_height)
+	local max_p = pos(0, 0)
+	self:foreachpos(
+		function(position, cell)
+			if not cell or cell == 0 then
+				return
+			end
+			if position.x < min_p.x then min_p.x = position.x end
+			if position.y < min_p.y then min_p.y = position.y end
+			if position.x > max_p.x then max_p.x = position.x end
+			if position.y > max_p.y then max_p.y = position.y end
+		end
+	)
+	local width = 1 + max_p.x - min_p.x
+	local height = 1 + max_p.y - min_p.y
+	self.origin = {
+		x = 110 + ((480 - 110) // 2) - ((width * 29) // 2) - (min_p.x * 29),
+		y = (270 // 2) - ((height * 29) // 2) - (min_p.y * 29),
+	}
+end
+
+
 function metatable:coords_origin()
-	return 121, 4
+	return self.origin.x, self.origin.y
 end
 
 
@@ -2006,11 +2155,6 @@ end
 function metatable:pos(x, y)
 	local ox, oy = self:coords_origin()
 	return pos((x - ox) // 29, (y - oy) // 29)
-end
-
-
-function metatable:distance(p0, p1)
-	return abs(p0.x - p1.x) + abs(p0.y - p1.y)
 end
 
 
@@ -2057,7 +2201,7 @@ end
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTI0IDA3OjE3OjA5Iixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyJdXQ==
+OS0wNyAxMDoxMjoxNSJdXQ==
 :: debug.lua
 --[[pod_format="raw",created="2024-08-24 12:45:09",modified="2024-09-01 05:15:15",revision=75]]
 -- Detect uninitialized globals and typos
@@ -2225,7 +2369,7 @@ function set_drawspace(drawspace)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-09-05 09:15:27",revision=3849]]
+--[[pod_format="raw",created="2024-03-30 05:39:34",modified="2024-09-07 10:12:15",revision=4290]]
 include "drakma.lua"
 include "src/constants.lua"
 include "src/sgrid.lua"
@@ -2268,11 +2412,13 @@ function _draw()
 end
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA4LTIzIDE4OjQ1OjEzIixtb2RpZmllZD0iMjAyNC0w
-OS0wNSAwOToxNToyNyIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
+OS0wNyAxMDoxMjoxNSIscnVudGltZT0xMCxzdG9yZWQ9IjIwMjQtMDMtMzAgMDY6NTQ6MjQiLHdv
 cmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEjMzkiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249InNyYy9pbl9nYW1lLmx1YSMzNDUiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
-InNyYy9nZngubHVhIzIwNCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL2xvZ2lj
-L21lY2hhbmljcy5sdWEjMjI2Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5n
-ZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNlX2lu
-ZGV4PTR9LHtsb2NhdGlvbj0icGFsLzAucGFsIix3b3Jrc3BhY2VfaW5kZXg9N319XV0=
+YXRpb249InNyYy9pbl9nYW1lLmx1YSMzNjkiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
+InNyYy9pbl9lZGl0b3IubHVhIzQ4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMv
+Z2Z4Lmx1YSMxNzciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9zZ3JpZC5sdWEj
+MTI0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvaGdyaWQubHVhIzExOSIsd29y
+a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0s
+e2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249InBhbC8w
+LnBhbCIsd29ya3NwYWNlX2luZGV4PTd9fV1d
 :: [eoc]
