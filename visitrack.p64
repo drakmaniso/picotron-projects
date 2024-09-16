@@ -8,7 +8,7 @@ version 2
 :: pal/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIscmV2aXNpb249OTI3OV1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
+NS0wMyAxNDowMTo0MSIscmV2aXNpb249OTUxMl1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -40,16 +40,16 @@ BD0cNoYH-wBXAGcwBwA3ADcABzBnAFfKCA0P8gQfDzIA--------------------------------
 -----------------11QPTEwfX0=
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIscmV2aXNpb249ODk0MF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+NS0wMyAxNDowMTo0MSIscmV2aXNpb249OTE3MV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
@@ -67,7 +67,7 @@ ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
 LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
 bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
 LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxtb2RpZmllZD0iMjAy
-NC0wNC0yMiAxMjozMTo1NSIsb2twYWxfdmVyc2lvbj0iMC4wLjQiLHJldmlzaW9uPTEzMjQsdGVz
+NC0wNS0wMSAxMDoxODo1NiIsb2twYWxfdmVyc2lvbj0iMC4wLjQiLHJldmlzaW9uPTEzNTAsdGVz
 dF9jdWJlX2NvbG9ycz17WzBdPXsxNSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1
 fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwx
 NywxOX0sezI4LDEyLDE2fSx7MTIsMTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9
@@ -81,39 +81,83 @@ oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
 MwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
+NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDE5OjMzOjQyIixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIscmV2aXNpb249NDQ3XV1sejQAwAEAAP8IAADwJ3B4dQADKAAAAwAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAA8AANDxEPEg8TDxQPFQ8W
-DxcTAPEBDxgPGQ8aDxsPHA8dDx4PHxQA8QAgDyEPIg8jDyQPJQ8mDycUAPEAKA8pDyoPKw8sDy0P
-Lg8vFADxADAPMQ8yDzMPNA81DzYPNxQA-wU4DzkPOg87DzwPPQ8_Dz8AD--w-wEA6-AjWgEQBg8g
-EAEgASAB8AACEAIMEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkxABgaMQAwDxUAMwD2
-AhARMA8nkA8RAiAMUAEgAeASTAAz4A8TFgD-HfBiDzoPZDAPHw--wAEQDxQPHQYQAQkADzUfOgAu
-UAEACgAPDGAPSQAPePCSdwA6Hw52AAIfHnUADxgMdAB1EAEgHyUAERwB-w-AAhAGCSAP6Q-PD6oP
-jw9-D28PWg9PDg8lDw8K8KVMAA4OaAEPMAD--wkf-wEAzPAP6A9AAA0ABCAPJA8mDyj--y0PDAIP
-A---LSzzLfBwHQBvQPOw8HAFCAD-3B--AQCXUP----8f
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA1LTAxIDA2OjU1OjQ4Iixtb2RpZmllZD0iMjAyNC0w
+NS0wMyAxNDowMTo0MSIscmV2aXNpb249MTM0XV1sejQAqQAAAJIXAAD-LHB4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDwAP--D-AQDr-yfSARAGDyAQ
+ASABIAHwAAIQAgwQASAPISABMA9A8MMPKA--8MYP_AoP-w_AD-cPDQHwCQEQBgwwAP------vR--
+AQCsv8gPQAANQP--sPBwCgD-------------------_EUP_w8P85
 :: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTI1IDExOjI3OjQ5Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIscmV2aXNpb249NTRdXWx6NAA6AQAAXQgAAPAncHh1AAMoAAADAAQPQBAC
-DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PEADwAA0PEQ8SDxMPFA8VDxYP
-FxMA8QEPGA8ZDxoPGw8cDx0PHg8fFADxACAPIQ8iDyMPJA8lDyYPJxQA8QAoDykPKg8rDywPLQ8u
-Dy8UAPEAMA8xDzIPMw80DzUPNg83FAD-BTgPOQ86DzsPPA89Dz4PPwAP--D-AQDr8BVaARAGDyAQ
-ASABIAHwAAIQAg0QASAPISABMA-qkA8hAiAOUAIgADkwDqAdAELpkA8jHQD8CiEQAfBoDygP--DG
-D-gKD-8PgA-3Dw0B8AlaABQMPQA-DvDDMAAEHwwvAP--fB--AQDMoOgOAA1A--_w8HAJAB-zCAD-
-4B--AQCXUP----8f
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA1LTAzIDEwOjQ4OjM0Iixtb2RpZmllZD0iMjAyNC0w
+NS0wMyAxNDowMTo0MSIscmV2aXNpb249NzddXWx6NAC-AAAAmhcAAP8scHh1AAMoAAAEAAQPQBAC
+DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PAA--8P8BAOvwCNIBEAYPIBAB
+IAEgAfAAAhACDBABIA8hDQD-FAggD7Dwsw8oD--AAvAHAfCgD-gKD-8PgA-3Dw0B8AkBEAYMOAAA
+UDAPQPDDNQAv8MYwAP------nx--AQCsv8gPQAANQP--sPBwCgD-------------------_EUP_w
+8P85
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
+NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: src/ui/
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDExOjQ2OjM0Iixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiJdXWx6NAAEAAAAAwAAADBuaWw=
+NS0wMyAxNDowMTo0MSJdXWx6NAAEAAAAAwAAADBuaWw=
+:: src/ui/checkbox.lua
+--[[pod_format="raw",created="2024-05-03 10:50:08",modified="2024-05-03 11:13:38",revision=37]]
+local head = require "src/ui/head"
+
+
+local checkbox = {}
+
+
+function checkbox.create(el)
+	el.width = 9 + (4 * #el.label or "")
+	el.height = 7
+	el.cursor = "pointer"
+	head.head():new(el)
+	if (not el.visible) el.visible = function() return true end
+	function el:draw()
+		if (not self:visible()) return
+		rect(0, 0, 6, 6,  el.ckeck_border or 59)
+--		rectfill(1, 1, 5, 5, el.check_bg or 61)
+		if self.get() then
+			rectfill(2, 2, 4, 4, el.check_fg or 17)
+		end
+		print(el.label, 10, 1, el.fg or 5)
+	end
+	function el:tap()
+		if (not self:visible()) return
+		self.set(not self.get())
+	end
+	return el
+end
+
+
+return checkbox
+:: src/ui/head.lua
+--[[pod_format="raw",created="2024-05-03 11:05:48",modified="2024-05-03 11:10:12",revision=16]]
+local head = {}
+
+
+local head_el = false
+
+
+function head.create()
+	head_el = create_gui()
+end
+
+
+function head.head()
+	return head_el
+end
+
+
+return head
 :: src/ui/knob.lua
---[[pod_format="raw",created="2024-04-22 11:46:43",modified="2024-04-25 12:20:00",revision=358]]
-local app = require "src/app"
+--[[pod_format="raw",created="2024-04-22 11:46:43",modified="2024-05-03 11:11:12",revision=364]]
+local head = require "src/ui/head"
 local mouse = require "src/ui/mouse"
 
 
@@ -133,7 +177,7 @@ function knob.create(el)
 		el.sprite = 56
 	end
 	el.cursor = get_spr(50)
-	app.gui:new(el)
+	head.head():new(el)
 	
 
 	function el:draw()
@@ -277,89 +321,42 @@ end
 
 
 return knob
-:: src/ui/mouse.lua
---[[pod_format="raw",created="2024-04-25 12:13:32",modified="2024-04-25 12:20:56",revision=21]]
-local settings = require "src/settings"
+:: src/ui/label.lua
+--[[pod_format="raw",created="2024-05-03 10:58:09",modified="2024-05-03 11:11:44",revision=11]]
+local head = require "src/ui/head"
+
+local label = {}
 
 
-local mouse = {}
-
-
-function mouse.lock(sensitivity, precise)
-	local s = settings.user.drag_sensitivity
-	if precise or key("shift") then
-		s = settings.user.drag_sensitivity_precise
+function label.create(el)
+	el.width = 4 * #el.label + 4
+	el.height = 5
+	head.head():new(el)
+	function el:draw()
+		print(el.label, 0, 0, el.fg or 5)
 	end
-	s *= sensitivity or 1
-	local dx, dy = mouselock(0x4|0x8, s, 0.0)
-	if settings.user.drag_horizontal then
-		return -dx
-	end
-	return dy
+	return el
 end
 
 
-function mouse.unlock()
-	mouselock(false)
-end
+return label
+:: src/ui/menu.lua
+--[[pod_format="raw",created="2024-04-30 07:13:12",modified="2024-05-03 11:12:34",revision=113]]
+local head = require "src/ui/head"
 
 
-return mouse
-:: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-04-26 20:52:16",revision=6620]]
-local app = {}
-
-
--- Global state
-
-app.pattern = 0 -- opened in pattern editor
-app.track = 0 -- opened in track editor
-app.instrument = 0 -- opened in instrument editor
-
-app.node = 0 -- selected in instrument editor
-
-app.base_note = 48
-app.base_volume = 0x32
-app.base_instrument = 00
-
--- Colors -----------------------------------------------------------------
-
-app.editor_bg = 62
-
-
--- Layout -------------------------------------------------------------------
-
-app.ruler_height = 9
-app.channels_width = 16
-app.detail_width = 56
-app.cell_width = 20
-app.cell_height = 29
-
-app.synth_width = 83
-app.synth_height = 72
-app.synth_gap = 5
-app.mod_width = 57
-app.mod_height = app.synth_height
-
--- GUI -------------------------------------------------------------------------
-
-app.refresh_gui = true
-app.gui = nil
-
-app.view = "inst" -- "patt" or "trak" or "inst" or "song"
-app.detail = false
-app.env_advanced = { [0] = false, false, false, false }
+local menu = {}
 
 
 local popup = false
 
 
-function app.attach_menu_button(parent, el)
+function menu.create_button(el)
 	local label = el.get_label()
 	el.width = (4 * #label) + 12
 	el.height = 9
 	el.cursor = "pointer"
-	parent:attach(el)
+	head.head():new(el)
 	el.opened = false
 	function el:draw()
 		if self.bg then
@@ -373,7 +370,7 @@ function app.attach_menu_button(parent, el)
 	end
 	function el:tap()
 		self.opened = true
-		app.open_menu {
+		menu.open {
 			x = self.sx, y = self.sy + 9,
 			highlight = self.highlight,
 			onclose = function()
@@ -388,7 +385,7 @@ function app.attach_menu_button(parent, el)
 end
 
 
-function app.open_menu(menu)
+function menu.open(menu)
 	for i = 1, #menu.items do
 		if menu.items[i].get_label then
 			menu.items[i].label = menu.items[i].get_label()
@@ -407,14 +404,14 @@ function app.open_menu(menu)
 	if not menu.height then
 		menu.height = max(12, 4 + (#menu.items * entry_height))
 	end
-	if menu.y + menu.height > app.gui.height then
+	if menu.y + menu.height > head.head().height then
 		menu.y = menu.y - 7 - menu.height
 	end
 
 	-- Modal layer	
-	popup = app.gui:attach {
+	popup = head.head():attach {
 		x = 0, y = 0,
-		width = app.gui.width, height = app.gui.height,
+		width = head.head().width, height = head.head().height,
 		draw = function(self)
 			local ox, oy = menu.x, menu.y
 			rectfill(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.bg or 7)
@@ -446,14 +443,14 @@ function app.open_menu(menu)
 				self.highlighted = 1 + ((my - oy - 4) \ entry_height)
 			else
 				self.cursor = "pointer"
-				self.highlighted = nil
+				self.highlighted = false
 			end
 		end,
 		click = function(self)
 			if popup then
 				popup:detach()
 			end
-			popup = nil
+			popup = false
 			if self.highlighted and menu.items[self.highlighted]
 				and menu.items[self.highlighted].action
 			then
@@ -465,16 +462,27 @@ function app.open_menu(menu)
 end
 
 
------------------------------------------------------------------------------
+function menu.has_menu()
+	return popup != false
+end
 
 
-local modal = false
+return menu
+:: src/ui/modal.lua
+--[[pod_format="raw",created="2024-04-30 07:41:00",modified="2024-05-03 11:13:08",revision=77]]
+local head = require "src/ui/head"
 
 
-function app.open_modal(el)
-	modal = app.gui:attach {
+local modal = {}
+
+
+local layer = false
+
+
+function modal.open(el)
+	layer = head.head():attach {
 		x = 0, y = 0,
-		width = app.gui.width, height = app.gui.height,
+		width = head.head().width, height = head.head().height,
 		draw = function(self)
 			poke(0x550b, 0x3f)
 			---fillp(0b0101101001011010)
@@ -486,60 +494,68 @@ function app.open_modal(el)
 			poke(0x550b, 0x00)
 		end,
 		click = function(self)
-			app.close_modal()
+			modal.close()
 		end
 	}
-	modal:attach(el)
+	layer:attach(el)
 	return el
 end
 
 
-function app.has_modal()
-	return modal or popup
+function modal.has_modal()
+	return layer
 end
 
 
-function app.close_modal()
-	if modal then
-		modal:detach()
+function modal.close()
+	if layer then
+		layer:detach()
 	end
-	modal = false
+	layer = false
 end
 
 
--- Checkbox -------------------------------------------------------------------
+return modal
+:: src/ui/mouse.lua
+--[[pod_format="raw",created="2024-04-25 12:13:32",modified="2024-05-03 11:13:38",revision=25]]
+local settings = require "src/settings"
 
 
-function app.attach_checkbox(parent, el)
-	el.width = 9 + (4 * #el.label or "")
-	el.height = 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	if (not el.visible) el.visible = function() return true end
-	function el:draw()
-		if (not self:visible()) return
-		rect(0, 0, 6, 6,  el.ckeck_border or 59)
---		rectfill(1, 1, 5, 5, el.check_bg or 61)
-		if self.get() then
-			rectfill(2, 2, 4, 4, el.check_fg or 17)
-		end
-		print(el.label, 10, 1, el.fg or 5)
+local mouse = {}
+
+
+function mouse.lock(sensitivity, precise)
+	local s = settings.user.drag_sensitivity
+	if precise or key("shift") then
+		s = settings.user.drag_sensitivity_precise
 	end
-	function el:tap()
-		if (not self:visible()) return
-		self.set(not self.get())
+	s *= sensitivity or 1
+	local dx, dy = mouselock(0x4|0x8, s, 0.0)
+	if settings.user.drag_horizontal then
+		return -dx
 	end
-	return el
+	return dy
 end
 
 
--- Numeric field ---------------------------------------------------------------
+function mouse.unlock()
+	mouselock(false)
+end
 
 
-function app.attach_num_field(parent, el)
-	el.width = el.width or parent.width - el.x
+return mouse
+:: src/ui/num_field.lua
+--[[pod_format="raw",created="2024-04-30 06:55:37",modified="2024-05-03 11:13:38",revision=30]]
+local head = require "src/ui/head"
+
+
+local num_field = {}
+
+
+function num_field.create(el)
+	el.width = el.width or 62
 	el.height = 12
-	parent:attach(el)
+	head.head():new(el)
 	if (not el.visible) el.visible = function() return true end
 	el.dragged = nil
 	function el:draw()
@@ -591,26 +607,56 @@ function app.attach_num_field(parent, el)
 end
 
 
---------------------------------------------
+return num_field
+:: src/app.lua
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-05-03 14:01:41",revision=6884]]
+local app = {}
 
+-- Global state
 
-function app.attach_label(parent, el)
-	el.width = 4 * #el.label + 4
-	el.height = 5
-	parent:attach(el)
-	function el:draw()
-		print(el.label, 0, 0, el.fg or 5)
-	end
-	return el
-end
+app.pattern = 0 -- opened in pattern editor
+app.track = 0 -- opened in track editor
+app.instrument = 0 -- opened in instrument editor
 
+app.node = 0 -- selected in instrument editor
+
+app.base_note = 48
+app.base_volume = 0x32
+app.base_instrument = 00
+
+-- UI state --------------------------------------------------------------------
+
+app.refresh_gui = true
+
+app.view = "inst" -- "patt" or "trak" or "inst" or "song"
+app.detail = false
+app.env_advanced = { [0] = false, false, false, false }
+
+-- Colors -----------------------------------------------------------------
+
+app.editor_bg = 62
+
+-- Layout constants ----------------------------------------------------------
+
+app.ruler_height = 9
+app.channels_width = 16
+app.detail_width = 56
+app.cell_width = 20
+app.cell_height = 29
+
+app.synth_width = 83
+app.synth_height = 72
+app.synth_gap = 5
+app.mod_width = 57
+app.mod_height = app.synth_height
 
 return app
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-17 17:04:34",revision=1110]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-30 07:08:16",revision=1128]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 
 
 local detail = {}
@@ -716,39 +762,30 @@ function detail.attach_section_track(parent, el)
 	el.width = parent.width - el.x
 	el.height = 48 -- TODO
 	parent:attach(el)
-	app.attach_num_field(
-		el,
-		{
+	el:attach(ui.create_num_field {
 			x = 0, y = 12,
 			label = "speed:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_speed(detail.track()) end,
 			set = function(v) sfx.set_track_speed(detail.track(), v) end,
-		}
-	)
-	el.loop0_field = app.attach_num_field(
-		el,
-		{
+	})
+	el.loop0_field = el:attach(ui.create_num_field {
 			x = 0, y = 22,
 			label = "length:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_loop0(detail.track()) end,
 			set = function(v) sfx.set_track_loop0(detail.track(), v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 32,
 			label = "loop end:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_loop1(detail.track()) end,
 			set = function(v) sfx.set_track_loop1(detail.track(), v) end,
-		}
-	)
+	})
 	
 	function el:draw()
 		local track = detail.track()
@@ -777,72 +814,54 @@ function detail.attach_section_note(parent, el)
 	el.width = parent.width - el.x
 	el.height = 70 -- TODO
 	parent:attach(el)
-	app.attach_num_field(
-		el,
-		{
+	el:attach(ui.create_num_field {
 			x = 0, y = 12,
 			label = "pitch:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_pitch(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_pitch(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 22,
 			label = "volume:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_volume(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_volume(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 32,
 			label = "inst:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_instrument(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_instrument(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 42,
 			label = "fx:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_fx(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_fx(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 52,
 			label = "param1:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_fx_param0(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_fx_param0(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
-	app.attach_num_field(
-		el,
-		{
+	})
+	el:attach(ui.create_num_field {
 			x = 0, y = 62,
 			label = "param2:",
 			label_fg = 22, field_fg = 22, field_bg = 62,
 			visible = function() return note_grid.selection != nil end,
 			get = function() return sfx.track_fx_param1(detail.track(), note_grid.selection.step) end,
 			set = function(v) sfx.set_track_fx_param1(detail.track(), note_grid.selection.step, v) end,
-		}
-	)
+	})
 		
 	function el:draw()
 		local track = app.track
@@ -863,7 +882,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-04-25 12:20:00",revision=4669]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-05-03 14:01:41",revision=4720]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -1005,7 +1024,7 @@ function ed_inst.attach(parent, el)
 	
 	function el:update()
 		-- Keys
-		if (app.has_modal()) return
+		if (ui.has_modal_or_menu()) return
 		local pitch_key = nil
 		for i = 1, #settings.keys.pitched do
 			local offset = settings.keys.pitched[i].offset
@@ -1104,7 +1123,9 @@ function ed_inst.attach_instr_chooser(parent, el)
 			app.instrument = msg.my \ 8
 			app.base_instrument = app.instrument -- TODO: temporary, remove
 			routing.clear_placement_buttons()
-			app.node = 0
+			if app.node then
+				app.node = 0
+			end
 			app.refresh_gui = true
 			return true
 		end
@@ -1299,7 +1320,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-04-23 11:34:51",revision=2631]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-05-03 10:56:48",revision=2668]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local ui = require "src/ui"
@@ -1332,7 +1353,7 @@ function envelopes.attach_panel(parent, el)
 	el.height = app.mod_height
 	parent:attach(el)
 
-	app.attach_menu_button(el, {
+	el:attach(ui.create_menu_button {
 		x = 2, y = 0, 
 		env_id = el.env_id,
 		get_label = function()
@@ -1386,97 +1407,77 @@ function envelopes.attach_panel(parent, el)
 
 		else
 			-- Custom -------------------------------------
-			app.attach_checkbox(
-				el,
-				{
-					x = 4, y = 12,
-					label = "lerp",
-					check_fg = 18,
-					get = function() return
-						(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
-					end,
-					set = function(v)
-						local flags = sfx.env_flags(app.instrument, el.env_id)
-						sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
-					end,
-				}
-			)
+			el:attach(ui.create_checkbox {
+				x = 4, y = 12,
+				label = "lerp",
+				check_fg = 18,
+				get = function() return
+					(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
+				end,
+				set = function(v)
+					local flags = sfx.env_flags(app.instrument, el.env_id)
+					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
+				end,
+			})
 			envelopes.attach_custom_editor(el, { x = 4, y = 20 })
-			app.attach_num_field(
-				el,
-				{
-					x = 4, y = 63,
-					width = 56,
-					label = "speed:",
-					field_fg = 29,
-					visible = function() return true end,
-					get = function() return sfx.env_speed(app.instrument, el.env_id) end,
-					set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
-				}
-			)
+			el:attach(ui.create_num_field {
+				x = 4, y = 63,
+				width = 56,
+				label = "speed:",
+				field_fg = 29,
+				visible = function() return true end,
+				get = function() return sfx.env_speed(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
+			})
 		end
 	end
 	
 	if el.large or app.env_advanced[el.env_id] then
-		app.attach_checkbox(
-			el,
-			{
-				x = el.width - app.mod_width + 4, y = 12,
-				label = "loop",
-				check_fg = 18,
-				visible = function() return sfx.env_type(app.instrument, el.env_id) != 2 end,
-				get = function() return
-					(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
-				end,
-				set = function(v)
-					local flags = sfx.env_flags(app.instrument, el.env_id)
-					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
-				end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
-				x = el.width - app.mod_width + 0, y = 22,
-				label = "speed:",
-				field_fg = 29,
-				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function() return sfx.env_speed(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
-				x = el.width - app.mod_width + 0, y = 32,
-				label = "start:",
-				field_fg = 28,
-				onclick = function() if (not el.large) visual.open_custom_envelope(el.env_id) end,
-				onrelease = function() if (not el.large) visual.close() end,
-				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function() return sfx.env_start(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
-			}
-		)
-		app.attach_checkbox(
-			el,
-			{
-				x = el.width - app.mod_width + 4, y = 42,
-				label = "rnd start",
-				check_fg = 18,
-				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function() return
-					(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
-				end,
-				set = function(v)
-					local flags = sfx.env_flags(app.instrument, el.env_id)
-					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
-				end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
+		el:attach(ui.create_checkbox {
+			x = el.width - app.mod_width + 4, y = 12,
+			label = "loop",
+			check_fg = 18,
+			visible = function() return sfx.env_type(app.instrument, el.env_id) != 2 end,
+			get = function() return
+				(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
+			end,
+			set = function(v)
+				local flags = sfx.env_flags(app.instrument, el.env_id)
+				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
+			end,
+		})
+		el:attach(ui.create_num_field {
+			x = el.width - app.mod_width + 0, y = 22,
+			label = "speed:",
+			field_fg = 29,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return sfx.env_speed(app.instrument, el.env_id) end,
+			set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
+		})
+		el:attach(ui.create_num_field {
+			x = el.width - app.mod_width + 0, y = 32,
+			label = "start:",
+			field_fg = 28,
+			onclick = function() if (not el.large) visual.open_custom_envelope(el.env_id) end,
+			onrelease = function() if (not el.large) visual.close() end,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return sfx.env_start(app.instrument, el.env_id) end,
+			set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
+		})
+		el:attach(ui.create_checkbox {
+			x = el.width - app.mod_width + 4, y = 42,
+			label = "rnd start",
+			check_fg = 18,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return
+				(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
+			end,
+			set = function(v)
+				local flags = sfx.env_flags(app.instrument, el.env_id)
+				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
+			end,
+		})
+		el:attach(ui.create_num_field {
 				x = el.width - app.mod_width + 0, y = 52,
 				label = "loop0:",
 				field_fg = 26,
@@ -1485,11 +1486,8 @@ function envelopes.attach_panel(parent, el)
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
-			}
-		)
-		app.attach_num_field(
-			el,
-			{
+		})
+		el:attach(ui.create_num_field {
 				x = el.width - app.mod_width + 0, y = 62,
 				label = "loop1:",
 				field_fg = 10,
@@ -1498,8 +1496,7 @@ function envelopes.attach_panel(parent, el)
 				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
 				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
 				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
-			}
-		)
+		})
 	end
 	
 	function el:draw()
@@ -1635,7 +1632,7 @@ end
 
 return envelopes
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-04-23 09:28:30",revision=1347]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-05-01 06:55:39",revision=1365]]
 local app = require "src/app"
 
 
@@ -1645,21 +1642,25 @@ local file = {}
 file.default_filename = "/ram/cart/sfx/1.sfx"
 
 
+-- `file.save` and `file.load` are direct copies of `sfx.p64` code to
+-- ensure perfect compatibility.
+
+
 function file.save()
-	local ud = userdata("u8", 0x30000)
-	for i = 0, 0x2ffff do
-		ud[i] = peek(0x30000 + i)
+	local ud = userdata("u8",0x40000)
+	for i=0,0x3f do
+		set(ud, i * 0x1000, peek(0x30000 + i * 0x1000, 0x1000))
 	end
 	return ud
 end
 
 
 function file.load(ud)
-	if type(ud) != "userdata" then
+	if (type(ud)~="userdata") then
 		init_data()
 	else
-		for i=0,0x2ffff do
-			poke(0x30000+i, ud[i])
+		for i=0,0x3f do
+			poke(0x30000 + i * 0x1000, get(ud, i * 0x1000, 0x1000))
 		end
 	end
 	-- TODO
@@ -1694,7 +1695,14 @@ end
 
 -- copied from "/system/apps/sfx.lua" in Picotron 0.0.1e
 function init_data()
+
+	-- use 256k from 0x30000
+	-- gives 399 SFX and managemable size for undo state comparisons
+	-- if change this need, to adjust undo stack size and loader/saver
 	
+	memset(0x30000, 0, 0x40000)
+	
+
 	-- index (0x30000)
 	
 	-- first 3 values are almost metadata only -- not currently
@@ -1724,9 +1732,12 @@ function init_data()
 	-- default track speed (+3 unused)
 	poke(0x30026, 16, 0, 0, 0) 
 	
-	-- pattern data: first 8 patterns
+	-- pattern data: first 16 patterns
+	-- want to keep default sfx file quite tiny
+	-- .. should be ok to save a whole .sfx for just one inst / experiment
+	-- later: interface to generate more default patterns
 	
-	for pp = 0,7 do
+	for pp = 0,1 do
 		local addr = 0x30100 + pp * 20
 		for i = 0, 7 do
 			poke(addr+i, pp*8 + i)
@@ -1805,8 +1816,8 @@ function init_data()
 		0,40,255,0 -- adsr
 	)
 	
-	-- copy default instrument to 1..15
-	for i=1,15 do
+	-- copy default instrument to 1..31
+	for i=1,31 do
 		memcpy(0x40000 + 0x200*i, 0x40000, 0x200)
 	end
 	
@@ -1829,8 +1840,10 @@ function init_data()
 	-- pitch, inst, vol: not set (0xff)
 	memset(addr+8, 0xff, 64*3)
 	
-	-- copy to other tracks
-	for i=1,63 do
+	-- copy to other tracks: 128k worth
+	-- ** only first 399 are saved / undoable (0x20000\328) **
+	
+	for i=1,398 do
 		memcpy(0x50000 + i*328, 0x50000, 328)
 	end
 end
@@ -2377,7 +2390,7 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-04-23 09:28:31",revision=2516]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-05-03 10:48:34",revision=2598]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2423,13 +2436,63 @@ local function attach_placement_button(el)
 	end
 	function el:tap()
 		routing.clear_placement_buttons()
-		app.node = sfx.add_node(app.instrument, self.parent_id,
+		local new_node = sfx.add_node(app.instrument, self.parent_id,
 			self.new_node_type, self.new_node_op, self.target_id, self.child_id)
+		if app.node then
+			app.node = new_node
+		end
 		app.refresh_gui = true
 	end
 	return el
 end
-	
+
+
+local function attach_insert_between_parent(new_node_type, new_node_op, node, pos)
+	if (node == sfx.root) return
+	if (new_node_type >= 8) return
+	if new_node_type == 2 and new_node_op > 0 then
+		if (node.parent == sfx.root) return
+	end
+	attach_placement_button {
+		parent_id = node.parent.id, target_id = node.id, child_id = node.id,
+		new_node_type = new_node_type, new_node_op = new_node_op,
+		x = pos.x - 2, y = pos.y + 4,
+	}
+end
+
+
+local function attach_insert_top_child(new_node_type, new_node_op, node, pos)
+	if new_node_type >= 8 then
+		if (node == sfx.root) return
+		if (node.type >= 8) return
+	end
+	if #node.children == 0 then
+		-- add only child
+		attach_placement_button {
+			parent_id = node.id, target_id = node.id + 1,
+			new_node_type = new_node_type, new_node_op = new_node_op,
+			x = pos.x + node_width + 2, y = pos.y + 4,
+		}
+	else
+		-- add above first child
+		attach_placement_button {
+			parent_id = node.id, target_id = node.id + 1,
+			new_node_type = new_node_type, new_node_op = new_node_op,
+			x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
+		}
+	end
+end
+
+
+local function attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
+	if (node == sfx.root) return
+	attach_placement_button {
+		parent_id = node.parent.id, target_id = node:last_child().id + 1,
+		new_node_type = new_node_type, new_node_op = new_node_op,
+		x = pos.x + node_width \ 2, y = pos.y + 8
+	}
+end
+
 
 local function start_new_node(new_node_type, new_node_op)
 --	app.node = nil
@@ -2445,9 +2508,13 @@ local function start_new_node(new_node_type, new_node_op)
 		ppos.x = 4 + ppos.column * (node_width + node_gap)
 		ppos.y = 4 + ppos.row * node_height
 		
+		attach_insert_between_parent(new_node_type, new_node_op, node, pos)
+		attach_insert_top_child(new_node_type, new_node_op, node, pos)
+		attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
+		--[[
 		if new_node_type == 2 and new_node_op > 0 then
 			-- Modulators --
-			if node != sfx.root and not (node.type == 2 and node.op > 0) then
+			if node != sfx.root and node.parent != sfx.root then
 				-- insert between parent
 				attach_placement_button {
 					parent_id = node.parent.id, target_id = node.id, child_id = node.id,
@@ -2527,7 +2594,7 @@ local function start_new_node(new_node_type, new_node_op)
 						new_node_type = new_node_type, new_node_op = new_node_op,
 						x = pos.x + node_width + 2, y = pos.y + 4,
 					}
-				elseif node.children[1].type != 2 	or node.children[1].op == 0 then
+				elseif node.children[1].type != 2 or node.children[1].op == 0 then
 					-- add above first child
 					attach_placement_button {
 						parent_id = node.id, target_id = node.id + 1,
@@ -2537,6 +2604,7 @@ local function start_new_node(new_node_type, new_node_op)
 				end
 			end
 		end
+		]]--
 	end
 end
 
@@ -2733,11 +2801,11 @@ function routing.attach_node_chooser(parent, el)
 	function el:draw()
 		--- rectfill(0, 0, self.width - 1, self.height - 1, 0)
 		if #placement_buttons > 0 then
-			print("select new node position", 4, 12, 22)
+			print("choose position", 4, 12, 22)
 			return
 		end
 		if sfx.root.free_nodes == 0 then
-			print("(all nodes are used)", 4, 12, 22)
+			print("(all modules are used)", 4, 12, 22)
 			return
 		end
 		print("add module:", 4, 2, 22)
@@ -2812,9 +2880,7 @@ end
 
 return routing
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-25 12:13:12",revision=2321]]
-local app = require "src/app"
-
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-30 07:57:00",revision=2363]]
 local settings = {}
 
 local settings_folder = "/appdata/visitrack/"
@@ -2927,7 +2993,15 @@ function settings.change_user(t)
 end
 
 
--- GUI -----------------------------------------------------------------------
+return settings
+:: src/settings_ui.lua
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2024-05-03 11:02:44",revision=35]]
+local settings = require "src/settings"
+local ui = require "src/ui"
+
+
+local settings_ui = {}
+
 
 local function create_button(el)
 	if not el.width then
@@ -2974,12 +3048,12 @@ local function create_button(el)
 end
 
 
-function settings.open_ui()
+function settings_ui.open()
 	local el = { x = 150, y = 12, width = 480 - 300, height = 270 - 11 - 24 }
-	app.open_modal(el)
-	app.attach_label(el, { x = 20, y = 30, label = "Keys for playing notes", fg = 5})
-	app.attach_label(el, { x = 20, y = 50, label = "- layout:", fg = 5})
-	app.attach_menu_button(el, {
+	ui.open_modal(el)
+	el:attach(ui.create_label { x = 20, y = 30, label = "Keys for playing notes", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 50, label = "- layout:", fg = 5})
+	el:attach(ui.create_menu_button {
 		x = 58, y = 50 - 2,
 		bg = 7,
 		get_label = function()
@@ -3011,9 +3085,9 @@ function settings.open_ui()
 			},
 		}		
 	})
-	app.attach_label(el, { x = 20, y = 90, label = "mouse movements (knobs, sliders, ...)", fg = 5})
-	app.attach_label(el, { x = 20, y = 110, label = "- direction:", fg = 5})
-	app.attach_menu_button(el, {
+	el:attach(ui.create_label { x = 20, y = 90, label = "mouse movements (knobs, sliders, ...)", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 110, label = "- direction:", fg = 5})
+	el:attach(ui.create_menu_button {
 		x = 70, y = 110 - 2,
 		bg = 7,
 		get_label = function()
@@ -3036,7 +3110,7 @@ function settings.open_ui()
 			},
 		}		
 	})	
-	app.attach_label(el, { x = 20, y = 130, label = "- sensitivity:", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 130, label = "- sensitivity:", fg = 5})
 	el:attach_field {
 		x = 78, y = 130 - 1,
 		width = 30, height = 7,
@@ -3047,7 +3121,7 @@ function settings.open_ui()
 			settings.change_user { drag_sensitivity = v }
 		end
 	}
-	app.attach_label(el, { x = 20, y = 150, label = "- precise sensitivity:", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 150, label = "- precise sensitivity:", fg = 5})
 	el:attach_field {
 		x = 110, y = 150 - 1,
 		width = 30, height = 7,
@@ -3063,7 +3137,7 @@ function settings.open_ui()
 		x = 140, y = el.height - 16,
 		label = "close",
 		action = function(self)
-			app.close_modal()
+			ui.close_modal()
 		end,
 	})
 	
@@ -3081,7 +3155,7 @@ function settings.open_ui()
 end
 
 
-return settings
+return settings_ui
 :: src/sfx.lua
 --[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-23 09:28:31",revision=6622]]
 local sfx = {}
@@ -3677,10 +3751,11 @@ end
 
 return sfx
 :: src/syn_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2024-04-22 11:53:57",revision=1616]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2024-04-30 07:26:24",revision=1627]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 
 
 local syn_menus = {}
@@ -3694,7 +3769,7 @@ function syn_menus.open_relationship(self)
 	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
 	
 	if node_type == 0x2 and self.parent.param == 2 then
-		app.open_menu {
+		ui.open_menu {
 			x = self.sx - 10, y = self.sy + 7,
 			width = 55,
 			items = {
@@ -3748,7 +3823,7 @@ function syn_menus.open_relationship(self)
 		(node_type == 0x02 and self.parent.param == 0)
 		or (node_type == 10 and self.parent.param == 3)
 	then
-		app.open_menu {
+		ui.open_menu {
 			x = self.sx - 10, y = self.sy + 7,
 			width = 52,
 			items = {
@@ -3775,7 +3850,7 @@ function syn_menus.open_relationship(self)
 			}
 		}
 	else
-		app.open_menu {
+		ui.open_menu {
 			x = self.sx - 10, y = self.sy + 7,
 			width = 40,
 			items = {
@@ -3837,7 +3912,7 @@ function syn_menus.open_multiplier(self)
 		)
 	end
 
-	app.open_menu {
+	ui.open_menu {
 		x = self.sx - 10, y = self.sy + 7,
 		width = 36,
 		items = mult_menu_items,
@@ -3854,7 +3929,7 @@ function syn_menus.open_envelope(self)
 	local has_free_run = flags & 0x08 > 0
 	local has_random = flags & 0x10 > 0
 	local env_id = env & 0x0f
-	app.open_menu {
+	ui.open_menu {
 		x = self.sx - 10, y = self.sy + 7,
 		width = 51,
 		items = {
@@ -3942,7 +4017,7 @@ end
 
 return syn_menus
 :: src/syn_param.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-26 20:52:16",revision=2871]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-30 06:58:36",revision=2879]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local syn_menus = require "src/syn_menus"
@@ -4322,11 +4397,12 @@ end
 
 return syn_param
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-04-23 09:28:31",revision=7989]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-05-03 14:01:41",revision=8079]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local syn_param = require "src/syn_param"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 local visual = require "src/visual"
 
 
@@ -4365,14 +4441,15 @@ end
 
 function synth.populate_unused(parent, el)
 	function el:draw()
-		--rectfill(0, 0, self.width, self.height, 62)
+		clip()
+--		rectfill(-2, -2, self.width + 1, self.height + 1, 21)
 		--synth.draw_corners(self)
 		local x, y = 19, 14
-		pal(7, 22)
+		pal(7, 58)
 		sspr(63, 0, 0, 7, 7, x, y, x + (7 * 4), y + (7 * 4))
 		pal(7, 7)
 		if self.node_id == 7 then
-			print("pfx6416", 52, 63, 5)
+			print("pfx6416", 52, 63, 22)
 		end
 	end
 	return el
@@ -4461,7 +4538,7 @@ function synth.populate_osc(parent, el)
 		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
 		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
 		syn_param.attach(el, 170, 84, params[5], { small = true })
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 142, y = 72,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4483,7 +4560,7 @@ function synth.populate_osc(parent, el)
 		syn_param.attach_mini(el, params[3])
 		syn_param.attach_mini(el, params[4])
 		syn_param.attach_mini(el, params[5])
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 2, y = 51,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4544,7 +4621,7 @@ function synth.populate_fm(parent, el)
 		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
 		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
 		syn_param.attach(el, 170, 84, params[5], { small = true })
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 142, y = 72,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4566,7 +4643,7 @@ function synth.populate_fm(parent, el)
 		syn_param.attach_mini(el, params[3])
 		syn_param.attach_mini(el, params[4])
 		syn_param.attach_mini(el, params[5])
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 2, y = 51,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4627,7 +4704,7 @@ function synth.populate_ring(parent, el)
 		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
 		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
 		syn_param.attach(el, 170, 84, params[5], { small = true })
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 142, y = 72,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4649,7 +4726,7 @@ function synth.populate_ring(parent, el)
 		syn_param.attach_mini(el, params[3])
 		syn_param.attach_mini(el, params[4])
 		syn_param.attach_mini(el, params[5])
-		app.attach_menu_button(el, {
+		el:attach(ui.create_menu_button {
 			x = 2, y = 51,
 			get_label = function()
 				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
@@ -4875,8 +4952,6 @@ function synth.attach_mute_toggle(parent, el)
 end
 
 
-
-
 function synth.attach_close_button(parent, el)
 	el.x = parent.width - 10
 	el.y = 2
@@ -4903,7 +4978,7 @@ function synth.attach_close_button(parent, el)
 			end
 		end
 		sfx.delete_node(app.instrument, self.node_id)
-		if app.node > self.node_id then
+		if app.node and app.node > self.node_id then
 			app.node = max(0, self.node_id - 1)
 		end
 		app.refresh_gui = true
@@ -4911,14 +4986,16 @@ function synth.attach_close_button(parent, el)
 	return el
 end
 
+
 return synth
 :: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2024-04-26 20:52:16",revision=293]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2024-05-03 14:01:41",revision=557]]
 local ui = {}
 
 
-local ui_knob = require "src/ui/knob"
-ui.create_knob = ui_knob.create
+local head = require "src/ui/head"
+ui.create_head = head.create
+ui.head = head.head
 
 
 local mouse = require "src/ui/mouse"
@@ -4926,11 +5003,45 @@ ui.mouselock = mouse.lock
 ui.mouseunlock = mouse.unlock
 
 
+local ui_knob = require "src/ui/knob"
+ui.create_knob = ui_knob.create
+
+
+local num_field = require "src/ui/num_field"
+ui.create_num_field = num_field.create
+
+
+local menu = require "src/ui/menu"
+ui.create_menu_button = menu.create_button
+ui.open_menu = menu.open
+ui.has_menu = menu.has_menu
+
+
+local modal = require "src/ui/modal"
+ui.open_modal = modal.open
+ui.close_modal = modal.close
+ui.has_modal = modal.has_modal
+
+
+function ui.has_modal_or_menu()
+	return ui.has_modal() or ui.has_menu()
+end
+
+
+local label = require "src/ui/label"
+ui.create_label = label.create
+
+
+local checkbox = require "src/ui/checkbox"
+ui.create_checkbox = checkbox.create
+
+
 return ui
 :: src/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-04-23 06:13:55",revision=1269]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-05-03 11:10:00",revision=1272]]
 local app = require "src/app"
 local sfx = require "src/sfx"
+local ui = require "src/ui"
 
 
 local visual = {}
@@ -4953,7 +5064,7 @@ end
 function visual.open_wavetable(target)
 	if (overlay) visual.close()
 	
-	overlay = visual.attach_wavetable(app.gui, target, {
+	overlay = visual.attach_wavetable(ui.head(), target, {
 		x = (480 \ 2) - (200 \ 2), y = 10,
 		width = 200, height = 90,
 	})
@@ -5084,7 +5195,7 @@ function visual.open_custom_envelope(env_id)
 	local env_type = sfx.env_type(app.instrument, env_id)
 	if (env_type != 2) return
 	
-	overlay = app.gui:attach {
+	overlay = ui.head():attach {
 		x = (480 \ 2) - (128 \ 2), y = 10,
 		width = 128, height = 90,
 		env_id = env_id,
@@ -5144,7 +5255,7 @@ end
 return visual
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
-NC0yNiAyMDo1MjoxNiIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
+NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
 MG5pbA==
 :: drak.lua
 --[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-19 11:56:33",revision=1102]]
@@ -5490,10 +5601,9 @@ Ud6Z5rjf6tBq1M12IUZmHc02KopiRdCp1LOBHMHZ0QAA4cCC7wIHkTJrZNpOGq0IGgAAgE2Igomj
 Ne2sKEoMZQIAAPfJpJPUziRgZZ1JJ0_fb-Tdaz9ApQAAwFecPt-Y-r9X-j93ENXN134D1wAAABB0
 RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-04-26 20:52:16",revision=9798]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-05-03 14:01:41",revision=10050]]
 include "drak.lua"
 local app = require "src/app"
-local settings = require "src/settings"
 local sfx = require "src/sfx"
 local file = require "src/file"
 local detail = require "src/detail"
@@ -5503,7 +5613,8 @@ local ed_patt = require "src/ed_patt"
 local ed_song = require "src/ed_song"
 local note_grid = require "src/note_grid"
 local routing = require "src/routing"
-local synth = require "src/synth" -- TODO: temporary, remove
+local settings = require "src/settings"
+local settings_ui = require "src/settings_ui"
 local ui = require "src/ui"
 
 
@@ -5525,7 +5636,7 @@ function _init()
 	menuitem {
 		id = "settings",
 		label = "\^:0000000000000000 Settings",
-		action = function() settings.open_ui() end,
+		action = function() settings_ui.open() end,
 	}	
 		
 	settings.load()
@@ -5544,7 +5655,7 @@ function _update()
 		generate_gui()
 		app.refresh_gui = false
 	end
-	app.gui:update_all()
+	ui.head():update_all()
 end
 
 
@@ -5554,7 +5665,7 @@ function _draw()
 	else
 		cls(62)
 	end
-	app.gui:draw_all()
+	ui.head():draw_all()
 	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 464, 253, 7)
 end
 
@@ -5562,22 +5673,22 @@ end
 function generate_gui()
 	local cell_width = 14
 	local cell_height = 29
-	app.gui = create_gui()
-	local top_panel = attach_top_panel(app.gui, { x = 0, y = 0 })
+	ui.create_head()
+	local top_panel = attach_top_panel(ui.head(), { x = 0, y = 0 })
 	if app.view == "patt" then
 		ed_patt.attach_pattern_selector(top_panel, { x = 118, y = 0})
 		detail.attach_pattern_flow_toggles(top_panel, { x = 322, y = 3 })
-		ed_patt.attach_channel_panel(app.gui, { x = 0, y = 16})
-		note_grid.attach(app.gui, { x = app.channels_width, y = 16 })
+		ed_patt.attach_channel_panel(ui.head(), { x = 0, y = 16})
+		note_grid.attach(ui.head(), { x = app.channels_width, y = 16 })
 	elseif app.view == "trak" then
-		ed_trak.attach(app.gui, { x = 0, y = 16 })
+		ed_trak.attach(ui.head(), { x = 0, y = 16 })
 	elseif app.view == "inst" then
-		ed_inst.attach(app.gui, { x = 0, y = 16 })
+		ed_inst.attach(ui.head(), { x = 0, y = 16 })
 	elseif app.view == "song" then
-		ed_song.attach(app.gui, { x = 0, y = 16 })
+		ed_song.attach(ui.head(), { x = 0, y = 16 })
 	end
 	if app.detail then
-		detail.attach_panel(app.gui, { x = 480 - app.detail_width, y = 16})
+		detail.attach_panel(ui.head(), { x = 480 - app.detail_width, y = 16})
 	end
 end
 
@@ -5786,15 +5897,16 @@ MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNC0yNiAyMDo1
-MjoxNiIsbm90ZXM9IkEgbXVzaWMgdHJhY2tlciBhbmQgaW5zdHJ1bWVudFxuZWRpdG9yIGZvciBc
-Ii5zZnhcIiBmaWxlcyIscnVudGltZT02LHN0b3JlZD0iMjAyNC0wNC0xNiAxMTozNzo1MSIsdGl0
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNS0wMyAxNDow
+MTo0MSIsbm90ZXM9IkEgbXVzaWMgdHJhY2tlciBhbmQgaW5zdHJ1bWVudFxuZWRpdG9yIGZvciBc
+Ii5zZnhcIiBmaWxlcyIscnVudGltZT03LHN0b3JlZD0iMjAyNC0wNC0xNiAxMTozNzo1MSIsdGl0
 bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjMiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFp
-bi5sdWEjMjE4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMyMDMi
-LHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS5sdWEjNSIsd29ya3NwYWNlX2lu
-ZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3N5bl9wYXJhbS5sdWEjNSIsd29ya3NwYWNlX2luZGV4PTF9
-LHtsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2VfaW5kZXg9Mn0se2xvY2F0aW9uPSJtYXAv
-MC5tYXAiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249InNmeC8wLnNmeCIsd29ya3NwYWNl
-X2luZGV4PTR9LHtsb2NhdGlvbj0ic2Z4LzEuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH0se2xvY2F0
-aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXWx6NAAEAAAAAwAAADBuaWw=
+bi5sdWEjNjciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAubHVhIzI3Iix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkubHVhIzciLHdvcmtzcGFjZV9pbmRl
+eD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjNDgiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
+YXRpb249InNyYy9lZF9pbnN0Lmx1YSMyNDMiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
+ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jr
+c3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7
+bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5p
+bA==
 :: [eoc]
