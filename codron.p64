@@ -1,0 +1,1022 @@
+picotron cartridge // www.picotron.net
+version 2
+
+:: fonts/
+:: fonts/cozi.font
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDEwOjIxOjQ1Iixtb2RpZmllZD0iMjAyNS0w
+My0yMSAxMDo0NTozNCIscmV2aXNpb249OF1dbHo0AHsDAAAVBwAA8FFweHUAAygACAAABAUKCxAD
+oA8QQAewD3AADxAgAQ5wD3AADjAO8DRvPyAtQA0PMw1ADA8MDEAMAAxALDAPMA88DQkPMCADDw8N
+CAMQDz4-BkA-MA8_AA9jDzYPHA8_DwgEAPCmMA8YgA8MDxhQHwwgGkAECgSwQgACABVwCg8fCgYK
+EAQPDgEPBg8IBwQQDwkEAgsgAgUCDwsFCgAUUARSBAJUAhAFAgcCBTAEDw4EcAQCMAiAAhAUEhEA
+DwYLDw0PCxsPBgAEDjQPDgAOCw8IBAIBCAAOCwwODAsOAAQOFQgUAAgRBxwHAA4RBxsOAAgcBCIA
+DhsOGw4ADhsPDhwOMAIAAkAEAAQCIAQCAQIEMAgACDACBAwEAkUA8BEEAgACEAkLHw0BCQAOGwgr
+AAcbBxsHAA4LIQsOAAdLB1sAIBEIBgCQIQAJEQ0bCQArJQDwFEIHAAk8Cw4AGwUDBRsAUQgADxEP
+Gx8VLxEACw8LDTsADksOSgDxASEADjsGDg8MBxsHKwAOCwGzAPCXDx9UAFsJAEsFAwAvER8VDxsP
+EQArDisAKwkcBwAIDAQCEQgAB1EHABESFAAJXAkCBbAIAAIEcA4MCQsJABEHKwcgCSEJABwJKwkg
+DgsIAQkADwwSCCIgCRsJDA4RBzsAAgADIgcADAAKLAsOEQsFAwULAANCCiAGHxUfESAHOyAOKw4g
+BxsHERAJGwkcEA8NAyEgCQEODAcAEggiCiA7CSArBQMgH5oA4AogGw4bICsJDA4QCAwOdgH2DBIB
+Ig4AIgAiDhQMJA4ADQVQExogb38AD1UPKgQA8AgAD0EPYw9-H10Pdw8_AAYfYw93Bg9BBiQBFkQE
+APAPAAQKD3wGDx8PGA8QAA8cDyYfXw9-Bg8cAA8iD3cfCgChDAAPKg8cDzYPd2sC8AEqAB8cBg9d
+DxwfFAAMDxwGLgCxKg86AAYPZw9jD2djABEGdwDxBn8PYwYADxgPeCwIDwcABg9jD2sPYyAA8wgM
+DxQPKg9dDyoPFAwwD1UwBg9zD2MPcxwAMRwPf3AA8QQiEA9-DyIPFAwHDyIPfwAGD3cfPwDzARAN
+BAAPUA8gEA8RDyoPRAAHAHEGD2sPdw9rRQBBD38ACwIA9AJvVRAPfg9CD1IPSg9CD34QCQwAQAkQ
+CQEKAB8BCQD---9oUA9KAQkA
+:: fonts/p9.font
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjQzOjIxIixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MDo1OCIscmV2aXNpb249MzBdXWx6NAB7BQAAoAUAAPCJcHh1AAMoAAgAAAQECAYQ
+A-AgDyAwDvA0RzAnQAcFB0AFAgVABQAFQCUwBAYHBgQgAQMHAwEgByFAJAcgBQcCBwJAAnABAlAT
+IBVQAgUCwCIAAiAVUAUHBQcFIAcDBgcCIAUEAgEFIBMGBQcgAgFQAiECIAIkAiAFAgcCBTACBwJg
+AgFAB4ACIAQiASAHJQcgAyIHIAcEBwEGAPEJBgQHIBUHFCAHAQcEByARBwUHIAc0IAcFCQDwDQUH
+FDACAAJAAgACASAEAgECBDAHAAcwAQIEAgE8APA0AAIgAhUBBjAGBQcFMBMFBzAGEQYwAxUDMAcD
+AQYwBwMRMAYBBQcwFQcFMAcSBzAHEgMwBQMVMCEGMBcVMAMlMAYVAzwA8BUBMAIFAwYwAwUDBTAG
+AQQDMAciMCUGMBUHAjAVFzAFEgUwBQcWAPEgBAEHIAMhAyABIgQgBiQGIAIFkAcgAgRQBwUHFSAH
+BQMFByAGIQYgAyUHIAcBAwEGAFARIAYRBeMAMBUgB-cA8AgiAyAVAxUgMQcgDw8vFQ8RIAM1IAYl
+A_wAYBEgAhUDBkkA8A4VIAYBBwQDIAcyIDUGICUHAiAdHxUPDyAVAhUgFSgB8hQHBAIBByAGAgMC
+BiBCIAMCBgIDMAQHAUACBQIwT38gD1UPKgQA8EkgD0EPfx9dDz4gDB9jD3cMIA0PRA0LDSAEDzwP
+HA8eDxAgDxwPLhwPHCAPNhwPHAggCg82D3cPNgogGgwKDxQgCgwPfw8qDzogDA9nD2MPZwwgD38P
+XQ9-VwDwESAPOBgfDiAMD2MPaw9jDCAICgwKCEAPVUAMD3MPYw9zEgDwFQ9-DA8iIAwKCAoMIAwP
+dx9jDDAFD1IOQA0PKgswDA9rD3cPa1QA8DkACQAJIE9VIA8OBA8eDy0PJiANHyEPJQIgDwwPHh4K
+IAgGCA8kDxogD04EDA9FDyYgDyIPXx8SDwogBggPPA0PBiAPEA8MAgPRAPB4Ig96HyIPEiAGDgAC
+DzwgCAcPEAIDICIPIgogCAwIAwggDxIPPw8SAgogBw8QD34EDzggAg8HDzICASAPDwIPDg8QCiAM
+H0AODxggDA8QGAUgCA84BAIHIAEPBw8SD3gPGCAPeg9CAg8KD3IgDwkMD0sPbQ9mIA8aDycPIg9z
+ASAHD0ofSQ9GZwAROgQA8WMaIA8jD2IfIgogAwAIDyoPTTADDxIPIQ9AIA99D3kNDz0PXSAMBwgG
+Dy4gDwYPJA9_DyYFIA8kD04ED0YHIA8KBw9aD0YPMCAGBAYPRA84IA8UDA8kGCAPOg9WD1IPMAgg
+BAoEBg8GIAgCDA4KIB8iDya8APICCw8kD3IPMCAEDzYPLA8mD2QTADRCDzCtAPBNIw8SIA8OD2QK
+DygPeCAEAg8GDysPGUAPDgUIMA8KDx8PEgQwBA8PDxUPDTAEAw8GDw4gDA4PFAQCIA8wCA8OGCAI
+DA8iDgsgDCgMIAUPfgsPFA8SIAQMDyQPIgFsAUAMCCAHDQDxAAUIIAQPfA8SBQggDC4MIOMA8QIk
+DgUgDwYODyYFAyAMDgULCTkAAI0BIA8iHQDwBAMgDA8iDy0PMAMgCggMCAQgHyoVACAKAAwA4BQK
+DyQEIAgMGAQwChAMlQBAKAUPLI8A8w0wD14IIC4FDw4gBR8kD0QPQiACBhIKIAweBQMgdgFhMAgM
+CB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUGBQYgDAAMDgsg
+LQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYPFARAAwgG
+MAoLBQpwAKBjBQggCAUJBAgg
+:: fonts/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiJdXQ==
+:: gfx/
+:: gfx/0.gfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiIscmV2aXNpb249MTM5Ml1dbHo0AJ0AAAAgMQAA8yF7WzBdPXtibXA9cHh1
+AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
+JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA------------------------------------
+----------------------------h1BtPTh9fQ==
+:: gfx/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiJdXQ==
+:: src/
+:: src/ui/
+:: src/ui/editor.lua
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-23 21:53:12",revision=1212]]
+-------------------------------------------------------------------------------------------
+
+
+local buffers = require "src/buffers.lua"
+local filetree = require "src/filetree.lua"
+
+
+-------------------------------------------------------------------------------------------
+
+
+local margin_width <const> = 26
+local padding_top <const> = 3
+local padding_left <const> = 4
+local row_height <const> = 11
+
+
+local show_line_numbers = true
+
+
+-------------------------------------------------------------------------------------------
+
+
+return function (attribs)
+	local result = attribs or {}
+	result.x = result.x or 0
+	result.y = result.y or 0
+	result.width_rel = 1
+	result.height_rel = 1
+	head():new(result)
+
+	-- Private fields
+	local blink_timer = 0
+
+
+	-- TODO: remove and use the one in buffers.lua
+	local function find_x_for_col(col, text)
+		local x = margin_width + padding_left
+		if text then
+			x += print(sub(text, 1, col - 1), 0, -1000)
+		end
+		return x
+	end
+
+	
+	function result:update(msg)
+		blink_timer += 1
+		local buffer = filetree.current_buffer()
+		if keyp("up") then buffer:move_cursors_up(); blink_timer = 0
+		elseif keyp("down") then buffer:move_cursors_down(); blink_timer = 0
+		elseif keyp("right") then buffer:move_cursors_right(); blink_timer = 0
+		elseif keyp("left") then buffer:move_cursors_left(); blink_timer = 0
+		end
+	end
+
+	
+	function result:draw(msg)
+		if show_line_numbers then
+			rectfill(margin_width, 0, self.width - 1, self.height - 1, 1)
+			rectfill(0, 0, margin_width - 1, self.height - 1, 16)
+		else
+			rectfill(0, 0, self.width - 1, self.height - 1, 1)
+		end
+		
+		-- TODO: this is in /system/lib/gui_ed.lua:
+		--     -- draw tabs relative to home
+		--     poke(0x4005, (@0x4005) | 0x2)
+
+		local buffer = filetree.current_buffer()
+		if not buffer then return end
+	
+		local x = padding_left + (show_line_numbers and margin_width or 0)
+		local y = padding_top
+		local row = buffer.starting_row
+		local text = buffer:text(row)
+		while text and y < self.height do
+			print(string.format("%4d", row), 3, y, 1)
+			print(text or "", x, y, 6)
+			y += row_height
+			row += 1
+			text = buffer:text(row)
+		end
+		
+		-- Cursors
+		
+		if blink_timer % 32 < 16 then
+			buffer:foreach_cursor(
+				function(col, row)
+					local y = (row - buffer.starting_row) * row_height + padding_top
+					local x = find_x_for_col(col, buffer:text(row))
+					rectfill(x, y - 2, x + 4, y + 8, 14)
+				end
+			)
+		end
+	end
+	
+
+	function result:mousewheel(msg)
+		local buffer = filetree.current_buffer()
+		if not buffer then return end
+		buffer.starting_row = max(1, buffer.starting_row - msg.wheel_y)
+	end
+
+
+	return result
+end
+
+
+-------------------------------------------------------------------------------------------
+
+:: src/ui/sidebar.lua
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-23 21:53:12",revision=981]]
+-------------------------------------------------------------------------------------------
+
+
+local filetree = require "src/filetree.lua"
+
+
+-------------------------------------------------------------------------------------------
+
+
+local arrow_up <const> = "\^:00040e1f00000000"
+local arrow_down <const> = "\^:001f0e0400000000"
+local arrow_right <const> = "\^:02060e0602000000"
+local arrow_left <const> = "\^:080c0e0c08000000"
+
+
+local row_height <const> = 9
+local padding_top = 8
+local padding_bottom = 8
+local padding_left = 3
+local padding_right = 3
+
+
+local bg_sidebar = 17
+local fg_path_inactive = 19
+local fg_path_active = 6
+
+
+-------------------------------------------------------------------------------------------
+
+
+return function(attribs)
+	local result = attribs or {}
+	result.x = attribs.x or 0
+	result.y = attribs.y or 0
+	result.width = 60
+	result.height_rel = 1
+	head():new(result)
+
+
+	-- Private fields
+
+
+	function result:hover(msg)
+		self.cursor = 1
+		if msg.mx >= self.width - 2 then
+			self.cursor = 9 -- TODO: replace with horiz. double arrow
+		else
+			self.cursor = "pointer"
+		end
+	end
+	
+
+	function result:tap(msg)
+		local row = 1 + (msg.my - padding_top) // row_height
+		filetree.set_current(row)
+	end
+	
+
+	function result:draw(msg)
+		rectfill(0, 0, self.width - 1, self.height - 1, bg_sidebar)
+		clip(
+			padding_left,
+			padding_top,
+			self.width - padding_left - padding_right,
+			self.height - padding_top - padding_bottom
+		)
+		local x, y = padding_left, padding_top
+		filetree.foreach(
+			function(node, level)
+				local str = "\014"
+				for i = 2, level do str ..= " " end
+				if node.children then str ..= arrow_down end
+				str ..= node.name
+				if node.children then str ..= "/" end
+				local c = fg_path_inactive
+				if node.path == filetree.current_path() then
+					c = fg_path_active
+				end
+				print(str, x, y, c)
+				y += row_height
+			end
+		)
+	end
+
+	
+	return result
+end
+
+
+-------------------------------------------------------------------------------------------
+
+:: src/ui/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiJdXQ==
+:: src/buffers.lua
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-23 21:53:12",revision=1223]]
+-------------------------------------------------------------------------------------------
+
+
+function new(path, text)
+	local result = {
+		-- Public fields
+		starting_row = 1
+	}
+	
+	-- Private fields
+	local text = split(text, "\n", false) or {}
+	local cursors = { { col = 1, row = 1, wanted_x = 0 } } --, { col = 3, row = 3 } }
+
+	function result:text(row)
+		if row > #text then return nil end
+		return text[row]	
+	end
+	
+	function result:foreach_cursor(func)
+		for cursor in all(cursors) do
+			func(cursor.col, cursor.row)
+		end
+	end
+
+	local function find_x_for_col(col, text)
+		if text then
+			return print(sub(text, 1, col - 1), 0, -1000)
+		end
+		return 0
+	end
+
+	local function find_col_for_x(x, text)
+		if not text then return 0 end
+		if #text == 0 then return 1 end
+		for i = 1, #text do
+			local xx = print(sub(text, 1, i), 0, -1000)
+			if xx and xx >= x then return i end
+		end
+		return #text + 1
+	end
+
+	function result:move_cursors_up()
+		for cursor in all(cursors) do
+			cursor.row = max(1, cursor.row - 1)
+			if cursor.wanted_x then
+				cursor.col = find_col_for_x(cursor.wanted_x + 3, text[cursor.row])
+			end
+			if cursor.col > #text[cursor.row] + 1 then
+				cursor.col = #text[cursor.row] + 1
+			end
+		end		
+	end
+
+	function result:move_cursors_down()
+		for cursor in all(cursors) do
+			cursor.row = min(cursor.row + 1, #text)
+			if cursor.wanted_x then
+				cursor.col = find_col_for_x(cursor.wanted_x + 3, text[cursor.row])
+			end
+			if cursor.col > #text[cursor.row] + 1 then
+				cursor.col = #text[cursor.row] + 1
+			end
+		end		
+	end
+
+	function result:move_cursors_left()
+		for cursor in all(cursors) do
+			cursor.col -= 1
+			if cursor.col < 1 then
+				if cursor.row > 1 then
+					cursor.row -= 1
+					cursor.col = #text[cursor.row] + 1
+				else
+					cursor.col = 1
+				end
+			end
+			cursor.wanted_x = find_x_for_col(cursor.col, text[cursor.row])
+		end		
+	end
+
+	function result:move_cursors_right()
+		for cursor in all(cursors) do
+			cursor.wanted_x = nil
+			cursor.col += 1
+			if cursor.col > #text[cursor.row] + 1 then
+				if cursor.row < #text then
+					cursor.row += 1
+					cursor.col = 1
+				else
+					cursor.col = #text[cursor.row] + 1
+				end
+			end
+			cursor.wanted_x = find_x_for_col(cursor.col, text[cursor.row])
+		end
+	end
+
+	return result
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
+return {
+	new = new,
+}
+:: src/filetree.lua
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-03-23 21:53:12",revision=687]]
+-------------------------------------------------------------------------------------------
+
+
+local buffers = require "src/buffers.lua"
+
+
+-------------------------------------------------------------------------------------------
+
+
+local root_path
+local filetree
+local current
+
+
+-------------------------------------------------------------------------------------------
+
+
+function open(path)
+	filetree = create_filetree(path)
+	set_current(1) -- TODO: should be set to the file actually opened!!!!
+end
+
+
+function create_filetree(root_path)
+	local segs = split(root_path, "/", false)
+	local root_name = segs[#segs]
+	local kind = fstat(root_path)
+	if kind == "folder" then
+		local children = {}
+		local names = ls(root_path)
+		sort(names)
+		for name in all(names) do
+			add(children, create_filetree(root_path .. "/" .. name))
+		end
+		return {
+			name = root_name,
+			path = root_path,
+			children = children,
+		}
+	elseif kind == "file" then
+		return {
+			name = root_name,
+			path = root_path,
+			buffer = buffers.new(root_path, fetch(root_path))
+		}
+	end
+	notify("*** error creating the filetree")
+	return nil
+end
+
+
+function sort(a)
+	-- TODO: something better...
+	for i = 1, #a do
+		local j = i
+		while j > 1 and a[j - 1] > a[j] do
+			a[j] , a[j - 1] = a[j - 1] , a[j]
+			j = j - 1
+		end
+	end
+end
+
+
+---------------------------------------------------------------------------------------
+
+
+function foreach_(func)
+	local function step(node, func, level)
+		if node ~= filetree then
+			func(node, level)
+		end
+		for child in all(node.children) do
+			step(child, func, level + 1)
+		end
+	end
+
+	step(filetree, func, 0)
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
+function current_node()
+	return current
+end
+
+
+function current_path()
+	if current then
+		return current.path
+	end
+	return nil
+end
+
+
+function current_buffer()
+	if current then
+		return current.buffer
+	end
+	return nil
+end
+
+
+function set_current(row)
+	local node = find_row(row)
+	if node and (not node.children) then
+		current = node
+	end
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
+function find_row(target)
+	local function step(node, current_row, target)
+		if current_row == target then
+			return node
+		end
+		current_row += 1
+		for child in all(node.children) do
+			local result, new_row = step(child, current_row, target)
+			if result then
+				return result, nil
+			end
+			current_row = new_row
+		end
+		return nil, current_row
+	end
+	return step(filetree, 0, target)
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
+function print_filetree()
+	foreach_(
+		function(node, indentation)
+			for i = 0, 2 * indentation do print(" \0") end
+			if node.children then
+				print(node.name .. "/ \f2" .. node.path)
+			else
+				print(node.name .. "  \f2" .. node.path)
+			end		
+		end
+	)
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
+return {
+	open = open,
+	foreach = foreach_,
+	current_node = current_node,
+	current_path = current_path,
+	current_buffer = current_buffer,
+	set_current = set_current,
+	find_row = find_row,
+	print = print_filetree,
+}
+
+
+-------------------------------------------------------------------------------------------
+
+:: src/ui.lua
+--[[pod_format="raw",created="2025-03-23 10:43:59",modified="2025-03-23 16:21:09",revision=363]]
+----------------------------------------------------------------------------------------
+
+
+local _head = nil
+function head() return _head end
+
+
+----------------------------------------------------------------------------------------
+
+
+function init()
+	_head = create_gui()
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+function update()
+	_head:update_all()
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+function draw()
+	_head:draw_all()
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+return {
+	head = head,
+	init = init,
+	draw = draw,
+	update = update,
+	editor = include "src/ui/editor.lua",
+	sidebar = include "src/ui/sidebar.lua",
+}
+
+
+----------------------------------------------------------------------------------------
+
+:: src/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiJdXQ==
+:: label.qoi
+b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
+Pss-wBLIPxLaP-6iiHnOP-39-f3MEsA-wBLAP8cSwT-AEsE-yxLBP8gSxD-GEsY-yRI-Ej-dEsU-
+xhLFP8f_uQA_yj8SwD8Sxz8S2j-_ooh5zj-9-f39yxLAP8ISwD-GEsE-wBLBP8YSwj8SwT-IEj-C
+Ej-GEsY-yhI-yf65AD7BP8ASwT-P-qKIeT8SP9b_uQA_yj8Swz-AEsE-wRI-Ej-AEsA-wBLAP8ES
+zD-_ooh5zj-9-f39yxLAP8ISwD-GEsE-wBLBP8YSwj8SwT-IEj-CEj-GEsY-xhLHP8X_uQA_wD-C
+EsA-y-6iiHnBPxLBP8YSxT-H-rkAPso-EsI-EsA-Ej8SwD8SP8ASwT8SwD8SPxLAPxLLP-6iiHnG
+PxLFP-39-f3LEsA-whLAP8YSxj-GEsI-zBI-whI-xhLGP8YSwD-DEsA-xf65AD7AP8ISwD-L-qKI
+eT8SP9r_uQA_yj8Swj8SwD8SPxLAPxI-EsI-EsA-Ej8SwD8Syz-_ooh5xT-BEsQ--f39-csSwD-C
+EsA-xhI-EsI-Ej-GEsU-yRI-wBLBP9YSwD-DEsA-xf65AD7AP8ISwD-L-qKIecU-xhLFP8f_uQA_
+yj8SwD8SPxLAPxI-EsA-Ej8Swj8SwD8SPxLAPxLLP-6iiHnGPxLFP-39-f3LEsA-whLAP8YSPxLC
+PxI-xhLFP8cSwT-AEsE-xhLGP8YSwD-DEsA-xf65AD7AP8ISwD-M-qKIecQ-1v65AD7LP8ASwT-A
+EsE-wRI-EsM-wBLAPxLAPxLLP-6iiHnOP-39-f3MEsA-wBLAP8cSxj-GEsU-xxLBP8sSwD-CEsA-
+xhLHP8X_uQA_wT-AEsE-6hL0P-6iiHnOP-39-f39-eP_uQA_9D-_ooh5zj-9-f39-f3_AKWh_v4k
+Y7DY-h0rU-39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDSKCDDKMz_wsPHwSjAO8Eo
+-f39-f38Ffog0SjAIMMozDsowjso-f39-f39wBX6INIoIMMozDsowjso-f39-f39wBX6INIoIMMo
+zDsowjso-f39-f39wBX6INIoIMMowjvCKDvCKDsowjso-f39-f39wBXC-hJTWcEVOcEVOcEVOcAV
+xDkVwTkVORU5wRXXINIoIMMozDsowjso-f39-f39wBXCOcEVORU5FcA5FcA5FTkVwzkVwTkVORU5
+FTkV1yDRKMEgwijMOyjCOyj9-f39-f3AFcI5FTkVOcEVwDkVwDkVORXDORXBORU5FTnBFdcg2CjM
+O8EowDvBKP39-f39-BXCORU5FTkVORXAORXAORU5FcM5FcE5FTkVORU5Fdcg2Cj9-f39-f3UFcI5
+FTkVORU5FTnBFTkVORXAORXAOcEVwDnAFTkVORXXINgo-f39-f391BX6INgo-f39-f391BX6INEo
+wCDDKP39-f39-dQV_iDQKCDAKCDCKP39-f39-dQV_iDTKCDCKP39-f39-dQVyznAFTnBFcA5wBXB
+ORXfINIoIMMo-f39-f391BXCOcMVwTkVwTkVORU5FcI5FeAg0SggxCj9-f39-f3UFcM5wRXCOcEV
+OcAVwDkVwjkV4CDQKCDFKP39-f39-dQVxDkVxTkVORU5FTkVwjkV4CDQKMIgwij9-f39-f3UFco5
+wBXAORU5FcA5wBU5FeEg2Cj9-f39-f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfog2Cj9-f39
+-f3UFfog0SjAIMMo2Tso1jsozzsozTsowzvAKP39-f3yFcM7wBU7FTsVO8EVwzvBFTvAFcQ7FcE7
+FTsVO8EVzyDQKCDAKCDCKNM7KMM7KMs7KMg7KME7KNs7KMQ7KP39-f3yFcI7FcE7FTsVwDsVxDsV
+wTsVOxXDOxXBOxU7FTsVOxXPINMoIMIo0zsowTvBKMA7wCjAOyjAOyjBOyjBO8AowTvBKME7KME7
+wSg7KMA7KDvAKMY7wCjBO8EoxDsowDsowDsowDvAKP39-f3oFcI7FcE7FTsVwDsVxDvAFcA7FTsV
+wzsVwTsVOxU7wRXPINEowCDDKNI7KME7KMA7KDsowDsoOyjAOyjAOyjBOyjAOyg7KMA7KMA7KME7
+KMA7KDsowDsowDsoxTsowDsoOyjAOyjEOyjAOyjAOyjCOyj9-f395xXCOxU7FTsVOxXAOxXEOxXB
+OxU7FcM7FcE7FTsVOxU7Fc8g0yggwijSOyjBOyjAOyg7wig7KMA7KMA7KME7wig7KMA7KMA7KME7
+KMA7KDsowDsowDsoxTvCKDsowDsoxDsowDsowDsowDvBKP39-f3nFcI7wRXAO8AVO8EVO8EVO8EV
+O8EVwDsVwDvBFcA7wBU7FTsVzyDQKCDAKCDCKNE7KMI7KMA7KDsowjsoOyjAOyjCOyjCOyjAOyg7
+KMM7wSg7KMA7KMA7KMU7KMI7KMA7KMQ7KMA7KMA7KDsowDso-f39-ecV_iDRKMAgwyjROyjDO8Eo
+wDvBKDvAKME7KMM7wSjAO8EoOyjFOyjAO8EoO8EoO8IowDvBKMA7wSjAOyjBO8AowDvBKMA7wSj9
+-f395xX6INgo_jvAKP39-f391BX6INgo-f39-f391BX6INgo-f39-f391BXDOcAVORU5FTnBFcM5
+wRU5FcE5wRXEOcAVORXBOcEVOcAVwDnBFcMg2Cj9-f39-f3UFcI5FcE5FTkVwDkVxDkVORU5FcI5
+FcQ5FcE5FcI5FcA5FTkVORXFINIoIMMo-f39-f391BXCORXBORU5FcA5FcQ5wRU5FcI5FcQ5wRU5
+FcI5FcA5FTkVOcAVxCDRKMAgwyj9-f39-f3UFcI5FTkVORU5FcA5FcQ5FTkVORXCORXGORU5FcI5
+FcA5FTkVORXFINAoICggwyj9-f39-f3UFcI5wRXAOcAVOcEVOcEVORU5FTnBFcA5FcA5wRU5wBXA
+OcEVOcEVOcEVOcEVwyDQKCAoIMMo-f39-f391BX6INAowiDCKP39-f39-dQV_iDSKCDDKP39-f39
+-dQV_iDSKCDDKP39-f39-dQV_iDYKP39-f39-dQVwznAFTkVORU5wRXDOcEVOcEVORXBOcEVOcEV
+OcEVOcEVwzkVxSDYKP39-f39-dQVwjkVwTkVORXAORXEORU5FTkVORU5FcE5FcI5FcE5FcA5FcU5
+FcUg2Cj9-f39-f3UFcI5FcE5FTkVwDkVxDnBFTnBFTkVwTnAFcE5FcE5FcA5wBXEORXFINgo-f39
+-f391BXCORU5FTkVORXAORXEORXBORU5FTkVwTkVwjkVwTkVwDkVxTkVxSDQKMIgwijSOyjMOyjO
+OyjAOyjBOyjXOyjDOyjKOyj9-f395xXCOcEVwDnAFTnBFTnBFTkVwTkVORU5wRU5wRXAORXBORXA
+OcEVwDkVwDnBFcMg0CggxSjSOyjMOyjOOyjEOyjdOyjKOyj9-f395xX6INAoIMUo0TvCKMA7wCjA
+OyjAOyg7wijFO8AowTvBKDvAKMA7wijAO8AowDsoO8AoxDsowTsoO8AowTvBKMA7wSjAO8AowDvC
+KP39-f3lFfog0CjBIMMo0jsowTsowDsoOyjAOyjAOyjGOyjAOyg7KMA7KMA7KME7KME7KMA7KDvA
+KMY7KME7KMA7KMA7KMA7KDsowDsoOyjAOyjAOyj9-f395xX6INMoIMIo0jsowTvCKMA7wCjBOyjG
+O8IoOyjAOyjAOyjBOyjBOyjAOyg7KMc7KDsoOyjAOyjAOyjAOyg7KMA7KDvCKMA7KP39-f3nFfog
+0yggwijSOyjBOyjCOyjAOyjAOyjGOyjCOyjAOyjAOyjBOyjBOyjAOyg7KMc7KDsoOyjAOyjAOyjA
+OyjAO8EoOyjDOyj9-f395xXCOcAVwTnAFTnBFTnBFcQ5wBU5wRU5wRU5wBXEORXBORU5FTnBFcMg
+0CjBIMMo0zvAKMA7wSg7KMA7KME7wCjFO8EowDvBKDvBKME7wCjAO8AowDsoyDsoOyjAO8EowDvB
+KMI7KMA7wSjBO8Ao-f39-eUVwjkVORU5FTkVwDkVwDkVxTkVwTkVORXAORXAORU5FcM5FcE5FTkV
+ORU5FcMg2Cj93jvAKP39-f3wFcI5FTkVORU5FcA5FcA5wBXEORXBOcAVwTkVwDkVORXDORXBORU5
+FTnBFcMg2Cj9-f39-f3UFcI5FTkVORU5FcA5FcA5FcU5FTkVORU5FcA5FcA5FTkVwzkVwTkVORU5
+FTkVwyDYKP39-f39-dQVwjkVORU5wBXBORXAOcEVOcEVOcEVORU5FTnBFTnBFcA5FcA5wRXAOcAV
+ORU5FcMg2Cj9-f39-f3UFfog0SjAIMMo-f39-f391BX6INAoIMUo-f39-f391BX6INAoIMUo-f39
+-f391BX6INAowSDDKP39-f39-dQVwznAFTnBFTkVORXDORXBORU5FTnBFdsg0CggwCggwij9-f39
+-f3UFcI5FcE5FcE5FTkVwzkVwTkVORU5FTkV2yDQKCDAKCDCKP39-f39-dQVwjnBFTnAFcE5FcQ5
+FcE5FTkVOcEV2yDRKMAgwyj9-f39-f3UFcQ5FTkVwTkVORXDORXBORU5FTkVORXbINgo-f39-f39
+1BXCOcAVwDkVwTkVORXAORXAOcEVwDnAFTkVORXbINgo-f39-f391BX6INgo-f39-f391BX6INgo
+-f39-f391BX6INAowiDCKOM7KMY7wCjVOyjBO8AowTvAKMA7KP39-f37Ffog0yggwijjOyjFOyjR
+Oyg7KMA7wCjAOyjAOyg7KMA7KDso-f39-fsVyzkVxDkVORU5wRXBORXbINMoIMIo0jvBKMA7wCjB
+O8AowTvBKMU7KMI7wCjAOyg7wCjEOyg7KMI7KMM7KDsowDsoOyjAOyj9-f39_BXLOcAVwzkVORXA
+ORXBORXcINIoIMMo0TsowDsoOyjAOyg7KMA7KDsowDsoxDvCKDsowDsoO8AozTsowjsowTvAKMA7
+KDso-f39-fkVyznBFcI5FTkVwDkVwTkV3CDRKCDEKNE7KMA7KDsowDsoOyjAOyg7KMA7KMU7KME7
+KMA7KDsozjsowTsowTsowDsoO8Ao-f39-foVyznAFcM5FTkVwDkVwTkV3CDRKCDEKNI7wSg7KMA7
+KDsowDsoOyjAOyjFOyjBOyjAOyg7KM47KMA7KMI7KMA7KDsoOyj9-f39_RXLORXFOcAVOcEVORXd
+INEoIMQo1DsowDvAKME7wCjBO8EoxTsowjvAKMA7KM07wSg7wijAO8AowDsowDso-f39-fgV_iDY
+KNI7wCj9-f39-fwV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQVwznAFTkVORU5
+wBXAOcEVORU5FcM5FcE5FTkVOcEV0yDRKMAgwyj9-f39-f3UFcI5FcE5FTkVORU5FcA5FcA5FTkV
+wzkVwTkVORU5FTkV0yDQKCDAKCDCKP39-f39-dQVwjnBFTnBFTkVORXAORXAOcEVwzkVwTkVORU5
+wRXTINAoIMAoIMIo-f39-f391BXEORXBORU5FTkVwDkVwDkVORXDORXBORU5FTkVORXTINEowCDD
+KP39-f39-dQVwjnAFcA5wRU5FTkVwDkVwDkVORXAORXAOcEVwDnAFTkVORXTINAoIMAoIMIo-f39
+-f391BX6INAoIMAoIMIo-f39-f391BX6INEowCDDKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39
+-f39-dQVwjkVORU5wRXDORXBORU5FTnBFd8g2Cj9-f39-f3UFcI5FTkVOcEVwzkVwTkVORU5FTkV
+3yDYKP39-f39-dQVwjkVORU5FTkVwzkVwTkVORU5wRXfINEowCDDKMM7wSjAO8Eo-f39-f39xxXC
+OcEVORU5FcM5FcE5FTkVORU5Fd8g0CggwCggwijFOyjCOyj9-f39-f3HFcI5wRU5FTkVwDkVwDnB
+FcA5wBU5FTkV3yDQKCDAKCDCKMU7KMI7KP39-f39-ccV_iDRKMEgwijFOyjCOyj9-f39-f3HFfog
+0yggwijFOyjCOyj9-f39-f3HFfog0yggwijFOyjCOyj9-f39-f3HFfog0SjAIMMoxTsowjso-f39
+-f39xxX6INgowzvBKMA7wSj9-f39-f3HFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfog2Cj9-f39
+-f3UFfogzSggwSjAIMMo-f39-f391BX6IMwowCDAKCDAKCDCKP39-f39-dQV_iDNKCDAKCAowCDC
+KP39-f39-dQV_iDNKCDAKMAgKCDCKP39-f39-dQV_iDNKCDAKCDAKCDCKP39-f39-dQV_iDNKCDA
+KCDAKCDCKP39-f39-dQV_iDMKMEgwCjAIMMo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f39
+1BX6INgo-f39-f391BX6INgo-f39-f391BX6IM0oIMIoIMMowjvAKM87wCjKOyjTO8Ao4zso-f39
+-e0V_iDMKMAgwSjAIMMowzso0Dsoyjso0jso5Tso-f39-e0V_iDNKCDCKCDDKMM7KME7wCjBO8Eo
+wDvAKME7KMo7wSjBO8AowTvBKMU7KMI7wCjBO8EoOyjAOyjAO8EozjvCKDsoO8AoOyjAOyjAO8Ao
+-f39-d0V_iDNKCDCKCDDKMM7KMA7KMA7KDsoxTsowDsoyjsowDsowjsoOyjHO8IoOyjAOyg7KMI7
+KMA7KDsoxzvCKMU7KME7wCjBOyjAOyg7KMA7KP39-f3cFfogzSggwiggwyjDOyjAOyjAOyg7KMM7
+wSjAOyjKOyjAOyjAO8EowDvAKMY7KME7KMA7KDsowjsowDsowDvAKNA7KME7KMI7KMA7KDvCKP39
+-f3cFfogzSggwiggwyjDOyjAOyjAOyg7KMI7KMA7KMA7KMo7KMA7KDsowDsowjsoxTsowTsowDso
+OyjCOyjAOyjCOyjEO8IoxTsowTsowjsowDsoOyj9-f393xX6IMwowSDAKMEgwijDO8AowDvAKME7
+wSjAO8EowDvAKMQ7wig7KMA7KMA7wSg7wSjAO8IowDsowjvAKME7wSjAO8EoO8Eo0TvAKDsowzvB
+KMA7wSj9-f393BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f39
+1BX6IM0oIMEowCDDKOY7KMM7KMA7KDsoyzsozTsoxjvAKNM7KDsozDvAKM87KMI7KMw7KME7KMs7
+KNM7wCjjOyjiOyjAOyj96RX6IMwowCDAKCDAKCDCKOY7KMI7KME7KDso2zsoxTso1TsoOyjLOyjR
+OyjQOyjDOyjKOyjSOyjlOyjiOyjBOyj96BX6IM0oIMMoIMIowzvAKMA7wSjGO8AowDsowDsowDvA
+KMA7wSjAO8IowDsoxzvBKMA7wCjAO8AowDvBKME7wCjBO8EoxTsowjvAKME7wSg7KMA7KMA7wSjP
+OyjBOyjAOyg7wSjBO8EoO8IoO8AowTvAKMA7wSjBOyjDOyjKO8EowTvAKME7wSjFOyjCO8AowTvB
+KDsowDsowDvBKM47wig7KDvAKDsowDsowDvAKMY7wCjAO8EowTvBKME7KP3oFfogzSggwiggwyjC
+OyjAOyg7KMA7KMQ7KMA7KDsowDsoOyjAOyg7KMA7KMA7KMI7KMY7KMA7KMI7KMA7KMA7KMA7KDso
+wDsoOyjAOyjEO8IoOyjAOyg7KMI7KMA7KDso0TvCKDsowDsoOyjAOyg7KMM7KMI7KMA7KMA7KDso
+wDsowDsowzsoyjsowDsowjsoOyjHO8IoOyjAOyg7KMI7KMA7KDsoxzvCKMU7KME7wCjBOyjAOyg7
+KMA7KMQ7KMA7KDsowDsoOyjAOyjBOyj96BX6IM0oIMEoIMQowjsowDsoOyjAOyjEO8IoOyjAOyg7
+wig7KMA7KMA7KMI7KMY7KMA7KMA7wSjAOyjAOyjAOyg7wig7KMA7KMU7KME7KMA7KDsowjsowDso
+wDvAKNA7KME7KMA7KDsowDsoOyjDOyjCOyjAOyjAOyg7KMA7KMA7KMM7KMo7KMA7KMA7wSjAO8Ao
+xjsowTsowDsoOyjCOyjAOyjAO8Ao0DsowTsowjsowDsoO8IoxDvCKDsowDsoOyjAOyjBOyj96BX6
+IM0oIMAoIMUowjsowDsoOyjAOyjEOyjCOyg7KMA7KMI7KMA7KMA7KMI7KMc7wSg7KMA7KMA7KMA7
+KMA7KDsowjsowDsoxTsowTsowDsoOyjCOyjAOyjCOyjPOyjBOyjAOyg7KMA7KDsowzsowjsowDso
+wDsoOyjAOyjAOyjDOyjKOyjAOyg7KMA7KMI7KMU7KME7KMA7KDsowjsowDsowjsoxDvCKMU7KME7
+KMI7KMA7KDsoxzsowjsowDsoOyjAOyjBOyj96BX6IMwowSAowiDCKMM7wCjAOyjAOyg7wijAO8Eo
+O8AowjvBKDsowDsowTvAKMA7KMk7KMA7wSg7wSg7KMA7KMA7wSjAO8EoO8IowDsowjvAKME7wSjA
+O8EoO8EoxzsoxjsowjvBKDsowDsowDvBKME7wCg7wSjAO8AowDsowDsowDsowzsoxTvCKDsowDso
+wDvBKDvBKMA7wijAOyjCO8AowTvBKMA7wSg7wSjRO8AoOyjDO8EowDvBKMU7wSg7KMA7KMA7wSjB
+Oyj96BX6INgo7DsoxjvAKPw7KO87KME7KP3yOyj96RX6INgo-f39-f391BX6INgo-f39-f391BX6
+INgo-f39-f391BX6IM0oIMEowCDDKOY7KMM7KMA7KDsowDvAKMs7KMg7wCjTOyg7KMw7wCjPOyjC
+OyjMOyjBOyjLOyjTO8Ao5DvAKMQ7wCjcOyjAOyj97xX6IMwowCDAKCDAKCDCKOY7KMI7KME7KDso
+wTsoyzsoxzso1TsoOyjLOyjROyjQOyjDOyjKOyjSOyjlOyjHOyjcOyjBOyj97hX6IM0oIMMoIMIo
+wzvAKMA7wSjGO8AowDsowDsowDvAKMA7wSjAO8IowDsoxzsowTvAKME7wSg7wijFOyjCO8AowTvB
+KDsowDsowDvBKM87KME7KMA7KDvBKME7wSg7wig7wCjBO8AowDvBKME7KMM7KMo7wSjBO8AowTvB
+KMU7KMI7wCjBO8EoOyjAOyjAO8EozzsowjvAKME7KME7wSjAO8AoxjvAKMA7wSjBO8EowTso-e4V
+_iDNKCDBKMAgwyjCOyjAOyg7KMA7KMQ7KMA7KDsowDsoOyjAOyg7KMA7KMA7KMI7KMc7KMA7KMA7
+KDsowzsoxjvCKDsowDsoOyjCOyjAOyg7KNE7wig7KMA7KDsowDsoOyjDOyjCOyjAOyjAOyg7KMA7
+KMA7KMM7KMo7KMA7KMI7KDsoxzvCKDsowDsoOyjCOyjAOyg7KMc7wijEO8IowjsowDsowDsowjso
+wDsoxDsowDsoOyjAOyg7KMA7KME7KP3uFfogzSggwyggwijCOyjAOyg7KMA7KMQ7wig7KMA7KDvC
+KDsowDsowDsowjsoxzsowDsowDsowDvAKME7KMc7KME7KMA7KDsowjsowDsowDvAKNA7KME7KMA7
+KDsowDsoOyjDOyjCOyjAOyjAOyg7KMA7KMA7KMM7KMo7KMA7KMA7wSjAO8AoxjsowTsowDsoOyjC
+OyjAOyjAO8Ao0DsowjvBKMA7KME7wCjAO8IoxDvCKDsowDsoOyjAOyjBOyj97hX6IM0oIMAoIMAo
+IMIowjsowDsoOyjAOyjEOyjCOyg7KMA7KMI7KMA7KMA7KMI7KMc7KMA7KMA7KMI7KMA7KMc7KME7
+KMA7KDsowjsowDsowjsozzsowTsowDsoOyjAOyg7KMM7KMI7KMA7KMA7KDsowDsowDsowzsoyjso
+wDsoOyjAOyjCOyjFOyjBOyjAOyg7KMI7KMA7KMI7KMQ7wijFOyjBOyjAOyjAOyjDOyg7KMc7KMI7
+KMA7KDsowDsowTso-e4V_iDMKMEgwCjAIMMowzvAKMA7KMA7KDvCKMA7wSg7wCjCO8EoOyjAOyjB
+O8AowDsoxzvAKMA7wCjAO8EowjvAKDvCKMA7KMI7wCjBO8EowDvBKDvBKMc7KMY7KMI7wSg7KMA7
+KMA7wSjBO8AoO8EowDvAKMA7KMA7KMA7KMM7KMU7wig7KMA7KMA7wSg7wSjAO8IowDsowjvAKME7
+wSjAO8EoO8Eo0DsowjvBKMA7wCg7wSjBO8EoxTvBKDsowDsowDvBKME7KP3uFfog2CjsOyj8Oyjv
+OyjBOyj99jso-e8V_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDNKCDCKCDD
+KP39-f39-dQV_iDMKMAgwSjAIMMo-f39-f391BX6IM0oIMAoICggwyj9-f39-f3UFfogzSggwCgg
+KCDDKP39-f39-dQV_iDNKCDAKMIgwij9-f39-f3UFfogzSggwiggwyj9-f39-f3UFfogzCjBIMEo
+IMMo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f39
+1BX6IM0oIMAowiDCKP39-f39-dQV_iDMKMAgwCggxSj9-f39-f3UFfogzSggwCggxSj9-f39-f3U
+FfogzSggwCjBIMMo-f39-f391BX6IM0oIMMoIMIo-f39-f391BX6IM0oIMMoIMIo-f39-f391BX6
+IMwowSAowSDDKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDY
+KP39-f39-dQV_iDNKCDBKMAgwyjCO8AozzvAKMc7wCjPOyjCOyjeO8Ao2jsozjsowDvAKME7KP39
+-fsV_iDMKMAgwCggxSjDOyjQOyjGOyjROyjkOyjaOyjNOyjCOyjCOyj9-f36FfogzSggwCggxSjD
+OyjBO8AowTvBKMA7wCjBOyjGOyjBOyjAOyg7wSjBO8EoO8IoO8AowTvAKMA7wSjGO8AowDvBKMA7
+wSjBOyjAOyjAOyjEO8AoOyjBO8AowDsoO8AoOyjAOyg7KMA7KDvBKME7KMI7KMI7KP39-foV_iDN
+KCDAKMEgwyjDOyjAOyjAOyg7KMU7KMA7KMU7wig7KMA7KDsowDsoOyjDOyjCOyjAOyjAOyg7KMA7
+KMc7KDsowDsoOyjAOyjAOyjAOyjAOyjEOyg7KDsowjsoO8AowTsoOyjAOyjAOyg7KMA7KMA7KMI7
+KMI7KP39-foV_iDNKCDAKCDAKCDCKMM7KMA7KMA7KDsowzvBKMA7KMY7KME7KMA7KDsowDsoOyjD
+OyjCOyjAOyjAOyg7KMA7KMU7wSg7KMA7KDsowDsowDsowDsowDsoxDsoOyg7KMA7wSg7KMI7wCjB
+OyjAOyg7KMA7KMA7KMI7KMI7KP39-foV_iDNKCDAKCDAKCDCKMM7KMA7KMA7KDsowjsowDsowDso
+xjsowTsowDsoOyjAOyg7KMM7KMI7KMA7KMA7KDsowDsoxDsowDsoO8EowDvBKME7KME7wSjEOyjB
+Oyg7KMA7KDsowjsoOyjAOyjAOyg7wSjBOyjCOyjCOyj9-f36FfogzCjBIMAowCDDKMM7wCjAO8Ao
+wTvBKMA7wSjAO8AoxTsowjvBKDsowDsowDvBKME7wCg7wSjAO8AowDsowDsoxTvBKDsowjsowzvA
+KMI7KDvCKDsowTsowDvBKDsowjsowDsowDvBKDsowzsowjvAKME7KP39-foV_iDYKP3ROyjCOyjH
+O8Ao3zsoxDsoxTso-f39_xX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6IM0o
+IMAowiDCKP39-f39-dQV_iDMKMAgwyggwij9-f39-f3UFfogzSggwyggwij9-f39-f3UFfogzSgg
+wiggwyj9-f39-f3UFfogzSggwSggxCj9-f39-f3UFfogzSggwSggxCj9-f39-f3UFfogzCjBIMAo
+IMQo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f391BX6INgo-f39-f39
+1BX6IM0oIMEowCDDKPU7KPI7KMg7KMI7KNE7KMs7KNI7KMc7KMY7KP39-ccV_iDMKMAgwCggwCgg
+wij97DsoyDsowjso0Tsoyzso0jso0Dso-f39xxX6IM0oIMAoIMAoIMIo4DsoO8AowDvAKME7wSg7
+KMA7KDvAKMA7KDvAKMA7wCjGO8EoO8EowTvAKME7wSjAO8AoyjvBKME7wCjAO8IoO8IowDvAKMA7
+KDvAKMQ7wijAO8AoxTvBKME7wCjGO8EoO8IoOyg7wCg7wCjBO8EoO8Io-f39xRX6IM0oIMEowCDD
+KOA7wCjBOyjAOyg7KMA7KDsowDsowDsowDvAKME7KMA7KMQ7KMI7KMA7KMI7KDsowjsowDsowTso
+xTsowDsoOyjAOyjAOyjCOyjBOyjAOyg7wCjHOyjBOyjAOyjEOyjAOyg7KMA7KMQ7KMM7KME7wCjC
+OyjAOyjDOyj9-f3HFfogzSggwCggwCggwijRO8IoO8IoxDsowjvCKDsowDsoOyjAOyjAOyjAOyjC
+O8IoxTvAKMA7KMA7KMA7wSg7KMI7wijJOyjAOyg7wijAOyjCOyjBO8IoOyjIOyjBOyjAOyjEOyjA
+Oyg7wijFO8AowTsowTsowzsowDsowzso-f39xxX6IM0oIMAoIMAoIMIo4DsowjsowzvBKDsowDso
+wDsowDsowjsoyjsoO8EowDsowDsoOyjCOyjEOyjFOyjAOyg7KMM7KMI7KME7KMI7KMg7KME7KMA7
+KMQ7KMA7KDsoyjsowDsowTsowzsowDsowzso-f39xxX6IMwowSDAKMAgwyjgOyjDO8EowjsowDvB
+KDvBKDsowzvBKMQ7wSjAOyjDO8EowDvBKMA7wSjAOyjGO8EowTvBKME7wCjBO8AowDvBKDsoyTvA
+KMA7wCjFO8EowTvBKMQ7wSjCO8AoOyjCO8EowDvBKME7wCj9-f3FFfog2CjtOyjcOyj9-f39-cMV
+_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDYKP39-f39-dQV_iDNKCDBKMAgwyjSOyjCO8Aoxjso
+yjsoxDsowDvAKMc7KMY7wCjBOyjVOyg7KMs7KDsowTsoxzsowTso-f39-cAV_iDMKMAgwCggwCgg
+wijWOyjHOyjLOyjDOyjCOyjGO8AoxTsowDsowTso1DsoOyjLOyg7KMI7KMY7KME7KP39-f3AFfog
+zSggwCggwCggwijRO8AowTsoxzsowjvBKDsowDsoO8EowTsowjsoxzsoyDsowTso2jsoOyjMOyjF
+O8IoO8EowTvAKMA7wSj9-f3yFfogzSggwSjBIMIo0jsowDvCKMU7KME7KMI7KMA7KDsowDsowDso
+wjsoxzsoxzsowjsoxTvCKDvCKMk7wyjLOyjGOyjBOyjAOyg7KMA7KDsowDso-f398RX6IM0oIMMo
+IMIo0jsowTsoxzsowjvAKMA7KMA7KDsowDsowDsowjsoxzsoxjsowzso2jsoOyjMOyjGOyjBOyjA
+Oyg7wig7KMA7KP39-fEV_iDNKCDDKCDCKNI7KME7KMc7KMQ7KDsowDsoOyjAOyjAOyjCOyjHOyjF
+OyjEOyjFO8IoO8IoyTvDKMs7KMY7KME7KMA7KDsowjsowDso-f398RX6IMwowSDAKMAgwyjRO8Eo
+wDsoxzsowTvBKME7wSg7wSjBOyjCO8AowTsowTvBKME7KMA7wijBOyjaOyg7KMw7KMc7wCg7KMA7
+KMA7wSg7KMA7KP39-fEV_iDYKOE7KNE7KMU7KMc7KMc7KOs7KP39-f3OFfog2Cj9-f39-f3UFfog
+2Cj9-f39-f3UFfog2Cj9-f39-f3UFfogzCjAIMEowCDDKPU7KNU7KDsoxzsowjsoxjvAKME7wCjB
+OyjHO8AowTvAKMY7KDso0jsoxDsowDvAKMY7wCjBOyj9-f3RFfogyyggwCggKCDAKCDCKPU7KNU7
+KDsowDsowzvAKME7wCjAOyjCOyjAOyg7KMM7KME7KMI7KMA7KDsoyDsoOyjSOyjDOyjCOyjFOyjA
+OyjBOyj9-f3QFfogziggKCAowCDCKOo7KDvAKMA7wCjAO8IoOyjAOyg7KDvAKDvBKMo7KMQ7KMA7
+KDsowDsowjsoO8AoOyjCO8IoOyjCOyg7wCg7KMI7KME7KM07wSg7KMA7KDvBKME7KMI7KMg7KME7
+KP39-dAV_iDNKCDAKMAgKCDCKOo7wCjBOyjAOyjAOyjBOyjAOyg7wCjBOyjAOyjKOyjDOyjAOyg7
+KME7KME7wCg7KDvBKME7KMI7KME7wCg7KDvBKMA7KME7KMw7KMI7KMA7KDsowDsowDsowjsoxjvA
+KMI7KP39-dAV_iDMKCDBKCDAKCDCKOA7wig7wig7KMI7wijAOyjBOyjAOyg7KMI7KMA7KMo7KMM7
+KMA7wijAOyjBOyjAOyg7KMA7KMA7KMI7KME7KMA7KDsowDsoOyg7KDsozTvAKMA7KMA7KDsowDso
+wDsowjsoyDsowTso-f390BX6IMsoIMIoIMAoIMIo6jsowjsowzsowTsowDsoOyjCOyjAOyjLOyjC
+OyjCOyjCOyjAOyjAOyg7KMA7KMA7KMM7KMA7KMA7KDsowDsoOyg7KDsozzsoOyjAOyg7KMA7KMA7
+KMI7KMU7KMA7KME7KP39-dAV_iDLKMIgwCjAIMMo6jsowzvBKME7wCjAO8EoOyjCOyjAOyjLOyjB
+O8EowTsowjsowTvAKME7wCjCO8AowTsowTvAKME7wCjBOyg7KMY7KME7KMA7wSjBO8EoO8EowTso
+wjvAKME7KME7wCjCOyj9-f3QFfog2Cj9-ew7KMU7KMc7KP39-dEV_iDYKP39-f39-dQV_iDYKP39
+-f39-dQV_iDYKP39-f39-dQV_iDMKMAgwiggwyj6OyjVOyg7KMY7KMI7KMc7KMc7KDso0jsoxDso
+wDvAKMY7wCjBOyjJOyg7KMY7KNA7KMI7KDso0jsoxDsowDvAKMY7wCjBOyjVOyjHOyj94BX6IMso
+IMAoIMAowCDDKPo7KNU7KDsowDsowjsoOyjBOyjBOyjCOyg7KMY7KDso0jsowzsowjsoxTsowDso
+wTsoyDsoOyjAOyjCOyg7KMU7KMc7KMI7KDso0jsowzsowjsoxTsowDsowTso1Dsoxzso-eAV_iDO
+KCDBKCDDKO87KDvAKMA7wCjAO8IoOyjAOyg7KDvAKDvBKMo7KMc7wig7KMc7KME7KM07wSg7KMA7
+KDvBKME7KMI7KMg7KME7KM07KMg7wSg7KMc7wSjOO8EoOyjAOyg7wSjBOyjCOyjIOyjBOyjUO8Eo
+wTvAKMA7wSjBO8Ao-dkV_iDNKCDCKCDDKO87wCjBOyjAOyjAOyjBOyjAOyg7wCjBOyjAOyjKOyjH
+OyjCOyjGOyjBOyjMOyjCOyjAOyg7KMA7KMA7KMI7KMY7wCjCOyjOOyjGOyjAOyjAOyjGOyjAOyjM
+OyjCOyjAOyg7KMA7KMA7KMI7KMY7wCjCOyjUOyjAOyjCOyg7KMA7KMI7KP3YFfogzCggwyggwyjg
+O8IoO8IoxDsowjvCKMA7KME7KMA7KDsowjsowDsoyjsoxzsowjsoxjsoOyg7KM07wCjAOyjAOyg7
+KMA7KMA7KMI7KMg7KME7KM47KMY7KMA7KMA7KME7wig7KMA7KM07wCjAOyjAOyg7KMA7KMA7KMI7
+KMg7KME7KMU7wig7wijEOyjAOyjAO8EoOyjAOyjAO8Eo-dgV_iDLKCDEKCDDKO87KMI7KMM7KME7
+KMA7KDsowjsowDsoyzsoxjsowzsoxTsoOyg7KM87KDsowDsoOyjAOyjAOyjCOyjFOyjAOyjBOyjP
+OyjGO8EowTsoxTsowDsozzsoOyjAOyg7KMA7KMA7KMI7KMU7KMA7KME7KNQ7KMA7KDsowDsoOyjA
+Oyg7KMA7KP3YFfogyyjCIMAowSDCKO87KMM7wSjBO8AowDvBKDsowjsowDsoyzsoxzvAKME7KMY7
+KDsoxjsowTsowDvBKME7wSg7wSjBOyjCO8AowTsowTvAKMI7KME7KME7KMc7KMg7KME7KMU7KMA7
+KMU7KME7KMA7wSjBO8EoO8EowTsowjvAKME7KME7wCjCOyjUOyjAOyjAO8EoOyjAOyjAO8Eo-dgV
+_iDYKP392DsoxTsoxzso2TvAKO07KMU7KMc7KP39xBX6INgo-f39-f391BX6INgo-f39-f391BX6
+INgo-f39-f391BX6IMwowCDBKMAgwyjrOyjVOyg7KP39-c47KDso0jsoxDsowDvAKMs7wCjBOyjJ
+Oyg7KPIV_iDLKCDAKCAoIMAoIMIo6zso1TsoOyj9-fg7KNE7KDso0jsowzsowjsoyjsowDsowTso
+yDsoOyjAOyjvFfogziggwiggwijgOyg7wCjAO8AowDvCKDsowDsoOyg7wCg7wSj9-f3EOyjCO8Eo
+2DvBKDsowDsoO8EowTsowjsozTsowTsozTsowjvBKOgV_iDNKCDCKCDDKOA7wCjBOyjAOyjAOyjB
+OyjAOyg7wCjBOyjAOyj9-f3EOyjBOyjAOyjWOyjCOyjAOyg7KMA7KMA7KMI7KMs7wCjCOyjOOyjB
+OyjAOyjnFfogzCggwiggxCjgOyjCO8IowDsowTsowDsoOyjCOyjAOyjJO8IoO8IoO8IoO8IoO8Io
+O8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8Io
+O8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IowDsowTsowDso1zvAKMA7KMA7KDso
+wDsowDsowjsozTsowTsozjsowTsowDsoO8IoO8IoO8IoO8IoO8IoO8IoO8IoO8IoFfogyyggwigg
+xSjgOyjCOyjDOyjBOyjAOyg7KMI7KMA7KP39-cU7KMA7KMA7KNk7KDsowDsoOyjAOyjAOyjCOyjK
+OyjAOyjBOyjPOyjAOyjAOyjnFfogyyjCICjCIMIo4DsowzvBKME7wCjAO8EoOyjCOyjAOyj9-f3F
+OyjAOyjAOyjPOyjBOyjAO8EowTvBKDvBKME7KMI7wCjBOyjGO8AowjsowTsowTsoxzsowDsowDso
+5xX6INgo-f39-fY7KMU7KMw7KP3CFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3U
+FfogzCjAIMEowCDDKN47KP39-f398RX6IMsoIMAoICggwCggwijeOyj9-f39-fEV_iDOKCDCKCDC
+KNI7wCjAO8EowTvBKP39-f398RX6IM0oIMEowCDDKNE7KMA7KDsowDsoOyjAOyj9-f39-fEV_iDM
+KCDEKCDCKNE7wig7KMA7KDsowDso-f39-f3xFfogyyggwiggwCggwijROyjCOyjAOyg7KMA7KP39
+-f398RX6IMsowiDAKMAgwyjSO8EoOyjAOyjAO8Eo-f39-f3xFfog2Cj9-f39-f3UFfog2Cj9-f39
+-f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfogzCjAIMIoIMMo-f39-f391BX6IMsoIMAoIMAo
+wCDDKP39-f39-dQV_iDOKCAoICggwyj9-f39-f3UAAAAAAAAAAE=
+:: lune.lua
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-22 19:12:07",revision=305]]
+----------------------------------------------------------------------------------------------
+
+
+function structure(meta)
+	meta.__index = meta
+	setmetatable(
+		meta,
+		{
+			__call =
+				function(mt, instance)
+					setmetatable(instance, mt)
+					return instance
+				end,
+		}
+	)
+	return meta
+end
+
+
+function isa(val, typ)
+	return getmetatable(val) == typ
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+_modules = {}
+
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name)
+	local src = fetch(filename) 
+	if (type(src) != "string") panic("could not include " .. filename)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("Syntax error:", tostr(err))
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+function panic(...)
+	local args = { ... }
+	foreach(
+		args,
+		function(str)
+			send_message(3, { event = "report_error", content = str })
+		end
+	)
+	stop()
+end
+
+
+--------------------------------------------------------------------------------------------
+:: main.lua
+--[[pod_format="raw",created="2025-03-22 16:03:48",modified="2025-03-23 21:53:12",revision=1670]]
+----------------------------------------------------------------------------------------
+
+
+include "lune.lua"
+local buffers = require "src/buffers.lua"
+local filetree = require "src/filetree.lua"
+local ui = require "src/ui.lua"
+
+--filetree.open("/test/codron")
+--filetree.print()
+--stop()
+
+
+----------------------------------------------------------------------------------------
+
+
+local font <const> = "/system/fonts/lil.font"
+local font <const> = "/system/fonts/lil_mono.font"
+local font <const> = "fonts/cozi.font"
+local font_alt <const> = "fonts/p9.font"
+
+
+----------------------------------------------------------------------------------------
+
+
+function _init()
+	local prog_name = env().argv[0]
+	if prog_name == "/system/apps/terminal.lua" then
+		-- Codron is the loaded cart, fix the path.
+		prog_name = "/ram/cart/main.lua"
+	end
+	
+	do
+		local font_mem = fetch(font)
+		if font_mem then
+			font_mem:poke(0x4000)
+		end
+		local font_alt_mem = fetch(font_alt)
+		if font_alt_mem then
+			font_alt_mem:poke(0x5600)
+		end
+	end
+
+	window {
+		tabbed = true,
+		title = "Codron",
+		-- workspace = 3, -- for Code workspace?
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABoAAAAYAAAA8AlweHUAQyAICARwJxBHMDcwNzA3MEcQJ3A="),
+	}
+	
+	ui.init()
+	
+	filetree.open("/test/codron")
+	
+	local sidebar = ui.head():attach(ui.sidebar { x = 0, y = 0 })
+	local editor = ui.head():attach(ui.editor { x = sidebar.width, y = 0 })
+	
+--	local path = "/test/codron/main.lua"
+--	local buffer = buffers.new(path, fetch(path))
+--	editor:set_buffer(buffer)
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+function _update()
+	ui:update()
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+function _draw()
+	cls(2)
+	ui:draw()
+	print(string.format("\014%.0f", stat(1) * 100.0) .. "%", 1, 247, 6)
+	print(string.format("\014%.0f", stat(0) / (1024 * 1024)) .. "MB", 1, 253, 6)
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function find_codron_pids()
+	local matching_pids = {}
+	for process in all(fetch "/ram/system/processes.pod") do
+		if process.name == "codron" then
+			matching_pids[#matching_pids + 1] = process.id
+		end
+	end
+	return matching_pids
+end
+
+
+----------------------------------------------------------------------------------------
+
+:: .info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
+My0yMyAyMTo1MzoxMiIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
+IzQwIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvZmlsZXRyZWUubHVhIzIwIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjNTgiLHdvcmtzcGFj
+ZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS9zaWRlYmFyLmx1YSM3NiIsd29ya3NwYWNlX2lu
+ZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3VpL2VkaXRvci5sdWEjMzUiLHdvcmtzcGFjZV9pbmRleD0x
+fSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFw
+LzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFj
+ZV9pbmRleD00fX1dXQ==
+:: [eoc]
