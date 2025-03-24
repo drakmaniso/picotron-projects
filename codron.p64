@@ -51,23 +51,23 @@ LQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYPFARAAwgG
 MAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSJdXQ==
+My0yNCAyMDozODozMSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSIscmV2aXNpb249MjAzM11dbHo0AAgBAACCMQAA8yF7WzBdPXtibXA9cHh1
+My0yNCAyMDozODozMSIscmV2aXNpb249MjQ0N11dbHo0ACABAACMMQAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
-JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA7-cCDQsE8AU3cAcgBxBXMAcQB4AEABCwBgBv
-dwAnoAcAUwAc8gXgV2AHMBdQBzAHAAdABzA3MAdgBwQAELAGABBXVAAfEKcAHfECGicAB4AXEAdg
-BwAHIAdQB0AEAI9gByAHgCfwAlcBHg8xAP------------------------------------------
--------------------rUG09OH19
+JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA7-cCDQsE8AQ3cBcgBxBXMAcQB4AEABCwBgBv
+dwAnoAcAUwALLDEwVADyBeBXYAcwF1AHMAcAB0AHMDcwB2AHBAAQsAYAEFdVAB8QVQAa8QYLCwTw
+EycAB2AXEAdABwAHIAcwB0AEAH9AByAHYCfgTgAejx5n4GfgZ-AIOQAND5IBHg8xAP----------
+--------------------------------------------------_bUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSJdXQ==
+My0yNCAyMDozODozMSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-24 13:13:29",revision=1995]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-24 20:38:31",revision=2563]]
 -------------------------------------------------------------------------------------------
 
 
@@ -79,14 +79,22 @@ local filetree = require "src/filetree.lua"
 
 
 local margin_width <const> = 26
-local min_edge_distance = 13
+local scrollbar_width <const> = 7
+local min_edge_distance <const> = 13
 
 
 local cursor_width <const> = 4
 local cursor_height <const> = 11
 
 
+-------------------------------------------------------------------------------------------
+
+
 local show_line_numbers = true
+
+
+local show_cursors_in_scrollbar = true
+local show_sections_in_scrollbar = false
 
 
 -------------------------------------------------------------------------------------------
@@ -96,13 +104,14 @@ return function (attribs)
 	local result = attribs or {}
 	result.x = result.x or 0
 	result.y = result.y or 0
-	result.width_rel = 1
+--	result.width_rel = 1
+--	result.width_add = -result.x
+	result.width = 480 - 60
 	result.height_rel = 1
 	head():new(result)
 
 	-- Private fields
 	local blink_timer = 0
-	local offset_x, offset_y = -4, -4
 	
 
 	local function get_margin_width()
@@ -115,30 +124,50 @@ return function (attribs)
 
 	function result:show_cursor(keep_edge_distance)
 		local edge_distance = keep_edge_distance and min_edge_distance or 0
-		local buffer = filetree.current_buffer()
-		local col, row = buffer:active_cursor_pos()
-		local y = buffer:find_cursor_y(row)
-		if y - edge_distance < offset_y then
-			offset_y = y - 2 - edge_distance
-			offset_y = max(- 4, offset_y)
-		elseif y + cursor_height - 2 + edge_distance > offset_y + self.height then
-			offset_y = y + cursor_height - 2 + edge_distance - self.height
+		local buf = filetree.current_buffer()
+		local col, row = buf:active_cursor_pos()
+		local y = buf:find_cursor_y(row)
+		if y - edge_distance < buf.offset_y then
+			buf.offset_y = y - 2 - edge_distance
+			buf.offset_y = max(- 4, buf.offset_y)
+		elseif y + cursor_height - 2 + edge_distance > buf.offset_y + self.height then
+			buf.offset_y = y + cursor_height - 2 + edge_distance - self.height
 		end
-		local x = buffer:find_cursor_x(col, row)
-		if x - 4 < offset_x then
-			offset_x = x - 4
-		elseif x + cursor_width > offset_x + self.width then
-			offset_x = x + cursor_width - self.width
+		local x = buf:find_cursor_x(col, row)
+		if x - 4 < buf.offset_x then
+			buf.offset_x = x - 4
+		elseif x + cursor_width + 2 + scrollbar_width > buf.offset_x + self.width - get_margin_width() then
+			buf.offset_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
+		end
+	end
+	
+
+	function result:hover(msg)
+		self.cursor = 1
+		if msg.mx >= self.width - scrollbar_width then
+			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
+			if msg.my >= thumb_y and msg.my <= thumb_y + thumb_height then
+				self.cursor = "grab"
+			end
 		end
 	end
 
 
 	function result:click(msg)
 		if msg.mb ~= 1 then return end
+		if msg.mx >= self.width - scrollbar_width then
+			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
+			if msg.my >= thumb_y and msg.my <= thumb_y + thumb_height then
+				self.click_on_scrollbar_thumb = true
+			else
+				self.click_on_scrollbar_bg = true
+			end
+			return
+		end
 		self:set_keyboard_focus(true)
 		local buffer = filetree.current_buffer()
-		local row = buffer:find_cursor_row(msg.my + offset_y)
-		local col = buffer:find_cursor_col(row, msg.mx + offset_x - get_margin_width())
+		local row = buffer:find_cursor_row(msg.my + buffer.offset_y)
+		local col = buffer:find_cursor_col(row, msg.mx + buffer.offset_x - get_margin_width())
 		if key("alt") then
 			buffer:add_cursor(col, row)
 			blink_timer = 0
@@ -146,29 +175,51 @@ return function (attribs)
 			buffer:set_cursor(col, row)
 			blink_timer = 0
 		end
+		self.click_on_text = true
 	end
 
 
 	function result:drag(msg)
 		if msg.mb == 2 then
-			offset_x -= msg.dx
-			offset_x = max(-4, offset_x)
-			offset_y -= msg.dy
-			offset_y = max(-4, offset_y)
+			local buffer = filetree.current_buffer()
+			buffer.offset_x -= msg.dx
+			buffer.offset_x = max(-4, buffer.offset_x)
+			buffer.offset_y -= msg.dy
+			buffer.offset_y = max(-4, buffer.offset_y)
+			return
+		end
+		if self.click_on_scrollbar_thumb then
+			local buffer = filetree.current_buffer()
+			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
+			thumb_y += msg.dy
+			buffer.offset_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
+			buffer.offset_y = mid(-4, buffer.offset_y, buffer:total_height() - self.height + min_edge_distance)
+			return
+		elseif self.click_on_scrollbar_bg then
+			local buffer = filetree.current_buffer()
+			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
+			buffer.offset_y = math.floor(0.5 + (msg.my * total_height) / self.height)
+			buffer.offset_y -= self.height // 2
+			buffer.offset_y = mid(-4, buffer.offset_y, buffer:total_height() - self.height + min_edge_distance)
+			return
 		end
 	end
 	
 
 	function result:release(msg)
-		if msg.mb ~= 1 then return end
-		self:show_cursor(false)
+		if self.click_on_text then
+			self:show_cursor(false)
+		end
+		self.click_on_text = false
+		self.click_on_scrollbar_thumb = false
+		self.click_on_scrollbar_bg = false
 	end
 	
 
 	function result:mousewheel(msg)
 		local buffer = filetree.current_buffer()
 		if not buffer then return end
-		offset_y = max(-4, offset_y - 24 * msg.wheel_y)
+		buffer.offset_y = mid(-4, buffer.offset_y - 24 * msg.wheel_y, buffer:total_height() - self.height + min_edge_distance)
 	end
 
 	
@@ -183,19 +234,37 @@ return function (attribs)
 			-- TODO: show cursor !!!
 		end
 			
-		if keyp("up") then buffer:move_cursors_up(); result:show_cursor(true); blink_timer = 0;
-		elseif keyp("down") then buffer:move_cursors_down(); result:show_cursor(true); blink_timer = 0
-		elseif keyp("right") then buffer:move_cursors_right(); result:show_cursor(true); blink_timer = 0
-		elseif keyp("left") then buffer:move_cursors_left(); result:show_cursor(true); blink_timer = 0
+		if keyp("up") then buffer:move_cursors_up(); self:show_cursor(true); blink_timer = 0;
+		elseif keyp("down") then buffer:move_cursors_down(); self:show_cursor(true); blink_timer = 0
+		elseif keyp("right") then buffer:move_cursors_right(); self:show_cursor(true); blink_timer = 0
+		elseif keyp("left") then buffer:move_cursors_left(); self:show_cursor(true); blink_timer = 0
 		end
 		
-		if key("ctrl") and key("shift") and keyp("n") then show_line_numbers = not show_line_numbers
+		if key("ctrl") then
+			if keyp("z") then
+				buffer:undo()
+				self:show_cursor(true)
+			elseif keyp("y") or (key("shift") and keyp("z")) then
+				buffer:redo()
+			end
+			if key("shift") and keyp("n") then show_line_numbers = not show_line_numbers
+			end
 		end
+	end
+
+
+	function result:compute_scrollbar_coords()
+		local buffer = filetree.current_buffer()
+		local total_height = buffer:total_height()
+		local thumb_height = math.floor(0.5 + (self.height * self.height) / total_height)
+		thumb_height = max(scrollbar_width, thumb_height)
+		local thumb_y = math.floor(0.5 + (buffer.offset_y * self.height) / total_height)
+		return total_height, thumb_y, thumb_height
 	end
 
 	
 	function result:draw(msg)
-		rectfill(0, 0, self.width - 1, self.height - 1, 1)
+		rectfill(0, 0, self.width - 1 - scrollbar_width, self.height - 1, 1)
 		
 		-- TODO: this is in /system/lib/gui_ed.lua:
 		--     -- draw tabs relative to home
@@ -204,14 +273,14 @@ return function (attribs)
 		local buffer = filetree.current_buffer()
 		if not buffer then return end
 	
-		local x = get_margin_width() - offset_x
-		local row = buffer:find_cursor_row(offset_y)
-		local y = buffer:find_cursor_y(row) - offset_y
+		local x = get_margin_width() - buffer.offset_x
+		local row = buffer:find_cursor_row(buffer.offset_y)
+		local y = buffer:find_cursor_y(row) - buffer.offset_y
 		local text = buffer:text(row)
 		while text and y < self.height do
 			print(text, x, y, 6)
 			row += 1
-			y = buffer:find_cursor_y(row) - offset_y
+			y = buffer:find_cursor_y(row) - buffer.offset_y
 			text = buffer:text(row)
 		end
 		
@@ -220,8 +289,8 @@ return function (attribs)
 		if blink_timer % 32 < 16 then
 			buffer:foreach_cursor(
 				function(col, row)
-					local y = buffer:find_cursor_y(row) - offset_y
-					local x = buffer:find_cursor_x(col, row) - offset_x + get_margin_width()
+					local y = buffer:find_cursor_y(row) - buffer.offset_y
+					local x = buffer:find_cursor_x(col, row) - buffer.offset_x + get_margin_width()
 					rectfill(x, y - 2, x + cursor_width, y + 8, 14)
 				end
 			)
@@ -230,14 +299,47 @@ return function (attribs)
 		-- Margin (i.e. line numbers)
 	
 		if show_line_numbers then
-			rectfill(0, 0, get_margin_width() - 1, self.height - 1, 18)
-			local row = buffer:find_cursor_row(offset_y)
-			local y = buffer:find_cursor_y(row) - offset_y
+			rectfill(0, 0, get_margin_width() - 1, self.height - 1, 16) -- or 18, 16
+			--line(get_margin_width() - 1, 0, get_margin_width() - 1, self.height - 1, 18)
+			local row = buffer:find_cursor_row(buffer.offset_y)
+			local y = buffer:find_cursor_y(row) - buffer.offset_y
 			while buffer:text(row) and y < self.height do
 				print(string.format("%4d", row), 3, y, 1)
 				row += 1
-				y = buffer:find_cursor_y(row) - offset_y
+				y = buffer:find_cursor_y(row) - buffer.offset_y
 			end
+		end
+
+		-- Scrollbar
+		
+		rectfill(self.width - scrollbar_width, 0, self.width - 1, self.height - 1, 13)
+		local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
+		-- The scrollbar thumb
+		rectfill(
+			self.width - scrollbar_width + 0, thumb_y,
+			self.width - 1, thumb_y + thumb_height - 1,
+			6
+		)
+		if show_sections_in_scrollbar then
+			buffer:foreach_row(
+				function(row, str)
+					if str:find("----", 1, 4) then
+						local y = buffer:find_cursor_y(row)
+						y = (y * self.height) // total_height
+						line(self.width - scrollbar_width + 1, y, self.width - 2, y, 18)
+					end
+				end
+			)
+		end
+		if show_cursors_in_scrollbar then
+			buffer:foreach_cursor(
+				function(col, row)
+					local y = buffer:find_cursor_y(row)
+					y = (y * self.height) // total_height
+					line(self.width - scrollbar_width + 1, y, self.width - 2, y, 14)
+					--line(self.width - scrollbar_width, y, self.width - 1, y, 10)
+				end
+			)
 		end
 	end
 
@@ -249,7 +351,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-24 13:13:29",revision=1375]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-24 20:38:31",revision=1570]]
 -------------------------------------------------------------------------------------------
 
 
@@ -273,9 +375,9 @@ local padding_left <const> = 3
 local padding_right <const> = 5
 
 
-local bg_sidebar <const> = 13 -- or 17
-local fg_path_inactive <const> = 1 -- or 19
-local fg_path_active <const> = 6 -- or 6
+local bg_sidebar <const> = 17 -- or 13, 17
+local fg_path_inactive <const> = 1 -- or 1, 19
+local fg_path_active <const> = 6 -- or 6, 6
 
 
 -------------------------------------------------------------------------------------------
@@ -317,14 +419,20 @@ return function(attribs)
 
 	function result:draw(msg)
 		rectfill(0, 0, self.width - 1, self.height - 1, bg_sidebar)
-		pal(7, fg_path_inactive)
-		spr(8, 2, 4)
-		spr(9, 2 + 3 + 13, 4)
-		spr(10, self.width - 2 - 13, 4)
-		pal(7, 7)
+		do
+			local x = 2
+			pal(7, fg_path_inactive)
+			if false then -- only for fullscreen
+				spr(11, x, 4); x += 12
+			end
+			spr( 8, x, 4); x += 14
+			spr( 9, x, 4); x += 14
+			spr(10, self.width - 11 - 4, 4)
+			pal(7, 7)
+		end
 		clip(
-			padding_left,
-			header_height + padding_top,
+			self.x + padding_left,
+			self.y + header_height + padding_top,
 			self.width - padding_left - padding_right,
 			self.height - header_height - padding_top - padding_bottom
 		)
@@ -356,9 +464,9 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSJdXQ==
+My0yNCAyMDozODozMSJdXQ==
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-24 13:13:29",revision=1887]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-24 20:38:31",revision=2290]]
 -------------------------------------------------------------------------------------------
 
 
@@ -369,21 +477,70 @@ local row_height <const> = 11
 ------------------------------------------------------------------------------------------
 
 
+local function shallow_copy(text)
+	local copied = {}
+	for i in ipairs(text) do
+		copied[i] = text[i]
+	end
+	return copied
+end
+
+
+------------------------------------------------------------------------------------------
+
+
 function new(path, text)
 	local result = {
 		-- Public fields
+		offset_x = -4,
+		offset_y = -4,
 	}
 	
 
 	-- Private fields
 	local text = split(text, "\n", false) or {}
 	local cursors = { { col = 1, row = 1, wanted_x = 0 } } --, { col = 3, row = 3 } }
+	local undo_stack = create_undo_stack(
+		function()
+			return {
+				text = shallow_copy(text),
+				cursors = pod(cursors),
+			}
+		end,
+		function(state)
+			text = state.text
+			cursors = unpod(state.cursors)
+		end
+	)
+	local current_insert_sequence = nil
 
 
 	function result:text(row)
 		if row < 1 then return "" end
 		if row > #text then return nil end
 		return text[row]	
+	end
+	
+
+	function result:foreach_row(func)
+		for row, str in ipairs(text) do
+			func(row, str)
+		end
+	end
+	
+
+	function result:checkpoint()
+		undo_stack:checkpoint()
+	end
+	
+
+	function result:undo()
+		undo_stack:undo()
+	end
+	
+
+	function result:redo()
+		undo_stack:redo()
 	end
 	
 
@@ -430,11 +587,22 @@ function new(path, text)
 	end
 	
 
+	function result:active_cursor_pos(width, height)
+		return cursors[#cursors].col, cursors[#cursors].row
+	end
+	
+
+	function result:total_height()
+		return #text * row_height
+	end
+	
+
 	function result:set_cursor(col, row)
 		local row = mid(1, row, #text)
 		local col = mid(1, col, #text[row] + 1)
 		local x = result:find_cursor_x(col, row)
 		cursors = { { col = col, row = row, x = x } }
+		current_insert_sequence = nil
 	end
 	
 
@@ -443,6 +611,7 @@ function new(path, text)
 		local col = mid(1, col, #text[row] + 1)
 		local x = result:find_cursor_x(col, row)
 		add(cursors, { col = col, row = row, x = x })
+		current_insert_sequence = nil
 	end
 
 
@@ -455,7 +624,8 @@ function new(path, text)
 			if cursor.col > #text[cursor.row] + 1 then
 				cursor.col = #text[cursor.row] + 1
 			end
-		end		
+		end
+		current_insert_sequence = nil
 	end
 
 
@@ -468,7 +638,8 @@ function new(path, text)
 			if cursor.col > #text[cursor.row] + 1 then
 				cursor.col = #text[cursor.row] + 1
 			end
-		end		
+		end
+		current_insert_sequence = nil
 	end
 
 
@@ -484,7 +655,8 @@ function new(path, text)
 				end
 			end
 			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
-		end		
+		end
+		current_insert_sequence = nil
 	end
 
 
@@ -502,11 +674,7 @@ function new(path, text)
 			end
 			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
 		end
-	end
-	
-
-	function result:active_cursor_pos(width, height)
-		return cursors[1].col, cursors[1].row
+		current_insert_sequence = nil
 	end
 	
 
@@ -514,12 +682,28 @@ function new(path, text)
 	
 
 	function result:insert(k)
+		-- Undo checkpoint, with grouping of inserts
+		local mode = "other"
+		if k == " " then mode = "space" end
+		if
+			(current_insert_sequence == nil)
+			or (mode == "space" and current_insert_sequence == "other")
+		then
+			self:checkpoint()
+		end
+		current_insert_sequence = mode
+		-- Actual insertion
 		for cursor in all(cursors) do
-			local str = text[cursor.row]
-			text[cursor.row] = sub(str, 1, cursor.col - 1) .. k .. sub(str, cursor.col)
-			-- TODO: handle all cursors
-			cursor.col += 1
-			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+			local row, col = cursor.row, cursor.col
+			local str = text[row]
+			text[row] = sub(str, 1, col - 1) .. k .. sub(str, col)
+			-- Move all impacted cursors
+			for cursor in all(cursors) do
+				if cursor.row == row and cursor.col >= col then
+					cursor.col += 1
+					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+				end
+			end
 		end
 	end
 
@@ -768,7 +952,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSJdXQ==
+My0yNCAyMDozODozMSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-wBLIPxLaP-6iiHnOP-39-f3MEsA-wBLAP8cSwT-AEsE-yxLBP8gSxD-GEsY-yRI-Ej-dEsU-
@@ -1006,32 +1190,113 @@ KCDEKCDCKNE7wig7KMA7KDsowDso-f39-f3xFfogyyggwiggwCggwijROyjCOyjAOyg7KMA7KP39
 -f398RX6IMsowiDAKMAgwyjSO8EoOyjAOyjAO8Eo-f39-f3xFfog2Cj9-f39-f3UFfog2Cj9-f39
 -f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfogzCjAIMIoIMMo-f39-f391BX6IMsoIMAoIMAo
 wCDDKP39-f39-dQV_iDOKCAoICggwyj9-f39-f3UAAAAAAAAAAE=
-:: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-22 19:12:07",revision=305]]
-----------------------------------------------------------------------------------------------
+:: main.lua
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-24 20:38:31",revision=478]]
+----------------------------------------------------------------------------------------
 
 
-function structure(meta)
-	meta.__index = meta
-	setmetatable(
-		meta,
-		{
-			__call =
-				function(mt, instance)
-					setmetatable(instance, mt)
-					return instance
-				end,
-		}
-	)
-	return meta
+include "require.lua"
+local buffers = require "src/buffers.lua"
+local filetree = require "src/filetree.lua"
+local ui = require "src/ui.lua"
+
+
+----------------------------------------------------------------------------------------
+
+
+local font <const> = "/system/fonts/lil.font"
+local font <const> = "/system/fonts/lil_mono.font"
+local font <const> = "fonts/cozi.font"
+local font_alt <const> = "fonts/p9.font"
+
+
+----------------------------------------------------------------------------------------
+
+
+local sidebar
+local editor
+
+
+----------------------------------------------------------------------------------------
+
+
+function _init()
+	local prog_name = env().argv[0]
+	if prog_name == "/system/apps/terminal.lua" then
+		-- Codron is the loaded cart, fix the path.
+		prog_name = "/ram/cart/main.lua"
+	end
+	
+	do
+		local font_mem = fetch(font)
+		if font_mem then
+			font_mem:poke(0x4000)
+		end
+		local font_alt_mem = fetch(font_alt)
+		if font_alt_mem then
+			font_alt_mem:poke(0x5600)
+		end
+	end
+
+	window {
+		tabbed = true,
+		width = 300, height = 200,
+		title = "cart/", -- TODO
+		--workspace = 3, -- for Code workspace?
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABoAAAAYAAAA8AlweHUAQyAICARwJxBHMDcwNzA3MEcQJ3A="),
+	}
+	
+	ui.init()
+	
+	filetree.open("/test/codron2")
+	
+	sidebar = ui.head():attach(ui.sidebar { x = 0, y = 0 })
+	editor = ui.head():attach(ui.editor { x = 60, y = 0 })
+	editor:set_keyboard_focus(true)
 end
 
 
-function isa(val, typ)
-	return getmetatable(val) == typ
+----------------------------------------------------------------------------------------
+
+
+function _update()
+	-- TODO: what?
+	-- Focus is lost on any click (in picotron's `update_all`),
+	-- how do we prevent that from happening?
+	editor:set_keyboard_focus(true)
+	ui:update()
 end
 
 
+----------------------------------------------------------------------------------------
+
+
+function _draw()
+	cls(2)
+	ui:draw()
+	print(string.format("\014%4.0f", stat(1) * 100.0) .. "%", 452, 247, 0)
+	print(string.format("\014%3.0f", stat(0) / (1024 * 1024)) .. "MB", 452, 253, 0)
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function find_codron_pids()
+	local matching_pids = {}
+	for process in all(fetch "/ram/system/processes.pod") do
+		if process.name == "codron" then
+			matching_pids[#matching_pids + 1] = process.id
+		end
+	end
+	return matching_pids
+end
+
+
+----------------------------------------------------------------------------------------
+
+:: require.lua
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-24 17:40:37",revision=309]]
 ---------------------------------------------------------------------------------------------
 
 
@@ -1078,118 +1343,13 @@ end
 
 
 --------------------------------------------------------------------------------------------
-:: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-24 13:13:29",revision=45]]
-----------------------------------------------------------------------------------------
-
-
-include "lune.lua"
-local buffers = require "src/buffers.lua"
-local filetree = require "src/filetree.lua"
-local ui = require "src/ui.lua"
-
-
-----------------------------------------------------------------------------------------
-
-
-local font <const> = "/system/fonts/lil.font"
-local font <const> = "/system/fonts/lil_mono.font"
-local font <const> = "fonts/cozi.font"
-local font_alt <const> = "fonts/p9.font"
-
-
-----------------------------------------------------------------------------------------
-
-
-local sidebar
-local editor
-
-
-----------------------------------------------------------------------------------------
-
-
-function _init()
-	local prog_name = env().argv[0]
-	if prog_name == "/system/apps/terminal.lua" then
-		-- Codron is the loaded cart, fix the path.
-		prog_name = "/ram/cart/main.lua"
-	end
-	
-	do
-		local font_mem = fetch(font)
-		if font_mem then
-			font_mem:poke(0x4000)
-		end
-		local font_alt_mem = fetch(font_alt)
-		if font_alt_mem then
-			font_alt_mem:poke(0x5600)
-		end
-	end
-
-	window {
-		tabbed = true,
-		--width = 300, height = 200,
-		title = "Codron",
-		--workspace = 3, -- for Code workspace?
-		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABoAAAAYAAAA8AlweHUAQyAICARwJxBHMDcwNzA3MEcQJ3A="),
-	}
-	
-	ui.init()
-	
-	filetree.open("/test/codron")
-	
-	sidebar = ui.head():attach(ui.sidebar { x = 0, y = 0 })
-	editor = ui.head():attach(ui.editor { x = sidebar.width, y = 0 })
-	editor:set_keyboard_focus(true)
-end
-
-
-----------------------------------------------------------------------------------------
-
-
-function _update()
-	-- TODO: what?
-	-- Focus is lost on any click (in picotron's `update_all`),
-	-- how do we prevent that from happening?
-	editor:set_keyboard_focus(true)
-	ui:update()
-end
-
-
-----------------------------------------------------------------------------------------
-
-
-function _draw()
-	cls(2)
-	ui:draw()
-	print(string.format("\014%.0f", stat(1) * 100.0) .. "%", 1, 247, 3)
-	print(string.format("\014%.0f", stat(0) / (1024 * 1024)) .. "MB", 1, 253, 3)
-end
-
-
-------------------------------------------------------------------------------------------
-
-
-function find_codron_pids()
-	local matching_pids = {}
-	for process in all(fetch "/ram/system/processes.pod") do
-		if process.name == "codron" then
-			matching_pids[#matching_pids + 1] = process.id
-		end
-	end
-	return matching_pids
-end
-
-
-----------------------------------------------------------------------------------------
-
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
-My0yNCAxMzoxMzoyOSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
-IzgiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9idWZmZXJzLmx1YSM0MSIsd29y
-a3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3VpL2VkaXRvci5sdWEjMTQyIix3b3Jrc3Bh
-Y2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkvc2lkZWJhci5sdWEjMjUiLHdvcmtzcGFjZV9p
-bmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlv
-bj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdv
-cmtzcGFjZV9pbmRleD00fX1dXQ==
+My0yNCAyMDozODozMSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
+Izg0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMjE0Iix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkvZWRpdG9yLmx1YSM5OSIsd29ya3Nw
+YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3VpL3NpZGViYXIubHVhIzI0Iix3b3Jrc3BhY2Vf
+aW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRp
+b249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3
+b3Jrc3BhY2VfaW5kZXg9NH19XV0=
 :: [eoc]
