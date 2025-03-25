@@ -51,11 +51,11 @@ LQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYPFARAAwgG
 MAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSJdXQ==
+My0yNSAyMTozNTowNSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSIscmV2aXNpb249MjQ0N11dbHo0ACABAACMMQAA8yF7WzBdPXtibXA9cHh1
+My0yNSAyMTozNTowNSIscmV2aXNpb249MzA0Nl1dbHo0ACABAACMMQAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA7-cCDQsE8AQ3cBcgBxBXMAcQB4AEABCwBgBv
 dwAnoAcAUwALLDEwVADyBeBXYAcwF1AHMAcAB0AHMDcwB2AHBAAQsAYAEFdVAB8QVQAa8QYLCwTw
@@ -63,11 +63,11 @@ EycAB2AXEAdABwAHIAcwB0AEAH9AByAHYCfgTgAejx5n4GfgZ-AIOQAND5IBHg8xAP----------
 --------------------------------------------------_bUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSJdXQ==
+My0yNSAyMTozNTowNSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-24 20:38:31",revision=2563]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-25 21:35:05",revision=3397]]
 -------------------------------------------------------------------------------------------
 
 
@@ -78,7 +78,7 @@ local filetree = require "src/filetree.lua"
 -------------------------------------------------------------------------------------------
 
 
-local margin_width <const> = 26
+local margin_width <const> = 19 -- 19 or 26
 local scrollbar_width <const> = 7
 local min_edge_distance <const> = 13
 
@@ -112,6 +112,10 @@ return function (attribs)
 
 	-- Private fields
 	local blink_timer = 0
+	local freewheel_last_dy = 0
+	local freewheel_velocity = 0.0
+	local freewheel_acceleration = 0.0
+	local last_command = nil
 	
 
 	local function get_margin_width()
@@ -139,6 +143,13 @@ return function (attribs)
 		elseif x + cursor_width + 2 + scrollbar_width > buf.offset_x + self.width - get_margin_width() then
 			buf.offset_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
 		end
+	end
+	
+
+	function result:clamp_scrollbar_thumb()
+		local buffer = filetree.current_buffer()
+		buffer.offset_y = mid(-4, buffer.offset_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
+		buffer.offset_x = mid(-4, buffer.offset_x, self.width - scrollbar_width - 2)
 	end
 	
 
@@ -176,16 +187,19 @@ return function (attribs)
 			blink_timer = 0
 		end
 		self.click_on_text = true
+		last_command = nil
 	end
 
 
 	function result:drag(msg)
 		if msg.mb == 2 then
 			local buffer = filetree.current_buffer()
-			buffer.offset_x -= msg.dx
-			buffer.offset_x = max(-4, buffer.offset_x)
 			buffer.offset_y -= msg.dy
-			buffer.offset_y = max(-4, buffer.offset_y)
+			self:clamp_scrollbar_thumb()
+			freewheel_velocity = math.floor(0.5 + (msg.dy + freewheel_last_dy) / 2.0)
+			freewheel_acceleration = 0.850 + 0.145 * mid(1, abs(msg.dy), 24) / 24.0
+			freewheel_last_dy = msg.dy
+			self.cursor = "grab"
 			return
 		end
 		if self.click_on_scrollbar_thumb then
@@ -193,15 +207,22 @@ return function (attribs)
 			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
 			thumb_y += msg.dy
 			buffer.offset_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
-			buffer.offset_y = mid(-4, buffer.offset_y, buffer:total_height() - self.height + min_edge_distance)
+			self:clamp_scrollbar_thumb()
 			return
 		elseif self.click_on_scrollbar_bg then
 			local buffer = filetree.current_buffer()
 			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
 			buffer.offset_y = math.floor(0.5 + (msg.my * total_height) / self.height)
 			buffer.offset_y -= self.height // 2
-			buffer.offset_y = mid(-4, buffer.offset_y, buffer:total_height() - self.height + min_edge_distance)
+			self:clamp_scrollbar_thumb()
 			return
+		end
+		local buffer = filetree.current_buffer()
+		local row = buffer:find_cursor_row(msg.my + buffer.offset_y)
+		local col = buffer:find_cursor_col(row, msg.mx + buffer.offset_x - get_margin_width())
+		local active_col, active_row = buffer:active_cursor_pos()
+		if col ~= active_col or row ~= active_row then
+			buffer:extend_active_selection(col, row)
 		end
 	end
 	
@@ -219,26 +240,88 @@ return function (attribs)
 	function result:mousewheel(msg)
 		local buffer = filetree.current_buffer()
 		if not buffer then return end
-		buffer.offset_y = mid(-4, buffer.offset_y - 24 * msg.wheel_y, buffer:total_height() - self.height + min_edge_distance)
+		buffer.offset_y -= 24 * msg.wheel_y
+		buffer.offset_x -= 6 * msg.wheel_x
+		self:clamp_scrollbar_thumb()
 	end
 
 	
 	function result:update(msg)
 		blink_timer += 1
 		local buffer = filetree.current_buffer()
+	
+		if freewheel_velocity ~= 0 and msg.mb == 0 then
+			buffer.offset_y -= freewheel_velocity
+			self:clamp_scrollbar_thumb()
+			freewheel_velocity *= freewheel_acceleration
+			if abs(freewheel_velocity) < 0.5 then
+				freewheel_velocity = 0.0
+				freewheel_acceleration = 0.0
+			end
+		end
+	
 		if not self:has_keyboard_focus() then return end
+
+		local moved = false -- has the cursor moved?
+		local this_command = nil -- TODO: something better than this...
 
 		while peektext() do
 			local k = readtext()
 			buffer:insert(k)
 			-- TODO: show cursor !!!
 		end
-			
-		if keyp("up") then buffer:move_cursors_up(); self:show_cursor(true); blink_timer = 0;
-		elseif keyp("down") then buffer:move_cursors_down(); self:show_cursor(true); blink_timer = 0
-		elseif keyp("right") then buffer:move_cursors_right(); self:show_cursor(true); blink_timer = 0
-		elseif keyp("left") then buffer:move_cursors_left(); self:show_cursor(true); blink_timer = 0
+
+		-- Movement (with option "shift")
+		if not key("ctrl") and not key("alt") then
+			local extend = key("shift")
+			if keyp("enter") then buffer:newline(); moved = true
+			elseif keyp("tab") then buffer:tab(); moved = true
+			elseif keyp("backspace") then buffer:backspace(); moved = true
+			elseif keyp("delete") then buffer:delete(); moved = true
+			elseif keyp("up") then buffer:move_up(extend); moved = true
+			elseif keyp("down") then buffer:move_down(extend); moved = true
+			elseif keyp("right") then buffer:move_right(extend); moved = true
+			elseif keyp("left") then buffer:move_left(extend); moved = true
+			elseif keyp("home") then buffer:move_home(extend, false); moved = true
+			elseif keyp("end") then buffer:move_end(extend); moved = true
+			elseif keyp("pageup") then
+				for i = 1, 20 do
+					buffer:move_up(extend)
+				end
+				moved = true
+			elseif keyp("pagedown") then
+				for i = 1, 20 do
+					buffer:move_down(extend)
+				end
+				moved = true
+			elseif keyp("escape") then
+				-- Does not work as of Picotron 0.2.0b (escape is borked)
+				buffer:set_cursor(buffer:active_cursor_pos())
+			end
 		end
+	
+		if key("ctrl") and not key("alt") then
+			local extend = key("shift")
+			if keyp("right") then buffer:next_word(extend); moved = true
+			elseif keyp("left") then buffer:previous_word(extend); moved = true
+			elseif keyp("w") then
+				if last_command ~= "select_word" then
+					buffer:next_word(false)
+					buffer:previous_word(false)
+				end
+				buffer:next_word(true)
+				this_command = "select_word"
+				moved = true
+			elseif keyp("l") then
+				if last_command ~= "select_line" then
+					buffer:move_home(false, false)
+				end
+				buffer:move_down(true)
+				this_command = "select_line"
+				moved = true
+			elseif keyp("a") then buffer:set_cursor(buffer:active_cursor_pos())
+			end
+		end	
 		
 		if key("ctrl") then
 			if keyp("z") then
@@ -247,11 +330,20 @@ return function (attribs)
 			elseif keyp("y") or (key("shift") and keyp("z")) then
 				buffer:redo()
 			end
+			if keyp("tab") then notify("boo") end
 			if key("shift") and keyp("n") then show_line_numbers = not show_line_numbers
 			end
 		end
+		
+		if moved then
+			self:show_cursor(true)
+			blink_timer = 0
+			last_command = this_command
+		end
+
 	end
 
+	
 
 	function result:compute_scrollbar_coords()
 		local buffer = filetree.current_buffer()
@@ -272,6 +364,29 @@ return function (attribs)
 
 		local buffer = filetree.current_buffer()
 		if not buffer then return end
+		
+		-- Selection
+		
+		buffer:foreach_selection(
+			function(start_col, start_row, end_col, end_row, _active)
+				for row = start_row, end_row do
+					local y = buffer:find_cursor_y(row) - buffer.offset_y
+					local start_x = get_margin_width() - buffer.offset_x
+					if row == start_row then
+						start_x = buffer:find_cursor_x(start_col, row) - buffer.offset_x + get_margin_width()
+					end
+					local end_x = self.width
+					if row == end_row then
+						end_x = buffer:find_cursor_x(end_col, row) - buffer.offset_x + get_margin_width() - 1
+					end
+					if not (row == end_row and end_col == 1) then
+						rectfill(start_x, y - 2, end_x, y + 8, 10)
+					end
+				end
+			end
+		)
+		
+		-- Text
 	
 		local x = get_margin_width() - buffer.offset_x
 		local row = buffer:find_cursor_row(buffer.offset_y)
@@ -286,12 +401,16 @@ return function (attribs)
 		
 		-- Cursors
 		
+		local cursor_color = buffer:has_multiple_cursors() and 30 or 14
 		if blink_timer % 32 < 16 then
 			buffer:foreach_cursor(
-				function(col, row)
+				function(col, row, is_selection, _active)
 					local y = buffer:find_cursor_y(row) - buffer.offset_y
 					local x = buffer:find_cursor_x(col, row) - buffer.offset_x + get_margin_width()
-					rectfill(x, y - 2, x + cursor_width, y + 8, 14)
+					local w = is_selection and 0 or cursor_width
+					if not is_selection then
+						rectfill(x, y - 2, x + w, y + 8, cursor_color)
+					end
 				end
 			)
 		end
@@ -299,12 +418,13 @@ return function (attribs)
 		-- Margin (i.e. line numbers)
 	
 		if show_line_numbers then
-			rectfill(0, 0, get_margin_width() - 1, self.height - 1, 16) -- or 18, 16
+			rectfill(-4 - buffer.offset_x, 0, -4 + get_margin_width() - 1 - buffer.offset_x, self.height - 1, 16) -- or 18, 16
 			--line(get_margin_width() - 1, 0, get_margin_width() - 1, self.height - 1, 18)
 			local row = buffer:find_cursor_row(buffer.offset_y)
 			local y = buffer:find_cursor_y(row) - buffer.offset_y
 			while buffer:text(row) and y < self.height do
-				print(string.format("%4d", row), 3, y, 1)
+--				print(string.format("%4d", row), 3, y, 1)
+				print(string.format("\014%4d", row), -2 - buffer.offset_x, y + 2, 1)
 				row += 1
 				y = buffer:find_cursor_y(row) - buffer.offset_y
 			end
@@ -333,11 +453,28 @@ return function (attribs)
 		end
 		if show_cursors_in_scrollbar then
 			buffer:foreach_cursor(
-				function(col, row)
-					local y = buffer:find_cursor_y(row)
-					y = (y * self.height) // total_height
-					line(self.width - scrollbar_width + 1, y, self.width - 2, y, 14)
-					--line(self.width - scrollbar_width, y, self.width - 1, y, 10)
+				function(col, row, is_selection, _is_active)
+					if not is_selection then
+						local y = buffer:find_cursor_y(row)
+						y = (y * self.height) // total_height
+						line(self.width - scrollbar_width + 1, y, self.width - 2, y, is_selection and 10 or cursor_color)
+						--line(self.width - scrollbar_width, y, self.width - 1, y, 10)
+					end
+				end
+			)
+		end
+		if true then
+			buffer:foreach_selection(
+				function(_start_col, start_row, _end_col, end_row, _is_active)
+					local start_y = buffer:find_cursor_y(start_row)
+					start_y = (start_y * self.height) // total_height
+					local end_y = buffer:find_cursor_y(end_row)
+					end_y = (end_y * self.height) // total_height
+					rectfill(
+						self.width - scrollbar_width + 1, start_y,
+						self.width - 2, end_y,
+						10
+					)
 				end
 			)
 		end
@@ -351,7 +488,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-24 20:38:31",revision=1570]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-25 21:35:05",revision=2064]]
 -------------------------------------------------------------------------------------------
 
 
@@ -405,15 +542,14 @@ return function(attribs)
 	end
 	
 	
-	function result:click()
+	function result:click(msg)
 		-- needed so that editor's keyboard focus is not lost.
-		return true
+		local row = 1 + (msg.my - header_height - padding_top) // row_height
+		filetree.set_current(row)
 	end
 	
 
 	function result:tap(msg)
-		local row = 1 + (msg.my - header_height - padding_top) // row_height
-		filetree.set_current(row)
 	end
 	
 
@@ -464,9 +600,9 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSJdXQ==
+My0yNSAyMTozNTowNSJdXQ==
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-24 20:38:31",revision=2290]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-25 21:35:05",revision=3036]]
 -------------------------------------------------------------------------------------------
 
 
@@ -512,7 +648,7 @@ function new(path, text)
 			cursors = unpod(state.cursors)
 		end
 	)
-	local current_insert_sequence = nil
+	local undo_group = nil
 
 
 	function result:text(row)
@@ -536,11 +672,13 @@ function new(path, text)
 
 	function result:undo()
 		undo_stack:undo()
+		undo_group = nil
 	end
 	
 
 	function result:redo()
 		undo_stack:redo()
+		undo_group = nil
 	end
 	
 
@@ -548,9 +686,42 @@ function new(path, text)
 	
 
 	function result:foreach_cursor(func)
-		for cursor in all(cursors) do
-			func(cursor.col, cursor.row)
+		local nb = #cursors
+		for i, cursor in ipairs(cursors) do
+			local is_active_cursor = (nb > 1) and (i == nb)
+			local is_selection = (cursor.sel_col ~= nil)
+			func(cursor.col, cursor.row, is_selection, is_active_cursor)
 		end
+	end
+	
+	
+	local function selection_range(cursor)
+		if cursor.sel_row < cursor.row then
+			return cursor.sel_col, cursor.sel_row, cursor.col, cursor.row
+		elseif cursor.sel_row > cursor.row then
+			return cursor.col, cursor.row, cursor.sel_col, cursor.sel_row
+		elseif cursor.sel_col < cursor.col then
+			return cursor.sel_col, cursor.sel_row, cursor.col, cursor.row
+		else
+			return cursor.col, cursor.row, cursor.sel_col, cursor.sel_row
+		end
+	end
+	
+
+	function result:foreach_selection(func)
+		local nb = #cursors
+		for i, cursor in ipairs(cursors) do
+			if cursor.sel_col then
+				local start_col, start_row, end_col, end_row = selection_range(cursor)
+				local is_active_cursor = (nb > 1) and (i == nb)
+				func(start_col, start_row, end_col, end_row, is_active_cursor)
+			end
+		end
+	end
+	
+
+	function result:has_multiple_cursors()
+		return #cursors > 1
 	end
 
 
@@ -602,7 +773,7 @@ function new(path, text)
 		local col = mid(1, col, #text[row] + 1)
 		local x = result:find_cursor_x(col, row)
 		cursors = { { col = col, row = row, x = x } }
-		current_insert_sequence = nil
+		undo_group = nil
 	end
 	
 
@@ -611,12 +782,69 @@ function new(path, text)
 		local col = mid(1, col, #text[row] + 1)
 		local x = result:find_cursor_x(col, row)
 		add(cursors, { col = col, row = row, x = x })
-		current_insert_sequence = nil
+		self:merge_cursors()
+		undo_group = nil
+	end
+	
+
+	function result:extend_active_selection(col, row)
+		local cursor = cursors[#cursors]
+		if not cursor.sel_col then
+			cursor.sel_col, cursor.sel_row = cursor.col, cursor.row
+		end
+		cursor.row = mid(1, row, #text)
+		cursor.col = mid(1, col, #text[row] + 1)
+		cursor.wanted_x = result:find_cursor_x(col, row)
+		self:merge_cursors()
+		undo_group = nil
+	end
+	
+
+	function result:merge_cursors()
+		-- TODO: handle selections...
+		local is_duplicate = {}
+		for i = #cursors, 1, -1 do
+			for j = i - 1, 1, -1 do
+				local c1, c2 = cursors[i], cursors[j]
+				if c1.row == c2.row and c1.col == c2.col then
+					is_duplicate[c1] = true
+				end
+			end
+		end
+		for i = #cursors, 1, -1 do
+			if is_duplicate[cursors[i]] then
+				table.remove(cursors, i)
+			end
+		end
+		if #cursors == 0 then -- should never happen?
+			self:set_cursor(1, 1)
+		end
 	end
 
 
-	function result:move_cursors_up()
+	-- Movement --
+	
+
+	local function initiate_selection(cursor)
+		cursor.sel_col, cursor.sel_row = cursor.col, cursor.row
+	end
+
+
+	local function cancel_selection(cursor)
+		cursor.sel_col, cursor.sel_row = nil, nil
+		cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+		undo_group = nil
+	end
+
+
+	function result:move_up(extend)
 		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				cursor.col, cursor.row, _, _ = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
 			cursor.row = max(1, cursor.row - 1)
 			if cursor.wanted_x then
 				cursor.col = result:find_cursor_col(cursor.row, cursor.wanted_x + 2)
@@ -625,12 +853,19 @@ function new(path, text)
 				cursor.col = #text[cursor.row] + 1
 			end
 		end
-		current_insert_sequence = nil
+		self:merge_cursors()
+		undo_group = nil
 	end
 
 
-	function result:move_cursors_down()
+	function result:move_down(extend)
 		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				 _, _, cursor.col, cursor.row = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
 			cursor.row = min(cursor.row + 1, #text)
 			if cursor.wanted_x then
 				cursor.col = result:find_cursor_col(cursor.row, cursor.wanted_x + 2)
@@ -639,12 +874,20 @@ function new(path, text)
 				cursor.col = #text[cursor.row] + 1
 			end
 		end
-		current_insert_sequence = nil
+		self:merge_cursors()
+		undo_group = nil
 	end
 
 
-	function result:move_cursors_left()
+	function result:move_left(extend)
 		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				cursor.col, cursor.row, _, _ = selection_range(cursor)
+				cancel_selection(cursor)
+				goto continue -- because the cursor must not move
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
 			cursor.col -= 1
 			if cursor.col < 1 then
 				if cursor.row > 1 then
@@ -654,15 +897,23 @@ function new(path, text)
 					cursor.col = 1
 				end
 			end
+			::continue::
 			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
 		end
-		current_insert_sequence = nil
+		self:merge_cursors()
+		undo_group = nil
 	end
 
 
-	function result:move_cursors_right()
+	function result:move_right(extend)
 		for cursor in all(cursors) do
-			cursor.wanted_x = nil
+			if cursor.sel_col and (not extend) then
+				_, _, cursor.col, cursor.row = selection_range(cursor)
+				cancel_selection(cursor)
+				goto continue -- because the cursor must not move
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
 			cursor.col += 1
 			if cursor.col > #text[cursor.row] + 1 then
 				if cursor.row < #text then
@@ -672,9 +923,126 @@ function new(path, text)
 					cursor.col = #text[cursor.row] + 1
 				end
 			end
+			::continue::
 			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
 		end
-		current_insert_sequence = nil
+		self:merge_cursors()
+		undo_group = nil
+	end
+
+
+	function result:move_home(extend, smart)
+		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				 cursor.col, cursor.row, _, _ = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
+			if smart then
+				-- TODO
+			else
+				cursor.col = 1
+			end
+			-- TODO: merge cursors!!!
+			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+		end
+		self:merge_cursors()
+		undo_group = nil
+	end
+
+
+	function result:move_end(extend, smart)
+		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				 _, _, cursor.col, cursor.row = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
+			if smart then
+				-- TODO
+			else
+				cursor.col = #text[cursor.row] + 1
+			end
+			-- TODO: merge cursors!!!
+			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+		end
+		self:merge_cursors()
+		undo_group = nil
+	end
+
+	
+	local function char_category(char)
+		if char == nil then return "nil"
+		elseif char == ord(" ") or char == ord("\t") then return "whitespace"
+		elseif char >= ord("a") and char <= ord("z") then return "identifier"
+		elseif char >= ord("A") and char <= ord("Z") then return "identifier"
+		elseif char >= ord("0") and char <= ord("9") then return "identifier"
+		elseif char == ord("_") then return "identifier"
+		-- TODO: separators, etc.
+		else return "other"
+		end
+	end
+
+
+	function result:next_word(extend)
+		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				 _, _, cursor.col, cursor.row = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
+			local str = text[cursor.row]
+			while char_category(str:byte(cursor.col)) == "whitespace" do
+				cursor.col += 1
+			end
+			if cursor.col == #str + 1 and cursor.row < #text then
+				cursor.row += 1
+				cursor.col = 0
+			end
+			cursor.col += 1
+			while
+				cursor.col < #str + 1
+				and char_category(str:byte(cursor.col)) == char_category(str:byte(cursor.col - 1))
+			do
+				cursor.col += 1
+			end
+			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+		end
+		self:merge_cursors()
+		undo_group = nil
+	end
+
+
+	function result:previous_word(extend)
+		for cursor in all(cursors) do
+			if cursor.sel_col and (not extend) then
+				 cursor.col, cursor.row, _, _ = selection_range(cursor)
+				cancel_selection(cursor)
+			elseif extend and (not cursor.sel_col) then
+				initiate_selection(cursor)
+			end
+			local str = text[cursor.row]
+			while cursor.col > 1 and char_category(str:byte(cursor.col - 1)) == "whitespace" do
+				cursor.col -= 1
+			end
+			if cursor.col == 1 and cursor.row > 1 then
+				cursor.row -= 1
+				cursor.col = #text[cursor.row] + 2
+			end
+			cursor.col -= 1
+			while
+				cursor.col > 1
+				and char_category(str:byte(cursor.col)) == char_category(str:byte(cursor.col - 1))
+			do
+				cursor.col -= 1
+			end
+			cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+		end
+		self:merge_cursors()
+		undo_group = nil
 	end
 	
 
@@ -683,16 +1051,16 @@ function new(path, text)
 
 	function result:insert(k)
 		-- Undo checkpoint, with grouping of inserts
-		local mode = "other"
-		if k == " " then mode = "space" end
-		if
-			(current_insert_sequence == nil)
-			or (mode == "space" and current_insert_sequence == "other")
+		local group = "insert"
+		if k == " " then group = "whitespace" end
+		if	
+			(group ~= undo_group)
+			and not (group == "insert" and undo_group == "whitespace")
 		then
 			self:checkpoint()
 		end
-		current_insert_sequence = mode
-		-- Actual insertion
+		undo_group = group
+		-- Actual edit
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
 			local str = text[row]
@@ -702,6 +1070,138 @@ function new(path, text)
 				if cursor.row == row and cursor.col >= col then
 					cursor.col += 1
 					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+				end
+			end
+		end
+	end
+	
+
+	function result:newline()
+		-- Undo checkpoint, with grouping of inserts
+		local group = "newline"
+		if group ~= undo_group then
+			self:checkpoint()
+		end
+		undo_group = group
+		-- Actual edit
+		for cursor in all(cursors) do
+			local row, col = cursor.row, cursor.col
+			table.insert(text, row + 1, sub(text[row], col, -1))
+			-- TODO: indentation
+			-- TODO: automatic block closer
+			text[row] = sub(text[row], 1, col - 1)
+			delta_col = #text[row]
+			-- Move all impacted cursors
+			for cursor in all(cursors) do
+				if cursor.row == row and cursor.col >= col then
+					cursor.row += 1
+					cursor.col -= delta_col
+					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+				elseif cursor.row > row then
+					cursor.row += 1
+				end
+			end
+		end
+	end
+	
+
+	function result:tab()
+		-- Undo checkpoint, with grouping of inserts
+		local group = "whitespace"
+		if group ~= undo_group then
+			self:checkpoint()
+		end
+		undo_group = group
+		-- Actual edit
+		for cursor in all(cursors) do
+			local row, col = cursor.row, cursor.col
+			local str = text[row]
+			text[row] = sub(str, 1, col - 1) .. "\t" .. sub(str, col)
+			-- Move all impacted cursors
+			for cursor in all(cursors) do
+				if cursor.row == row and cursor.col >= col then
+					cursor.col += 1
+					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+				end
+			end
+		end
+	end
+	
+
+	function result:backspace()
+		-- Undo checkpoint, with grouping of inserts
+		local group = "backspace"
+		if group ~= undo_group then
+			self:checkpoint()
+		end
+		undo_group = group
+		-- Actual edit
+		for cursor in all(cursors) do
+			local row, col = cursor.row, cursor.col
+			if col == 1 and row > 1 then
+				-- join with previous line
+				undo_group = nil
+				delta_col = #text[row - 1]
+				text[row - 1] = text[row - 1] .. text[row]
+				table.remove(text, row)
+				-- Move all impacted cursors
+				for cursor in all(cursors) do
+					if cursor.row == row then
+						cursor.col += delta_col
+						cursor.row -= 1
+					elseif cursor.row > row then
+						cursor.row -= 1
+					end
+				end
+			elseif col > 1 then
+				local str = text[row]
+				text[row] = sub(str, 1, col - 2) .. sub(str, col)
+				-- Move all impacted cursors
+				for cursor in all(cursors) do
+					if cursor.row == row and cursor.col >= col then
+						cursor.col -= 1
+						cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+					end
+				end
+			end
+		end
+	end
+	
+
+	function result:delete()
+		-- Undo checkpoint, with grouping of inserts
+		local group = "delete"
+		if group ~= undo_group then
+			self:checkpoint()
+		end
+		undo_group = group
+		-- Actual edit
+		for cursor in all(cursors) do
+			local row, col = cursor.row, cursor.col
+			if col == #text[row] + 1 and row < #text then
+				-- Join with next line
+				undo_group = nil
+				delta_col = #text[row]
+				text[row] = text[row] .. text[row + 1]
+				table.remove(text, row + 1)
+				-- Move all impacted cursors
+				for cursor in all(cursors) do
+					if cursor.row == row + 1 then
+						cursor.col += delta_col
+						cursor.row -= 1
+					elseif cursor.row > row + 1 then
+						cursor.row -= 1
+					end
+				end
+			elseif col <= #text[row] then
+				local str = text[row]
+				text[row] = sub(str, 1, col - 1) .. sub(str, col + 1)
+				-- Move all impacted cursors
+				for cursor in all(cursors) do
+					if cursor.row == row and cursor.col > col then
+						cursor.col -= 1
+						cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+					end
 				end
 			end
 		end
@@ -952,7 +1452,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSJdXQ==
+My0yNSAyMTozNTowNSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-wBLIPxLaP-6iiHnOP-39-f3MEsA-wBLAP8cSwT-AEsE-yxLBP8gSxD-GEsY-yRI-Ej-dEsU-
@@ -1191,7 +1691,7 @@ KCDEKCDCKNE7wig7KMA7KDsowDso-f39-f3xFfogyyggwiggwCggwijROyjCOyjAOyg7KMA7KP39
 -f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfogzCjAIMIoIMMo-f39-f391BX6IMsoIMAoIMAo
 wCDDKP39-f39-dQV_iDOKCAoICggwyj9-f39-f3UAAAAAAAAAAE=
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-24 20:38:31",revision=478]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-25 21:35:05",revision=1083]]
 ----------------------------------------------------------------------------------------
 
 
@@ -1237,10 +1737,13 @@ function _init()
 			font_alt_mem:poke(0x5600)
 		end
 	end
-
+	
+	local fullscreen = env().argv[1] == "-f"
 	window {
-		tabbed = true,
-		width = 300, height = 200,
+		pauseable = false,
+		capture_escapes = true,
+		tabbed = not fullscreen,
+		width = not fullscreen and 300, height = not fullscreen and 200,
 		title = "cart/", -- TODO
 		--workspace = 3, -- for Code workspace?
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ABoAAAAYAAAA8AlweHUAQyAICARwJxBHMDcwNzA3MEcQJ3A="),
@@ -1295,6 +1798,36 @@ end
 
 ----------------------------------------------------------------------------------------
 
+:: manual.txt
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-03-25 16:18:30",revision=207]]
+# Codron
+
+## Keybinds
+
+### While editing
+
+- Ctrl-F: Find (non-interactive)
+- Ctrl-D: reverse finD
+- Ctrl-G: find aGain
+- Ctrl-H: searcH and replace
+- Ctrl-I: Incremental find
+- Ctrl-U: reverse incremental find
+
+- Ctrl-E: Edit (popup to choose a file or a line number)
+
+- Ctrl-J: Jump to previous file (hold ctrl to keep jumping)
+- Ctrl-K: Jump to next file
+
+
+### Incremental find
+
+- Tab?: go to next match
+- Ctrl-I again: go to next match
+- Ctrl-U: go to previous match
+- Movement keys: exit the search and move
+- Enter: exit the search (do not select the match)
+- Escape: exit the search and go back to initial position
+
 :: require.lua
 --[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-24 17:40:37",revision=309]]
 ---------------------------------------------------------------------------------------------
@@ -1343,13 +1876,18 @@ end
 
 
 --------------------------------------------------------------------------------------------
+:: todo.txt
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-03-25 10:05:21",revision=106]]
+- Add: escape to remove multi-cursors
+
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
-My0yNCAyMDozODozMSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
-Izg0Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMjE0Iix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkvZWRpdG9yLmx1YSM5OSIsd29ya3Nw
-YWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ic3JjL3VpL3NpZGViYXIubHVhIzI0Iix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRp
-b249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3
-b3Jrc3BhY2VfaW5kZXg9NH19XV0=
+My0yNSAyMTozNTowNSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
+IzQ4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMjk1Iix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkvZWRpdG9yLmx1YSMyMzkiLHdvcmtz
+cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS9zaWRlYmFyLmx1YSMxIix3b3Jrc3BhY2Vf
+aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMTk5Iix3b3Jrc3BhY2VfaW5kZXg9
+MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1h
+cC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3Bh
+Y2VfaW5kZXg9NH19XV0=
 :: [eoc]
