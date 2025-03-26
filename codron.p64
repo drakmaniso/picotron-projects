@@ -51,11 +51,11 @@ LQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYPFARAAwgG
 MAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSJdXQ==
+My0yNiAxMToxOToyMSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSIscmV2aXNpb249MzA0Nl1dbHo0ACABAACMMQAA8yF7WzBdPXtibXA9cHh1
+My0yNiAxMToxOToyMSIscmV2aXNpb249MzI1MF1dbHo0ACABAACMMQAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA7-cCDQsE8AQ3cBcgBxBXMAcQB4AEABCwBgBv
 dwAnoAcAUwALLDEwVADyBeBXYAcwF1AHMAcAB0AHMDcwB2AHBAAQsAYAEFdVAB8QVQAa8QYLCwTw
@@ -63,11 +63,11 @@ EycAB2AXEAdABwAHIAcwB0AEAH9AByAHYCfgTgAejx5n4GfgZ-AIOQAND5IBHg8xAP----------
 --------------------------------------------------_bUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSJdXQ==
+My0yNiAxMToxOToyMSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-25 21:35:05",revision=3397]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-26 11:19:21",revision=3612]]
 -------------------------------------------------------------------------------------------
 
 
@@ -271,10 +271,10 @@ return function (attribs)
 			-- TODO: show cursor !!!
 		end
 
-		-- Movement (with option "shift")
+		-- Movement (with optional "shift")
 		if not key("ctrl") and not key("alt") then
 			local extend = key("shift")
-			if keyp("enter") then buffer:newline(); moved = true
+			if keyp("enter") then buffer:newline(true, key("shift")); moved = true
 			elseif keyp("tab") then buffer:tab(); moved = true
 			elseif keyp("backspace") then buffer:backspace(); moved = true
 			elseif keyp("delete") then buffer:delete(); moved = true
@@ -488,7 +488,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-25 21:35:05",revision=2064]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-26 11:19:21",revision=2272]]
 -------------------------------------------------------------------------------------------
 
 
@@ -600,9 +600,9 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSJdXQ==
+My0yNiAxMToxOToyMSJdXQ==
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-25 21:35:05",revision=3036]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-26 11:19:21",revision=3328]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1049,6 +1049,67 @@ function new(path, text)
 	-- Edition --
 	
 
+	local function shift_cursors_after_deletion(start_col, start_row, end_col, end_row)
+		-- There's probably a cleverer way to do this,
+		-- but at least this is straightforward to follow.
+		for cursor in all(cursors) do
+			if cursor.row < start_row then
+				-- nothing to do
+			elseif cursor.row < end_row then
+				cursor.col, cursor.row = start_col, start_row
+			elseif (cursor.row == end_row) and (cursor.col < start_col) then
+				-- nothing to do
+			elseif (cursor.row == end_row) and (cursor.col < end_col) then
+				cursor.col = start_col
+			elseif cursor.row == end_row then
+				cursor.col += start_col - end_col
+			else
+				cursor.row += start_row - end_row
+			end
+			-- The same with selection anchors
+			if not cursor.sel_col then
+				-- no selection
+			elseif cursor.sel_row < start_row then
+				-- nothing to do
+			elseif cursor.sel_row < end_row then
+				cursor.sel_col, cursor.sel_row = start_col, start_row
+			elseif (cursor.sel_row == end_row) and (cursor.sel_col < start_col) then
+				-- nothing to do
+			elseif (cursor.sel_row == end_row) and (cursor.sel_col < end_col) then
+				cursor.sel_col = start_col
+			elseif cursor.sel_row == end_row then
+				cursor.sel_col += start_col - end_col
+			else
+				cursor.sel_row += start_row - end_row
+			end
+		end
+	end
+	
+
+	function result:delete_selection()
+		local has_deleted = false
+		for cursor in all(cursors) do
+			if cursor.sel_col then
+				has_deleted = true
+				local start_col, start_row, end_col, end_row = selection_range(cursor)
+				text[start_row] =
+					sub(text[start_row], 1, start_col - 1)
+					.. sub(text[end_row], end_col, -1)
+				for _ = start_row + 1, end_row do
+					table.remove(text, start_row + 1)
+				end
+				shift_cursors_after_deletion(start_col, start_row, end_col, end_row)
+				cursor.col, cursor.row = start_col, start_row
+				cursor.sel_col, cursor.sel_row = nil, nil
+			end
+		end
+		if has_deleted then
+			undo_group = nil
+		end
+		return has_deleted
+	end
+	
+
 	function result:insert(k)
 		-- Undo checkpoint, with grouping of inserts
 		local group = "insert"
@@ -1061,6 +1122,7 @@ function new(path, text)
 		end
 		undo_group = group
 		-- Actual edit
+		self:delete_selection()
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
 			local str = text[row]
@@ -1075,8 +1137,73 @@ function new(path, text)
 		end
 	end
 	
+	
+	local function is_whitespace(byte)
+		return (byte == ord(" ")) or (byte == ord("\t"))
+	end
+	
 
-	function result:newline()
+	local function is_empty_line(str)
+		for col = 1, #str do
+			if not is_whitespace(str:byte(col)) then
+				return false
+			end
+		end
+		return true
+	end
+	
+
+	local function should_indent_after(str)
+		local last_token
+		local col = 1
+		while (col <= #str) do
+			local s, cat
+			s, col, cat = tokenoid(str, col)
+			if (cat == 1) and (s == "function") then
+				return true
+			end
+			if cat ~= 0 then
+				last_token = s
+			end
+		end
+		local indent_tokens <const> = {
+			["("] = true, ["["] = true, ["{"] = true, ["="] = true,
+			-- TODO: add the myriad assignment operators
+			["do"] = true, ["else"] = true, ["elseif"] = true,
+			["for"] = true, ["function"] = true, ["goto"] = true, ["if"] = true,
+			["local"] = true, ["repeat"] = true, ["return"] = true,
+			["then"] = true, ["until"] = true, ["while"] = true,
+		}
+		return indent_tokens[last_token]
+	end
+
+
+	local function block_closer(str)
+		local first_keyword, last_keyword
+		local col = 1
+		while (col <= #str) do
+			local s, cat
+			s, col, cat = tokenoid(str, col)
+			if cat == 1 then
+				if (not first_keyword) or (first_keyword == "local") then
+					first_keyword = s
+				end
+				last_keyword = s
+			end
+		end
+		if (first_keyword == "function") or (last_keyword == "do")
+			or (last_keyword == "then") or (last_keyword == "else")
+		then
+			return "end"
+		end
+		if last_keyword == "repeat" then
+			return "until"
+		end
+		return nil
+	end
+
+
+	function result:newline(autoindent, autoclose)
 		-- Undo checkpoint, with grouping of inserts
 		local group = "newline"
 		if group ~= undo_group then
@@ -1084,21 +1211,48 @@ function new(path, text)
 		end
 		undo_group = group
 		-- Actual edit
+		self:delete_selection()
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
-			table.insert(text, row + 1, sub(text[row], col, -1))
-			-- TODO: indentation
-			-- TODO: automatic block closer
+			local indentation = ""
+			if autoindent then
+				local above = row
+				while above > 1 and is_empty_line(text[above]) do
+					above -= 1
+				end
+				local c = 1
+				while c < #text[above] and is_whitespace(text[above]:byte(c)) do
+					indentation ..= text[above][c]
+					c += 1
+				end
+				if should_indent_after(sub(text[row], 1, col - 1)) then
+					indentation ..= "\t"
+				end
+			end
+			table.insert(text, row + 1, indentation .. sub(text[row], col, -1))
+			local delta_row = 1
+			if autoclose and col == #text[row] + 1 then
+				local closer = block_closer(text[row])
+				if closer then
+					table.insert(text, row + 2, sub(indentation, 2, -1) .. closer)
+					delta_row = 2
+				end
+			end
 			text[row] = sub(text[row], 1, col - 1)
-			delta_col = #text[row]
+			local delta_col = #indentation - #text[row]
 			-- Move all impacted cursors
 			for cursor in all(cursors) do
-				if cursor.row == row and cursor.col >= col then
+				if cursor.row == row and cursor.col == col then
+					-- The insertion cursor always move 1 row, even when autoclose
 					cursor.row += 1
-					cursor.col -= delta_col
+					cursor.col += delta_col
+					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
+				elseif cursor.row == row and cursor.col >= col then
+					cursor.row += delta_row
+					cursor.col += delta_col
 					cursor.wanted_x = result:find_cursor_x(cursor.col, cursor.row)
 				elseif cursor.row > row then
-					cursor.row += 1
+					cursor.row += delta_row
 				end
 			end
 		end
@@ -1113,6 +1267,7 @@ function new(path, text)
 		end
 		undo_group = group
 		-- Actual edit
+		self:delete_selection()
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
 			local str = text[row]
@@ -1136,6 +1291,9 @@ function new(path, text)
 		end
 		undo_group = group
 		-- Actual edit
+		if self:delete_selection() then
+			return
+		end
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
 			if col == 1 and row > 1 then
@@ -1176,6 +1334,9 @@ function new(path, text)
 		end
 		undo_group = group
 		-- Actual edit
+		if self:delete_selection() then
+			return
+		end
 		for cursor in all(cursors) do
 			local row, col = cursor.row, cursor.col
 			if col == #text[row] + 1 and row < #text then
@@ -1452,7 +1613,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSJdXQ==
+My0yNiAxMToxOToyMSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-wBLIPxLaP-6iiHnOP-39-f3MEsA-wBLAP8cSwT-AEsE-yxLBP8gSxD-GEsY-yRI-Ej-dEsU-
@@ -1691,7 +1852,7 @@ KCDEKCDCKNE7wig7KMA7KDsowDso-f39-f3xFfogyyggwiggwCggwijROyjCOyjAOyg7KMA7KP39
 -f3UFfog2Cj9-f39-f3UFfog2Cj9-f39-f3UFfogzCjAIMIoIMMo-f39-f391BX6IMsoIMAoIMAo
 wCDDKP39-f39-dQV_iDOKCAoICggwyj9-f39-f3UAAAAAAAAAAE=
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-25 21:35:05",revision=1083]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-26 11:19:21",revision=1290]]
 ----------------------------------------------------------------------------------------
 
 
@@ -1882,12 +2043,11 @@ end
 
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
-My0yNSAyMTozNTowNSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
-IzQ4Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMjk1Iix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkvZWRpdG9yLmx1YSMyMzkiLHdvcmtz
-cGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS9zaWRlYmFyLmx1YSMxIix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYnVmZmVycy5sdWEjMTk5Iix3b3Jrc3BhY2VfaW5kZXg9
-MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1h
-cC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3Bh
-Y2VfaW5kZXg9NH19XV0=
+My0yNiAxMToxOToyMSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
+IzEiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9idWZmZXJzLmx1YSM1NTciLHdv
+cmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS9lZGl0b3IubHVhIzEiLHdvcmtzcGFj
+ZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy91aS9zaWRlYmFyLmx1YSMxIix3b3Jrc3BhY2VfaW5k
+ZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249
+Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jr
+c3BhY2VfaW5kZXg9NH19XV0=
 :: [eoc]
