@@ -51,23 +51,43 @@ DAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYP
 FARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiJdXQ==
+My0yNyAxODozNToyNSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiIscmV2aXNpb249NDM5M11dbHo0ABYBAAByMgAA8yF7WzBdPXtibXA9cHh1
+My0yNyAxODozNToyNSIscmV2aXNpb249NDY1NV1dbHo0AEIBAAChMgAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALSzE2fSx9AB-wcAAMDzEA788LCwTwE2fgZ_Bn8BM4AAstMTA5APECCCcA
 B2AXEAdABwAHIAcwB0AEAI9AByAHYCfwCk8AHvEACwdwBwAHAAdgJ1BnUCdgDABPcAfwC0kAHfIB
-wDdgBxAXUAcQBwAHQAcQN5kAEJAGAG83ACeAB8BRAA0OUwEPMgD-------------------------
--------------------------------------69QPTEwfX0=
+wDdgBxAXUAcQBwAHQAcQN5kAEJAGAG83ACeAB8BRAA0OUwEPMgCw-wMLCwQgEQARUAEHAQcBYAEH
+AXAEAAQRYCIAX1ARABEgYQAMHzKTAB8PMgD-----------------------------------------
+--------------------lFA9MTB9fQ==
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiJdXQ==
+My0yNyAxODozNToyNSJdXQ==
+:: map/
+:: map/0.map
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTI3IDE1OjA4OjIyIixtb2RpZmllZD0iMjAyNS0w
+My0yNyAxODozNToyNSIscmV2aXNpb249MjQ3XV1sejQAaAAAAFgQAADwCHt7Ym1wPXVzZXJkYXRh
+KCJpMTYiLDMyAwAvIjABAP--------------------vxCCIpLGhpZGRlbj1mYWxzZSxwYW5feD0w
+CADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9fQ==
+:: map/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTI3IDE1OjA4OjIyIixtb2RpZmllZD0iMjAyNS0w
+My0yNyAxODozNToyNSJdXQ==
+:: sfx/
+:: sfx/0.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTI3IDE1OjA4OjIyIixtb2RpZmllZD0iMjAyNS0w
+My0yNyAxODozNToyNSIscmV2aXNpb249MjQ3XV1sejQAoAAAAAsKAAD-MHB4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-8nqgEQ
+Bg8gEAEgASAB8AACEAIOEAEgDyEgATAPQPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYOMAD-----
+-70f-wEArM-ID0AADxBA--_w8P8BAP-qUP----8p
+:: sfx/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTI3IDE1OjA4OjIyIixtb2RpZmllZD0iMjAyNS0w
+My0yNyAxODozNToyNSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-27 15:07:36",revision=4299]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-27 18:35:25",revision=4544]]
 -------------------------------------------------------------------------------------------
 
 
@@ -109,6 +129,7 @@ return function (attribs)
 --	result.width_add = -result.x
 	result.width = 480 - 60
 	result.height_rel = 1
+	result.cursor = get_spr(16)
 	head():new(result)
 
 	-- Private fields
@@ -144,21 +165,23 @@ return function (attribs)
 		elseif x + cursor_width + 2 + scrollbar_width > buf.offset_x + self.width - get_margin_width() then
 			buf.offset_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
 		end
+		buf:highlight(row)
 	end
 	
 
 	function result:clamp_scrollbar_thumb()
 		local buffer = workspace.current_buffer()
 		buffer.offset_y = mid(-4, buffer.offset_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
-		buffer.offset_x = mid(-4, buffer.offset_x, self.width - scrollbar_width - 2)
+		buffer.offset_x = max(-4, buffer.offset_x)
 		buffer.display_y = mid(-4, buffer.display_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
-		buffer.display_x = mid(-4, buffer.display_x, self.width - scrollbar_width - 2)
+		buffer.display_x = max(-4, buffer.display_x)
 	end
 	
 
 	function result:hover(msg)
-		self.cursor = 1
+		self.cursor = get_spr(16)
 		if msg.mx >= self.width - scrollbar_width then
+			self.cursor = 1
 			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
 			if msg.my >= thumb_y and msg.my <= thumb_y + thumb_height then
 				self.cursor = "grab"
@@ -261,6 +284,14 @@ return function (attribs)
 	function result:update(msg)
 		blink_timer += 1
 		local buffer = workspace.current_buffer()
+		
+		for i = 1, 5 do
+			buffer:highlight(buffer.highlighter_row)
+			buffer.highlighter_row += 1
+			if buffer.highlighter_row > buffer:number_of_rows() then
+				buffer.highlighter_row = 1
+			end
+		end
 	
 		if freewheel_velocity ~= 0 and msg.mb == 0 then
 			buffer.offset_y -= freewheel_velocity
@@ -356,6 +387,7 @@ return function (attribs)
 				local selections = buffer:get_all_selections()
 				app.set_multiclipboard(selections)
 				buffer:delete_selection()
+				moved = true
 			elseif keyp("v") then
 				-- TODO: should be in a function, somewhere...
 				buffer:delete_selection()
@@ -377,19 +409,17 @@ return function (attribs)
 						end
 					)
 				end
-			elseif keyp("enter") then
-				notify("Ctrl-Enter works!!!")
-			elseif keyp("backspace") then
-				notify("Ctrl-Backspace works!!!")
+				moved = true
 			end
 		end	
 		
 		if key("ctrl") then
 			if keyp("z") then
 				buffer:undo()
-				self:show_cursor(true)
+				moved = true
 			elseif keyp("y") or (key("shift") and keyp("z")) then
 				buffer:redo()
+				moved = true
 			end
 			if keyp("tab") then notify("boo") end
 			if key("shift") and keyp("n") then show_line_numbers = not show_line_numbers
@@ -430,6 +460,7 @@ return function (attribs)
 		
 		-- Selection
 		
+		local selection_color = (buffer:number_of_selections() > 1) and 9 or 10
 		buffer:foreach_selection(
 			function(start_col, start_row, end_col, end_row, _active)
 				for row = start_row, end_row do
@@ -443,7 +474,7 @@ return function (attribs)
 						end_x = buffer:find_cursor_x(end_col, row) - dx + get_margin_width() - 1
 					end
 					if not (row == end_row and end_col == 1) then
-						rectfill(start_x, y - 2, end_x, y + 8, 10)
+						rectfill(start_x, y - 2, end_x, y + 8, selection_color)
 					end
 				end
 			end
@@ -454,24 +485,25 @@ return function (attribs)
 		local x = get_margin_width() - dx
 		local row = buffer:find_cursor_row(dy)
 		local y = buffer:find_cursor_y(row) - dy
-		local text = buffer:text(row)
+		buffer:highlight(row)
+		local text = buffer:highlighted(row)
 		while text and y < self.height do
 			print(text, x, y, 6)
 			row += 1
 			y = buffer:find_cursor_y(row) - dy
-			text = buffer:text(row)
+			text = buffer:highlighted(row)
 		end
 		
 		-- Cursors
 		
-		local cursor_color = buffer:has_multiple_cursors() and 30 or 14
+		local cursor_color = (buffer:number_of_cursors() > 1) and 30 or 14
 		if blink_timer % 32 < 16 then
 			buffer:foreach_cursor(
 				function(col, row, is_selection, _active)
 					local y = buffer:find_cursor_y(row) - dy
 					local x = buffer:find_cursor_x(col, row) - dx + get_margin_width()
 					local w = is_selection and 0 or cursor_width
-					if not is_selection then
+					if (not is_selection) or false then
 						rectfill(x, y - 2, x + w, y + 8, cursor_color)
 					end
 				end
@@ -520,8 +552,7 @@ return function (attribs)
 					if not is_selection then
 						local y = buffer:find_cursor_y(row)
 						y = (y * self.height) // total_height
-						line(self.width - scrollbar_width + 1, y, self.width - 2, y, is_selection and 10 or cursor_color)
-						--line(self.width - scrollbar_width, y, self.width - 1, y, 10)
+						line(self.width - scrollbar_width + 1, y, self.width - 2, y, cursor_color)
 					end
 				end
 			)
@@ -536,7 +567,7 @@ return function (attribs)
 					rectfill(
 						self.width - scrollbar_width + 1, start_y,
 						self.width - 2, end_y,
-						10
+						selection_color
 					)
 				end
 			)
@@ -551,7 +582,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-27 15:07:36",revision=2785]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-27 18:35:25",revision=3030]]
 -------------------------------------------------------------------------------------------
 
 
@@ -667,24 +698,28 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiJdXQ==
+My0yNyAxODozNToyNSJdXQ==
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-03-27 15:07:36",revision=289]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-03-27 18:35:25",revision=534]]
 
-local multiclipboard = nil
+local multiclipboard = {}
 
 
 function set_multiclipboard(array)
-	multiclipboard = array
-	set_clipboard(table.concat(array, "\n"))
+	multiclipboard = {
+		multi = array,
+		clipboard = table.concat(array, "\n"),
+	}
+	set_clipboard(multiclipboard.clipboard)
 end
 
 
 function get_multiclipboard()
-	if multiclipboard then
-		return multiclipboard
+	local clipboard = get_clipboard()
+	if multiclipboard.array and (clipboard == multiclipboard.clipboard) then
+		return multiclipboard.array
 	end
-	return get_clipboard()
+	return clipboard
 end
 
 
@@ -693,7 +728,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-27 15:07:36",revision=4162]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-27 18:35:25",revision=4407]]
 -------------------------------------------------------------------------------------------
 
 
@@ -723,11 +758,13 @@ function new(path, text)
 		offset_y = -4,
 		display_x = -4,
 		display_y = -4,
+		highlighter_row = 1,
 	}
 	
 
 	-- Private fields
 	local text = split(text, "\n", false) or {}
+	local highlighted = {}
 	local cursors = { { col = 1, row = 1, wanted_x = 0 } } --, { col = 3, row = 3 } }
 	local undo_stack = create_undo_stack(
 		function()
@@ -750,6 +787,16 @@ function new(path, text)
 		return text[row]	
 	end
 	
+	
+	function result:highlighted(row)
+		return (highlighted[row] and highlighted[row].out) or text[row] or ""
+	end
+	
+	
+	function result:number_of_rows()
+		return #text
+	end
+	
 
 	function result:full_text_copy()
 		return table.concat(text, "\n")
@@ -760,6 +807,50 @@ function new(path, text)
 		for row, str in ipairs(text) do
 			func(row, str)
 		end
+	end
+	
+	
+	local decor_multicat = {[3] = "\fd", [4] = "\fs"}
+	local reserved = {"and", "break", "do", "else", "elseif", "end", "for",	"function", "if", "in", "local", "not", "or", "repeat", "return", "then", "until", "while", "true", "false", "nil" }
+	local decor_keyword = {}
+	for i = 1, #reserved do decor_keyword[reserved[i]] = "\fe" end
+	local decor_cat <const> = { [0] = "\f7", "\f6", "\fs", "\fd", "\fc", "\f7" }
+	
+	
+	function result:highlight(row)
+		local str = text[row] or ""
+		
+		local unchanged = highlighted[row] and highlighted[row].input == str
+		local continuity =
+			highlighted[row] and highlighted[row - 1]
+			and (highlighted[row - 1].after == highlighted[row].after)
+		if unchanged and (continuity or (row == 1)) then
+			return
+		end
+		
+		if row > 1 then
+			self:highlight(row - 1)
+		end
+		
+		local out = ""
+		local col = 1
+		local lexer_state = highlighted[row - 1] and highlighted[row - 1].after or 0
+		while col <= #str do
+			local token, end_col, cat
+			token, end_col, cat, lexer_state = tokenoid(str, col, lexer_state)
+			if not token then return out end
+			local decor =
+				decor_multicat[cat] or decor_keyword[token]
+				or (cat == 1 and str[end_col] == "(" and "\fq") or decor_cat[cat] or ""
+			out = out .. decor .. token
+			col = end_col
+		end
+		highlighted[row] = {
+			input = str,
+			out = out,
+			before = previous_lexer_state,
+			after = lexer_state,
+		}
 	end
 	
 
@@ -1282,9 +1373,11 @@ function new(path, text)
 		local delta_row = #lines - 1
 		local delta_col = - col + 1 + #lines[#lines]
 		table.insert(text, row + 1, lines[#lines] .. sub(text[row], col, -1))
+		table.insert(highlighted, row + 1, nil)
 		text[row] = sub(text[row], 1, col - 1) .. lines[1]
 		for i = #lines - 1, 2, -1 do
 			table.insert(text, row + 1, lines[i])
+			table.insert(highlighted, row + 1, nil)
 		end
 		for cursor in all(cursors) do
 			if cursor.row == row and cursor.col >= col then
@@ -1293,7 +1386,9 @@ function new(path, text)
 			elseif cursor.row > row then
 				cursor.row += delta_row
 			end
-			if cursor.sel_row == row and cursor.sel_col >= col then
+			if not cursor.sel_col then
+				-- do nothing
+			elseif cursor.sel_row == row and cursor.sel_col >= col then
 				cursor.sel_row += delta_row
 				cursor.sel_col += delta_col
 			elseif cursor.sel_row > row then
@@ -1320,6 +1415,7 @@ function new(path, text)
 			local row, col = cursor.row, cursor.col
 			local str = text[row]
 			text[row] = sub(str, 1, col - 1) .. k .. sub(str, col)
+			self:highlight(row)
 			-- Move all impacted cursors
 			for cursor in all(cursors) do
 				if cursor.row == row and cursor.col >= col then
@@ -1423,11 +1519,13 @@ function new(path, text)
 				end
 			end
 			table.insert(text, row + 1, indentation .. sub(text[row], col, -1))
+			table.insert(highlighted, row + 1, nil)
 			local delta_row = 1
 			if autoclose and col == #text[row] + 1 then
 				local closer = block_closer(text[row])
 				if closer then
 					table.insert(text, row + 2, sub(indentation, 2, -1) .. closer)
+					table.insert(highlighted, row + 2, nil)
 					delta_row = 2
 				end
 			end
@@ -1495,6 +1593,7 @@ function new(path, text)
 				delta_col = #text[row - 1]
 				text[row - 1] = text[row - 1] .. text[row]
 				table.remove(text, row)
+				table.remove(highlighted, row)
 				-- Move all impacted cursors
 				for cursor in all(cursors) do
 					if cursor.row == row then
@@ -1538,6 +1637,7 @@ function new(path, text)
 				delta_col = #text[row]
 				text[row] = text[row] .. text[row + 1]
 				table.remove(text, row + 1)
+				table.remove(highlighted, row + 1)
 				-- Move all impacted cursors
 				for cursor in all(cursors) do
 					if cursor.row == row + 1 then
@@ -1573,7 +1673,7 @@ return {
 	new = new,
 }
 :: src/ui.lua
---[[pod_format="raw",created="2025-03-23 10:43:59",modified="2025-03-27 15:07:36",revision=809]]
+--[[pod_format="raw",created="2025-03-23 10:43:59",modified="2025-03-27 18:35:25",revision=1054]]
 ----------------------------------------------------------------------------------------
 
 
@@ -1621,7 +1721,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-03-27 15:07:36",revision=1877]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-03-27 18:35:25",revision=2122]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1930,7 +2030,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiJdXQ==
+My0yNyAxODozNToyNSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-Esw-EsM-EtE--qKIec4--f39-cwSwD-AEsA-xxLBP8ASwT-LEsE-yBLEP8YSxj-JEj8SP90S
@@ -2253,7 +2353,7 @@ KM47wCjBOyg7KME7KNA7KMk7KME7wCjFO8IowDvAKME7wCjBO8AowTso-f391zXBKDUoNSg1wSjA
 EP3DOtEo0jsoxzsoxjsowzsowTsoOyjLOyjDOyjAOyjAOyjOOyjBOyg7KMI7KM87KMg7KME7KMA7
 KMQ7KMI7KMA7KDsowDsoOyjAOyjBOyj9-f3jEMUAAAAAAAAAAQ==
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-27 15:07:36",revision=2511]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-27 18:35:25",revision=2756]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2529,7 +2629,7 @@ end
 ----------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-03-27 15:07:36",revision=673]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-03-27 18:35:25",revision=918]]
 # Codron
 
 ## Keybinds
@@ -2578,7 +2678,7 @@ Multi-cursors and multi-selection:
 - Movement keys: exit find, cancel selection.
 
 :: require.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-27 15:07:36",revision=753]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-27 18:35:25",revision=998]]
 ---------------------------------------------------------------------------------------------
 
 
@@ -2626,12 +2726,12 @@ end
 
 --------------------------------------------------------------------------------------------
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-03-27 15:07:36",revision=708]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-03-27 18:35:25",revision=953]]
 - Add: horizontal scrollbar? based on longest line on screen?
 
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNzozNiIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
+My0yNyAxODozNToyNSIscnVudGltZT0xNix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1haW4ubHVh
 Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRl
 eD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0i
 c2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH19XV0=
