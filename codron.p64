@@ -1,6 +1,31 @@
 picotron cartridge // www.picotron.net
 version 2
 
+:: defaults/
+:: defaults/theme.lua
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2025-04-01 20:24:10",revision=658]]
+
+return {
+	-- Sidebar
+	sidebar_bg = 17,
+	sidebar_fg = 1,
+	sidebar_fg_active = 6,
+	-- Editor
+	editor_bg = 1,
+	lua_text = 6,
+	lua_comment = 13,
+	lua_operator = 7,
+	lua_keyword = 14,
+	lua_string = 12,
+	lua_string = 12,
+	lua_number = 12,
+	lua_reserved = 12,
+	lua_function = 11,
+	lua_unknown = 8,
+}
+:: defaults/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTMxIDEzOjAxOjM3Iixtb2RpZmllZD0iMjAyNS0w
+NC0wMSAyMDoyNDoxMSJdXQ==
 :: fonts/
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNS0w
@@ -51,31 +76,31 @@ DAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYP
 FARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSJdXQ==
+NC0wMSAyMDoyNDoxMSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSIscmV2aXNpb249NzA3OV1dbHo0AIkBAADiMgAA8yF7WzBdPXtibXA9cHh1
+NC0wMSAyMDoyNDoxMCIscmV2aXNpb249NzQyOF1dbHo0AI8BAADiMgAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALHDE_ALGAFxAXABcwNwAXAAQAfzAXABcQF4BGACEQdzoAFRAKAA9EABoA
-BgEf8DEArM8LCwTwE2fgZ_Bn8BM4AAwdMDkA8QIIJwAHYBcQB0AHAAcgBzAHQAQAj0AHIAdgJ-AK
-TwAe8QALB3AHAAcAB2AnUGdQJ2AMAE9wB-ALSQAd8gHAN2AHEBdQBxAHAAdABxA3mQAQkAYAbzcA
-J4AHwFEAGt8JCATwBgdgF1AnYBdwPAAOHTY8AEIHJyA3HwEBBAAvV5BCAA0P0QEeHzAyACz-AwsL
-BCARABFQAQcBBwFgAQcBcAQABBFgIgBfUBEAESBhAAwfMpMAHw8yAP----------------------
---------------------------------------_UUD0xMH19
+BgEf8PkADA8xAI3PCwsE8BNn4GfgZ-ATOAALLTEwOQDxAggnAAdgFxAHQAcAByAHMAdABACPQAcg
+B2An8ApPAB7xAAsHcAcABwAHYCdQZ1AnYAwAT3AH8AtJAB3yAcA3YAcQF1AHEAcAB0AHEDeZABCQ
+BgBvNwAngAfAUQAa3wkIBPAGB2AXUCdgF3A8AA4dNjwAQgcnIDcfAQEEAC9XkEIADQ-RAR0vMTAy
+ACz-AwsLBCARABFQAQcBBwFgAQcBcAQABBFgIgBfUBEAESBhAAwfMpMAHw8yAP--------------
+----------------------------------------------_UUD0xMH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSJdXQ==
+NC0wMSAyMDoyNDoxMSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-03-30 16:18:59",revision=6866]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-04-01 20:24:10",revision=7652]]
 -------------------------------------------------------------------------------------------
 
 
 local app = require "src/app.lua"
 local buffers = require "src/buffers.lua"
-local workspace = require "src/workspace.lua"
+local config = require "src/config.lua"
 local findbox = require "src/ui/findbox.lua"
 
 
@@ -154,18 +179,20 @@ return function(attribs)
 		-- TODO: use middle of current selection instead?
 		local col, row = buffer:active_cursor_pos()
 		local y = buffer:find_cursor_y(row)
-		if y - edge_distance < buffer.offset_y then
-			buffer.offset_y = y - 2 - edge_distance
-			buffer.offset_y = max(- 4, buffer.offset_y)
-		elseif y + cursor_height - 2 + edge_distance > buffer.offset_y + self.height then
-			buffer.offset_y = y + cursor_height - 2 + edge_distance - self.height
+		if y - edge_distance < buffer.screen_y then
+			buffer.screen_y = y - 2 - edge_distance
+			buffer.screen_y = max(- 4, buffer.screen_y)
+		elseif y + cursor_height - 2 + edge_distance > buffer.screen_y + self.height then
+			buffer.screen_y = y + cursor_height - 2 + edge_distance - self.height
 		end
 		local x = buffer:find_cursor_x(col, row)
-		if x - 4 < buffer.offset_x then
-			buffer.offset_x = x - 4
-		elseif x + cursor_width + 2 + scrollbar_width > buffer.offset_x + self.width - get_margin_width() then
-			buffer.offset_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
+		if x - 4 < buffer.screen_x then
+			buffer.screen_x = x - 4
+		elseif x + cursor_width + 2 + scrollbar_width > buffer.screen_x + self.width - get_margin_width() then
+			buffer.screen_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
 		end
+		freewheel_velocity = 0
+		freewheel_acceleration = 0
 		-- TODO: use *start* of current selection instead
 		buffer:highlight(row)
 		buffer.highlighter_row = row
@@ -176,23 +203,25 @@ return function(attribs)
 		if not self.height then return end -- when called from switch_to
 		local col, row = buffer:active_cursor_pos()
 		local y = buffer:find_cursor_y(row)
-		buffer.offset_y = y - (self.height // 2) - 11
+		buffer.screen_y = y - (self.height // 2) - 11
 		local x = buffer:find_cursor_x(col, row)
-		if x - 4 < buffer.offset_x then
-			buffer.offset_x = x - 4
-		elseif x + cursor_width + 2 + scrollbar_width > buffer.offset_x + self.width - get_margin_width() then
-			buffer.offset_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
+		if x - 4 < buffer.screen_x then
+			buffer.screen_x = x - 4
+		elseif x + cursor_width + 2 + scrollbar_width > buffer.screen_x + self.width - get_margin_width() then
+			buffer.screen_x = x + cursor_width + 2 + scrollbar_width - self.width + get_margin_width()
 		end
+		freewheel_velocity = 0
+		freewheel_acceleration = 0
 		buffer:highlight(row)
 		buffer.highlighter_row = row
 	end
 	
 
 	function self:clamp_scrollbar_thumb()
-		buffer.offset_y = mid(-4, buffer.offset_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
-		buffer.offset_x = max(-4, buffer.offset_x)
-		buffer.display_y = mid(-4, buffer.display_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
-		buffer.display_x = max(-4, buffer.display_x)
+		buffer.screen_y = mid(-4, buffer.screen_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
+		buffer.screen_x = max(-4, buffer.screen_x)
+		buffer.y = mid(-4, buffer.anim_y, max(-4, buffer:total_height() - self.height + min_edge_distance))
+		buffer.anim_x = max(-4, buffer.anim_x)
 	end
 	
 
@@ -237,8 +266,8 @@ return function(attribs)
 			if not findbox.hidden then
 				findbox:stop_search()
 			end
-			local row = buffer:find_cursor_row(msg.my + buffer.offset_y)
-			local col = buffer:find_cursor_col(row, msg.mx + buffer.offset_x - get_margin_width())
+			local row = buffer:find_cursor_row(msg.my + buffer.screen_y)
+			local col = buffer:find_cursor_col(row, msg.mx + buffer.screen_x - get_margin_width())
 			if click_counter == 1 then
 				drag_select_mode = "char"
 				buffer:set_cursor(col, row, key("alt"))
@@ -258,19 +287,19 @@ return function(attribs)
 		if self.click_on_scrollbar_thumb then
 			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
 			thumb_y += msg.dy
-			buffer.offset_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
-			buffer.display_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
+			buffer.screen_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
+			buffer.anim_y = math.floor(0.5 + (thumb_y * total_height) / self.height)
 			self:clamp_scrollbar_thumb()
 			return
 		elseif self.click_on_scrollbar_bg and msg.mb == 1 then
 			local total_height, thumb_y, thumb_height = self:compute_scrollbar_coords()
-			buffer.offset_y = math.floor(0.5 + (msg.my * total_height) / self.height)
-			buffer.offset_y -= self.height // 2
+			buffer.screen_y = math.floor(0.5 + (msg.my * total_height) / self.height)
+			buffer.screen_y -= self.height // 2
 			self:clamp_scrollbar_thumb()
 			return
 		end
 		if self.right_click_on_text and msg.mb == 2 then
-			buffer.offset_y -= msg.dy
+			buffer.screen_y -= msg.dy
 			self:clamp_scrollbar_thumb()
 			freewheel_velocity = math.floor(0.5 + (msg.dy + freewheel_last_dy) / 2.0)
 			freewheel_acceleration = 0.850 + 0.145 * mid(1, abs(msg.dy), 24) / 24.0
@@ -279,8 +308,8 @@ return function(attribs)
 			return
 		end
 		if not self.click_on_text then return end
-		local row = buffer:find_cursor_row(msg.my + buffer.offset_y)
-		local col = buffer:find_cursor_col(row, msg.mx + buffer.offset_x - get_margin_width())
+		local row = buffer:find_cursor_row(msg.my + buffer.screen_y)
+		local col = buffer:find_cursor_col(row, msg.mx + buffer.screen_x - get_margin_width())
 		local active_col, active_row = buffer:active_cursor_pos()
 		if col ~= active_col or row ~= active_row then
 			if drag_select_mode == "char" then
@@ -292,9 +321,9 @@ return function(attribs)
 			end
 		end
 		if msg.my < 1 then
-			buffer.offset_y -= 3
+			buffer.screen_y -= 3
 		elseif msg.my > self.height - 2 then
-			buffer.offset_y += 3
+			buffer.screen_y += 3
 		end
 	end
 	
@@ -311,8 +340,8 @@ return function(attribs)
 
 	function self:mousewheel(msg)
 		if not buffer then return end
-		buffer.offset_y -= 24 * msg.wheel_y
-		buffer.offset_x -= 6 * msg.wheel_x
+		buffer.screen_y -= 24 * msg.wheel_y
+		buffer.screen_x -= 6 * msg.wheel_x
 		self:clamp_scrollbar_thumb()
 	end
 
@@ -335,7 +364,7 @@ return function(attribs)
 		end
 	
 		if freewheel_velocity ~= 0 and msg.mb == 0 then
-			buffer.offset_y -= freewheel_velocity
+			buffer.screen_y -= freewheel_velocity
 			self:clamp_scrollbar_thumb()
 			freewheel_velocity *= freewheel_acceleration
 			if abs(freewheel_velocity) < 0.5 then
@@ -348,16 +377,16 @@ return function(attribs)
 		 return start * (1 - t) + fin * t	
 		end
 		local speed = findbox.hidden and 0.333333 or 0.2
-		if abs(buffer.offset_y - buffer.display_y) < 1.0 then
-			buffer.display_y = buffer.offset_y
+		if abs(buffer.screen_y - buffer.anim_y) < 1.0 then
+			buffer.anim_y = buffer.screen_y
 		else
-			buffer.display_y = lerp(buffer.display_y, buffer.offset_y, speed)
+			buffer.anim_y = lerp(buffer.anim_y, buffer.screen_y, speed)
 			self:clamp_scrollbar_thumb()
 		end
-		if abs(buffer.offset_x - buffer.display_x) < 1.0 then
-			buffer.display_x = buffer.offset_x
+		if abs(buffer.screen_x - buffer.anim_x) < 1.0 then
+			buffer.anim_x = buffer.screen_x
 		else
-			buffer.display_x = lerp(buffer.display_x, buffer.offset_x, speed)
+			buffer.anim_x = lerp(buffer.anim_x, buffer.screen_x, speed)
 			self:clamp_scrollbar_thumb()
 		end
 		
@@ -368,6 +397,10 @@ return function(attribs)
 			findbox:launch_search(findbox.hidden, "forward")
 		elseif keyp("d") and key("ctrl") then
 			findbox:launch_search(findbox.hidden, "backward")
+		end
+		
+		if self:has_keyboard_focus() and not findbox.hidden then
+			findbox:set_keyboard_focus(true)
 		end
 	
 		if not self:has_keyboard_focus() then return end
@@ -467,13 +500,18 @@ return function(attribs)
 		local total_height = buffer:total_height()
 		local thumb_height = math.floor(0.5 + (self.height * self.height) / total_height)
 		thumb_height = max(scrollbar_width, thumb_height)
-		local thumb_y = math.floor(0.5 + (buffer.display_y * self.height) / total_height)
+		local thumb_y = math.floor(0.5 + (buffer.anim_y * self.height) / total_height)
 		return total_height, thumb_y, thumb_height
 	end
 
 	
 	function self:draw(msg)
-		rectfill(0, 0, self.width - 1 - scrollbar_width, self.height - 1, 1)
+		local theme = config.theme
+		rectfill(
+			0, 0,
+			self.width - 1 - scrollbar_width, self.height - 1,
+			theme.editor_bg
+		)
 		
 		-- TODO: this is in /system/lib/gui_ed.lua:
 		--     -- draw tabs relative to home
@@ -481,8 +519,8 @@ return function(attribs)
 
 		if not buffer then return end
 		
-		local dx = math.floor(0.5 + buffer.display_x)
-		local dy = math.floor(0.5 + buffer.display_y)
+		local dx = math.floor(0.5 + buffer.anim_x)
+		local dy = math.floor(0.5 + buffer.anim_y)
 		
 		-- Matches
 		
@@ -641,11 +679,11 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2025-03-30 16:18:59",revision=1759]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2025-04-01 20:24:10",revision=2545]]
 -------------------------------------------------------------------------------------------
 
 
--- no requires
+local config = require "src/config.lua"
 
 
 -------------------------------------------------------------------------------------------
@@ -725,7 +763,7 @@ return function(attribs)
 			end
 		end
 		no_match = not found
-		if and_show then
+		if found and and_show then
 			self.editor:center_cursor(true)
 		end
 	end
@@ -804,7 +842,8 @@ return function(attribs)
 			end
 		elseif keyp("backspace") then
 			if key("ctrl") then
-				-- TODO: delete word
+				target = ""
+				update_search(false)
 			else
 				target = target:sub(1, -2)
 				update_search(true)
@@ -864,7 +903,8 @@ return function(attribs)
 	
 	
 	function self:draw(msg)
-		rectfill(0, 0, self.width - 1, self.height - 1, bg_sidebar)
+		local theme = config.theme
+		rectfill(0, 0, self.width - 1, self.height - 1, theme.sidebar_bg)
 		line(0, 0, self.width - 1, 0, 1)
 		line(0, 0, 0, self.height - 1, 1)
 		line(self.width - 1, 0, self.width - 1, self.height - 1, 1)
@@ -886,7 +926,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2025-03-30 16:18:59",revision=2261]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2025-04-01 20:24:10",revision=3047]]
 ----------------------------------------------------------------------------------------
 
 
@@ -932,12 +972,13 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-03-30 16:18:59",revision=5352]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-04-01 20:24:10",revision=6138]]
 -------------------------------------------------------------------------------------------
 
 
-local filetree = require "src/filetree.lua"
 local buffers = require "src/buffers.lua"
+local config = require "src/config.lua"
+local filetree = require "src/filetree.lua"
 
 
 -------------------------------------------------------------------------------------------
@@ -950,16 +991,10 @@ local arrow_left <const> = "\^:080c0e0c08000000"
 
 
 local row_height <const> = 9
-local header_height <const> = 16
-local padding_top <const> = 5
-local padding_bottom <const> = 3
+local header_height <const> = 20
+local footer_height <const> = 8
 local padding_left <const> = 3
 local padding_right <const> = 5
-
-
---local bg_sidebar <const> = 17 -- or 13, 17
-local fg_path_inactive <const> = 1 -- or 1, 19
-local fg_path_active <const> = 6 -- or 6, 6
 
 
 -------------------------------------------------------------------------------------------
@@ -1004,7 +1039,7 @@ return function(attribs)
 	
 	
 	function self:click(msg)
-		local y = header_height + padding_top
+		local y = header_height
 		filetree.foreach(
 			function(node, level)
 				if level == 0 then return end
@@ -1031,11 +1066,15 @@ return function(attribs)
 	
 
 	function self:draw(msg)
-		rectfill(0, 0, self.width - 1, self.height - 1, is_testing and 13 or bg_sidebar)
---		local fg_path_inactive = is_testing and 18 or fg_path_inactive
+		local theme = config.theme
+		rectfill(
+			0, 0,
+			self.width - 1, self.height - 1,
+			theme.sidebar_bg
+		)
 		do
 			local x = 2
-			pal(7, fg_path_inactive)
+			pal(7, theme.sidebar_fg)
 			if false then -- only for fullscreen
 				spr(8, x, 2); x += 11
 			end
@@ -1045,11 +1084,11 @@ return function(attribs)
 			--spr(9, x, 2); x += 11
 			spr(11, self.width - 11 - 3, 2)
 			pal(7, 7)
-			line(4, 15, self.width - 5, 15, fg_path_inactive)
+			line(4, 15, self.width - 5, 15, theme.sidebar_fg)
 		end
 		do
---			line(4, self.height - 9, self.width - 5, self.height - 9, fg_path_inactive)
-			pal(7, fg_path_inactive)
+--			line(4, self.height - 9, self.width - 5, self.height - 9, theme.sidebar_fg)
+			pal(7, theme.sidebar_fg)
 			spr(12, 0, self.height - 8)
 			spr(13, self.width - 11, self.height - 8)
 			pal(7, 7)
@@ -1061,27 +1100,28 @@ return function(attribs)
 			row = string.format("%d", row)
 --			local x = self.width - 4*(#row) - 4
 			local x = (self.width // 2) - ((4 * #row) // 2) - 1
-			print("\014" .. row, x, self.height - 6, fg_path_inactive)
+			print("\014" .. row, x, self.height - 6, theme.sidebar_fg)
 		end
 		clip(
 			self.x + padding_left,
-			self.y + header_height + padding_top,
+			self.y + header_height,
 			self.width - padding_left - padding_right,
-			self.height - header_height - padding_top - padding_bottom
+			self.height - header_height - footer_height
 		)
 --		rectfill(0, 0, self.width - 1, self.height - 12, 2)
-		local x, y = padding_left, header_height + padding_top
+		local x, y = padding_left, header_height
 		filetree.foreach(
 			function(node, level)
-				if level == 0 then return end
+				if node:is_folder() and level == 0 then return end
+				level = max(1, level)
 				local str = "\014"
 				str ..= node:path():basename()
 				if node:is_folder() then str ..= "/" end
-				local c = fg_path_inactive
+				local c = theme.sidebar_fg
 				if node == current then
-					c = fg_path_active
+					c = theme.sidebar_fg_active
 				end
-				if node:is_file() and not node:is_checked() then
+				if node:is_file() and not node:is_on_disk() then
 					c = (node == current) and 9 or 25
 				end
 				if node:is_file() and node:is_stale() then
@@ -1090,7 +1130,7 @@ return function(attribs)
 				print(str, x + 6 * (level - 1), y, c)
 				--[[
 				for i = 0, level - 2 do
-					line(x + i*6 + 1, y - 2, x + i*6 + 1, y + 6, fg_path_active)
+					line(x + i*6 + 1, y - 2, x + i*6 + 1, y + 6, theme.sidebar_fg_active)
 				end
 				]]--
 				y += row_height
@@ -1107,9 +1147,9 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSJdXQ==
+NC0wMSAyMDoyNDoxMSJdXQ==
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-03-30 16:18:59",revision=2856]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-04-01 20:24:10",revision=3642]]
 
 local multiclipboard = {}
 
@@ -1137,11 +1177,12 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-03-30 16:18:59",revision=6729]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-04-01 20:24:10",revision=7515]]
 -------------------------------------------------------------------------------------------
 
 
 local app = require "src/app.lua"
+local config = require "src/config.lua"
 
 
 -------------------------------------------------------------------------------------------
@@ -1177,15 +1218,70 @@ end
 
 
 ------------------------------------------------------------------------------------------
+	
+	
+local decor_multicat = { [3] = "\fd", [4] = "\fc" }
+local reserved_keywords = { "and", "break", "do", "else", "elseif", "end", "for",	"function", "if", "in", "local", "not", "or", "repeat", "return", "then", "until", "while" }
+local reserved_values = { "true", "false", "nil" }
+local decor_keyword = {}
+local decor_cat = { [0] = "\f7", "\f6", "\fc", "\fd", "\fc", "\f7" }
+local decor_funcname = function(cat, char) if cat == 1 and char == "(" then return "\fb" else return nil end end
+
+function init()
+	local theme = config.theme
+	
+	local function color_hex(c)
+		local c = c and type(c) == "number" and mid(0, c, 63) or 7
+		if 0 <= c and c <= 9 then
+			return string.format("\f%d", c)
+		else
+			return "\f" .. chr(ord("a") + c - 10)
+		end
+	end
+	
+	decor_multicat = {
+		[3] = color_hex(theme.lua_comment),
+		[4] = color_hex(theme.lua_string),
+	}
+	
+	decor_cat = {
+		[0] = color_hex(theme.lua_unknown),
+		color_hex(theme.lua_text),
+		color_hex(theme.lua_number),
+		color_hex(8), -- ???
+		color_hex(9), -- ???
+		color_hex(theme.lua_operator),
+	}
+	
+	for i = 1, #reserved_keywords do
+		decor_keyword[reserved_keywords[i]] = color_hex(theme.lua_keyword)
+	end
+	
+	for i = 1, #reserved_values do
+		decor_keyword[reserved_values[i]] = color_hex(theme.lua_reserved)
+	end
+	
+	decor_funcname =
+		function(cat, char)
+			if cat == 1 and char == "(" then
+				return color_hex(theme.lua_function)
+			else
+				return nil
+			end
+		end
+end
+
+
+------------------------------------------------------------------------------------------
 
 
 function new(text)
 	local self = {
 		-- Public fields
-		offset_x = -4,
-		offset_y = -4,
-		display_x = -4,
-		display_y = -4,
+		screen_x = -4,
+		screen_y = -4,
+		anim_x = -4,
+		anim_y = -4,
 		highlighter_row = 1,
 	}
 	
@@ -1247,17 +1343,6 @@ function new(text)
 			func(row, str)
 		end
 	end
-	
-	
-	local decor_multicat = { [3] = "\fd", [4] = "\fc" }
-	local reserved_keywords = { "and", "break", "do", "else", "elseif", "end", "for",	"function", "if", "in", "local", "not", "or", "repeat", "return", "then", "until", "while" }
-	local reserved_values = { "true", "false", "nil" }
-	local decor_keyword = {}
-	for i = 1, #reserved_keywords do decor_keyword[reserved_keywords[i]] = "\fe" end
-	for i = 1, #reserved_values do decor_keyword[reserved_values[i]] = "\fc" end
-	local decor_cat <const> = { [0] = "\f7", "\f6", "\fc", "\fd", "\fc", "\f7" }
-	local decor_funcname = function(cat, char) if cat == 1 and char == "(" then return "\fb" else return nil end end
-	
 	
 	function self:highlight(row)
 		row = mid(1, row, #text)
@@ -1330,8 +1415,8 @@ function new(text)
 	
 	function self:center_on(col, row)
 		-- TODO: this method should be in editor.lua, probably
-		self.offset_y = self:find_cursor_y(row - 12)
-		self.offset_x = self:find_cursor_x(col, row)
+		self.screen_y = self:find_cursor_y(row - 12)
+		self.screen_x = self:find_cursor_x(col, row)
 	end
 	
 
@@ -1342,21 +1427,23 @@ function new(text)
 		local nb = #cursors
 		for i, cursor in ipairs(cursors) do
 			local is_active_cursor = (nb > 1) and (i == nb)
-			local is_selection = (cursor.sel_col ~= nil)
+			local is_selection = (cursor.acol ~= nil)
 			func(cursor.col, cursor.row, is_selection, is_active_cursor)
 		end
 	end
 	
 	
 	local function selection_range(cursor)
-		if cursor.sel_row < cursor.row then
-			return cursor.sel_col, cursor.sel_row, cursor.col, cursor.row
-		elseif cursor.sel_row > cursor.row then
-			return cursor.col, cursor.row, cursor.sel_col, cursor.sel_row
-		elseif cursor.sel_col < cursor.col then
-			return cursor.sel_col, cursor.sel_row, cursor.col, cursor.row
+		if not cursor.acol then
+			return cursor.col, cursor.row, cursor.col, cursor.row
+		elseif cursor.arow < cursor.row then
+			return cursor.acol, cursor.arow, cursor.col, cursor.row
+		elseif cursor.arow > cursor.row then
+			return cursor.col, cursor.row, cursor.acol, cursor.arow
+		elseif cursor.acol < cursor.col then
+			return cursor.acol, cursor.arow, cursor.col, cursor.row
 		else
-			return cursor.col, cursor.row, cursor.sel_col, cursor.sel_row
+			return cursor.col, cursor.row, cursor.acol, cursor.arow
 		end
 	end
 	
@@ -1380,7 +1467,7 @@ function new(text)
 	function self:foreach_selection(func)
 		local nb = #cursors
 		for i, cursor in ipairs(cursors) do
-			if cursor.sel_col then
+			if cursor.acol then
 				local start_col, start_row, end_col, end_row = selection_range(cursor)
 				local is_active_cursor = (nb > 1) and (i == nb)
 				func(start_col, start_row, end_col, end_row, is_active_cursor)
@@ -1412,7 +1499,7 @@ function new(text)
 	function self:number_of_selections()
 		local nb = 0
 		for cursor in all(cursors) do
-			if cursor.sel_col then
+			if cursor.acol then
 				nb += 1
 			end
 		end
@@ -1473,7 +1560,7 @@ function new(text)
 			local wanted_x = self:find_cursor_x(match.ecol, match.erow)
 			table.insert(
 				cursors,
-				{ sel_col = match.scol, sel_row = match.srow,
+				{ acol = match.scol, arow = match.srow,
 					col = match.ecol, row = match.erow,
 					wanted_x = wanted_x }
 			)
@@ -1543,7 +1630,7 @@ function new(text)
 	
 	function self:current_selection()
 		local cursor = cursors[#cursors]
-		if cursor.sel_col then
+		if cursor.acol then
 			return selection_range(cursor)
 		end
 		return nil
@@ -1552,7 +1639,7 @@ function new(text)
 	
 	function self:current_selection_string()
 		local cursor = cursors[#cursors]
-		if cursor.sel_col then
+		if cursor.acol then
 			return selection_string(cursor)
 		end
 		return nil
@@ -1579,16 +1666,16 @@ function new(text)
 	
 
 	function self:set_selection(scol, srow, ecol, erow, is_add)
-		local sel_row = mid(1, srow, #text)
-		local sel_col = mid(1, scol, #text[srow] + 1)
+		local arow = mid(1, srow, #text)
+		local acol = mid(1, scol, #text[srow] + 1)
 		local row = mid(1, erow, #text)
 		local col = mid(1, ecol, #text[erow] + 1)
 		local x = self:find_cursor_x(col, row)
 		if is_add then
-			add(cursors, { col = col, row = row, x = x, sel_col = sel_col, sel_row = sel_row })
+			add(cursors, { col = col, row = row, x = x, acol = acol, arow = arow })
 			self:merge_cursors()
 		else
-			cursors = { { col = col, row = row, x = x, sel_col = sel_col, sel_row = sel_row } }
+			cursors = { { col = col, row = row, x = x, acol = acol, arow = arow } }
 		end
 		undo_group = nil
 	end
@@ -1601,12 +1688,12 @@ function new(text)
 		if (col == cursor.col) and (row == cursor.row) then
 			return
 		end
-		if not cursor.sel_col then
-			cursor.sel_col, cursor.sel_row = cursor.col, cursor.row
+		if not cursor.acol then
+			cursor.acol, cursor.arow = cursor.col, cursor.row
 		end
 		cursor.col, cursor.row = col, row
-		if (cursor.col == cursor.sel_col) and (cursor.row == cursor.sel_row) then
-			cursor.sel_col, cursor.sel_row = nil, nil
+		if (cursor.col == cursor.acol) and (cursor.row == cursor.arow) then
+			cursor.acol, cursor.arow = nil, nil
 		end
 		cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
 		self:merge_cursors()
@@ -1621,7 +1708,7 @@ function new(text)
 		local x = self:find_cursor_x(col, row)
 		local cursor = {
 			wcol = col, wrow = row,
-			sel_col = scol, sel_row = srow,
+			acol = scol, arow = srow,
 			col = ecol, row = erow,
 			x = x,
 		}
@@ -1646,13 +1733,13 @@ function new(text)
 			cursors[#cursors] = {
 				wcol = cursor.wcol, wrow = cursor.wrow,
 				col = scol, row = srow,
-				sel_col = wecol, sel_row = werow,
+				acol = wecol, arow = werow,
 				wanted_x = self:find_cursor_x(scol, srow)
 			}
 		elseif (erow > werow) or (erow == werow and ecol >= wecol) then
 			cursors[#cursors] = {
 				wcol = cursor.wcol, wrow = cursor.wrow,
-				sel_col = wscol, sel_row = wsrow,
+				acol = wscol, arow = wsrow,
 				col = ecol, row = erow,
 				wanted_x = self:find_cursor_x(ecol, erow)
 			}
@@ -1667,7 +1754,7 @@ function new(text)
 		local x = self:find_cursor_x(1, row)
 		local cursor = {
 			lrow = row,
-			sel_col = 1, sel_row = row,
+			acol = 1, arow = row,
 			col = 1, row = mid(1, row + 1, #text),
 			x = x,
 		}
@@ -1684,17 +1771,17 @@ function new(text)
 	function self:extend_line_selection(row)
 		local cursor = cursors[#cursors]
 		local row = mid(1, row, #text)
-		if not cursor.sel_col then
-			cursor.sel_col, cursor.sel_row = cursor.col, cursor.row
+		if not cursor.acol then
+			cursor.acol, cursor.arow = cursor.col, cursor.row
 		end
 		if not cursor.lrow then
 			cursor.lrow = cursor.row
 		end
 		if row >= cursor.lrow then
-			cursor.sel_col, cursor.sel_row = 1, cursor.lrow
+			cursor.acol, cursor.arow = 1, cursor.lrow
 			cursor.col, cursor.row = 1, row + 1
 		elseif row < cursor.lrow then
-			cursor.sel_col, cursor.sel_row = 1, row
+			cursor.acol, cursor.arow = 1, row
 			cursor.col, cursor.row = 1, cursor.lrow + 1
 		end
 		cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
@@ -1705,8 +1792,8 @@ function new(text)
 	
 	function self:clear_selections()
 		cursors = { cursors[#cursors] }
-		cursors[#cursors].sel_col = nil
-		cursors[#cursors].sel_row = nil
+		cursors[#cursors].acol = nil
+		cursors[#cursors].arow = nil
 	end
 	
 
@@ -1775,12 +1862,12 @@ function new(text)
 	
 
 	local function initiate_selection(cursor)
-		cursor.sel_col, cursor.sel_row = cursor.col, cursor.row
+		cursor.acol, cursor.arow = cursor.col, cursor.row
 	end
 
 
 	local function cancel_selection(cursor)
-		cursor.sel_col, cursor.sel_row = nil, nil
+		cursor.acol, cursor.arow = nil, nil
 		cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
 		undo_group = nil
 	end
@@ -1788,10 +1875,10 @@ function new(text)
 
 	function self:move_up(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				cursor.col, cursor.row, _, _ = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			cursor.row = max(1, cursor.row - 1)
@@ -1809,10 +1896,10 @@ function new(text)
 
 	function self:move_down(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				 _, _, cursor.col, cursor.row = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			cursor.row = min(cursor.row + 1, #text)
@@ -1830,11 +1917,11 @@ function new(text)
 
 	function self:move_left(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				cursor.col, cursor.row, _, _ = selection_range(cursor)
 				cancel_selection(cursor)
 				goto continue -- because the cursor must not move
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			cursor.col -= 1
@@ -1856,11 +1943,11 @@ function new(text)
 
 	function self:move_right(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				_, _, cursor.col, cursor.row = selection_range(cursor)
 				cancel_selection(cursor)
 				goto continue -- because the cursor must not move
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			cursor.col += 1
@@ -1882,10 +1969,10 @@ function new(text)
 
 	function self:move_home(extend, smart)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				 cursor.col, cursor.row, _, _ = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			if smart then
@@ -1903,10 +1990,10 @@ function new(text)
 
 	function self:move_end(extend, smart)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				 _, _, cursor.col, cursor.row = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			if smart then
@@ -1924,10 +2011,10 @@ function new(text)
 
 	function self:next_word(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				 _, _, cursor.col, cursor.row = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			local str = text[cursor.row]
@@ -1954,10 +2041,10 @@ function new(text)
 
 	function self:previous_word(extend)
 		for cursor in all(cursors) do
-			if cursor.sel_col and (not extend) then
+			if cursor.acol and (not extend) then
 				 cursor.col, cursor.row, _, _ = selection_range(cursor)
 				cancel_selection(cursor)
-			elseif extend and (not cursor.sel_col) then
+			elseif extend and (not cursor.acol) then
 				initiate_selection(cursor)
 			end
 			local str = text[cursor.row]
@@ -2003,20 +2090,20 @@ function new(text)
 				cursor.row += start_row - end_row
 			end
 			-- The same with selection anchors
-			if not cursor.sel_col then
+			if not cursor.acol then
 				-- no selection
-			elseif cursor.sel_row < start_row then
+			elseif cursor.arow < start_row then
 				-- nothing to do
-			elseif cursor.sel_row < end_row then
-				cursor.sel_col, cursor.sel_row = start_col, start_row
-			elseif (cursor.sel_row == end_row) and (cursor.sel_col < start_col) then
+			elseif cursor.arow < end_row then
+				cursor.acol, cursor.arow = start_col, start_row
+			elseif (cursor.arow == end_row) and (cursor.acol < start_col) then
 				-- nothing to do
-			elseif (cursor.sel_row == end_row) and (cursor.sel_col < end_col) then
-				cursor.sel_col = start_col
-			elseif cursor.sel_row == end_row then
-				cursor.sel_col += start_col - end_col
+			elseif (cursor.arow == end_row) and (cursor.acol < end_col) then
+				cursor.acol = start_col
+			elseif cursor.arow == end_row then
+				cursor.acol += start_col - end_col
 			else
-				cursor.sel_row += start_row - end_row
+				cursor.arow += start_row - end_row
 			end
 		end
 	end
@@ -2029,7 +2116,7 @@ function new(text)
 			undo_group = nil
 		end
 		for cursor in all(cursors) do
-			if cursor.sel_col then
+			if cursor.acol then
 				has_deleted = true
 				local start_col, start_row, end_col, end_row = selection_range(cursor)
 				text[start_row] =
@@ -2041,7 +2128,7 @@ function new(text)
 				end
 				shift_cursors_after_deletion(start_col, start_row, end_col, end_row)
 				cursor.col, cursor.row = start_col, start_row
-				cursor.sel_col, cursor.sel_row = nil, nil
+				cursor.acol, cursor.arow = nil, nil
 			end
 		end
 		return has_deleted
@@ -2061,8 +2148,8 @@ function new(text)
 					cursor.col += #str
 				end
 				cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
-				if cursor.sel_row == row and cursor.sel_col >= col then
-					cursor.sel_col += #str
+				if cursor.arow == row and cursor.acol >= col then
+					cursor.acol += #str
 				end
 			end
 			return
@@ -2083,13 +2170,13 @@ function new(text)
 			elseif cursor.row > row then
 				cursor.row += delta_row
 			end
-			if not cursor.sel_col then
+			if not cursor.acol then
 				-- do nothing
-			elseif cursor.sel_row == row and cursor.sel_col >= col then
-				cursor.sel_row += delta_row
-				cursor.sel_col += delta_col
-			elseif cursor.sel_row > row then
-				cursor.sel_row += delta_row
+			elseif cursor.arow == row and cursor.acol >= col then
+				cursor.arow += delta_row
+				cursor.acol += delta_col
+			elseif cursor.arow > row then
+				cursor.arow += delta_row
 			end
 		end
 	end
@@ -2282,10 +2369,10 @@ function new(text)
 						then
 							cursor.col = mid(1, cursor.col + delta_col, #text[cursor.row])
 						end
-						if srow <= cursor.sel_row and cursor.sel_row <= erow
-							and cursor.sel_col ~= 1
+						if srow <= cursor.arow and cursor.arow <= erow
+							and cursor.acol ~= 1
 						then
-							cursor.sel_col = mid(1, cursor.sel_col + delta_col, #text[cursor.sel_row])
+							cursor.acol = mid(1, cursor.acol + delta_col, #text[cursor.arow])
 						end
 					end
 				end
@@ -2405,10 +2492,186 @@ end
 
 
 return {
+	init = init,
 	new = new,
 }
+:: src/config.lua
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2025-04-01 20:24:10",revision=656]]
+----------------------------------------------------------------------------------------
+
+
+local M = {}
+
+
+----------------------------------------------------------------------------------------
+
+
+M.theme = {}
+M.shortcuts = {}
+M.settings = {}
+
+
+----------------------------------------------------------------------------------------
+
+
+local safe_env = {
+	-- Standard Lua functions
+	assert = assert,
+	collectgarbage = collectgarbage,
+	error = error,
+	getmetatable = getmetatable,
+	ipairs = ipairs,
+	load = load,
+	loadfile = loadfile,
+	next = next,
+	pairs = pairs,
+	pcall = pcall,
+	rawequal = rawequal,
+	rawget = rawget,
+	rawlen = rawlen,
+	rawset = rawset,
+	select = select,
+	setmetatable = setmetatable,
+	tonumber = tonumber,
+	tostring = tostring,
+	type = type,
+	-- Standard Lua modules
+	coroutine = coroutine,
+	math = math,
+	string = string,
+	table = table,
+	utf8 = utf8,
+	-- Picotron's Lua functions
+	env = env,
+	printh = printh,
+	-- Picotron's input functions
+	btn = btn,
+	btnp = btnp,
+	key = key,
+	keyp = keyp,
+	peektext = peektext,
+	readtext = readtext,
+	mouse = mouse,
+	mouselock = mouselock,
+	-- Picotron's string functions
+	chr = chr,
+	ord = ord,
+	sub = sub,
+	split = split,
+	create_delta = create_delta,
+	apply_delta = apply_delta,
+	-- Picotron's table functions
+	add = add,
+	del = del,
+	deli = deli,
+	count = count,
+	all = all,
+	foreach = foreach,
+	-- Picotron's pod functions
+	pod = pod,
+	unpod = unpod,
+	-- Picotron's files functions
+	store = store,
+	fetch = fetch,
+	store_metadata = store_metadata,
+	fetch_metadata = fetch_metadata,
+	mkdir = mkdir,
+	ls = ls,
+	cp = cp,
+	mv = mv,
+	rm = rm,
+	pwd = pwd,
+	fullpath = fullpath,
+	fstat = fstat,
+	include = include,
+	-- Picotron's system functions
+	printh = printh,
+	env = env,
+	stop = stop,
+	time = time,
+	date = date,
+	get_clipboard = get_clipboard,
+	set_clipboard = set_clipboard,
+	stat = stat,
+	-- Picotron's memory functions
+	peek = peek,
+	poke = poke,
+	peek2 = peek2,
+	poke2 = poke2,
+	peek4 = peek4,
+	poke4 = poke4,
+	peek8 = peek8,
+	poke8 = poke8,
+	memcpy = memcpy,
+	memset = memset,
+	-- Picotron's userdata functions
+	userdata = userdata,
+	vec = vec,
+	memmap = memmap,
+	unmap = unmap,
+}
+
+
+----------------------------------------------------------------------------------------
+
+
+local function load_config_file(path, t)
+	log("loading " .. pod(path))
+	local is_default = (t == nil)
+	local t = t or {}
+	if (not is_default) and (not fstat(path)) then
+		-- User configuration files may not exist.
+		return t
+	end
+	local fun, err = load_file(path, safe_env)
+	if not fun then
+		send_message(3, { event = "report_error", content = "*loading error in configuration file " .. pod(path) .. ":" })
+		send_message(3, { event = "report_error", content = tostring(err) })
+		return t
+	end
+	local cofun = cocreate(fun)
+	local success, tt = coresume(cofun)
+	if not success then
+		send_message(3, { event = "report_error", content = "*runtime error in configuration file " .. pod(path) .. ":" })
+		send_message(3, { event = "report_error", content = tostring(tt) })
+		return
+	end
+	log("type="..type(tt))
+	if type(tt) ~= "table" then
+		send_message(3, { event = "report_error", content = "*runtime error in configuration file " .. pod(path) .. ":" })
+		send_message(3, { event = "report_error", content = "config file did not return a table" })
+		return
+	end
+	for k, v in pairs(tt) do
+		t[k] = v
+	end
+	return t
+end
+
+
+function M.init()
+	setmetatable(safe_env, {
+		__index =
+			function(k)
+				send_error("unknown global: " .. tostring(k))
+			end,
+	})
+	M.theme = load_config_file("defaults/theme.lua")
+	load_config_file("/appdata/codron/theme.lua", M.theme)
+	log("theme.sidebar_bg="..pod(M.theme.sidebar_bg))
+end
+
+
+----------------------------------------------------------------------------------------
+
+
+return M
+
+
+----------------------------------------------------------------------------------------
+
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2025-03-30 16:18:59",revision=908]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2025-04-01 20:24:10",revision=1694]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2476,7 +2739,7 @@ local function new_file(path, buffer, metadata)
 	local path = path or ""
 	local buffer = buffer or buffers.new("(empty)")
 	local metadata = metadata or {}
-	local checked = true
+	local is_on_disk = true
 	local stale = false
 	
 	function self:is_folder() return false end
@@ -2497,36 +2760,51 @@ local function new_file(path, buffer, metadata)
 		stale = true
 	end
 	
-	function self:is_checked()
-		return checked
+	function self:is_on_disk()
+		return is_on_disk
 	end
 	
-	function self:mark_checked()
-		checked = true
+	function self:mark_is_on_disk()
+		is_on_disk = true
 	end
 	
-	function self:uncheck_all()
-		checked = false
+	function self:unmark_is_on_disk()
+		is_on_disk = false
 	end
 	
 	function self:save_all()
 		local full_text = self:buffer():full_text_copy()
-		log("filetree.save_all: saving " .. pod(self:path()))
+		--log("filetree.file.save_all: saving " .. pod(self:path()))
 		-- TODO: stale file detection
 		local new_metadata = fetch_metadata(self:path())
 		if new_metadata and metadata.revision and new_metadata.revision
 			and metadata.revision < new_metadata.revision
 		then
-			notify("*** not saved ***") -- TODO
+			stale = true
+			log("not saved because newer revision on disk: " .. pod(path))
+			notify(pod(path) .. ": skipped saving over external changes") -- TODO
 			return
 		end
-		local err = store(self:path(), full_text, {})
+		local err = store(self:path(), full_text, metadata)
 		metadata = fetch_metadata(self:path())
 		if err then
 			notify(err)
 		else
 			stale = false
 		end
+	end
+	
+	function self:save_as(new_path)
+		local full_text = self:buffer():full_text_copy()
+		local err = store(new_path, full_text, metadata)
+		metadata = fetch_metadata(new_path)
+		if err then
+			notify(err)
+			return err
+		end
+		path = new_path
+		stale = false
+		return nil
 	end
 	
 	function self:foreach(fun, level)
@@ -2549,7 +2827,7 @@ local function new_folder(path)
 	-- Private fields
 	local path = path
 	local children = {}
-	local checked = false
+	local is_on_disk = false
 	
 	function self:is_folder() return true end
 	function self:is_file() return false end
@@ -2591,22 +2869,25 @@ local function new_folder(path)
 		return #children == 0
 	end
 	
-	function self:is_checked()
-		return checked
+	function self:is_on_disk()
+		return is_on_disk
 	end
 	
-	function self:mark_checked()
-		checked = true
+	function self:mark_is_on_disk()
+		is_on_disk = true
 	end
 	
-	function self:uncheck_all()
-		checked = false
+	function self:unmark_is_on_disk()
+		is_on_disk = false
 		for child in all(children) do
-			child:uncheck_all()
+			child:unmark_is_on_disk()
 		end
 	end
 	
 	function self:save_all()
+		if self == root then
+			log("filetree.root: saving all " .. pod(path))
+		end
 		for child in all(children) do
 			child:save_all()
 		end
@@ -2676,14 +2957,14 @@ local function refresh()
 			-- TODO: compare metadata
 			-- and mark for existence
 			local new_metadata = fetch_metadata(node:path())
-			log("metadata="..pod(node:metadata()).." new_metadata="..pod(new_metadata))
+			--log("metadata="..pod(node:metadata()).." new_metadata="..pod(new_metadata))
 			if node:metadata().revision and new_metadata.revision 
 				and node:metadata().revision < new_metadata.revision
 			then
 				log("refresh: " .. pod(node:path()) .. " is stale")
 				node:mark_stale()
 			end
-			node:mark_checked()
+			node:mark_is_on_disk()
 			return
 		elseif node:is_folder() then
 			local folder_content = ls(node:path())
@@ -2697,14 +2978,14 @@ local function refresh()
 					node:sort()
 				end
 			end
-			node:mark_checked()
+			node:mark_is_on_disk() -- TODO: only if it contains child file on disk?
 			return
 		else
 			send_error("fileset.refresh: unexpected fstat result: " .. pod(kind))
 		end
 	end
 
-	root:uncheck_all()
+	root:unmark_is_on_disk()
 	check(root)
 end
 
@@ -2750,7 +3031,7 @@ local function save_all()
 	
 	if root:is_file() then
 		notify("saved " .. root:path())
-	elseif root:is_folder() and root:path():sub(1, 7) == "/system" then
+	elseif root:folder_path():sub(1, 7) == "/system" then
 		notify("saved all files in " .. root:path() .. " ** warning: changes to /system/ not written to disk **")
 	elseif root:is_folder() and root:path():sub(1, 9) ~= "/ram/cart" then
 		notify("saved all files in " .. root:path())
@@ -2797,7 +3078,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/ui.lua
---[[pod_format="raw",created="2025-03-23 10:43:59",modified="2025-03-30 16:18:59",revision=3376]]
+--[[pod_format="raw",created="2025-03-23 10:43:59",modified="2025-04-01 20:24:10",revision=4162]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2817,11 +3098,16 @@ return {
 }
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-03-30 16:18:59",revision=3318]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-04-01 20:24:10",revision=4104]]
 --------------------------------------------------------------------------------------------
 
 
-function log(str) printh(env().argv[0]..": "..(str or ""))  end
+function log(str)
+	local path = debug.getinfo(2).source
+	if path[1] == "@" then path = path:sub(2, -1) end
+	local line = debug.getinfo(2).currentline
+	printh(path .. ":" .. line .. ": " .. (str or ""))
+end
 --function log(_str) end
 
 
@@ -2855,6 +3141,27 @@ function require(name)
 	_modules[name] = module
 
 	return module
+end
+
+
+--------------------------------------------------------------------------------------------
+
+
+function load_file(path, env)
+	local path = fullpath(path)
+	local src = fetch(path)
+	if type(src) != "string" then
+		return nil, "could not load file " .. pod(path)
+	end
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. path, "t", env)
+
+	return func, err
 end
 
 
@@ -2902,7 +3209,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-03-30 16:18:59",revision=4444]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-04-01 20:24:10",revision=5230]]
 -------------------------------------------------------------------------------------------
 
 
@@ -3335,7 +3642,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSJdXQ==
+NC0wMSAyMDoyNDoxMSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-Esw-EsM-EtE--qKIec4--f39-cwSwD-AEsA-xxLBP8ASwT-LEsE-yBLEP8YSxj-JEj8SP90S
@@ -3658,12 +3965,13 @@ KM47wCjBOyg7KME7KNA7KMk7KME7wCjFO8IowDvAKME7wCjBO8AowTso-f391zXBKDUoNSg1wSjA
 EP3DOtEo0jsoxzsoxjsowzsowTsoOyjLOyjDOyjAOyjAOyjOOyjBOyg7KMI7KM87KMg7KME7KMA7
 KMQ7KMI7KMA7KDsowDsoOyjAOyjBOyj9-f3jEMUAAAAAAAAAAQ==
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-03-30 16:18:59",revision=5083]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-04-01 20:24:10",revision=5869]]
 ----------------------------------------------------------------------------------------
 
 
 include "src/utils.lua"
 local buffers = require "src/buffers.lua"
+local config = require "src/config.lua"
 local filetree = require "src/filetree.lua"
 local ui = require "src/ui.lua"
 
@@ -3680,14 +3988,6 @@ local font_alt <const> = "fonts/p9.font"
 ----------------------------------------------------------------------------------------
 
 
--- Temporary: change sidebar color to distinguish
--- between in-dev version, testing version and working version
-bg_sidebar = 17
-
-
-----------------------------------------------------------------------------------------
-
-
 local sidebar
 local editor
 
@@ -3699,37 +3999,39 @@ function _init()
 	log("---- new process -----------------------------------------------")
 	log("env=" .. pod(env()))
 
-	local requested_path = env().argv[1] or "/ram/cart/main.lua"
-	local this_prog = env().argv[0]
-	if this_prog == "/system/apps/terminal.lua" then
-		-- Codron is the loaded cart, use a fake path.
-		requested_path = "/test/test2/main.lua"
-		bg_sidebar = 13
-	end
+	-- Requested path is the first argument passed to
+	-- the program, and may contain a hloc.
+	local requested_path = get_requested_path()
 
 	broadcast_requested_path(requested_path)
 
-	local path = fullpath(requested_path)
-	local parts = split(path, "#", false)
-	local path = parts[1]
-	local row = tonumber(parts[2])
-	local main_path = filetree.find_main(path)
+	local path, row = split_fullpath_and_hloc(requested_path)
+	
+	if not fstat(path) then
+		-- New files must be created early, by the freshly launched
+		-- process. If the file belongs to an already existing
+		-- window, both process will have the same window.location,
+		-- and the WM will kill the new, unneeded one.
+		store(path, "", {})
+	end
+	
+	local main_path, root_path = find_main_and_root_path(path)
 
-	open_window(main_path, path)	
-	install_event_handlers()
-	update_menu_items()
+	open_window(main_path, path)
+	
+	config.init()
+	buffers.init()
+	log("config.theme.sidebar_bg=" .. pod(config.theme.sidebar_bg))
 	load_fonts()
 	
-	local root_path = main_path and parent_folder(main_path)
-		or requested_path
-	log([[root_path="]]..root_path..[["]])
 	filetree.create(root_path)
-	filetree.printh()
+	--filetree.printh()
+
+	update_menu_items()
+	install_event_handlers()
 	
-	ui.init()
-	editor = ui.head():attach(ui.editor { x = 60, y = 0 })
-	editor:set_keyboard_focus(true)
-	sidebar = ui.head():attach(ui.sidebar { x = 0, y = 0, editor = editor })
+	generate_ui()
+	
 	sidebar:set_current(filetree.find(path))
 	if row then
 		sidebar:current_node():buffer():set_cursor(1, row)
@@ -3742,6 +4044,17 @@ end
 
 
 function _update()
+	local display = get_display()
+	local width, height = display:width(), display:height()
+	if true then
+		sidebar.x, sidebar.y = 0, 0
+		editor.x, editor.y = sidebar.width, 0
+		editor.width, editor.height = width - sidebar.width, height
+	else
+		sidebar.x, sidebar.y = width - sidebar.width, 0
+		editor.x, editor.y = 0, 0
+		editor.width, editor.height = width - sidebar.width, height
+	end
 	-- TODO: what?
 	-- Focus is lost on any click (in picotron's `update_all`),
 	-- how do we prevent that from happening?
@@ -3762,8 +4075,59 @@ end
 function _draw()
 	cls(8) -- TODO: remove
 	ui:draw()
-	--print(string.format("\014%4.0f", stat(1) * 100.0) .. "%", 452, 246, 0)
+	print(string.format("\014%4.0f", stat(1) * 100.0) .. "%", 452, 246, 0)
 	print(string.format("\014%3.0f", stat(0) / (1024 * 1024)) .. "MB", 452, 253, 0)
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function generate_ui()
+	ui.init()
+	editor = ui.head():attach(ui.editor { x = 60, y = 0 })
+	editor:set_keyboard_focus(true)
+	sidebar = ui.head():attach(ui.sidebar { x = 0, y = 0, editor = editor })
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function get_requested_path()
+	local requested_path = env().argv[1] or "/ram/cart/main.lua"
+	local this_prog = env().argv[0]
+	if this_prog == "/system/apps/terminal.lua" then
+		-- Codron is the loaded cart, use a fake path.
+		requested_path = "/test/test2/main.lua"
+	end
+	return requested_path
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function split_fullpath_and_hloc(path)
+	local path = fullpath(path)
+	local parts = split(path, "#", false)
+	local path = parts[1]
+	local row = tonumber(parts[2])
+	return path, row
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+function find_main_and_root_path(path)
+	local main_path = filetree.find_main(path)
+	local root_path = path
+	if main_path then
+		root_path = parent_folder(main_path)
+	end
+	log([[root_path="]]..root_path..[["]])
+	return main_path, root_path
 end
 
 
@@ -3848,44 +4212,47 @@ local function switch_to(path, sender)
 
 	local root = filetree.root()
 	
-	if root:is_file() then
-		if path ~= root:path() then
-			log("main.switch_to: not this single-file: requested=" .. pod(path) .. " this=" .. pod(root:path()))
-			return
-		end
+	if root:is_file() and path == root:path() then
 		log("main.switch_to: *found* single-file: requested=" .. pod(path) .. " this=" .. pod(root:path()))
-		sidebar:set_current(node)
+		sidebar:set_current(root)
 		if row then
 			sidebar:current_node():buffer():set_cursor(1, row)
 			editor:center_cursor()
 		end
 		return
-	end
-	
-	if root:is_folder() and sub(path, 1, #root:path()) ~= root:path() then
-		log("main.switch_to: not in filetree folder: requested=" .. pod(path) .. " folder=" .. pod(root:path()))
-	end
-	
-	local node = filetree.find(path)
-	if node then
-		log("main.switch_to: *found* requested file: requested=" .. pod(path))
-		sidebar:set_current(node)
-		if row then
-			sidebar:current_node():buffer():set_cursor(1, row)
-			editor:center_cursor()
-		end
+		
+	elseif root:is_file() then
+		log("main.switch_to: not this single-file: requested=" .. pod(path) .. " this=" .. pod(root:path()))
+		-- TODO: should we `stop()` right there?
+		-- or is it better to let the WM do the killing?
 		return
-	end
+	
+	elseif root:is_folder() and sub(path, 1, #root:path()) == root:path() then
+		local node = filetree.find(path)
+		
+		if node then
+			log("main.switch_to: *found* requested file: requested=" .. pod(path))
+			sidebar:set_current(node)
+			if row then
+				sidebar:current_node():buffer():set_cursor(1, row)
+				editor:center_cursor()
+			end
+			return
+			
+		else
+			log("main.switch: *new file* belongs in filetree folder: requested=" .. pod(path) .. " folder=" .. pod(root:path()))
+			filetree.refresh()
+			sidebar:set_current(filetree.find(path))
+		end
 
-	log("main.switch: *new file* belongs in filetree folder: requested=" .. pod(path) .. " folder=" .. pod(root:path()))
-	store(path, "")
-	filetree.refresh()
-	sidebar:set_current_node(filetree.find(path))
-	log("sending kill_process message to [" .. string.format("%03d", sender) .. "]")
-	send_message(2, { event = "kill_process", proc_id = sender, exit_code = 0 })
-	-- TODO: !
-	sidebar:set_current(nil)
+	elseif root:is_folder() then
+		log("main.switch_to: not in filetree folder: requested=" .. pod(path) .. " folder=" .. pod(root:path()))
+		return
+	end
 end
+
+
+------------------------------------------------------------------------------------------
 
 
 function install_event_handlers()
@@ -3922,6 +4289,26 @@ function install_event_handlers()
 		"save_file_as",
 		function(msg)
 			log("EVENT: save_file_as " .. pod(msg))
+			local new_path = fullpath(msg.filename)
+			if not new_path then
+				notify("unable to save: invalid file name")
+				return
+			end
+			local node = sidebar:current_node()
+			if not node then
+				return
+			end
+			local ext = node:path():ext()
+			if not new_path:ext() and ext then
+				new_path ..= "." .. ext
+			end
+			local err = node:save_as(new_path)
+			if err then
+				notify(err)
+			else
+				notify("saved as " .. new_path)
+			end
+			filetree.refresh()
 		end
 	)
 	on_event(
@@ -3941,12 +4328,16 @@ function install_event_handlers()
 		function(msg)
 			--log("gained_focus")
 			-- TODO: check for file changes.
+			filetree.refresh()
 		end
 	)
 	on_event(
 		"lost_focus",
 		function(msg)
-			--log("lost_focus")
+			local root = filetree.root()
+			if root:is_folder() and sub(root:path(), 1, 9) == "/ram/cart" then
+				filetree.root():save_all()
+			end
 		end
 	)
 	on_event(
@@ -3969,6 +4360,12 @@ function install_event_handlers()
 		end
 	)
 	-- non existing events?
+	on_event(
+		"modified:/test/test2",
+		function(msg)
+			log("??? EVENT: modified:")
+		end
+	)
 	on_event(
 		"close_window",
 		function(msg)
@@ -4001,7 +4398,9 @@ function update_menu_items()
 		action = function()
 			log("MENU: New File")
 			local folder = filetree.root():folder_path()
-			log([[open file folder= "]] .. folder .. [["]])
+			if sidebar:current_node() then
+				folder = sidebar:current_node():folder_path()
+			end
 			local open_with = env().argv[0]
 			if open_with == "/system/apps/terminal.lua" then
 				open_with = "/ram/cart/main.lua"
@@ -4026,7 +4425,9 @@ function update_menu_items()
 		action = function()
 			log("MENU: Open File")
 			local folder = filetree.root():folder_path()
-			log([[open file folder= "]] .. folder .. [["]])
+			if sidebar:current_node() then
+				folder = sidebar:current_node():folder_path()
+			end
 			local open_with = env().argv[0]
 			if open_with == "/system/apps/terminal.lua" then
 				open_with = "/ram/cart/main.lua"
@@ -4041,27 +4442,72 @@ function update_menu_items()
 			)
 		end
 	}
+	
+	if filetree.root():is_folder()
+		and filetree.root():path():sub(1, 9) == "/ram/cart"
+	then
+		menuitem {
+			id = "save_file",
+			label = "\f6\^:7f4141417f616500 Save All (auto)",
+			shortcut = "CTRL-S", -- ctrl-s is handled by window manager
+			action =
+				function()
+					-- still save just in case!
+					send_message(pid(), { event = "save_file"} )
+					return true
+				end
+		}
+	elseif filetree.root():is_folder() then
+		menuitem {
+			id = "save_file",
+			label = "\^:7f4141417f616500 Save All",
+			shortcut = "CTRL-S", -- ctrl-s is handled by window manager
+			action =
+				function()
+					send_message(pid(), { event = "save_file" })
+				end
+		}
+	else
+		menuitem {
+			id = "save_file",
+			label = "\^:7f4141417f616500 Save File",
+			shortcut = "CTRL-S", -- ctrl-s is handled by window manager
+			action =
+				function()
+					send_message(pid(), { event = "save_file" })
+				end
+		}
+	end
+
+	menuitem{
+		id = "save_file_as",
+		label = "\^:7f4141417f616500 Save File As",
+		action = function() 
+			local folder = filetree.root():folder_path()
+			local ext = "lua"
+			if sidebar:current_node() then
+				folder = sidebar:current_node():folder_path()
+				ext = sidebar:current_node():path():ext()
+			end
+			create_process(
+				"/system/apps/filenav.p64", 
+				{
+					path = folder,
+					intention = "save_file_as",
+					use_ext = ext,
+					window_attribs = { workspace = "current", autoclose = true }
+				}
+			)
+		end
+	}
+
 end
 
 
 ------------------------------------------------------------------------------------------
 
-
-function find_codron_pids()
-	local matching_pids = {}
-	for process in all(fetch "/ram/system/processes.pod") do
-		if process.name == "codron" then
-			matching_pids[#matching_pids + 1] = process.id
-		end
-	end
-	return matching_pids
-end
-
-
-----------------------------------------------------------------------------------------
-
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-03-30 16:18:59",revision=3240]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-04-01 20:24:10",revision=4026]]
 # Codron
 
 ## Keybinds
@@ -4112,11 +4558,10 @@ Multi-cursors and multi-selection:
 - Movement keys: exit find, cancel selection.
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-03-30 16:18:59",revision=3275]]
-- Fix: alt-double-click to add words to selection.
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-04-01 20:24:10",revision=4061]]
+- Fix: alt-double-click to add words to selection: an extra cursor is added.
 - Fix: bug when opening non-existent file
 - Fix: disable syntax highlighting for non-lua files.
-- Fix: double-click drag in reverse is broken.
 - Add: alt-click on selection to discard it.
 - Add: button to add new file in sidebar.
 - Add: button to refresh the filetree.
@@ -4131,8 +4576,18 @@ Multi-cursors and multi-selection:
 - Add: horizontal drag with right click, but gated with pressure.
 
 :: .info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjA0OjA0Iixtb2RpZmllZD0iMjAyNS0w
-My0zMCAxNjoxODo1OSIscnVudGltZT0xNyx3b3Jrc3BhY2VzPXt7bG9jYXRpb249ImdmeC8wLmdm
-eCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ibWFpbi5sdWEiLHdvcmtzcGFjZV9pbmRl
-eD00fX1dXQ==
+b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjUtMDMtMjIgMTY6MDQ6
+MDQiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
+MDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAwMDEwNzExMTExMTExMTExMTEx
+MTExMTExMDcwMTAwMDEwNzExMTExMTExMTExMTExMTExMTExMTExMTA3MDEwMTA3MTExMTExMTEx
+MTExMTExMTExMTExMTExMDcwMTAxMDcxMTExMTExMTExMTExMTExMTExMTExMTEwNzAxMDEwNzEx
+MTExMTExMTExMTExMTExMTExMTExMTA3MDEwMTA3MTExMTExMTExMTExMTExMTExMTExMTExMDcw
+MTAxMDcxMTExMTExMTExMTExMTExMTExMTExMTEwNzAxMDEwNzExMTExMTExMTExMTExMTExMTEx
+MTExMTA3MDEwMTA3MTExMTExMTExMTExMTExMTExMTExMTExMDcwMTAxMDYwNzExMTExMTExMTEx
+MTExMTExMTExMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
+MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNS0wNC0wMSAyMDoy
+NDoxMSIsbm90ZXM9IkEgY29kZSBlZGl0b3IiLHJ1bnRpbWU9MTcsdGl0bGU9IkNvZHJvbiIsdmVy
+c2lvbj0iMC4wLjAiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2Vf
+aW5kZXg9Mn0se2xvY2F0aW9uPSJtYWluLmx1YSIsd29ya3NwYWNlX2luZGV4PTd9fV1d
 :: [eoc]
