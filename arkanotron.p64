@@ -1,0 +1,759 @@
+picotron cartridge // www.picotron.net
+version 2
+
+:: gfx/
+:: gfx/0.gfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMiIscmV2aXNpb249MTY3Nl1dbHo0AAoUAAC8WgAA8yF7WzBdPXtibXA9cHh1
+AEMgDAwE8CQHEAeAF5AXgAcQB-AkLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT0yfSw_APEBGQ8E
+B-8aCQf_Bg8bHvsFHQQAkWtuax0eaw5LDQcAQwsdDgsKACUNCwsAOC4LDSUANV1rHT8AW-0HDv0I
+hQAzLTI1hwAiLTWIABkxiAAgFAyIAO8CDxsPGgf_AB8bHvsAHQQACW8O8wIN8wTqAAsOYgBBfxoP
+GwUAzw8aB14fGw4HXh0eWwMAG18Ocw0Oc3sAIP4T-xoEB-4BDxseB_4dLgfOLT4Hrj1Om01Om00_
+sz0u0y0e89UAD1oAGf8UAx4H7hMuB84jPgeuM06bQ06bQz6-GzMu3SMe-QATDv0CA-1aACCfAgMO
+B-4AEx77BAAMIv8bZAAPYgAZXxAQBPDwMQALHzhHAQUPIAIObx79Ag79A-EAHfEPbxoLPgtuB04L
+TgtODxseSw0OSw0OGx0eOw0DDlsNCQD-HgsNix0e2x0DDR4dCw6rDg0DKx7LHR6rDTsdHksNWw0r
+HR5NA10DTQ5NA20DTYAAQgEJAPABKw0OGw1bHRMeLQ47HRsdHogA3zsNHg0DHhsdHlsNDiuRADIQ
+AJEA8QgPGxseCwAOC04LDT4NCz4NDkstDjsDDoUAcBMNDksDDgsLADMDDQOaAPESHgsDLSsdEx4T
+DQ47Mx0bDQMdCx47DRsNEysdHlsDDisNPQAhSwPdAAA4AAChADA9AwCiAD8tAwBEAj0PMQCNvwMD
+BA0HDRcGDQYN_wAZ7wUFBAAnADcGNwYnFgAmNgEa-wUHBwQQJyBHAFcGVwZHFgAnFiAmEEAAGf8I
+CQkEEEcgZwB3BncGZxZnFlcmACc2IEZEABr-DwsLBDAnUGcghxCHAJcGlwaHFgB3BhBnFiA3JlAm
+MEoAGeANDQQwR1CHIKcQpwC3BgIA-wCnFqcWAIcWEHcmIEc2UEZOAA0P8AFcsg0NBAYHBhc2HR8S
+CAAfHgcAOg_LAAssMTCMAPAbUGYwJlcgFhdWEBYHJkcAFgcWZwAGBxY3VgcGJ2YHFhd2BwYndgcG
+F1YdYQAhRi1nAD8tDxJvACTPxsfG9wr2JP0K-xIKPAAd8AA2LVAXNi0wZi0gJ0YtEDeGAIAAFic2
+HQ4AJosABgUAER2bAC8NFh4BHw8MAh4PMQD--xdwAwUEDxAPHAQAvwcODA4MDxAMDQANtwUaXxsH
+BPCtMQBKXx8HBPDJMQAMDzgBHg8xAI3wGRUHBAAvGAE2AQYBNgEuAA4vDg8SNwYHBjcNHw4OAj4N
+Ng8NBgw2DS4LABEMCgAjEi4KAP8FHlINPA0MDTwNMgAiATwBDAE8ASLTAR0AfABUZgEGAWZ8AFNn
+BgcGZ3wAEGZ8ABFmfAAhZgwKACMSLgoAgR5SDWwNDA1sfABfbAEMAWx8ABwSIXwAVJYBBgGWfABT
+lwYHBpd8ABCWfAARlnwAIZYMCgAjEi4KAIEeUg2cDQwNnHwAX5wBDAGcfAAcEid8AFTGAQYBxnwA
+U8cGBwbHfAAQxnwAEcZ8ACHGDAoAIxIuCgCBHlINzA0MDcx8AF-MAQwBzHwAHBItfABA9gABBgUA
+A34Ac-cABgcG9wCAACD2AIEAIfYAggAy9gAMDAAlEi4MAHAeUg38AA0MBQAAiABA-AABDAUAD4oA
+Dg-cAh4PMQD-5fAAGg0ENwbnBjcGByYNB9YNBgDwCgYtBu0GDRYNBwYN9wMmDQYdB-YCDQYdFwYI
+AFAXBgcGDQkALwcGGgABMAb9AyAAhQYNFucGFxYNVQBrBj0G7QY9mQATNJkAIi0xmgAfN5oAGPMB
+_wQWDQYd_wQGHR8a_wYTHgQAQRcG_wSJAC-7BIgAOjH-GgCJACL_AIgALfsAiAAfHocACiL7AIcA
+Mf8bAIcAL-wAhwAfcAf-GgoH-geVEC8GHQQADn-zBh0O8wgNZQAeALcS8ApvGg8bjxoHXg8bC34N
+XgMeSw0DHmsDDjsTCgDxLw6LAzsTHlsNAxsNiw0LEw0OawMrDXsDDRMODRNbDRsDDTsdGwMQPgOL
+Aw0LAw0eKxMeKwMbAx4rAw0DHksTCAAgDluVDyALE88P-wp7AzsdAwsTHj0DfQNNAx0TDk0DjQM9
+Ay0DugAd8QQATxoPGyALXxoPG18aIAdODxsAvgAgLjt5ABQjvgBAOxMeC8EAMCsTC8MA8isDHjsT
+DQsTAA4bAx4bAxsDDUstAw0DIBNbEw0AAxsdIwsDIAMeAzsDHgsDADMeKwMAAzsDGwMOKwMQFwEB
+zwBhSwMADlsNzwD-CmsDAEsdIx49AG0DAANNIxA9EF0DIAMdMxDuASQUA1QCDwQACn--GwYTDv0I
+NAEODy0ELg2WAPEMKxe7FysTHhsHFgGbASYbEx4bJgEPG4sBJg0LDABhDYsBFg8N7AHSHB2bHB0L
+Ex47HbsdGz4AHv23AA6FAB85hQAQRAufEAuIALMfHAwfEAwfHAwPEJIA0g0cDxwcChwKDAEmDxuY
+ALEdDBoMHQwKDRYPDRMAoCsfDQ8bnQkfDRmiACP5AKEAX-kGEw75oQA9FQyiAAQyASENHAIABZ8A
+IQ8QnwA5GgwKoAAfmqAAUxANmwA0HQwangAgDAo9ASQcDZ4AIQ0KnAAvHQE9AWESHZ0AJAoN2wEb
+CtoBAjkBHw2dAGEjDQyeAAOdACIBCp4ABp0AA9cBD50AYjMPHA_gAA-ZAQUiAQ2gAA_fADMPbQRJ
+NA8ZmwECYQ8biw0mDMAAMA0Mi9EDAA0AYCsaHJsaHLYAMxy7HLcAf-wGEw78CAM7CxkPVgEEJZkL
+iABzFwoZChcKCY4AMAkaBwIAFgosAwAeAEkZCgcJUwFBmQwfDZ0AL-wAnABJAXsAFRcrAxIHnQAF
+nAAiCQoiAA_cAGISCZ0ABJwAEgqdABUJnAASB50AHw2cAGEEtAEP1AEFBPQBD5wAXwWzAQKbADsP
+GQfUASINCp0AD5wAYQOzAS8PGdQBBBQN9AEPnAA-XxQKBPC4zQAcP-D-Q2EFLxe7dghTGwwdDAtc
+BSIPENMHB5kG4AoLDB0MGwwNDxAWDw0K-wBQGRqbGRr7ADMauxr8AH-6BhMO_ggDmQA4EwyaAA9s
+CAgRG5kACGwIMB8bmwUAAJwAPxm7GZYGPQWcABMLnQAFkQYCnQAmDxCdABINngAeAZ0ADzkBTRIb
+nQAyDQ8QngAdCtIBEx3zAQ85AV4BtAEBngAEnQA7AQ8c2AEiAQyfAA86AV8AfRYDtgEP2AEFIgEK
+ngAfAQsDDQ9mCExxGAwENwbfGt0PEt7cDxTb2w8RAtsPEAJQDyAEEwQAQhcG_wLXDxMC1w8S29YP
+Id8b1Q8-3AY9gwQZAXwAE8fiECK2DX4ALQbNfwAvHxqAAAYixwaBAAI-AE8GPQbNgwA5IPcBEABh
+DQf2AA0W7hETAO4RFAAIEhEAIAAA_BEQAQkAHzaQADA-8P8RMgBLDyQCEQ8xAFwgHA5PA5EMB-4J
+Ax77CBMEAEA7F7sXpxACWQ8ARhEEWQ8RGwwAA1kPAA0AECwNABAsCwARO2QPghsTHksdux0rSQB-
+-QgTDv0KAyMBGQ_QAAMBTAwDkwCDHxw-EB8cHxCaAFAsDxwfEIIEAHMPIQ8bogCDDB8QDRwNGg1Y
+BgAUAJEvDQEqHToNDCkPAHA7GQiaCBkYrgAj_ACtAF-4CBMO_K0APWQNHxw9HA1FATIMHwyEDQSp
+ABENDwAiHQyXCAKoAFUKPRw9CqcAH52nAFIQHacABKYAEg2nABUqpQADdA8ITQFvCgw9HC0BpgBc
+ci0fHD0MDwynABQKRxEEpwAYKn0PAqYAXwEcPRwdpgBcIAw9pgACpAB2DQodChwKHaQAEQEPACkc
+CqUAXw0aPRoNpgBdEQ9GAxQvRgNBDQwPHKwAFQyrABENrAAYLKoATx0aPRqpAC4PsARJAZwPAtEA
+ApwPA2YDApwPAA0AECoNABAqCwARO6cPAMEAMxy7HMIAX-wIEw78wgANHzdrARElmQuTAEMXORcZ
+lgAgKgc2DRUJEAIQCg8AIxkHMw0CZgFxDSkXOQcKLA8AbzscCJkIHGYBAA_kAD1UCRc5Fwk7AQGU
+AALZDRIbEQACpwAIpgBPCjkXOaUAXQBKAQSkABEJkgAHpAQCpAAJpARfBzkXKQ2kAFwBvQEpJivd
+AQSlAAT_AQekABENHQIPpABaAboBAqIAJA8Z2gEG6wED-AEIpAACHQIPpQBbALwBSQ8ZJivdAQWm
+AAP_AQilAAEdAg_kADoPnAQeAJsMr-oKB-oHBBr5BhQEAA5--xkGFAr_CLQsGg7_DA_eGSIPZAAO
+z-sKB-sHDxMb-xsGHwYAH3-zBh4L8wgO2QAeEBfZAI8CHv8OBhIe-QQADI--GAYSDvwIAmUAHhAf
+ZQBvDxUe9AYdBAAOj-8UBh0O-AgNZQAeEw9lAE--FgYfBgAff-UGHQ71CA0ZAoEh-xzaAAAqEx8d
+BAAOb-8QBh0O_8kAHpH3C-YIDQcG-QbhDSP-G8oePw77AwkAICD3BS4OXwgNB-0JhwAqP-EEBwgA
+HA6AAA8ZCTwPMQDvhBoNBEf-GgBXHyExJg37CAByFg0PG-sADEwQZAz7AgwNBgoAHwcKAA5wFgcM
+_wAMB04QIwf7VwCP-AAHJl38AE1DAhxE-xAKD3EdDQYALBwOAgBpDxAMHgwdBAAl-XILAAUEACsc
+DgIABxwAAQQAL-0LqAAfCpwAD6gAChwfpwAm-XQMAA_kABYfDKQAHwuZAA_lABwpcw4QAA_lAAEm
+Dg0dAASBAR8KqAAeGwucAAUGACwcD6gALh4MqAAVcgsABAQAEg0tAAo5ACgdDAQAHw6oACAYDJwA
+D6gAHSb9dAwAAgQALxwOpAAMHx6kACAwCgwelAAFQwAA6wAsDRwCAAYdAAMxASn_cxAAAOwBHw00
+AAxPHQz_CscZHw8yAK8PpgURDzEAvgbfB0MN9gQNogcPBAAFBiQAL-0LjAH-QQ_9ASGQV98aZzYN
+3gc2ngFQFg3bBxahAQD2ETHbDA0BCBMMAAgCCgAfBwoADnEmBwzbDAcmUAATB1AAjzYN3Ac2bdxd
+nQAeSxBnNg35BwSrADMMDhwCAAS0AAFaBREbBAASDrwAIvsCugA-_wIHCAAINSYHCzkAFB66AANc
+ADQcDgzDAAQiAG8MCwc2bdvMACMZH8wABMsAIxwOAgAEygAXDMsAD8oAGwU3ABUehAEDXAAEXgAk
+Ng0hAB8byAAnGAzJABUPyQAqDhw1ATcmDQ7LAA-KABsDNQABcAEDygAM8wEmNg25AQ-MACcSDhgH
+ATMBBFwCIwscAgAEyAATGyIABVsCE-7HAD-_AgcIAAgPWwICA1sALxwLWwIDH97HACMD3wcAaAAD
+xgAjHAsCAATFAAVnAARWAg-FABUFNwAHVgIZC10AClYCD8MAJASjCDQbDA7EACoLHCwBWiYNDgwb
+UQIPxQAVHx5RAgADXQAE6AELUQIPxwAeDqYGD-kADlTQZzYN0O4AFNDlACLwANwAE-DcAD-wAgcI
+AAhEJgfwANMAFNDKAF-QBzZt0IgBHmAcHxxcHhyMAXYOLD8QLA4M2wMWe2oFYwwODJsMDkUChAwO
+HCs8KxwOJgaBDgwrHB4cKwwFBAMRAAC6AxoMEwALJAADRAACzwADYAAGjAUFfAABmQARO5gAb20c
+HlweHOIAHjAMDxzaADAPHAz8A0UcfxAcbQIlHJsrA1QODCtcK_wDkg4cGxw_HBscDuIAAcoAETwG
+ABYHEQAAtgILEwAJJAAERAAC4gADYAAE4gAFegATNmkBIzZt6AAPwgEfIZ8QwAEWvs4ERS5cLgy7
+AWMuHD8cHC68AZMcHhwLPAscHhy8ASAuDA0AIQsMMAADEQA6DD4MEQAJIgAFQgADugFVLhw7HC66
+AQd7AAOTAE9tHJ4cHgQjND5cPtIAZB4sPxwsHtMAci4MGzwbDC7SACEuHKAAIhwu0gAArwAQPq8A
+FAcPADgMXgwPAAkeAAQ8AALMAANYAATMADQeLDt0AAONAA-oBCBALxB8Lq0FRRxfHBypBVQOHAtc
+C_ICECYPAACWABMcfgKzHgwLHF4cCwweDRYPAHUMfgwLDB4HDwA6LhwuEQAKIAACPgAC1AAFXAAG
+XAMHfAAAmQAQW5gAT20ufC7cAB4gHxDWACEfEFgDRw8cXAtaAwJ2AASJBhEclAASHOAAhQ4MCxx_
+HAsMXgNACwwuPNEAJg4HEQA8DBsMEwALJAACRAAC5gADYAAHrAYGfgAVNm8BITZt7gAP5QXfKN8Q
+9AtUPkgPGD6UAEI_aAw_lgByPigMHigMPpsAMD4YDAMAHwcNABcxJgcuDQAGPwNkFwY_FwYeugAe
+3j8DD7oAHyc4H7oAI1gcugBiThgcGBxOuQCPTggcHggcTgcNABcxJgc_DQAUPrkAfy4HFh4HFi65
+ADlUThgfGE65AEJOOBxOuQBCXjgcXrcAf14IHAgcXgcMABQwJgdODAAUTrIAbz4HFgcWPrEAOhY-
+sAAyXjxerwBTbjxuDRYJAB8HCQALVCYHXjxenwA-TjZOnAA6Jx8YTQEkHDhNASQcOE0BbxwIHAhe
+BwwAFDAmB04MAAZNASEWB1IBD7cCOEQfGDg_sQA0PhxYtwJEHBgcGLcCMBwIHoQADw0AFzEmBz4N
+AAa3AjEWBx69Ag_5ADg2DxhIuQAjDGi5AGQ_DCgeDCgqBCAMGAMAHwcNABcAaQcADQAGKgReBhc_
+BhcqBA8JERsP1gUfDzIA-0YOjwEPMQD---------------8XUG09OH19
+:: gfx/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyJdXQ==
+:: lib/
+:: lib/collides.lua
+--[[pod_format="raw",created="2025-04-10 10:36:12",modified="2025-04-12 19:44:12",revision=2146]]
+----------------------------------------------------------------------------------
+
+
+local M = {}
+
+
+----------------------------------------------------------------------------------
+
+
+local function distance_squared(x1, y1, x2, y2)
+	local delta_x = x1 - x2
+	local delta_y = y1 - y2
+	return (delta_x * delta_x) + (delta_y * delta_y)
+end
+
+
+----------------------------------------------------------------------------------
+
+
+function M.circle_box(cx, cy, radius, left, top, right, bottom)
+	local closest_x = mid(left, cx, right)
+	local closest_y = mid(top, cy, bottom)
+	return distance_squared(cx, cy, closest_x, closest_y) < radius * radius
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+function M.circle_circle(cx1, cy1, radius1, cx2, cy2, radius2)
+	local both_radius = radius1 + radius2
+	return distance_squared(cx1, cy1, cx2, cy2) < both_radius * both_radius
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+function M.find_quadrant(x, y, left, top, right, bottom)
+	local slope1 = (bottom - top) / (right - left)
+	local c1 = top - slope1 * left
+	local slope2 = (top - bottom) / (right - left)
+	local c2 = bottom - slope2 * left
+	if y >= slope1 * x + c1 then
+		if y >= slope2 * x + c2 then
+			return "bottom"
+		else
+			return "left"
+		end
+	else
+		if y > slope2 * x + c2 then
+			return "right"
+		else
+			return "top"
+		end
+	end
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+return M
+
+
+-----------------------------------------------------------------------------------
+
+:: lib/mathfix.lua
+--[[pod_format="raw",created="2025-04-10 14:41:14",modified="2025-04-12 19:44:12",revision=1933]]
+math.round =
+	function(n)
+		return math.floor(0.5 + n)
+	end
+
+math.sign =
+	function(n)
+		return n ~= 0 and sgn(n) or 0
+	end
+
+
+return nil
+:: lib/require.lua
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-04-12 19:44:12",revision=8237]]
+---------------------------------------------------------------------------------------------
+
+
+_modules = {}
+
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name)
+	local src = fetch(filename) 
+	if type(src) != "string" then
+		panic("could not include " .. filename)
+	end
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if not func then
+		panic("Syntax error:", tostr(err))
+	end
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+--------------------------------------------------------------------------------------------
+
+
+function send_error(...)
+	send_message(3, { event = "report_error", content = "*Error:" })
+	
+	local path = debug.getinfo(3).source
+	local line = debug.getinfo(3).currentline
+	local str = sub(path, 2) .. ":" .. string.format("%d", line) .. ":\n"
+
+	local args = { ... }
+	str ..= table.concat(args, "\n")
+	send_message(3, { event = "report_error", content = str })
+end
+
+
+function panic(...)
+	send_message(3, { event = "report_error", content = "*Fatal error:" })
+	
+	local path = debug.getinfo(3).source
+	local line = debug.getinfo(3).currentline
+	local str = sub(path, 2) .. ":" .. string.format("%d", line) .. ":\n"
+
+	local args = { ... }
+	str ..= table.concat(args, "\n")
+	send_message(3, { event = "report_error", content = str })
+
+	stop()
+end
+
+
+--------------------------------------------------------------------------------------------
+
+:: lib/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEwIDA4OjQ0OjI4Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyJdXQ==
+:: map/
+:: map/0.map
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMiIscmV2aXNpb249MTUyN11dbHo0ALgAAAC5FgAA-w57e2JtcD11c2VyZGF0
+YSgiaTE2IiwzMiwyMiwiMAEACm8xOTAwMWEEADQvYjABAB4-MTgwAQA2LzE4gAD---93LzEwgABr
+HzCAAP------nA8BAE-xCSIpLGhpZGRlbj1mYWxzZSxwYW5feD0tMQkA8gJ5PS0xMS41LHRpbGVf
+aD0xMgoAEHcKAI96b29tPTF9LFwLCQ8BAP-------------2D1wLBBUzXAsfMFwLB1BtPTF9fQ==
+:: map/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyJdXQ==
+:: sfx/
+:: sfx/0.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyIscmV2aXNpb249MTUzNF1dbHo0AIsBAAAWCwAA-zBweHUAAygAAAQABA9A
+EAIOAAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOvxJ6oB
+EAYPIBABIAEgAfAAAhACDhABIA8hEAIBMA9CkA8RAhAPEA85DyJAAQ8REAEPSg8rA7APEhYA8AQn
+DzxAAg8OEAEP7OAPEhAGCQACOwD2HQ85EAEgBA8cAAKACSAMIA9C8E8PEfAfAvCXD-gKD-8PgA-3
+Dw0B8AkBEAYOeAD6ChYAESAPJQ-qD8QBDxEPSQ_8AA8QD9MPyZCTAE9ckA8SkwACHxOTAAIRB5MA
+YDEPOQ9dAJUAox4AAg8QDzQPv1CbAP8GBwgwDx8ABAAP3QAC8AwPEfAHBfAHqwAMA5AA3yABMA9A
+8MMPKA--8MYwAP------bx--AQCs8wXID0AADxBAD0j--y8B-S8O-S-wcBMALEX9EgAZRxIA-w4C
+QA8wDy8PLQ8rDykPKA8mDyT9KAFg-Sh_-Sjw-wEA-_ZQ-----00=
+:: sfx/1.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEyIDEzOjUzOjAwIixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyIscmV2aXNpb249MjQwXV1sejQAaAEAAOgZAAD-MHB4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-EnqgEQ
+Bg8gEAEgASAB8AACEAIOEAEgDyEQAgEwD0KQDxECEA8QDzkPIkABDxEQAQ9KDysDsA8SFgDwBCcP
+PEACDw4QAQ-s4A8SEAYJAAI7APYdDzkQASAEDxwAAoAJIAwgD0LwTw8R8B8C8JcP_AoP-w_AD-cP
+DQHwCQEQBg54APoKFgARIA8lD_oPxAEPEQ9JD7wADxAP0w-JkJMAT1yQDxKTAAIfE5MAAhEHkwBg
+MQ85D10AlQCjHgACDxAPNA_-UJsA-wYHCDAPHwAEAA-dAALwDA8R8AcF8AerAAwDkADfIAEwD0Dw
+ww8oD--wxjAA------9vH-8BAKzPyA9AAA8QQP--sPBwCwD----------------------xRQ-7Dw
+-zk=
+:: sfx/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyJdXQ==
+:: src/
+:: src/in_game.lua
+--[[pod_format="raw",created="2025-04-10 09:08:13",modified="2025-04-12 19:44:12",revision=2168]]
+-----------------------------------------------------------------------------------
+
+
+local M = {}
+
+
+local new_ball = require "src/new_ball.lua"
+local new_brick = require "src/new_brick.lua"
+local new_racket = require "src/new_racket.lua"
+local new_walls = require "src/new_walls.lua"
+
+
+-----------------------------------------------------------------------------------
+
+
+local balls = {}
+local walls = nil
+local racket = nil
+local bricks = {}
+
+
+-----------------------------------------------------------------------------------
+
+
+function M.enter()
+	local ball = new_ball()
+	ball:set_position(240, 200)
+	ball:set_angle(math.pi)
+	ball:set_speed(2.0)
+	balls = { ball }
+	walls = new_walls(10 * 26 + 8 - 100)
+	racket = new_racket()
+	local left, _, _ = walls:collider()
+	for i = 2, 3 do
+		for j = 0, 10 do
+			add(bricks, new_brick(left + 5 + i * 26, 40 + j * 13))
+		end
+	end
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+local counter = 0
+function M.update()
+	racket:move(walls)
+	counter += 1
+	if counter % 1 ~= 0 then return end
+	for ball in all(balls) do
+		ball:move()
+		walls:bounce(ball)
+		racket:bounce(ball)
+		for brick in all(bricks) do
+			brick:bounce(ball)
+		end
+	end
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+function M.draw()
+	cls(1)
+	spr(161 + ((counter // 4) % 6), 10, 10)
+	spr(169 + ((counter // 6) % 5), 10, 30)
+	spr(177 + ((counter // 6) % 7), 10, 50)
+	walls:draw()
+	for brick in all(bricks) do
+		brick:draw()
+	end
+	for ball in all(balls) do
+		ball:draw()
+	end
+	racket:draw()
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+return M
+
+
+-----------------------------------------------------------------------------------
+
+:: src/new_ball.lua
+--[[pod_format="raw",created="2025-04-10 11:22:18",modified="2025-04-12 19:44:12",revision=2113]]
+-----------------------------------------------------------------------------------
+
+
+require "lib/mathfix.lua"
+
+
+-----------------------------------------------------------------------------------
+
+
+return function()
+	local self = {}
+	
+	local center_x, center_y = 0.0, 0.0
+	local radius = 3
+	local speed = 2.0
+	local vel_x, vel_y = 0.0, 0.0
+	local flip_x_timer = 0
+	local flip_y_timer = 0
+	
+	function self:collider()
+		return center_x, center_y, radius
+	end
+	
+	function self:previous_position()
+		return center_x - vel_x, center_y - vel_y
+	end
+	
+	function self:set_position(x, y)
+		center_x, center_y = x, y
+	end
+	
+	function self:set_angle(a)
+		vel_x = speed * math.sin(a)
+		vel_y = - speed * math.cos(a)
+		if mode == "mixed" then
+			vel_x, vel_y = math.round(2*vel_x)/2, math.round(2*vel_y)/2
+		elseif mode == "retro" then
+			vel_x, vel_y = math.round(vel_x), math.round(vel_y)
+		end
+	end
+	
+	function self:set_speed(s)
+		speed = s
+		if mode == "retro" then
+			speed += 0.5
+		end
+	end
+	
+	function self:flip_x()
+		if flip_x_timer < 8 then return false end
+		vel_x = - vel_x
+		flip_x_timer = 0
+		return true
+	end
+	
+	function self:flip_y()
+		if flip_y_timer < 8 then return false end
+		vel_y = - vel_y
+		flip_y_timer = 0
+		return true
+	end
+	
+	function self:move()
+		center_x += vel_x
+		center_y += vel_y
+		flip_x_timer += 1
+		flip_y_timer += 1
+	end
+	
+	function self:slide_back_to_x(target_x)
+		-- target_x = center_x + (f * vel_x)
+		-- f * vel_x = target_x - center_x
+		local f = (target_x - center_x) / vel_x
+		center_x += f * vel_x
+		center_y += f * vel_y
+	end
+	
+	function self:slide_back_to_y(target_y)
+		-- target_y = center_y + (f * vel_y)
+		-- f * vel_y = target_y - center_y
+		local f = (target_y - center_y) / vel_y
+		center_x += f * vel_x
+		center_y += f * vel_y
+	end
+	
+	function self:draw()
+--		print("Vel: "..string.format("% 5.2f  % 5.2f", vel_x, vel_y), 5, 200, 7)
+--		print("Pos: "..string.format("% 6.1f % 6.1f", center_x, center_y), 5, 210, 7)
+		local x, y = math.round(center_x), math.round(center_y)
+		spr(17, x - 2, y - 2)
+	end
+	
+	return self
+end
+
+
+-----------------------------------------------------------------------------------
+
+:: src/new_brick.lua
+--[[pod_format="raw",created="2025-04-12 16:44:24",modified="2025-04-12 19:44:12",revision=208]]
+-------------------------------------------------------------------------------------
+
+
+local collides = require "lib/collides.lua"
+
+
+-------------------------------------------------------------------------------------
+
+
+return function(x, y)
+	local self = {}
+	
+	local destroyed = false
+	
+	function self:box()
+		return x, y, x + 26 - 1, y + 13 - 1
+	end
+	
+	function self:bounce(ball)
+		local cx, cy, radius = ball:collider()
+		local l, t, r, b = self:box()
+		if collides.circle_box(cx, cy, radius, l, t, r, b) then
+			local prev_x, prev_y = ball:previous_position()
+			local quadrant = collides.find_quadrant(prev_x, prev_y, l, t, r, b)
+			if quadrant == "bottom" then
+				if ball:flip_y() then
+					ball:slide_back_to_y(b + radius)
+					sfx(2, 0)
+				end
+			elseif quadrant == "top" then
+				if ball:flip_y() then
+					ball:slide_back_to_y(t - radius)
+					sfx(2, 0)
+				end
+			elseif quadrant == "left" then
+				if ball:flip_x() then
+					ball:slide_back_to_x(l - radius)
+					sfx(2, 0)
+				end
+			elseif quadrant == "right" then
+				if ball:flip_x() then
+					ball:slide_back_to_x(r + radius)
+					sfx(2, 0)
+				end
+			else
+				sfx(3, 0)
+			end
+--			destroyed = true
+		end
+	end
+	
+	function self:draw()
+		if not destroyed then
+			spr(67, x, y)
+		end
+	end
+	
+	return self
+end
+
+
+-------------------------------------------------------------------------------------
+
+:: src/new_racket.lua
+--[[pod_format="raw",created="2025-04-10 19:09:05",modified="2025-04-12 19:44:12",revision=1532]]
+-----------------------------------------------------------------------------------
+
+
+local collides = require "lib/collides.lua"
+
+
+-----------------------------------------------------------------------------------
+
+
+return function()
+	local self = {}
+	
+	local center_x, top = 240, 260
+	local speed = 3
+	local width = 33
+	
+	function self:box()
+		local left = center_x - width // 2
+		local right = left + width - 1
+		local bottom = top + 7 - 1
+		return left, top, right, bottom
+	end
+	
+	function self:move(walls)
+		local wall_left, _, wall_right = walls:collider()
+		if key("a") or key("j") then
+			center_x -= speed
+		elseif key("d") or key("l") then
+			center_x += speed
+		end
+		local left_x = ((btn(1) or 0) - (btn(0) or 0)) / 255.0
+		local right_x = ((btn(9) or 0) - (btn(8) or 0)) / 255.0
+		local joy_x = mid(-1.0, left_x + right_x, 1.0)
+		center_x += speed * joy_x
+		center_x = mid(wall_left + width // 2, center_x, wall_right - width // 2)
+	end
+	
+	function self:bounce(ball)
+		local cx, cy, radius = ball:collider()
+		local l, t, r, b = self:box()
+		if collides.circle_box(cx, cy, radius, l, t, r, b) then
+			local dx = (cx - center_x) / ((width + radius) / 2)
+			local angle = 0.66 * dx * (math.pi / 2.0)
+			ball:slide_back_to_y(top - radius)
+			ball:set_angle(angle)
+			sfx(1, 0)
+		end
+	end
+	
+	function self:draw()
+		spr(50, center_x - width // 2, top)
+	end
+	
+	return self
+end
+
+
+-----------------------------------------------------------------------------------
+
+:: src/new_walls.lua
+--[[pod_format="raw",created="2025-04-12 12:35:09",modified="2025-04-12 19:44:12",revision=420]]
+-----------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------
+
+
+return function(width)
+	local self = {}
+	
+	local left = 240 - width // 2 - 1
+	local top = 13
+	local right = left + width + 1
+	
+	function self:collider()
+		return left, top, right
+	end
+	
+	function self:bounce(ball)
+		local cx, cy, radius = ball:collider()
+		if cx - left < radius then
+			ball:slide_back_to_x(left + radius)
+			ball:flip_x()
+			sfx(0, 0)
+		end
+		if right - cx < radius then
+			ball:slide_back_to_x(right - radius)
+			ball:flip_x()
+			sfx(0, 0)
+		end
+		if cy - top < radius then
+			ball:slide_back_to_y(top + radius)
+			ball:flip_y()
+			sfx(0, 0)
+		end
+	end
+	
+	function self:draw()
+		sspr(26, 0, 0, 1, 13, left + 1, top - 13 + 1, right - left - 1, 13)
+		sspr(24, 0, 0, 13, 1, left - 13 + 1, top + 1, 13, 270 - top)
+		sspr(24, 0, 0, 13, 1, right, top + 1, 13, 270 - top)
+		spr(25, left - 13 + 1, top - 13 + 1)
+		spr(27, right, top - 13 + 1)
+--		line(left + 30, top, right - 30, 10, 8)
+--		line(left, top, left, 200, 8)
+--		line(right, top, right, 200, 8)
+	end
+	
+	return self
+end
+
+
+-----------------------------------------------------------------------------------
+
+:: src/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEwIDA4OjQ0OjI0Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyJdXQ==
+:: design.md
+b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNS0wNC0wOCAxMzozNDo1MiIsbW9k
+aWZpZWQ9IjIwMjUtMDQtMTIgMTk6NDQ6MTIiLHJldmlzaW9uPTIyMDddXQojIERlc2lnbgoKIyMg
+UmFja2V0IE1vZGlmaWVycwoKLSBMYXJnZXIgcmFja2V0LgotIEZhc3RlciBtb3ZlbWVudC4KLSBN
+YWduZXQ6IGdyYWIgdGhlIGJhbGwgaWYgc2hvb3RpbmcgcmlnaHQgYmVmb3JlIHRvdWNoLgotIFR1
+bm5lbDogY2FuIGdvIHRocm91Z2ggdGhlIGJvcmRlcnMgb2YgdGhlIHNjcmVlbiBhbiByZS1hcHBl
+YXIgb24gdGhlIG90aGVyCiAgc2lkZS4KLSBUd2luczogdHdvIHNsaWdodGx5IHNtYWxsZXIgcmFj
+a2V0cy4KLSBGYWlsc2FmZTogb25jZSBwZXIgbGV2ZWwsIGNhdGNoIGEgbG9zdCBiYWxsIGlmIHNo
+b290aW5nIGF0IHRoZSByaWdodCB0aW1lLgoKIyMgQmFsbCBNb2RpZmllcnMKCi0gTXVsdGliYWxs
+OiBhZGQgYW4gYWRkaXRpb25hbCBiYWxsOyBhIGxpZmUgaXMgbG9zdCBvbmx5IHdoZW4gdGhlIGxh
+c3QgbXVsdGliYWxsCiAgaXMgbG9zdC4KLSBCaWdnZXIgYmFsbC4KLSBQYXJhY2h1dGU6IHNsb3dz
+IHRoZSBiYWxsIHdoZW4gYXBwcm9hY2hpbmcgdGhlIGJvdHRvbSBvZiB0aGUgc2NyZWVuLgotIFRy
+aWdnZXIgYmFsbDogYm91bmNlIG9uIHByb2plY3RpbGVzLgoKIyMgV2VhcG9ucwoKLSBTaW5nbGUg
+YnVsbGV0OiBkZWZhdWx0IHdlYXBvbi4KLSBEb3VibGUgYnVsbGV0LgotIFRyaXBsZSBidWxsZXQ6
+IGZpcmVzIGluIDMgZGlyZWN0aW9ucy4KLSBMYXNlcjogaW1tZWRpYXRlLCBidXQgc2xvd3MgdGhl
+IHJhY2tldC4KLSBSb2NrZXRzOiBmb2xsb3dzIHJhY2tldCBtb3ZlbWVudCBhZnRlciBiZWluZyBm
+aXJlZC4KCiMjIEJyaWNrcwoKLSBIb3Jpem9udGFsIGJyaWNrLgotIFZlcnRpY2FsIGJyaWNrLgot
+IFNtYWxsIHNxdWFyZSBicmljay4KLSBBbmdsZWQgYnJpY2s-Ci0gUm91bmQgYnJpY2s-Ci0gSGV4
+YWdvbmFsIGJyaWNrPwoKLSBOb3JtYWwgYnJpY2suCi0gSGFyZGVuZWQgYnJpY2s6IG11c3QgYmUg
+aGl0IGJ5IGEgYmFsbCBzZXZlcmFsIHRpbWVzLgotIE1vdmluZyBicmljazogbW92ZSBiZXR3ZWVu
+IHR3byBwb3NpdGlvbnMgYXQgcmVndWxhciBpbnRlcnZhbHM7IHNob290aW5nIHNsb3dzCiAgaXRz
+IG1vdmVtZW50LgotIFZhbmlzaGluZyBicmljazogZGlzYXBwZWFyIGlmIGEgYmFsbCBjb21lcyBm
+cm9tIGJlbG93OiBtdXN0IGJlIGhpdCBmcm9tCiAgYWJvdmU7IHNob290aW5nIGF0IHRoZSByaWdo
+dCB0aW1lIG1ha2UgdGhlIGJyaWNrIHJlLWFwcGVhci4KLSBTZWxmLXJlcGFpcmluZyBicmljazog
+c2xvd2x5IHJlcGFpciBpdHNlbGYgYWZ0ZXIgYmVpbmcgaGl0IHRoZSBmaXJzdCB0aW1lOwogIGNs
+ZWFyZWQgaWYgaGl0IGEgc2Vjb25kIHRpbWUgYmVmb3JlIHRoZSByZXBhaXIgaXMgY29tcGxldGU7
+IHNob290aW5nIHNsb3dzCiAgdGhlIHJlcGFpci4KLSBCdWlsZGVyIGJyaWNrOiBpZiBhbnkgb2Yg
+aXRzIGVpZ2h0IG5laWdoYm9ycyBhcmUgZW1wdHksIGdlbmVyYXRlIGEgbmV3IGJyaWNrLgoKLSBB
+cm1vcjogcHJvdGVjdHMgdGhlIGJyaWNrIGZyb20gYmFsbHM7IG11c3QgYmUgc2hvb3RlZCBzZXZl
+cmFsIHRpbWVzLgotIFNoaWVsZDogcHJvdGVjdHMgdGhlIGJyaXNrIGZyb20gYmFsbHM7IHdoZW4g
+c2hvb3RlZCwgdGhlIHNoaWVsZCBpcyBsb3dlcmVkIGZvcgogIGEgbGltaXRlZCB0aW1lLgotIEJ1
+bXBlciBTaGllbGQ6IHByb3RlY3RzIHRoZSBicmljayBmcm9tIGJhbGxzLCBhbmQgbWFrZSBiYWxs
+cyBib3VuY2Ugd2l0aAogIGdyZWF0ZXIgc3BlZWQgYW5kIHJhbmRvbSBkaXJlY3Rpb247IHdoZW4g
+c2hvb3RlZCwgdGhlIGJ1bXBlciBpcyBkaXNhYmxlZCBmb3IKICBhIHNob3J0IGxpbWl0ZWQgdGlt
+ZS4KLSBNYWduZXQgU2hpZWxkLgotIFRlbGVwb3J0ZXIgU2hpZWxkPwotIFJlcGVsbGVyPzogZ2Vu
+ZXJhdGVzIGEgZm9yY2VmaWVsZCB0aGF0IGNvbnRpbnVvdXNseSByZXBlbHMgYmFsbHMu
+:: main.lua
+--[[pod_format="raw",created="2025-04-08 12:44:49",modified="2025-04-12 19:44:12",revision=2220]]
+-----------------------------------------------------------------------------------
+
+
+include "lib/require.lua"
+
+local in_game = require "src/in_game.lua"
+
+
+-----------------------------------------------------------------------------------
+
+
+-- "modern", "mixed" or "retro"
+mode = "modern"
+
+
+-----------------------------------------------------------------------------------
+
+
+function _init()
+	window {
+		title = "Arkanotron",
+		tabbed = false,
+		cursor = 1,
+	}
+	in_game.enter()
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+function _update()
+	in_game.update()
+end
+
+
+-----------------------------------------------------------------------------------
+
+
+function _draw()
+	in_game.draw()
+end
+
+
+-----------------------------------------------------------------------------------
+
+:: .info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjU5OjM2Iixtb2RpZmllZD0iMjAyNS0w
+NC0xMiAxOTo0NDoxMyIscnVudGltZT0xNyx3b3Jrc3BhY2VzPXt7bG9jYXRpb249ImdmeC8wLmdm
+eCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5k
+ZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249
+InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTR9LHtsb2NhdGlvbj0ibWFpbi5sdWEiLHdvcmtz
+cGFjZV9pbmRleD03fX1dXQ==
+:: [eoc]
