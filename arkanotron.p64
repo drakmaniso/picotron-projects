@@ -4,7 +4,7 @@ version 2
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMiIscmV2aXNpb249MTY3Nl1dbHo0AAoUAAC8WgAA8yF7WzBdPXtibXA9cHh1
+NC0xMyAwNTo0NDo1OCIscmV2aXNpb249MTc1N11dbHo0AAoUAAC8WgAA8yF7WzBdPXtibXA9cHh1
 AEMgDAwE8CQHEAeAF5AXgAcQB-AkLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT0yfSw_APEBGQ8E
 B-8aCQf_Bg8bHvsFHQQAkWtuax0eaw5LDQcAQwsdDgsKACUNCwsAOC4LDSUANV1rHT8AW-0HDv0I
 hQAzLTI1hwAiLTWIABkxiAAgFAyIAO8CDxsPGgf_AB8bHvsAHQQACW8O8wIN8wTqAAsOYgBBfxoP
@@ -97,10 +97,10 @@ AAa3AjEWBx69Ag_5ADg2DxhIuQAjDGi5AGQ_DCgeDCgqBCAMGAMAHwcNABcAaQcADQAGKgReBhc_
 BhcqBA8JERsP1gUfDzIA-0YOjwEPMQD---------------8XUG09OH19
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyJdXQ==
+NC0xMyAwNTo0NDo1OCJdXQ==
 :: lib/
 :: lib/collides.lua
---[[pod_format="raw",created="2025-04-10 10:36:12",modified="2025-04-12 19:44:12",revision=2146]]
+--[[pod_format="raw",created="2025-04-10 10:36:12",modified="2025-04-13 05:44:58",revision=2263]]
 ----------------------------------------------------------------------------------
 
 
@@ -169,10 +169,20 @@ return M
 -----------------------------------------------------------------------------------
 
 :: lib/mathfix.lua
---[[pod_format="raw",created="2025-04-10 14:41:14",modified="2025-04-12 19:44:12",revision=1933]]
+--[[pod_format="raw",created="2025-04-10 14:41:14",modified="2025-04-13 05:44:58",revision=2050]]
 math.round =
 	function(n)
 		return math.floor(0.5 + n)
+	end
+	
+math.round_toward_zero =
+	function(n)
+		return n >= 0.0 and n - (n % 1) or n - (n % -1)
+	end
+
+math.round_away_from_zero =
+	function(n)
+		return n >= 0.0 and n - (n % -1) or n - (n % 1)
 	end
 
 math.sign =
@@ -183,7 +193,7 @@ math.sign =
 
 return nil
 :: lib/require.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-04-12 19:44:12",revision=8237]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-04-13 05:44:58",revision=8354]]
 ---------------------------------------------------------------------------------------------
 
 
@@ -256,21 +266,21 @@ end
 
 :: lib/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEwIDA4OjQ0OjI4Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyJdXQ==
+NC0xMyAwNTo0NDo1OCJdXQ==
 :: map/
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMiIscmV2aXNpb249MTUyN11dbHo0ALgAAAC5FgAA-w57e2JtcD11c2VyZGF0
+NC0xMyAwNTo0NDo1OCIscmV2aXNpb249MTYwOF1dbHo0ALgAAAC5FgAA-w57e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMiwyMiwiMAEACm8xOTAwMWEEADQvYjABAB4-MTgwAQA2LzE4gAD---93LzEwgABr
 HzCAAP------nA8BAE-xCSIpLGhpZGRlbj1mYWxzZSxwYW5feD0tMQkA8gJ5PS0xMS41LHRpbGVf
 aD0xMgoAEHcKAI96b29tPTF9LFwLCQ8BAP-------------2D1wLBBUzXAsfMFwLB1BtPTF9fQ==
 :: map/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyJdXQ==
+NC0xMyAwNTo0NDo1OCJdXQ==
 :: sfx/
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjQ0OjQ5Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyIscmV2aXNpb249MTUzNF1dbHo0AIsBAAAWCwAA-zBweHUAAygAAAQABA9A
+NC0xMyAwNTo0NDo1OCIscmV2aXNpb249MTYxNV1dbHo0AIsBAAAWCwAA-zBweHUAAygAAAQABA9A
 EAIOAAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOvxJ6oB
 EAYPIBABIAEgAfAAAhACDhABIA8hEAIBMA9CkA8RAhAPEA85DyJAAQ8REAEPSg8rA7APEhYA8AQn
 DzxAAg8OEAEP7OAPEhAGCQACOwD2HQ85EAEgBA8cAAKACSAMIA9C8E8PEfAfAvCXD-gKD-8PgA-3
@@ -280,7 +290,7 @@ YDEPOQ9dAJUAox4AAg8QDzQPv1CbAP8GBwgwDx8ABAAP3QAC8AwPEfAHBfAHqwAMA5AA3yABMA9A
 QA8wDy8PLQ8rDykPKA8mDyT9KAFg-Sh_-Sjw-wEA-_ZQ-----00=
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEyIDEzOjUzOjAwIixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyIscmV2aXNpb249MjQwXV1sejQAaAEAAOgZAAD-MHB4dQADKAAABAAED0AQ
+NC0xMyAwNTo0NDo1OCIscmV2aXNpb249MzIxXV1sejQAaAEAAOgZAAD-MHB4dQADKAAABAAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-EnqgEQ
 Bg8gEAEgASAB8AACEAIOEAEgDyEQAgEwD0KQDxECEA8QDzkPIkABDxEQAQ9KDysDsA8SFgDwBCcP
 PEACDw4QAQ-s4A8SEAYJAAI7APYdDzkQASAEDxwAAoAJIAwgD0LwTw8R8B8C8JcP_AoP-w_AD-cP
@@ -290,10 +300,10 @@ ww8oD--wxjAA------9vH-8BAKzPyA9AAA8QQP--sPBwCwD----------------------xRQ-7Dw
 -zk=
 :: sfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEzOjM0OjM0Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyJdXQ==
+NC0xMyAwNTo0NDo1OCJdXQ==
 :: src/
 :: src/in_game.lua
---[[pod_format="raw",created="2025-04-10 09:08:13",modified="2025-04-12 19:44:12",revision=2168]]
+--[[pod_format="raw",created="2025-04-10 09:08:13",modified="2025-04-13 05:44:58",revision=2285]]
 -----------------------------------------------------------------------------------
 
 
@@ -322,13 +332,13 @@ function M.enter()
 	local ball = new_ball()
 	ball:set_position(240, 200)
 	ball:set_angle(math.pi)
-	ball:set_speed(2.0)
+	ball:set_speed(2.5)
 	balls = { ball }
-	walls = new_walls(10 * 26 + 8 - 100)
+	walls = new_walls(12 * 26 + 8)
 	racket = new_racket()
 	local left, _, _ = walls:collider()
-	for i = 2, 3 do
-		for j = 0, 10 do
+	for i = 2, 9 do
+		for j = 0, 8 do
 			add(bricks, new_brick(left + 5 + i * 26, 40 + j * 13))
 		end
 	end
@@ -344,12 +354,22 @@ function M.update()
 	counter += 1
 	if counter % 1 ~= 0 then return end
 	for ball in all(balls) do
-		ball:move()
-		walls:bounce(ball)
-		racket:bounce(ball)
-		for brick in all(bricks) do
-			brick:bounce(ball)
-		end
+		ball:move(
+			function(ball, sign_x, sign_y)
+				if walls:bounce(ball, sign_x, sign_y) then
+					return true
+				end
+				if racket:bounce(ball, sign_x, sign_y) then
+					return true
+				end
+				for brick in all(bricks) do
+					if brick:bounce(ball, sign_x, sign_y) then
+						return true
+					end
+				end
+				return false
+			end
+		)
 	end
 end
 
@@ -382,7 +402,7 @@ return M
 -----------------------------------------------------------------------------------
 
 :: src/new_ball.lua
---[[pod_format="raw",created="2025-04-10 11:22:18",modified="2025-04-12 19:44:12",revision=2113]]
+--[[pod_format="raw",created="2025-04-10 11:22:18",modified="2025-04-13 05:44:58",revision=2230]]
 -----------------------------------------------------------------------------------
 
 
@@ -395,7 +415,8 @@ require "lib/mathfix.lua"
 return function()
 	local self = {}
 	
-	local center_x, center_y = 0.0, 0.0
+	local screen_x, screen_y = 0, 0
+	local remain_x, remain_y = 0.0, 0.0
 	local radius = 3
 	local speed = 2.0
 	local vel_x, vel_y = 0.0, 0.0
@@ -403,15 +424,16 @@ return function()
 	local flip_y_timer = 0
 	
 	function self:collider()
-		return center_x, center_y, radius
+		return screen_x, screen_y, radius
 	end
 	
 	function self:previous_position()
-		return center_x - vel_x, center_y - vel_y
+		return screen_x - vel_x, screen_y - vel_y
 	end
 	
 	function self:set_position(x, y)
-		center_x, center_y = x, y
+		screen_x, screen_y = x, y
+		remain_x, remain_y = 0, 0
 	end
 	
 	function self:set_angle(a)
@@ -422,6 +444,7 @@ return function()
 		elseif mode == "retro" then
 			vel_x, vel_y = math.round(vel_x), math.round(vel_y)
 		end
+		remain_x, remain_y = 0, 0
 	end
 	
 	function self:set_speed(s)
@@ -434,6 +457,7 @@ return function()
 	function self:flip_x()
 		if flip_x_timer < 8 then return false end
 		vel_x = - vel_x
+		remain_x, remain_y = 0, 0
 		flip_x_timer = 0
 		return true
 	end
@@ -441,37 +465,63 @@ return function()
 	function self:flip_y()
 		if flip_y_timer < 8 then return false end
 		vel_y = - vel_y
+		remain_x, remain_y = 0, 0
 		flip_y_timer = 0
 		return true
 	end
 	
-	function self:move()
-		center_x += vel_x
-		center_y += vel_y
+	function self:move(handle_collisions)
 		flip_x_timer += 1
 		flip_y_timer += 1
+		remain_x += vel_x
+		remain_y += vel_y
+		local move_x, move_y =
+			math.round_toward_zero(remain_x),
+			math.round_toward_zero(remain_y)
+		remain_x -= move_x
+		remain_y -= move_y
+		local sign_x, sign_y = math.sign(move_x), math.sign(move_y)
+		while move_x ~= 0 or move_y ~= 0 do
+			local prev_x, prev_y = screen_x, screen_y
+			if move_x ~= 0 then
+				screen_x += sign_x
+				move_x -= sign_x
+				if handle_collisions(self, sign_x, 0) then
+					screen_x = prev_x
+					move_x = 0
+				end
+			end
+			if move_y ~= 0 then
+				screen_y += sign_y
+				move_y -= sign_y
+				if handle_collisions(self, 0, sign_y) then
+					screen_y = prev_y
+					move_y = 0
+				end
+			end
+		end
 	end
 	
 	function self:slide_back_to_x(target_x)
-		-- target_x = center_x + (f * vel_x)
-		-- f * vel_x = target_x - center_x
-		local f = (target_x - center_x) / vel_x
-		center_x += f * vel_x
-		center_y += f * vel_y
+		-- target_x = screen_x + (f * vel_x)
+		-- f * vel_x = target_x - screen_x
+		local f = (target_x - screen_x) / vel_x
+		screen_x = target_x
+		screen_y = math.round(screen_y + f * vel_y)
 	end
 	
 	function self:slide_back_to_y(target_y)
-		-- target_y = center_y + (f * vel_y)
-		-- f * vel_y = target_y - center_y
-		local f = (target_y - center_y) / vel_y
-		center_x += f * vel_x
-		center_y += f * vel_y
+		-- target_y = screen_y + (f * vel_y)
+		-- f * vel_y = target_y - screen_y
+		local f = (target_y - screen_y) / vel_y
+		screen_x = math.round(screen_x + f * vel_x)
+		screen_y = target_y
 	end
 	
 	function self:draw()
 --		print("Vel: "..string.format("% 5.2f  % 5.2f", vel_x, vel_y), 5, 200, 7)
---		print("Pos: "..string.format("% 6.1f % 6.1f", center_x, center_y), 5, 210, 7)
-		local x, y = math.round(center_x), math.round(center_y)
+--		print("Pos: "..string.format("% 6.1f % 6.1f", screen_x, screen_y), 5, 210, 7)
+		local x, y = math.round(screen_x), math.round(screen_y)
 		spr(17, x - 2, y - 2)
 	end
 	
@@ -482,7 +532,7 @@ end
 -----------------------------------------------------------------------------------
 
 :: src/new_brick.lua
---[[pod_format="raw",created="2025-04-12 16:44:24",modified="2025-04-12 19:44:12",revision=208]]
+--[[pod_format="raw",created="2025-04-12 16:44:24",modified="2025-04-13 05:44:58",revision=325]]
 -------------------------------------------------------------------------------------
 
 
@@ -501,37 +551,55 @@ return function(x, y)
 		return x, y, x + 26 - 1, y + 13 - 1
 	end
 	
-	function self:bounce(ball)
+	function self:bounce(ball, sign_x, sign_y)
 		local cx, cy, radius = ball:collider()
 		local l, t, r, b = self:box()
 		if collides.circle_box(cx, cy, radius, l, t, r, b) then
+			---[[
+			if sign_x ~= 0 and ball:flip_x() then
+				sfx(2, 0)
+				return true
+			end
+			if sign_y ~= 0 and ball:flip_y() then
+				sfx(2, 0)
+				return true
+			end
+			--]]
+				
+			--[[
 			local prev_x, prev_y = ball:previous_position()
-			local quadrant = collides.find_quadrant(prev_x, prev_y, l, t, r, b)
+			local quadrant = collides.find_quadrant(cx, cy, l, t, r, b)
 			if quadrant == "bottom" then
 				if ball:flip_y() then
-					ball:slide_back_to_y(b + radius)
+--					ball:slide_back_to_y(b + radius)
 					sfx(2, 0)
+					return true
 				end
 			elseif quadrant == "top" then
 				if ball:flip_y() then
-					ball:slide_back_to_y(t - radius)
+--					ball:slide_back_to_y(t - radius)
 					sfx(2, 0)
+					return true
 				end
 			elseif quadrant == "left" then
 				if ball:flip_x() then
-					ball:slide_back_to_x(l - radius)
+--					ball:slide_back_to_x(l - radius)
 					sfx(2, 0)
+					return true
 				end
 			elseif quadrant == "right" then
 				if ball:flip_x() then
-					ball:slide_back_to_x(r + radius)
+--					ball:slide_back_to_x(r + radius)
 					sfx(2, 0)
+					return true
 				end
 			else
 				sfx(3, 0)
 			end
+			--]]
 --			destroyed = true
 		end
+		return false
 	end
 	
 	function self:draw()
@@ -547,7 +615,7 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/new_racket.lua
---[[pod_format="raw",created="2025-04-10 19:09:05",modified="2025-04-12 19:44:12",revision=1532]]
+--[[pod_format="raw",created="2025-04-10 19:09:05",modified="2025-04-13 05:44:58",revision=1649]]
 -----------------------------------------------------------------------------------
 
 
@@ -585,16 +653,31 @@ return function()
 		center_x = mid(wall_left + width // 2, center_x, wall_right - width // 2)
 	end
 	
-	function self:bounce(ball)
+	function self:bounce(ball, sign_x, sign_y)
 		local cx, cy, radius = ball:collider()
 		local l, t, r, b = self:box()
-		if collides.circle_box(cx, cy, radius, l, t, r, b) then
+		if cy > t + (b - t) // 2 then
+			return false
+		end
+		local above = (sign_y > 0) -- or (cy < t + (b - t) // 2)
+		if collides.circle_box(cx, cy, radius, l, t, r, b) and above then
 			local dx = (cx - center_x) / ((width + radius) / 2)
 			local angle = 0.66 * dx * (math.pi / 2.0)
-			ball:slide_back_to_y(top - radius)
 			ball:set_angle(angle)
+--			if sign_y ~= 0 then
+--				ball:slide_back_to_y(top - radius)
+--			end
+--			if sign_x ~= 0 then
+--				if dx < 0 then
+--					ball:slide_back_to_x(l - radius)
+--				else
+--					ball:slide_back_to_x(r + radius)
+--				end
+--			end
 			sfx(1, 0)
+			return true
 		end
+		return false
 	end
 	
 	function self:draw()
@@ -608,7 +691,7 @@ end
 -----------------------------------------------------------------------------------
 
 :: src/new_walls.lua
---[[pod_format="raw",created="2025-04-12 12:35:09",modified="2025-04-12 19:44:12",revision=420]]
+--[[pod_format="raw",created="2025-04-12 12:35:09",modified="2025-04-13 05:44:58",revision=537]]
 -----------------------------------------------------------------------------------
 
 
@@ -626,23 +709,27 @@ return function(width)
 		return left, top, right
 	end
 	
-	function self:bounce(ball)
+	function self:bounce(ball, sign_x, sign_y)
 		local cx, cy, radius = ball:collider()
 		if cx - left < radius then
-			ball:slide_back_to_x(left + radius)
+--			ball:slide_back_to_x(left + radius)
 			ball:flip_x()
 			sfx(0, 0)
+			return true
 		end
 		if right - cx < radius then
-			ball:slide_back_to_x(right - radius)
+--			ball:slide_back_to_x(right - radius)
 			ball:flip_x()
 			sfx(0, 0)
+			return true
 		end
 		if cy - top < radius then
-			ball:slide_back_to_y(top + radius)
+--			ball:slide_back_to_y(top + radius)
 			ball:flip_y()
 			sfx(0, 0)
+			return true
 		end
+		return false
 	end
 	
 	function self:draw()
@@ -664,10 +751,10 @@ end
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTEwIDA4OjQ0OjI0Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyJdXQ==
+NC0xMyAwNTo0NDo1OCJdXQ==
 :: design.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNS0wNC0wOCAxMzozNDo1MiIsbW9k
-aWZpZWQ9IjIwMjUtMDQtMTIgMTk6NDQ6MTIiLHJldmlzaW9uPTIyMDddXQojIERlc2lnbgoKIyMg
+aWZpZWQ9IjIwMjUtMDQtMTMgMDU6NDQ6NTgiLHJldmlzaW9uPTIzMjRdXQojIERlc2lnbgoKIyMg
 UmFja2V0IE1vZGlmaWVycwoKLSBMYXJnZXIgcmFja2V0LgotIEZhc3RlciBtb3ZlbWVudC4KLSBN
 YWduZXQ6IGdyYWIgdGhlIGJhbGwgaWYgc2hvb3RpbmcgcmlnaHQgYmVmb3JlIHRvdWNoLgotIFR1
 bm5lbDogY2FuIGdvIHRocm91Z2ggdGhlIGJvcmRlcnMgb2YgdGhlIHNjcmVlbiBhbiByZS1hcHBl
@@ -702,7 +789,7 @@ c2hvb3RlZCwgdGhlIGJ1bXBlciBpcyBkaXNhYmxlZCBmb3IKICBhIHNob3J0IGxpbWl0ZWQgdGlt
 ZS4KLSBNYWduZXQgU2hpZWxkLgotIFRlbGVwb3J0ZXIgU2hpZWxkPwotIFJlcGVsbGVyPzogZ2Vu
 ZXJhdGVzIGEgZm9yY2VmaWVsZCB0aGF0IGNvbnRpbnVvdXNseSByZXBlbHMgYmFsbHMu
 :: main.lua
---[[pod_format="raw",created="2025-04-08 12:44:49",modified="2025-04-12 19:44:12",revision=2220]]
+--[[pod_format="raw",created="2025-04-08 12:44:49",modified="2025-04-13 05:44:58",revision=2337]]
 -----------------------------------------------------------------------------------
 
 
@@ -751,9 +838,9 @@ end
 
 :: .info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA0LTA4IDEyOjU5OjM2Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMiAxOTo0NDoxMyIscnVudGltZT0xNyx3b3Jrc3BhY2VzPXt7bG9jYXRpb249ImdmeC8wLmdm
-eCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5k
-ZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7bG9jYXRpb249
-InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTR9LHtsb2NhdGlvbj0ibWFpbi5sdWEiLHdvcmtz
-cGFjZV9pbmRleD03fX1dXQ==
+NC0xMyAwNTo0NDo1OCIscnVudGltZT0xNyx3b3Jrc3BhY2VzPXt7bG9jYXRpb249ImdmeC8wLmdm
+eCIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jrc3BhY2VfaW5k
+ZXg9Mn0se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD0zfSx7bG9jYXRpb249
+InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ibWFpbi5sdWEiLHdvcmtz
+cGFjZV9pbmRleD02fX1dXQ==
 :: [eoc]
