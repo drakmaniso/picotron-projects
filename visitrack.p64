@@ -2,13 +2,9 @@ picotron cartridge // www.picotron.net
 version 2
 
 :: gfx/
-:: map/
-:: sfx/
-:: src/
-:: pal/
 :: gfx/0.gfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIscmV2aXNpb249OTUxMl1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249OTcxOF1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
 AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
 DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
 ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
@@ -39,18 +35,18 @@ AAADBg_TAD1f8ABM8ESQABn-AQkHBPAFTzogbhBuEG4gTgARBBrQCQcEoE87IG4QDk8PDj8AH6CC
 BD0cNoYH-wBXAGcwBwA3ADcABzBnAFfKCA0P8gQfDzIA--------------------------------
 -----------------11QPTEwfX0=
 :: gfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
+:: map/
 :: map/0.map
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIscmV2aXNpb249OTE3MV1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: map/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
+:: pal/
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
@@ -80,30 +76,33 @@ ZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAA
 oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
 MwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: pal/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1dbHo0AAQAAAADAAAA
-MG5pbA==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1d
+:: sfx/
 :: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA1LTAxIDA2OjU1OjQ4Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIscmV2aXNpb249MTM0XV1sejQAqQAAAJIXAAD-LHB4dQADKAAABAAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDwAP--D-AQDr-yfSARAGDyAQ
-ASABIAHwAAIQAgwQASAPISABMA9A8MMPKA--8MYP_AoP-w_AD-cPDQHwCQEQBgwwAP------vR--
-AQCsv8gPQAANQP--sPBwCgD-------------------_EUP_w8P85
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDExOjI5OjU2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249MTA4XV1sejQAcgEAACwYAADwJ3B4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAAXwFwAfD-AQDr-Sm_ARAG
+DyAQASABIAHwAAIQAgwQASAPISABMA-AD2jwwg8oDznwxg-4Cg--D4AP9w8NAfAJARAGDDIA-w0P
+5RABMA_AoAggD6ZQAg_G8AMJ8A8K8HcPKA--QQASAHMAP0DwwzAA------91H-8BAKz1c8gPQAAC
+QA9QH1E-Uh8pPygPKV9ELyYvJ59PLxwfGx8aLxk-GD8ZDxqP--Anjg8_DzsPNg8zDzAPLQ8qDygP
+JQ8jDx8PHA8aDxgPFQ8UDxIPEA8PDw4PDQ8MCgkIBhUEEyIRICEwARIxUE7wcA9AAA8QQH8lfzR-
+JP4Y8Aj_GPwI-hgYAPIINP4ocP4ofP4of3bwKB_fH48ffx9v8CgeAE-_sPBwCgD-------------
+------9mUP6w8P85
 :: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA1LTAzIDEwOjQ4OjM0Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIscmV2aXNpb249NzddXWx6NAC-AAAAmhcAAP8scHh1AAMoAAAEAAQPQBAC
-DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PAA--8P8BAOvwCNIBEAYPIBAB
-IAEgAfAAAhACDBABIA8hDQD-FAggD7Dwsw8oD--AAvAHAfCgD-gKD-8PgA-3Dw0B8AkBEAYMOAAA
-UDAPQPDDNQAv8MYwAP------nx--AQCsv8gPQAANQP--sPBwCgD-------------------_EUP_w
-8P85
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDEyOjIyOjEwIixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249MTgyXV1sejQALgEAAP4XAAD-MHB4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-MeqgEQ
+Bg8gEAEgASAB8AACEAIOEAEPMxAPISABDyMgD4CQDxECIA5QAiAB4A8SCgAFKAASzSgAEN0oAPoZ
+BAjwDwnwDwrQAg9A8AcPHA8r8MQDAA-4Cg--D4AP9w8NAfAJARAGDmsAECBBAP8bMA_AkAEJ8A8I
+EAQPGg-cATAGD_oPQgHwAQrgDzUAD0DwZQ878AcPKvCvTwAUn0Dwww8oD--wxjAA------9vH-8B
+AKzyCsgPQAAPEEB-KH8m--8g8AD9IP8yAP0g8HAYAC-9sAoA--------------------fFD9sPD-
+OQ==
 :: sfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1dbHo0AAQAAAADAAAA
-MG5pbA==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
+:: src/
 :: src/ui/
-:: src/ui/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDExOjQ2OjM0Iixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSJdXWx6NAAEAAAAAwAAADBuaWw=
 :: src/ui/checkbox.lua
 --[[pod_format="raw",created="2024-05-03 10:50:08",modified="2024-05-03 11:13:38",revision=37]]
 local head = require "src/ui/head"
@@ -156,7 +155,7 @@ end
 
 return head
 :: src/ui/knob.lua
---[[pod_format="raw",created="2024-04-22 11:46:43",modified="2024-05-03 11:11:12",revision=364]]
+--[[pod_format="raw",created="2024-04-22 11:46:43",modified="2025-03-17 12:24:14",revision=368]]
 local head = require "src/ui/head"
 local mouse = require "src/ui/mouse"
 
@@ -608,8 +607,11 @@ end
 
 
 return num_field
+:: src/ui/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDExOjQ2OjM0Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSJdXQ==
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2024-05-03 14:01:41",revision=6884]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2025-03-17 17:38:31",revision=7078]]
 local app = {}
 
 -- Global state
@@ -882,7 +884,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2024-05-03 14:01:41",revision=4720]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2025-03-17 17:05:34",revision=4768]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -895,6 +897,8 @@ local ui = require "src/ui"
 local ed_inst = {}
 
 local instr_chooser = false
+
+local last_pitch = 0xff -- last pitch played on the keyboard
 
 
 function ed_inst.attach(parent, el)
@@ -1041,16 +1045,20 @@ function ed_inst.attach(parent, el)
 				pitch += 12
 			end
 			pitch = mid(0, pitch, 0xfe)
-			note(
-				pitch, -- todo
-				app.instrument, -- current_instrument
-				app.base_volume, -- current_volume
-				ord(" "), 0x00, -- fx, fx param
-				8, -- channel 8 so it can play with pattern
-				false -- don't force retrigger
-			)
+			if pitch ~= last_pitch then
+				note(
+					pitch, -- todo
+					app.instrument, -- current_instrument
+					app.base_volume, -- current_volume
+					ord(" "), 0x00, -- fx, fx param
+					8, -- channel 8 so it can play with pattern
+					false -- don't force retrigger
+				)
+				last_pitch = pitch
+			end
 		else
 			note(0xff, 0xff, 0xff, 0xff, 0xff, 8)
+			last_pitch = 0xff
 		end
 		
 		if key("ctrl") and keyp("c") then
@@ -1632,7 +1640,7 @@ end
 
 return envelopes
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2024-05-01 06:55:39",revision=1365]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2025-03-17 12:50:33",revision=1457]]
 local app = require "src/app"
 
 
@@ -1647,7 +1655,7 @@ file.default_filename = "/ram/cart/sfx/1.sfx"
 
 
 function file.save()
-	local ud = userdata("u8",0x40000)
+	local ud = userdata("u8", 0x40000)
 	for i=0,0x3f do
 		set(ud, i * 0x1000, peek(0x30000 + i * 0x1000, 0x1000))
 	end
@@ -1737,13 +1745,14 @@ function init_data()
 	-- .. should be ok to save a whole .sfx for just one inst / experiment
 	-- later: interface to generate more default patterns
 	
-	for pp = 0,1 do
+	for pp = 0,3
+	do
 		local addr = 0x30100 + pp * 20
-		for i = 0, 7 do
-			poke(addr+i, pp*8 + i)
+		for i = 0, 3 do
+			poke(addr+i, pp*4 + i)
 		end
 		poke(addr+8, 0x0)  -- flow flags
-		poke(addr+9, 0xff) -- channel mask
+		poke(addr+9, 0x0f) -- channel mask -- 4 channels
 		poke(addr+10, 0,0) -- length (I16)
 		
 	end
@@ -1752,8 +1761,62 @@ function init_data()
 	----------------------------------------------------------------------------
 	-- single instrument at 0x40000 (instrument 0)
 	
+	clear_instrument(0)
+	
+	-- copy default instrument to 1..31
+	for i=1,31 do
+		memcpy(0x40000 + 0x200*i, 0x40000, 0x200)
+	end
+	
+	--------------------------------------------------
+	-- Track Data  0x50000
+	--------------------------------------------------
+	
+	-- Default track size is 5 * 64 rows + 8 = 328 bytes
+	
+	-- header (8)
+	init_track(0x50000)
+	
+	-- copy to other tracks: 128k worth
+	-- ** only first 399 are saved / undoable (0x20000\328) **
+	-- 384 used in tracker
+	for i=1,398 do
+		memcpy(0x50000 + i*328, 0x50000, 328)
+	end
+end
+
+
+function init_track(addr)
+--	printh("init_track "..addr)
+	poke2(addr, 64) -- len
+	poke(addr+2,16) -- spd
+	poke(addr+3,0)  -- loop0
+	poke(addr+4,0)  -- loop1
+	poke(addr+5,0)  -- delay
+	poke(addr+6,0)  -- flags (0x1 mute)
+	poke(addr+7,0)  -- unused
+	
+	-- pitch, inst, vol: not set (0xff)
+	memset(addr+8, 0xff, 64*3)
+	
+	-- fx, fx_p: clear
+	memset(addr+8+64*3, 0x0, 64*2)
+end
+
+
+function clear_pattern(i)
+	local addr = 0x30100 + i*20
+	memset(addr,0,20)
+end
+
+
+function clear_instrument(i)
+	local addr = 0x40000 + i * 0x200
+	
+	memset(addr, 0, 0x200)
+	
 	-- node 0: root
-	poke(0x40000 + (0 * 32), -- instrument 10node 0
+	poke(addr + (0 * 32), -- node 0
 	
 			0,    -- parent (0x7)  op (0xf0)
 			1,    -- kind (0x0f): 1 root  kind_p (0xf0): 0  -- wavetable_index
@@ -1773,7 +1836,7 @@ function init_data()
 	
 	
 	-- node 1: sine
-	poke(0x40000 + (1 * 32), -- instrument 0, node 1
+	poke(addr + (1 * 32), -- instrument 0, node 1
 	
 			0,    -- parent (0x7)  op (0xf0)
 			2,    -- kind (0x0f): 2 osc  kind_p (0xf0): 0  -- wavetable_index
@@ -1792,60 +1855,26 @@ function init_data()
 	)
 	
 	
-
-	-- wavetable
-	for i=0,7 do
-	poke(0x40000 + 0x1e0,
+	-- wavetables
+	poke(addr + 0x1e0,
 		0x00, -- address (low)  in 256 byte increments
 		0xf8, -- address (high) in 64k increments
 		0x0a, -- samples (1 << n) 1024
 		0xff,  -- wt_height 256(0); wave mval points at one of the entries
 		
-		-- to do: update (is garbage now?)
+		-- white noise
 		0x80,
 		0xf7,
 		0x0d, -- samples (1 << n) 8192
 		0x01
 	)
-	end
 
 	-- envelope 0 inst 1
 	
-	poke(0x40000 + 0x100,
+	poke(addr + 0x100,
 		0,0,0,0, 0,0,0,0,
 		0,40,255,0 -- adsr
 	)
-	
-	-- copy default instrument to 1..31
-	for i=1,31 do
-		memcpy(0x40000 + 0x200*i, 0x40000, 0x200)
-	end
-	
-	--------------------------------------------------
-	-- Track Data  0x50000
-	--------------------------------------------------
-	
-	-- Default track size is 5 * 64 rows + 8 = 328 bytes
-	
-	-- header (8)
-	local addr = 0x50000
-	poke2(addr, 64) -- len
-	poke(addr+2,16) -- spd
-	poke(addr+3,0)  -- loop0
-	poke(addr+4,0)  -- loop1
-	poke(addr+5,0)  -- delay
-	poke(addr+6,0)  -- flags (0x1 mute)
-	poke(addr+7,0)  -- unused
-	
-	-- pitch, inst, vol: not set (0xff)
-	memset(addr+8, 0xff, 64*3)
-	
-	-- copy to other tracks: 128k worth
-	-- ** only first 399 are saved / undoable (0x20000\328) **
-	
-	for i=1,398 do
-		memcpy(0x50000 + i*328, 0x50000, 328)
-	end
 end
 
 
@@ -3157,7 +3186,7 @@ end
 
 return settings_ui
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2024-04-23 09:28:31",revision=6622]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2025-03-17 17:38:31",revision=6819]]
 local sfx = {}
 
 
@@ -3252,12 +3281,14 @@ function sfx.set_track_loop1(track, val)
 end
 
 
--- Track notes -------------------------------------------------------------
+-- Track notes -----------------------------------------------------------------------------
 
 
 function sfx.track_pitch(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step)
 end
+
+
 function sfx.set_track_pitch(track, step, v)
 	return poke(0x50000 + 8 + (track * 328) + step, v)
 end
@@ -3266,6 +3297,8 @@ end
 function sfx.track_instrument(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + 64)
 end
+
+
 function sfx.set_track_instrument(track, step, v)
 	return poke(0x50000 + 8 + (track * 328) + step + 64, v)
 end
@@ -3274,6 +3307,8 @@ end
 function sfx.track_volume(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + (2 * 64))
 end
+
+
 function sfx.set_track_volume(track, step, v)
 	return poke(0x50000 + 8 + (track * 328) + step + (2 * 64), v)
 end
@@ -3282,6 +3317,8 @@ end
 function sfx.track_fx(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + (3 * 64))
 end
+
+
 function sfx.set_track_fx(track, step, v)
 	return poke(0x50000 + 8 + (track * 328) + step + (3 * 64), v)
 end
@@ -3290,24 +3327,36 @@ end
 function sfx.track_fx_params(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
 end
+
+
 function sfx.track_fx_param0(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64)) >> 4
 end
+
+
 function sfx.track_fx_param1(track, step)
 	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64)) & 0xf
 end
+
+
 function sfx.set_track_fx_params(track, step, v)
 	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), v)
 end
+
+
 function sfx.set_track_fx_param0(track, step, v)
 	local previous = peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
 	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), (previous & 0x0f) | (v << 4))
 end
+
+
 function sfx.set_track_fx_param1(track, step, v)
 	local previous = peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
 	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), (previous & 0xf0) | (v & 0x0f))
 end
--- Pattern flow flags ------------------------------------------------------
+
+
+-- Pattern flow flags -----------------------------------------------------------------------
 
 
 function sfx.pattern_loop_start(pattern)
@@ -3354,12 +3403,43 @@ function sfx.set_pattern_loop_stop(pattern, bool)
 	end
 end
 
-------------------------------------------------------------------------------
--- The Synth -----------------------------------------------------------------
-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+---------------------------------- The Synth ----------------------------------------------------
+-------------------------------------------------------------------------------------------------
 
 
--- Node tree -----------------------------------------------------------------
+-- Instruments --------------------------------------------------------------------------
+
+
+function sfx.instrument_flag(instrument, flag)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local addr = inst_addr + 0x1df
+	return (peek(addr) & flag) > 0
+end
+
+
+function sfx.set_instrument_flag(instrument, flag, value)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local addr = inst_addr + 0x1df
+	local other_flags = peek(addr) & (~ flag)
+	if value then
+		poke(addr, other_flags | flag)
+	else
+		poke(addr, other_flags)
+	end
+end
+
+
+function sfx.toggle_instrument_flag(instrument, flag)
+	local inst_addr = 0x40000 + instrument * 0x200
+	local addr = inst_addr + 0x1df
+	local previous = peek(addr)
+	poke(addr, previous ^^ flag)
+end
+
+
+-- Node tree ----------------------------------------------------------------------------
 
 
 sfx.nodes = {}
@@ -3503,7 +3583,7 @@ function sfx.add_node(instrument, parent_id, node_type, node_op, target_id, chil
 end
 
 
--- Node configuration ------------------------------------------------------------
+-- Node configuration ------------------------------------------------------------------------
 
 
 function sfx.delete_node(instrument, node_id)
@@ -3663,7 +3743,9 @@ function sfx.node_wavetable_info(instrument, node)
 	return dat_addr, wt_width, wt_height
 end
 
--- Envelopes -------------------------------------------------------------------
+
+-- Envelopes ---------------------------------------------------------------------------------
+
 
 function sfx.env_type(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3671,11 +3753,13 @@ function sfx.env_type(instrument, env)
 	return peek(env_addr)
 end
 
+
 function sfx.set_env_type(instrument, env, type)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr, type)
 end
+
 
 function sfx.env_flags(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3683,11 +3767,13 @@ function sfx.env_flags(instrument, env)
 	return peek(env_addr + 1)
 end
 
+
 function sfx.set_env_flags(instrument, env, flags)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 1, flags)
 end
+
 
 function sfx.env_speed(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3695,11 +3781,13 @@ function sfx.env_speed(instrument, env)
 	return peek(env_addr + 2)
 end
 
+
 function sfx.set_env_speed(instrument, env, val)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 2, val)
 end
+
 
 function sfx.env_loop0(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3707,11 +3795,13 @@ function sfx.env_loop0(instrument, env)
 	return peek(env_addr + 3)
 end
 
+
 function sfx.set_env_loop0(instrument, env, val)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 3, val)
 end
+
 
 function sfx.env_loop1(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3719,11 +3809,13 @@ function sfx.env_loop1(instrument, env)
 	return peek(env_addr + 4)
 end
 
+
 function sfx.set_env_loop1(instrument, env, val)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 4, val)
 end
+
 
 function sfx.env_start(instrument, env)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3731,11 +3823,13 @@ function sfx.env_start(instrument, env)
 	return peek(env_addr + 5)
 end
 
+
 function sfx.set_env_start(instrument, env, val)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 5, val)
 end
+
 
 function sfx.env_param(instrument, env, param)
 	local inst_addr = 0x40000 + instrument * 0x200
@@ -3743,661 +3837,17 @@ function sfx.env_param(instrument, env, param)
 	return peek(env_addr + 8 + param)
 end
 
+
 function sfx.set_env_param(instrument, env, param, val)
 	local inst_addr = 0x40000 + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 8 + param, val)
 end
 
+
 return sfx
-:: src/syn_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2024-04-30 07:26:24",revision=1627]]
-local app = require "src/app"
-local envelopes = require "src/envelopes"
-local sfx = require "src/sfx"
-local ui = require "src/ui"
-
-
-local syn_menus = {}
-
-
--- Relationship menu -----------------------------------------------------
-
-
-function syn_menus.open_relationship(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	
-	if node_type == 0x2 and self.parent.param == 2 then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 55,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						self.parent.min_val, self.parent.max_val = 0, 255
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-				{ divider = true },
-				{
-					label = 
-						(flags & 0x20 > 0)
-							and "\|f\^:7f415d5d5d417f00\|h quantized"
-							or "\|f\^:7f41414141417f00\|h quantized",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
-					 end,
-				},
-			}
-		}
-	elseif
-		(node_type == 0x02 and self.parent.param == 0)
-		or (node_type == 10 and self.parent.param == 3)
-	then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 52,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-			}
-		}
-	else
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 40,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-			}
-		}
-	end
-end
-
-
--- Multiplier menu -------------------------------------------------------------
-
-
-function syn_menus.open_multiplier(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	
-	local mult_options = { 
-		[0] = 
-		{ label = "none", val = 0x00 | 0x00 },
-		{ label = "*4", val = 0x00 | 0x40 },
-		{ label = "/4", val = 0x20 | 0x40 },
-		{ label = "*16", val = 0x00 | 0x80 },
-		{ label = "/16", val = 0x20 | 0x80 },
-		{ label = "*64", val = 0x00 | 0xc0 },
-		{ label = "/64", val = 0x20 | 0xc0 },
-	}
-	local mult_menu_items = {}
-	for i = 0, #mult_options do
-		add(mult_menu_items, 
-			{
-				label = (env & 0xe0 == mult_options[i].val)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
-					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
-				fg = i == 0 and 5 or 24,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
-				 end,
-			}
-		)
-	end
-
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 36,
-		items = mult_menu_items,
-	}
-end
-
-
--- Envelope menu ------------------------------------------------------------------
-
-
-function syn_menus.open_envelope(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local has_env = flags & 0x04 > 0
-	local has_free_run = flags & 0x08 > 0
-	local has_random = flags & 0x10 > 0
-	local env_id = env & 0x0f
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 51,
-		items = {
-			{
-				label = (not has_env and not has_random)
-					and "\|f\^:1c225d5d5d221c00\|h none"
-					or "\|f\^:1c22414141221c00\|h none",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
-				 end,
-			},
-			{
-				label = (has_env and env_id == 0)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(0))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 1)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(1))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 2)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(2))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
-				end,
-			},
-			{
-				label = (has_env and env_id == 3)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(3))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
-				end,
-			},
-			{
-				label = has_random
-						and "\|f\^:1c225d5d5d221c00\|h random"
-						or "\|f\^:1c22414141221c00\|h random",
-				fg = 30,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
-				 end,
-			},
-			{
-				divider = true,
-			},
-			{
-				label = has_free_run
-							and "\|f\^:7f415d5d5d417f00\|h free run"
-							or "\|f\^:7f41414141417f00\|h free run",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
-				 end,
-			},
-		}
-	}
-end
-
-
-return syn_menus
-:: src/syn_param.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2024-04-30 06:58:36",revision=2879]]
-local app = require "src/app"
-local sfx = require "src/sfx"
-local syn_menus = require "src/syn_menus"
-local ui = require "src/ui"
-
-
-local syn_param = {}
-
-
--- Field ----------------------------------------------------------------------
-
-
-local function attach_field(parent, el)
-	el.width = 4 * 4 + 3
-	el.height = 7
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	function el:draw()
-		rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if (not self.visible) or self.visible(self) then
-			local val = self:get()
-			local fg = self.fg or 59
-			local str
-			if self.to_str then
-				str = self:to_str(val)
-			else
-				str = tostr(val)
-			end
-			if #str > 4 then
-				print(str, 0, 1, self.dragged and 7 or fg)
-			elseif self.centered then
-				p8_centered_print(str, 10, 1, self.dragged and 7 or fg)
-			else
-				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
-			end
-		end
-	end
-	
-
-	function el:hover()
-		if (not self.visible) or self.visible(self) then
-			self.cursor = get_spr(50)
-		else
-			self.cursor = 1
-		end
-	end
-	
-
-	function el:click(msg)
-		if self.visible and (not self.visible(self)) then
-			return true
-		end
-		self.cursor = 0
-		self.dragged = true
-		ui.mouselock(1.0, true)
-		if self.onclick then
-			self:onclick(msg)
-		elseif self.parent.onclick then
-			self.parent:onclick(msg)
-		end
-		return true
-	end
-	
-	function el:doubleclick()
-		return true
-	end
-	
-
-	function el:drag(msg)
-		local delta = ui.mouselock(1.0, true)
-		local old = self:get()
-		local new = old - delta
-		self:set(new)
-	end
-
-	
-	function el:release()
-		self.cursor = get_spr(50)
-		self.dragged = false
-		ui.mouseunlock()
-		self.up_barrier = nil
-		self.down_barrier = nil
-		if self.onrelease then
-			self:onrelease()
-		elseif self.parent.onrelease then
-			self.parent:onrelease()
-		end
-	end
-	
-
-	return el
-end
-
-
-local function attach_relationship(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if flags & 0x03 == 0x01 then
-			print("\^:2070200000000000", -1, 2, 60)
-		elseif flags & 0x03 == 0x02 then
-			print("\^:5020500000000000", -1, 2, 60)
-		elseif flags & 0x03 > 0 then
-			print("?", 3, 1, 60)
-		else
-			pset(4, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_relationship(self)
-	end
-	return el
-end
-
-
-local function attach_multiplier(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if self.mini then
-			if (env & 0xc0 > 0) then
-				print("!", 0, 1, 24)
-			else
-				pset(1, 3, 58)
-			end
-			return
-		end
-		if (env & 0xc0 > 0) then
-			str2 = (env & 0x20 == 0) and 
-				"\^:5020500000000000" or  -- *
-				"\^:4020100000000000"     -- /
-			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
-			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
-			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
-			clip()
-			print(str2, -4, 2, 24)
-		else
-			pset(2, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_multiplier(self)
-	end
-	return el
-end
-
-
-local function attach_envelope(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		if flags & 0x04 > 0 then
-			local fg, bg = 7, 18
-			if flags & 0x08 > 0 then
-				fg, bg = bg, fg
-			end
-			line(1, 0, self.width - 1 - 1, 0, bg)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
-			print(string.format("%x", env & 0x0f), 2, 1, fg)
-		elseif flags & 0x10 > 0 then
-			line(1, 0, self.width - 1 - 1, 0, 30)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
-			print("r", 2, 1, 7)
-		else
-			line(2, 1, self.width - 1 - 2, 1, 58)
-			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
-			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_envelope(self)
-	end
-	return el
-end
-
-
--- Getters and setters ------------------------------------------------------
-
-
-local function get_val1(self)
-	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val1 >= 128) val1 -= 256
-	end
-	return val1
-end
-
-
-local function set_val1(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function get_val0(self)
-	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val0 >= 128) val0 -= 256
-	end
-	return val0
-end
-
-
-local function set_val0(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function has_env(self)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	return flags & (0x4 | 0x10) > 0
-end
-
-
-local function smart_str(self, val)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
-		local num = 1 + val % 16
-		local den = 1 + val \ 16
-		return num .. "/" .. den
-	end
-	return tostr(val)
-end
-
-
--- The widget -----------------------------------------------------------------
-
-
-function syn_param.attach(parent, x, y, el, style)
-	el.x, el.y = x, y
-	el.small = small
-	el.width, el.height = 35, 58
-	el.small = style.small
-	el.emphasis = style.emphasis
-	parent:attach(el)
-	el:attach(ui.create_knob {
-		x = 2, y = 10,
-		small = style.small,
-		get = get_val1,
-		set = set_val1,
-		has_secondary = has_env,
-		get_secondary = get_val0,
-		set_secondary = set_val0,
-	})
-	attach_relationship(
-		el,
-		{
-			x = 0, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 41,
-			centered = true,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 28, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 51,
-			fg = 18, centered = true,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 28, y = 51,
-		}
-	)
-	
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		if self.emphasis then
-			rectfill(0, 0, self.width - 1, 8, 5)
-		else
-			rectfill(0, 0, self.width - 1, 8, 5)
-		end
-		p8_centered_print(
-			el.long_label or el.label,
-			(self.width \ 2) + 1, 2,
-			self.emphasis and 6 or 6
-		)
-	end	
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-	
-	return el
-end
-
-
--- Mini widget ---------------------------------------------------------------------
-
-
-function syn_param.attach_mini(parent, el)
-	el.x = el.x or 0
-	el.y = el.y or (12 + 10 * el.param)
-	el.width = parent.width
-	el.height = 10
-	parent:attach(el)
-	attach_relationship(
-		el,
-		{
-			x = 24, y = 0,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7, y = 0,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 24 + 7 + 20, y = 0,
-			mini = true,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7 + 20 + 4, y = 0,
-			fg = 18,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 24 + 7 + 20 + 4 + 20, y = 0,
-		}
-	)
-	function el:draw()
-		print(self.label, 24 - (4 * #self.label), 1, 5)
-		---print(self.label, 2, 1, 5)
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-end
-
-
-return syn_param
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2024-05-03 14:01:41",revision=8079]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2025-03-17 17:38:31",revision=8226]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local syn_param = require "src/syn_param"
@@ -4439,11 +3889,12 @@ function synth.attach_node_panel(parent, el)
 end
 
 
+-- Unused slot -------------------------------------------------------------------------------
+
+
 function synth.populate_unused(parent, el)
 	function el:draw()
 		clip()
---		rectfill(-2, -2, self.width + 1, self.height + 1, 21)
-		--synth.draw_corners(self)
 		local x, y = 19, 14
 		pal(7, 58)
 		sspr(63, 0, 0, 7, 7, x, y, x + (7 * 4), y + (7 * 4))
@@ -4454,6 +3905,9 @@ function synth.populate_unused(parent, el)
 	end
 	return el
 end
+
+
+-- Root Synth Node ---------------------------------------------------------------------------
 
 
 function synth.populate_root(parent, el)
@@ -4475,6 +3929,8 @@ function synth.populate_root(parent, el)
 		syn_param.attach_mini(el, params[3])
 --		syn_param.attach(el, 130, 84, params[2], { small = true })
 --		syn_param.attach(el, 170, 84, params[3], { small = true })
+		el:attach(synth.instrument_flag_toggle { x = 120, y = 84, label = "wide", flag = 0x02 })
+		el:attach(synth.instrument_flag_toggle { x = 160, y = 84, label = "retrig", flag = 0x01 })
 		visual.attach_oscilloscope(el, 8, { x = 20, y = 12, width = 184, height = 68 })
 	else
 		syn_param.attach_mini(el, params[0])
@@ -4483,6 +3939,8 @@ function synth.populate_root(parent, el)
 		syn_param.attach_mini(el, params[3])
 		--- slider.attach(el, { label = "p0", param = 4, node_id = el.node_id } )
 		--- slider.attach(el, { label = "p1", param = 5, node_id = el.node_id } )
+		el:attach(synth.instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
+		el:attach(synth.instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
 	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 7)
@@ -4895,9 +4353,41 @@ function synth.populate_unknown(parent, el)
 end
 
 
--------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
 
+
+function synth.instrument_flag_toggle(el)
+	el.width = el.width or 35
+	el.height = el.height or 9
+	el.label = el.label or "---"
+	el.cursor = "pointer"
 	
+	function el:draw()
+		palt(59, true)
+		pal(2, 0)
+		pal(17, 18)
+		if sfx.instrument_flag(app.instrument, el.flag) then
+			spr(33, 0, 1)
+		else
+			spr(32, 0, 1)
+		end
+		pal(17, 17)
+		pal(2, 2)
+		palt(59, false)
+		print(el.label, 10, 2, 5)
+	end
+	
+	function el:tap()
+		sfx.toggle_instrument_flag(app.instrument, el.flag)
+	end
+	
+	return el
+end
+
+
+------------------------------------------------------------------------------------------------	
+
+
 function synth.draw_corners(el)
 --[[
 	if app.node and app.node == el.node_id then 
@@ -4988,8 +4478,661 @@ end
 
 
 return synth
+:: src/syn_menus.lua
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2025-03-17 17:38:31",revision=1651]]
+local app = require "src/app"
+local envelopes = require "src/envelopes"
+local sfx = require "src/sfx"
+local ui = require "src/ui"
+
+
+local syn_menus = {}
+
+
+-- Relationship menu -----------------------------------------------------
+
+
+function syn_menus.open_relationship(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	
+	if node_type == 0x2 and self.parent.param == 2 then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 55,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						self.parent.min_val, self.parent.max_val = 0, 255
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+				{ divider = true },
+				{
+					label = 
+						(flags & 0x20 > 0)
+							and "\|f\^:7f415d5d5d417f00\|h quantized"
+							or "\|f\^:7f41414141417f00\|h quantized",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 0x02 and self.parent.param == 0)
+		or (node_type == 10 and self.parent.param == 3)
+		or (node_type == 8 and self.parent.param == 2)
+	then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 52,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 8 and self.parent.param ~= 2)
+		or (node_type == 9)
+		or (node_type == 10 and self.parent.param ~= 3)
+	then
+		-- no menu
+	else
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 40,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+			}
+		}
+	end
+end
+
+
+-- Multiplier menu -------------------------------------------------------------
+
+
+function syn_menus.open_multiplier(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	
+	local mult_options = { 
+		[0] = 
+		{ label = "none", val = 0x00 | 0x00 },
+		{ label = "*4", val = 0x00 | 0x40 },
+		{ label = "/4", val = 0x20 | 0x40 },
+		{ label = "*16", val = 0x00 | 0x80 },
+		{ label = "/16", val = 0x20 | 0x80 },
+		{ label = "*64", val = 0x00 | 0xc0 },
+		{ label = "/64", val = 0x20 | 0xc0 },
+	}
+	local mult_menu_items = {}
+	for i = 0, #mult_options do
+		add(mult_menu_items, 
+			{
+				label = (env & 0xe0 == mult_options[i].val)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
+					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
+				fg = i == 0 and 5 or 24,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
+				 end,
+			}
+		)
+	end
+
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 36,
+		items = mult_menu_items,
+	}
+end
+
+
+-- Envelope menu ------------------------------------------------------------------
+
+
+function syn_menus.open_envelope(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local has_env = flags & 0x04 > 0
+	local has_free_run = flags & 0x08 > 0
+	local has_random = flags & 0x10 > 0
+	local env_id = env & 0x0f
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 51,
+		items = {
+			{
+				label = (not has_env and not has_random)
+					and "\|f\^:1c225d5d5d221c00\|h none"
+					or "\|f\^:1c22414141221c00\|h none",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
+				 end,
+			},
+			{
+				label = (has_env and env_id == 0)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(0))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 1)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(1))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 2)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(2))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
+				end,
+			},
+			{
+				label = (has_env and env_id == 3)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(3))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
+				end,
+			},
+			{
+				label = has_random
+						and "\|f\^:1c225d5d5d221c00\|h random"
+						or "\|f\^:1c22414141221c00\|h random",
+				fg = 30,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
+				 end,
+			},
+			{
+				divider = true,
+			},
+			{
+				label = has_free_run
+							and "\|f\^:7f415d5d5d417f00\|h free run"
+							or "\|f\^:7f41414141417f00\|h free run",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
+				 end,
+			},
+		}
+	}
+end
+
+
+return syn_menus
+:: src/syn_param.lua
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2025-03-17 17:38:31",revision=2973]]
+local app = require "src/app"
+local sfx = require "src/sfx"
+local syn_menus = require "src/syn_menus"
+local ui = require "src/ui"
+
+
+local syn_param = {}
+
+
+-- Field ----------------------------------------------------------------------
+
+
+local function attach_field(parent, el)
+	el.width = 4 * 4 + 3
+	el.height = 7
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	function el:draw()
+		rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if (not self.visible) or self.visible(self) then
+			local val = self:get()
+			local fg = self.fg or 59
+			local str
+			if self.to_str then
+				str = self:to_str(val)
+			else
+				str = tostr(val)
+			end
+			if #str > 4 then
+				print(str, 0, 1, self.dragged and 7 or fg)
+			elseif self.centered then
+				p8_centered_print(str, 10, 1, self.dragged and 7 or fg)
+			else
+				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
+			end
+		end
+	end
+	
+
+	function el:hover()
+		if (not self.visible) or self.visible(self) then
+			self.cursor = get_spr(50)
+		else
+			self.cursor = 1
+		end
+	end
+	
+
+	function el:click(msg)
+		if self.visible and (not self.visible(self)) then
+			return true
+		end
+		self.cursor = 0
+		self.dragged = true
+		ui.mouselock(1.0, true)
+		if self.onclick then
+			self:onclick(msg)
+		elseif self.parent.onclick then
+			self.parent:onclick(msg)
+		end
+		return true
+	end
+	
+	function el:doubleclick()
+		return true
+	end
+	
+
+	function el:drag(msg)
+		local delta = ui.mouselock(1.0, true)
+		local old = self:get()
+		local new = old - delta
+		self:set(new)
+	end
+
+	
+	function el:release()
+		self.cursor = get_spr(50)
+		self.dragged = false
+		ui.mouseunlock()
+		self.up_barrier = nil
+		self.down_barrier = nil
+		if self.onrelease then
+			self:onrelease()
+		elseif self.parent.onrelease then
+			self.parent:onrelease()
+		end
+	end
+	
+
+	return el
+end
+
+
+local function attach_relationship(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if flags & 0x03 == 0x01 then
+			print("\^:2070200000000000", -1, 2, 60)
+		elseif flags & 0x03 == 0x02 then
+			print("\^:5020500000000000", -1, 2, 60)
+		elseif flags & 0x03 > 0 then
+			print("?", 3, 1, 60)
+		else
+			pset(4, 3, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_relationship(self)
+	end
+	return el
+end
+
+
+local function attach_multiplier(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if self.mini then
+			if (env & 0xc0 > 0) then
+				print("!", 0, 1, 24)
+			else
+				pset(1, 3, 58)
+			end
+			return
+		end
+		if (env & 0xc0 > 0) then
+			str2 = (env & 0x20 == 0) and 
+				"\^:5020500000000000" or  -- *
+				"\^:4020100000000000"     -- /
+			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
+			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
+			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
+			clip()
+			print(str2, -4, 2, 24)
+		else
+			pset(2, 3, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_multiplier(self)
+	end
+	return el
+end
+
+
+local function attach_envelope(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		if flags & 0x04 > 0 then
+			local fg, bg = 7, 18
+			if flags & 0x08 > 0 then
+				fg, bg = bg, fg
+			end
+			line(1, 0, self.width - 1 - 1, 0, bg)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
+			print(string.format("%x", env & 0x0f), 2, 1, fg)
+		elseif flags & 0x10 > 0 then
+			line(1, 0, self.width - 1 - 1, 0, 30)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
+			print("r", 2, 1, 7)
+		else
+			line(2, 1, self.width - 1 - 2, 1, 58)
+			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
+			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_envelope(self)
+	end
+	return el
+end
+
+
+-- Getters and setters ------------------------------------------------------
+
+
+local function get_val1(self)
+	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val1 >= 128) val1 -= 256
+	end
+	return val1
+end
+
+
+local function set_val1(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function get_val0(self)
+	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val0 >= 128) val0 -= 256
+	end
+	return val0
+end
+
+
+local function set_val0(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function has_env(self)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	return flags & (0x4 | 0x10) > 0
+end
+
+
+local function smart_str(self, val)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
+		local num = 1 + val % 16
+		local den = 1 + val \ 16
+		return num .. "/" .. den
+	end
+	return tostr(val)
+end
+
+
+-- The widget -----------------------------------------------------------------
+
+
+function syn_param.attach(parent, x, y, el, style)
+	el.x, el.y = x, y
+	el.small = small
+	el.width, el.height = 35, 58
+	el.small = style.small
+	el.emphasis = style.emphasis
+	parent:attach(el)
+	el:attach(ui.create_knob {
+		x = 2, y = 10,
+		small = style.small,
+		get = get_val1,
+		set = set_val1,
+		has_secondary = has_env,
+		get_secondary = get_val0,
+		set_secondary = set_val0,
+	})
+	attach_relationship(
+		el,
+		{
+			x = 0, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 41,
+			centered = true,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 28, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 51,
+			fg = 18, centered = true,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 28, y = 51,
+		}
+	)
+	
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		if self.emphasis then
+			rectfill(0, 0, self.width - 1, 8, 5)
+		else
+			rectfill(0, 0, self.width - 1, 8, 5)
+		end
+		p8_centered_print(
+			el.long_label or el.label,
+			(self.width \ 2) + 1, 2,
+			self.emphasis and 6 or 6
+		)
+	end	
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+	
+	return el
+end
+
+
+-- Mini widget ---------------------------------------------------------------------
+
+
+function syn_param.attach_mini(parent, el)
+	el.x = el.x or 0
+	el.y = el.y or (12 + 10 * el.param)
+	el.width = parent.width
+	el.height = 10
+	parent:attach(el)
+	attach_relationship(
+		el,
+		{
+			x = 24, y = 0,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7, y = 0,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 24 + 7 + 20, y = 0,
+			mini = true,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7 + 20 + 4, y = 0,
+			fg = 18,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 24 + 7 + 20 + 4 + 20, y = 0,
+		}
+	)
+	function el:draw()
+		print(self.label, 24 - (4 * #self.label), 1, 5)
+		---print(self.label, 2, 1, 5)
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+end
+
+
+return syn_param
 :: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2024-05-03 14:01:41",revision=557]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2025-03-17 09:25:34",revision=559]]
 local ui = {}
 
 
@@ -5038,7 +5181,7 @@ ui.create_checkbox = checkbox.create
 
 return ui
 :: src/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2024-05-03 11:10:00",revision=1272]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2025-03-17 11:45:43",revision=1283]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local ui = require "src/ui"
@@ -5143,7 +5286,7 @@ function visual.attach_oscilloscope(parent, channel, el)
 		end
 		rectfill(0, 0, self.width - 1, self.height - 1, bg)
 		-- Oscilloscope
-		local tick_addr = 0x200000 + node_id * 4096
+		local tick_addr = 0x200000 + node_id * 8192
 
 		-- `tick_len` is never used by sfx.p64...
 		-- but the second `stat` is necessary to get
@@ -5254,9 +5397,8 @@ end
 
 return visual
 :: src/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNC0w
-NS0wMyAxNDowMTo0MSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1dbHo0AAQAAAADAAAA
-MG5pbA==
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1d
 :: drak.lua
 --[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-19 11:56:33",revision=1102]]
 
@@ -5601,7 +5743,7 @@ Ud6Z5rjf6tBq1M12IUZmHc02KopiRdCp1LOBHMHZ0QAA4cCC7wIHkTJrZNpOGq0IGgAAgE2Igomj
 Ne2sKEoMZQIAAPfJpJPUziRgZZ1JJ0_fb-Tdaz9ApQAAwFecPt-Y-r9X-j93ENXN134D1wAAABB0
 RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2024-05-03 14:01:41",revision=10050]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2025-03-17 17:38:31",revision=10273]]
 include "drak.lua"
 local app = require "src/app"
 local sfx = require "src/sfx"
@@ -5666,7 +5808,8 @@ function _draw()
 		cls(62)
 	end
 	ui.head():draw_all()
-	print(string.format("\014% 3.0f", (stat(1) * 100.0)) .. "%", 464, 253, 7)
+	print(string.format("\014% 3.0f", stat(1) * 100.0) .. "%", 464, 247, 7)
+	print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 460, 253, 7)
 end
 
 
@@ -5737,7 +5880,7 @@ function attach_view_selector(parent, el)
 	
 	function el:draw()
 		print("inst", 2, 6, app.view == "inst" and 7 or 62)
-		print("trak", 2 + 20, 6, app.view == "trak" and 7 or 62)
+		print("clip", 2 + 20, 6, app.view == "trak" and 7 or 62)
 		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
 		print("song", 2 + 60 + 1, 6, app.view == "song" and 7 or 62)
 	end
@@ -5758,20 +5901,19 @@ function attach_view_selector(parent, el)
 	return el
 end
 
--- Default note attributes -------------------------------------------------------
+
+-- Default note attributes --------------------------------------------------------------
 
 
 function attach_note_attributes(parent, el)
 	el.width = 78
 	el.height = 16
-	--- el.cursor = "pointer"
 	el.cursor = get_spr(50)
 	parent:attach(el)
 	
 	el.drag_start = nil
 
 	function el:draw()
-		---rectfill(0, 0, self.width, self.height, 0)
 		local note = app.base_note % 12
 		local octave = app.base_note \ 12
 		local is_sharp = (note == 1) or (note == 3) or (note == 6)
@@ -5897,16 +6039,16 @@ MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
 MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
 ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNC0wNS0wMyAxNDow
-MTo0MSIsbm90ZXM9IkEgbXVzaWMgdHJhY2tlciBhbmQgaW5zdHJ1bWVudFxuZWRpdG9yIGZvciBc
-Ii5zZnhcIiBmaWxlcyIscnVudGltZT03LHN0b3JlZD0iMjAyNC0wNC0xNiAxMTozNzo1MSIsdGl0
-bGU9IlZpc2lUcmFjayIsdmVyc2lvbj0iMC4wLjMiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFp
-bi5sdWEjNjciLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249InNyYy9hcHAubHVhIzI3Iix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvdWkubHVhIzciLHdvcmtzcGFjZV9pbmRl
-eD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjNDgiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9j
-YXRpb249InNyYy9lZF9pbnN0Lmx1YSMyNDMiLHdvcmtzcGFjZV9pbmRleD0xfSx7bG9jYXRpb249
-ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9LHtsb2NhdGlvbj0ibWFwLzAubWFwIix3b3Jr
-c3BhY2VfaW5kZXg9M30se2xvY2F0aW9uPSJzZngvMC5zZngiLHdvcmtzcGFjZV9pbmRleD00fSx7
-bG9jYXRpb249InNmeC8xLnNmeCIsd29ya3NwYWNlX2luZGV4PTd9fV1dbHo0AAQAAAADAAAAMG5p
-bA==
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNS0wMy0xNyAxNzoz
+ODozMSIsbm90ZXM9IkEgbXVzaWMgdHJhY2tlciBhbmQgaW5zdHJ1bWVudFxuZWRpdG9yIGZvciBc
+Ii5zZnhcIiBmaWxlcyIscnVudGltZT0xNSxzdG9yZWQ9IjIwMjQtMDQtMTYgMTE6Mzc6NTEiLHRp
+dGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1h
+aW4ubHVhIzU5Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMxIix3
+b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSMyNDkiLHdvcmtzcGFjZV9p
+bmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjMzQiLHdvcmtzcGFjZV9pbmRleD0xfSx7
+bG9jYXRpb249InNyYy9zeW5fcGFyYW0ubHVhIzMyMyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2Nh
+dGlvbj0ic3JjL3N5bl9tZW51cy5sdWEjMTAyIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9u
+PSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29y
+a3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH0s
+e2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXQ==
 :: [eoc]
