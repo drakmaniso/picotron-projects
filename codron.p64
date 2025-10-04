@@ -3,17 +3,19 @@ version 2
 
 :: defaults/
 :: defaults/settings.lua
---[[pod_format="raw",created="2025-04-05 12:46:20",modified="2025-04-11 17:43:33",revision=1273]]
+--[[pod_format="raw",created="2025-04-05 12:46:20",modified="2025-09-15 16:35:49",revision=1522]]
 return {
 	window_mode = "tabbed",
 	default_theme = "dark",
+	cursor_style = "block",
+	cursor_hide_if_selection = true,
 }
 :: defaults/shortcuts.lua
---[[pod_format="raw",created="2025-04-05 12:46:29",modified="2025-04-11 17:43:33",revision=1272]]
+--[[pod_format="raw",created="2025-04-05 12:46:29",modified="2025-09-15 16:35:49",revision=1521]]
 return {
 }
 :: defaults/theme_dark.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2025-04-11 17:43:33",revision=2721]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2025-09-15 16:35:49",revision=2970]]
 return {
 	-- UI
 	ui_bg = 17,
@@ -47,7 +49,7 @@ return {
 	lua_unknown = 8,
 }
 :: defaults/theme_light.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2025-04-11 17:43:33",revision=2722]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2025-09-15 16:35:49",revision=2971]]
 return {
 	-- UI
 	ui_bg = 22,
@@ -82,27 +84,27 @@ return {
 }
 :: defaults/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTMxIDEzOjAxOjM3Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozNCJdXQ==
+OS0xNSAxNjozNTo0OSJdXQ==
 :: fonts/
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNS0w
-My0yOCAyMDo1NDozNSIscmV2aXNpb249MjRdXWx6NACgAwAAPgcAAPEdcHh1AAMoAAgAAAQFCgsA
-AQOQD4APmD_ID4APj3_ID4kviA-4D4gPmC_ID4kGAEL4L4gIEwDwqw_IAB4PmAgeD4nwMG8-IC1A
-DQ8zDUAMDwwMQAwADEAsMA8wDzwNCQ8wIAMPDw0HAxAPPj8GQD8wDz4AD2MPNg8cDz4IBggwDxiA
-DwwPGFAfDCAaQA8ECgSwQgACABVwCg8fCgsKEAQPDg8BDwYIDwcEEA8JBAIBIAIFAg8LBQoAFFAE
-UgQCVAIQBQIPBwIFMAQPDgRgFAIwB4ACEBQSHwEADwYBDw0PCxEPBgAEDjQPDgAOAQgEAg8BBwkA
-8jMOCAEOAAQOFQcUAAccDwcYCQAOHAkRDgAHGAQiAA4RDhEOAA4RDw4YDjACAAJABAAUAhAEAgwC
-BDAHAAcwAgQIBAJPAPAYAAIADQ8RHx0PDQwNAA4RByEACREJEQkADgEsAQ4ACUEJAAccCRwHBgCQ
-LAANHAMRDQAhJQDwFUIJAA04AQ4AEQUPAwURAFwHAA8RDxsfFS8RAAEPCwMxAA5BDksA8QEsAA4x
-Bg4PDAkRCSEADgEMuADwYA8fVABRDQBBBQ8DAC8RHxUPGw8RACEOIQAhDRgJAAcIBAIcBwAJXAkA
-HBIUAA1YDQIFsAkAAgRwDSENABwJIQkgDSwNABgNIQ0gDgEHDA0ADwwSByIQDSENCA4cCTEAAgAP
-AyIJAAgADwwoAQ4cAaMA8CcBAAtCDwwgBh8VHxEgCTEgDiEOEAkhCRwADSENGBADCywgDQwOCAkA
-EgciDwwgMQ0gIQULIB_cAPYeCiARDhEQMQ0IDhAHCA4MBwAOEgwiDnIOFAgkDiAODxUPDCAbGiBv
-fwAPVQ8qBADwCAAPQQ9jD38fXQ93Dz4ABh9jD3cGD0EGJwEWRAQA8A8ABAoPfAYPHw8YDxAADxwP
-Jh9fD38GDxwADyIPdx8KAKEIAA8qDxwPNg93dALwASoAHxwGD10PHB8UAAgPHAYuALEqDzoABg9n
-D2MPZ2MAEQZ3APEFfw9jBgAPGA94KAcJAAYPYw9rD2MfAPMICA8UDyoPXQ8qDxQIMA9VMAYPcw9j
-D3McADEcD39vAPEEIhAPfw8iDxQIAw8iD38ABg93Hz8A8wIQDwoEAA9QDyAQDxEPKg9EAAcAcQYP
-aw93D2tGAEEPfwAFAgD0Am9VEA9_D0IPUg9KD0IPfhABDABAARABDQoAHw0JAP---2hQD0oNAQA=
+NC0xMiAxNzoyMzozMCIscmV2aXNpb249MjZdXWx6NAChAwAAQgcAAPMZcHh1AAMoAAgAAAQFCgsA
+AQOQD4APmC_ID4kPgA_Pf4gPiS_ID-gPiBQAAAYAQvgviAgTAPCtD4gAHg_YCB4PifAwbz8gLUAN
+DzMNQAwPDAxADAAMQCwwDzAPPA0JDzAgAw8PDQcDEA8_PwZAPzAPPgAPYw82DxwPPggGCDAPGIAP
+DA8YUB8MIBpADwQKBLBCAAIAFXAKDx8KCwoQBA8ODwEPBggPBwQQDwkEAgEgAgUCDwsFCgAUUARS
+BAJUAhAEDxUPDg8VBDAEDw4EYBQCMAeAAhAUEh8BAA8GAQ8NDwsRDwYABA40Dw4ADgEIBAIPAQcJ
+APIzDggBDgAEDhUHFAAHHA8HGAkADhwJEQ4ABxgEIgAOEQ4RDgAOEQ8OGA4wAgACQAQAFAIQBAIM
+AgQwBwAHMAIECAQCTwDwGAACAA0PER8dDw0MDQAOEQchAAkRCREJAA4BLAEOAAlBCQAHHAkcBwYA
+kCwADRwDEQ0AISUA8BVCCQANOAEOABEFDwMFEQBcBwAPEQ8bHxUvEQABDwsDMQAOQQ5LAPEBLAAO
+MQYODwwJEQkhAA4BDLgA8GAPH1QAUQ0AQQUPAwAvER8VDxsPEQAhDiEAIQ0YCQAHCAQCHAcACVwJ
+ABwSFAANWA0CBbAJAAIEcA0hDQAcCSEJIA0sDQAYDSENIA4BBwwNAA8MEgciEA0hDQgOHAkxAAIA
+DwMiCQAIAA8MKAEOHAGjAPAnAQALQg8MIAYfFR8RIAkxIA4hDhAJIQkcAA0hDRgQAwssIA0MDggJ
+ABIHIg8MIDENICEFCyAfnAD2HgogEQ4REDENCA4QBwgODAcADhIMIg5yDhQIJA4gDg8VDwwgGxog
+b38AD1UPKgQA8AgAD0EPYw9-H10Pdw8_AAYfYw93Bg9BBicBFkQEAPAPAAQKD3wGDx8PGA8QAA8c
+DyYfXw9-Bg8cAA8iD3cfCgChCAAPKg8cDzYPd3YC8AEqAB8cBg9dDxwfFAAIDxwGLgCxKg86AAYP
+Zw9jD2djABEGdwDxBX8PYwYADxgPeCgHCQAGD2MPaw9jHwDzCAgPFA8qD10PKg8UCDAPVTAGD3MP
+Yw9zHAAxHA9-bwDxBCIQD38PIg8UCAMPIg9-AAYPdx8-APMCEA8KBAAPUA8gEA8RDyoPRAAHAHEG
+D2sPdw9rRgBBD38ABQIA9AJvVRAPfg9CD1IPSg9CD34QAQwAQAEQAQ0KAB8NCQD---9oUA9KDQEA
 :: fonts/p9.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjQzOjIxIixtb2RpZmllZD0iMjAyNS0w
 My0yNyAxNTowNToxNCIscmV2aXNpb249NDldXWx6NACBBQAApgUAAPCPcHh1AAMoAAgAAAQECAYQ
@@ -133,11 +135,11 @@ DAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYP
 FARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: fonts/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjM2OjMxIixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozNCJdXQ==
+OS0xNSAxNjozNTo0OSJdXQ==
 :: gfx/
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozMyIscmV2aXNpb249ODkwM11dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
+NC0xNCAxMjo1MDo0NiIscmV2aXNpb249OTA3MF1dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALHDE_ANeAFxAXABcwFwAXEBcQDAAfgEgAIRV3RgAfd0QAHgAIAR-w_wAM
 DzEAjc8LCwTwE2fgZ_Bn8BM4AAstMTA5APECCCcAB2AXEAdABwAHIAcwB0AEAI9AByAHYCfwCk8A
@@ -148,11 +150,11 @@ ByAHAGwCEVAEAAAWAJ9QNwAHoAegB7BXAAweNIkADzIA--------------------------------
 ----------------------------I1A9MTR9fQ==
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE3OjM3OjMxIixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozNCJdXQ==
+OS0xNSAxNjozNTo0OSJdXQ==
 :: src/
 :: src/ui/
 :: src/ui/banner.lua
---[[pod_format="raw",created="2025-04-09 08:35:55",modified="2025-04-11 17:43:33",revision=928]]
+--[[pod_format="raw",created="2025-04-09 08:35:55",modified="2025-09-15 16:35:49",revision=1177]]
 ------------------------------------------------------------------------------------
 
 
@@ -253,7 +255,7 @@ end
 ------------------------------------------------------------------------------------
 
 :: src/ui/button.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2025-04-11 17:43:33",revision=1834]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2025-09-15 16:35:49",revision=2083]]
 -------------------------------------------------------------------------------------
 
 
@@ -309,7 +311,7 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-04-11 17:43:33",revision=9715]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2025-09-15 16:35:49",revision=9964]]
 -------------------------------------------------------------------------------------------
 
 
@@ -381,7 +383,7 @@ return function()
 			findbox:stop_search()
 			local current = recent[#recent]
 			if current then
-				current:buffer():clear_selections()
+				current:buffer():deselect_all()
 			end
 		end
 		while del(recent, node) do end
@@ -580,7 +582,7 @@ return function()
 		local col = buffer:find_cursor_col(row, msg.mx + buffer.screen_x - get_margin_width())
 		local active_col, active_row = buffer:active_cursor_pos()
 		if drag_select_mode == "char" then
-			buffer:extend_active_selection(col, row)
+			buffer:extend_selection(col, row)
 		elseif drag_select_mode == "word" then
 			buffer:extend_word_selection(col, row)
 		elseif drag_select_mode == "line" then
@@ -666,9 +668,11 @@ return function()
 		-- because its `keyp` state when getting keyboard focus
 		-- is unreliable.
 		if keyp("f") and key("ctrl") then
-			findbox:launch_search(findbox.hidden, "forward")
-		elseif keyp("d") and key("ctrl") then
-			findbox:launch_search(findbox.hidden, "backward")
+			if key("shift") then
+				findbox:launch_search(findbox.hidden, "backward")
+			else
+				findbox:launch_search(findbox.hidden, "forward")
+			end
 		end
 		
 		if self:has_keyboard_focus() and not findbox.hidden then
@@ -718,6 +722,23 @@ return function()
 			local extend = key("shift")
 			if keyp("right") then buffer:next_word(key("shift")); moved = true
 			elseif keyp("left") then buffer:previous_word(key("shift")); moved = true
+			elseif keyp("d") then
+				if buffer:number_of_selections() > 0 then
+					local scol, srow, ecol, erow = buffer:current_selection()
+					if srow == erow then
+						local target = buffer:text(srow):sub(scol, ecol - 1)
+						scol, srow, ecol, erow = buffer:search(ecol, erow, target, true)
+						if scol then
+							buffer:select(scol, srow, ecol, erow,
+								key("shift") and "replace_current" or "add")
+							self:show_cursor(true)
+						end
+					end
+				else
+					local col, row = buffer:active_cursor_pos()
+					local scol, srow, ecol, erow = buffer:find_word_at(col, row)
+					buffer:select(scol, srow, ecol, erow)
+				end
 			elseif keyp("w") then
 				buffer:next_word(false)
 				buffer:previous_word(false)
@@ -757,6 +778,9 @@ return function()
 					recent_pick += 1
 				end
 				recent_pressed = true
+			elseif keyp("u") then
+				recent_pick -= 1
+				recent_pressed = true
 			elseif keyp("tab") then
 				notify("!!!")
 			elseif key("shift") and keyp("n") then
@@ -778,7 +802,7 @@ return function()
 			blink_timer = 0
 			last_command = this_command
 		end
-	end
+	end -- function update
 	
 
 	function self:compute_scrollbar_coords()
@@ -899,9 +923,13 @@ return function()
 				function(col, row, is_selection, _active)
 					local y = buffer:find_cursor_y(row) - dy
 					local x = buffer:find_cursor_x(col, row) - dx + get_margin_width()
-					local w = is_selection and 0 or cursor_width
-					if (not is_selection) or false then
-						rectfill(x, y - 2, x + w, y + 8, cursor_color)
+					-- TODO: adapt to line height
+					if is_selection and config.settings.cursor_hide_if_selection then
+						-- nothing
+					elseif config.settings.cursor_style == "line" then
+						line(x - 1, y - 2, x - 1, y + 8, cursor_color)
+					else
+						rectfill(x, y - 2, x + cursor_width, y + 8, cursor_color)
 					end
 				end
 			)
@@ -987,6 +1015,17 @@ return function()
 			)
 		end
 		
+		if true then
+			local w = 4 * 5
+			local x = self.width - w - scrollbar_width
+			if msg.my > 8 or msg.mx < x then
+				rectfill(x, 0, x + w - 1, 8, theme.ui_bg)
+				local _, row = current:buffer():active_cursor_pos()
+				local row_str = string.format("\014%4d", row)
+				print(row_str, x + 2, 2, theme.ui_fg) 
+			end
+		end
+		
 		if recent_pressed then
 			local max_width = 0
 			for n in all(recent) do
@@ -1007,8 +1046,7 @@ return function()
 				y += 11
 			end
 		end
-	
-	end
+	end -- function draw
 	
 	
 	return self
@@ -1018,7 +1056,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2025-04-11 17:43:33",revision=4608]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2025-09-15 16:35:49",revision=4857]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1074,14 +1112,14 @@ return function(editor)
 			buffer:set_cursor(ocol, orow)
 			for scol, srow, ecol, erow in buffer:matches() do
 				if (srow == arow and scol >= acol) or (srow > arow) then
-					buffer:set_selection(scol, srow, ecol, erow)
+					buffer:select(scol, srow, ecol, erow)
 					found = true
 					break
 				end
 			end
 			if not found then
 				for scol, srow, ecol, erow in buffer:matches() do
-					buffer:set_selection(scol, srow, ecol, erow)
+					buffer:select(scol, srow, ecol, erow)
 					found = true
 					break
 				end
@@ -1090,14 +1128,14 @@ return function(editor)
 			buffer:set_cursor(ocol, orow)
 			for scol, srow, ecol, erow in buffer:matches_reverse() do
 				if (srow == arow and ecol <= acol) or (srow < arow) then
-					buffer:set_selection(scol, srow, ecol, erow)
+					buffer:select(scol, srow, ecol, erow)
 					found = true
 					break
 				end
 			end
 			if not found then
 				for scol, srow, ecol, erow in buffer:matches_reverse() do
-					buffer:set_selection(scol, srow, ecol, erow)
+					buffer:select(scol, srow, ecol, erow)
 					found = true
 					break
 				end
@@ -1132,9 +1170,9 @@ return function(editor)
 		self:set_keyboard_focus(true)
 		if first_launch then
 			self.hidden = false
-			local str = buffer:current_selection_string()
-			if str then
-				target = str
+			if buffer:number_of_selections() > 0 then 
+				local scol, srow, ecol, erow = buffer:current_selection(cursor)
+				target = buffer:range_string(scol, srow, ecol, erow)
 			end
 			ocol, orow, _, _ = buffer:current_selection()
 			if not ocol then
@@ -1266,7 +1304,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2025-04-11 17:43:33",revision=5110]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2025-09-15 16:35:49",revision=5359]]
 ----------------------------------------------------------------------------------------
 
 
@@ -1326,7 +1364,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/iconbutton.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2025-04-11 17:43:33",revision=1833]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2025-09-15 16:35:49",revision=2082]]
 -------------------------------------------------------------------------------------
 
 
@@ -1375,7 +1413,7 @@ return function(self)
 	return self
 end
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-04-11 17:43:33",revision=8201]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2025-09-15 16:35:49",revision=8450]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1590,9 +1628,9 @@ end
 
 :: src/ui/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDEwOjE5OjAxIixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozNCJdXQ==
+OS0xNSAxNjozNTo0OSJdXQ==
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-04-11 17:43:33",revision=5705]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2025-09-15 16:35:49",revision=5955]]
 
 local multiclipboard = {}
 
@@ -1620,7 +1658,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-04-11 17:43:33",revision=9578]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2025-09-15 16:35:49",revision=9827]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1631,7 +1669,7 @@ local config = require "src/config.lua"
 -------------------------------------------------------------------------------------------
 
 
--- NOTE: duplicated in buffer.lua!
+-- TODO: variable height rows, at least for soft-wrapping?
 local row_height <const> = 11
 
 
@@ -1776,6 +1814,21 @@ function new(text)
 		return #text
 	end
 	
+	
+	function self:range_string(start_col, start_row, end_col, end_row)
+		local str = ""
+		if start_row == end_row then
+			str = sub(text[start_row], start_col, end_col - 1)
+		else
+			str = sub(text[start_row], start_col, -1) .. "\n"
+			for row = start_row + 1, end_row - 1 do
+				str ..= text[row] .. "\n"
+			end
+			str ..= sub(text[end_row], 1, end_col - 1) or ""
+		end
+		return str
+	end
+	
 
 	function self:full_text_copy()
 		return table.concat(text, "\n")
@@ -1857,13 +1910,6 @@ function new(text)
 	end
 	
 	
-	function self:center_on(col, row)
-		-- TODO: this method should be in editor.lua, probably
-		self.screen_y = self:find_cursor_y(row - 12)
-		self.screen_x = self:find_cursor_x(col, row)
-	end
-	
-	
 	-- Marks --
 	
 	
@@ -1909,22 +1955,6 @@ function new(text)
 		end
 	end
 	
-	
-	local function selection_string(cursor)
-		local str = ""
-		local start_col, start_row, end_col, end_row = selection_range(cursor)
-		if start_row == end_row then
-			str = sub(text[start_row], start_col, end_col - 1)
-		else
-			str = sub(text[start_row], start_col, -1) .. "\n"
-			for row = start_row + 1, end_row - 1 do
-				str ..= text[row] .. "\n"
-			end
-			str ..= sub(text[end_row], 1, end_col - 1) or ""
-		end
-		return str
-	end
-	
 
 	function self:foreach_selection(func)
 		local nb = #cursors
@@ -1941,7 +1971,8 @@ function new(text)
 	function self:get_all_selections()
 		local selections = {}
 		for cursor in all(cursors) do
-			local str = selection_string(cursor)
+			local start_col, start_row, end_col, end_row = selection_range(cursor)
+			local str = self:range_string(start_col, start_row, end_col, end_row)
 			add(selections, str)
 		end
 		return selections
@@ -1969,7 +2000,27 @@ function new(text)
 	end
 	
 	
+	function self:search(start_col, start_row, target, plain)
+		-- TODO: support multi-line targets?
+		for row = start_row, #text do
+			local col = (row == start_row) and start_col or 1
+			local scol, ecol = text[row]:find(target, col, plain)
+			if scol then
+				return scol, row, ecol + 1, row
+			end
+		end
+		for row = 1, start_row do
+			local scol, ecol = text[row]:find(target, col, plain)
+			if scol and (row ~= start_row or ecol < start_col) then
+				return scol, row, ecol + 1, row
+			end
+		end
+		return nil
+	end
+	
+	
 	function self:search_all(target, plain)
+		-- TODO: support multi-line targets?
 		matches = {}
 		for row = 1, #text do
 			local col = 1
@@ -2098,15 +2149,6 @@ function new(text)
 		return nil
 	end
 	
-	
-	function self:current_selection_string()
-		local cursor = cursors[#cursors]
-		if cursor.acol then
-			return selection_string(cursor)
-		end
-		return nil
-	end
-	
 
 	function self:total_height()
 		return #text * row_height
@@ -2127,23 +2169,27 @@ function new(text)
 	end
 	
 
-	function self:set_selection(scol, srow, ecol, erow, is_add)
+	function self:select(scol, srow, ecol, erow, mode)
 		local arow = mid(1, srow, #text)
 		local acol = mid(1, scol, #text[srow] + 1)
 		local row = mid(1, erow, #text)
 		local col = mid(1, ecol, #text[erow] + 1)
 		local x = self:find_cursor_x(col, row)
-		if is_add then
-			add(cursors, { col = col, row = row, x = x, acol = acol, arow = arow })
+		local selection = { col = col, row = row, x = x, acol = acol, arow = arow }
+		if mode == "add" then
+			add(cursors, selection)
+			self:merge_cursors()
+		elseif mode == "replace_current" then
+			cursors[#cursors] = selection
 			self:merge_cursors()
 		else
-			cursors = { { col = col, row = row, x = x, acol = acol, arow = arow } }
+			cursors = { selection }
 		end
 		undo_group = nil
 	end
 	
 
-	function self:extend_active_selection(col, row)
+	function self:extend_selection(col, row)
 		local cursor = cursors[#cursors]
 		local row = mid(1, row, #text)
 		local col = mid(1, col, #text[row] + 1)
@@ -2252,7 +2298,7 @@ function new(text)
 	end
 	
 	
-	function self:clear_selections()
+	function self:deselect_all()
 		cursors = { cursors[#cursors] }
 		cursors[#cursors].acol = nil
 		cursors[#cursors].arow = nil
@@ -3057,7 +3103,7 @@ return {
 	new = new,
 }
 :: src/config.lua
---[[pod_format="raw",created="2025-03-31 13:04:42",modified="2025-04-11 17:43:33",revision=2719]]
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2025-09-15 16:35:49",revision=2968]]
 ----------------------------------------------------------------------------------------
 
 
@@ -3235,7 +3281,7 @@ return M
 ----------------------------------------------------------------------------------------
 
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2025-04-11 17:43:33",revision=3757]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2025-09-15 16:35:49",revision=4006]]
 -------------------------------------------------------------------------------------------
 
 
@@ -3703,7 +3749,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-04-11 17:43:33",revision=6167]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-09-15 16:35:49",revision=6416]]
 --------------------------------------------------------------------------------------------
 
 
@@ -3814,7 +3860,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-04-11 17:43:33",revision=7293]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2025-09-15 16:35:49",revision=7542]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4247,7 +4293,7 @@ return {
 
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE4OjIwOjExIixtb2RpZmllZD0iMjAyNS0w
-NC0xMSAxNzo0MzozNCJdXQ==
+OS0xNSAxNjozNTo0OSJdXQ==
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-rkAPvI-wf6iiHnMP-39-f39-cUSxD-X-rkA
 Pss-Esw-EsM-EtE--qKIec4--f39-cwSwD-AEsA-xxLBP8ASwT-LEsE-yBLEP8YSxj-JEj8SP90S
@@ -4570,7 +4616,7 @@ KM47wCjBOyg7KME7KNA7KMk7KME7wCjFO8IowDvAKME7wCjBO8AowTso-f391zXBKDUoNSg1wSjA
 EP3DOtEo0jsoxzsoxjsowzsowTsoOyjLOyjDOyjAOyjAOyjOOyjBOyg7KMI7KM87KMg7KME7KMA7
 KMQ7KMI7KMA7KDsowDsoOyjAOyjBOyj9-f3jEMUAAAAAAAAAAQ==
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-04-11 17:43:33",revision=7932]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2025-09-15 16:35:49",revision=8185]]
 ----------------------------------------------------------------------------------------
 
 
@@ -4632,24 +4678,25 @@ function _init()
 	local main_path, root_path = find_main_and_root_path(path)
 
 	open_window(main_path, path)
-	
+
 	buffers.init()
 	load_fonts()
-	
+
 	filetree.create(root_path)
 	--filetree.printh()
 
 	update_menu_items()
 	install_event_handlers()
-	
+
 	generate_ui()
-	
+
 	editor:set_node(filetree.find(path))
 	if row and editor:node() then
 		editor:node():buffer():mark_row(row, "error")
 		editor:node():buffer():set_cursor(1, row)
 		editor:center_cursor()
 	end
+
 end
 
 
@@ -4920,6 +4967,15 @@ function install_event_handlers()
 				log([[!!! filename="]]..msg.filename..[[" !!!]])
 			end
 			filetree.save_all()
+			if (msg.notify_on_complete) then
+				log("sending 'notify_on_complete' message to "..msg.notify_on_complete)
+				send_message(msg.notify_on_complete, {
+					event = "save_file_completed",
+					filename = filetree.root():path(),
+--						err = err,
+					autosave = msg.autosave
+				})
+			end			
 			editor:buffer():unmark_all()
 		end
 	)
@@ -5148,7 +5204,7 @@ end
 ------------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-04-11 17:43:33",revision=6089]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2025-09-15 16:35:49",revision=6338]]
 # Codron
 
 ## Keybinds
@@ -5157,15 +5213,13 @@ end
 
 Switch between files:
 - Ctrl-E: File Chooser / Command Palette
-- Ctrl-J: Jump to previous file (hold ctrl to keep jumping)
-- Ctrl-K: Jump to next file
+- Ctrl-J: Jump to previous file in recent stack (hold ctrl to keep jumping)
+- Ctrl-Shift-J: Jump to next file in recent stack
 
 Find, aka incremental search:
 - Ctrl-F: Find
-- Ctrl-D: reverse finD
-- Ctrl-W: find current word
+- Ctrl-Shift-F: reverse Find
 - Ctrl-F Ctrl-F: find aGain
-- Ctrl-D Ctrl-D: find aGain
 
 Search and replace:
 - Ctrl-H: searcH and replace
@@ -5183,6 +5237,8 @@ Selection:
   by one line.
   
 Multi-cursors and multi-selection:
+- Ctrl-D: if selection, add next occurence; otherwise select current word.
+- Ctrl-Shift-D: if selection, deselect current occurence and add next occurence.
 - Ctrl-G: deselect current occurence?
 - Ctrl-I: if selection, add a cursor at end of each
   line, otherwise add one cursor below.
@@ -5194,21 +5250,20 @@ Multi-cursors and multi-selection:
 - Shift-Enter: exit find, cancel selection.
 - Ctrl-A: exit find, select all occurences.
 - Ctrl-F: select next occurence.
-- Ctrl-D: select previous occurence.
+- Ctrl-Shift-F: select previous occurence.
 - Escape: exit find, go back to original position.
 - Movement keys: exit find, cancel selection.
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-04-11 17:43:33",revision=6124]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2025-09-15 16:35:49",revision=6373]]
 # Things To Do
 
 ## Before First Release
 
-- Fix: alt-double-click to add words to selection: an extra cursor is added.
-- Fix: bug when opening non-existent file
 - Fix: disable syntax highlighting for non-lua files.
+- Change: debugging logs opt-in in settings.
 - Add: alt-click on selection to discard it.
-- Add: scrolling the filetree in the sidebar
+- Add: scrolling the filetree in the sidebar.
 
 ## Later
 
@@ -5224,15 +5279,15 @@ Multi-cursors and multi-selection:
 b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjUtMDMtMjIgMTY6MDQ6
 MDQiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
 MDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAwMDEwNzExMTExMTExMTExMTEx
-MTExMTExMDcwMTAwMDEwNzExMTExMTExMTExMTExMTExMTExMTExMTA3MDEwMTA3MTExMTExMTEx
-MTExMTExMTExMTExMTExMDcwMTAxMDcxMTExMTExMTExMTExMTExMTExMTExMTEwNzAxMDEwNzEx
-MTExMTExMTExMTExMTExMTExMTExMTA3MDEwMTA3MTExMTExMTExMTExMTExMTExMTExMTExMDcw
-MTAxMDcxMTExMTExMTExMTExMTExMTExMTExMTEwNzAxMDEwNzExMTExMTExMTExMTExMTExMTEx
+MTExMTExMDcwMTAwMDEwNzExMTExMTExMTExMTExMTExMTExMTExMTA3MDEwMTA3MTExMTA3MDcw
+NzExMTEwNzA3MDcxMTExMDcwMTAxMDcxMTExMDcwNzExMTExMTExMDcwNzExMTEwNzAxMDEwNzEx
+MTEwNzA3MTExMTExMTEwNzA3MTExMTA3MDEwMTA3MTExMTA3MDcxMTExMTExMTA3MDcxMTExMDcw
+MTAxMDcxMTExMDcwNzExMTExMTExMDcwNzExMTEwNzAxMDEwNzExMTEwNzA3MDcxMTExMDcwNzA3
 MTExMTA3MDEwMTA3MTExMTExMTExMTExMTExMTExMTExMTExMDcwMTAxMDYwNzExMTExMTExMTEx
 MTExMTExMTExMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
 MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNS0wNC0xMSAxNzo0
-MzozNCIsbm90ZXM9IkEgY29kZSBlZGl0b3IiLHJ1bnRpbWU9MTcsdGl0bGU9IkNvZHJvbiIsdmVy
-c2lvbj0iMC4wLjAiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0iZ2Z4LzAuZ2Z4Iix3b3Jrc3BhY2Vf
-aW5kZXg9MX0se2xvY2F0aW9uPSJtYWluLmx1YSIsd29ya3NwYWNlX2luZGV4PTR9fV1d
+MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNS0wOS0xNSAxNjoz
+NTo0OSIsbm90ZXM9IkEgY29kZSBlZGl0b3IiLHJ1bnRpbWU9MjAsdGl0bGU9IkNvZHJvbiIsdmVy
+c2lvbj0iMC4wLjAiLHdvcmtzcGFjZXM9e3tsb2NhdGlvbj0ibWFpbi5sdWEiLHdvcmtzcGFjZV9p
+bmRleD0xfSx7bG9jYXRpb249ImdmeC8wLmdmeCIsd29ya3NwYWNlX2luZGV4PTJ9fV1d
 :: [eoc]
