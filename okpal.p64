@@ -13,15 +13,16 @@ NjA3MDcwYzBjMDcwNzAxMDExNjE2MDcwMTAxMDcxNjE2MTYxNjE2MTYxNjE2MTYxNjE2MTYwNzAx
 MDEwNjA3MTYxNjE2MTYxNjE2MTYxNjE2MTYwNzA2MDEwMTA2MDYwNzA3MDcwNzA3MDcwNzA3MDcw
 NzA2MDYwMTAwMDEwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwMTAwMDAwMDAxMDYwNjA2MDYwNjA2
 MDYwNjA2MDYwMTAwMDAwMDAwMDAwMTAxMDEwMTAxMDEwMTAxMDEwMTAwMDAwMCIpLG1vZGlmaWVk
-PSIyMDI1LTEwLTIwIDA5OjM0OjQ3Iixub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0
+PSIyMDI1LTEwLTI0IDE4OjU4OjQyIixub3Rlcz0iUGFsZXR0ZSBFZGl0b3Jcbih1c2UgbWVudSB0
 byBvcGVuIHRoZSBtYW51YWwpIixydW50aW1lPTIxLHNhbmRib3g9ZmFsc2Usc3RvcmVkPSIyMDI0
 LTA0LTE0IDEwOjMwOjA0Iix0aXRsZT0iT2tQQUwiLHZlcnNpb249IjEuMi4yIix3b3Jrc3BhY2Vz
 PXt7bG9jYXRpb249Im1haW4ubHVhIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJnZngv
-MC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfX1dXQ==
+MC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249InBhbC8wLnBhbCIsd29ya3NwYWNl
+X2luZGV4PTd9fV1d
 :: gfx/
 :: gfx/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Iixtb2RpZmllZD0iMjAyNS0x
-MC0yMCAwOTozNDo0NiIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1d
+MC0yNCAxODo1ODo0MSIsc3RvcmVkPSIyMDI0LTAzLTMxIDA1OjMzOjA2Il1d
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTMxIDA1OjMzOjA3Iixtb2RpZmllZD0iMjAyNS0w
 NS0zMSAwNzozNjozOCIscmV2aXNpb249OTI2Ml1dbHo0ABZEAABKogAA9iN7WzBdPXtibXA9cHh1
@@ -558,7 +559,7 @@ NcA-wDX9-f39-f38P8A1wD-ANcA-wDXAP8A1wj-BNT81PzU-wDXDP8A1wD-ANcA-wDXAP8A1-f39
 -f39-D-ANcA-wDXAP8A1wD-ANcE-NT81PzU-NT81wz-ANcA-wDXAP8A1wD-ANf39-f39-f3AP8A1
 wD-ANcA-wDXAP8A1wD81PzXAP8A1P8E1wD-ANcA-wDXAP8A1wD-ANf39-f3LAAAAAAAAAAE=
 :: main.lua
---[[pod_format="raw",created="2024-03-31 05:33:06",modified="2025-10-20 09:34:46",revision=10319]]
+--[[pod_format="raw",created="2024-03-31 05:33:06",modified="2025-10-24 18:58:41",revision=10370]]
 include "src/globals.lua"
 --include "src/custom_wrangle.lua"
 include "src/oklab.lua"
@@ -803,7 +804,7 @@ function copy(t)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=true,modified="2025-10-20 09:34:46",revision=1386,stored="2024-04-04 06:56:33"]]
+--[[pod_format="raw",created="2024-04-04 06:47:16",icon=userdata("u8",16,16,"00000101010101010101010101000000000106060606060606060606060100000107010606060606060606060606010000010106060707070707070707060100000106060607070707060606070601000107010606070707070606060706010000010106060706060607070707060100000106060607060606070707070601000107010606070707070707070706010000010106060606060606060606060100000106060606060606060606060601000107010606060606060606060601010000010101010101010101010101070100000101070707070707070707070601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=true,modified="2025-10-24 18:58:41",revision=1437,stored="2024-04-04 06:56:33"]]
 # OkPal
 
 OkPal is a tool to create and edit color palettes.
@@ -1093,12 +1094,65 @@ in ".hex".
 - Added a test zone, with 24 paintable cubes (click on a cube face to change its color).
 
 
+:: pal/
+:: pal/.info.pod
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTEwLTI0IDE1OjE3OjIxIixtb2RpZmllZD0iMjAyNS0x
+MC0yNCAxODo1ODo0MSJdXQ==
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNS0xMC0y
+NCAxNTozOTo1MyIsaGlkZGVuPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
+ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
+c2UsZmFsc2V9LGhpZGRlbl90b2dnbGVzPXtbMF09ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LGh1
+ZV9vZmZzZXQ9LTAuMzkwNTgxNzE3NDUxNTIsaWNvbj11c2VyZGF0YSgidTgiLDE2LDE2LCIwMDAx
+MDEwMTAxMDEwMTAxMDEwMTAxMDAwMDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDYwMTAwMDAw
+MDAwMDAwMTA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAwMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA2
+MDYwNjAxMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDYwNjA2MDYwMTAwMDAwMTA3MDcwNzA3MDcw
+NzA3MDcwNzA3MDcwNzAxMDAwMDAxMDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDEwMDAwMDEwNzA3
+MDYwNjAxMDEwZDBkMDEwMTA3MDcwMTAwMDAwMTA3MDcwNjA2MDEwMTBkMGQwMTAxMDcwNzAxMDAw
+MDAxMDcwNzAxMDEwNzA3MDYwNjBkMGQwNzA3MDEwMDAwMDEwNzA3MDEwMTA3MDcwNjA2MGQwZDA3
+MDcwMTAwMDAwMTA3MDcwZDBkMDEwMTBkMGQwNjA2MDcwNzAxMDAwMDAxMDcwNzBkMGQwMTAxMGQw
+ZDA2MDYwNzA3MDEwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwMTAwMDAwMTA3MDcwNzA3
+MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMCIpLGxv
+Y2tlZD17WzBdPXRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxm
+YWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxzZSxmYWxz
+ZSxmYWxzZSxmYWxzZSxmYWxzZX0sbW9kaWZpZWQ9IjIwMjUtMTAtMjQgMTg6NTI6MjkiLG9rcGFs
+X3ZlcnNpb249IjEuMi4zIixwaWNrZXJzX21vZGU9ImxpbmVhcl9odWUiLHJldmlzaW9uPTQsdGVz
+dF9jdWJlX2NvbG9ycz17WzBdPXsxNSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1
+fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwx
+NywxOX0sezI4LDEyLDE2fSx7MTIsMTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9
+LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUs
+MjF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9fSx0ZXN0X21vZGU9ImN1YmVzIix0ZXN0X3JhbXBf
+Y29sb3JzPXVzZXJkYXRhKCJ1OCIsMTAsMjcsIjAwMTgwODE5MDkwYTFhMGIxYjAwMDYwMDAwMDAw
+MDAwMDAwMDAzMDAxNjAwMDAwMDAwMDAwMDAwMTMwMDA1MDAwMDAwMDAwMDAwMDAwMTAwMGQwMDAw
+MDAwMDAwMDAwMDEwMDAxZDAwMDAwMDAwMDAwMDAwMTEwMDE3MDAwMDAwMDAwMDAwMDAwYzAwMGUw
+MDAwMDAwMDAwMDAwMDFjMDAxZTEyMDIxNTE0MDQxZjBmMDcwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAxNDA0MWYwZjA4MTgwMjAwMDAxNTA1MTYwNjA3MTcwZTFlMDAwMDAxMTAxMTBjMWMxZDBkMTIw
+MDAwMTMwMzFiMGIxYTBhMDkxOTAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIp
+LHdoaXRlc3RfY29sb3I9N11dbHo0ABQBAAAVAgAA9QV1c2VyZGF0YSgiaTMyIiw2NCwiMAEAwDFk
+MmI1MzAwN2UyNQgA8BcwMDg3NTEwMGFiNTIzNjAwNWY1NzRmMDBjMmMzYzcwMGZmZjFlOAgAQDAw
+NGQIABFhNgBgZmZlYzI3CgAgZTQ4AEAyOWFkJABgODM3NjljIAAxNzdhOACwY2NhYTAwMjQ2M2Iv
+APAeMGE1YTEwMDY1NDY4ODAwMTI1MzU5MDA3MjMwMmQwMDQ1MmQzMjAwYTI4ODc5QADwDWFjYzUw
+MGI5MDAzZTAwZTI2YjAyMDA5NWYwNDJQACBiMsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQABdOTA2
+NzABAH9iYjAwNjYwAQDRUDAwMCIp
 :: src/
 :: src/.info.pod
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Iixtb2RpZmllZD0iMjAyNS0x
-MC0yMCAwOTozNDo0NiIsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Il1d
+MC0yNCAxODo1ODo0MSIsc3RvcmVkPSIyMDI0LTA0LTAzIDE4OjA3OjM0Il1d
 :: src/files.lua
---[[pod_format="raw",created="2025-03-08 09:21:19",modified="2025-10-20 09:34:46",revision=1128]]
+--[[pod_format="raw",created="2025-03-08 09:21:19",modified="2025-10-24 18:58:41",revision=1179]]
 -- Loading and saving -------------------------------------------------------------
 
 
@@ -1312,7 +1366,7 @@ function load_hex_file(data, metadata)
 
 	load_metadata(metadata)
 	if current_import_choice == "dont_clobber" then
-		active_color = nil
+		select_color(nil)
 		for c = 0, 31 do
 			hidden[c] = true
 			locked[c] = true
@@ -1347,7 +1401,7 @@ function save_hex_file()
 end
 
 :: src/globals.lua
---[[pod_format="raw",created="2024-04-03 09:15:53",modified="2025-10-20 09:34:46",revision=6942]]
+--[[pod_format="raw",created="2024-04-03 09:15:53",modified="2025-10-24 18:58:41",revision=6993]]
 current_import_choice = "dont_clobber"
 
 undo_stack = nil
@@ -1390,7 +1444,6 @@ user_settings = {
 
 okpal_version = "1.2.3"
 
-active_color = nil
 bg_color = 0 -- TODO: what about fg?
 blackest_color = 0 -- TODO: remove?
 whitest_color = 7 -- TODO: remove?
@@ -1407,6 +1460,20 @@ hue_offset = 0.0
 test_mode = "cubes"
 test_cube_colors = nil
 test_ramp_colors = nil
+
+-- TODO: move all selection stuff in another file
+local selection = nil
+
+function selected_color()
+	if type(selection) == "number" then
+		return selection
+	end
+	return nil
+end
+
+function select_color(c)
+	selection = c
+end
 
 
 -- Constants ----------------------------------------------------------------------
@@ -1474,7 +1541,7 @@ function default_test_ramp_colors()
 end	
 
 :: src/gui.lua
---[[pod_format="raw",created="2024-03-31 05:58:06",modified="2025-10-20 09:34:46",revision=10038]]
+--[[pod_format="raw",created="2024-03-31 05:58:06",modified="2025-10-24 18:58:41",revision=10089]]
 function generate_gui()
 	gui = create_gui()
 	generate_palette_gui()
@@ -1765,7 +1832,7 @@ function distance(ax, ay, bx, by)
 	return math.sqrt((ax - bx)^2 + (ay - by)^2)
 end
 :: src/gui_alt_sliders.lua
---[[pod_format="raw",created="2025-03-11 11:29:57",modified="2025-10-20 09:34:46",revision=2288]]
+--[[pod_format="raw",created="2025-03-11 11:29:57",modified="2025-10-24 18:58:41",revision=2339]]
 local rectangle_width = 375
 local rectangle_height = 98
 local rectangle_border = 7
@@ -1823,10 +1890,10 @@ function create_rectangle_picker(el)
 				pal(14, 14)
 			end
 		end
-		if active_color and not hidden[active_color] then
-			local x, y = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local x, y = hv_coords(selected_color(), self.ordinate)
 			pal(7, outline_color())
-			pal(14, active_color)
+			pal(14, selected_color())
 			spr(
 				self.drag_delta and 13 or 12,
 				x - 5, y - 5,
@@ -1851,8 +1918,8 @@ function create_rectangle_picker(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local ax, ay = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, ay = hv_coords(selected_color(), self.ordinate)
 			if distance(ax, ay, msg.mx, msg.my) < 6 then
 				self.cursor = "pointer"
 			end
@@ -1867,8 +1934,8 @@ function create_rectangle_picker(el)
 	end
 	
 	function el.click(self, msg)
-		if active_color and not hidden[active_color] then
-			local ax, ay = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, ay = hv_coords(selected_color(), self.ordinate)
 			if distance(ax, ay, msg.mx, msg.my) < 6 then
 				undo_stack:checkpoint()
 				mouselock(0x4|0x8, 1.0, 0.25)
@@ -1878,14 +1945,14 @@ function create_rectangle_picker(el)
 			end
 		end
 		
-		active_color = nil
+		select_color(nil)
 		-- In reverse order to prioritize colors on top
 		for c = 63, 0, -1 do
 			local cx, cy = hv_coords(c, self.ordinate)
 			if distance(cx, cy, msg.mx, msg.my) < 5 and not hidden[c] and lum(c) != 0 then
 				undo_stack:checkpoint()
-				active_color = c
-				local ax, ay = hv_coords(active_color, self.ordinate)
+				select_color(c)
+				local ax, ay = hv_coords(selected_color(), self.ordinate)
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
 				self.drag_delta = { ox = ax, oy = ay, x = 0, y = 0 }
@@ -1896,9 +1963,9 @@ function create_rectangle_picker(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		elseif msg.mb & 0x07 then
 			self.drag_delta.x += msg.dx
@@ -1911,7 +1978,7 @@ function create_rectangle_picker(el)
 			if msg.mb & 4 ~= 0 then v = nil end
 			local sat = self.ordinate == "s" and v or nil
 			local lum = self.ordinate == "l" and v or nil
-			change_color(active_color, hue, sat, lum)
+			change_color(selected_color(), hue, sat, lum)
 		end
 	end
 	
@@ -1936,8 +2003,8 @@ function create_hue_knob(el)
 	el.height = 9
 	
 	function el.draw(self, _msg)
-		if active_color and not hidden[active_color] then
-			local ax, _ = hv_coords(active_color, "l")
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = hv_coords(selected_color(), "l")
 			pal(7, outline_color())
 			pal(13, 0)
 			spr(5, ax - 4, 0)
@@ -1948,8 +2015,8 @@ function create_hue_knob(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local ax, _ = hv_coords(active_color, "l")
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = hv_coords(selected_color(), "l")
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 then
 				self.cursor = "grab"
 			end
@@ -1958,8 +2025,8 @@ function create_hue_knob(el)
 
 	function el.click(self, msg)
 		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local ax, _ = hv_coords(active_color, "l")
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = hv_coords(selected_color(), "l")
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 then
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
@@ -1969,16 +2036,16 @@ function create_hue_knob(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		else
 			self.drag_delta.x += msg.dx
 			local ax = self.drag_delta.ox + self.drag_delta.x * 0.25
 			local hue, _ = coords_hv(ax, 0)
 			hue = max(0.0, hue)
-			change_color(active_color, hue, nil, nil)
+			change_color(selected_color(), hue, nil, nil)
 		end
 	end
 	
@@ -2004,10 +2071,10 @@ function create_val_knob(el)
 	el.height = rectangle_height
 	
 	function el.draw(self, _msg)
-		if active_color and not hidden[active_color] then
-			local _, ay = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = hv_coords(selected_color(), self.ordinate)
 			pal(7, outline_color())
-			pal(13, active_color)
+			pal(13, selected_color())
 			spr(6, 0, ay - 4)
 			pal(13, 13)
 			pal(7, 7)
@@ -2016,8 +2083,8 @@ function create_val_knob(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local _, ay = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = hv_coords(selected_color(), self.ordinate)
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 then
 				self.cursor = "grab"
 			end
@@ -2026,8 +2093,8 @@ function create_val_knob(el)
 
 	function el.click(self, msg)
 		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local _, ay = hv_coords(active_color, self.ordinate)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = hv_coords(selected_color(), self.ordinate)
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 then
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
@@ -2037,9 +2104,9 @@ function create_val_knob(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		else
 			self.drag_delta.y += msg.dy
@@ -2047,7 +2114,7 @@ function create_val_knob(el)
 			local _, v = coords_hv(0, ay)
 			local sat = self.ordinate == "s" and v or nil
 			local lum = self.ordinate == "l" and v or nil
-			change_color(active_color, nil, sat, lum)
+			change_color(selected_color(), nil, sat, lum)
 		end
 	end
 	
@@ -2186,7 +2253,7 @@ function create_hue_scrubber(el)
 	return el
 end
 :: src/gui_help.lua
---[[pod_format="raw",created="2025-03-07 10:21:37",modified="2025-10-20 09:34:46",revision=653]]
+--[[pod_format="raw",created="2025-03-07 10:21:37",modified="2025-10-24 18:58:41",revision=704]]
 local text_view
 
 function open_help()
@@ -2230,7 +2297,7 @@ function create_text_view(el)
 	return el
 end
 :: src/gui_hexdialog.lua
---[[pod_format="raw",created="2025-03-05 12:06:52",modified="2025-10-20 09:34:46",revision=531]]
+--[[pod_format="raw",created="2025-03-05 12:06:52",modified="2025-10-24 18:58:41",revision=582]]
 function open_import_hex_file_dialog()
 	local el = open_modal(180, 100, false)
 	el:attach(create_label { x = 50, y = 6, label = "Import \".hex\" file", fg = bg_color })
@@ -2267,7 +2334,7 @@ function prepare_imported_hex(dialog)
 	gui_changed = true
 end
 :: src/gui_newfile.lua
---[[pod_format="raw",created="2025-03-05 08:57:06",modified="2025-10-20 09:34:46",revision=401]]
+--[[pod_format="raw",created="2025-03-05 08:57:06",modified="2025-10-24 18:58:41",revision=452]]
 function open_new_file_dialog()
 	local el = open_modal(180, 100, false)
 	el:attach(create_label { x = 60, y = 6, label = "New Palette", fg = bg_color })
@@ -2299,7 +2366,7 @@ function prepare_new_file(dialog)
 	close_modal()
 end
 :: src/gui_old_sliders.lua
---[[pod_format="raw",created="2025-03-17 19:49:11",modified="2025-10-20 09:34:46",revision=971]]
+--[[pod_format="raw",created="2025-03-17 19:49:11",modified="2025-10-24 18:58:41",revision=1022]]
 local circle_size = 190
 local circle_border = 13
 local circle_inner = circle_size - 2 * circle_border
@@ -2412,20 +2479,20 @@ function create_hue_sat_picker(el)
 				pal(14, 14)
 			end
 		end
-		if active_color and not hidden[active_color] then
+		if selected_color() and not hidden[selected_color()] then
 			-- Triangular knob
-			local ax, ay = h_coords(active_color, 6, 0.0)
-			local bx, by = h_coords(active_color, 24, -0.008)
-			local cx, cy = h_coords(active_color, 24, 0.008)
+			local ax, ay = h_coords(selected_color(), 6, 0.0)
+			local bx, by = h_coords(selected_color(), 24, -0.008)
+			local cx, cy = h_coords(selected_color(), 24, 0.008)
 			pal(7, outline_color())
 			line(ax, ay, bx, by, 7)
 			line(bx, by, cx, cy, 7)
 			line(cx, cy, ax, ay, 7)
 			pal(7)
 			-- Active dot
-			local x, y = hs_coords(active_color)
+			local x, y = hs_coords(selected_color())
 			pal(7, outline_color())
-			pal(14, active_color)
+			pal(14, selected_color())
 			spr(
 				self.drag_delta and 13 or 12,
 				x - 5, y - 5
@@ -2449,9 +2516,9 @@ function create_hue_sat_picker(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
+		if selected_color() and not hidden[selected_color()] then
 			local h, r = coords_hs(msg.mx, msg.my)
-			local dh = h - hue(active_color)
+			local dh = h - hue(selected_color())
 			if dh < -0.5 then dh += 1.0 end
 			if
 				r >= 1.02 and r <= 1.18
@@ -2459,7 +2526,7 @@ function create_hue_sat_picker(el)
 			then
 				self.cursor = "grab"
 			else
-				local ax, ay = hs_coords(active_color)
+				local ax, ay = hs_coords(selected_color())
 				if distance(ax, ay, msg.mx, msg.my) < 6 then
 					self.cursor = "pointer"
 				end
@@ -2476,39 +2543,39 @@ function create_hue_sat_picker(el)
 	
 	function el.click(self, msg)
 		local h, r = coords_hs(msg.mx, msg.my)
-		local active_hue = active_color and hue(active_color) or 0
+		local active_hue = selected_color() and hue(selected_color()) or 0
 		local dh = h - active_hue
 		if dh < -0.5 then dh += 1.0 end
 		if
-			(active_color and not hidden[active_color])
+			(selected_color() and not hidden[selected_color()])
 			and r >= 1.02 and r <= 1.18
 			and abs(dh) <= 0.01
 		then
 			undo_stack:checkpoint()
 			mouselock(0x4|0x8, 1.0, 0.25)
 			self.cursor = 0
-			local ax, ay = h_coords(active_color, 10)
+			local ax, ay = h_coords(selected_color(), 10)
 			self.knob_drag_delta = { ox = ax, oy = ay, x = 0, y = 0 }
 			return true
-		elseif active_color and not hidden[active_color] then
-			local ax, ay = hs_coords(active_color)
+		elseif selected_color() and not hidden[selected_color()] then
+			local ax, ay = hs_coords(selected_color())
 			if distance(ax, ay, msg.mx, msg.my) < 6 then
 				undo_stack:checkpoint()
-				local ax, ay = hs_coords(active_color)
+				local ax, ay = hs_coords(selected_color())
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
 				self.drag_delta = { ox = ax, oy = ay, x = 0, y = 0 }
 				return true
 			end
 		end
-		active_color = nil
+		select_color(nil)
 		-- In reverse order to prioritize colors on top
 		for c = 63, 0, -1 do
 			local cx, cy = hs_coords(c)
 			if distance(cx, cy, msg.mx, msg.my) < 5 and not hidden[c] and lum(c) != 0 then
 				undo_stack:checkpoint()
-				active_color = c
-				local ax, ay = hs_coords(active_color)
+				select_color(c)
+				local ax, ay = hs_coords(selected_color())
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
 				self.drag_delta = { ox = ax, oy = ay, x = 0, y = 0 }
@@ -2521,8 +2588,8 @@ function create_hue_sat_picker(el)
 	end
 	
 	function el.drag(self, msg)
-		if not active_color then return end
-		if locked[active_color] then
+		if not selected_color() then return end
+		if locked[selected_color()] then
 			padlock_flashing = true
 			return
 		end
@@ -2532,7 +2599,7 @@ function create_hue_sat_picker(el)
 			local ax = self.knob_drag_delta.ox + self.knob_drag_delta.x * 0.25
 			local ay = self.knob_drag_delta.oy + self.knob_drag_delta.y * 0.25
 			local hue, sat = coords_hs(ax, ay)
-			change_color(active_color, hue, nil, nil)
+			change_color(selected_color(), hue, nil, nil)
 		elseif self.drag_delta then
 			self.drag_delta.x += msg.dx
 			self.drag_delta.y += msg.dy
@@ -2541,7 +2608,7 @@ function create_hue_sat_picker(el)
 			local hue, sat = coords_hs(ax, ay)
 			if msg.mb == 4 then hue = nil end
 			if msg.mb == 2 then sat = nil end
-			change_color(active_color, hue, sat, nil)
+			change_color(selected_color(), hue, sat, nil)
 			return true
 		end
 	end
@@ -2575,7 +2642,7 @@ function create_sat_lum_picker(el)
 			outline_color()
 		)
 		for c = 0, 63 do
-			local dh = hue(c) - hue(active_color or 0)
+			local dh = hue(c) - hue(selected_color() or 0)
 			if dh < -0.5 then dh += 1.0 end
 			if not hidden[c] and lum(c) != 0 then -- and abs(dh) <= 0.1 then
 				local x, y = sl_coords(c)
@@ -2584,10 +2651,10 @@ function create_sat_lum_picker(el)
 				pal(14, 14)
 			end
 		end
-		if active_color and not hidden[active_color] then
-			local x, y = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local x, y = sl_coords(selected_color())
 			pal(7, outline_color())
-			pal(14, active_color)
+			pal(14, selected_color())
 			spr(
 				self.drag_delta and 13 or 12,
 				x - 5, y - 5,
@@ -2612,8 +2679,8 @@ function create_sat_lum_picker(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local ax, ay = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, ay = sl_coords(selected_color())
 			if distance(ax, ay, msg.mx, msg.my) < 6 then
 				self.cursor = "grab"
 			end
@@ -2628,8 +2695,8 @@ function create_sat_lum_picker(el)
 	end
 	
 	function el.click(self, msg)
-		if active_color and not hidden[active_color] then
-			local ax, ay = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, ay = sl_coords(selected_color())
 			if distance(ax, ay, msg.mx, msg.my) < 6 then
 				undo_stack:checkpoint()
 				mouselock(0x4|0x8, 1.0, 0.25)
@@ -2638,14 +2705,14 @@ function create_sat_lum_picker(el)
 				return
 			end
 		end
-		active_color = nil
+		select_color(nil)
 		-- In reverse order to prioritize colors on top
 		for c = 63, 0, -1 do
 			local cx, cy = sl_coords(c)
 			if distance(cx, cy, msg.mx, msg.my) < 5 and not hidden[c] and lum(c) != 0 then
 				undo_stack:checkpoint()
-				active_color = c
-				local ax, ay = sl_coords(active_color)
+				select_color(c)
+				local ax, ay = sl_coords(selected_color())
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
 				self.drag_delta = { ox = ax, oy = ay, x = 0, y = 0 }
@@ -2656,9 +2723,9 @@ function create_sat_lum_picker(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		else
 			self.drag_delta.x += msg.dx
@@ -2668,7 +2735,7 @@ function create_sat_lum_picker(el)
 			local sat, lum = coords_sl(ax, ay)
 			if msg.mb == 2 then sat = nil end
 			if msg.mb == 4 then lum = nil end
-			change_color(active_color, nil, sat, lum)
+			change_color(selected_color(), nil, sat, lum)
 		end
 	end
 	
@@ -2691,8 +2758,8 @@ function create_sat_knob(el)
 	el.height = 9
 	
 	function el.draw(self, _msg)
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = sl_coords(selected_color())
 			pal(7, outline_color())
 			pal(13, 0)
 			spr(5, ax - 4, 0)
@@ -2703,8 +2770,8 @@ function create_sat_knob(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = sl_coords(selected_color())
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 then
 				self.cursor = "grab"
 			end
@@ -2713,8 +2780,8 @@ function create_sat_knob(el)
 
 	function el.click(self, msg)
 		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local ax, _ = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local ax, _ = sl_coords(selected_color())
 			if msg.mx and msg.mx >= ax - 4 and msg.mx <= ax + 4 then
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
@@ -2724,15 +2791,15 @@ function create_sat_knob(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		else
 			self.drag_delta.x += msg.dx
 			local ax = self.drag_delta.ox + self.drag_delta.x * 0.25
 			local sat, lum = coords_sl(ax, 0)
-			change_color(active_color, nil, sat, nil)
+			change_color(selected_color(), nil, sat, nil)
 		end
 	end
 	
@@ -2757,10 +2824,10 @@ function create_lum_knob(el)
 	el.height = square_size
 	
 	function el.draw(self, _msg)
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = sl_coords(selected_color())
 			pal(7, outline_color())
-			pal(13, active_color)
+			pal(13, selected_color())
 			spr(6, 0, ay - 4)
 			pal(13, 13)
 			pal(7, 7)
@@ -2769,8 +2836,8 @@ function create_lum_knob(el)
 	
 	function el.hover(self, msg)
 		self.cursor = 1
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = sl_coords(selected_color())
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 then
 				self.cursor = "grab"
 			end
@@ -2779,8 +2846,8 @@ function create_lum_knob(el)
 
 	function el.click(self, msg)
 		undo_stack:checkpoint()
-		if active_color and not hidden[active_color] then
-			local _, ay = sl_coords(active_color)
+		if selected_color() and not hidden[selected_color()] then
+			local _, ay = sl_coords(selected_color())
 			if msg.my and msg.my >= ay - 4 and msg.my <= ay + 4 then
 				mouselock(0x4|0x8, 1.0, 0.25)
 				self.cursor = 0
@@ -2790,15 +2857,15 @@ function create_lum_knob(el)
 	end
 	
 	function el.drag(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if (not self.drag_delta) return
-		if locked[active_color] then
+		if locked[selected_color()] then
 			padlock_flashing = true
 		else
 			self.drag_delta.y += msg.dy
 			local ay = self.drag_delta.oy + self.drag_delta.y * 0.25
 			local sat, lum = coords_sl(0, ay)
-			change_color(active_color, nil, nil, lum)
+			change_color(selected_color(), nil, nil, lum)
 		end
 	end
 	
@@ -2813,17 +2880,17 @@ function create_lum_knob(el)
 end
 
 :: src/gui_palette.lua
---[[pod_format="raw",created="2025-02-28 10:09:19",modified="2025-10-20 09:34:46",revision=5256]]
+--[[pod_format="raw",created="2025-02-28 10:09:19",modified="2025-10-24 18:58:41",revision=5307]]
 function generate_palette_gui()
-	gui.tap = function(self, msg) if (msg.has_pointer) active_color = nil end
+	gui.tap = function(self, msg) if (msg.has_pointer) select_color(nil) end
 	gui.mousewheel =
 		function(self, msg)
-			if not active_color then
-				active_color = 0
+			if not selected_color() then
+				select_color(0)
 			elseif msg.wheel_y < 0 then
-				active_color = (active_color + 1) % 64
+				select_color((selected_color() + 1) % 64)
 			elseif msg.wheel_y > 0 then
-				active_color = (active_color - 1) % 64
+				select_color((selected_color() - 1) % 64)
 			end
 		end
 		
@@ -2932,11 +2999,11 @@ function create_palette(el)
 			if hidden[c] then
 				ovalfill(x + 2, y + 2, x + size - 3, y + size - 3, bg_color)
 			end
-			if c == active_color then
+			if c == selected_color() then
 				rect(
 					x + 1, y + 1,
 					x + size - 2, y + size - 2,
-					contrast_color(active_color)
+					contrast_color(selected_color())
 				)
 			end
 		end	
@@ -2947,12 +3014,12 @@ function create_palette(el)
 			if 0 <= c and c <= 63 then
 				local x = 1 + col * size
 				local y = 1 + row * size
-				if c != active_color and not locked[c] then
+				if c != selected_color() and not locked[c] then
 					rect(x + 3, y + 3, x + size - 4, y + size - 4, contrast_color(c))
 				end
 			end
 			local mx, my = self.drag_pos.x, self.drag_pos.y
-			rectfill(mx, my, mx + 8, my + 8, active_color)		
+			rectfill(mx, my, mx + 8, my + 8, selected_color())		
 		end
 	end
 
@@ -2961,8 +3028,8 @@ function create_palette(el)
 		local row = min(nb_rows - 1, (msg.my - 1) \ size)
 		local c = col + row * nb_columns
 		if msg.mb == 1 then
-			self.previous_active = active_color
-			active_color = c
+			self.previous_active = selected_color()
+			select_color(c)
 			self.click_pos = { x = msg.mx, y = msg.my }
 		elseif msg.mb == 2 then
 			change_hidden(c, not hidden[c])
@@ -2974,7 +3041,7 @@ function create_palette(el)
 			local dx = abs(self.click_pos.x - msg.mx)
 			local dy = abs(self.click_pos.y - msg.my)
 			if dx > 1 or dy > 1 then
-				if locked[active_color] then
+				if locked[selected_color()] then
 					padlock_flashing = true
 				else
 					self.drag_pos = {}
@@ -2993,9 +3060,9 @@ function create_palette(el)
 			local c = col + row * nb_columns
 			if 0 <= c and c <= 63 and not locked[c] then
 				undo_stack:checkpoint()
---				swap_colors(active_color, c)
-				reorder_palette({ [active_color] = c, [c] = active_color })
-				active_color = c
+--				swap_colors(selected_color(), c)
+				reorder_palette({ [selected_color()] = c, [c] = selected_color() })
+				select_color(c)
 				send_palette()
 			end			
 		end
@@ -3006,8 +3073,8 @@ function create_palette(el)
 	end
 
 	function el.tap(self, msg)
-		if active_color and color_code(active_color) == 0x000000
-			or active_color == self.previous_active
+		if selected_color() and color_code(selected_color()) == 0x000000
+			or selected_color() == self.previous_active
 		then
 			circling_anim_timer = 1.0
 			self.previous_active = nil
@@ -3049,7 +3116,7 @@ function create_visibility_buttons(el)
 			blink_timer -= 1
 			if blink_timer <= -9 then
 				blink_timer = 180 + math.random(1, 6) * 90
-				local nb_eyes = active_color and 4 or 3
+				local nb_eyes = selected_color() and 4 or 3
 				blink_eye = math.random(0, nb_eyes)
 				if hidden_toggles[blink_eye] then
 					blink_eye = math.random(0, nb_eyes)
@@ -3111,22 +3178,22 @@ function create_color_preview(el)
 		x = 5, y = el.height - 12,
 		width = 40, height = 9,
 		small_font = false,
-		get_fg = function(self) return contrast_color(active_color or 0) end,
+		get_fg = function(self) return contrast_color(selected_color() or 0) end,
 		get = function(self)
-			if (not active_color) return ""
-			return "#" .. color_hex(active_color)
+			if (not selected_color()) return ""
+			return "#" .. color_hex(selected_color())
 		end,
 		set = function(self, str)
-			if (locked[active_color]) return
+			if (locked[selected_color()]) return
 			str = str:gsub("%s", ""):gsub("#", "")
 			if (#str ~= 6) return
 			local code = tonum("0x" .. str)
 			if (type(code) ~= "number") return
 			undo_stack:checkpoint()
-			change_color_code(active_color, code)
+			change_color_code(selected_color(), code)
 		end,
 		update = function(self, msg)
-			self.hidden = active_color == nil
+			self.hidden = selected_color() == nil
 		end
 	})
 
@@ -3137,24 +3204,24 @@ function create_color_preview(el)
 		small_font = true,
 		get_fg = function(self) return outline_color() end,
 		get = function(self)
-			if (not active_color) return ""
-			local h = hue(active_color) * 360.0
+			if (not selected_color()) return ""
+			local h = hue(selected_color()) * 360.0
 			while h < 0.0 do
 				h += 360.0
 			end
 			return string.format("%3.0f\031", h)
 		end,
 		set = function(self, str)
-			if (locked[active_color]) return
+			if (locked[selected_color()]) return
 			str = str:gsub("%s", ""):gsub("\031", "")
 			local h = tonum(str)
 			if (type(h) ~= "number") return
 			h = (h % 360.0) / 360.0
 			undo_stack:checkpoint()
-			change_color(active_color, h, nil, nil)
+			change_color(selected_color(), h, nil, nil)
 		end,
 		update = function(self, msg)
-			self.hidden = active_color == nil
+			self.hidden = selected_color() == nil
 		end
 	})
 
@@ -3165,21 +3232,21 @@ function create_color_preview(el)
 		small_font = true,
 		get_fg = function(self) return outline_color() end,
 		get = function(self)
-			if (not active_color) return ""
-			local s = sat(active_color) * 100.0
+			if (not selected_color()) return ""
+			local s = sat(selected_color()) * 100.0
 			return string.format("%3.0f%%", s)
 		end,
 		set = function(self, str)
-			if (locked[active_color]) return
+			if (locked[selected_color()]) return
 			str = str:gsub("%s", ""):gsub("%%", "")
 			local s = tonum(str)
 			if (type(s) ~= "number") return
 			s = s / 100.0
 			undo_stack:checkpoint()
-			change_color(active_color, nil, s, nil)
+			change_color(selected_color(), nil, s, nil)
 		end,
 		update = function(self, msg)
-			self.hidden = active_color == nil
+			self.hidden = selected_color() == nil
 		end
 	})
 
@@ -3190,39 +3257,39 @@ function create_color_preview(el)
 		small_font = true,
 		get_fg = function(self) return outline_color() end,
 		get = function(self)
-			if (not active_color) return ""
-			local l = lum(active_color) * 100.0
+			if (not selected_color()) return ""
+			local l = lum(selected_color()) * 100.0
 			return string.format("%3.0f%%", l)
 		end,
 		set = function(self, str)
-			if (locked[active_color]) return
+			if (locked[selected_color()]) return
 			str = str:gsub("%s", ""):gsub("%%", "")
 			local l = tonum(str)
 			if (type(l) ~= "number") return
 			l = l / 100.0
 			undo_stack:checkpoint()
-			change_color(active_color, nil, nil, l)
+			change_color(selected_color(), nil, nil, l)
 		end,
 		update = function(self, msg)
-			self.hidden = active_color == nil
+			self.hidden = selected_color() == nil
 		end
 	})
 
 	-- Container callbacks
 
 	function el.draw(self, msg)
-		if active_color then
-			rectfill(1, 1, self.height - 2, self.height - 2, active_color)
-			print(string.format("%d", active_color), 4, 4, contrast_color(active_color))
+		if selected_color() then
+			rectfill(1, 1, self.height - 2, self.height - 2, selected_color())
+			print(string.format("%d", selected_color()), 4, 4, contrast_color(selected_color()))
 			pal(7, outline_color())
-			if locked[active_color] then
+			if locked[selected_color()] then
 				if padlock_flashing_time % 18 < 10 then
 					spr(2, self.height + 4, 1)
 				end
 			else
 				spr(1, self.height + 4, 1)
 			end
-			if hidden[active_color] then
+			if hidden[selected_color()] then
 				spr(43, self.height + 4 + size, 1)
 			else
 				local sprite = 40
@@ -3231,13 +3298,13 @@ function create_color_preview(el)
 				end
 				spr(sprite, self.height + 4 + size, 1)
 			end
-			if bg_color == active_color then
+			if bg_color == selected_color() then
 				spr(10, self.height + 4 + 2 * size, 1)
 			else
 				spr(9, self.height + 4 + 2 * size, 1)
 			end
 			pal(7, 7)
-			local hue = hue(active_color) * 360.0
+			local hue = hue(selected_color()) * 360.0
 			while hue < 0.0 do
 				hue += 360.0
 			end
@@ -3253,22 +3320,22 @@ function create_color_preview(el)
 	end
 	
 	function el.tap(self, msg)
-		if (not active_color) return
+		if (not selected_color()) return
 		if msg.mx < self.height or msg.my > size then
 			return
 		elseif msg.mx < self.height + 4 + size then
-			locked[active_color] = not locked[active_color]
+			locked[selected_color()] = not locked[selected_color()]
 		elseif msg.mx < self.height + 4 + 2 * size then
-			change_hidden(active_color, not hidden[active_color])
+			change_hidden(selected_color(), not hidden[selected_color()])
 		elseif msg.mx < self.height + 4 + 3 * size then
-			if key("shift") and bg_color != active_color then
-				whitest_color = active_color
+			if key("shift") and bg_color != selected_color() then
+				whitest_color = selected_color()
 			elseif key("ctrl") then
-				blackest_color = active_color
-			elseif bg_color == active_color then
+				blackest_color = selected_color()
+			elseif bg_color == selected_color() then
 				bg_color = blackest_color
 			else
-				bg_color = active_color
+				bg_color = selected_color()
 			end
 		end
 	end
@@ -3419,9 +3486,9 @@ function create_test_cube(el)
 		end
 		if msg.mb == 1 then
 			undo_stack:checkpoint()
-			test_cube_colors[self.test_id][face] = active_color or 1
+			test_cube_colors[self.test_id][face] = selected_color() or 1
 		elseif msg.mb == 2 then
-			active_color = test_cube_colors[self.test_id][face]
+			select_color(test_cube_colors[self.test_id][face])
 		end
 	end
 	
@@ -3476,9 +3543,9 @@ function create_test_ramps(el)
 		if (not i) return
 		if msg.mb == 1 then
 			undo_stack:checkpoint()
-			test_ramp_colors:set(i, j, active_color)
+			test_ramp_colors:set(i, j, selected_color())
 		elseif msg.mb == 2 then
-			active_color = mid(0, test_ramp_colors:get(i, j), 63)
+			select_color(mid(0, test_ramp_colors:get(i, j), 63))
 		elseif msg.mb == 4 then
 			test_ramp_colors:set(i, j, 0)
 		end
@@ -3512,7 +3579,7 @@ function create_test_hex(el)
 	return el
 end
 :: src/gui_settings.lua
---[[pod_format="raw",created="2025-02-28 11:31:28",modified="2025-10-20 09:34:46",revision=1871]]
+--[[pod_format="raw",created="2025-02-28 11:31:28",modified="2025-10-24 18:58:41",revision=1922]]
 function open_settings()
 	local el = open_modal(220, 170, true)
 	el:attach(create_label { x = 90, y = 6, label = "Settings", fg = bg_color })
@@ -3606,35 +3673,35 @@ function open_settings()
 	})
 end
 :: src/integration.lua
---[[pod_format="raw",created="2025-03-08 09:24:27",modified="2025-10-20 09:34:46",revision=838]]
+--[[pod_format="raw",created="2025-03-08 09:24:27",modified="2025-10-24 18:58:41",revision=889]]
 -- Copy and paste ----------------------------------------------------------------
 
 
 function copy_color()
-	if active_color then
-		set_clipboard("#" .. color_hex(active_color))
+	if selected_color() then
+		set_clipboard("#" .. color_hex(selected_color()))
 	end
 end
 
 
 function cut_color()
-	if active_color then
-		set_clipboard("#" .. color_hex(active_color))
-		if not locked[active_color] then
+	if selected_color() then
+		set_clipboard("#" .. color_hex(selected_color()))
+		if not locked[selected_color()] then
 			 undo_stack:checkpoint()
-			change_color_code(active_color, 0x000000)
-			change_hidden(active_color, true)
+			change_color_code(selected_color(), 0x000000)
+			change_hidden(selected_color(), true)
 		end
 	end
 end
 
 
 function paste_color()
-	if not active_color then
+	if not selected_color() then
 		notify("unable to paste: no selected color")
 		return
 	end
-	if locked[active_color] then
+	if locked[selected_color()] then
 		notify("unable to paste: selected color is locked")
 		return
 	end
@@ -3647,8 +3714,8 @@ function paste_color()
 		local code = tonumber("0x" .. hex)
 		if type(code) == "number" then
 			undo_stack:checkpoint()
-			change_color_code(active_color, code)
-			change_hidden(active_color, false)
+			change_color_code(selected_color(), code)
+			change_hidden(selected_color(), false)
 		else
 			notify("unable to paste: unrecognized string: \"" .. cb .."\"")
 		end
@@ -3753,7 +3820,7 @@ function handle_drop_items(msg)
 end
 
 :: src/oklab.lua
---[[pod_format="raw",created="2024-03-31 09:08:26",modified="2025-10-20 09:34:46",revision=1194]]
+--[[pod_format="raw",created="2024-03-31 09:08:26",modified="2025-10-24 18:58:41",revision=1245]]
 -- Copyright(c) 2021 Bjorn Ottosson
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -4466,7 +4533,7 @@ end
 
 return oklab
 :: src/palette.lua
---[[pod_format="raw",created="2024-03-31 08:27:10",modified="2025-10-20 09:34:46",revision=4486]]
+--[[pod_format="raw",created="2024-03-31 08:27:10",modified="2025-10-24 18:58:41",revision=4537]]
 ------------------------------------------------------------------------------------------
 
 
@@ -4752,7 +4819,7 @@ end
 
 ----------------------------------------------------------------------------------------
 :: src/remap.lua
---[[pod_format="raw",created="2024-04-04 07:28:50",modified="2025-10-20 09:34:46",revision=1300]]
+--[[pod_format="raw",created="2024-04-04 07:28:50",modified="2025-10-24 18:58:41",revision=1351]]
 -- Color remapping ---------------------------------------------------------------
 
 
@@ -4854,7 +4921,7 @@ function remap_colors()
 end
 
 :: src/settings.lua
---[[pod_format="raw",created="2025-03-07 18:22:46",modified="2025-10-20 09:34:46",revision=747]]
+--[[pod_format="raw",created="2025-03-07 18:22:46",modified="2025-10-24 18:58:41",revision=798]]
 local settings_folder = "/appdata/okpal/"
 local settings_filepath = "/appdata/okpal/settings.pod"
 
@@ -4880,7 +4947,7 @@ function change_settings(t)
 end
 
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2025-10-20 09:34:46",revision=673]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2025-10-24 18:58:41",revision=724]]
 -- Soft-wraps a very tiny subset of markdown.
 -- This code is absolutely horrible, but kind of work.
 function soft_wrap(text, width)
@@ -4973,7 +5040,7 @@ function soft_wrap(text, width)
 	return lines
 end
 :: todo.txt
---[[pod_format="raw",created="2024-03-31 20:08:43",modified="2025-10-20 09:34:46",revision=1531]]
+--[[pod_format="raw",created="2024-03-31 20:08:43",modified="2025-10-24 18:58:41",revision=1582]]
 - Fix: remap colors doesn't remap the test cubes and test ramps...
 - Fix: undo after remapping doesn't reset blackest and whitest colors...
 - Change: color icon for .pal files, maybe even
