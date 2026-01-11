@@ -6,10 +6,10 @@ version 2
 :: map/
 :: sfx/
 :: calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-11 15:12:54",revision=865]]
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-11 18:16:02",revision=1141]]
 function op_plus()
 	if depth() < 2 then
-		show_error([["+" needs 2 numbers]])
+		show_error("+: need 2 numbers")
 		return
 	end
 	local result = get(2) + get(1)
@@ -22,7 +22,7 @@ end
 
 function op_minus()
 	if depth() < 2 then
-		show_error([["-" needs 2 numbers]])
+		show_error("-: need 2 numbers")
 		return
 	end
 	local result = get(2) - get(1)
@@ -35,7 +35,7 @@ end
 
 function op_negated()
 	if depth() < 1 then
-		show_error([["~" needs 1 number]])
+		show_error("~: need 1 number")
 		return
 	end
 	local source = str(get(1)).." neg"
@@ -47,7 +47,7 @@ end
 
 function cmd_neg()
 	if depth() < 1 then
-		show_error([["neg" needs 1 number]])
+		show_error("neg: need 1 number")
 		return
 	end
 	local result = - get(1)
@@ -59,7 +59,7 @@ end
 
 function op_times()
 	if depth() < 2 then
-		show_error([["*" needs 2 numbers]])
+		show_error("*: need 2 numbers")
 		return
 	end
 	local result = get(2) * get(1)
@@ -72,7 +72,7 @@ end
 
 function op_slash()
 	if depth() < 2 then
-		show_error([["/" needs 2 numbers]])
+		show_error("/: need 2 numbers")
 		return
 	end
 	local result = get(2) / get(1)
@@ -85,7 +85,7 @@ end
 
 function op_backslash()
 	if depth() < 2 then
-		show_error([["\" needs 2 numbers]])
+		show_error("\\: need 2 numbers")
 		return
 	end
 	local result = get(2) // get(1)
@@ -98,7 +98,7 @@ end
 
 function op_mod()
 	if depth() < 2 then
-		show_error([["%" needs 2 numbers]])
+		show_error("%: need 2 numbers")
 		return
 	end
 	local result = get(2) % get(1)
@@ -111,7 +111,7 @@ end
 
 function op_pow()
 	if depth() < 2 then
-		show_error([["^" needs 2 numbers]])
+		show_error("^2: need 2 numbers")
 		return
 	end
 	local result = get(2) ^ get(1)
@@ -124,7 +124,7 @@ end
 
 function cmd_sq()
 	if depth() < 1 then
-		show_error([["^2" needs 1 number]])
+		show_error("^: need 1 number")
 		return
 	end
 	local result = get(1) ^ 2
@@ -136,7 +136,7 @@ end
 
 function cmd_sqrt()
 	if depth() < 1 then
-		show_error([["sqrt" needs 1 number]])
+		show_error("sqrt: need 1 number")
 		return
 	end
 	local result = sqrt(get(1))
@@ -145,8 +145,13 @@ function cmd_sqrt()
 	push(result, source)
 end
 
+:: config.lua
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-11 18:16:02",revision=255]]
+config = {
+	orientation = "classic", -- "classic" or "inverted"
+}
 :: entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-11 15:12:54",revision=1424]]
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-11 18:16:02",revision=1700]]
 local buffer = ""
 
 
@@ -161,7 +166,7 @@ function update_entry()
 		clear_error()
 		local c = readtext()
 		if is_uppercase(c) then
-			pick(string.byte(c) - string.byte("A") + 1)
+			pick(letter_to_index(c, "uppercase"), c)
 		else
 			buffer ..= c
 			changed = true
@@ -177,12 +182,16 @@ function update_entry()
 	local ctrled = not key("shift") and key("ctrl") and not key("alt")
 	local ctrl_shifted = key("shift") and key("ctrl") and not key("alt")
 	
+	if keyp("kp enter") then
+		clear_error()
+		buffer = parse(buffer.." ", false)
+		undo_checkpoint()
+	end
+	
 	if keyp("enter") then
 		clear_error()
 		if plain then
 			cmd_dup()
-		elseif shifted then
-			cmd_dupfar()
 		end
 	end
 	
@@ -191,7 +200,7 @@ function update_entry()
 		if plain then
 			cmd_drop()
 		elseif shifted then
-			cmd_dropfar()
+			-- TODO: interactive drop
 		elseif ctrl_shifted then
 			cmd_clear()
 		end
@@ -203,6 +212,10 @@ function update_entry()
 			buffer = string.sub(buffer, 1, #buffer - 1)
 		elseif ctrled then
 			buffer = ""
+		elseif shifted then
+			cmd_dropfirst()
+		elseif ctrl_shifted then
+			cmd_clear()
 		end
 	end
 	
@@ -211,28 +224,37 @@ function update_entry()
 		if plain then
 			cmd_swap()
 		elseif shifted then
-			cmd_swapfar()
+			-- TODO: interactive swap
 		end
 	end
 	
 	if keyp("pageup") then
 		clear_error()
 		if plain then
-			cmd_roll()
+			if config.orientation == "inverted" then
+				cmd_unroll()
+			else
+				cmd_roll()
+			end
 		end
 	end
 	
 	if keyp("pagedown") then
 		clear_error()
 		if plain then
-			cmd_unroll()
+			if config.orientation == "inverted" then
+				cmd_roll()
+			else
+				cmd_unroll()
+			end
 		end
 	end
 end
 
 :: error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-11 15:12:54",revision=757]]
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-11 18:16:02",revision=1033]]
 local error_msg = ""
+local welcome_msg = "   rpn-calc\n\ntype ? for help"
 
 
 function show_error(msg)
@@ -242,10 +264,26 @@ end
 
 function clear_error()
 	error_msg = ""
+	welcome_msg = ""
 end
 
 
-function draw_error()
+function draw_error(position)
+	if welcome_msg ~= "" then
+		local width = get_display():width()
+		local height = get_display():height()
+		local msg = "\014"..welcome_msg
+		local w, h = print(msg, -1000, -1000)
+		w += 1000; h += 1000
+		w += 20; h += 14
+		local x = (width - w) // 2
+		local y = (height - h) // 2
+		rrectfill(x + 2, y + 2, w - 1, h - 1, 0, 0)
+		rrectfill(x, y, w - 1, h - 1, 0, 5)
+		rrect(x + 2, y + 2, w - 5, h - 5, 0, 13)
+		print(msg, x + 10, y + 7, 7)
+		return
+	end
 	if error_msg == "" then
 		return
 	end
@@ -253,12 +291,17 @@ function draw_error()
 	local msg = "\014"..error_msg
 	local w, h = print(msg, -1000, -1000)
 	w, h = w + 1000, h + 1000
-	rrectfill(0, 0, width, h + 4, 0, 8)
-	print(msg, (width - w) // 2, 2, 7)
+	local y = 0
+	if position == "bottom" then
+		y = get_display():height() - h - 5
+	end
+	rrectfill(0, y, width, h + 5, 0, 8)
+	print(msg, (width - w) // 2, y + 3, 7)
 end
 
 :: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-11 15:12:54",revision=1477]]
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-11 18:16:02",revision=1753]]
+include "config.lua"
 include "stack.lua"
 include "calc.lua"
 include "parser.lua"
@@ -287,7 +330,7 @@ end
 function _init()
 	window {
 		title = "RPN Calc",
-		width = 140, height = 98,
+		width = 136, height = 136,
 		pauseable = false
 	}
 	
@@ -320,10 +363,56 @@ function _update()
 		if keyp("y") then
 			undo_stack:redo()
 		end
+		if keyp("o") then
+			if config.orientation == "classic" then
+				config.orientation = "inverted"
+			else
+				config.orientation = "classic"
+			end
+		end
 	end
 	local mx, my, mb, _, wheel_y = mouse()
 	if mb ~= 0 then
 		clear_error()
+	end
+end
+
+
+local entry_height <const> = 14
+local stride <const> = 13
+
+
+local function draw_stack_row(idx, y, width)
+	if idx % 2 == 0 then
+		rrectfill(0, y, width, stride, 0, bg)
+	else
+		rrectfill(0, y, width, stride, 0, bg_alt)
+	end
+	local item = get_item(idx)
+	if item then
+		print(index_to_letter(idx, "uppercase"), width - 6, y + 3, fg_alt)
+		local value_str = str(item.value)
+		local value_w = print(value_str, 0, -1000, 0)
+		local source_w = print("\014"..item.source, 0, -1000, 0)
+		if source_w + 2 < width - 12 - value_w then
+			print("\014"..item.source, 2, y + 4, 0)
+		elseif item.source ~= "" then
+			print("...", 2, y + 4, 0)
+		end
+		print(value_str, width - 12 - value_w, y + 3, fg)
+	end
+end
+
+
+function draw_entry(y)
+	local entry_text = entry()
+	local x_end = print(entry_text, 4, y + 4, fg)
+	if (peek(0x547f) & 0x10) > 0 then
+		if blink_timer <= blink_speed then
+			rrectfill(x_end, y + 2, 6, 11, 0, entry_height)
+		end
+	else
+		rrect(x_end, y + 2, 6, 11, 0, entry_height)
 	end
 end
 
@@ -333,42 +422,25 @@ function _draw()
 	local height = get_display():height()
 	cls(0)
 	-- The stack
-	local entry_height = 14
-	local stride = 13
-	local y = height - entry_height - stride
-	local idx = 1
-	for y = height - entry_height - stride + 1, - stride, - stride do
-		if idx % 2 == 0 then
-			rrectfill(0, y, width, stride, 0, bg)
-		else
-			rrectfill(0, y, width, stride, 0, bg_alt)
+	if config.orientation == "inverted" then
+		local idx = 1
+		for y = entry_height - 1, height, stride do
+			draw_stack_row(idx, y, width)
+			idx += 1
 		end
-		print(string.char(idx - 1 + string.byte("A")) .. ": ", width - 6, y + 3, fg_alt)
-		local item = get_item(idx)
-		if item then
-			local value_str = str(item.value)
-			local value_w = print(value_str, 0, -1000, 0)
-			local source_w = print("\014"..item.source, 0, -1000, 0)
-			if source_w + 2 < width - 12 - value_w then
-				print("\014"..item.source, 2, y + 4, 0)
-			elseif item.source ~= "" then
-				print("...", 2, y + 4, 0)
-			end
-			print(value_str, width - 12 - value_w, y + 3, fg)
-		end
-		idx += 1
-	end
-	line(width - 9, 0, width - 9, height - entry_height, 0)
-	local entry_text = entry()
-	local x_end = print(entry_text, 4, height - 10, fg)
-	if (peek(0x547f) & 0x10) > 0 then
-		if blink_timer <= blink_speed then
-			rrectfill(x_end, height - 12, 6, 11, 0, entry_height)
-		end
+		line(width - 9, entry_height - 1, width - 9, height, 0)
+		draw_entry(-1)
+		draw_error("bottom")
 	else
-		rrect(x_end, height - 12, 6, 11, 0, entry_height)
+		local idx = 1
+		for y = height - entry_height - stride + 1, - stride, - stride do
+			draw_stack_row(idx, y, width)
+			idx += 1
+		end
+		line(width - 9, 0, width - 9, height - entry_height, 0)
+		draw_entry(height - 14)
+		draw_error("top")
 	end
-	draw_error()
 end
 
 
@@ -384,7 +456,9 @@ function str(v)
 		return v and "true" or "false"
 	elseif type(v) == "number" then
 		local s
-		if abs(v) >= 0.001 and abs(v) <= 999999999999 then
+		if v == 0 then
+			s = "0"
+		elseif abs(v) >= 0.001 and abs(v) <= 999999999999 then
 			s = string.format("%f", v)
 			if string.find(s, "%.") then
 				s = string.gsub(s, "0*$", "")
@@ -410,7 +484,7 @@ function str(v)
 end
 
 :: parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-11 15:12:54",revision=1376]]
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-11 18:16:02",revision=1652]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -454,7 +528,7 @@ function parse(buffer, entered)
 --			pick(string.byte(c) - string.byte("A") + 1)
 --			buffer, maybe_more = string.sub(buffer, 2), true
 		else
-			show_error([[unknown character: "]]..c..[["]])
+			show_error("unknown character: "..c)
 			buffer, maybe_more = string.sub(buffer, 2), true
 		end
 	end
@@ -484,7 +558,7 @@ function parse_identifier(buffer, entered)
 	if pos > 1 and (pos - 1 < #buffer or entered) then
 		local identifier = string.sub(buffer, 1, pos - 1)
 		if #identifier == 1 then
-			pick(string.byte(identifier) - string.byte("a") + 1)
+			pick(letter_to_index(identifier, "lowercase"), identifier)
 		else
 			local cmd_func = cmd_funcs[identifier]
 			if cmd_func then
@@ -526,7 +600,7 @@ function is_lowercase(char)
 end
 
 :: stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-11 15:12:54",revision=970]]
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-11 18:16:02",revision=1246]]
 local stack = { }
 
 
@@ -542,6 +616,23 @@ end
 
 function depth()
 	return #stack
+end
+
+
+function index_to_letter(idx, uppercase)
+	if idx > 26 then return "" end
+	local base = (uppercase == "uppercase") and "A" or "a"
+	return string.char((#stack - idx) + string.byte(base))
+end
+
+
+function letter_to_index(char, uppercase)
+	local base = (uppercase == "uppercase") and "A" or "a"
+	local result = #stack - (string.byte(char) - string.byte(base))
+	if result < 1 then
+		return nil -- TODO: something safer?
+	end
+	return result
 end
 
 
@@ -578,10 +669,9 @@ end
 -----------------------------------------------------------------------------------
 
 
-function pick(index)
-	if index > #stack then
-		show_error("pick error:\nnothing on "
-			..string.char(index - 1 + string.byte("a")))
+function pick(index, letter)
+	if (not index) or (index > #stack) then
+		show_error("pick: nothing on "..string.lower(letter))
 		return
 	end
 	local value = get(index)
@@ -598,16 +688,16 @@ end
 
 function cmd_drop()
 	if #stack < 1 then
-		show_error("drop error:\nnothing on the stack")
+		show_error("drop: nothing on the stack")
 		return
 	end
 	_ = deli(stack)
 end
 
 
-function cmd_dropfar()
+function cmd_dropfirst()
 	if #stack < 1 then
-		show_error("dropfar error:\nnothing on the stack")
+		show_error("dropfar: nothing on the stack")
 		return
 	end
 	_ = deli(stack, 1)
@@ -616,7 +706,7 @@ end
 
 function cmd_clear()
 	if #stack < 1 then
-		show_error("clear error:\nnothing on the stack")
+		show_error("clear: nothing on the stack")
 		return
 	end
 	stack = {}
@@ -625,25 +715,16 @@ end
 
 function cmd_dup()
 	if #stack < 1 then
-		show_error("dup error:\nnothing on the stack")
+		show_error("dup: nothing on the stack")
 		return
 	end
 	pick(1)
 end
 
 
-function cmd_dupfar()
-	if #stack < 1 then
-		show_error("dupfar error:\nnothing on the stack")
-		return
-	end
-	pick(#stack)
-end
-
-
 function cmd_swap()
 	if #stack < 2 then
-		show_error("swap error:\nneed 2 values")
+		show_error("swap: need 2 values")
 		return
 	end
 	stack[#stack - 0], stack[#stack - 1] =
@@ -651,19 +732,9 @@ function cmd_swap()
 end
 
 
-function cmd_swapfar()
-	if #stack < 2 then
-		show_error("swapfar error:\nneed 2 values")
-		return
-	end
-	stack[#stack], stack[1] =
-		stack[1], stack[#stack]
-end
-
-
 function cmd_roll()
 	if #stack < 1 then
-		show_error("dup error:\nnothing on the stack")
+		show_error("dup: nothing on the stack")
 		return
 	end
 	local far_item = deli(stack, 1)
@@ -673,7 +744,7 @@ end
 
 function cmd_roll()
 	if #stack < 1 then
-		show_error("roll error:\nnothing on the stack")
+		show_error("roll: nothing on the stack")
 		return
 	end
 	local far_item = deli(stack, 1)
@@ -683,7 +754,7 @@ end
 
 function cmd_unroll()
 	if #stack < 1 then
-		show_error("unroll error:\nnothing on the stack")
+		show_error("unroll: nothing on the stack")
 		return
 	end
 	local bottom_item = deli(stack)
@@ -691,12 +762,12 @@ function cmd_unroll()
 end
 
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 15:12:54",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-11 15:12:54"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-11 18:16:02"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTEgMTU6MTI6NTQiLHJldmlzaW9uPTE0NjddXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTEgMTg6MTY6MDIiLHJldmlzaW9uPTE3NDNdXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -714,22 +785,29 @@ IGZ1bmN0aW9uIGRlZmluaXRpb246IGxvd2VyY2FzZSB3b3JkLCB0aGVuICI9IiwgdGhlbiBleHBy
 ZXNzaW9uLAp0aGVuIGVudGVyLiBFeHByZXNzaW9uIGlzIGEgc2VxdWVuY2Ugb2YgbnVtYmVycywg
 b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
+:: doc/todo.md
+b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMSAxNzowNTowNCIsbW9k
+aWZpZWQ9IjIwMjYtMDEtMTEgMTg6MTY6MDIiLHJldmlzaW9uPTEyN11dCi0gYWRkOiBpbnRlcmFj
+dGl2ZSBkcm9wLCBzd2FwLCBhbmQgcm9sbAotIGFkZDogcmlnaHQtY2xpY2sgbWVudSBvbiBzdGFj
+ayByb3dzCi0gYWRkOiBsZWZ0LWNsaWNrIG9uIHN0YWNrIHJvd3MgdG8gcGljawotIGFkZDogc2Ny
+b2xsaW5nIHRoZSBzdGFjawotIGFkZDogaGVscCBzY3JlZW4KLSBhZGQ6IG1hbnVhbAotIGFkZDog
+bWFjcm9zIGZvciBrZXlzIGApYCBgXWAgYH1gCg==
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 15:12:54"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 15:12:54"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMCAxMjo0MTozMSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 15:12:54"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
