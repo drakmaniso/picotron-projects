@@ -6,7 +6,7 @@ version 2
 :: map/
 :: sfx/
 :: calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-11 18:16:02",revision=1141]]
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-11 20:33:45",revision=1197]]
 function op_plus()
 	if depth() < 2 then
 		show_error("+: need 2 numbers")
@@ -146,12 +146,11 @@ function cmd_sqrt()
 end
 
 :: config.lua
---[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-11 18:16:02",revision=255]]
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-11 20:33:45",revision=311]]
 config = {
-	orientation = "classic", -- "classic" or "inverted"
 }
 :: entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-11 18:16:02",revision=1700]]
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-11 20:33:45",revision=1756]]
 local buffer = ""
 
 
@@ -192,6 +191,7 @@ function update_entry()
 		clear_error()
 		if plain then
 			cmd_dup()
+			undo_checkpoint()
 		end
 	end
 	
@@ -199,10 +199,12 @@ function update_entry()
 		clear_error()
 		if plain then
 			cmd_drop()
+			undo_checkpoint()
 		elseif shifted then
 			-- TODO: interactive drop
 		elseif ctrl_shifted then
 			cmd_clear()
+			undo_checkpoint()
 		end
 	end
 	
@@ -214,8 +216,10 @@ function update_entry()
 			buffer = ""
 		elseif shifted then
 			cmd_dropfirst()
+			undo_checkpoint()
 		elseif ctrl_shifted then
 			cmd_clear()
+			undo_checkpoint()
 		end
 	end
 	
@@ -223,6 +227,7 @@ function update_entry()
 		clear_error()
 		if plain then
 			cmd_swap()
+			undo_checkpoint()
 		elseif shifted then
 			-- TODO: interactive swap
 		end
@@ -231,30 +236,24 @@ function update_entry()
 	if keyp("pageup") then
 		clear_error()
 		if plain then
-			if config.orientation == "inverted" then
-				cmd_unroll()
-			else
-				cmd_roll()
-			end
+			cmd_roll()
+			undo_checkpoint()
 		end
 	end
 	
 	if keyp("pagedown") then
 		clear_error()
 		if plain then
-			if config.orientation == "inverted" then
-				cmd_roll()
-			else
-				cmd_unroll()
-			end
+			cmd_unroll()
+			undo_checkpoint()
 		end
 	end
 end
 
 :: error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-11 18:16:02",revision=1033]]
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-11 20:33:45",revision=1089]]
 local error_msg = ""
-local welcome_msg = "   rpn-calc\n\ntype ? for help"
+local welcome_msg = "  stack calc\n\ntype ? for help"
 
 
 function show_error(msg)
@@ -280,7 +279,7 @@ function draw_error(position)
 		local y = (height - h) // 2
 		rrectfill(x + 2, y + 2, w - 1, h - 1, 0, 0)
 		rrectfill(x, y, w - 1, h - 1, 0, 5)
-		rrect(x + 2, y + 2, w - 5, h - 5, 0, 13)
+		rrect(x + 2, y + 2, w - 5, h - 5, 0, 22)
 		print(msg, x + 10, y + 7, 7)
 		return
 	end
@@ -300,7 +299,7 @@ function draw_error(position)
 end
 
 :: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-11 18:16:02",revision=1753]]
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-11 20:33:45",revision=1809]]
 include "config.lua"
 include "stack.lua"
 include "calc.lua"
@@ -309,8 +308,8 @@ include "entry.lua"
 include "error.lua"
 
 
-local bg <const> = 2
-local bg_alt <const> = 4
+local bg1 <const> = 19 -- 20, 19
+local bg2 <const> = 3 -- 4, 3
 local fg <const> = 7
 local fg_alt <const> = 0
 
@@ -329,7 +328,7 @@ end
 
 function _init()
 	window {
-		title = "RPN Calc",
+		title = "Stack Calc",
 		width = 136, height = 136,
 		pauseable = false
 	}
@@ -363,13 +362,6 @@ function _update()
 		if keyp("y") then
 			undo_stack:redo()
 		end
-		if keyp("o") then
-			if config.orientation == "classic" then
-				config.orientation = "inverted"
-			else
-				config.orientation = "classic"
-			end
-		end
 	end
 	local mx, my, mb, _, wheel_y = mouse()
 	if mb ~= 0 then
@@ -384,9 +376,9 @@ local stride <const> = 13
 
 local function draw_stack_row(idx, y, width)
 	if idx % 2 == 0 then
-		rrectfill(0, y, width, stride, 0, bg)
+		rrectfill(0, y, width, stride, 0, bg1)
 	else
-		rrectfill(0, y, width, stride, 0, bg_alt)
+		rrectfill(0, y, width, stride, 0, bg2)
 	end
 	local item = get_item(idx)
 	if item then
@@ -422,25 +414,14 @@ function _draw()
 	local height = get_display():height()
 	cls(0)
 	-- The stack
-	if config.orientation == "inverted" then
-		local idx = 1
-		for y = entry_height - 1, height, stride do
-			draw_stack_row(idx, y, width)
-			idx += 1
-		end
-		line(width - 9, entry_height - 1, width - 9, height, 0)
-		draw_entry(-1)
-		draw_error("bottom")
-	else
-		local idx = 1
-		for y = height - entry_height - stride + 1, - stride, - stride do
-			draw_stack_row(idx, y, width)
-			idx += 1
-		end
-		line(width - 9, 0, width - 9, height - entry_height, 0)
-		draw_entry(height - 14)
-		draw_error("top")
+	local idx = 1
+	for y = height - entry_height - stride + 1, - stride, - stride do
+		draw_stack_row(idx, y, width)
+		idx += 1
 	end
+	line(width - 9, 0, width - 9, height - entry_height, 0)
+	draw_entry(height - 14)
+	draw_error("top")
 end
 
 
@@ -484,7 +465,7 @@ function str(v)
 end
 
 :: parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-11 18:16:02",revision=1652]]
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-11 20:33:45",revision=1708]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -600,7 +581,7 @@ function is_lowercase(char)
 end
 
 :: stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-11 18:16:02",revision=1246]]
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-11 20:33:45",revision=1302]]
 local stack = { }
 
 
@@ -762,12 +743,12 @@ function cmd_unroll()
 end
 
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 20:33:45",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-11 18:16:02"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-11 20:33:45"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTEgMTg6MTY6MDIiLHJldmlzaW9uPTE3NDNdXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTEgMjA6MzM6NDUiLHJldmlzaW9uPTE3OTldXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -787,27 +768,28 @@ b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
 :: doc/todo.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMSAxNzowNTowNCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTEgMTg6MTY6MDIiLHJldmlzaW9uPTEyN11dCi0gYWRkOiBpbnRlcmFj
+aWZpZWQ9IjIwMjYtMDEtMTEgMjA6MzM6NDUiLHJldmlzaW9uPTE4M11dCi0gYWRkOiBpbnRlcmFj
 dGl2ZSBkcm9wLCBzd2FwLCBhbmQgcm9sbAotIGFkZDogcmlnaHQtY2xpY2sgbWVudSBvbiBzdGFj
 ayByb3dzCi0gYWRkOiBsZWZ0LWNsaWNrIG9uIHN0YWNrIHJvd3MgdG8gcGljawotIGFkZDogc2Ny
 b2xsaW5nIHRoZSBzdGFjawotIGFkZDogaGVscCBzY3JlZW4KLSBhZGQ6IG1hbnVhbAotIGFkZDog
-bWFjcm9zIGZvciBrZXlzIGApYCBgXWAgYH1gCg==
+bWFjcm9zIGZvciBrZXlzIGApYCBgXWAgYH1gCi0gYWRkOiB1cC9kb3duIHRvIGxpbWl0IHN0YWNr
+IGRlcHRoPwoK
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 20:33:45"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 20:33:45"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMCAxMjo0MTozMSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 18:16:02"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-11 20:33:45"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
