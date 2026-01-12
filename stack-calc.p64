@@ -5,8 +5,228 @@ version 2
 :: gfx/
 :: map/
 :: sfx/
-:: calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-12 10:25:43",revision=1530]]
+:: src/
+:: main.lua
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-12 14:05:15",revision=2390]]
+include "src/config.lua"
+include "src/state.lua"
+include "src/stack.lua"
+include "src/calc.lua"
+include "src/parser.lua"
+include "src/entry.lua"
+include "src/error.lua"
+include "src/soft_wrap.lua"
+include "src/help.lua"
+
+local bg0 <const> = 19
+local bg1 <const> = 3
+local bg2 <const> = 27
+local fg <const> = 7
+local fg_alt <const> = 0
+
+
+local blink_timer = 0
+local blink_speed <const> = 20
+
+
+function _init()
+	window {
+		title = "Stack Calc",
+		width = 136, height = 136,
+		pauseable = false
+	}
+	init_undo_stack()
+	init_help()
+end
+
+
+function _update()
+	blink_timer += 1
+	blink_timer %= blink_speed * 2
+	if is_help_shown() then
+		update_help()
+	else
+		update_entry()
+	end
+	if key("ctrl") then
+		if key("shift") and keyp("z") then
+			undo_stack:redo()
+		elseif keyp("z") then
+			undo_stack:undo()
+		end
+		if keyp("y") then
+			undo_stack:redo()
+		end
+		-- TODO: should not change config
+		if keyp("k") then
+			config.with_keyboard = not config.with_keyboard
+			local width = get_display():width()
+			local height = get_display():height()
+			if config.with_keyboard then
+				width += 100
+			else
+				width -= 100
+			end
+			send_message(pid(), { event = "resize", width = width, height = height })
+		end
+		if keyp("b") then
+			config.big_rows = not config.big_rows
+		end
+	end
+	local mx, my, mb, _, wheel_y = mouse()
+	if mb ~= 0 then
+		clear_error()
+	end
+end
+
+
+local function draw_stack_row(idx, y, width, no_entry)
+	local h_row = height_row()
+	if idx % 2 == (no_entry and 0 or 1) then
+		rrectfill(0, y, width, h_row, 0, bg1)
+	else
+		rrectfill(0, y, width, h_row, 0, bg2)
+	end
+	local item = get_item(idx)
+	line(width - 9, y, width - 9, y + h_row - 1, 19)
+	if item then
+		local y_letter = y + h_row - 10
+		print(index_to_letter(idx, "lowercase"), width - 6, y_letter, fg_alt)
+		local text_value = str(item.value)
+		local w_value = print(text_value, 0, -1000, 0)
+		local big_rows = h_row > 20
+		if item.source ~= "" then
+			local text_source = "\014"..item.source..(big_rows and "=" or "")
+			local w_source = print(text_source, 0, -1000, 0)
+			local source_fits = w_source + 2 < width - 12 - w_value
+			if source_fits or big_rows then
+				print(text_source, 2, y + 4, 0)
+			else
+				print("...", 2, y + 4, 0)
+			end
+		end
+		print(text_value, width - 14 - w_value, y + h_row - 10, fg)
+	end
+end
+
+
+function draw_entry(y, width)
+	local h_row = height_row()
+	rrectfill(0, y, width, h_row, 0, 1)
+	local text_entry = entry()
+	local w = print(text_entry, 0, -1000)
+	local x_end = print(text_entry, width - 14 - w, y + h_row - 10, fg)
+	if (peek(0x547f) & 0x10) > 0 then
+		if blink_timer <= blink_speed then
+			rrectfill(x_end, y + h_row - 12, 6, 11, 0, 14)
+		end
+	else
+		rrect(x_end, y + h_row - 12, 6, 11, 0, 14)
+	end
+end
+
+
+function _draw()
+	local width = get_display():width()
+	local height = get_display():height()
+	
+	if is_help_shown() then
+		draw_help()
+		return
+	end
+	
+	local has_entry = entry() ~= nil
+	if config.with_keyboard then
+		width -= 100
+	end
+	cls(0)
+	local idx = 1
+	local h_row = height_row()
+	local y_start = height - h_row
+	if has_entry then
+		y_start -= h_row
+	end
+	for y = y_start, - h_row, - h_row do
+		draw_stack_row(idx, y, width, has_entry)
+		idx += 1
+	end
+	if has_entry then
+		draw_entry(height - h_row, width)
+	end
+	draw_error("top")
+end
+
+
+-----------------------------------------------------------------------------------------
+-- Utils
+-----------------------------------------------------------------------------------------
+
+
+function str(v)
+	if type(v) == "nil" then
+		return "nil"
+	elseif type(v) == "bool" then
+		return v and "true" or "false"
+	elseif type(v) == "number" then
+		local s
+		if v == 0 then
+			s = "0"
+		elseif abs(v) >= 0.001 and abs(v) <= 999999999999 then
+			s = string.format("%f", v)
+			if string.find(s, "%.") then
+				s = string.gsub(s, "0*$", "")
+				s = string.gsub(s, "%.$", "")
+			end
+		else
+			s = string.format("%99e", v)
+		end
+--		local s = tostr(v)
+--		s = string.gsub(s, "%.0$", "")
+		return s
+	elseif type(v) == "string" then
+		return pod(v)
+	elseif type(v) == "table" then
+		local str = "{"
+		for k, v in pairs(v) do
+			str ..= stringify(k).."="..stringify(v)..","
+		end
+		return str.."}"
+	else
+		return "**unknown type**"
+	end
+end
+
+:: manual.txt
+--[[pod_format="raw",created="2026-01-12 12:42:40",modified="2026-01-12 14:05:15",revision=93]]
+# Stack Calc
+
+## Quick Ref
+
+Stack manipulation: Enter=dup, Backspace=drop,
+Del=drop_oldest, Tab=swap, PageUp=roll,
+PageDown=unroll.
+
+Math operations: + - ~(neg) * / \(idiv) %(mod)
+^(pow) @(sq) $(sqrt).
+
+## Introduction
+
+This calculator uses postfix notation (aka RPN) instead
+of the more traditional algebraic notation. To make an
+operation, you first enter both numbers, *and then* the
+operator.
+
+For example, to make an addition, you would type "20",
+then hit space to validate, then type "30", and finally
+type "+". For this simple operation, this may seem more
+convoluted than the classic approach! A RPN calculator
+is especially useful when you're doing repeated calculations
+on a small set of numbers. It's useful for the problems
+that would be cumbersome to type on a traditional
+calculator, but too trivial to write a program for.
+
+:: src/calc.lua
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-12 14:05:15",revision=1778]]
 function op_plus()
 	if depth() < 2 then
 		show_error("+: need 2 numbers")
@@ -38,7 +258,7 @@ function op_negated()
 		show_error("~: need 1 number")
 		return
 	end
-	local source = str(get(1)).." neg"
+	local source = "neg("..str(get(1))..")"
 	local result = - get(1)
 	cmd_drop()
 	push(result, source)
@@ -145,13 +365,20 @@ function cmd_sqrt()
 	push(result, source)
 end
 
-:: config.lua
---[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-12 10:25:43",revision=644]]
+:: src/config.lua
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-12 14:05:15",revision=892]]
 config = {
-	on_screen_keyboard = true,
+	big_rows = false,
+	with_keyboard = false,
 }
-:: entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-12 10:25:43",revision=2089]]
+
+
+function height_row()
+	return config.big_rows and 21 or 13
+end
+
+:: src/entry.lua
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-12 14:05:15",revision=2337]]
 local buffer = ""
 
 
@@ -171,15 +398,19 @@ function update_entry()
 			if not buffer then
 				buffer = ""
 			end
-			buffer ..= c
-			changed = true
+			if c == "?" then
+				show_help()
+			else
+				buffer ..= c
+				changed = true
+			end
 		end
 	end
 	if changed then
 		buffer = parse(buffer)
 		undo_stack:checkpoint()
 	end
-	
+		
 	local plain = not key("shift") and not key("ctrl") and not key("alt")
 	local shifted = key("shift") and not key("ctrl") and not key("alt")
 	local ctrled = not key("shift") and key("ctrl") and not key("alt")
@@ -205,22 +436,6 @@ function update_entry()
 		end
 	end
 	
-	if keyp("del") then
-		clear_error()
-		if plain and buffer then
-			buffer = ""
-		elseif plain and not buffer then
-			cmd_dropfirst()
-			undo_stack:checkpoint()
-		elseif shifted then
-			cmd_dropfirst()
-			undo_stack:checkpoint()
-		elseif ctrl_shifted then
-			cmd_clear()
-			undo_stack:checkpoint()
-		end
-	end
-	
 	if keyp("backspace") then
 		clear_error()
 		if plain and buffer then
@@ -233,6 +448,22 @@ function update_entry()
 		elseif shifted then
 			-- works when editing an entry
 			cmd_drop()
+			undo_stack:checkpoint()
+		elseif ctrl_shifted then
+			cmd_clear()
+			undo_stack:checkpoint()
+		end
+	end
+	
+	if keyp("del") then
+		clear_error()
+		if plain and buffer then
+			buffer = ""
+		elseif plain and not buffer then
+			cmd_dropfirst()
+			undo_stack:checkpoint()
+		elseif shifted then
+			cmd_dropfirst()
 			undo_stack:checkpoint()
 		elseif ctrl_shifted then
 			cmd_clear()
@@ -268,14 +499,14 @@ function update_entry()
 			buffer = parse((buffer or "") .. " unroll ")
 			undo_stack:checkpoint()
 		elseif shifted then
-			cmd_unroll()
+			cmd_roll()
 			undo_stack:checkpoint()
 		end
 	end
 end
 
-:: error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-12 10:25:43",revision=1422]]
+:: src/error.lua
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-12 14:05:15",revision=1670]]
 local error_msg = ""
 local welcome_msg = "  stack calc\n\ntype ? for help"
 
@@ -322,165 +553,72 @@ function draw_error(position)
 	print(msg, (width - w) // 2, y + 3, 7)
 end
 
-:: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-12 10:25:43",revision=2142]]
-include "config.lua"
-include "state.lua"
-include "stack.lua"
-include "calc.lua"
-include "parser.lua"
-include "entry.lua"
-include "error.lua"
-
-local bg0 <const> = 19
-local bg1 <const> = 3
-local bg2 <const> = 27
-local fg <const> = 7
-local fg_alt <const> = 0
+:: src/help.lua
+--[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-12 14:05:15",revision=153]]
+local help_shown = false
+local help_text = "line 1\nline 2\nline 3"
+local help_lines = {}
+local help_current_line = 1
 
 
-local blink_timer = 0
-local blink_speed <const> = 20
-
-
-function _init()
-	window {
-		title = "Stack Calc",
-		width = 136, height = 136,
-		pauseable = false
-	}
-	init_undo_stack()
+function is_help_shown()
+	return help_shown
 end
 
 
-function _update()
-	blink_timer += 1
-	blink_timer %= blink_speed * 2
-	update_entry()
-	if key("ctrl") then
-		if key("shift") and keyp("z") then
-			undo_stack:redo()
-		elseif keyp("z") then
-			undo_stack:undo()
-		end
-		if keyp("y") then
-			undo_stack:redo()
-		end
-	end
-	local mx, my, mb, _, wheel_y = mouse()
-	if mb ~= 0 then
-		clear_error()
-	end
+function show_help()
+	help_shown = true 
 end
 
 
-local function draw_stack_row(idx, y, width, no_entry)
-	if idx % 2 == (no_entry and 0 or 1) then
-		rrectfill(0, y, width, height_row, 0, bg1)
-	else
-		rrectfill(0, y, width, height_row, 0, bg2)
-	end
-	local item = get_item(idx)
-	line(width - 9, y, width - 9, y + height_row - 1, 19)
-	if item then
-		local y_letter = y + height_row - 10
-		print(index_to_letter(idx, "lowercase"), width - 6, y_letter, fg_alt)
-		local text_value = str(item.value)
-		local w_value = print(text_value, 0, -1000, 0)
-		local big_rows = height_row > 20
-		if item.source ~= "" then
-			local text_source = "\014"..item.source..(big_rows and "=" or "")
-			local w_source = print(text_source, 0, -1000, 0)
-			local source_fits = w_source + 2 < width - 12 - w_value
-			if source_fits or big_rows then
-				print(text_source, 2, y + 4, 0)
-			else
-				print("...", 2, y + 4, 0)
-			end
-		end
-		print(text_value, width - 14 - w_value, y + height_row - 10, fg)
-	end
+function hide_help()
+	help_shown = false
 end
 
 
-function draw_entry(y, width)
-	rrectfill(0, y, width, height_row, 0, 1)
-	local text_entry = entry()
-	local w = print(text_entry, 0, -1000)
-	local x_end = print(text_entry, width - 14 - w, y + height_row - 10, fg)
-	if (peek(0x547f) & 0x10) > 0 then
-		if blink_timer <= blink_speed then
-			rrectfill(x_end, y + height_row - 12, 6, 11, 0, 14)
-		end
-	else
-		rrect(x_end, y + height_row - 12, 6, 11, 0, 14)
-	end
+function init_help()
+	help_text = fetch("manual.txt")
 end
 
 
-function _draw()
-	local width = get_display():width()
-	local height = get_display():height()
-	cls(0)
-	-- The stack
-	local idx = 1
-	local y_start = height - height_row
-	local has_entry = entry() ~= nil
-	if has_entry then
-		y_start -= height_row
-	end
-	for y = y_start, - height_row, - height_row do
-		draw_stack_row(idx, y, width, has_entry)
-		idx += 1
-	end
-	if has_entry then
-		draw_entry(height - height_row, width)
-	end
-	draw_error("top")
-end
-
-
------------------------------------------------------------------------------------------
--- Utils
------------------------------------------------------------------------------------------
-
-
-function str(v)
-	if type(v) == "nil" then
-		return "nil"
-	elseif type(v) == "bool" then
-		return v and "true" or "false"
-	elseif type(v) == "number" then
-		local s
-		if v == 0 then
-			s = "0"
-		elseif abs(v) >= 0.001 and abs(v) <= 999999999999 then
-			s = string.format("%f", v)
-			if string.find(s, "%.") then
-				s = string.gsub(s, "0*$", "")
-				s = string.gsub(s, "%.$", "")
-			end
-		else
-			s = string.format("%99e", v)
+function update_help()
+	while peektext() do
+		local c = readtext()
+		if c == "?" then
+			hide_help()
 		end
---		local s = tostr(v)
---		s = string.gsub(s, "%.0$", "")
-		return s
-	elseif type(v) == "string" then
-		return pod(v)
-	elseif type(v) == "table" then
-		local str = "{"
-		for k, v in pairs(v) do
-			str ..= stringify(k).."="..stringify(v)..","
-		end
-		return str.."}"
-	else
-		return "**unknown type**"
+	end
+	
+	help_lines = soft_wrap(help_text, get_display():width())
+
+	local _mx, _my, _mb, _wheel_x, wheel_y = mouse()
+	if wheel_y ~= 0 then
+		local nb_lines = get_display():height() // 11
+		help_current_line = mid(
+			1,
+			help_current_line - (wheel_y * 3),	
+			#help_lines - nb_lines
+		)
 	end
 end
 
-:: parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-12 10:25:43",revision=2041]]
+function draw_help(x, y, w, h)
+	local h_window = get_display():height()
+	local w_window = get_display():width()
+	cls(7)
+	cursor(2, 2)
+	color(5)
+	local l = help_current_line
+	local y = 0
+	while y < h_window do
+		print(help_lines[l])
+		y += 11
+		l += 1
+	end
+end
+
+:: src/parser.lua
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-12 14:05:15",revision=2289]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -600,8 +738,101 @@ function is_lowercase(char)
 	return char >= "a" and char <= "z"
 end
 
-:: stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-12 10:25:43",revision=1635]]
+:: src/soft_wrap.lua
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-12 14:05:15",revision=824]]
+-- Soft-wraps a very tiny subset of markdown.
+-- This code is absolutely horrible, but kind of work.
+function soft_wrap(text, width)
+	local space_width <const> = print(" ", -1000, -1000) + 1000
+	local lines = {}
+	local line = ""
+	local x = 0
+	local indentation = 0 -- indentation of the current paragraph
+
+	local function add_word(word)
+		if word == "" then return end
+		local dx = print(word, -1000, -1000) + 1000
+		if x + space_width + dx >= width then
+			add(lines, line)
+			line = ""
+			x = 0
+			for i = 1, indentation do
+				line ..= " "
+				x += space_width
+			end
+			line ..= word
+			x += dx
+		else
+			if line:find("^%s*$") then
+				line ..= word
+				x += dx
+			else
+				line ..= " " .. word
+				x += space_width + dx
+			end
+		end
+	end
+	
+	local function add_line()
+		add(lines, line)
+		line = ""
+		x = 0
+	end
+	
+	local in_paragraph = false
+	local in_code = false
+	local ignore_word = false
+	local ignore_line = false
+	add_line()
+	for hard_line in text:gmatch("([^\n]*)\n?") do
+		ignore_line = false
+		ignore_word = false
+		if hard_line:find("^%s*$") then
+			if in_paragraph then
+				add_line()
+				add_line()
+				in_paragraph = false
+				indentation = 0
+			end
+		elseif hard_line:find("^%s*- ") then
+			if in_paragraph then
+				add_line()
+			end
+			add_word("-")
+			indentation = 2
+			in_paragraph = true
+			ignore_word = true
+		elseif hard_line:find("^```%s*$") then
+			if line ~= "" then
+				add_line()
+			end
+			in_code = not in_code
+			ignore_line = true
+		else
+			in_paragraph = true
+ 		end
+ 		
+ 		if not ignore_line then
+	 		if in_code then
+	 			line = hard_line
+	 			add_line()
+	 		else
+				for word in hard_line:gmatch("([^%s]*)%s?") do
+					if ignore_word then
+						ignore_word = false
+					else
+						add_word(word)
+					end
+				end
+			end
+		end
+	end
+	add_line()
+	
+	return lines
+end
+:: src/stack.lua
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-12 14:05:15",revision=1883]]
 local stack = { }
 
 
@@ -762,11 +993,8 @@ function cmd_unroll()
 	add(stack, bottom_item, 1)
 end
 
-:: state.lua
---[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-12 10:25:43",revision=32]]
-height_row = 13 -- 13 or 21
-
-
+:: src/state.lua
+--[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-12 14:05:15",revision=280]]
 undo_stack = nil
 
 
@@ -786,13 +1014,23 @@ function init_undo_stack()
 	)
 end
 
+:: todo.txt
+--[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-12 14:05:15",revision=764]]
+- add: interactive drop, swap, and roll
+- add: right-click menu on stack rows
+- add: left-click on stack rows to pick
+- add: scrolling the stack
+- add: help screen
+- add: manual
+- add: macros for keys `)` `]` `}`
+- add: up/down to limit stack depth?
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 10:25:43",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 14:05:15",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-12 10:25:43"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-12 14:05:15"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTIgMTA6MjU6NDMiLHJldmlzaW9uPTIxMzJdXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTIgMTQ6MDU6MTUiLHJldmlzaW9uPTIzODBdXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -810,34 +1048,28 @@ IGZ1bmN0aW9uIGRlZmluaXRpb246IGxvd2VyY2FzZSB3b3JkLCB0aGVuICI9IiwgdGhlbiBleHBy
 ZXNzaW9uLAp0aGVuIGVudGVyLiBFeHByZXNzaW9uIGlzIGEgc2VxdWVuY2Ugb2YgbnVtYmVycywg
 b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
-:: doc/todo.md
-b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMSAxNzowNTowNCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTIgMTA6MjU6NDMiLHJldmlzaW9uPTUxNl1dCi0gYWRkOiBpbnRlcmFj
-dGl2ZSBkcm9wLCBzd2FwLCBhbmQgcm9sbAotIGFkZDogcmlnaHQtY2xpY2sgbWVudSBvbiBzdGFj
-ayByb3dzCi0gYWRkOiBsZWZ0LWNsaWNrIG9uIHN0YWNrIHJvd3MgdG8gcGljawotIGFkZDogc2Ny
-b2xsaW5nIHRoZSBzdGFjawotIGFkZDogaGVscCBzY3JlZW4KLSBhZGQ6IG1hbnVhbAotIGFkZDog
-bWFjcm9zIGZvciBrZXlzIGApYCBgXWAgYH1gCi0gYWRkOiB1cC9kb3duIHRvIGxpbWl0IHN0YWNr
-IGRlcHRoPw==
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 10:25:43"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 14:05:15"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 10:25:43"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 14:05:15"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMCAxMjo0MTozMSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 10:25:43"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-12 14:05:15"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
 AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
 MBABIAEgAfAAAhACDhABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAA------_9
 H-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
+:: src/.info.pod
+--[[pod,created="2026-01-12 12:18:36",modified="2026-01-12 14:05:15"]]
 :: [eoc]
