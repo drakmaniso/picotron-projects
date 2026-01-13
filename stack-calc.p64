@@ -7,7 +7,7 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-13 18:18:48",revision=3255]]
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-13 22:30:00",revision=3423]]
 include "src/config.lua"
 include "src/state.lua"
 include "src/stack.lua"
@@ -181,18 +181,17 @@ end
 
 
 function draw_stack(width, height)
-	local has_entry = entry() ~= nil
 	local idx = 1
 	local h_row = height_row()
 	local y_start = height - h_row
-	if has_entry then
+	if entry_shown() then
 		y_start -= h_row
 	end
 	for y = y_start, - h_row, - h_row do
-		draw_stack_row(idx, y, width, has_entry)
+		draw_stack_row(idx, y, width, entry_shown())
 		idx += 1
 	end
-	if has_entry then
+	if entry_shown() then
 		draw_entry(height - h_row, width)
 	end
 end
@@ -265,7 +264,7 @@ function str(v)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-13 18:18:48",revision=958]]
+--[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-13 22:30:00",revision=1126]]
 ## Quick Ref
 
 ```
@@ -295,7 +294,7 @@ problems that would be cumbersome to type on a traditional
 calculator, but too trivial to merit a full-blown program.
 
 :: src/calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-13 18:18:48",revision=2643]]
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-13 22:30:00",revision=2811]]
 function op_plus()
 	if depth() < 2 then
 		show_error("+: need 2 numbers")
@@ -398,9 +397,21 @@ function op_mod()
 end
 
 
+function cmd_inv()
+	if depth() < 1 then
+		show_error("inv: need 1 number")
+		return
+	end
+	local result = 1 / get(1)
+	local source = "1/"..str(get(1))
+	cmd_drop()
+	push(result, source)
+end
+
+
 function op_pow()
 	if depth() < 2 then
-		show_error("^2: need 2 numbers")
+		show_error("^: need 2 numbers")
 		return
 	end
 	local result = get(2) ^ get(1)
@@ -413,7 +424,7 @@ end
 
 function cmd_sq()
 	if depth() < 1 then
-		show_error("^: need 1 number")
+		show_error("sq: need 1 number")
 		return
 	end
 	local result = get(1) ^ 2
@@ -435,7 +446,7 @@ function cmd_sqrt()
 end
 
 :: src/config.lua
---[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-13 18:18:48",revision=1757]]
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-13 22:30:00",revision=1925]]
 config = {
 	big_rows = false,
 	with_keyboard = true,
@@ -448,12 +459,18 @@ function height_row()
 end
 
 :: src/entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-13 18:18:48",revision=3202]]
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-13 22:30:00",revision=3370]]
 local buffer = nil
+local macros = {"", "", ""}
 
 
 function entry()
 	return buffer
+end
+
+
+function entry_shown()
+	return buffer ~= nil
 end
 
 
@@ -463,8 +480,37 @@ function append(expr)
 	else
 		buffer ..= expr
 	end
-	buffer = parse(buffer)
+	buffer = eval(buffer)
 	undo_stack:checkpoint()
+end
+
+
+function backspace()
+	if buffer and #buffer > 0 then
+		buffer = buffer:sub(1, #buffer - 1)
+	end
+end
+
+
+function clear_entry()
+	if buffer then
+		buffer = ""
+	end
+end
+
+
+function load_macro(idx)
+	buffer = "("..macros[idx]
+end
+
+
+function store_macro(idx, source)
+	macros[idx] = source
+end
+
+
+function run_macro(idx)
+	eval(macros[idx])
 end
 
 
@@ -481,6 +527,9 @@ function update_entry()
 			end
 			if c == "?" then
 				show_help()
+			elseif c == "(" then
+				load_macro(1)
+				changed = true
 			else
 				buffer ..= c
 				changed = true
@@ -488,7 +537,7 @@ function update_entry()
 		end
 	end
 	if changed then
-		buffer = parse(buffer)
+		buffer = eval(buffer)
 		undo_stack:checkpoint()
 	end
 		
@@ -499,14 +548,14 @@ function update_entry()
 	
 	if keyp("kp enter") then
 		clear_error()
-		buffer = parse((buffer or "") .. " ")
+		buffer = eval((buffer or "") .. " ")
 		undo_stack:checkpoint()
 	end
 	
 	if keyp("enter") then
 		clear_error()
 		if plain and buffer then
-			buffer = parse(buffer .. " ")
+			buffer = eval(buffer .. " ")
 			undo_stack:checkpoint()
 		elseif plain and not buffer then
 			cmd_dup()
@@ -531,7 +580,7 @@ function update_entry()
 			cmd_drop()
 			undo_stack:checkpoint()
 		elseif ctrl_shifted then
-			cmd_clear()
+			cmd_dropfirst()
 			undo_stack:checkpoint()
 		end
 	end
@@ -555,7 +604,7 @@ function update_entry()
 	if keyp("tab") then
 		clear_error()
 		if plain then
-			buffer = parse((buffer or "") .. " swap ")
+			buffer = eval((buffer or "") .. " swap ")
 			undo_stack:checkpoint()
 		elseif shifted then
 			cmd_swap()
@@ -566,7 +615,7 @@ function update_entry()
 	if keyp("pageup") then
 		clear_error()
 		if plain then
-			buffer = parse((buffer or "") .. " roll ")
+			buffer = eval((buffer or "") .. " roll ")
 			undo_stack:checkpoint()
 		elseif shifted then
 			cmd_roll()
@@ -577,7 +626,7 @@ function update_entry()
 	if keyp("pagedown") then
 		clear_error()
 		if plain then
-			buffer = parse((buffer or "") .. " unroll ")
+			buffer = eval((buffer or "") .. " unroll ")
 			undo_stack:checkpoint()
 		elseif shifted then
 			cmd_roll()
@@ -587,7 +636,7 @@ function update_entry()
 end
 
 :: src/error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-13 18:18:48",revision=2535]]
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-13 22:30:00",revision=2703]]
 local error_msg = ""
 local welcome_msg = "  stack calc\n\ntype ? for help"
 
@@ -629,7 +678,7 @@ function draw_error(width, height)
 end
 
 :: src/help.lua
---[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-13 18:18:48",revision=1018]]
+--[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-13 22:30:00",revision=1186]]
 local help_shown = false
 local help_text = ""
 local help_lines = {}
@@ -718,20 +767,20 @@ function draw_help(x, y, w, h)
 end
 
 :: src/keyboard.lua
---[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-13 18:18:48",revision=286]]
+--[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-13 22:30:00",revision=454]]
 local kbd = {
 	-- First row
 	{
-		{ sprite = 0, expr = " clear ", },
-		{ sprite = 1, expr = "", },
-		{ sprite = 2, expr = "", },
+		{ sprite = 0, expr = function() if entry_shown() then clear_entry() else append(" clear ") end end, },
+		{ sprite = 1, expr = function() undo_stack:undo() end, },
+		{ sprite = 2, expr = function() undo_stack:redo() end, },
 		{ sprite = 3, expr = "", },
 		{ sprite = 4, expr = "", },
 		{ sprite = 5, expr = "", },
 	},
 	-- Second row
 	{
-		{ sprite = 8, expr = "", },
+		{ sprite = 8, expr = function() if entry_shown() then backspace() else append(" drop ") end end, },
 		{ sprite = 9, expr = "", },
 		{ sprite = 10, expr = "", },
 		{ sprite = 11, expr = "", },
@@ -740,12 +789,12 @@ local kbd = {
 	},
 	-- Third row
 	{
-		{ sprite = 16, expr = "", },
-		{ sprite = 17, expr = "", },
-		{ sprite = 18, expr = "", },
-		{ sprite = 19, expr = " 1 swap /", },
-		{ sprite = 20, expr = " sq ", },
-		{ sprite = 21, expr = " sqrt ", },
+		{ sprite = 16, expr = "" },
+		{ sprite = 17, expr = function() load_macro(1) end, },
+		{ sprite = 18, expr = append(")"), },
+		{ sprite = 19, expr = " inv ", },
+		{ sprite = 20, expr = "^", },
+		{ sprite = 21, expr = "", },
 	},
 	-- Fourth row
 	{
@@ -753,8 +802,8 @@ local kbd = {
 		{ sprite = 25, expr = "7", },
 		{ sprite = 26, expr = "8", },
 		{ sprite = 27, expr = "9", },
-		{ sprite = 28, expr = "^", },
-		{ sprite = 29, expr = "", },
+		{ sprite = 28, expr = " sq ", },
+		{ sprite = 29, expr = " sqrt ", },
 	},
 	-- Fifth row
 	{
@@ -780,7 +829,7 @@ local kbd = {
 		{ sprite = 49, expr = "0", },
 		{ sprite = 50, expr = ".", },
 		{ sprite = 51, expr = " ~ ", },
-		{ sprite = 52, expr = " ", }, -- TODO
+		{ sprite = 52, expr = function() if entry_shown() then append(" ") else append(" dup ") end end, },
 		nil,
 	},
 }
@@ -809,7 +858,11 @@ function update_keyboard(x, y, width, height)
 			if not kbd_state[j][i] then
 				clear_error()
 				kbd_state[j][i] = true
-				append(key.expr)
+				if type(key.expr) == "string" then
+					append(key.expr)
+				elseif type(key.expr) == "function" then
+					key.expr()
+				end
 			end
 		end
 	else
@@ -845,7 +898,7 @@ function draw_keyboard(x, y, width, height)
 end
 
 :: src/parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-13 18:18:48",revision=3154]]
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-13 22:30:00",revision=3322]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -862,35 +915,39 @@ local op_funcs = {
 
 local cmd_funcs = {
 	["drop"] = cmd_drop,
+	["dropfirst"] = cmd_dropfirst,
 	["clear"] = cmd_clear,
 	["dup"] = cmd_dup,
 	["swap"] = cmd_swap,
 	["roll"] = cmd_roll,
 	["unroll"] = cmd_unroll,
 	["neg"] = cmd_neg,
+	["inv"] = cmd_inv,
 	["sq"] = cmd_sq,
 	["sqrt"] = cmd_sqrt,
 }
 
 
-function parse(buffer)
+function eval(buffer)
 	local maybe_more = true
 	while #buffer > 0 and maybe_more do
 		maybe_more = false
 		local c = buffer[1]
 		local op_func = op_funcs[c]
-		if is_number_char(c) then
-			buffer, maybe_more = parse_number(buffer)
+		if is_digit(c) then
+			buffer, maybe_more = eval_number(buffer)
 		elseif is_space(c) then
 			buffer, maybe_more = string.sub(buffer, 2), true
 		elseif op_func then
 			op_func()
 			buffer, maybe_more = string.sub(buffer, 2), true
 		elseif is_lowercase(c) then
-			buffer, maybe_more = parse_identifier(buffer)
---		elseif is_uppercase(c) then
---			pick(string.byte(c) - string.byte("A") + 1)
---			buffer, maybe_more = string.sub(buffer, 2), true
+			buffer, maybe_more = eval_identifier(buffer)
+		elseif c == "(" then
+			buffer, maybe_more = eval_macro(buffer)
+		elseif c == ")" then
+			run_macro(1)
+			maybe_more = true
 		else
 			show_error("unknown character: "..c)
 			buffer, maybe_more = string.sub(buffer, 2), true
@@ -903,13 +960,17 @@ function parse(buffer)
 end
 
 
-function parse_number(buffer)
+function eval_number(buffer)
 	local pos = 1
-	while is_number_char(buffer[pos]) do
+	while is_lowalphanum(buffer[pos]) do
 		pos += 1
 	end
 	if pos > 1 and (pos - 1 < #buffer) then
 		local number = tonumber(string.sub(buffer, 1, pos - 1))
+		if not number then
+			show_error([[invalid number: "]]..string.sub(buffer, 1, pos - 1)..[["]])
+			return buffer, false
+		end
 		push(number)
 		return string.sub(buffer, pos), true
 	end
@@ -917,9 +978,9 @@ function parse_number(buffer)
 end
 
 
-function parse_identifier(buffer)
+function eval_identifier(buffer)
 	local pos = 1
-	while is_lowercase(buffer[pos]) do
+	while is_lowalphanum(buffer[pos]) do
 		pos += 1
 	end
 	if pos > 1 and (pos - 1 < #buffer) then
@@ -940,6 +1001,16 @@ function parse_identifier(buffer)
 end
 
 
+function eval_macro(buffer)
+	if buffer[#buffer] == ")" then
+		local macro = string.sub(buffer, 2, #buffer - 1)
+		store_macro(1, macro)
+		return macro.." ", true
+	end
+	return buffer, false
+end
+
+
 -------------------------------------------------------------------------------------------------
 
 
@@ -949,7 +1020,7 @@ function is_space(char)
 end
 
 
-function is_number_char(char)
+function is_digit(char)
 	if not char then return false end
 	return (char >= "0" and char <= "9") or char == "."
 end
@@ -966,8 +1037,13 @@ function is_lowercase(char)
 	return char >= "a" and char <= "z"
 end
 
+
+function is_lowalphanum(char)
+	return is_digit(char) or is_lowercase(char)
+end
+
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-13 18:18:48",revision=1689]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-13 22:30:00",revision=1857]]
 -- Soft-wraps a very tiny subset of markdown.
 function soft_wrap(text, width, with_small_font)
 	local function prefix(s) if with_small_font then return "\014"..s else return s end end
@@ -1071,7 +1147,7 @@ function soft_wrap(text, width, with_small_font)
 end
 
 :: src/stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-13 18:18:48",revision=2748]]
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-13 22:30:00",revision=2916]]
 local stack = { }
 
 
@@ -1233,7 +1309,7 @@ function cmd_unroll()
 end
 
 :: src/state.lua
---[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-13 18:18:48",revision=1145]]
+--[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-13 22:30:00",revision=1313]]
 undo_stack = nil
 
 
@@ -1254,7 +1330,7 @@ function init_undo_stack()
 end
 
 :: todo.txt
---[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-13 18:18:48",revision=1629]]
+--[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-13 22:30:00",revision=1797]]
 - add: interactive drop, swap, and roll
 - add: right-click menu on stack rows
 - add: left-click on stack rows to pick
@@ -1264,12 +1340,12 @@ end
 - add: macros for keys `)` `]` `}`
 - add: up/down to limit stack depth?
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 18:18:48",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-13 18:18:48"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-13 22:30:00"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTMgMTg6MTg6NDgiLHJldmlzaW9uPTMyNDVdXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTMgMjI6MzA6MDAiLHJldmlzaW9uPTM0MTNdXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -1288,56 +1364,65 @@ ZXNzaW9uLAp0aGVuIGVudGVyLiBFeHByZXNzaW9uIGlzIGEgc2VxdWVuY2Ugb2YgbnVtYmVycywg
 b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 18:18:48"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
-MS0xMyAxNzo1MzoyMCIscmV2aXNpb249ODddXWx6NAAoCAAAsjwAAPEXe1swXT17Ym1wPXB4dQBD
-IBEMBADvGAD_FhcOBy4nXgcuBy4HDgcIACMXbg4A8xBuFw4nDgcOB-4VDxLuDQDtACxmbGFncz0w
-LHBhbl94CADLeT0wLHpvb209OH0sYQD-COIA8igHEieiNxIHkifSN-IaDxLiDgDuSAAh7yknEgeS
-BxI30ifCN-IXSAAn9gYVLQIdEi1iDRINAg0SDXINEh0iDXIOAH8NAg0CLfIVYAAqZS0SHVINAgIA
-EFJyAAAIACQNIhIAAgoAPx3yFmgAJ0cWHRIdTAAPCgABMh1yHRAADzABIl8QEATw8JkAHC-wvDEA
-HAGDAoAVFx4nDgd_B2sCEi4IACYXHhAAAB4AHyeDAiZf7xQA-ok8AP8RD_8BV-8CCAfuF953foeO
-d54X-gAH-grqACiBCgfuB_4H-gADABEBAwAfCE8AKBQIRQABUQABWwAPngAp8AYFBy4HrhcuB74H
-HgfOBx4HDhcOF54UAL8HPgeuBx4XDhf_BF8AKOAMF-4BB_4HjhcOFw4nnrIAEN5TAA8BASk1GHeO
-qgAAgQMEwAAAEAAv-gVXAoZP4gDyiUsFJPIB5gD2B08-9gAO9gAO5g7mDgoAX-YJDxLmRQEh9gHm
-APYILz-GDiYOtg4mDsYuCgAv9ghTADMRPqkAL9YeowAmAOgBsQoXDhfeB34HHgc_BgAAjALPXgce
-B94n-gAHzieuQwIosBUHDgc_R14HTgeeWQABxgUzTgcOCgDfDgeuFx4XvgcuB94XLlACdB8xUAIB
-rxoH4ifCR6JnkmduCCbyA_YA9goPP_Ye1g4GDsYOFg7GTl8CDwkCKKEHTz_2DvYAPvYBSgBPAA62
-Pk8AKUEJHz-W9AIfPqgCMLHvEwD_GAcuB84HDjsFjw4HzgcuB-4YTAIl3xMA-hoH-g9H-g8H-hor
-AlFvJgwE8P_5fAQgrxdnkmeiR8In4gfiCiYAjQEELAIj9gADAE-WTvYHNQQuA9gEP_YO5k4ANE-W
-HvYBLAIxERqyBiBH3gcADuEBD0kAGE86R-46IAJRDzEAEB83HwIB-hcERxIHggdCF4IHAgcSR2IH
-AhcSFwIHYkcSBwIHghdCB4IHIjfyBTkCDx4GHr8WHrYOBg4GDrYeFqEBLX-mAPZdHz-mZgYnAtEC
-AcUCENY2Ai-2D38CI7AmDAQA-xkUAP5BN48IsQ5HDjcON74HPhcepQ4QPqMIEidcBlAuBy4nHhwA
-NQceFxwAATYAMS4HLggAr-5CDxL_FA0A-RSEACOxQicONy4nLicOR65eABEOBADAPgf_ABceNx5H
-Dgc_QAcA8AYCGAAx7iceDABOHicOR3wAD5UEGA-YAkoMRwJUJg62TrYKAAD0Aw83BCgmBz9VAAVl
-Bg_1BisFqAAFKAUP6gItQAcvP9agBwSfAAJNAwBVAB8JqwcuQg72AC4BAx4AgAUPTwAiIj7GCAA_
-DvYLTwAPHgITD3IJTvEEAu8VAP4WFg4GLiZeBi4GLgYOBggAIxZuDgBAbhYOJqwELv4V9AQPXgAT
-7ygGHiauNh4GnibeNv4aRgAl7ykmHgaeBh423ibONv4XRgAl9gYVLQ4dHi1uDR4NDg0eDX4NHh0u
-DX4OAH8NDg0OLf4VXgAoZS0eHV4NDgIAEF5wAAAIACQNLhIAAgoAPx3_FmYAJUcWHR4dSgAPCgAB
-Mh1_HRAADioBD3YCd3AVFh4mDgZ_CAciBi4IACYWHhAAAB4AHyaMAScfiTkA-wEP3QFY-wIIBu4W
-3nZ_ho52nhb_AAb_CuQAJYEKBu4G7gb_AAMAEQEDAB8ITAAlFAhCAAFOAAFYAA_YACbwBgUGLgau
-Fi4GvgYeBs4GHgYOFg4WnhQAvwY_Bq4GHhYOFv4EXAAl4AwW-gEG7gaOFg4WDiaerAAQ3lAAD-gA
-JjUYdo6kAABgAwS6AAAQAC-_BUUChw8ZAyLyAeUA9QdPP-UADvUADuUO5Q4KAE-1CQDlTAAi1ggv
-P8UOJQ61DiUOxS4KAC-1CFAAMBE_owAv1R6dACMAIgGxChYOFt4GfgYeBj4GAAB4Au9eBh4G3ib_
-AAbOJq4A7lgAI5AVBg4GPkZeBk50ByEGHpQFM04GDgoA3w4GrhYeFr4GLgbeFi4-AoevGgbuJs5G
-rmaeZjEII-ID5QD1Cg8-5R7VDgUOxQ4VDsVOTgIP_wEloQdPP7UO9QA_9QFHAE8ADrU_TAAmQQkf
-P9XdAh8_lAItACoBcRgGLgbOBg4TBY4OBs4GLgb_GDIBD3YBFY-_D0b_Dwb_GhoCh54XZp5mrkbO
-Ju6mAA_BARYEGgIj9QADAE-VTvUHFQQrA7IEP_UO5UsAMU-VHvUBGgIuERp_BiBG3gcADywBIwBG
-AE86Rv46PAAgH7wOAlOQBEYeBo4GThaO4QQgRm6HClAWDgZuRu0Ejo4WTgaOBi42JwcP8AUdvxUe
-tQ4FDgUOtR4VlgEqf_UA9V0fP_U1BiQCugIBrgIQ1SUCL-UPawIfAOoQPxf-FesRNj8A-hSAACEP
-5xEuLwD_4hGBCjYCVCUOtU61CgAA2AMPGAQlJgc-UgAFNAYOgQYP2AIfBQAFD9MCKkAHLz-VYwcE
-mQACMwMAUgAfCW4HK0IO9QAu6gIeAFUFD0wAHyI_xQgAPg71C0wADwwCDw9CG08PMQD--zYP7AQR
-HzEyACwOlQAPMQD-----dw55Bw8tBTAfOJQAHR83MQC_DlgBDzEAbg-EABAfODEA7w5XAQ8xAP--
-----------------A1BtPTh9fQ==
+MS0xMyAyMjowOTozNCIscmV2aXNpb249MTQ0XV1sejQAMQoAAKNAAADxF3tbMF09e2JtcD1weHUA
+QyARDAQA7xgA-hYXDgcuJ14HLgcuBw4HCAAjF24OAPMQbhcOJw4HDgf_FQ8S7g0A7QAsZmxhZ3M9
+MCxwYW5feAgAy3k9MCx6b29tPTd9LGEA-wjiAPIoBxInojcSB5In0jfyGg8S4g4A7kgAIe8pJxIH
+kgcSN9InwjfyF0gAJx_JOwAn8ggWFwInAidSBzIHEgcCB1InEgcSJ3IHEg4AIRciCAAv8hVgACdx
+FScCFxInYkgAlhIHcgcSFyIHcg4AXwcCBwInYAAlL-C8MQBNAU4C-wIIB_4X3nd_h453nhf_AAf_
+CjkCJPEH7xQA-gwH-gAHnhcOFw4HvgcuB74H3gwAL-4XVAAosAoXDhfeB44nPgd_4gLPFw4XXke_
+B-4BJ-4LVgAoEBaqAJI_J44HPgceB34GAH83DgceB-4WrAAuUH4HDicuigMiBw6wAAAIACQHvgYA
+HydjASpxFQc_Fx4XXu0DOw4HfggAjg4HXicOFx4n-wMPQwJJQBUXHieEAACAABIuCAAmFx4QAAAe
+AA_SACbxDADhAPEVJxEXASdRBwEHAQchJ1EnAQchBwEHUQYAEgEKABAnCABe8RUPEuHKAw9ZARNQ
+CQfuB_4WAgADABEBAwAfCagBKBQJRQABUQABWwAPTwApYAUHLgeuF1MDUR4HzgceWAIQnhQAvwc_
+B64HHhcOF-4EuQIwMR4HPgYAER63Aq8eB94n-gAHzieuWwAosAQHDgc_R14HTgeeWQABFQIzTgcO
+CgBCDgeuFxgDEB5_BD-eFy65AlQv8LyJAiAfiWACJPIB5gD2B08-9gAO9gAO5g7mDgoAX-YJDxLm
+VwEh9gHmAPYILz-GDiYOtg4mDsYuCgAv9ghTADMRPqkAL9YeowAmAPoBgAwX-gEH7geOBAYxJ54H
+3wFPDhf_CE0CKDUYd47-AgBgBAQVAwAQAC-_BTsCVAJZCDASFwJFCCAHIuUHDwoAATIXchcQAA-8
+CCmvGgfiJ8JHomeSZ0YAJvID5gD2Cg8-5h7WDgYOxg4WDsZOgQIPKwIooQdPP7YO9gA_9gFKAE8A
+DrY_TwApQQkfP9YWAx8_ygIwse8TAP4YBy4HzgcOdwWPDgfOBy4H-hh2AiXfEwD_Ggf_D0f_Dwf_
+GkUAIF8QEATw8DEACxk4MQBvJgwE8P_5MgAZAywCrhdnkmeiR8In4ge2Cw9GABQAjQEELAIj9gAD
+AE7WTvYHjQEPUAAVA1cEA-oEP_YO5k4ANE7WHvYBLAIPUQAbA90BUAAH3kfeBwAO4QEPSQAYTzpH
+-jo-ABMOIAIPMQA8D0sEApAERxIHggdCF4KeDEFHYgcCwwQgYkemDK6CF0IHggciN-IFOQIPmwEc
+37YOFh62DgYOBg62HhahAS1_5gD2XR8-5ogGD9ECGwHFAhDWNgIv9g9-AiOwJgwEAP8ZFAD_QTd2
+BnAORw43Dje_jAsBeQ8QPooGEifTCFAuBy4nHhwANQceFxwAATYAMS4HLggAr-5CDxL_FA0A-RSE
+ACOxQicONy4nLicOR65eABEOBADAPgf_ABceNx5HDgc_twkAZwkCGAAx7iceDABOHicOR3wAD5UE
+GA-YAkoOiwcPMQD-Ag5XAQ_IAUHxBALvFQD_FhYOBi4mXgYuBi4GDgYIACMWbg4AQG4WDiblAy-_
+FS0EDi8xMF8AA_8oBh4mrjYeBp4m3jb_GkcAJu8pJh4GngYeNt4mzjb_F0cAIA9jEhcvMTBkEkwv
+MTBlEkwvMTBNAmX_AggG7hbedn6GjnaeFv4ABv4KrAAPSQAND2MS-7EPcQJVkj8A-hUnHhcOJxkB
+VS4nXicOLhcDxgAjBy4qFw7CBA-TAhOBCgbuBu4G-gADABEBAwAfCEwAJRQIQgABTgABWAAfCkwA
+JfAGBQYuBq4WLga_Bh4GzgYeBg4WDhaeFAC-Bj4GrgYeFg4W-gRcACWxChYOFt4GfgYeBj4GAABO
+AM9eBh4G3ib_AAbOJq5YACWQFQYOBj5GXgZOzAUAtABjBg4GTgYOCgDfDgauFh4WvgYuBt4WLmMA
+Dw9zAl8OHRIPAAEY8gHlAPUHTz-1AA71AA7lDuUOCgBP9QkA5UwAItYILz-FDiUOtQ4lDsUuCgAv
+9QhQADARPqMAL9UenQAjAOkB4AwW-gEG7gaOFg4WDiae7QIQ3pECDzkDJjUYdo7lAjV_Bg77AgAQ
+AC7_BVYAD78JbAW4AK4aBu4mzkauZp5mtQgPmQEU8gAKDz-lHtUOBQ7FDhUOxU45Ag-mASWhB08-
+tQ71AD71AUcATwAOtT5MACZBCR8-1cgCHz5-Ai0B4gFhBi4GzgYOFQWODgbOBi4G-hgyAQ92ARWP
+-g9G-g8G-hpGBIECpACeF2aeZq5GzibupgAPgQEWBBoCI-UAAwBP1U71BwAEKwOdBD-lDuVLADFP
+1R71ARoCLhEaPwQgRt4HAA8sASMARgBPOkb_OigEIQ8OAlOQBEYeBo4GThaODQewRm4GDhYeFg4G
+bkYZB46OFk4GjgYuNugED9sFHb8VHrUOBQ4FDrUeFZYBKn-lAPVdHz-lIAYkAroCAa4CENUlAi-1
+D2sCHwCpED8X-xWqETY-AP4UgAAhD6YRLi8A-qERggk2AlQlDrVOtQoAANgDDxgEJSYHP1IABTQG
+DoEGD9gCHwUABQ-TAipABy8-1WMHBJkAAjMDAFIAHwluBytCDvUALuoCHgBVBQ9MAB8iPsUIAD4O
+9QtMAA8MAg8PPQJOH7yODh0C-RBrJwIXYgcCUhEWUhIAACIADmQRD2YAGrADxzIHIgciBxIXMk8R
+cBcCFwIHDxTTERAnCwAmDgcXACIOBysAAQoAb8fyAw8S4mkPIQDbAGEXEicSF1IkHADSEQBiAADS
+EQMQAAEeAA-VAC1SEhciFxK_ABAHpxICCgBIEhcCJxQAAyYAAs4AD24AJBIVTgADmwEAwgABmwFG
+FyIHYhAABSQAD60BLQRSABYC3AABDAARIrIBChQABywAD_IAJi-wvDEATQCrGEAHLz-Woh0DBh0C
+BAAQFkEZD4gfJQatHUIO9gAuAxkeAAMZD08AIiI_xggAPg72C08AD24SFwBOEiEXbpEHBWASBAoA
+AwgACQwAHxdAEyofiTwAIy-wvDEAfgl0G0ImDrZOLwICBAAP4gEqFj9VAAWSHw-iHysFqAADMQIe
+ABccDwsiHgFVIgIUAgEIACQXrg4APxceBxIWLBAVoSQFPxQCAgASbrMkLBdulQICbwAO4CYPuSR4
+sgPHMQchFxEHIQcxNCcQJwoAMSEHATgnEzEIAAQMAAJYJ08xx-ED8CQjL-C8MQB_AdYBUxkHHge_
+BAAT3gQAL-4YJwIoFxhJAARZAC-_GQkCJQ8xAP9xDtcKD3cNMQ-FAB4PWAHhDzEAXQ-EABAfODEA
+7w5XAQ8xAP------------------A1BtPTh9fQ==
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 18:18:48"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMCAxMjo0MTozMSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 18:18:48"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -1345,5 +1430,5 @@ AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
 MBABIAEgAfAAAhACDhABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAA------_9
 H-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
 :: src/.info.pod
---[[pod,created="2026-01-12 12:18:36",modified="2026-01-13 18:18:48"]]
+--[[pod,created="2026-01-12 12:18:36",modified="2026-01-13 22:30:00"]]
 :: [eoc]
