@@ -7,7 +7,7 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-13 22:30:00",revision=3423]]
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-13 22:51:44",revision=3458]]
 include "src/config.lua"
 include "src/state.lua"
 include "src/stack.lua"
@@ -264,7 +264,7 @@ function str(v)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-13 22:30:00",revision=1126]]
+--[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-13 22:51:44",revision=1161]]
 ## Quick Ref
 
 ```
@@ -294,7 +294,7 @@ problems that would be cumbersome to type on a traditional
 calculator, but too trivial to merit a full-blown program.
 
 :: src/calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-13 22:30:00",revision=2811]]
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-13 22:51:44",revision=2846]]
 function op_plus()
 	if depth() < 2 then
 		show_error("+: need 2 numbers")
@@ -446,7 +446,7 @@ function cmd_sqrt()
 end
 
 :: src/config.lua
---[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-13 22:30:00",revision=1925]]
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-13 22:51:44",revision=1960]]
 config = {
 	big_rows = false,
 	with_keyboard = true,
@@ -459,7 +459,7 @@ function height_row()
 end
 
 :: src/entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-13 22:30:00",revision=3370]]
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-13 22:51:44",revision=3405]]
 local buffer = nil
 local macros = {"", "", ""}
 
@@ -510,7 +510,7 @@ end
 
 
 function run_macro(idx)
-	eval(macros[idx])
+	eval(macros[idx].." ")
 end
 
 
@@ -636,7 +636,7 @@ function update_entry()
 end
 
 :: src/error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-13 22:30:00",revision=2703]]
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-13 22:51:44",revision=2738]]
 local error_msg = ""
 local welcome_msg = "  stack calc\n\ntype ? for help"
 
@@ -678,7 +678,7 @@ function draw_error(width, height)
 end
 
 :: src/help.lua
---[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-13 22:30:00",revision=1186]]
+--[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-13 22:51:44",revision=1221]]
 local help_shown = false
 local help_text = ""
 local help_lines = {}
@@ -767,7 +767,7 @@ function draw_help(x, y, w, h)
 end
 
 :: src/keyboard.lua
---[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-13 22:30:00",revision=454]]
+--[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-13 22:51:44",revision=489]]
 local kbd = {
 	-- First row
 	{
@@ -791,7 +791,7 @@ local kbd = {
 	{
 		{ sprite = 16, expr = "" },
 		{ sprite = 17, expr = function() load_macro(1) end, },
-		{ sprite = 18, expr = append(")"), },
+		{ sprite = 18, expr = ")", },
 		{ sprite = 19, expr = " inv ", },
 		{ sprite = 20, expr = "^", },
 		{ sprite = 21, expr = "", },
@@ -898,7 +898,7 @@ function draw_keyboard(x, y, width, height)
 end
 
 :: src/parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-13 22:30:00",revision=3322]]
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-13 22:51:44",revision=3357]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -947,7 +947,7 @@ function eval(buffer)
 			buffer, maybe_more = eval_macro(buffer)
 		elseif c == ")" then
 			run_macro(1)
-			maybe_more = true
+			buffer, maybe_more = string.sub(buffer, 2), true
 		else
 			show_error("unknown character: "..c)
 			buffer, maybe_more = string.sub(buffer, 2), true
@@ -1043,7 +1043,7 @@ function is_lowalphanum(char)
 end
 
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-13 22:30:00",revision=1857]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-13 22:51:44",revision=1892]]
 -- Soft-wraps a very tiny subset of markdown.
 function soft_wrap(text, width, with_small_font)
 	local function prefix(s) if with_small_font then return "\014"..s else return s end end
@@ -1147,7 +1147,7 @@ function soft_wrap(text, width, with_small_font)
 end
 
 :: src/stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-13 22:30:00",revision=2916]]
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-13 22:51:44",revision=2951]]
 local stack = { }
 
 
@@ -1309,7 +1309,7 @@ function cmd_unroll()
 end
 
 :: src/state.lua
---[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-13 22:30:00",revision=1313]]
+--[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-13 22:51:44",revision=1348]]
 undo_stack = nil
 
 
@@ -1330,7 +1330,7 @@ function init_undo_stack()
 end
 
 :: todo.txt
---[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-13 22:30:00",revision=1797]]
+--[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-13 22:51:44",revision=1832]]
 - add: interactive drop, swap, and roll
 - add: right-click menu on stack rows
 - add: left-click on stack rows to pick
@@ -1340,12 +1340,12 @@ end
 - add: macros for keys `)` `]` `}`
 - add: up/down to limit stack depth?
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:51:44",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-13 22:30:00"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-13 22:51:44"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTMgMjI6MzA6MDAiLHJldmlzaW9uPTM0MTNdXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTMgMjI6NTE6NDQiLHJldmlzaW9uPTM0NDhdXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -1364,7 +1364,7 @@ ZXNzaW9uLAp0aGVuIGVudGVyLiBFeHByZXNzaW9uIGlzIGEgc2VxdWVuY2Ugb2YgbnVtYmVycywg
 b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:51:44"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMyAyMjowOTozNCIscmV2aXNpb249MTQ0XV1sejQAMQoAAKNAAADxF3tbMF09e2JtcD1weHUA
@@ -1415,14 +1415,14 @@ sgPHMQchFxEHIQcxNCcQJwoAMSEHATgnEzEIAAQMAAJYJ08xx-ED8CQjL-C8MQB_AdYBUxkHHge_
 BAAT3gQAL-4YJwIoFxhJAARZAC-_GQkCJQ8xAP9xDtcKD3cNMQ-FAB4PWAHhDzEAXQ-EABAfODEA
 7w5XAQ8xAP------------------A1BtPTh9fQ==
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:51:44"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xMCAxMjo0MTozMSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:30:00"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-13 22:51:44"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -1430,5 +1430,5 @@ AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
 MBABIAEgAfAAAhACDhABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAA------_9
 H-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
 :: src/.info.pod
---[[pod,created="2026-01-12 12:18:36",modified="2026-01-13 22:30:00"]]
+--[[pod,created="2026-01-12 12:18:36",modified="2026-01-13 22:51:44"]]
 :: [eoc]
