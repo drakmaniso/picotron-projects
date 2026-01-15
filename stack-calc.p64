@@ -7,7 +7,7 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-14 14:21:36",revision=3913]]
+--[[pod_format="raw",created="2026-01-10 13:14:25",modified="2026-01-15 17:25:50",revision=4364]]
 include "src/config.lua"
 include "src/state.lua"
 include "src/stack.lua"
@@ -61,6 +61,7 @@ function _init()
 		title = "Stack Calc",
 		width = width_kbd, height = 2 * height_kbd,
 		pauseable = false,
+		fullscreen = false,
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ACIAAAAmAAAA8QBweHUAQyAICAQAVxAHMAcEAGNXEAcAFwAIAFAABxBXAA=="),
 	}
 	menuitem {
@@ -96,7 +97,7 @@ function _init()
 			if config.keyboard_shown then
 				if config.keyboard_below then
 					width = max(msg.width, width_kbd)
-					height = max(msg.height, height_kbd + 3 * 13)
+					height = max(msg.height, height_kbd + 2 * 13 + 4)
 				else
 					width = max(msg.width, width_kbd + 68)
 					height = max(msg.height, height_kbd)
@@ -169,6 +170,11 @@ function _update()
 	if config.keyboard_shown then
 		local x_kbd = width_win - width_kbd
 		local y_kbd = height_win - height_kbd
+		if config.keyboard_below then
+			x_kbd = x_kbd // 2
+		else
+			y_kbd = y_kbd // 2
+		end
 		update_keyboard(x_kbd, y_kbd, width_kbd, height_kbd)
 	end
 	if key("ctrl") then
@@ -198,20 +204,20 @@ function _update()
 end
 
 
-local function draw_stack_row(idx, y, width, no_entry)
+local function draw_stack_row(idx, x, y, width, no_entry)
 	local h_row = height_row()
 	local offset = no_entry and 0 or 1
 	--local offset = depth() % 2
 	if idx % 2 == offset then
-		rrectfill(0, y, width, h_row, 0, bg1)
+		rrectfill(x, y, width, h_row, 0, bg1)
 	else
-		rrectfill(0, y, width, h_row, 0, bg2)
+		rrectfill(x, y, width, h_row, 0, bg2)
 	end
 	local item = get_item(idx)
-	line(width - 9, y, width - 9, y + h_row - 1, 19)
+	line(x + width - 9, y, x + width - 9, y + h_row - 1, 19)
 	if item then
 		local y_letter = y + h_row - 10
-		print(index_to_letter(idx, "lowercase"), width - 6, y_letter, fg_alt)
+		print(index_to_letter(idx, "lowercase"), x + width - 6, y_letter, fg_alt)
 		local text_value = str(item.value)
 		local w_value = print(text_value, 0, -1000, 0)
 		local big_rows = h_row > 20
@@ -220,22 +226,22 @@ local function draw_stack_row(idx, y, width, no_entry)
 			local w_source = print(text_source, 0, -1000, 0)
 			local source_fits = w_source + 2 < width - 12 - w_value
 			if source_fits or big_rows then
-				print(text_source, 2, y + 4, 0)
+				print(text_source, x + 2, y + 4, 0)
 			else
-				print(".\-f.\-f.", 2, y + 4, 0)
+				print(".\-f.\-f.", x + 2, y + 4, 0)
 			end
 		end
-		print(text_value, width - 14 - w_value, y + h_row - 10, fg)
+		print(text_value, x + width - 14 - w_value, y + h_row - 10, fg)
 	end
 end
 
 
-function draw_entry(y, width)
+function draw_entry(x, y, width)
 	local h_row = height_row()
-	rrectfill(0, y, width, h_row, 0, 1)
+	rrectfill(x, y, width, h_row, 0, 1)
 	local text_entry = entry()
 	local w = print(text_entry, 0, -1000)
-	local x_end = print(text_entry, width - 14 - w, y + h_row - 10, fg)
+	local x_end = print(text_entry, x + width - 14 - w, y + h_row - 10, fg)
 	if (peek(0x547f) & 0x10) > 0 then
 		if blink_timer <= blink_speed then
 			rrectfill(x_end, y + h_row - 12, 6, 11, 0, 14)
@@ -246,19 +252,19 @@ function draw_entry(y, width)
 end
 
 
-function draw_stack(width, height)
+function draw_stack(x_stack, y_stack, width, height)
 	local idx = 1
 	local h_row = height_row()
-	local y_start = height - h_row
+	local y_start = y_stack + height - h_row
 	if entry_shown() then
 		y_start -= h_row
 	end
 	for y = y_start, - h_row, - h_row do
-		draw_stack_row(idx, y, width, entry_shown())
+		draw_stack_row(idx, x_stack, y, width, entry_shown())
 		idx += 1
 	end
 	if entry_shown() then
-		draw_entry(height - h_row, width)
+		draw_entry(x_stack, y_stack + height - h_row, width)
 	end
 end
 
@@ -280,11 +286,30 @@ function _draw()
 		draw_help()
 		return
 	end
-	draw_stack(width_stack, height_stack)
-	draw_error(width_stack, height_stack)
+	
+	do
+		local x, y = 2, 2
+		local width = width_stack - 4
+		local height = height_stack - 4
+		clip(x, y, width, height)
+		draw_stack(x, y, width, height)
+		draw_error(x, y, width, height)
+		clip()
+		rrectfill(x, y, width, height, 4, 0x800000000 | 13)
+		rrect(x - 1, y - 1, width + 2, height + 2, 6, 6)
+		clip(x - 1, y - 1, width - 1, height - 1)
+		rrect(x - 1, y - 1, width + 2, height + 2, 6, 5)
+		clip()
+	end
+	
 	if config.keyboard_shown then
 		local x_kbd = width_win - width_kbd
 		local y_kbd = height_win - height_kbd
+		if config.keyboard_below then
+			x_kbd = x_kbd // 2
+		else
+			y_kbd = y_kbd // 2
+		end
 		draw_keyboard(x_kbd, y_kbd, width_kbd, height_kbd)
 	end
 end
@@ -330,33 +355,120 @@ function str(v)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-14 14:21:36",revision=1616]]
+--[[pod_format="raw",created="2026-01-12 12:42:40",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-01-15 17:25:50",revision=2067]]
 ## Quick Ref
 
 ```
 Stack manipulation:
-  \f2Enter\fd=dup  \f2Tab\fd=swap
-  \f2Backspace\fd=drop  \f2Del\fd=dropfirst
-  \f2PageUp\fd=roll \f2PageDown\fd=unroll\fi
+  [Tab]: "swap"
+  [Enter]: "dup"
+  [Backspace]: "drop"
+  [Ctrl-Del]: "clear"
+  [PageUp]/[PageDown]: "roll"/"unroll"
 
 Math operators:
-  \f2+ - * /
-  \f2~\fd=neg
-  \f2\\fd=idiv \f2%\fd=mod
-  \f2^\fd=pow \f2@\fd=sq \f2$\fd=sqrt\fi
+  [+] [-] [*] [/]
+  [~]: "neg"    [&]: "inv"
+  [\]: "idiv"    [%]: "mod"
+  [^]: "pow"
+  [@]: "sq"    [$]: "sqrt"
+  [!]: "fact"
+
+Math functions:
+  "sqrt" "root"
+  "exp" "ln" "pow10" "log"
+  "cos" "sin" "tan" "acos" "asin" "atan" "atan2"
+  "pi" "deg" "rad"
 ```
+Stack variables: each single-letter variable correspond to a
+stack row; "a" is the oldest entry, "b" the second oldest,
+and so on.
 
 ## Introduction
 
 This calculator uses postfix notation (aka RPN): operators
-must follow their operands. For example, to add 2 and 3
-together, type "2(enter)3+".
+follow their operands. For example, to add 2 and 3 together,
+type [2] [enter] [3] [+].
 
-Note: although there is an on-screen keyboard, the app is best
-used with a physical keyboard.
+- Push numbers on the stack using [space] or [enter].
+
+- Operators (such as [+] or [*]) take the numbers they need
+  from the stack and replace them with the result.
+
+- As a shortcut, operators can also be used to validate the
+  number currently edited, and perform a calculation in a
+  single step.
+
+- Functions ("sqrt", "cos") and commands (such as "dup",
+  "swap") are executed with [space] or [enter].
+
+- Some keys manipulate the stack; the most useful are [tab]
+  to swap the two most-recent entries, [enter] to duplicate
+  the last entry, and [backspace] to drop it.
+
+- Macros start with an opening bracket [(] [[] [{].
+
+- Run a macro by typing the corresponding closing bracket.
+
+Note: there is an on-screen keyboard for convenience, but
+the app is designed to be used with your physical keyboard.
+
+## Operator keys
+
+- [+] [-] [*] [/]: arithmetic operators. Note that [-] is
+  only used for subtraction; use [~] for entering negative
+  numbers.
+- [~]: negates the most recent number.
+- [\]: integer division.
+- [%]: modulo.
+- [^]: exponentiation.
+- [@]: square.
+- [$]: square root.
+- [!]: factorial
+
+## Stack Manipulation
+
+- [Tab]: exchange the two most recent numbers. Spelled
+  "swap" in macros.
+
+- [Enter] (when no entry is being edited): duplicate the
+  most recent number. Spelled "dup" in macros.
+
+- [Ctrl-Enter]: duplicate the second most recent number.
+  Spelled "over" in macros.
+
+- [PageUp]: move all numbers in the stack upward (the oldest
+  is replacing the most recent). Spelled "roll" in macros.
+
+- [PageDown]: move all numbers in the stack downward (the
+  most recent is replacing the oldest). Spelled "unroll" in
+  macros.
+
+- [Backspace] (when no entry is being editied): remove the
+  most recent number. Spelled "drop" in macros.
+
+- [Del]: remove the oldest number. Spelled "dropfirst" in
+  macros.
+
+- [Ctrl-Del]: clear the stack. Spelled "clear" in macros.
+
+## Macros
+
+It's possible to define three macros at the same time,
+corresponding to the three kind of brackets: () [] {}.
+
+To start writing a macro, type an open bracket (eg [(]),
+then type numbers, operators and commands as usual. When the
+macro is complete, type the closing bracket. The macro will
+be stored and immediately executes.
+
+To run a macro at anytime, simply type the closing bracket.
+
+To edit a macro, type the opening bracket again; the
+previous content will be loaded in the entry buffer.
 
 :: src/calc.lua
---[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-14 14:21:36",revision=3301]]
+--[[pod_format="raw",created="2026-01-10 20:00:00",modified="2026-01-15 17:25:50",revision=3752]]
 function op_plus(ongoing_source)
 	if depth() < 2 then
 		show_error("+: need 2 numbers")
@@ -515,7 +627,7 @@ function cmd_sqrt(ongoing_source)
 		return
 	end
 	local result = sqrt(get(1))
-	local source = "sqrt("..str(get(1))..")"
+	local source = "\|f\^:7010101418100000\|h"..str(get(1))
 	cmd_drop()
 	push(result, ongoing_source or source)
 end
@@ -594,8 +706,124 @@ function op_fact(ongoing_source)
 	push(result, ongoing_source or source)
 end
 
+
+function cmd_pi(ongoing_source)
+	local result = math.pi
+	local source = "pi"
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_deg(ongoing_source)
+	if depth() < 1 then
+		show_error("deg: need 1 number")
+		return
+	end
+	local result = math.deg(get(1))
+	local source = "deg("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_rad(ongoing_source)
+	if depth() < 1 then
+		show_error("rad: need 1 number")
+		return
+	end
+	local result = math.rad(get(1))
+	local source = "rad("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_cos(ongoing_source)
+	if depth() < 1 then
+		show_error("cos: need 1 number")
+		return
+	end
+	local result = math.cos(get(1))
+	local source = "cos("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_sin(ongoing_source)
+	if depth() < 1 then
+		show_error("sin: need 1 number")
+		return
+	end
+	local result = math.sin(get(1))
+	local source = "sin("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_tan(ongoing_source)
+	if depth() < 1 then
+		show_error("tan: need 1 number")
+		return
+	end
+	local result = math.tan(get(1))
+	local source = "tan("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_acos(ongoing_source)
+	if depth() < 1 then
+		show_error("acos: need 1 number")
+		return
+	end
+	local result = math.acos(get(1))
+	local source = "acos("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_asin(ongoing_source)
+	if depth() < 1 then
+		show_error("asin: need 1 number")
+		return
+	end
+	local result = math.asin(get(1))
+	local source = "asin("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_atan(ongoing_source)
+	if depth() < 1 then
+		show_error("atan: need 1 number")
+		return
+	end
+	local result = math.atan(get(1))
+	local source = "atan("..str(get(1))..")"
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
+
+function cmd_atan2(ongoing_source)
+	if depth() < 2 then
+		show_error("atan2: need 2 numbers")
+		return
+	end
+	local result = math.atan(get(2), get(1))
+	local source = "atan2("..str(get(2))..","..str(get(1))..")"
+	cmd_drop()
+	cmd_drop()
+	push(result, ongoing_source or source)
+end
+
 :: src/config.lua
---[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-14 14:21:36",revision=2415]]
+--[[pod_format="raw",created="2026-01-11 15:26:40",modified="2026-01-15 17:25:50",revision=2866]]
 config = {
 	big_rows = false,
 	keyboard_shown = true,
@@ -608,7 +836,7 @@ function height_row()
 end
 
 :: src/entry.lua
---[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-14 14:21:36",revision=3860]]
+--[[pod_format="raw",created="2026-01-10 13:36:29",modified="2026-01-15 17:25:50",revision=4311]]
 local buffer = nil
 local macros = {"", "", ""}
 
@@ -688,9 +916,6 @@ function update_entry()
 		if is_uppercase(c) then
 			pick(letter_to_index(c, "uppercase"), c)
 		else
-			if not buffer then
-				buffer = ""
-			end
 			if c == "?" then
 				show_help()
 			elseif is_macro_opener(c) then
@@ -700,7 +925,7 @@ function update_entry()
 				close_macro(macro_idx(c))
 				changed = true
 			else
-				buffer ..= c
+				buffer = (buffer or "") .. c
 				changed = true
 			end
 		end
@@ -822,7 +1047,7 @@ function update_entry()
 end
 
 :: src/error.lua
---[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-14 14:21:36",revision=3193]]
+--[[pod_format="raw",created="2026-01-10 20:54:23",modified="2026-01-15 17:25:50",revision=3644]]
 local error_msg = ""
 local welcome_msg = "  stack calc\n\ntype ? for help"
 
@@ -838,14 +1063,14 @@ function clear_error()
 end
 
 
-function draw_error(width, height)
+function draw_error(x0, y0, width, height)
 	if welcome_msg ~= "" then
 		local msg = "\014"..welcome_msg
 		local w, h = print(msg, -1000, -1000)
 		w += 1000; h += 1000
 		w += 20; h += 14
-		local x = (width - w) // 2
-		local y = (height - h) // 2
+		local x = x0 + (width - w) // 2
+		local y = y0 + (height - h) // 2
 		rrectfill(x + 2, y + 2, w - 1, h - 1, 0, 0)
 		rrectfill(x, y, w - 1, h - 1, 0, 5)
 		rrect(x + 2, y + 2, w - 5, h - 5, 0, 22)
@@ -858,13 +1083,12 @@ function draw_error(width, height)
 	local msg = "\014"..error_msg
 	local w, h = print(msg, -1000, -1000)
 	w, h = w + 1000, h + 1000
-	local y = 0
-	rrectfill(0, y, width, h + 5, 0, 8)
-	print(msg, (width - w) // 2, y + 3, 7)
+	rrectfill(x0, y0, width, h + 5, 0, 8)
+	print(msg, x0 + (width - w) // 2, y0 + 3, 7)
 end
 
 :: src/help.lua
---[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-14 14:21:36",revision=1676]]
+--[[pod_format="raw",created="2026-01-12 11:43:13",modified="2026-01-15 17:25:50",revision=2127]]
 local help_shown = false
 local help_text = ""
 local help_lines = {}
@@ -896,6 +1120,14 @@ local function resize_help()
 end
 
 
+local function process_line(line)
+	line = line:gsub("%[([^%]]+)%]", "\f6[\fg%1\f6]\fi")
+--	line = line:gsub("%]", "\f6]\fi")
+	line = line:gsub([["([%w-]+)"]], "\fr%1\fi")
+	return line or ""
+end
+
+
 function init_help()
 	help_text = fetch("manual.txt")
 	on_event("resize", function() resize_help() end)
@@ -909,7 +1141,7 @@ function update_help()
 	elseif resize_needed then
 		local width = get_display():width() - 2
 		small_font = width < 160
-		help_lines = soft_wrap(help_text, width, small_font)
+		help_lines = soft_wrap(help_text, width, small_font, process_line)
 		resize_timer = 15
 	end
 	
@@ -958,7 +1190,7 @@ function draw_help(x, y, w, h)
 end
 
 :: src/keyboard.lua
---[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-14 14:21:36",revision=944]]
+--[[pod_format="raw",created="2026-01-13 12:59:02",modified="2026-01-15 17:25:50",revision=1395]]
 local kbd = {
 	-- First row
 	{
@@ -1089,7 +1321,7 @@ function draw_keyboard(x, y, width, height)
 end
 
 :: src/parser.lua
---[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-14 14:21:36",revision=3812]]
+--[[pod_format="raw",created="2026-01-10 14:19:08",modified="2026-01-15 17:25:50",revision=4263]]
 local op_funcs = {
 	["+"] = op_plus,
 	["-"] = op_minus,
@@ -1099,6 +1331,7 @@ local op_funcs = {
 	["\\"] = op_backslash,
 	["%"] = op_mod,
 	["^"] = op_pow,
+	["&"] = cmd_inv,
 	["@"] = cmd_sq,
 	["$"] = cmd_sqrt,
 	["!"] = op_fact,
@@ -1124,6 +1357,16 @@ local cmd_funcs = {
 	["pow10"] = cmd_pow10,
 	["log"] = cmd_log,
 	["fact"] = op_fact,
+	["pi"] = cmd_pi,
+	["deg"] = cmd_deg,
+	["rad"] = cmd_rad,
+	["cos"] = cmd_cos,
+	["sin"] = cmd_sin,
+	["tan"] = cmd_tan,
+	["acos"] = cmd_acos,
+	["asin"] = cmd_asin,
+	["atan"] = cmd_atan,
+	["atan2"] = cmd_atan2,
 }
 
 
@@ -1272,9 +1515,9 @@ function macro_closer(idx)
 end
 
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-14 14:21:36",revision=2347]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-01-15 17:25:50",revision=2798]]
 -- Soft-wraps a very tiny subset of markdown.
-function soft_wrap(text, width, with_small_font)
+function soft_wrap(text, width, with_small_font, transform)
 	local function prefix(s) if with_small_font then return "\014"..s else return s end end
 	local space_width <const> = print(prefix(" "), -1000, -1000) + 1000
 	local lines = {}
@@ -1316,6 +1559,7 @@ function soft_wrap(text, width, with_small_font)
 	end
 
 	local function add_word(word)
+		local word = transform and transform(word) or word
 		local dx = print(prefix(word), -1000, -1000) + 1000
 		if lines[#lines] == "" then
 			lines[#lines] = word
@@ -1337,11 +1581,13 @@ function soft_wrap(text, width, with_small_font)
 	end
 	
 	for source_line in text:gmatch("([^\n]*)\n") do
-		source_line = source_line:gsub("\\f", "\f")
 		if context == "code" then
 			if source_line:find("^```") then
 				context = "default"
+				indentation = 0
+				add_paragraph_break()
 			else
+				source_line = transform and transform(source_line) or source_line
 				add_line(source_line)
 			end
 			goto next_line
@@ -1376,7 +1622,7 @@ function soft_wrap(text, width, with_small_font)
 end
 
 :: src/stack.lua
---[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-14 14:21:36",revision=3406]]
+--[[pod_format="raw",created="2026-01-10 18:50:54",modified="2026-01-15 17:25:50",revision=3857]]
 local stack = { }
 
 
@@ -1543,7 +1789,7 @@ function cmd_unroll(_ongoing_source)
 end
 
 :: src/state.lua
---[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-14 14:21:36",revision=1803]]
+--[[pod_format="raw",created="2026-01-12 10:16:01",modified="2026-01-15 17:25:50",revision=2254]]
 undo_stack = nil
 
 
@@ -1566,7 +1812,7 @@ function init_undo_stack()
 end
 
 :: todo.txt
---[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-14 14:21:36",revision=2287]]
+--[[pod_format="raw",created="2026-01-11 17:05:04",modified="2026-01-15 17:25:50",revision=2738]]
 - add: interactive drop, swap, and roll
 - add: right-click menu on stack rows
 - add: left-click on stack rows to pick
@@ -1576,12 +1822,12 @@ end
 - add: macros for keys `)` `]` `}`
 - add: up/down to limit stack depth?
 :: .info.pod
---[[pod,created="2025-11-13 21:07:43",icon=userdata("u8",16,16,"000000010101010101010101010000000000010707070707070707070701000000010712121212121212121212070100010712121201010101010112121207010107121212011c1c1c1c01121212070101071212120101010101011212120701010712121201010101010112121207010107121212010d010d01011212120701010712121201010101010112121207010107121212010d01180101121212070101071212120101010101011212120701011d0712121212121212121212071d01011d1d070707070707070707071d1d0100011d1d1d1d1d1d1d1d1d1d1d1d01000000011d1d1d1d1d1d1d1d1d1d01000000000001010101010101010101000000"),modified="2026-01-14 14:21:37",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#63",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2025-11-13 21:07:43",icon=userdata("u8",16,16,"000000010101010101010101010000000000010707070707070707070701000000010712121212121212121212070100010712121201010101010112121207010107121212011c1c1c1c01121212070101071212120101010101011212120701010712121201010101010112121207010107121212010d010d01011212120701010712121201010101010112121207010107121212010d01180101121212070101071212120101010101011212120701011d0712121212121212121212071d01011d1d070707070707070707071d1d0100011d1d1d1d1d1d1d1d1d1d1d1d01000000011d1d1d1d1d1d1d1d1d1d01000000000001010101010101010101000000"),modified="2026-01-15 17:25:50",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#63",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: doc/.info.pod
---[[pod,created="2026-01-10 13:20:37",modified="2026-01-14 14:21:37"]]
+--[[pod,created="2026-01-10 13:20:37",modified="2026-01-15 17:25:50"]]
 :: doc/rcalc.md
 b64$LS1bW3BvZF9mb3JtYXQ9InJhdyIsY3JlYXRlZD0iMjAyNi0wMS0xMCAxMjo0MTo0OCIsbW9k
-aWZpZWQ9IjIwMjYtMDEtMTQgMTQ6MjE6MzYiLHJldmlzaW9uPTM5MDNdXQpSUE4gY2FsY3VsYXRv
+aWZpZWQ9IjIwMjYtMDEtMTUgMTc6MjU6NTAiLHJldmlzaW9uPTQzNTRdXQpSUE4gY2FsY3VsYXRv
 cgoKRGVzaWduOiBzYW1lIGtleSBzZXF1ZW5jZSBmb3IgaW50ZXJhY3RpdmUgdXNlIGFuZCBleHBy
 ZXNzaW9ucy4gSS5lLiB1c2UgZW50ZXIKYmV0d2VlbiBlbnRyaWVzIGZvciBzdGVwIGJ5IHN0ZXAg
 ZGlzcGxheSwgb3Igc3BhY2UgZm9yIGNhbGN1bGF0aW5nIGFuIGV4cHJlc3Npb24KaW4gYSBzaW5n
@@ -1600,7 +1846,7 @@ ZXNzaW9uLAp0aGVuIGVudGVyLiBFeHByZXNzaW9uIGlzIGEgc2VxdWVuY2Ugb2YgbnVtYmVycywg
 b3BlcmF0aW9ucywgbG93ZXJjYXNlIHdvcmRzIGFuZAp1cHBlcmNhc2UgbGV0dGVycyBzZXBhcmF0
 ZWQgYnkgc3BhY2Uu
 :: gfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-14 14:21:37"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-15 17:25:50"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xNCAxMzozOToxMCIscmV2aXNpb249MTQ3XV1sejQAZAoAAINAAADxF3tbMF09e2JtcD1weHUA
@@ -1652,14 +1898,14 @@ FxEHIQcx0SQQJwoAMSEHAdUkEzEIAAQMAAL1JE8xx-EDsiQjL-C8MQB_AdYBUxkHHge_BAAT3gQA
 L-4YJwIoFxhJAARZAC-_GQkCJQ8xAP9xDtcKD3cNMQ-FAB4PWAHhDzEAXQ-EABAfODEA7w5XAQ8x
 AP------------------A1BtPTh9fQ==
 :: map/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-14 14:21:37"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-15 17:25:50"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0xNCAwOTo0OTo1NyIscmV2aXNpb249M11dbHo0AFEAAABTAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xMgoA8AF3PTE3LHpvb209
 MC4yNX19
 :: sfx/.info.pod
---[[pod,created="2025-11-13 21:07:43",modified="2026-01-14 14:21:37"]]
+--[[pod,created="2025-11-13 21:07:43",modified="2026-01-15 17:25:50"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNS0w
 Ny0zMSAwODozMDoyOCIscmV2aXNpb249MF1dbHo0AKAAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -1667,5 +1913,5 @@ AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
 MBABIAEgAfAAAhACDhABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAA------_9
 H-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
 :: src/.info.pod
---[[pod,created="2026-01-12 12:18:36",modified="2026-01-14 14:21:37"]]
+--[[pod,created="2026-01-12 12:18:36",modified="2026-01-15 17:25:50"]]
 :: [eoc]
