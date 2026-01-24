@@ -6,7 +6,7 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 08:53:01",revision=621]]
+--[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 11:33:51",revision=774]]
 include "src/lune.lua"
 include "src/pfx6416.lua"
 sfx = include "src/sfx.lua"
@@ -35,10 +35,8 @@ function _init()
 		print("height = " .. height)
 	end
 	]]
-	--wt = czf_sawtooth(480, 64)
-	--wt = czf_squarewave(480, 64)
-	wt = czf_sawpulse(480, 64)
-	--wt = cz_test(480, 64)
+	wt = Wavetable.new(480, 64)
+	wt:set_wavetable(cz_sawpulse)
 end
 
 
@@ -47,11 +45,31 @@ wave = 0
 
 function _update()
 	if not wt then return end
+	
 	local _, _, _, _, wheel_y = mouse()
 	if wheel_y > 0 and wave > 0 then
 		wave -= 1
 	elseif wheel_y < 0 and wave < wt.height then
 		wave += 1
+	end
+	
+	if keyp("1") then
+		wt:set_wavetable(cz_saw1)
+	end
+	if keyp("2") then
+		wt:set_wavetable(cz_saw2)
+	end
+	if keyp("3") then
+		wt:set_wavetable(cz_saw3)
+	end
+	if keyp("4") then
+		wt:set_wavetable(cz_saw4)
+	end
+	if keyp("5") then
+		wt:set_wavetable(cz_square)
+	end
+	if keyp("6") then
+		wt:set_wavetable(cz_sawpulse)
 	end
 end
 
@@ -77,14 +95,14 @@ function _draw()
 end
 
 :: src/basic_waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 08:53:01",revision=285]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 11:33:51",revision=438]]
 function saw(x)
 	return (1 - 2 * x)
 end
 
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 08:53:01",revision=946]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 11:33:51",revision=1099]]
 --------------------------------------------------------------------------------------------
 
 
@@ -173,7 +191,7 @@ end
 
 --------------------------------------------------------------------------------------------
 :: src/pfx6416.lua
---[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 08:53:01",revision=595]]
+--[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 11:33:51",revision=748]]
 local inst_data <const> = 0x040000
 local wt_defs <const> = inst_data + 256 + 192 + 32
 
@@ -200,7 +218,37 @@ end
 
 
 :: src/phase_distortion.lua
---[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 08:53:01",revision=341]]
+--[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 11:33:51",revision=494]]
+function wcos(x, w)
+	return 0.5 + cos(x) / 2
+end
+
+
+function wsin(x, w)
+	return 0.5 + sin(x) / 2
+end
+
+
+function wsaw(x, w)
+	return 1 - x
+end
+
+
+function wtriangle(x, w)
+	if x < 0.5 then
+		if x < 0.25 then
+			return 0.5 + (2 * x)
+		else
+			return 1.5 - (2 * x)
+		end
+	else
+		if x < 0.75 then
+			return 1.5 - (2 * x)
+		else
+			return (2 * x) - 1.5
+		end
+	end
+end
 
 
 --[[
@@ -216,40 +264,10 @@ end
 	py - 1 = c * (px - 1)
 	c = (py - 1) / (px - 1)
 ]]
-local function bend(x, px, py)
-	local a <const> = py / px
-	local c <const> = (py - 1) / (px - 1)
-	local d <const> = 1 - c
-	if x < px then
-		return x * a
-	else
-		return x * c + d
-	end
-end
-
-
-local function bendf(func, p0x, p0y, p1x, p1y)
-	return function(progress)
-		local px = p0x + (p1x - p0x) * progress
-		local py = p0y + (p1y - p0y) * progress
-		local a <const> = py / px
-		local c <const> = (py - 1) / (px - 1)
-		local d <const> = 1 - c
-		return function(x)
-			if x < px then
-				return func(x * a)
-			else
-				return func(x * c + d)
-			end
-		end
-	end
-end
-
-
-local function bendfunc(p0x, p0y, p1x, p1y)
-	return function(progress, x)
-		local px = p0x + (p1x - p0x) * progress
-		local py = p0y + (p1y - p0y) * progress
+local function bend(p0x, p0y, p1x, p1y)
+	return function(x, w)
+		local px = p0x + (p1x - p0x) * w
+		local py = p0y + (p1y - p0y) * w
 		
 		local a <const> = py / px
 		local c <const> = (py - 1) / (px - 1)
@@ -265,185 +283,103 @@ end
 
 
 local function distort(wfunc, bfunc)
-	return function(progress, x)
-		return wfunc(bfunc(progress, x))
+	return function(x, w)
+		return wfunc(bfunc(x, w), w)
 	end
 end
 
 
-local function distort_2bend(wfunc, bfunc1, bfunc2)
-	return function(progress, x)
+local function split(funcA, funcB)
+	return function(x, w)
 		if x < 0.5 then
-			return wfunc(bfunc1(progress, 2 * x) / 2)
+			return funcA(2 * x, w)
 		else
-			return wfunc(0.5 + bfunc2(progress, 2 * x - 1) / 2)
+			return funcB(2 * x - 1, w)
 		end
 	end
 end
 
 
-local function wavesplit(funcA, funcB)
-	return function(x)
+local function doublebend(funcA, funcB)
+	return function(x, w)
 		if x < 0.5 then
-			return funcA(2 * x)
+			return funcA(2 * x, w) / 2
 		else
-			return funcB(2 * x - 1)
+			return 0.5 + funcB(2 * x - 1, w) / 2
 		end
 	end
 end
 
 
-local function bendsplit(funcA, funcB)
-	return function(progress, x)
-		if x < 0.5 then
-			return funcA(progress, 2 * x) / 2
-		else
-			return 0.5 + funcB(progress, 2 * x - 1) / 2
-		end
-	end
-end
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 
-local function doublebend(x, px, py)
-	if x < 0.5 then
-		return bend(2 * x, px, py) / 2
-	else
-		return 0.5 + (bend(2 * x - 1, px, py) / 2)
-	end
-end
+cz_saw1 =
+	distort(
+		wcos,
+		bend(0.5, 0.5, 1.0, 0.5)
+	)
 
 
-local function bendbend(x, px1, py1, px2, py2)
-	if x < 0.5 then
-		return bend(2 * x, px1, py1) / 2
-	else
-		return 0.5 + (bend(2 * x - 1, px2, py2) / 2)
-	end
-end
-
-
-local function quadruplebend(x, px, py)
-	return doublebend(doublebend(x, px, py), px, py)
-end
-
-
-function cz_sawtooth(width, height)
-	local wt = Wavetable.new(width, height)
-	for w = 0, wt.height do
-		local b = w / wt.height
-		wt:set_wave(w, function(x) return cos(bend(x, 0.5 - 0.5 * b, 0.5)) end)
-	end
-	return wt
-end
-
-
-function czf_sawtooth(width, height)
-	local wt = Wavetable.new(width, height)
-	wt:set_wavetable(
-		distort(
-			cos,
-			bendfunc(0.5, 0.5, 0.0, 0.5)
+cz_saw2 =
+	distort(
+		function(x) return 1 - wsin(x) end,
+		doublebend(
+			bend(0.5, 0.5, 0.0, 0.5),
+			bend(0.5, 0.5, 1.0, 0.5)
 		)
 	)
-	return wt
-end
 
 
-function cz_squarewave(width, height)
-	local wt = Wavetable.new(width, height)
-	for w = 0, wt.height do
-		local b = w / wt.height
-		wt:set_wave(w, function(x) return cos(doublebend(x, 0.5 + 0.5 * b, 0.5 - 0.5 * b)) end)
-	end
-	return wt
-end
+cz_saw3 =
+	distort(
+		wtriangle,
+		doublebend(
+			bend(0.5, 0.5, 0.0, 0.5),
+			bend(0.5, 0.5, 1.0, 0.5)
+		)
+	)
 
 
-function czf_squarewave(width, height)
-	local wt = Wavetable.new(width, height)
---	wt:set_wavetable(split(bendf(cos, 0.5, 0.5, 1.0, 0.0), bendf(cos, 0.5, 0.5, 1.0, 0.0)))
-	---[[
-	wt:set_wavetable(
+cz_saw4 =
+	distort(
+		wsaw,
+		doublebend(
+			bend(0.5, 0.5, 1.0, 0.0),
+			bend(0.5, 0.5, 0.0, 1.0)
+		)
+	)
+
+
+cz_square =
+	distort(
+		wcos, 
+		doublebend(
+			bend(0.5, 0.5, 1.0, 0.0),
+			bend(0.5, 0.5, 1.0, 0.0)
+		)
+	)
+	
+	
+cz_sawpulse =
+	split(
 		distort(
-			cos, 
-			bendsplit(
-				bendfunc(0.5, 0.5, 1.0, 0.0),
-				bendfunc(0.5, 0.5, 1.0, 0.0)
+			wcos,	
+			bend(0.5, 0.5, 0.0, 0.5)
+		),
+		distort(
+			wcos,
+			doublebend(
+				bend(0.5, 0.5, 0.0, 1.0),
+				bend(0.5, 0.5, 1.0, 0.0)
 			)
 		)
 	)
-	--]]
-	--[[
-	wt:set_wavetable(
-		distort_2bend(
-			cos, 
-			bendfunc(0.5, 0.5, 1.0, 0.0),
-			bendfunc(0.5, 0.5, 1.0, 0.0)
-		)
-	)
-	--]]
-	return wt
-end
-
-
-function cz_sawpulse(width, height)
-	local wt = Wavetable.new(width, height)
-	for w = 0, wt.height do
-		local b = w / wt.height
-		wt:set_double_wave(
-			w,
-			function(x) return cos(bend(x, 0.5 - 0.5 * b, 0.5)) end,
-			function(x)
-				return cos(bendbend(
-					x, 
-					0.5 - 0.5 * b, 0.5 + 0.5 * b,
-					0.5 + 0.5 * b, 0.5 - 0.5 * b
-				))
-			end
-		)
-	end
-	return wt
-end
-
-
-function czf_sawpulse(width, height)
-	local wt = Wavetable.new(width, height)
-	wt:set_wavetable(
-		distort(
-			wavesplit(cos, cos),
-			bendsplit(
-				bendfunc(0.5, 0.5, 0.0, 0.5),
-				bendsplit(
-					bendfunc(0.5, 0.5, 0.0, 1.0),
-					bendfunc(0.5, 0.5, 1.0, 0.0)
-				)
-			)
-		)
-	)
-	return wt
-end
-
-
-function cz_test(width, height)
-	local wt = Wavetable.new(width, height)
-	for w = 0, wt.height do
-		local b = w / wt.height
-		wt:set_wave(
-			w,
-			function(x)
-				return cos(bendbend(
-					x, 
-					0.5 - 0.5 * b, 0.5 + 0.5 * b, 1.0,
-					0.5 + 0.5 * b, 0.5 - 0.5 * b, 1.0
-				))
-			end
-		)
-	end
-	return wt
-end
+	
+	
 
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 08:53:01",revision=7386]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 11:33:51",revision=7539]]
 local sfx = {}
 
 
@@ -1104,7 +1040,7 @@ end
 
 return sfx
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 08:53:01",revision=620]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 11:33:51",revision=773]]
 Wavetable = structure {
 	-- width: Int -- number of samples in a wave
 	-- height: Int -- number of waves in the wavetable
@@ -1166,42 +1102,44 @@ end
 
 function Wavetable:set_wavetable(func)
 	for wave = 0, self.height do
-		local progress = wave / self.height
-		local wavefunc = function(x) return func(progress, x) end
+		local w = wave / self.height
+		local wavefunc = function(x) return func(x, w) end
 		self:set_wave(wave, wavefunc)
 	end
 end
 
 :: .info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 08:53:02",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="sfx/1.sfx",workspace_index=4}}]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: gfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 08:53:02"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 08:53:02"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0yMyAxMzozODoxOSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 08:53:02"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNi0w
-MS0yMyAxNDo0OToxMyIscmV2aXNpb249NV1dbHo0AKUAAAALCgAA-zBweHUAAygAAAQABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
-MBABIAEgAfAAAhACDhABIA8hIAEwDz-www8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAAAh9AMAD-
------6cf-wEArM-ID0AADxBA--_w8P8BAP-qUP----8p
+MS0yNCAwOTo1MjoxNSIscmV2aXNpb249OF1dbHo0ALoAAAAaCgAA-zBweHUAAygAAAQABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv8NqoBEAYP
+MBABIAEgAfAAAhACDhABIA8gBhABMA8-kAEKIA82IA9-IA9YIAHwpw8oD--wxg-4Cg--D4AP9w8N
+AfAJARAGDj8AjyEgATAPQPDDMAD------6Uf-wEArM-ID0AADxBA--_w8P8BAP-qUP----8p
 :: sfx/1.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTIzIDE0OjM4OjIyIixtb2RpZmllZD0iMjAyNi0w
-MS0yMyAxNDozODoyMiIscmV2aXNpb249MF1dbHo0ALkAAAAlGQAA-zBweHUAAygAAAQABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
-IBABIAEgAfAAAhACDhABIA8hIAFADyrwwg8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAAAF8wD0Dw
-wzAA------_lH-8BAKzPyA9AAA8QQP--sPBwCwD----------------------xRQ-7Dw-zk=
+MS0yNCAwOTo1MTozNyIscmV2aXNpb249N11dbHo0AAYBAADbFwAA-zBweHUAAygAAAQABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-YqoBEAYP
+IBABIAEgAfAAAhACDhABIA8hIAEgBA_CD2wADxAPPWAJ8A8KIA_XIA9BIA_3IAzwhw8oD--AAhAI
+DxwEEA--D9IPpg_GD3MPZg9TD0YPOQ8zDy0eLxrwnwIAD-gKD-8PgA-3Dw0B8AkBEAYOawAAUDAP
+QPDDUwAv8MYwAP------nx--AQCs8gbID0AADxBADyb--y8A-S8PI-0v8HAUAC-9sAoA--------
+------------fFD9sPD-OQ==
 :: src/.info.pod
---[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 08:53:02"]]
+--[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 11:33:51"]]
 :: [eoc]
