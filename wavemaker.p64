@@ -6,11 +6,12 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 15:29:38",revision=1022]]
+--[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 21:41:43",revision=1982]]
 include "src/lune.lua"
 include "src/pfx6416.lua"
 sfx = include "src/sfx.lua"
 include "src/wavetable.lua"
+include "src/transform.lua"
 include "src/basic_waves.lua"
 include "src/phase_distortion.lua"
 
@@ -35,8 +36,8 @@ function _init()
 		print("height = " .. height)
 	end
 	]]
-	wt = Wavetable.new(480, 64)
-	wt:set_wavetable(split(cz_saw, cz_reso1))
+	wt = Wavetable.new(480, 63)
+	wt:set_wavetable(drakma_cosine2saw2reso)
 end
 
 
@@ -51,22 +52,6 @@ function _update()
 		wave -= 1
 	elseif wheel_y < 0 and wave < wt.height then
 		wave += 1
-	end
-	
-	if keyp("q") then
-		wt:set_wavetable(pd_saw1)
-	end
-	if keyp("w") then
-		wt:set_wavetable(pd_saw2)
-	end
-	if keyp("e") then
-		wt:set_wavetable(pd_saw3)
-	end
-	if keyp("a") then
-		wt:set_wavetable(pd_square)
-	end
-	if keyp("z") then
-		wt:set_wavetable(pd_sawpulse)
 	end
 
 	if keyp("1") then
@@ -96,6 +81,49 @@ function _update()
 	if keyp("9") then
 		wt:set_wavetable(split(cz_saw, cz_reso1))
 	end
+	
+	if keyp("q") then
+		wt:set_wavetable(drakma_cosine2saw)
+	end
+	if keyp("w") then
+		wt:set_wavetable(drakma_sine2saw)
+	end
+	if keyp("e") then
+		wt:set_wavetable(drakma_triangle2saw)
+	end
+	if keyp("r") then
+		wt:set_wavetable(drakma_square2saw)
+	end
+	if keyp("t") then
+		wt:set_wavetable(drakma_cosine2saw2reso)
+	end
+	if keyp("a") then
+		wt:set_wavetable(drakma_cosine2square)
+	end
+	if keyp("s") then
+		wt:set_wavetable(drakma_triangle2square)
+	end
+	if keyp("d") then
+		wt:set_wavetable(drakma_triangle2square2saw)
+	end
+	if keyp("f") then
+		wt:set_wavetable(drakma_sawpulse)
+	end
+	if keyp("z") then
+		wt:set_wavetable(drakma_saw2reso)
+	end
+	if keyp("x") then
+		wt:set_wavetable(drakma_square2reso)
+	end
+	if keyp("c") then
+		wt:set_wavetable(drakma_triangle2reso)
+	end
+	if keyp("v") then
+		wt:set_wavetable(drakma_sawpulse2reso)
+	end
+	if keyp("b") then
+		wt:set_wavetable(drakma_sawpulse2resoalt)
+	end
 end
 
 
@@ -120,7 +148,7 @@ function _draw()
 end
 
 :: src/basic_waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 15:29:38",revision=686]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 21:41:43",revision=1646]]
 function w_cos(x, w)
 	return 0.5 + cos(x) / 2
 end
@@ -146,6 +174,62 @@ function w_triangle(x, w)
 end
 
 
+w_cotriangle = phase(w_triangle, 0.25)
+
+
+function w_pulse50(x, w)
+	x = x % 1.0
+	if x < 0.5 then
+		return 1
+	else
+		return 0
+	end
+end
+
+
+w_square = w_pulse50
+
+
+function w_pulse75(x, w)
+	x = x % 1.0
+	if x < 0.75 then
+		return 1
+	else
+		return 0
+	end
+end
+
+
+function w_pulse25(x, w)
+	x = x % 1.0
+	if x < 0.25 then
+		return 1
+	else
+		return 0
+	end
+end
+
+
+function w_pulse12(x, w)
+	x = x % 1.0
+	if x < 0.125 then
+		return 1
+	else
+		return 0
+	end
+end
+
+
+function w_pulse01(x, w)
+	x = x % 1.0
+	if x < 0.0078125 then
+		return 1
+	else
+		return 0
+	end
+end
+
+
 function w_trapeze(x, w)
 	x = x % 1.0
 	if x < 0.5 then
@@ -156,75 +240,22 @@ function w_trapeze(x, w)
 end
 
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+w_triangle16 = bitcrunch(w_triangle, 16)
 
 
-function phase(func, ph)
-	return function(x, w)
-		return func(x + ph, w)
-	end
-end
+nes_triangle = nes_slope(phase(w_triangle16, 0.75), 1)
 
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+nes_pulse12 = nes_slope(w_pulse12, 1)
+nes_pulse25 = nes_slope(w_pulse25, 1)
+nes_pulse50 = nes_slope(w_pulse50, 1)
+nes_pulse75 = nes_slope(w_pulse75, 1)
 
 
-function split(funcA, funcB)
-	return function(x, w)
-		if x < 0.5 then
-			return funcA(2 * x, w)
-		else
-			return funcB(2 * x - 1, w)
-		end
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function mask(func1, func2)
-	return function(x, w)
-		return 1 - (1 - func1(x, w)) * (1 - func2(x, w))
-	end
-end
-
-
-function multiply(func1, func2)
-	return function(x, w)
-		return func1(x, w) * func2(x, w)
-	end
-end
-
-
-function multiply_bipolar(func1, func2)
-	return function(x, w)
-		local value1 = 2 * func1(x, w) - 1
-		local value2 = 2 * func2(x, w) - 1
-		return 0.5 + (value1 * value2) / 2
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function inverse(func)
-	return function(x, w)
-		return 1 - func(x, w)
-	end
-end
-
-
-function reverse(func)
-	return function(x, w)
-		return func(x, 1 - w)
-	end
-end
-
-
+nes_waveforms = sequence(nes_triangle, nes_pulse75,
+	nes_pulse50, nes_pulse25, nes_pulse12)
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 15:29:38",revision=1347]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 21:41:43",revision=2307]]
 --------------------------------------------------------------------------------------------
 
 
@@ -313,7 +344,7 @@ end
 
 --------------------------------------------------------------------------------------------
 :: src/pfx6416.lua
---[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 15:29:38",revision=996]]
+--[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 21:41:43",revision=1956]]
 local inst_data <const> = 0x040000
 local wt_defs <const> = inst_data + 256 + 192 + 32
 
@@ -340,7 +371,7 @@ end
 
 
 :: src/phase_distortion.lua
---[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 15:29:38",revision=742]]
+--[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 21:41:43",revision=1702]]
 --[[
 	y = a * x + b
 	0 = a * 0 + b
@@ -393,7 +424,7 @@ end
 function reso(func)
 	return function(x, w)
 		local r = (15 * w) + 1
-		return func(r * x, w)
+		return func((r * x) % 1, w)
 	end
 end
 
@@ -469,7 +500,14 @@ cz_saw_reso1 = split(cz_saw, cz_reso1)
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 
-pd_saw1 =
+drakma_cosine2saw =
+	distort(
+		inverse(w_cos),
+		bend(0.5, 0.5, 1.0, 0.5)
+	)
+
+
+drakma_sine2saw =
 	distort(
 		w_sin,
 		doublebend(
@@ -479,7 +517,7 @@ pd_saw1 =
 	)
 
 
-pd_saw2 =
+drakma_triangle2saw =
 	distort(
 		phase(w_triangle, 0.25),
 		doublebend(
@@ -489,7 +527,7 @@ pd_saw2 =
 	)
 
 
-pd_saw3 =
+drakma_square2saw =
 	reverse(
 		distort(
 			w_saw,
@@ -501,17 +539,38 @@ pd_saw3 =
 	)
 
 
-pd_square =
+drakma_cosine2square =
 	distort(
-		w_cos, 
+		phase(w_cos, 0.5), 
 		doublebend(
 			bend(0.5, 0.5, 1.0, 0.0),
 			bend(0.5, 0.5, 1.0, 0.0)
 		)
 	)
+
+
+drakma_triangle2square =
+	distort(
+		phase(w_triangle, 0.5),
+		doublebend(
+			bend(0.5, 0.5, 1.0, 0.0),
+			bend(0.5, 0.5, 1.0, 0.0)
+		)
+	)
+
+
+drakma_triangle2square2saw =
+	sequence(drakma_triangle2square, drakma_square2saw)
+	
+
+drakma_pulsewidth =
+	distort(
+		w_square, 
+		bend(0.5, 0.5, 1 - 0.001953, 0.5)
+	)
 	
 	
-pd_sawpulse =
+drakma_sawpulse =
 	split(
 		distort(
 			w_cos,	
@@ -526,9 +585,45 @@ pd_sawpulse =
 		)
 	)
 
+	
+drakma_saw2reso =
+	mask(
+		reso(reverse(drakma_cosine2saw)),
+		w_saw
+	)
+
+	
+drakma_square2reso =
+	mask(
+		reso(reverse(drakma_cosine2square)),
+		w_trapeze
+	)
+
+	
+drakma_triangle2reso =
+	mask(
+		reso(w_triangle),
+		w_triangle
+	)
+
+
+drakma_cosine2saw2reso = sequence(drakma_cosine2saw, drakma_saw2reso)
+
+	
+drakma_sawpulse2reso = mask(reso(w_cos), inverse(drakma_pulsewidth))
+
+	
+drakma_sawpulse2resoalt =
+	mask(
+		reso(reverse(cz_sawpulse)),
+		distort(
+			w_trapeze, 
+			bend(0.5, 0.5, 1 - 0.001953, 0.5)
+		)
+	)
 
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 15:29:38",revision=7787]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 21:41:43",revision=8747]]
 local sfx = {}
 
 
@@ -1188,8 +1283,115 @@ end
 
 
 return sfx
+:: src/transform.lua
+--[[pod_format="raw",created="2026-01-24 18:59:35",modified="2026-01-24 21:41:43",revision=598]]
+
+
+function nes_slope(func, coeff)
+	local coeff = coeff or 2
+	return function(x, w)
+		local value = 2 * func(x, w) - 1
+		if value > 0.0 then
+			value -= x * coeff
+		else
+			value -= (1 - x) * coeff
+		end
+		value /= 1 + coeff
+		local y = 0.5 + value / 2
+		return y
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function bitcrunch(func, res)
+	res = res and (res - 1) or 15
+	return function(x, w)
+		return math.floor(0.5 + res * func(x, w)) / res
+	end
+end
+
+
+function phase(func, ph)
+	return function(x, w)
+		return func(x + ph, w)
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function split(funcA, funcB)
+	return function(x, w)
+		if x < 0.5 then
+			return funcA(2 * x, w)
+		else
+			return funcB(2 * x - 1, w)
+		end
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function mask(func1, func2)
+	return function(x, w)
+		return 1 - (1 - func1(x, w)) * (1 - func2(x, w))
+	end
+end
+
+
+function multiply(func1, func2)
+	return function(x, w)
+		return func1(x, w) * func2(x, w)
+	end
+end
+
+
+function multiply_bipolar(func1, func2)
+	return function(x, w)
+		local value1 = 2 * func1(x, w) - 1
+		local value2 = 2 * func2(x, w) - 1
+		return 0.5 + (value1 * value2) / 2
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function inverse(func)
+	return function(x, w)
+		return 1 - func(x, w)
+	end
+end
+
+
+function reverse(func)
+	return function(x, w)
+		return func(x, 1 - w)
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function sequence(...)
+	local funcs = {...}
+	local count = #funcs
+	return function(x, w)
+		local idx = 1 + math.floor(0.5 + w * (count - 1))
+		return funcs[idx](x, w * count % 1.000000000001)
+	end
+end
+
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 15:29:38",revision=1021]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 21:41:43",revision=1981]]
 Wavetable = structure {
 	-- width: Int -- number of samples in a wave
 	-- height: Int -- number of waves in the wavetable
@@ -1251,23 +1453,23 @@ function Wavetable:set_wavetable(func)
 end
 
 :: .info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 15:29:38",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 21:41:43",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: gfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 15:29:38"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 21:41:43"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 15:29:38"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 21:41:43"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0yMyAxMzozODoxOSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 15:29:38"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 21:41:43"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNi0w
 MS0yNCAwOTo1MjoxNSIscmV2aXNpb249OF1dbHo0ALoAAAAaCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -1283,5 +1485,5 @@ DxwEEA--D9IPpg_GD3MPZg9TD0YPOQ8zDy0eLxrwnwIAD-gKD-8PgA-3Dw0B8AkBEAYOawAAUDAP
 QPDDUwAv8MYwAP------nx--AQCs8gbID0AADxBADyb--y8A-S8PI-0v8HAUAC-9sAoA--------
 ------------fFD9sPD-OQ==
 :: src/.info.pod
---[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 15:29:38"]]
+--[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 21:41:43"]]
 :: [eoc]
