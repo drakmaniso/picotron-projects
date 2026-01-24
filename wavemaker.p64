@@ -6,7 +6,7 @@ version 2
 :: sfx/
 :: src/
 :: main.lua
---[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 11:33:51",revision=774]]
+--[[pod_format="raw",created="2026-01-23 13:38:19",modified="2026-01-24 14:29:03",revision=882]]
 include "src/lune.lua"
 include "src/pfx6416.lua"
 sfx = include "src/sfx.lua"
@@ -36,7 +36,7 @@ function _init()
 	end
 	]]
 	wt = Wavetable.new(480, 64)
-	wt:set_wavetable(cz_sawpulse)
+	wt:set_wavetable(cz_saw)
 end
 
 
@@ -53,24 +53,49 @@ function _update()
 		wave += 1
 	end
 	
+	if keyp("q") then
+		wt:set_wavetable(pd_saw1)
+	end
+	if keyp("w") then
+		wt:set_wavetable(pd_saw2)
+	end
+	if keyp("e") then
+		wt:set_wavetable(pd_saw3)
+	end
+	if keyp("r") then
+		wt:set_wavetable(pd_saw4)
+	end
+	if keyp("a") then
+		wt:set_wavetable(pd_square)
+	end
+	if keyp("z") then
+		wt:set_wavetable(pd_sawpulse)
+	end
+
 	if keyp("1") then
-		wt:set_wavetable(cz_saw1)
-	end
+		wt:set_wavetable(cz_saw)
+	end	
 	if keyp("2") then
-		wt:set_wavetable(cz_saw2)
-	end
-	if keyp("3") then
-		wt:set_wavetable(cz_saw3)
-	end
-	if keyp("4") then
-		wt:set_wavetable(cz_saw4)
-	end
-	if keyp("5") then
 		wt:set_wavetable(cz_square)
-	end
-	if keyp("6") then
+	end	
+	if keyp("3") then
+		wt:set_wavetable(cz_pulse)
+	end	
+	if keyp("4") then
+		wt:set_wavetable(cz_doublesine)
+	end	
+	if keyp("5") then
 		wt:set_wavetable(cz_sawpulse)
-	end
+	end	
+	if keyp("6") then
+		wt:set_wavetable(wtriangle)
+	end	
+	if keyp("7") then
+		wt:set_wavetable(wtriangle)
+	end	
+	if keyp("8") then
+		wt:set_wavetable(wtriangle)
+	end	
 end
 
 
@@ -95,14 +120,14 @@ function _draw()
 end
 
 :: src/basic_waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 11:33:51",revision=438]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-24 14:29:03",revision=546]]
 function saw(x)
 	return (1 - 2 * x)
 end
 
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 11:33:51",revision=1099]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-24 14:29:03",revision=1207]]
 --------------------------------------------------------------------------------------------
 
 
@@ -191,7 +216,7 @@ end
 
 --------------------------------------------------------------------------------------------
 :: src/pfx6416.lua
---[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 11:33:51",revision=748]]
+--[[pod_format="raw",created="2026-01-23 14:18:54",modified="2026-01-24 14:29:03",revision=856]]
 local inst_data <const> = 0x040000
 local wt_defs <const> = inst_data + 256 + 192 + 32
 
@@ -218,7 +243,7 @@ end
 
 
 :: src/phase_distortion.lua
---[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 11:33:51",revision=494]]
+--[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-24 14:29:03",revision=602]]
 function wcos(x, w)
 	return 0.5 + cos(x) / 2
 end
@@ -264,7 +289,7 @@ end
 	py - 1 = c * (px - 1)
 	c = (py - 1) / (px - 1)
 ]]
-local function bend(p0x, p0y, p1x, p1y)
+function bend(p0x, p0y, p1x, p1y)
 	return function(x, w)
 		local px = p0x + (p1x - p0x) * w
 		local py = p0y + (p1y - p0y) * w
@@ -282,14 +307,14 @@ local function bend(p0x, p0y, p1x, p1y)
 end
 
 
-local function distort(wfunc, bfunc)
+function distort(wfunc, bfunc)
 	return function(x, w)
 		return wfunc(bfunc(x, w), w)
 	end
 end
 
 
-local function split(funcA, funcB)
+function split(funcA, funcB)
 	return function(x, w)
 		if x < 0.5 then
 			return funcA(2 * x, w)
@@ -300,7 +325,7 @@ local function split(funcA, funcB)
 end
 
 
-local function doublebend(funcA, funcB)
+function doublebend(funcA, funcB)
 	return function(x, w)
 		if x < 0.5 then
 			return funcA(2 * x, w) / 2
@@ -314,14 +339,74 @@ end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 
-cz_saw1 =
+cz_saw =
+	distort(
+		wcos,
+		bend(0.5, 0.5, 0.0, 0.5)
+	)
+
+
+cz_square =
+	distort(
+		wcos, 
+		doublebend(
+			doublebend(
+				bend(0.0, 0.0, 1.0, 0.0),
+				bend(1.0, 1.0, 0.0, 1.0)
+			),
+			doublebend(
+				bend(0.0, 0.0, 1.0, 0.0),
+				bend(1.0, 1.0, 0.0, 1.0)
+			)
+		)
+	)
+
+
+cz_square =
+	distort(
+		wcos, 
+		doublebend(
+			bend(0.0, 0.0, 1.0, 0.0),
+			bend(0.0, 0.0, 1.0, 0.0)
+		)
+	)
+
+
+cz_pulse =
+	distort(
+		wcos, 
+		bend(0.0, 0.0, 0.99, 0.0)
+	)
+
+
+cz_doublesine =
+	distort(
+		split(wcos, wcos),
+		bend(0.5, 0.5, 0.01, 0.5)
+	)
+
+
+cz_sawpulse =
+	distort(
+		wcos,
+		doublebend(
+			bend(0.0, 0.0, 0.0, 0.0),
+			bend(1.0, 1.0, 0.0, 1.0)
+		)
+	)
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+pd_saw1 =
 	distort(
 		wcos,
 		bend(0.5, 0.5, 1.0, 0.5)
 	)
 
 
-cz_saw2 =
+pd_saw2 =
 	distort(
 		function(x) return 1 - wsin(x) end,
 		doublebend(
@@ -331,7 +416,7 @@ cz_saw2 =
 	)
 
 
-cz_saw3 =
+pd_saw3 =
 	distort(
 		wtriangle,
 		doublebend(
@@ -341,7 +426,7 @@ cz_saw3 =
 	)
 
 
-cz_saw4 =
+pd_saw4 =
 	distort(
 		wsaw,
 		doublebend(
@@ -351,7 +436,7 @@ cz_saw4 =
 	)
 
 
-cz_square =
+pd_square =
 	distort(
 		wcos, 
 		doublebend(
@@ -361,7 +446,7 @@ cz_square =
 	)
 	
 	
-cz_sawpulse =
+pd_sawpulse =
 	split(
 		distort(
 			wcos,	
@@ -375,11 +460,10 @@ cz_sawpulse =
 			)
 		)
 	)
-	
-	
+
 
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 11:33:51",revision=7539]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-24 14:29:03",revision=7647]]
 local sfx = {}
 
 
@@ -1040,7 +1124,7 @@ end
 
 return sfx
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 11:33:51",revision=773]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-24 14:29:03",revision=881]]
 Wavetable = structure {
 	-- width: Int -- number of samples in a wave
 	-- height: Int -- number of waves in the wavetable
@@ -1080,22 +1164,8 @@ function Wavetable:set_wave(wave, func)
 	local start = wave * self.width
 	local length <const> = self.width
 	for i = 0, self.width - 1 do
-		local value = func(i / length)
+		local value = 2 * func(i / length) - 1
 		self.samples[start + i] = value
-	end
-end
-
-
-function Wavetable:set_double_wave(wave, func1, func2)
-	local start = wave * self.width
-	local length <const> = self.width // 2
-	for i = 0, length - 1 do
-		local value = func1(i / length)
-		self.samples[start + i] = value
-	end
-	for i = 0, length - 1 do
-		local value = func2(i / length)
-		self.samples[start + length + i] = value
 	end
 end
 
@@ -1109,23 +1179,23 @@ function Wavetable:set_wavetable(func)
 end
 
 :: .info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 14:29:03",runtime=24,workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
 :: gfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 14:29:03"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNS0w
 MS0xNyAxMDozNzo0NCIscmV2aXNpb249Ml1dbHo0AH4AAAASMQAA8yF7WzBdPXtibXA9cHh1AEMg
 EBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMt5PTAsem9vbT04fSw_AB-wMQD-----
 -----------------------------------------------------------XUG09OH19
 :: map/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 14:29:03"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAxLTE3IDEwOjM1OjQ4Iixtb2RpZmllZD0iMjAyNi0w
 MS0yMyAxMzozODoxOSIscmV2aXNpb249Ml1dbHo0AEwAAABQAAAA8Rx7e2JtcD1weHUATIAgIAD-
 AAD---8DLGhpZGRlbj1mYWxzZSxwYW5feD0wCADSeT0wLHRpbGVfaD0xNgoAEHcKAIB6b29tPTF9
 fQ==
 :: sfx/.info.pod
---[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 11:33:51"]]
+--[[pod,created="2026-01-15 17:19:56",modified="2026-01-24 14:29:03"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTA3LTMxIDA4OjMwOjI4Iixtb2RpZmllZD0iMjAyNi0w
 MS0yNCAwOTo1MjoxNSIscmV2aXNpb249OF1dbHo0ALoAAAAaCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -1141,5 +1211,5 @@ DxwEEA--D9IPpg_GD3MPZg9TD0YPOQ8zDy0eLxrwnwIAD-gKD-8PgA-3Dw0B8AkBEAYOawAAUDAP
 QPDDUwAv8MYwAP------nx--AQCs8gbID0AADxBADyb--y8A-S8PI-0v8HAUAC-9sAoA--------
 ------------fFD9sPD-OQ==
 :: src/.info.pod
---[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 11:33:51"]]
+--[[pod,created="2026-01-23 13:39:49",modified="2026-01-24 14:29:03"]]
 :: [eoc]
