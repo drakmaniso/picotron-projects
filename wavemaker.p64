@@ -8,21 +8,17 @@ version 2
 :: src/
 :: src/wavetables/
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-25 15:38:28",revision=11386]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-25 19:59:24",revision=11657]]
 include "src/lune.lua"
-include "src/misc.lua"
-include "src/wavetables/transform.lua"
-include "src/wavetables/basic_waves.lua"
-include "src/wavetables/phase_distortion.lua"
-include "src/wavetables/wavetable.lua"
-include "src/wt_editor.lua"
+--include "src/misc.lua"
+include "src/waves.lua"
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local file = require "src/file.lua"
-local ed_inst = require "src/ed_inst.lua"
-local routing = require "src/routing.lua"
+local ui_instrument = require "src/ui_instrument.lua"
+local ui_routing = require "src/ui_routing.lua"
 local settings = require "src/settings.lua"
-local settings_ui = require "src/settings_ui.lua"
+local ui_settings = require "src/ui_settings.lua"
 local ui = require "src/ui.lua"
 
 
@@ -30,7 +26,6 @@ function _init()
 	window {
 		tabbed = true,
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICATAF0AHEBcgBxAXEAcgFxAHQBfA")
---		icon = --[[pod_type="gfx"]]unpod("b64:bHo0ACIAAAAkAAAA8whweHUAQyAICAQAVwBHAFcABwBHAAcAFwgAYFcARwBXAA==")
 	}
 
 	wrangle_working_file(
@@ -107,7 +102,7 @@ function generate_gui()
 	local cell_height = 29
 	ui.create_head()
 --	local top_panel = attach_top_panel(ui.head(), { x = 0, y = 0 })
-	ed_inst.attach(ui.head(), { x = 0, y = 0 })
+	ui_instrument.attach(ui.head(), { x = 0, y = 0 })
 end
 
 
@@ -247,7 +242,7 @@ function attach_note_attributes(parent, el)
 			-- TODO: temporary, remove
 			app.instrument = app.base_instrument
 			app.node = 0
-			routing.clear_placement_buttons()
+			ui_routing.clear_placement_buttons()
 		end
 	end
 	
@@ -297,10 +292,10 @@ function attach_detail_button(parent, el)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-25 15:38:28",revision=1113]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-25 19:59:24",revision=1384]]
 
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-25 15:38:28",revision=8191]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-25 19:59:24",revision=8462]]
 local app = {}
 
 -- Global state
@@ -343,580 +338,8 @@ app.mod_width = 57
 app.mod_height = app.synth_height
 
 return app
-:: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-25 15:38:28",revision=5880]]
-local app = require "src/app.lua"
-local envelopes = require "src/envelopes.lua"
-local settings = require "src/settings.lua"
-local routing = require "src/routing.lua"
-local sfx = require "src/sfx.lua"
-local synth = require "src/synth.lua"
-local ui = require "src/ui.lua"
-
-
-local ed_inst = {}
-
-local instr_chooser = false
-
-local last_pitch = 0xff -- last pitch played on the keyboard
-
-
-function ed_inst.attach(parent, el)
-	el.width = 480 - (app.detail and app.detail_width or 0)
-	el.height = 270 - 11 -- TODO: remove - 16
-	parent:attach(el)
-
-	sfx.refresh_nodes(app.instrument)	
-
-	local y = 0
-	if instr_chooser then
-		-- preserve scrolling position
-		-- when refreshing gui
-		y = instr_chooser.child[1].y
-	end
-	instr_chooser = ed_inst.attach_instr_chooser(el, { x = 4, y = 4 })
-	instr_chooser.child[1].y = y
-	
-	--[[el:attach(ui.create_knob {
-		x = 110, y = 10,
-		small = false,
-		white = false,
-		min_val = 0, max_val = 64, init_val = 32,
-		sensitivity = 0.25,
-		get = function(self)
-			local _, val1, _, _ = sfx.node_param(app.instrument, 0, 0)
-			return val1
-		end,
-		set = function(self, val)
-			val = mid(0, val, 64)
-			sfx.set_node_param_val1(app.instrument, 0, 0, val)
-		end,
-		has_secondary = function() return false end,
-		get_secondary = nil,
-		set_secondary = nil,
-	})--]]
-	app.routing_widget = routing.attach(el, { x = 90, y = 4 })
-
-	local dx = app.synth_width + app.synth_gap
-	local dy = app.synth_height + app.synth_gap
-	local ox = (480 - (4 * dx) + app.synth_gap) \ 2
-	local oy = 270 - 11 - (2 * app.synth_height) - app.synth_gap - 2
-			
-	if app.node then
-		synth.attach_node_panel(
-			el,
-			{
-				x = ox + app.mod_width + app.synth_gap, y = oy , 
-				node_id = app.node,
-				large = true,
-			}
-		)
-		for row = 0, 1 do
-			envelopes.attach_panel(
-				el,
-				{
-					x = 4, y = oy + row * dy, 
-					env_id = row, large = true,
-				}
-			)
-			envelopes.attach_panel(
-				el,
-				{
-					x = 480 - 2 * app.mod_width - 2 * app.synth_gap + 1, y = oy + row * dy,
-					env_id = 2 + row, large = true,
-				}
-			)
-		end
-	elseif not app.wt then
-		local id = 0
-		for row = 0, 1 do
-			envelopes.attach_panel(
-				el,
-				{
-					x = 4, y = oy + row * dy, 
-					env_id = row,
-				}
-			)
-			for column = 0, 3 do
-				synth.attach_node_panel(
-					el,
-					{
-						x = ox + column * dx, y = oy + row * dy, 
-						node_id = id
-					}
-				)
-				id += 1
-			end
-			envelopes.attach_panel(
-				el,
-				{
-					x = 480 - app.mod_width - 4 - 1, y = oy + row * dy,
-					env_id = 2 + row,
-				}
-			)
-		end
-	else -- A wavetable is selected
-		wt_editor.attach(
-			el,
-			{
-				x = 4, y = oy, 
-			}
-		)
-	end
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, 105, 0, 58)
-		line(0, 105, self.width - 1, 105, 58)
-		if app.node then
-			line(0, 182, 125, 182, 58)
-			line(354, 182, 480, 182, 58)
-			line(125, 105, 125, self.height - 1, 58)
-			line(354, 105, 354, self.height - 1, 58)
-		elseif not app.wt then
-			line(0, 182, self.width - 1, 182, 58)
-			line(63, 105, 63, self.height - 1, 58)
-			line(151, 105, 151, self.height - 1, 58)
-			line(239, 105, 239, self.height - 1, 58)
-			line(327, 105, 327, self.height - 1, 58)
-			line(415, 105, 415, self.height - 1, 58)
-		end
-	end	
-	
-	function el:update()
-		-- Keys
-		if (ui.has_modal_or_menu()) return
-		if (ui.head():get_keyboard_focus_element()) return
-		local pitch_key = nil
-		for i = 1, #settings.keys.pitched do
-			local offset = settings.keys.pitched[i].offset
-			for j = 0, #settings.keys.pitched[i] do
-				local k = settings.keys.pitched[i][j]
-				if key(k, true) then
-					pitch_key = j + offset
-				end
-			end
-		end
-		if pitch_key and not key("ctrl") then
-			local pitch = pitch_key + app.base_note
-			if key("shift") then
-				pitch += 12
-			end
-			pitch = mid(0, pitch, 0xfe)
-			if pitch ~= last_pitch then
-				note(
-					pitch, -- todo
-					app.instrument, -- current_instrument
-					app.base_volume, -- current_volume
-					ord(" "), 0x00, -- fx, fx param
-					8, -- channel 8 so it can play with pattern
-					false -- don't force retrigger
-				)
-				last_pitch = pitch
-			end
-		else
-			note(0xff, 0xff, 0xff, 0xff, 0xff, 8)
-			last_pitch = 0xff
-		end
-		
-		if key("ctrl") and keyp("c") then
-			local data = userdata("u8", 0x200)
-			set(data, 0, peek(0x40000 + (app.instrument * 0x200), 0x200))
-			set_clipboard(
-				pod(
-					{ instrument = data },
-					7,
-					{ pod_type = "instrument" }
-				)
-			)
-			notify("copied instrument")
-		end
-		
-		if key("ctrl") and keyp("v") then
-			local data = unpod(get_clipboard())
-			if data and type(data.instrument == "userdata") then
-				poke(
-					0x40000 + (app.instrument * 0x200),
-					get(data.instrument, 0, 0x200)
-				)
-				app.refresh_gui = true
-				app.node = 0
-				notify("pasted instrument")
-			else
-				nodify("unable to paste instrument: invalid data in clipboard")
-			end
-		end
-	end
-
-	--[[	
-	function el:click(msg)
-		if not routing.clear_placement_buttons() then
-			app.node = nil
-		end
-		app.refresh_gui = true
-	end
-	]]
-
-	return el
-end
-
-
--- Instrument chooser --------------------------------------------------------------
-
-
-function ed_inst.attach_instr_chooser(parent, el)
-	el.width = 80
-	el.height = 82
-	local container = parent:attach(el)
-	function container:draw()
-		clip()
-		rect(-1, -1, self.width, self.height, 5)
-		clip(self.sx, self.sy, self.width, self.height)
-	end
-	local contents = container:attach {
-		x = 0, y = 0, width = el.width, height = 128 * 8 + 2,
-		cursor = "pointer",
-		draw = function(self)
-			rectfill(0, 0, self.width, self.height, 58)
-			for i = 0, 127 do -- TODO: dynamic number of instruments?
-				if i == app.instrument then
-					rectfill(0, i * 8 - 1, self.width, (i * 8) + 7, 17)
-				end
-				local name = sfx.instrument_name(i)
-				if name == "" then name = "---" end
-				print("" .. i .. ": " .. name, 4, 1 + i * 8, (i == app.instrument) and 7 or 62)
-			end
-		end,
-		click = function(self, msg)
-			app.instrument = msg.my \ 8
-			app.base_instrument = app.instrument -- TODO: temporary, remove
-			routing.clear_placement_buttons()
-			if app.node then
-				app.node = 0
-			end
-			app.refresh_gui = true
-			return true
-		end
-	}
-	container:attach_scrollbars()
-	return el
-end
-
-
-return ed_inst
-:: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-25 15:38:28",revision=3781]]
-local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local visual = require "src/visual.lua"
-
-
-local envelopes = {}
-
-					
-
--- Envelope panel -----------------------------------------------------------
-
-
-local env_type_names = { [0] = "adsr", "lfo", "custom" }
-local lfo_shape_names = { [0] = "sine", "tri", "saw", "isaw", "square", "pulse" }
-
-
-function envelopes.make_label(env_id)
-	local env_type = sfx.env_type(app.instrument, env_id)
-	return env_type_names[env_type] .. " " .. env_id
-end
-
-
-function envelopes.attach_panel(parent, el)
-	el.width = el.large and (2 * app.mod_width + app.synth_gap) or app.mod_width
-	if not el.large and el.x > 200 then
-		-- TODO: clean this up...
-		el.width += 1
-	end
-	el.height = app.mod_height
-	parent:attach(el)
-
-	el:attach(ui.create_menu_button {
-		x = 2, y = 0, 
-		env_id = el.env_id,
-		get_label = function()
-			return envelopes.make_label(el.env_id)
-		end,
-		fg = 7,
-		highlight = 29,
-		items = {
-			{ label = "adsr", action = function() sfx.set_env_type(app.instrument, el.env_id, 0); app.refresh_gui = true end },
-			{ label = "lfo", action = function() sfx.set_env_type(app.instrument, el.env_id, 1); app.refresh_gui = true end },
-			{ label = "custom", action = function() sfx.set_env_type(app.instrument, el.env_id, 2); app.refresh_gui = true end },
-		}
-	})
-	
-	if not el.large then
-		envelopes.attach_advanced_button(el, { x = el.width - 12, y = 0 })
-	end
-
-	if not app.env_advanced[el.env_id] then 
-
-		local env_type = sfx.env_type(app.instrument, el.env_id)	
-		if env_type == 0 then
-			-- ADSR ----------------------------------------------
-			local labels = { [0] = "a", "d", "s", "r" }
-			for i = 0, 3 do
-				envelopes.attach_slider(el, { x = 3 + 13 * i, y = 12, slider_height = 40, env_id = el.env_id, param = i, label = labels[i] })
-			end
-			
-		elseif env_type == 1 then
-			-- LFO -----------------------------------------------
-			local items = {}
-			for i = 0, #lfo_shape_names do
-				add(items, { label = lfo_shape_names[i], action = function() sfx.set_env_param(app.instrument, el.env_id, 5, i) end })
-			end
-			--[[ not yet implemented?
-			envelopes.attach_menu_button(el, {
-				x = 14, y = 12, 
-				env_id = el.env_id,
-				get_label = function()
-					local shape = sfx.env_param(app.instrument, el.env_id, 5)
-					return lfo_shape_names[shape] or "???"
-				end,
-				fg = 5,
-				highlight = 29,
-				items = items,
-			})
-			]]--
-			envelopes.attach_slider(el, { x = 8, y = 12, slider_height = 40, env_id = el.env_id, param = 4, label = "freq" })
-			envelopes.attach_slider(el, { x = 34, y = 12, slider_height = 40, env_id = el.env_id, param = 6, label = "phase" })
-			
-
-		else
-			-- Custom -------------------------------------
-			el:attach(ui.create_checkbox {
-				x = 4, y = 12,
-				label = "lerp",
-				check_fg = 18,
-				get = function() return
-					(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
-				end,
-				set = function(v)
-					local flags = sfx.env_flags(app.instrument, el.env_id)
-					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
-				end,
-			})
-			envelopes.attach_custom_editor(el, { x = 4, y = 20 })
-			el:attach(ui.create_num_field {
-				x = 4, y = 63,
-				width = 56,
-				label = "speed:",
-				field_fg = 29,
-				visible = function() return true end,
-				get = function() return sfx.env_speed(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
-			})
-		end
-	end
-	
-	if el.large or app.env_advanced[el.env_id] then
-		el:attach(ui.create_checkbox {
-			x = el.width - app.mod_width + 4, y = 12,
-			label = "loop",
-			check_fg = 18,
-			visible = function() return sfx.env_type(app.instrument, el.env_id) != 2 end,
-			get = function() return
-				(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
-			end,
-			set = function(v)
-				local flags = sfx.env_flags(app.instrument, el.env_id)
-				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
-			end,
-		})
-		el:attach(ui.create_num_field {
-			x = el.width - app.mod_width + 0, y = 22,
-			label = "speed:",
-			field_fg = 29,
-			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-			get = function() return sfx.env_speed(app.instrument, el.env_id) end,
-			set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
-		})
-		el:attach(ui.create_num_field {
-			x = el.width - app.mod_width + 0, y = 32,
-			label = "start:",
-			field_fg = 28,
-			onclick = function() if (not el.large) visual.open_custom_envelope(el.env_id) end,
-			onrelease = function() if (not el.large) visual.close() end,
-			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-			get = function() return sfx.env_start(app.instrument, el.env_id) end,
-			set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
-		})
-		el:attach(ui.create_checkbox {
-			x = el.width - app.mod_width + 4, y = 42,
-			label = "rnd start",
-			check_fg = 18,
-			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-			get = function() return
-				(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
-			end,
-			set = function(v)
-				local flags = sfx.env_flags(app.instrument, el.env_id)
-				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
-			end,
-		})
-		el:attach(ui.create_num_field {
-				x = el.width - app.mod_width + 0, y = 52,
-				label = "loop0:",
-				field_fg = 26,
-				onclick = function() if (not el.large) visual.open_custom_envelope(el.env_id) end,
-				onrelease = function() if (not el.large) visual.close() end,
-				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
-		})
-		el:attach(ui.create_num_field {
-				x = el.width - app.mod_width + 0, y = 62,
-				label = "loop1:",
-				field_fg = 10,
-				onclick = function() if (not el.large) visual.open_custom_envelope(el.env_id) end,
-				onrelease = function() if (not el.large) visual.close() end,
-				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
-				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
-		})
-	end
-	
-	function el:draw()
-		rectfill(0, 0, self.width, 8, 18)
-		---rectfill(0, 9, self.width, self.height, 6)
-		envelopes.draw_corners(self)
-	end
-	
-	function el:click()
-		return true
-	end
-		
-	return el
-end
-
-	
-function envelopes.draw_corners(el)
-	pset(0, 0, 6)
-	pset(el.width - 1, 0, 6)
-	pset(0, 8, 6)
-	pset(el.width - 1, 8, 6)
-end
-
-
-function envelopes.attach_slider(parent, el)
-	el.width = 13
-	el.height = el.slider_height + 20
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		local oy = 9
-		for i = 0, 8, 1 do
-			local h = math.floor(0.5 + (i / 8) * (el.slider_height - 1))
-			if i % 8 == 0 then
-				line(0, oy + el.slider_height - 1 - h, 12, oy + el.slider_height - 1 - h, 7)
-			elseif i % 4 == 0 then
-				line(2, oy + el.slider_height - 1 - h, 10, oy + el.slider_height - 1 - h, 7)
-			else
-				line(4, oy + el.slider_height - 1 - h, 8, oy + el.slider_height - 1 - h, 7)
-			end
-		end
-		local val = sfx.env_param(app.instrument, self.env_id, self.param)
-		local h = math.floor(0.5 + (val / 255) * (el.slider_height - 1))
-		spr(60, 2, oy + el.slider_height - 1 - h - 3)
-		line(6, oy, 6, oy + el.slider_height - 1, 59)
-		if (self.dragged) pal(15, 7)
-		spr(61, 2, oy + el.slider_height - 1 - h - 3)
-		pal(15, 15)
-		clip()
-		p8_centered_print(self.label, 4 + 3, 0, 5)
-		p8_centered_print(tostr(val), 4 + 3, self.height - 7, self.dragged and 59 or 58)
-	end
-	--[[function el:update(msg)
-		if (app.has_modal()) return
-		local mx, my, mb = mouse()
-		if mb != 0 then
-			self.hovered = self.dragged != nil
-		else
-			self.hovered = self.sx <= mx and mx < self.sx + self.width
-				and self.sy <= my and my < self.sy + self.height
-		end
-	end]]
-	function el:click(msg)
-		self.cursor = 0
-		self.dragged = true
-	end
-	function el:drag(msg)
-		if self.dragged then
-			local delta = ui.mouselock()
-			local old = sfx.env_param(app.instrument, self.env_id, self.param)
-			local new = old - delta
-			new = mid(0, new, 255)
-			sfx.set_env_param(app.instrument, self.env_id, self.param, new)
-		end
-	end
-	function el:release(msg)
-		ui.mouseunlock()
-		self.cursor = get_spr(50)
-		self.dragged = nil
-	end
-	return el
-end
-
-
-function envelopes.attach_advanced_button(parent, el)
-	el.width = 10
-	el.height = 10
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		spr(39, 1, 1)
-	end
-	function el:tap()
-		app.env_advanced[parent.env_id] = not app.env_advanced[parent.env_id]
-		app.refresh_gui = true
-	end
-	return el
-end
-
-
--- Custrom envelopes ------------------------------------------------------------
-
-
-function envelopes.attach_custom_editor(parent, el)
-	el.width = 50
-	el.height = 42
-	el.cursor = "crosshair"
-	parent:attach(el)
-	el.env_id = parent.env_id
-	el.draw = visual.draw_custom_envelope
-	function el:drag(msg)
-		local param = mid(0, (msg.mx - 1) \ 3, 15)
-		local val = ((self.height - 1 - msg.my) * 255) / (self.height - 2)
-		local val = mid(0, math.floor(0.5 + val), 255)
-		sfx.set_env_param(app.instrument, parent.env_id, param, val)
-	end
-	function el:update()
-		local mx, my, mb = mouse()
-		if
-			self.sx <= mx and mx < self.sx + self.width
-			and self.sy <= my and my < self.sy + self.height
-		then
-			local param = mid(0, (mx - self.sx - 1) \ 3, 15)
-			self.selected = param
-		else
-			self.selected = nil
-		end
-	end
-	return el
-end
-
-
-return envelopes
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-25 15:38:28",revision=2570]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-25 19:59:24",revision=2841]]
 local app = require "src/app.lua"
 
 
@@ -1173,7 +596,7 @@ end
 
 return file
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-25 15:38:28",revision=2922]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-25 19:59:24",revision=3193]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -1266,7 +689,7 @@ function structure(meta)
 end
 
 :: src/misc.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-25 15:38:28",revision=2215]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-25 19:59:24",revision=2486]]
 -- Table utility functions --------------------------------------------------------
 
 
@@ -1392,543 +815,8 @@ function set_drawspace(drawspace)
     poke2(0x552e,drawspace.clip_b)
 end
 
-:: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-25 15:38:28",revision=3711]]
-local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
-
-
-local routing = {}
-
-
--- Locals ------------------------------------------------------------------------
-
-
-local node_width = 26
-local node_height = 16 -- TODO: if 7 vertical nodes, lower to 14
-local node_gap = 14
-
-
-local placement_buttons = {}
-
-
-local function attach_placement_button(el)
-	el.x -= 3
-	el.y -= 3
-	el.width = 7 -- TODO
-	el.height = 7
-	el.cursor = "pointer"
-	app.routing_widget:attach(el)
-	add(placement_buttons, el)
-	function el:draw()
-		local x, y = 3, 3
-		rectfill(
-			x - 2, y - 3, 
-			x + 2, y + 3,
-			24
-		)
-		rectfill(
-			x - 3, y - 2,
-			x + 3, y + 2,
-			24
-		)
-		print("+", x - 1, y - 2, 7)
-	end
-	function el:click()
-		return true -- (ed_inst click() refreshes gui)
-	end
-	function el:tap()
-		routing.clear_placement_buttons()
-		local new_node = sfx.add_node(app.instrument, self.parent_id,
-			self.new_node_type, self.new_node_op, self.target_id, self.child_id)
-		if app.node then
-			app.node = new_node
-		end
-		app.refresh_gui = true
-	end
-	return el
-end
-
-
-local function attach_insert_between_parent(new_node_type, new_node_op, node, pos)
-	if (node == sfx.root) return
-	if (new_node_type >= 8) return
-	if new_node_type == 2 and new_node_op > 0 then
-		if (node.parent == sfx.root) return
-	end
-	attach_placement_button {
-		parent_id = node.parent.id, target_id = node.id, child_id = node.id,
-		new_node_type = new_node_type, new_node_op = new_node_op,
-		x = pos.x - 2, y = pos.y + 4,
-	}
-end
-
-
-local function attach_insert_top_child(new_node_type, new_node_op, node, pos)
-	if new_node_type >= 8 then
-		if (node == sfx.root) return
-		if (node.type >= 8) return
-	end
-	if #node.children == 0 then
-		-- add only child
-		attach_placement_button {
-			parent_id = node.id, target_id = node.id + 1,
-			new_node_type = new_node_type, new_node_op = new_node_op,
-			x = pos.x + node_width + 2, y = pos.y + 4,
-		}
-	else
-		-- add above first child
-		attach_placement_button {
-			parent_id = node.id, target_id = node.id + 1,
-			new_node_type = new_node_type, new_node_op = new_node_op,
-			x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
-		}
-	end
-end
-
-
-local function attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
-	if (node == sfx.root) return
-	attach_placement_button {
-		parent_id = node.parent.id, target_id = node:last_child().id + 1,
-		new_node_type = new_node_type, new_node_op = new_node_op,
-		x = pos.x + node_width \ 2, y = pos.y + 8
-	}
-end
-
-
-local function start_new_node(new_node_type, new_node_op)
---	app.node = nil
---	app.refresh_gui = true
-	for n = 0, 7 do
-		local node = sfx.nodes[n]
-		local pos = node.position
-		if (not pos) break -- TODO: when does this occur?
-		-- Coordinates from logical position
-		pos.x = 4 + pos.column * (node_width + node_gap)
-		pos.y = 4 + pos.row * node_height
-		local ppos = node.parent.position
-		ppos.x = 4 + ppos.column * (node_width + node_gap)
-		ppos.y = 4 + ppos.row * node_height
-		
-		--[[
-		attach_insert_between_parent(new_node_type, new_node_op, node, pos)
-		attach_insert_top_child(new_node_type, new_node_op, node, pos)
-		attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
-		--]]
-		---[[
-		if new_node_type == 2 and new_node_op > 0 then
-			-- Modulators --
-			if node != sfx.root and node.parent != sfx.root then
-				-- insert between parent
-				attach_placement_button {
-					parent_id = node.parent.id, target_id = node.id, child_id = node.id,
-					new_node_type = new_node_type, new_node_op = new_node_op,
-					x = pos.x - 2, y = pos.y + 4,
-				}
-			end
-			if node.type == 2 and node.op == 0 then
-				if #node.children == 0 then
-					-- add only child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + 2, y = pos.y + 4,
-					}
-				elseif node.children[1].type != 2 or node.children[1].op == 0 then
-					-- add above first child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
-					}
-				end
-			end
-			
-		elseif new_node_type == 2 then
-			-- Oscillators --
-			if node != sfx.root and not (node.type == 2 and node.op > 0) then
-				-- insert between parent
-				attach_placement_button {
-					parent_id = node.parent.id, target_id = node.id, child_id = node.id,
-					new_node_type = new_node_type, new_node_op = new_node_op,
-					x = pos.x - 2, y = pos.y + 4,
-				}
-			end
-			if node != sfx.root then
-				-- add sibling below
-				attach_placement_button {
-					parent_id = node.parent.id, target_id = node:last_child().id + 1,
-					new_node_type = new_node_type, new_node_op = new_node_op,
-					x = pos.x + node_width \ 2, y = pos.y + 8
-				}
-			end
-			if node.type == 2 or node == sfx.root then
-				if #node.children == 0 then
-					-- add only child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + 2, y = pos.y + 4,
-					}
-				elseif node.children[1].type != 2 	or node.children[1].op == 0 then
-					-- add above first child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
-					}
-				end
-			end
-			
-		else
-			-- Effects --
-			if node != sfx.root then
-				-- add sibling below
-				attach_placement_button {
-					parent_id = node.parent.id, target_id = node:last_child().id + 1,
-					new_node_type = new_node_type, new_node_op = new_node_op,
-					x = pos.x + node_width \ 2, y = pos.y + 8
-				}
-			end
-			if 	node.type == 2 then
-				if #node.children == 0 then
-					-- add only child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + 2, y = pos.y + 4,
-					}
-				elseif node.children[1].type != 2 or node.children[1].op == 0 then
-					-- add above first child
-					attach_placement_button {
-						parent_id = node.id, target_id = node.id + 1,
-						new_node_type = new_node_type, new_node_op = new_node_op,
-						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
-					}
-				end
-			end
-		end
-		--]]
-	end
-end
-
-
-function routing.clear_placement_buttons()
-	local cleared_something = #placement_buttons > 0
-	for i = 1, #placement_buttons do
-		placement_buttons[i]:detach()
-	end
-	placement_buttons = {}
-	return cleared_something
-end
-
-
--- Routing display -------------------------------------------------------------
-
-
-function routing.attach(parent, el)
-	el.width = 385
-	el.height = 97
-	parent:attach(el)
-	routing.attach_node_chooser(el, { x = 300, y = 56 })
-	
-	function el:draw()
-		rectfill(0, 0, self.width, self.height, 59)
-		pset(0, 0, 6)
-		pset(self.width - 1, 0, 6)
-		pset(0, self.height - 1, 6)
-		pset(self.width - 1, self.height - 1, 6)
-		-- Overview and Wavetable buttons
-		for i, label in ipairs({"all","wt 0","wt 1","wt 2","wt 3"}) do
-			local bg = (i == 1) and 7 or 58
-			local fg = (i == 1) and 22 or 5
-			rrectfill(4, 4 + i * node_height, node_width + 1, 9, 0, bg)
-			print(label, 10 + (i==1 and 2 or 0), 4 + i * node_height + 2, fg)
-			if app.node then
-				-- nothing to do
-			elseif
-				(i == 1 and not app.wt)
-				or (i == 2 and app.wt == 0)
-				or (i == 3 and app.wt == 1)
-				or (i == 4 and app.wt == 2)
-				or (i == 5 and app.wt == 3)
-			then
-				rect(4 - 1, 4 + i * node_height - 1, 4 + node_width + 1, 4 + i * node_height + 8 + 1, 0)
-				rect(4 - 2, 4 + i * node_height - 2, 4 + node_width + 2, 4 + i * node_height + 8 + 2, 24)
-			end
-		end
-		-- Routing graph
-		for n = 0, 7 do
-			local node = sfx.nodes[n]
-			local pos = node.position
-			if (not pos) break -- TODO: when does this occur?
-			-- Coordinates from logical position
-			pos.x = 4 + pos.column * (node_width + node_gap)
-			pos.y = 4 + pos.row * node_height
-			local ppos = node.parent.position
-			ppos.x = 4 + ppos.column * (node_width + node_gap)
-			ppos.y = 4 + ppos.row * node_height
-
-			if app.node == n then
-				rect(pos.x - 2, pos.y - 2, pos.x + node_width + 2, pos.y + 8 + 2, 24)
-				rect(pos.x - 1, pos.y - 1, pos.x + node_width + 1, pos.y + 8 + 1, 0)
-			end
-			
-			if node.type >= 8 and node.older_sibling then
-				-- Horizontal bracket
-				local col = 6
-				local x = pos.x + node_width \ 2
-				local orig = node.older_sibling
-				local depth = 0
-				while #orig.children > 0 and depth < 8 do
-					orig = orig.children[#orig.children]
-					depth += 1
-				end
-				local orig_x = orig.position.x + node_width
-				line(x - (node_width \ 2) - 3, pos.y - 4, x - (node_width \ 2) - 3 - 2, pos.y - 6, col)
-				line(x - 3, pos.y - 4, x - (node_width \ 2) - 3, pos.y - 4, col)
-				line(x, pos.y - 2, x - 2, pos.y - 4, col)
-				line(x, pos.y - 2, x + 2, pos.y - 4, col)
-				line(x + 3, pos.y - 4, orig_x + 3, pos.y - 4, col)
-				line(orig_x + 3, pos.y - 4, orig_x + 3 + 2, pos.y - 6, col)
-			elseif node != sfx.root then
-				-- Arrow
-				line(
-					ppos.x + node_width + 7, ppos.y + 4,
-					ppos.x + node_width + 1, ppos.y + 4,
-					7
-				)
-				line(
-					pos.x - 7, pos.y + 4,
-					ppos.x + node_width + 7, ppos.y + 4,
-					7
-				)
-				line(
-					pos.x - 1, pos.y + 4,
-					pos.x - 7, pos.y + 4,
-					7
-				)
-				line(pos.x - 2, pos.y + 3, pos.x - 2, pos.y + 5, 7)
-				line(pos.x - 3, pos.y + 2, pos.x - 3, pos.y + 6, 7)
-			end
-			
-			-- Node boxes
-			local str = "??? "
-			local fg = 63
-			local bg = 30
-			if node == sfx.root then str = "inst"; fg = 22; bg = 7
-			elseif node.type == 2 then
-				if node.op == 0 then str = "osc " .. n; bg = 17
-				elseif node.op == 1 then str = "fm " .. n; bg = 27
-				elseif node.op == 2 then str = "ring " .. n; bg = 22
-				end
-			elseif node.type == 8 then str = "filt " .. n; bg = 14
-			elseif node.type == 9 then str = "echo " .. n; bg = 31
-			elseif node.type == 10 then str = "shap " .. n; bg = 9
-			end
-			rectfill(pos.x, pos.y, pos.x + node_width, pos.y + 8, bg)
-			p8_centered_print(str, pos.x + (node_width \ 2) + 1, pos.y + 2, fg)
-		end
-		clip()
-		line()
-		line(1, -1, 22)
-		line(self.width - 2, -1, 22)
-		line(self.width, 1, 22)
-		line(self.width, self.height - 2, 22)
-		line(self.width - 2, self.height, 22)
-		line(1, self.height, 22)
-		line(-1, self.height - 2, 22)
-		line(-1, 1, 22)
-		line(1, -1, 22)
-		clip(self.sx, self.sy, self.width - 1, self.height - 1)
-	end
-	
-	function el:hover(msg)
-		self.cursor = 1
-		if (#placement_buttons != 0) return
-		for n = 0, 7 do
-			local node = sfx.nodes[n]
-			local pos = node.position
-			if
-				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
-				and pos.y <= msg.my and msg.my <= pos.y + 10
-			then
-				self.cursor = "pointer"
-			end
-		end
-		if msg.mx <= node_width + 4 then
-			if (msg.my >= 4 + node_height and msg.my <= 4 + node_height + 10)
-				or (msg.my >= 4 + 2 * node_height and msg.my <= 4 + 2 * node_height + 10)
-				or (msg.my >= 4 + 3 * node_height and msg.my <= 4 + 3 * node_height + 10)
-				or (msg.my >= 4 + 4 * node_height and msg.my <= 4 + 4 * node_height + 10)
-				or (msg.my >= 4 + 5 * node_height and msg.my <= 4 + 5 * node_height + 10)
-			then
-				self.cursor = "pointer"
-			end
-		end
-	end
-
-	function el:click(msg)
-		if #placement_buttons != 0 then
-			routing.clear_placement_buttons()
-			return
-		end
-		for n = 0, 7 do
-			local node = sfx.nodes[n]
-			local pos = node.position
-			if
-				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
-				and pos.y <= msg.my and msg.my <= pos.y + 10
-			then
-				app.node = n
-				app.refresh_gui = true
-				return true
-			end
-		end
-		if msg.mx <= node_width + 4 then
-			if msg.my >= 4 + node_height and msg.my <= 4 + node_height + 10 then
-				app.node = nil
-				app.wt = nil
-				app.refresh_gui = true
-				return true
-			elseif msg.my >= 4 + 2 * node_height and msg.my <= 4 + 2 * node_height + 10 then
-				app.node = nil
-				app.wt = 0
-				app.refresh_gui = true
-				return true
-			elseif msg.my >= 4 + 3 * node_height and msg.my <= 4 + 3 * node_height + 10 then
-				app.node = nil
-				app.wt = 1
-				app.refresh_gui = true
-				return true
-			elseif msg.my >= 4 + 4 * node_height and msg.my <= 4 + 4 * node_height + 10 then
-				app.node = nil
-				app.wt = 2
-				app.refresh_gui = true
-				return true
-			elseif msg.my >= 4 + 5 * node_height and msg.my <= 4 + 5 * node_height + 10 then
-				app.node = nil
-				app.wt = 3
-				app.refresh_gui = true
-				return true
-			end
-		end
-	end
-	
-	return el
-end
-
-
--- Node chooser ----------------------------------------------------------------
-
-
-local node_choice = {
-	[0] = {
-		[0] = { label = "osc", color = 17, node_type = 0x2, node_op = 0x0 },
-		{ label = "fm", color = 27, node_type = 0x2, node_op = 0x1 },
-		{ label = "ring", color = 22, node_type = 0x2, node_op = 0x2 },
-	},
-	{
-		[0] = { label = "filt", color = 14, node_type = 0x8, node_op = 0x0 },
-		{ label = "echo", color = 31, node_type = 0x9, node_op = 0x0 },
-		{ label = "shap", color = 9, node_type = 0x0a, node_op = 0x0 },
-	},
-}
-
-
-function routing.attach_node_chooser(parent, el)
-	el.width = 118
-	el.height = 50
-	parent:attach(el)
-	
-	for i = 1, #placement_buttons do
-		app.routing_widget:attach(placement_buttons[i])
-	end
-
-	function el:draw()
-		--- rectfill(0, 0, self.width - 1, self.height - 1, 0)
-		if #placement_buttons > 0 then
-			print("choose position", 4, 12, 22)
-			return
-		end
-		if sfx.root.free_nodes == 0 then
-			print("(all modules are used)", 4, 12, 22)
-			return
-		end
-		print("add module:", 4, 2, 22)
-		local ox, oy = 4, 12
-		for row = 0, #node_choice do
-			for column = 0, #(node_choice[row]) do
-				local x = ox + column * node_width
-				local y = oy + row * (8 + 4)
-				local col = node_choice[row][column].color
-				rectfill(x, y, x + (node_width - 6), y + 8, col)
-				p8_centered_print(
-					node_choice[row][column].label,
-					x + ((node_width - 6) \ 2) + 1,
-					y + 2,
-					63
-				)
-			end
-		end
-	end
-	
-	function el:hover(msg)
-		self.cursor = 1
-		if (#placement_buttons > 0) return
-		if (sfx.root.free_nodes == 0) return
-		local ox, oy = 4, 12
-		for row = 0, #node_choice do
-			for column = 0, #(node_choice[row]) do
-				local x = ox + column * node_width
-				local y = oy + row * (8 + 4)
-				if
-					x <= msg.mx and msg.mx <= x + (node_width - 6)
-					and y <= msg.my and msg.my <= y + 8
-				then
-					self.cursor = "pointer"
-				end
-			end
-		end
-	end
-
-	function el:click(msg)
-		return true -- don't want to deselect the node!
-	end
-	
-	function el:tap(msg)
-		if #placement_buttons > 0 then
-			routing.clear_placement_buttons()
-			return
-		end
-		if (sfx.root.free_nodes == 0) return
-		local ox, oy = 4, 12
-		for row = 0, #node_choice do
-			for column = 0, #(node_choice[row]) do
-				local x = ox + column * node_width
-				local y = oy + row * (8 + 4)
-				if
-					x <= msg.mx and msg.mx <= x + (node_width - 6)
-					and y <= msg.my and msg.my <= y + 8
-				then
-					start_new_node(
-						node_choice[row][column].node_type,
-						node_choice[row][column].node_op
-					)
-				end
-			end
-		end
-	end
-	
-
-	return el
-end
-
-
-return routing
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-25 15:38:28",revision=3476]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-25 19:59:24",revision=3747]]
 local settings = {}
 
 local settings_folder = "/appdata/visitrack/"
@@ -2042,170 +930,8 @@ end
 
 
 return settings
-:: src/settings_ui.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-25 15:38:28",revision=1148]]
-local settings = require "src/settings.lua"
-local ui = require "src/ui.lua"
-
-
-local settings_ui = {}
-
-
-local function create_button(el)
-	if not el.width then
-		if el.label then
-			el.width = 8 + (4 * #el.label)
-		else
-			el.width = 9
-		end
-	end
-	if not el.height then
-		el.height = 9
-	end
-	if not el.fg then
-		el.fg = 5
-	end
-	if not el.bg then
-		el.bg = 7
-	end
-	el.cursor = "pointer"
-	function el:draw()
-		rectfill(1, 0, self.width - 2, 0, self.bg)
-		rectfill(0, 1, self.width - 1, self.height - 2, self.bg)
-		rectfill(1, self.height - 1, self.width - 2, self.height - 1, self.bg)
-		local label = self.get_label and self:get_label() or self.label
-		if label then
-			print(label, (self.width \ 2) - (2 * #label), 2, self.fg)
-		end
-	end
-	function el:hover()
-		return true
-	end
-	function el:click()
-		return true
-	end
-	function el:doubleclick()
-		return true
-	end
-	function el:tap()
-		if self.action then
-			self:action()
-		end
-	end
-	return el
-end
-
-
-function settings_ui.open()
-	local el = { x = 150, y = 12, width = 480 - 300, height = 270 - 11 - 24 }
-	ui.open_modal(el)
-	el:attach(ui.create_label { x = 20, y = 30, label = "Keys for playing notes", fg = 5})
-	el:attach(ui.create_label { x = 20, y = 50, label = "- layout:", fg = 5})
-	el:attach(ui.create_menu_button {
-		x = 58, y = 50 - 2,
-		bg = 7,
-		get_label = function()
-			return settings.user.pitched_layout
-		end,
-		fg = 59,
-		highlight = 15,
-		items = {
-			{
-				label = "piano-like",
-				action = function()
-					settings.change_keys(settings.piano_keys)
-					settings.change_user { pitched_layout = "piano-like" }
-				end
-			},
-			{
-				label = "guitar-like",
-				action = function()
-					settings.change_keys(settings.isomorphic_keys)
-					settings.change_user { pitched_layout = "guitar-like" }
-				end
-			},
-			{
-				label = "chromatic",
-				action = function()
-					settings.change_keys(settings.chromatic_keys)
-					settings.change_user { pitched_layout = "chromatic" }
-				end
-			},
-		}		
-	})
-	el:attach(ui.create_label { x = 20, y = 90, label = "mouse movements (knobs, sliders, ...)", fg = 5})
-	el:attach(ui.create_label { x = 20, y = 110, label = "- direction:", fg = 5})
-	el:attach(ui.create_menu_button {
-		x = 70, y = 110 - 2,
-		bg = 7,
-		get_label = function()
-			return settings.user.drag_horizontal and "horizontal" or "vertical"
-		end,
-		fg = 59,
-		highlight = 15,
-		items = {
-			{
-				label = "vertical",
-				action = function()
-					settings.change_user { drag_horizontal = false }
-				end
-			},
-			{
-				label = "horizontal",
-				action = function()
-					settings.change_user { drag_horizontal = true }
-				end
-			},
-		}		
-	})	
-	el:attach(ui.create_label { x = 20, y = 130, label = "- sensitivity:", fg = 5})
-	el:attach_field {
-		x = 78, y = 130 - 1,
-		width = 30, height = 7,
-		get = function() return settings.user.drag_sensitivity end,
-		set = function(self, val)
-			local v = mid(0.0, tonum(val), 8.0)
-			if (v == 0) v = 0.5
-			settings.change_user { drag_sensitivity = v }
-		end
-	}
-	el:attach(ui.create_label { x = 20, y = 150, label = "- precise sensitivity:", fg = 5})
-	el:attach_field {
-		x = 110, y = 150 - 1,
-		width = 30, height = 7,
-		get = function() return settings.user.drag_sensitivity_precise end,
-		set = function(self, val)
-			local v = mid(0.0, tonum(val), 8.0)
-			if (v == 0) v = 0.125
-			settings.change_user { drag_sensitivity_precise = v }
-		end
-	}
-	
-	el:attach(create_button {
-		x = 140, y = el.height - 16,
-		label = "close",
-		action = function(self)
-			ui.close_modal()
-		end,
-	})
-	
-	function el:draw()
-		rect(0, 0, self.width - 1, self.height - 1, 61)
-		rect(1, 1, self.width - 2, self.height - 2, 22)
-		rectfill(2, 2, self.width - 3, self.height - 3, 6)
-		rectfill(2, 2, self.width - 3, 2 + 10, 2)
-		print("settings", (self.width \ 2) - (2 * #"settings"), 5, 7)
-	end
-	
-	function el:click()
-		return true
-	end
-end
-
-
-return settings_ui
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-25 15:38:28",revision=7962]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-25 19:59:24",revision=8233]]
 local pfx = {}
 
 
@@ -2933,1323 +1659,8 @@ end
 
 
 return pfx
-:: src/syn_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-25 15:38:28",revision=2764]]
-local app = require "src/app.lua"
-local envelopes = require "src/envelopes.lua"
-local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-
-
-local syn_menus = {}
-
-
--- Relationship menu -----------------------------------------------------
-
-
-function syn_menus.open_relationship(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	
-	if node_type == 0x2 and self.parent.param == 2 then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 55,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						self.parent.min_val, self.parent.max_val = 0, 255
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-				{ divider = true },
-				{
-					label = 
-						(flags & 0x20 > 0)
-							and "\|f\^:7f415d5d5d417f00\|h quantized"
-							or "\|f\^:7f41414141417f00\|h quantized",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
-					 end,
-				},
-			}
-		}
-	elseif
-		(node_type == 0x02 and self.parent.param == 0)
-		or (node_type == 10 and self.parent.param == 3)
-		or (node_type == 8 and self.parent.param == 2)
-	then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 52,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-			}
-		}
-	elseif
-		(node_type == 8 and self.parent.param ~= 2)
-		or (node_type == 9)
-		or (node_type == 10 and self.parent.param ~= 3)
-	then
-		-- no menu
-	else
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 40,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-			}
-		}
-	end
-end
-
-
--- Multiplier menu -------------------------------------------------------------
-
-
-function syn_menus.open_multiplier(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	
-	local mult_options = { 
-		[0] = 
-		{ label = "none", val = 0x00 | 0x00 },
-		{ label = "*4", val = 0x00 | 0x40 },
-		{ label = "/4", val = 0x20 | 0x40 },
-		{ label = "*16", val = 0x00 | 0x80 },
-		{ label = "/16", val = 0x20 | 0x80 },
-		{ label = "*64", val = 0x00 | 0xc0 },
-		{ label = "/64", val = 0x20 | 0xc0 },
-	}
-	local mult_menu_items = {}
-	for i = 0, #mult_options do
-		add(mult_menu_items, 
-			{
-				label = (env & 0xe0 == mult_options[i].val)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
-					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
-				fg = i == 0 and 5 or 24,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
-				 end,
-			}
-		)
-	end
-
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 36,
-		items = mult_menu_items,
-	}
-end
-
-
--- Envelope menu ------------------------------------------------------------------
-
-
-function syn_menus.open_envelope(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local has_env = flags & 0x04 > 0
-	local has_free_run = flags & 0x08 > 0
-	local has_random = flags & 0x10 > 0
-	local env_id = env & 0x0f
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 51,
-		items = {
-			{
-				label = (not has_env and not has_random)
-					and "\|f\^:1c225d5d5d221c00\|h none"
-					or "\|f\^:1c22414141221c00\|h none",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
-				 end,
-			},
-			{
-				label = (has_env and env_id == 0)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(0))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 1)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(1))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 2)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(2))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
-				end,
-			},
-			{
-				label = (has_env and env_id == 3)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(3))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
-				end,
-			},
-			{
-				label = has_random
-						and "\|f\^:1c225d5d5d221c00\|h random"
-						or "\|f\^:1c22414141221c00\|h random",
-				fg = 30,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
-				 end,
-			},
-			{
-				divider = true,
-			},
-			{
-				label = has_free_run
-							and "\|f\^:7f415d5d5d417f00\|h free run"
-							or "\|f\^:7f41414141417f00\|h free run",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
-				 end,
-			},
-		}
-	}
-end
-
-
-return syn_menus
-:: src/syn_param.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-25 15:38:28",revision=4086]]
-local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
-local syn_menus = require "src/syn_menus.lua"
-local ui = require "src/ui.lua"
-
-
-local syn_param = {}
-
-
--- Field ----------------------------------------------------------------------
-
-
-local function attach_field(parent, el)
-	el.width = 4 * 4 + 3
-	el.height = 7
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	function el:draw()
-		rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if (not self.visible) or self.visible(self) then
-			local val = self:get()
-			local fg = self.fg or 59
-			local str
-			if self.to_str then
-				str = self:to_str(val)
-			else
-				str = tostr(val)
-			end
-			if #str > 4 then
-				print(str, 0, 1, self.dragged and 7 or fg)
-			elseif self.centered then
-				p8_centered_print(str, 10, 1, self.dragged and 7 or fg)
-			else
-				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
-			end
-		end
-	end
-	
-
-	function el:hover()
-		if (not self.visible) or self.visible(self) then
-			self.cursor = get_spr(50)
-		else
-			self.cursor = 1
-		end
-	end
-	
-
-	function el:click(msg)
-		if self.visible and (not self.visible(self)) then
-			return true
-		end
-		self.cursor = 0
-		self.dragged = true
-		ui.mouselock(1.0, true)
-		if self.onclick then
-			self:onclick(msg)
-		elseif self.parent.onclick then
-			self.parent:onclick(msg)
-		end
-		return true
-	end
-	
-	function el:doubleclick()
-		return true
-	end
-	
-
-	function el:drag(msg)
-		local delta = ui.mouselock(1.0, true)
-		local old = self:get()
-		local new = old - delta
-		self:set(new)
-	end
-
-	
-	function el:release()
-		self.cursor = get_spr(50)
-		self.dragged = false
-		ui.mouseunlock()
-		self.up_barrier = nil
-		self.down_barrier = nil
-		if self.onrelease then
-			self:onrelease()
-		elseif self.parent.onrelease then
-			self.parent:onrelease()
-		end
-	end
-	
-
-	return el
-end
-
-
-local function attach_relationship(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if flags & 0x03 == 0x01 then
-			print("\^:2070200000000000", -1, 2, 60)
-		elseif flags & 0x03 == 0x02 then
-			print("\^:5020500000000000", -1, 2, 60)
-		elseif flags & 0x03 > 0 then
-			print("?", 3, 1, 60)
-		else
-			pset(4, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_relationship(self)
-	end
-	return el
-end
-
-
-local function attach_multiplier(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if self.mini then
-			if (env & 0xc0 > 0) then
-				print("!", 0, 1, 24)
-			else
-				pset(1, 3, 58)
-			end
-			return
-		end
-		if (env & 0xc0 > 0) then
-			str2 = (env & 0x20 == 0) and 
-				"\^:5020500000000000" or  -- *
-				"\^:4020100000000000"     -- /
-			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
-			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
-			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
-			clip()
-			print(str2, -4, 2, 24)
-		else
-			pset(2, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_multiplier(self)
-	end
-	return el
-end
-
-
-local function attach_envelope(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		if flags & 0x04 > 0 then
-			local fg, bg = 7, 18
-			if flags & 0x08 > 0 then
-				fg, bg = bg, fg
-			end
-			line(1, 0, self.width - 1 - 1, 0, bg)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
-			print(string.format("%x", env & 0x0f), 2, 1, fg)
-		elseif flags & 0x10 > 0 then
-			line(1, 0, self.width - 1 - 1, 0, 30)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
-			print("r", 2, 1, 7)
-		else
-			line(2, 1, self.width - 1 - 2, 1, 58)
-			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
-			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_envelope(self)
-	end
-	return el
-end
-
-
--- Getters and setters ------------------------------------------------------
-
-
-local function get_val1(self)
-	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val1 >= 128) val1 -= 256
-	end
-	return val1
-end
-
-
-local function set_val1(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function get_val0(self)
-	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val0 >= 128) val0 -= 256
-	end
-	return val0
-end
-
-
-local function set_val0(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function has_env(self)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	return flags & (0x4 | 0x10) > 0
-end
-
-
-local function smart_str(self, val)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
-		local num = 1 + val % 16
-		local den = 1 + val \ 16
-		return num .. "/" .. den
-	end
-	return tostr(val)
-end
-
-
--- The widget -----------------------------------------------------------------
-
-
-function syn_param.attach(parent, x, y, el, style)
-	el.x, el.y = x, y
-	el.small = small
-	el.width, el.height = 35, 58
-	el.small = style.small
-	el.emphasis = style.emphasis
-	parent:attach(el)
-	el:attach(ui.create_knob {
-		x = 2, y = 10,
-		small = style.small,
-		get = get_val1,
-		set = set_val1,
-		has_secondary = has_env,
-		get_secondary = get_val0,
-		set_secondary = set_val0,
-	})
-	attach_relationship(
-		el,
-		{
-			x = 0, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 41,
-			centered = true,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 28, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 51,
-			fg = 18, centered = true,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 28, y = 51,
-		}
-	)
-	
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		if self.emphasis then
-			rectfill(0, 0, self.width - 1, 8, 5)
-		else
-			rectfill(0, 0, self.width - 1, 8, 5)
-		end
-		p8_centered_print(
-			el.long_label or el.label,
-			(self.width \ 2) + 1, 2,
-			self.emphasis and 6 or 6
-		)
-	end	
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-	
-	return el
-end
-
-
--- Mini widget ---------------------------------------------------------------------
-
-
-function syn_param.attach_mini(parent, el)
-	el.x = el.x or 0
-	el.y = el.y or (12 + 10 * el.param)
-	el.width = parent.width
-	el.height = 10
-	parent:attach(el)
-	attach_relationship(
-		el,
-		{
-			x = 24, y = 0,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7, y = 0,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 24 + 7 + 20, y = 0,
-			mini = true,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7 + 20 + 4, y = 0,
-			fg = 18,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 24 + 7 + 20 + 4 + 20, y = 0,
-		}
-	)
-	function el:draw()
-		print(self.label, 24 - (4 * #self.label), 1, 5)
-		---print(self.label, 2, 1, 5)
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-end
-
-
-return syn_param
-:: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-25 15:38:28",revision=9339]]
-local app = require "src/app.lua"
-local envelopes = require "src/envelopes.lua"
-local syn_param = require "src/syn_param.lua"
-local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local visual = require "src/visual.lua"
-
-
-local synth = {}
-
-
--- Node panels --------------------------------------------------------------------
-
-
-function synth.attach_node_panel(parent, el)
-	if app.node and app.node == el.node_id then
-		el.width = 480 - 4 * app.mod_width - 6 * app.synth_gap + 2
-		el.height = 2 * app.synth_height + app.synth_gap
-	else
-		el.width = app.synth_width
-		el.height = app.synth_height
-	end
-	parent:attach(el)
-	
-	local type = sfx.node_type(app.instrument, el.node_id)
-	if el.node_id == 0 then return synth.populate_root(parent, el)
-	elseif type == 0 then return synth.populate_unused(parent, el)
-	elseif type == 2 then
-		local op = sfx.node_op(app.instrument, el.node_id)
-		if op == 0 then return synth.populate_osc(parent, el)
-		elseif op == 1 then return synth.populate_fm(parent, el)
-		elseif op == 2 then return synth.populate_ring(parent, el)
-		end
-	elseif type == 8 then return synth.populate_filt(parent, el)
-	elseif type == 9 then return synth.populate_echo(parent, el)
-	elseif type == 10 then return synth.populate_shap(parent, el)
-	end
-	return synth.populate_unknown(parent, el)
-end
-
-
--- Unused slot -------------------------------------------------------------------------------
-
-
-function synth.populate_unused(parent, el)
-	function el:draw()
-		clip()
-		local x, y = 19, 14
-		pal(7, 58)
-		sspr(63, 0, 0, 7, 7, x, y, x + (7 * 4), y + (7 * 4))
-		pal(7, 7)
-		if self.node_id == 7 then
-			print("pfx6416", 52, 63, 22)
-		end
-	end
-	return el
-end
-
-
--- Root Synth Node ---------------------------------------------------------------------------
-
-
-local instrument_name_field
-
-
-function synth.populate_root(parent, el)
-	local params = {
-		[0] = { label = "vol", long_label = "volume", param = 0,
-			min_val = 0, max_val = 64, init_val = 32, sensitivity = 0.25 },
-		{ label = "pan", param = 1, min_val = -128, max_val = 127, },
-		{ label = "tune", param = 2, min_val = -128, max_val = 127, },
-		{ label = "bend", param = 3, min_val = -128, max_val = 127, },
-	}
-	for i = 0, #params do params[i].node_id = el.node_id end
-
-	if el.large then
-		syn_param.attach(el, 30, 84, params[0], { emphasis = true})
-		syn_param.attach(el, 70, 84, params[1], { small = true })
-		params[2].x, params[2].y = 112, 125
-		syn_param.attach_mini(el, params[2])
-		params[3].x, params[3].y = 112, 135
-		syn_param.attach_mini(el, params[3])
---		syn_param.attach(el, 130, 84, params[2], { small = true })
---		syn_param.attach(el, 170, 84, params[3], { small = true })
-
-		-- TODO: replace with a custom field
-		-- also: add the same field to the mini version
-		instrument_name_field = el:attach_text_editor{
-			x = 116 + 4, y = 96,
-			width = 72, height = 9,
-			bgcol = 58, fgcol = 59, curcol = 2,
-			block_scrolling = true, max_lines = 1,
-			margin_top = 2,
-			key_callback = {
-				enter = function () 
-					sfx.set_instrument_name(app.instrument, instrument_name_field:get_text()[1])
-					instrument_name_field:set_keyboard_focus(false)
-				end
-			},
-			update = function(self)
-				-- update in realtime -- don't need to press enter to change
-				if (instrument_name_field:has_keyboard_focus()) then
-					sfx.set_instrument_name(app.instrument, instrument_name_field:get_text()[1])
-				end
-			end
-		}
-		instrument_name_field:set_text{sfx.instrument_name(app.instrument)}
-
-		el:attach(synth.instrument_flag_toggle { x = 120, y = 114, label = "wide", flag = 0x02 })
-		el:attach(synth.instrument_flag_toggle { x = 160, y = 114, label = "retrig", flag = 0x01 })
-		visual.attach_oscilloscope(el, 8, { x = 20, y = 12, width = 184, height = 68 })
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[3])
-		--- slider.attach(el, { label = "p0", param = 4, node_id = el.node_id } )
-		--- slider.attach(el, { label = "p1", param = 5, node_id = el.node_id } )
-		el:attach(synth.instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
-		el:attach(synth.instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
-	end
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 7)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-		print("synthesizer", 4, 2, 22)
-		-- Name label
-		rrectfill(116, 84, 72 + 8, 9, 0, 5)
-		print("name", 116 + 31, 84 + 2, 6)
-	end
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-	return el
-end
-
-
--- Oscillator -------------------------------------------------------------------
-
-
-local wt_labels = { [0] = "wt0", "wt1", "wt2", "wt3" }
-local wt_long_labels = { [0] = "wavetable 0", "wavetable 1", "wavetable 2", "wavetable 3" }
-local osc_params = {
-	[0] = { label = "vol", long_label = "volume", param = 0,
-		min_val = 0, max_val = 64, init_val = 32, sensitivity = 0.25 },
-	{ label = "pan", param = 1, min_val = -128, max_val = 127, },
-	{ label = "tune", param = 2, min_val = -128, max_val = 127, },
-	{ label = "bend", param = 3, min_val = -128, max_val = 127, },
-	{ label = "", long_label = "wave", param = 4, min_val = 0, max_val = 255, },
-	{ label = "phase", param = 5, min_val = -128, max_val = 127, },
-}
-
-function synth.populate_osc(parent, el)
-	local params = unpod(pod(osc_params))
-	-- closures are not copied by unpod/pod?
-	params[4].onclick = function(self) visual.open_wavetable(self) end
-	params[4].onrelease = function(self) visual.close() end
-	params[5].onclick = params[4].onclick
-	params[5].onrelease = params[4].onrelease
-	
-	for i = 0, #params do params[i].node_id = el.node_id end
-	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
-	if flags & 0x03 == 0x02 then
-		-- tune param in "multiply" relationship:
-		-- change the min and max values
-		params[2].min_val = 0
-		params[2].max_val = 255
-	end
-
-	synth.attach_mute_toggle(el, { label = "osc", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 20, 16, params[0], { emphasis = true})
-		syn_param.attach(el, 60, 16, params[1], { small = true })
-		syn_param.attach(el, 20, 84, params[2], { small = true })
-		syn_param.attach(el, 60, 84, params[3], { small = true })
-		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
-		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
-		syn_param.attach(el, 170, 84, params[5], { small = true })
-		el:attach(ui.create_menu_button {
-			x = 142, y = 72,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_long_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[3])
-		syn_param.attach_mini(el, params[4])
-		syn_param.attach_mini(el, params[5])
-		el:attach(ui.create_menu_button {
-			x = 2, y = 51,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-		
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 17)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-		line(113, 90, 113, 138, 5)
-	end
-	
-	return el
-end
-
-
--- FM modulator -------------------------------------------------------------------
-
-
-function synth.populate_fm(parent, el)
-	local params = unpod(pod(osc_params))
-	-- closures are not copied by unpod/pod?
-	params[4].onclick = function(self) visual.open_wavetable(self) end
-	params[4].onrelease = function(self) visual.close() end
-	params[5].onclick = params[4].onclick
-	params[5].onrelease = params[4].onrelease
-	
-	for i = 0, #params do params[i].node_id = el.node_id end
-	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
-	if flags & 0x03 == 0x02 then
-		-- tune param in "multiply" relationship:
-		-- change the min and max values
-		params[2].min_val = 0
-		params[2].max_val = 255
-	end
-
-	synth.attach_mute_toggle(el, { label = "fm", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 20, 16, params[0], { emphasis = true})
-		syn_param.attach(el, 60, 16, params[1], { small = true })
-		syn_param.attach(el, 20, 84, params[2], { small = true })
-		syn_param.attach(el, 60, 84, params[3], { small = true })
-		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
-		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
-		syn_param.attach(el, 170, 84, params[5], { small = true })
-		el:attach(ui.create_menu_button {
-			x = 142, y = 72,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_long_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[3])
-		syn_param.attach_mini(el, params[4])
-		syn_param.attach_mini(el, params[5])
-		el:attach(ui.create_menu_button {
-			x = 2, y = 51,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-		
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 27)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-		line(113, 90, 113, 138, 5)
-	end
-	
-	return el
-end
-
-
--- Ring mod -------------------------------------------------------------------
-
-
-function synth.populate_ring(parent, el)
-	local params = unpod(pod(osc_params))
-	-- closures are not copied by unpod/pod?
-	params[4].onclick = function(self) visual.open_wavetable(self) end
-	params[4].onrelease = function(self) visual.close() end
-	params[5].onclick = params[4].onclick
-	params[5].onrelease = params[4].onrelease
-	
-	for i = 0, #params do params[i].node_id = el.node_id end
-	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
-	if flags & 0x03 == 0x02 then
-		-- tune param in "multiply" relationship:
-		-- change the min and max values
-		params[2].min_val = 0
-		params[2].max_val = 255
-	end
-
-	synth.attach_mute_toggle(el, { label = "ring", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 20, 16, params[0], { emphasis = true})
-		syn_param.attach(el, 60, 16, params[1], { small = true })
-		syn_param.attach(el, 20, 84, params[2], { small = true })
-		syn_param.attach(el, 60, 84, params[3], { small = true })
-		local wave = syn_param.attach(el, 130, 84, params[4], { emphasis = true })
-		visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
-		syn_param.attach(el, 170, 84, params[5], { small = true })
-		el:attach(ui.create_menu_button {
-			x = 142, y = 72,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_long_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[3])
-		syn_param.attach_mini(el, params[4])
-		syn_param.attach_mini(el, params[5])
-		el:attach(ui.create_menu_button {
-			x = 2, y = 51,
-			get_label = function()
-				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
-				return wt_labels[wt] or "wt?"
-			end,
-			fg = 5,
-			highlight = 15,
-			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
-			}
-		})
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-		
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 22)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-		line(113, 90, 113, 138, 5)
-	end
-	
-	return el
-end
-
-
--- Filter ----------------------------------------------------------------------
-
-
-function synth.populate_filt(parent, el)
-	local params = {
-		[0] =
-		{ label = "low", param = 0, min_val = 0, max_val = 255, },
-		{ label = "high", param = 1, min_val = 0, max_val = 255, },
-		{ label = "res", param = 2, min_val = 0, max_val = 255, },
-	}
-	for i = 0, #params do params[i].node_id = el.node_id end
-	
-	synth.attach_mute_toggle(el, { label = "filt", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 34, 50, params[0], {})
-		syn_param.attach(el, 94, 50, params[2], {})
-		syn_param.attach(el, 154, 50, params[1], {})
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[1])
-	end
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 14)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-	end
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-	return el
-end
-
-
--- Delay --------------------------------------------------------------------------
-
-
-function synth.populate_echo(parent, el)
-	local params = {
-		[0] =
-		{ label = "delay", param = 0, min_val = 0, max_val = 255, },
-		{ label = "vol", param = 1, min_val = 0, max_val = 255, },
-	}
-	for i = 0, #params do params[i].node_id = el.node_id end
-	
-	synth.attach_mute_toggle(el, { label = "echo", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 59, 84, params[0], {})
-		syn_param.attach(el, 130, 84, params[1], {})
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-	end
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 31)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-	end
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-	return el
-end
-
-
--- Waveshaper ------------------------------------------------------------------
-
-
-function synth.populate_shap(parent, el)
-	local params = {
-		[0] =
-		{ label = "gain", param = 0, min_val = 0, max_val = 255, },
-		{ label = "elbow", param = 1, min_val = 0, max_val = 255, },
-		{ label = "cut", param = 2, min_val = 0, max_val = 255, },
-		{ label = "mix", param = 3, min_val = 0, max_val = 64, sensitivity = 0.25 },
-	}
-	for i = 0, #params do params[i].node_id = el.node_id end
-	
-	synth.attach_mute_toggle(el, { label = "shap", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	if el.large then
-		syn_param.attach(el, 20, 84, params[0], {})
-		syn_param.attach(el, 60, 84, params[3], { small = true })
-		syn_param.attach(el, 130, 84, params[2], {})
-		syn_param.attach(el, 170, 84, params[1], {})
-		local oscillo_id = sfx.nodes[el.node_id].parent.id
-		visual.attach_oscilloscope(el, 8, { x = 11, y = 16, width = 92, height = 60, node_id = oscillo_id })
-	else
-		syn_param.attach_mini(el, params[0])
-		syn_param.attach_mini(el, params[1])
-		syn_param.attach_mini(el, params[2])
-		syn_param.attach_mini(el, params[3])
-	end
-	function el:draw()
-		rectfill(0, 0, self.width, 9, 9)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-	end
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-	return el
-end
-
-
--- Unknown --------------------------------------------------------------------------
-
-
-function synth.populate_unknown(parent, el)
-	local params = {
-		[0] =
-		{ label = "p0", param = 0, min_val = 0, max_val = 255, },
-		{ label = "p1", param = 1, min_val = 0, max_val = 255, },
-		{ label = "p2", param = 2, min_val = 0, max_val = 255, },
-		{ label = "p3", param = 3, min_val = 0, max_val = 255, },
-		{ label = "p4", param = 4, min_val = 0, max_val = 255, },
-		{ label = "p5", param = 5, min_val = 0, max_val = 255, },
-	}
-	for i = 0, #params do params[i].node_id = el.node_id end
-	
-	synth.attach_mute_toggle(el, { label = "???", node_id = el.node_id })
-	synth.attach_close_button(el, { node_id = el.node_id })
-	syn_param.attach_mini(el, params[0])
-	syn_param.attach_mini(el, params[1])
-	syn_param.attach_mini(el, params[2])
-	syn_param.attach_mini(el, params[3])
-	syn_param.attach_mini(el, params[4])
-	syn_param.attach_mini(el, params[5])
-	function el:draw()
-		rectfill(0, 0, self.width, self.height, 30)
-		rectfill(0, 9, self.width, self.height, 6)
-		synth.draw_corners(self)
-	end
-	function el:click() return true end
-	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
-	return el
-end
-
-
--------------------------------------------------------------------------------------------------
-
-
-function synth.instrument_flag_toggle(el)
-	el.width = el.width or 35
-	el.height = el.height or 9
-	el.label = el.label or "---"
-	el.cursor = "pointer"
-	
-	function el:draw()
-		palt(59, true)
-		pal(2, 0)
-		pal(17, 18)
-		if sfx.instrument_flag(app.instrument, el.flag) then
-			spr(33, 0, 1)
-		else
-			spr(32, 0, 1)
-		end
-		pal(17, 17)
-		pal(2, 2)
-		palt(59, false)
-		print(el.label, 10, 2, 5)
-	end
-	
-	function el:tap()
-		sfx.toggle_instrument_flag(app.instrument, el.flag)
-	end
-	
-	return el
-end
-
-
-------------------------------------------------------------------------------------------------	
-
-
-function synth.draw_corners(el)
---[[
-	if app.node and app.node == el.node_id then 
-		clip()
-		rect(-1, -1, el.width, el.height, 24)
-		pset(-1, -1, app.editor_bg)
-		pset(el.width, -1, app.editor_bg)
-		pset(-1, el.height, app.editor_bg)
-		pset(el.width, el.height, app.editor_bg)
-		col = 24
-	end
---]]
-	pset(0, 0, 6)
-	pset(el.width - 1, 0, 6)
-	pset(0, 8, 6)
-	pset(el.width - 1, 8, 6)
-end
-
-
--- Title bar widgets -------------------------------------------------------------
-
-
-function synth.attach_mute_toggle(parent, el)
-	el.x = 1
-	el.y = 1
-	el.width = 3 + 4 * #(el.label .. " " .. el.node_id) + 3
-	el.height = 9
-	el.cursor = "pointer"
-	parent:attach(el)
-	el.muted = (sfx.node_flags(app.instrument, el.node_id) & 0x2) > 0
-	function el:draw()
-		local label = self.label .. " " .. self.node_id
-		print(label, 3, 1, 63)
-		if self.muted then
-			line(1, 3, 3 + 4 * #label, 3, 24)
-		end
-	end
-	function el:click()
-		return true -- don't pass to panel to avoid selection
-	end
-	function el:tap()
-		self.muted = not self.muted
-		local flags = sfx.node_flags(app.instrument, self.node_id)
-		if self.muted then
-			flags |= 0x2
-		else
-			flags &= ~0x2
-		end
-		sfx.set_node_flags(app.instrument, self.node_id, flags)
-	end
-	return el
-end
-
-
-function synth.attach_close_button(parent, el)
-	el.x = parent.width - 10
-	el.y = 2
-	el.width = 12
-	el.height = 9
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		pal(7, 63)
-		spr(36, 0, 0)
-		pal(7, 7)
-	end
-	function el:click()
-		return true -- don't pass to panel to avoid selection
-	end
-	function el:tap()
-		if app.node then
-			if app.node == self.node_id then
-				if #(sfx.nodes[app.node].children) > 0 then
-					app.node = sfx.nodes[app.node].children[1].id
-				else
-					app.node = sfx.nodes[app.node].parent.id
-				end
-			end
-		end
-		sfx.delete_node(app.instrument, self.node_id)
-		if app.node and app.node > self.node_id then
-			app.node = max(0, self.node_id - 1)
-		end
-		app.refresh_gui = true
-	end
-	return el
-end
-
-
-return synth
 :: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-25 15:38:28",revision=1672]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-25 19:59:24",revision=1943]]
 local settings = require "src/settings.lua"
 
 
@@ -4271,6 +1682,17 @@ end
 
 function ui.head()
 	return head
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Misc
+----------------------------------------------------------------------------------------------------
+
+
+function ui.print_centered(s, x, y, col)
+	local count = #s
+	print(s, x - ((count * 4) \ 2), y, col)
 end
 
 
@@ -4779,20 +2201,2605 @@ end
 
 
 return ui
-:: src/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-25 15:38:28",revision=2396]]
+:: src/ui_envelopes.lua
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-25 19:59:24",revision=4052]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx.lua"
+local ui = require "src/ui.lua"
+local ui_visual = require "src/ui_visual.lua"
+
+
+local ui_envelopes = {}
+
+					
+
+-- Envelope panel -----------------------------------------------------------
+
+
+local env_type_names = { [0] = "adsr", "lfo", "custom" }
+local lfo_shape_names = { [0] = "sine", "tri", "saw", "isaw", "square", "pulse" }
+
+
+function ui_envelopes.make_label(env_id)
+	local env_type = sfx.env_type(app.instrument, env_id)
+	return env_type_names[env_type] .. " " .. env_id
+end
+
+
+function ui_envelopes.attach_panel(parent, el)
+	el.width = el.large and (2 * app.mod_width + app.synth_gap) or app.mod_width
+	if not el.large and el.x > 200 then
+		-- TODO: clean this up...
+		el.width += 1
+	end
+	el.height = app.mod_height
+	parent:attach(el)
+
+	el:attach(ui.create_menu_button {
+		x = 2, y = 0, 
+		env_id = el.env_id,
+		get_label = function()
+			return ui_envelopes.make_label(el.env_id)
+		end,
+		fg = 7,
+		highlight = 29,
+		items = {
+			{ label = "adsr", action = function() sfx.set_env_type(app.instrument, el.env_id, 0); app.refresh_gui = true end },
+			{ label = "lfo", action = function() sfx.set_env_type(app.instrument, el.env_id, 1); app.refresh_gui = true end },
+			{ label = "custom", action = function() sfx.set_env_type(app.instrument, el.env_id, 2); app.refresh_gui = true end },
+		}
+	})
+	
+	if not el.large then
+		ui_envelopes.attach_advanced_button(el, { x = el.width - 12, y = 0 })
+	end
+
+	if not app.env_advanced[el.env_id] then 
+
+		local env_type = sfx.env_type(app.instrument, el.env_id)	
+		if env_type == 0 then
+			-- ADSR ----------------------------------------------
+			local labels = { [0] = "a", "d", "s", "r" }
+			for i = 0, 3 do
+				ui_envelopes.attach_slider(el, { x = 3 + 13 * i, y = 12, slider_height = 40, env_id = el.env_id, param = i, label = labels[i] })
+			end
+			
+		elseif env_type == 1 then
+			-- LFO -----------------------------------------------
+			local items = {}
+			for i = 0, #lfo_shape_names do
+				add(items, { label = lfo_shape_names[i], action = function() sfx.set_env_param(app.instrument, el.env_id, 5, i) end })
+			end
+			--[[ not yet implemented?
+			ui_envelopes.attach_menu_button(el, {
+				x = 14, y = 12, 
+				env_id = el.env_id,
+				get_label = function()
+					local shape = sfx.env_param(app.instrument, el.env_id, 5)
+					return lfo_shape_names[shape] or "???"
+				end,
+				fg = 5,
+				highlight = 29,
+				items = items,
+			})
+			]]--
+			ui_envelopes.attach_slider(el, { x = 8, y = 12, slider_height = 40, env_id = el.env_id, param = 4, label = "freq" })
+			ui_envelopes.attach_slider(el, { x = 34, y = 12, slider_height = 40, env_id = el.env_id, param = 6, label = "phase" })
+			
+
+		else
+			-- Custom -------------------------------------
+			el:attach(ui.create_checkbox {
+				x = 4, y = 12,
+				label = "lerp",
+				check_fg = 18,
+				get = function() return
+					(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
+				end,
+				set = function(v)
+					local flags = sfx.env_flags(app.instrument, el.env_id)
+					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
+				end,
+			})
+			ui_envelopes.attach_custom_editor(el, { x = 4, y = 20 })
+			el:attach(ui.create_num_field {
+				x = 4, y = 63,
+				width = 56,
+				label = "speed:",
+				field_fg = 29,
+				visible = function() return true end,
+				get = function() return sfx.env_speed(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
+			})
+		end
+	end
+	
+	if el.large or app.env_advanced[el.env_id] then
+		el:attach(ui.create_checkbox {
+			x = el.width - app.mod_width + 4, y = 12,
+			label = "loop",
+			check_fg = 18,
+			visible = function() return sfx.env_type(app.instrument, el.env_id) != 2 end,
+			get = function() return
+				(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
+			end,
+			set = function(v)
+				local flags = sfx.env_flags(app.instrument, el.env_id)
+				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
+			end,
+		})
+		el:attach(ui.create_num_field {
+			x = el.width - app.mod_width + 0, y = 22,
+			label = "speed:",
+			field_fg = 29,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return sfx.env_speed(app.instrument, el.env_id) end,
+			set = function(v) sfx.set_env_speed(app.instrument, el.env_id, v) end,
+		})
+		el:attach(ui.create_num_field {
+			x = el.width - app.mod_width + 0, y = 32,
+			label = "start:",
+			field_fg = 28,
+			onclick = function() if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
+			onrelease = function() if (not el.large) ui_visual.close() end,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return sfx.env_start(app.instrument, el.env_id) end,
+			set = function(v) sfx.set_env_start(app.instrument, el.env_id, v) end,
+		})
+		el:attach(ui.create_checkbox {
+			x = el.width - app.mod_width + 4, y = 42,
+			label = "rnd start",
+			check_fg = 18,
+			visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+			get = function() return
+				(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
+			end,
+			set = function(v)
+				local flags = sfx.env_flags(app.instrument, el.env_id)
+				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
+			end,
+		})
+		el:attach(ui.create_num_field {
+				x = el.width - app.mod_width + 0, y = 52,
+				label = "loop0:",
+				field_fg = 26,
+				onclick = function() if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
+				onrelease = function() if (not el.large) ui_visual.close() end,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+				get = function() return sfx.env_loop0(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
+		})
+		el:attach(ui.create_num_field {
+				x = el.width - app.mod_width + 0, y = 62,
+				label = "loop1:",
+				field_fg = 10,
+				onclick = function() if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
+				onrelease = function() if (not el.large) ui_visual.close() end,
+				visible = function() return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
+				get = function() return sfx.env_loop1(app.instrument, el.env_id) end,
+				set = function(v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
+		})
+	end
+	
+	function el:draw()
+		rectfill(0, 0, self.width, 8, 18)
+		---rectfill(0, 9, self.width, self.height, 6)
+		ui_envelopes.draw_corners(self)
+	end
+	
+	function el:click()
+		return true
+	end
+		
+	return el
+end
+
+	
+function ui_envelopes.draw_corners(el)
+	pset(0, 0, 6)
+	pset(el.width - 1, 0, 6)
+	pset(0, 8, 6)
+	pset(el.width - 1, 8, 6)
+end
+
+
+function ui_envelopes.attach_slider(parent, el)
+	el.width = 13
+	el.height = el.slider_height + 20
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		local oy = 9
+		for i = 0, 8, 1 do
+			local h = math.floor(0.5 + (i / 8) * (el.slider_height - 1))
+			if i % 8 == 0 then
+				line(0, oy + el.slider_height - 1 - h, 12, oy + el.slider_height - 1 - h, 7)
+			elseif i % 4 == 0 then
+				line(2, oy + el.slider_height - 1 - h, 10, oy + el.slider_height - 1 - h, 7)
+			else
+				line(4, oy + el.slider_height - 1 - h, 8, oy + el.slider_height - 1 - h, 7)
+			end
+		end
+		local val = sfx.env_param(app.instrument, self.env_id, self.param)
+		local h = math.floor(0.5 + (val / 255) * (el.slider_height - 1))
+		spr(60, 2, oy + el.slider_height - 1 - h - 3)
+		line(6, oy, 6, oy + el.slider_height - 1, 59)
+		if (self.dragged) pal(15, 7)
+		spr(61, 2, oy + el.slider_height - 1 - h - 3)
+		pal(15, 15)
+		clip()
+		ui.print_centered(self.label, 4 + 3, 0, 5)
+		ui.print_centered(tostr(val), 4 + 3, self.height - 7, self.dragged and 59 or 58)
+	end
+	--[[function el:update(msg)
+		if (app.has_modal()) return
+		local mx, my, mb = mouse()
+		if mb != 0 then
+			self.hovered = self.dragged != nil
+		else
+			self.hovered = self.sx <= mx and mx < self.sx + self.width
+				and self.sy <= my and my < self.sy + self.height
+		end
+	end]]
+	function el:click(msg)
+		self.cursor = 0
+		self.dragged = true
+	end
+	function el:drag(msg)
+		if self.dragged then
+			local delta = ui.mouselock()
+			local old = sfx.env_param(app.instrument, self.env_id, self.param)
+			local new = old - delta
+			new = mid(0, new, 255)
+			sfx.set_env_param(app.instrument, self.env_id, self.param, new)
+		end
+	end
+	function el:release(msg)
+		ui.mouseunlock()
+		self.cursor = get_spr(50)
+		self.dragged = nil
+	end
+	return el
+end
+
+
+function ui_envelopes.attach_advanced_button(parent, el)
+	el.width = 10
+	el.height = 10
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		spr(39, 1, 1)
+	end
+	function el:tap()
+		app.env_advanced[parent.env_id] = not app.env_advanced[parent.env_id]
+		app.refresh_gui = true
+	end
+	return el
+end
+
+
+-- Custrom envelopes ------------------------------------------------------------
+
+
+function ui_envelopes.attach_custom_editor(parent, el)
+	el.width = 50
+	el.height = 42
+	el.cursor = "crosshair"
+	parent:attach(el)
+	el.env_id = parent.env_id
+	el.draw = ui_visual.draw_custom_envelope
+	function el:drag(msg)
+		local param = mid(0, (msg.mx - 1) \ 3, 15)
+		local val = ((self.height - 1 - msg.my) * 255) / (self.height - 2)
+		local val = mid(0, math.floor(0.5 + val), 255)
+		sfx.set_env_param(app.instrument, parent.env_id, param, val)
+	end
+	function el:update()
+		local mx, my, mb = mouse()
+		if
+			self.sx <= mx and mx < self.sx + self.width
+			and self.sy <= my and my < self.sy + self.height
+		then
+			local param = mid(0, (mx - self.sx - 1) \ 3, 15)
+			self.selected = param
+		else
+			self.selected = nil
+		end
+	end
+	return el
+end
+
+
+return ui_envelopes
+:: src/ui_instrument.lua
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-25 19:59:24",revision=6151]]
+local app = require "src/app.lua"
+local settings = require "src/settings.lua"
+local sfx = require "src/sfx.lua"
+local ui = require "src/ui.lua"
+local ui_envelopes = require "src/ui_envelopes.lua"
+local ui_nodes = require "src/ui_nodes.lua"
+local ui_routing = require "src/ui_routing.lua"
+local ui_wavetable = require "src/ui_wavetable.lua"
+
+
+local ui_instrument = {}
+
+local instr_chooser = false
+
+local last_pitch = 0xff -- last pitch played on the keyboard
+
+
+function ui_instrument.attach(parent, el)
+	el.width = 480 - (app.detail and app.detail_width or 0)
+	el.height = 270 - 11 -- TODO: remove - 16
+	parent:attach(el)
+
+	sfx.refresh_nodes(app.instrument)	
+
+	local y = 0
+	if instr_chooser then
+		-- preserve scrolling position
+		-- when refreshing gui
+		y = instr_chooser.child[1].y
+	end
+	instr_chooser = ui_instrument.attach_instr_chooser(el, { x = 4, y = 4 })
+	instr_chooser.child[1].y = y
+	
+	--[[el:attach(ui.create_knob {
+		x = 110, y = 10,
+		small = false,
+		white = false,
+		min_val = 0, max_val = 64, init_val = 32,
+		sensitivity = 0.25,
+		get = function(self)
+			local _, val1, _, _ = sfx.node_param(app.instrument, 0, 0)
+			return val1
+		end,
+		set = function(self, val)
+			val = mid(0, val, 64)
+			sfx.set_node_param_val1(app.instrument, 0, 0, val)
+		end,
+		has_secondary = function() return false end,
+		get_secondary = nil,
+		set_secondary = nil,
+	})--]]
+	app.routing_widget = ui_routing.attach(el, { x = 90, y = 4 })
+
+	local dx = app.synth_width + app.synth_gap
+	local dy = app.synth_height + app.synth_gap
+	local ox = (480 - (4 * dx) + app.synth_gap) \ 2
+	local oy = 270 - 11 - (2 * app.synth_height) - app.synth_gap - 2
+			
+	if app.node then
+		ui_nodes.attach_node_panel(
+			el,
+			{
+				x = ox + app.mod_width + app.synth_gap, y = oy , 
+				node_id = app.node,
+				large = true,
+			}
+		)
+		for row = 0, 1 do
+			ui_envelopes.attach_panel(
+				el,
+				{
+					x = 4, y = oy + row * dy, 
+					env_id = row, large = true,
+				}
+			)
+			ui_envelopes.attach_panel(
+				el,
+				{
+					x = 480 - 2 * app.mod_width - 2 * app.synth_gap + 1, y = oy + row * dy,
+					env_id = 2 + row, large = true,
+				}
+			)
+		end
+	elseif not app.wt then
+		local id = 0
+		for row = 0, 1 do
+			ui_envelopes.attach_panel(
+				el,
+				{
+					x = 4, y = oy + row * dy, 
+					env_id = row,
+				}
+			)
+			for column = 0, 3 do
+				ui_nodes.attach_node_panel(
+					el,
+					{
+						x = ox + column * dx, y = oy + row * dy, 
+						node_id = id
+					}
+				)
+				id += 1
+			end
+			ui_envelopes.attach_panel(
+				el,
+				{
+					x = 480 - app.mod_width - 4 - 1, y = oy + row * dy,
+					env_id = 2 + row,
+				}
+			)
+		end
+	else -- A wavetable is selected
+		ui_wavetable.attach(
+			el,
+			{
+				x = 4, y = oy, 
+			}
+		)
+	end
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, 105, 0, 58)
+		line(0, 105, self.width - 1, 105, 58)
+		if app.node then
+			line(0, 182, 125, 182, 58)
+			line(354, 182, 480, 182, 58)
+			line(125, 105, 125, self.height - 1, 58)
+			line(354, 105, 354, self.height - 1, 58)
+		elseif not app.wt then
+			line(0, 182, self.width - 1, 182, 58)
+			line(63, 105, 63, self.height - 1, 58)
+			line(151, 105, 151, self.height - 1, 58)
+			line(239, 105, 239, self.height - 1, 58)
+			line(327, 105, 327, self.height - 1, 58)
+			line(415, 105, 415, self.height - 1, 58)
+		end
+	end	
+	
+	function el:update()
+		-- Keys
+		if (ui.has_modal_or_menu()) return
+		if (ui.head():get_keyboard_focus_element()) return
+		local pitch_key = nil
+		for i = 1, #settings.keys.pitched do
+			local offset = settings.keys.pitched[i].offset
+			for j = 0, #settings.keys.pitched[i] do
+				local k = settings.keys.pitched[i][j]
+				if key(k, true) then
+					pitch_key = j + offset
+				end
+			end
+		end
+		if pitch_key and not key("ctrl") then
+			local pitch = pitch_key + app.base_note
+			if key("shift") then
+				pitch += 12
+			end
+			pitch = mid(0, pitch, 0xfe)
+			if pitch ~= last_pitch then
+				note(
+					pitch, -- todo
+					app.instrument, -- current_instrument
+					app.base_volume, -- current_volume
+					ord(" "), 0x00, -- fx, fx param
+					8, -- channel 8 so it can play with pattern
+					false -- don't force retrigger
+				)
+				last_pitch = pitch
+			end
+		else
+			note(0xff, 0xff, 0xff, 0xff, 0xff, 8)
+			last_pitch = 0xff
+		end
+		
+		if key("ctrl") and keyp("c") then
+			local data = userdata("u8", 0x200)
+			set(data, 0, peek(0x40000 + (app.instrument * 0x200), 0x200))
+			set_clipboard(
+				pod(
+					{ instrument = data },
+					7,
+					{ pod_type = "instrument" }
+				)
+			)
+			notify("copied instrument")
+		end
+		
+		if key("ctrl") and keyp("v") then
+			local data = unpod(get_clipboard())
+			if data and type(data.instrument == "userdata") then
+				poke(
+					0x40000 + (app.instrument * 0x200),
+					get(data.instrument, 0, 0x200)
+				)
+				app.refresh_gui = true
+				app.node = 0
+				notify("pasted instrument")
+			else
+				nodify("unable to paste instrument: invalid data in clipboard")
+			end
+		end
+	end
+
+	--[[	
+	function el:click(msg)
+		if not ui_routing.clear_placement_buttons() then
+			app.node = nil
+		end
+		app.refresh_gui = true
+	end
+	]]
+
+	return el
+end
+
+
+-- Instrument chooser --------------------------------------------------------------
+
+
+function ui_instrument.attach_instr_chooser(parent, el)
+	el.width = 80
+	el.height = 82
+	local container = parent:attach(el)
+	function container:draw()
+		clip()
+		rect(-1, -1, self.width, self.height, 5)
+		clip(self.sx, self.sy, self.width, self.height)
+	end
+	local contents = container:attach {
+		x = 0, y = 0, width = el.width, height = 128 * 8 + 2,
+		cursor = "pointer",
+		draw = function(self)
+			rectfill(0, 0, self.width, self.height, 58)
+			for i = 0, 127 do -- TODO: dynamic number of instruments?
+				if i == app.instrument then
+					rectfill(0, i * 8 - 1, self.width, (i * 8) + 7, 17)
+				end
+				local name = sfx.instrument_name(i)
+				if name == "" then name = "---" end
+				print("" .. i .. ": " .. name, 4, 1 + i * 8, (i == app.instrument) and 7 or 62)
+			end
+		end,
+		click = function(self, msg)
+			app.instrument = msg.my \ 8
+			app.base_instrument = app.instrument -- TODO: temporary, remove
+			ui_routing.clear_placement_buttons()
+			if app.node then
+				app.node = 0
+			end
+			app.refresh_gui = true
+			return true
+		end
+	}
+	container:attach_scrollbars()
+	return el
+end
+
+
+return ui_instrument
+:: src/ui_menus.lua
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-25 19:59:24",revision=3035]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx.lua"
+local ui = require "src/ui.lua"
+local ui_envelopes = require "src/ui_envelopes.lua"
+
+
+local ui_menus = {}
+
+
+-- Relationship menu -----------------------------------------------------
+
+
+function ui_menus.open_relationship(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	
+	if node_type == 0x2 and self.parent.param == 2 then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 55,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						self.parent.min_val, self.parent.max_val = 0, 255
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+				{ divider = true },
+				{
+					label = 
+						(flags & 0x20 > 0)
+							and "\|f\^:7f415d5d5d417f00\|h quantized"
+							or "\|f\^:7f41414141417f00\|h quantized",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 0x02 and self.parent.param == 0)
+		or (node_type == 10 and self.parent.param == 3)
+		or (node_type == 8 and self.parent.param == 2)
+	then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 52,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 8 and self.parent.param ~= 2)
+		or (node_type == 9)
+		or (node_type == 10 and self.parent.param ~= 3)
+	then
+		-- no menu
+	else
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 40,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+			}
+		}
+	end
+end
+
+
+-- Multiplier menu -------------------------------------------------------------
+
+
+function ui_menus.open_multiplier(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	
+	local mult_options = { 
+		[0] = 
+		{ label = "none", val = 0x00 | 0x00 },
+		{ label = "*4", val = 0x00 | 0x40 },
+		{ label = "/4", val = 0x20 | 0x40 },
+		{ label = "*16", val = 0x00 | 0x80 },
+		{ label = "/16", val = 0x20 | 0x80 },
+		{ label = "*64", val = 0x00 | 0xc0 },
+		{ label = "/64", val = 0x20 | 0xc0 },
+	}
+	local mult_menu_items = {}
+	for i = 0, #mult_options do
+		add(mult_menu_items, 
+			{
+				label = (env & 0xe0 == mult_options[i].val)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
+					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
+				fg = i == 0 and 5 or 24,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
+				 end,
+			}
+		)
+	end
+
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 36,
+		items = mult_menu_items,
+	}
+end
+
+
+-- Envelope menu ------------------------------------------------------------------
+
+
+function ui_menus.open_envelope(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local has_env = flags & 0x04 > 0
+	local has_free_run = flags & 0x08 > 0
+	local has_random = flags & 0x10 > 0
+	local env_id = env & 0x0f
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 51,
+		items = {
+			{
+				label = (not has_env and not has_random)
+					and "\|f\^:1c225d5d5d221c00\|h none"
+					or "\|f\^:1c22414141221c00\|h none",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
+				 end,
+			},
+			{
+				label = (has_env and env_id == 0)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. ui_envelopes.make_label(0))
+					or ("\|f\^:1c22414141221c00\|h " .. ui_envelopes.make_label(0)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 1)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. ui_envelopes.make_label(1))
+					or ("\|f\^:1c22414141221c00\|h " .. ui_envelopes.make_label(1)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 2)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. ui_envelopes.make_label(2))
+					or ("\|f\^:1c22414141221c00\|h " .. ui_envelopes.make_label(2)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
+				end,
+			},
+			{
+				label = (has_env and env_id == 3)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. ui_envelopes.make_label(3))
+					or ("\|f\^:1c22414141221c00\|h " .. ui_envelopes.make_label(3)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
+				end,
+			},
+			{
+				label = has_random
+						and "\|f\^:1c225d5d5d221c00\|h random"
+						or "\|f\^:1c22414141221c00\|h random",
+				fg = 30,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
+				 end,
+			},
+			{
+				divider = true,
+			},
+			{
+				label = has_free_run
+							and "\|f\^:7f415d5d5d417f00\|h free run"
+							or "\|f\^:7f41414141417f00\|h free run",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
+				 end,
+			},
+		}
+	}
+end
+
+
+return ui_menus
+:: src/ui_nodes.lua
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-25 19:59:24",revision=9610]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx.lua"
+local ui = require "src/ui.lua"
+local ui_envelopes = require "src/ui_envelopes.lua"
+local ui_params = require "src/ui_params.lua"
+local ui_visual = require "src/ui_visual.lua"
+
+
+local ui_nodes = {}
+
+
+-- Node panels --------------------------------------------------------------------
+
+
+function ui_nodes.attach_node_panel(parent, el)
+	if app.node and app.node == el.node_id then
+		el.width = 480 - 4 * app.mod_width - 6 * app.synth_gap + 2
+		el.height = 2 * app.synth_height + app.synth_gap
+	else
+		el.width = app.synth_width
+		el.height = app.synth_height
+	end
+	parent:attach(el)
+	
+	local type = sfx.node_type(app.instrument, el.node_id)
+	if el.node_id == 0 then return ui_nodes.populate_root(parent, el)
+	elseif type == 0 then return ui_nodes.populate_unused(parent, el)
+	elseif type == 2 then
+		local op = sfx.node_op(app.instrument, el.node_id)
+		if op == 0 then return ui_nodes.populate_osc(parent, el)
+		elseif op == 1 then return ui_nodes.populate_fm(parent, el)
+		elseif op == 2 then return ui_nodes.populate_ring(parent, el)
+		end
+	elseif type == 8 then return ui_nodes.populate_filt(parent, el)
+	elseif type == 9 then return ui_nodes.populate_echo(parent, el)
+	elseif type == 10 then return ui_nodes.populate_shap(parent, el)
+	end
+	return ui_nodes.populate_unknown(parent, el)
+end
+
+
+-- Unused slot -------------------------------------------------------------------------------
+
+
+function ui_nodes.populate_unused(parent, el)
+	function el:draw()
+		clip()
+		local x, y = 19, 14
+		pal(7, 58)
+		sspr(63, 0, 0, 7, 7, x, y, x + (7 * 4), y + (7 * 4))
+		pal(7, 7)
+		if self.node_id == 7 then
+			print("pfx6416", 52, 63, 22)
+		end
+	end
+	return el
+end
+
+
+-- Root Synth Node ---------------------------------------------------------------------------
+
+
+local instrument_name_field
+
+
+function ui_nodes.populate_root(parent, el)
+	local params = {
+		[0] = { label = "vol", long_label = "volume", param = 0,
+			min_val = 0, max_val = 64, init_val = 32, sensitivity = 0.25 },
+		{ label = "pan", param = 1, min_val = -128, max_val = 127, },
+		{ label = "tune", param = 2, min_val = -128, max_val = 127, },
+		{ label = "bend", param = 3, min_val = -128, max_val = 127, },
+	}
+	for i = 0, #params do params[i].node_id = el.node_id end
+
+	if el.large then
+		ui_params.attach(el, 30, 84, params[0], { emphasis = true})
+		ui_params.attach(el, 70, 84, params[1], { small = true })
+		params[2].x, params[2].y = 112, 125
+		ui_params.attach_mini(el, params[2])
+		params[3].x, params[3].y = 112, 135
+		ui_params.attach_mini(el, params[3])
+--		ui_params.attach(el, 130, 84, params[2], { small = true })
+--		ui_params.attach(el, 170, 84, params[3], { small = true })
+
+		-- TODO: replace with a custom field
+		-- also: add the same field to the mini version
+		instrument_name_field = el:attach_text_editor{
+			x = 116 + 4, y = 96,
+			width = 72, height = 9,
+			bgcol = 58, fgcol = 59, curcol = 2,
+			block_scrolling = true, max_lines = 1,
+			margin_top = 2,
+			key_callback = {
+				enter = function () 
+					sfx.set_instrument_name(app.instrument, instrument_name_field:get_text()[1])
+					instrument_name_field:set_keyboard_focus(false)
+				end
+			},
+			update = function(self)
+				-- update in realtime -- don't need to press enter to change
+				if (instrument_name_field:has_keyboard_focus()) then
+					sfx.set_instrument_name(app.instrument, instrument_name_field:get_text()[1])
+				end
+			end
+		}
+		instrument_name_field:set_text{sfx.instrument_name(app.instrument)}
+
+		el:attach(ui_nodes.instrument_flag_toggle { x = 120, y = 114, label = "wide", flag = 0x02 })
+		el:attach(ui_nodes.instrument_flag_toggle { x = 160, y = 114, label = "retrig", flag = 0x01 })
+		ui_visual.attach_oscilloscope(el, 8, { x = 20, y = 12, width = 184, height = 68 })
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[3])
+		--- slider.attach(el, { label = "p0", param = 4, node_id = el.node_id } )
+		--- slider.attach(el, { label = "p1", param = 5, node_id = el.node_id } )
+		el:attach(ui_nodes.instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
+		el:attach(ui_nodes.instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
+	end
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 7)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+		print("synthesizer", 4, 2, 22)
+		-- Name label
+		rrectfill(116, 84, 72 + 8, 9, 0, 5)
+		print("name", 116 + 31, 84 + 2, 6)
+	end
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+	return el
+end
+
+
+-- Oscillator -------------------------------------------------------------------
+
+
+local wt_labels = { [0] = "wt0", "wt1", "wt2", "wt3" }
+local wt_long_labels = { [0] = "wavetable 0", "wavetable 1", "wavetable 2", "wavetable 3" }
+local osc_params = {
+	[0] = { label = "vol", long_label = "volume", param = 0,
+		min_val = 0, max_val = 64, init_val = 32, sensitivity = 0.25 },
+	{ label = "pan", param = 1, min_val = -128, max_val = 127, },
+	{ label = "tune", param = 2, min_val = -128, max_val = 127, },
+	{ label = "bend", param = 3, min_val = -128, max_val = 127, },
+	{ label = "", long_label = "wave", param = 4, min_val = 0, max_val = 255, },
+	{ label = "phase", param = 5, min_val = -128, max_val = 127, },
+}
+
+function ui_nodes.populate_osc(parent, el)
+	local params = unpod(pod(osc_params))
+	-- closures are not copied by unpod/pod?
+	params[4].onclick = function(self) ui_visual.open_wavetable(self) end
+	params[4].onrelease = function(self) ui_visual.close() end
+	params[5].onclick = params[4].onclick
+	params[5].onrelease = params[4].onrelease
+	
+	for i = 0, #params do params[i].node_id = el.node_id end
+	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
+	if flags & 0x03 == 0x02 then
+		-- tune param in "multiply" relationship:
+		-- change the min and max values
+		params[2].min_val = 0
+		params[2].max_val = 255
+	end
+
+	ui_nodes.attach_mute_toggle(el, { label = "osc", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
+		ui_params.attach(el, 60, 16, params[1], { small = true })
+		ui_params.attach(el, 20, 84, params[2], { small = true })
+		ui_params.attach(el, 60, 84, params[3], { small = true })
+		local wave = ui_params.attach(el, 130, 84, params[4], { emphasis = true })
+		ui_visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
+		ui_params.attach(el, 170, 84, params[5], { small = true })
+		el:attach(ui.create_menu_button {
+			x = 142, y = 72,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_long_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[3])
+		ui_params.attach_mini(el, params[4])
+		ui_params.attach_mini(el, params[5])
+		el:attach(ui.create_menu_button {
+			x = 2, y = 51,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+		
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 17)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+		line(113, 90, 113, 138, 5)
+	end
+	
+	return el
+end
+
+
+-- FM modulator -------------------------------------------------------------------
+
+
+function ui_nodes.populate_fm(parent, el)
+	local params = unpod(pod(osc_params))
+	-- closures are not copied by unpod/pod?
+	params[4].onclick = function(self) ui_visual.open_wavetable(self) end
+	params[4].onrelease = function(self) ui_visual.close() end
+	params[5].onclick = params[4].onclick
+	params[5].onrelease = params[4].onrelease
+	
+	for i = 0, #params do params[i].node_id = el.node_id end
+	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
+	if flags & 0x03 == 0x02 then
+		-- tune param in "multiply" relationship:
+		-- change the min and max values
+		params[2].min_val = 0
+		params[2].max_val = 255
+	end
+
+	ui_nodes.attach_mute_toggle(el, { label = "fm", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
+		ui_params.attach(el, 60, 16, params[1], { small = true })
+		ui_params.attach(el, 20, 84, params[2], { small = true })
+		ui_params.attach(el, 60, 84, params[3], { small = true })
+		local wave = ui_params.attach(el, 130, 84, params[4], { emphasis = true })
+		ui_visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
+		ui_params.attach(el, 170, 84, params[5], { small = true })
+		el:attach(ui.create_menu_button {
+			x = 142, y = 72,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_long_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[3])
+		ui_params.attach_mini(el, params[4])
+		ui_params.attach_mini(el, params[5])
+		el:attach(ui.create_menu_button {
+			x = 2, y = 51,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+		
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 27)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+		line(113, 90, 113, 138, 5)
+	end
+	
+	return el
+end
+
+
+-- Ring mod -------------------------------------------------------------------
+
+
+function ui_nodes.populate_ring(parent, el)
+	local params = unpod(pod(osc_params))
+	-- closures are not copied by unpod/pod?
+	params[4].onclick = function(self) ui_visual.open_wavetable(self) end
+	params[4].onrelease = function(self) ui_visual.close() end
+	params[5].onclick = params[4].onclick
+	params[5].onrelease = params[4].onrelease
+	
+	for i = 0, #params do params[i].node_id = el.node_id end
+	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
+	if flags & 0x03 == 0x02 then
+		-- tune param in "multiply" relationship:
+		-- change the min and max values
+		params[2].min_val = 0
+		params[2].max_val = 255
+	end
+
+	ui_nodes.attach_mute_toggle(el, { label = "ring", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
+		ui_params.attach(el, 60, 16, params[1], { small = true })
+		ui_params.attach(el, 20, 84, params[2], { small = true })
+		ui_params.attach(el, 60, 84, params[3], { small = true })
+		local wave = ui_params.attach(el, 130, 84, params[4], { emphasis = true })
+		ui_visual.attach_wavetable(el, wave, { x = 114, y = 14, width = 104, height = 58 })
+		ui_params.attach(el, 170, 84, params[5], { small = true })
+		el:attach(ui.create_menu_button {
+			x = 142, y = 72,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_long_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[3])
+		ui_params.attach_mini(el, params[4])
+		ui_params.attach_mini(el, params[5])
+		el:attach(ui.create_menu_button {
+			x = 2, y = 51,
+			get_label = function()
+				local wt = sfx.node_osc_wavetable(app.instrument, el.node_id)
+				return wt_labels[wt] or "wt?"
+			end,
+			fg = 5,
+			highlight = 15,
+			items = {
+				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+			}
+		})
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+		
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 22)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+		line(113, 90, 113, 138, 5)
+	end
+	
+	return el
+end
+
+
+-- Filter ----------------------------------------------------------------------
+
+
+function ui_nodes.populate_filt(parent, el)
+	local params = {
+		[0] =
+		{ label = "low", param = 0, min_val = 0, max_val = 255, },
+		{ label = "high", param = 1, min_val = 0, max_val = 255, },
+		{ label = "res", param = 2, min_val = 0, max_val = 255, },
+	}
+	for i = 0, #params do params[i].node_id = el.node_id end
+	
+	ui_nodes.attach_mute_toggle(el, { label = "filt", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 34, 50, params[0], {})
+		ui_params.attach(el, 94, 50, params[2], {})
+		ui_params.attach(el, 154, 50, params[1], {})
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[1])
+	end
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 14)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+	end
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+	return el
+end
+
+
+-- Delay --------------------------------------------------------------------------
+
+
+function ui_nodes.populate_echo(parent, el)
+	local params = {
+		[0] =
+		{ label = "delay", param = 0, min_val = 0, max_val = 255, },
+		{ label = "vol", param = 1, min_val = 0, max_val = 255, },
+	}
+	for i = 0, #params do params[i].node_id = el.node_id end
+	
+	ui_nodes.attach_mute_toggle(el, { label = "echo", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 59, 84, params[0], {})
+		ui_params.attach(el, 130, 84, params[1], {})
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+	end
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 31)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+	end
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+	return el
+end
+
+
+-- Waveshaper ------------------------------------------------------------------
+
+
+function ui_nodes.populate_shap(parent, el)
+	local params = {
+		[0] =
+		{ label = "gain", param = 0, min_val = 0, max_val = 255, },
+		{ label = "elbow", param = 1, min_val = 0, max_val = 255, },
+		{ label = "cut", param = 2, min_val = 0, max_val = 255, },
+		{ label = "mix", param = 3, min_val = 0, max_val = 64, sensitivity = 0.25 },
+	}
+	for i = 0, #params do params[i].node_id = el.node_id end
+	
+	ui_nodes.attach_mute_toggle(el, { label = "shap", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	if el.large then
+		ui_params.attach(el, 20, 84, params[0], {})
+		ui_params.attach(el, 60, 84, params[3], { small = true })
+		ui_params.attach(el, 130, 84, params[2], {})
+		ui_params.attach(el, 170, 84, params[1], {})
+		local oscillo_id = sfx.nodes[el.node_id].parent.id
+		ui_visual.attach_oscilloscope(el, 8, { x = 11, y = 16, width = 92, height = 60, node_id = oscillo_id })
+	else
+		ui_params.attach_mini(el, params[0])
+		ui_params.attach_mini(el, params[1])
+		ui_params.attach_mini(el, params[2])
+		ui_params.attach_mini(el, params[3])
+	end
+	function el:draw()
+		rectfill(0, 0, self.width, 9, 9)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+	end
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+	return el
+end
+
+
+-- Unknown --------------------------------------------------------------------------
+
+
+function ui_nodes.populate_unknown(parent, el)
+	local params = {
+		[0] =
+		{ label = "p0", param = 0, min_val = 0, max_val = 255, },
+		{ label = "p1", param = 1, min_val = 0, max_val = 255, },
+		{ label = "p2", param = 2, min_val = 0, max_val = 255, },
+		{ label = "p3", param = 3, min_val = 0, max_val = 255, },
+		{ label = "p4", param = 4, min_val = 0, max_val = 255, },
+		{ label = "p5", param = 5, min_val = 0, max_val = 255, },
+	}
+	for i = 0, #params do params[i].node_id = el.node_id end
+	
+	ui_nodes.attach_mute_toggle(el, { label = "???", node_id = el.node_id })
+	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	ui_params.attach_mini(el, params[0])
+	ui_params.attach_mini(el, params[1])
+	ui_params.attach_mini(el, params[2])
+	ui_params.attach_mini(el, params[3])
+	ui_params.attach_mini(el, params[4])
+	ui_params.attach_mini(el, params[5])
+	function el:draw()
+		rectfill(0, 0, self.width, self.height, 30)
+		rectfill(0, 9, self.width, self.height, 6)
+		ui_nodes.draw_corners(self)
+	end
+	function el:click() return true end
+	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
+	return el
+end
+
+
+-------------------------------------------------------------------------------------------------
+
+
+function ui_nodes.instrument_flag_toggle(el)
+	el.width = el.width or 35
+	el.height = el.height or 9
+	el.label = el.label or "---"
+	el.cursor = "pointer"
+	
+	function el:draw()
+		palt(59, true)
+		pal(2, 0)
+		pal(17, 18)
+		if sfx.instrument_flag(app.instrument, el.flag) then
+			spr(33, 0, 1)
+		else
+			spr(32, 0, 1)
+		end
+		pal(17, 17)
+		pal(2, 2)
+		palt(59, false)
+		print(el.label, 10, 2, 5)
+	end
+	
+	function el:tap()
+		sfx.toggle_instrument_flag(app.instrument, el.flag)
+	end
+	
+	return el
+end
+
+
+------------------------------------------------------------------------------------------------	
+
+
+function ui_nodes.draw_corners(el)
+--[[
+	if app.node and app.node == el.node_id then 
+		clip()
+		rect(-1, -1, el.width, el.height, 24)
+		pset(-1, -1, app.editor_bg)
+		pset(el.width, -1, app.editor_bg)
+		pset(-1, el.height, app.editor_bg)
+		pset(el.width, el.height, app.editor_bg)
+		col = 24
+	end
+--]]
+	pset(0, 0, 6)
+	pset(el.width - 1, 0, 6)
+	pset(0, 8, 6)
+	pset(el.width - 1, 8, 6)
+end
+
+
+-- Title bar widgets -------------------------------------------------------------
+
+
+function ui_nodes.attach_mute_toggle(parent, el)
+	el.x = 1
+	el.y = 1
+	el.width = 3 + 4 * #(el.label .. " " .. el.node_id) + 3
+	el.height = 9
+	el.cursor = "pointer"
+	parent:attach(el)
+	el.muted = (sfx.node_flags(app.instrument, el.node_id) & 0x2) > 0
+	function el:draw()
+		local label = self.label .. " " .. self.node_id
+		print(label, 3, 1, 63)
+		if self.muted then
+			line(1, 3, 3 + 4 * #label, 3, 24)
+		end
+	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
+	end
+	function el:tap()
+		self.muted = not self.muted
+		local flags = sfx.node_flags(app.instrument, self.node_id)
+		if self.muted then
+			flags |= 0x2
+		else
+			flags &= ~0x2
+		end
+		sfx.set_node_flags(app.instrument, self.node_id, flags)
+	end
+	return el
+end
+
+
+function ui_nodes.attach_close_button(parent, el)
+	el.x = parent.width - 10
+	el.y = 2
+	el.width = 12
+	el.height = 9
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		pal(7, 63)
+		spr(36, 0, 0)
+		pal(7, 7)
+	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
+	end
+	function el:tap()
+		if app.node then
+			if app.node == self.node_id then
+				if #(sfx.nodes[app.node].children) > 0 then
+					app.node = sfx.nodes[app.node].children[1].id
+				else
+					app.node = sfx.nodes[app.node].parent.id
+				end
+			end
+		end
+		sfx.delete_node(app.instrument, self.node_id)
+		if app.node and app.node > self.node_id then
+			app.node = max(0, self.node_id - 1)
+		end
+		app.refresh_gui = true
+	end
+	return el
+end
+
+
+return ui_nodes
+:: src/ui_params.lua
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-25 19:59:24",revision=4357]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx.lua"
+local ui = require "src/ui.lua"
+local ui_menus = require "src/ui_menus.lua"
+
+
+local ui_params = {}
+
+
+-- Field ----------------------------------------------------------------------
+
+
+local function attach_field(parent, el)
+	el.width = 4 * 4 + 3
+	el.height = 7
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	function el:draw()
+		rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if (not self.visible) or self.visible(self) then
+			local val = self:get()
+			local fg = self.fg or 59
+			local str
+			if self.to_str then
+				str = self:to_str(val)
+			else
+				str = tostr(val)
+			end
+			if #str > 4 then
+				print(str, 0, 1, self.dragged and 7 or fg)
+			elseif self.centered then
+				ui.print_centered(str, 10, 1, self.dragged and 7 or fg)
+			else
+				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
+			end
+		end
+	end
+	
+
+	function el:hover()
+		if (not self.visible) or self.visible(self) then
+			self.cursor = get_spr(50)
+		else
+			self.cursor = 1
+		end
+	end
+	
+
+	function el:click(msg)
+		if self.visible and (not self.visible(self)) then
+			return true
+		end
+		self.cursor = 0
+		self.dragged = true
+		ui.mouselock(1.0, true)
+		if self.onclick then
+			self:onclick(msg)
+		elseif self.parent.onclick then
+			self.parent:onclick(msg)
+		end
+		return true
+	end
+	
+	function el:doubleclick()
+		return true
+	end
+	
+
+	function el:drag(msg)
+		local delta = ui.mouselock(1.0, true)
+		local old = self:get()
+		local new = old - delta
+		self:set(new)
+	end
+
+	
+	function el:release()
+		self.cursor = get_spr(50)
+		self.dragged = false
+		ui.mouseunlock()
+		self.up_barrier = nil
+		self.down_barrier = nil
+		if self.onrelease then
+			self:onrelease()
+		elseif self.parent.onrelease then
+			self.parent:onrelease()
+		end
+	end
+	
+
+	return el
+end
+
+
+local function attach_relationship(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if flags & 0x03 == 0x01 then
+			print("\^:2070200000000000", -1, 2, 60)
+		elseif flags & 0x03 == 0x02 then
+			print("\^:5020500000000000", -1, 2, 60)
+		elseif flags & 0x03 > 0 then
+			print("?", 3, 1, 60)
+		else
+			pset(4, 3, 58)
+		end
+	end
+	function el:tap()
+		ui_menus.open_relationship(self)
+	end
+	return el
+end
+
+
+local function attach_multiplier(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if self.mini then
+			if (env & 0xc0 > 0) then
+				print("!", 0, 1, 24)
+			else
+				pset(1, 3, 58)
+			end
+			return
+		end
+		if (env & 0xc0 > 0) then
+			str2 = (env & 0x20 == 0) and 
+				"\^:5020500000000000" or  -- *
+				"\^:4020100000000000"     -- /
+			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
+			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
+			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
+			clip()
+			print(str2, -4, 2, 24)
+		else
+			pset(2, 3, 58)
+		end
+	end
+	function el:tap()
+		ui_menus.open_multiplier(self)
+	end
+	return el
+end
+
+
+local function attach_envelope(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		if flags & 0x04 > 0 then
+			local fg, bg = 7, 18
+			if flags & 0x08 > 0 then
+				fg, bg = bg, fg
+			end
+			line(1, 0, self.width - 1 - 1, 0, bg)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
+			print(string.format("%x", env & 0x0f), 2, 1, fg)
+		elseif flags & 0x10 > 0 then
+			line(1, 0, self.width - 1 - 1, 0, 30)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
+			print("r", 2, 1, 7)
+		else
+			line(2, 1, self.width - 1 - 2, 1, 58)
+			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
+			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
+		end
+	end
+	function el:tap()
+		ui_menus.open_envelope(self)
+	end
+	return el
+end
+
+
+-- Getters and setters ------------------------------------------------------
+
+
+local function get_val1(self)
+	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val1 >= 128) val1 -= 256
+	end
+	return val1
+end
+
+
+local function set_val1(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function get_val0(self)
+	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val0 >= 128) val0 -= 256
+	end
+	return val0
+end
+
+
+local function set_val0(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function has_env(self)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	return flags & (0x4 | 0x10) > 0
+end
+
+
+local function smart_str(self, val)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
+		local num = 1 + val % 16
+		local den = 1 + val \ 16
+		return num .. "/" .. den
+	end
+	return tostr(val)
+end
+
+
+-- The widget -----------------------------------------------------------------
+
+
+function ui_params.attach(parent, x, y, el, style)
+	el.x, el.y = x, y
+	el.small = small
+	el.width, el.height = 35, 58
+	el.small = style.small
+	el.emphasis = style.emphasis
+	parent:attach(el)
+	el:attach(ui.create_knob {
+		x = 2, y = 10,
+		small = style.small,
+		get = get_val1,
+		set = set_val1,
+		has_secondary = has_env,
+		get_secondary = get_val0,
+		set_secondary = set_val0,
+	})
+	attach_relationship(
+		el,
+		{
+			x = 0, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 41,
+			centered = true,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 28, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 51,
+			fg = 18, centered = true,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 28, y = 51,
+		}
+	)
+	
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		if self.emphasis then
+			rectfill(0, 0, self.width - 1, 8, 5)
+		else
+			rectfill(0, 0, self.width - 1, 8, 5)
+		end
+		ui.print_centered(
+			el.long_label or el.label,
+			(self.width \ 2) + 1, 2,
+			self.emphasis and 6 or 6
+		)
+	end	
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+	
+	return el
+end
+
+
+-- Mini widget ---------------------------------------------------------------------
+
+
+function ui_params.attach_mini(parent, el)
+	el.x = el.x or 0
+	el.y = el.y or (12 + 10 * el.param)
+	el.width = parent.width
+	el.height = 10
+	parent:attach(el)
+	attach_relationship(
+		el,
+		{
+			x = 24, y = 0,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7, y = 0,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 24 + 7 + 20, y = 0,
+			mini = true,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7 + 20 + 4, y = 0,
+			fg = 18,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 24 + 7 + 20 + 4 + 20, y = 0,
+		}
+	)
+	function el:draw()
+		print(self.label, 24 - (4 * #self.label), 1, 5)
+		---print(self.label, 2, 1, 5)
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+end
+
+
+return ui_params
+:: src/ui_routing.lua
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-25 19:59:24",revision=3982]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx.lua"
+
+
+local ui_routing = {}
+
+
+-- Locals ------------------------------------------------------------------------
+
+
+local node_width = 26
+local node_height = 16 -- TODO: if 7 vertical nodes, lower to 14
+local node_gap = 14
+
+
+local placement_buttons = {}
+
+
+local function attach_placement_button(el)
+	el.x -= 3
+	el.y -= 3
+	el.width = 7 -- TODO
+	el.height = 7
+	el.cursor = "pointer"
+	app.routing_widget:attach(el)
+	add(placement_buttons, el)
+	function el:draw()
+		local x, y = 3, 3
+		rectfill(
+			x - 2, y - 3, 
+			x + 2, y + 3,
+			24
+		)
+		rectfill(
+			x - 3, y - 2,
+			x + 3, y + 2,
+			24
+		)
+		print("+", x - 1, y - 2, 7)
+	end
+	function el:click()
+		return true -- (ed_inst click() refreshes gui)
+	end
+	function el:tap()
+		ui_routing.clear_placement_buttons()
+		local new_node = sfx.add_node(app.instrument, self.parent_id,
+			self.new_node_type, self.new_node_op, self.target_id, self.child_id)
+		if app.node then
+			app.node = new_node
+		end
+		app.refresh_gui = true
+	end
+	return el
+end
+
+
+local function attach_insert_between_parent(new_node_type, new_node_op, node, pos)
+	if (node == sfx.root) return
+	if (new_node_type >= 8) return
+	if new_node_type == 2 and new_node_op > 0 then
+		if (node.parent == sfx.root) return
+	end
+	attach_placement_button {
+		parent_id = node.parent.id, target_id = node.id, child_id = node.id,
+		new_node_type = new_node_type, new_node_op = new_node_op,
+		x = pos.x - 2, y = pos.y + 4,
+	}
+end
+
+
+local function attach_insert_top_child(new_node_type, new_node_op, node, pos)
+	if new_node_type >= 8 then
+		if (node == sfx.root) return
+		if (node.type >= 8) return
+	end
+	if #node.children == 0 then
+		-- add only child
+		attach_placement_button {
+			parent_id = node.id, target_id = node.id + 1,
+			new_node_type = new_node_type, new_node_op = new_node_op,
+			x = pos.x + node_width + 2, y = pos.y + 4,
+		}
+	else
+		-- add above first child
+		attach_placement_button {
+			parent_id = node.id, target_id = node.id + 1,
+			new_node_type = new_node_type, new_node_op = new_node_op,
+			x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
+		}
+	end
+end
+
+
+local function attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
+	if (node == sfx.root) return
+	attach_placement_button {
+		parent_id = node.parent.id, target_id = node:last_child().id + 1,
+		new_node_type = new_node_type, new_node_op = new_node_op,
+		x = pos.x + node_width \ 2, y = pos.y + 8
+	}
+end
+
+
+local function start_new_node(new_node_type, new_node_op)
+--	app.node = nil
+--	app.refresh_gui = true
+	for n = 0, 7 do
+		local node = sfx.nodes[n]
+		local pos = node.position
+		if (not pos) break -- TODO: when does this occur?
+		-- Coordinates from logical position
+		pos.x = 4 + pos.column * (node_width + node_gap)
+		pos.y = 4 + pos.row * node_height
+		local ppos = node.parent.position
+		ppos.x = 4 + ppos.column * (node_width + node_gap)
+		ppos.y = 4 + ppos.row * node_height
+		
+		--[[
+		attach_insert_between_parent(new_node_type, new_node_op, node, pos)
+		attach_insert_top_child(new_node_type, new_node_op, node, pos)
+		attach_insert_sibling_below(new_node_type, new_node_op, node, pos)
+		--]]
+		---[[
+		if new_node_type == 2 and new_node_op > 0 then
+			-- Modulators --
+			if node != sfx.root and node.parent != sfx.root then
+				-- insert between parent
+				attach_placement_button {
+					parent_id = node.parent.id, target_id = node.id, child_id = node.id,
+					new_node_type = new_node_type, new_node_op = new_node_op,
+					x = pos.x - 2, y = pos.y + 4,
+				}
+			end
+			if node.type == 2 and node.op == 0 then
+				if #node.children == 0 then
+					-- add only child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + 2, y = pos.y + 4,
+					}
+				elseif node.children[1].type != 2 or node.children[1].op == 0 then
+					-- add above first child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
+					}
+				end
+			end
+			
+		elseif new_node_type == 2 then
+			-- Oscillators --
+			if node != sfx.root and not (node.type == 2 and node.op > 0) then
+				-- insert between parent
+				attach_placement_button {
+					parent_id = node.parent.id, target_id = node.id, child_id = node.id,
+					new_node_type = new_node_type, new_node_op = new_node_op,
+					x = pos.x - 2, y = pos.y + 4,
+				}
+			end
+			if node != sfx.root then
+				-- add sibling below
+				attach_placement_button {
+					parent_id = node.parent.id, target_id = node:last_child().id + 1,
+					new_node_type = new_node_type, new_node_op = new_node_op,
+					x = pos.x + node_width \ 2, y = pos.y + 8
+				}
+			end
+			if node.type == 2 or node == sfx.root then
+				if #node.children == 0 then
+					-- add only child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + 2, y = pos.y + 4,
+					}
+				elseif node.children[1].type != 2 	or node.children[1].op == 0 then
+					-- add above first child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
+					}
+				end
+			end
+			
+		else
+			-- Effects --
+			if node != sfx.root then
+				-- add sibling below
+				attach_placement_button {
+					parent_id = node.parent.id, target_id = node:last_child().id + 1,
+					new_node_type = new_node_type, new_node_op = new_node_op,
+					x = pos.x + node_width \ 2, y = pos.y + 8
+				}
+			end
+			if 	node.type == 2 then
+				if #node.children == 0 then
+					-- add only child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + 2, y = pos.y + 4,
+					}
+				elseif node.children[1].type != 2 or node.children[1].op == 0 then
+					-- add above first child
+					attach_placement_button {
+						parent_id = node.id, target_id = node.id + 1,
+						new_node_type = new_node_type, new_node_op = new_node_op,
+						x = pos.x + node_width + node_gap + node_width \ 2, y = pos.y - 0,
+					}
+				end
+			end
+		end
+		--]]
+	end
+end
+
+
+function ui_routing.clear_placement_buttons()
+	local cleared_something = #placement_buttons > 0
+	for i = 1, #placement_buttons do
+		placement_buttons[i]:detach()
+	end
+	placement_buttons = {}
+	return cleared_something
+end
+
+
+-- Routing display -------------------------------------------------------------
+
+
+function ui_routing.attach(parent, el)
+	el.width = 385
+	el.height = 97
+	parent:attach(el)
+	ui_routing.attach_node_chooser(el, { x = 300, y = 56 })
+	
+	function el:draw()
+		rectfill(0, 0, self.width, self.height, 59)
+		pset(0, 0, 6)
+		pset(self.width - 1, 0, 6)
+		pset(0, self.height - 1, 6)
+		pset(self.width - 1, self.height - 1, 6)
+		-- Overview and Wavetable buttons
+		for i, label in ipairs({"all","wt 0","wt 1","wt 2","wt 3"}) do
+			local bg = (i == 1) and 7 or 58
+			local fg = (i == 1) and 22 or 5
+			rrectfill(4, 4 + i * node_height, node_width + 1, 9, 0, bg)
+			print(label, 10 + (i==1 and 2 or 0), 4 + i * node_height + 2, fg)
+			if app.node then
+				-- nothing to do
+			elseif
+				(i == 1 and not app.wt)
+				or (i == 2 and app.wt == 0)
+				or (i == 3 and app.wt == 1)
+				or (i == 4 and app.wt == 2)
+				or (i == 5 and app.wt == 3)
+			then
+				rect(4 - 1, 4 + i * node_height - 1, 4 + node_width + 1, 4 + i * node_height + 8 + 1, 0)
+				rect(4 - 2, 4 + i * node_height - 2, 4 + node_width + 2, 4 + i * node_height + 8 + 2, 24)
+			end
+		end
+		-- Routing graph
+		for n = 0, 7 do
+			local node = sfx.nodes[n]
+			local pos = node.position
+			if (not pos) break -- TODO: when does this occur?
+			-- Coordinates from logical position
+			pos.x = 4 + pos.column * (node_width + node_gap)
+			pos.y = 4 + pos.row * node_height
+			local ppos = node.parent.position
+			ppos.x = 4 + ppos.column * (node_width + node_gap)
+			ppos.y = 4 + ppos.row * node_height
+
+			if app.node == n then
+				rect(pos.x - 2, pos.y - 2, pos.x + node_width + 2, pos.y + 8 + 2, 24)
+				rect(pos.x - 1, pos.y - 1, pos.x + node_width + 1, pos.y + 8 + 1, 0)
+			end
+			
+			if node.type >= 8 and node.older_sibling then
+				-- Horizontal bracket
+				local col = 6
+				local x = pos.x + node_width \ 2
+				local orig = node.older_sibling
+				local depth = 0
+				while #orig.children > 0 and depth < 8 do
+					orig = orig.children[#orig.children]
+					depth += 1
+				end
+				local orig_x = orig.position.x + node_width
+				line(x - (node_width \ 2) - 3, pos.y - 4, x - (node_width \ 2) - 3 - 2, pos.y - 6, col)
+				line(x - 3, pos.y - 4, x - (node_width \ 2) - 3, pos.y - 4, col)
+				line(x, pos.y - 2, x - 2, pos.y - 4, col)
+				line(x, pos.y - 2, x + 2, pos.y - 4, col)
+				line(x + 3, pos.y - 4, orig_x + 3, pos.y - 4, col)
+				line(orig_x + 3, pos.y - 4, orig_x + 3 + 2, pos.y - 6, col)
+			elseif node != sfx.root then
+				-- Arrow
+				line(
+					ppos.x + node_width + 7, ppos.y + 4,
+					ppos.x + node_width + 1, ppos.y + 4,
+					7
+				)
+				line(
+					pos.x - 7, pos.y + 4,
+					ppos.x + node_width + 7, ppos.y + 4,
+					7
+				)
+				line(
+					pos.x - 1, pos.y + 4,
+					pos.x - 7, pos.y + 4,
+					7
+				)
+				line(pos.x - 2, pos.y + 3, pos.x - 2, pos.y + 5, 7)
+				line(pos.x - 3, pos.y + 2, pos.x - 3, pos.y + 6, 7)
+			end
+			
+			-- Node boxes
+			local str = "??? "
+			local fg = 63
+			local bg = 30
+			if node == sfx.root then str = "inst"; fg = 22; bg = 7
+			elseif node.type == 2 then
+				if node.op == 0 then str = "osc " .. n; bg = 17
+				elseif node.op == 1 then str = "fm " .. n; bg = 27
+				elseif node.op == 2 then str = "ring " .. n; bg = 22
+				end
+			elseif node.type == 8 then str = "filt " .. n; bg = 14
+			elseif node.type == 9 then str = "echo " .. n; bg = 31
+			elseif node.type == 10 then str = "shap " .. n; bg = 9
+			end
+			rectfill(pos.x, pos.y, pos.x + node_width, pos.y + 8, bg)
+			ui.print_centered(str, pos.x + (node_width \ 2) + 1, pos.y + 2, fg)
+		end
+		clip()
+		line()
+		line(1, -1, 22)
+		line(self.width - 2, -1, 22)
+		line(self.width, 1, 22)
+		line(self.width, self.height - 2, 22)
+		line(self.width - 2, self.height, 22)
+		line(1, self.height, 22)
+		line(-1, self.height - 2, 22)
+		line(-1, 1, 22)
+		line(1, -1, 22)
+		clip(self.sx, self.sy, self.width - 1, self.height - 1)
+	end
+	
+	function el:hover(msg)
+		self.cursor = 1
+		if (#placement_buttons != 0) return
+		for n = 0, 7 do
+			local node = sfx.nodes[n]
+			local pos = node.position
+			if
+				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
+				and pos.y <= msg.my and msg.my <= pos.y + 10
+			then
+				self.cursor = "pointer"
+			end
+		end
+		if msg.mx <= node_width + 4 then
+			if (msg.my >= 4 + node_height and msg.my <= 4 + node_height + 10)
+				or (msg.my >= 4 + 2 * node_height and msg.my <= 4 + 2 * node_height + 10)
+				or (msg.my >= 4 + 3 * node_height and msg.my <= 4 + 3 * node_height + 10)
+				or (msg.my >= 4 + 4 * node_height and msg.my <= 4 + 4 * node_height + 10)
+				or (msg.my >= 4 + 5 * node_height and msg.my <= 4 + 5 * node_height + 10)
+			then
+				self.cursor = "pointer"
+			end
+		end
+	end
+
+	function el:click(msg)
+		if #placement_buttons != 0 then
+			ui_routing.clear_placement_buttons()
+			return
+		end
+		for n = 0, 7 do
+			local node = sfx.nodes[n]
+			local pos = node.position
+			if
+				pos and pos.x and pos.x <= msg.mx and msg.mx <= pos.x + node_width
+				and pos.y <= msg.my and msg.my <= pos.y + 10
+			then
+				app.node = n
+				app.refresh_gui = true
+				return true
+			end
+		end
+		if msg.mx <= node_width + 4 then
+			if msg.my >= 4 + node_height and msg.my <= 4 + node_height + 10 then
+				app.node = nil
+				app.wt = nil
+				app.refresh_gui = true
+				return true
+			elseif msg.my >= 4 + 2 * node_height and msg.my <= 4 + 2 * node_height + 10 then
+				app.node = nil
+				app.wt = 0
+				app.refresh_gui = true
+				return true
+			elseif msg.my >= 4 + 3 * node_height and msg.my <= 4 + 3 * node_height + 10 then
+				app.node = nil
+				app.wt = 1
+				app.refresh_gui = true
+				return true
+			elseif msg.my >= 4 + 4 * node_height and msg.my <= 4 + 4 * node_height + 10 then
+				app.node = nil
+				app.wt = 2
+				app.refresh_gui = true
+				return true
+			elseif msg.my >= 4 + 5 * node_height and msg.my <= 4 + 5 * node_height + 10 then
+				app.node = nil
+				app.wt = 3
+				app.refresh_gui = true
+				return true
+			end
+		end
+	end
+	
+	return el
+end
+
+
+-- Node chooser ----------------------------------------------------------------
+
+
+local node_choice = {
+	[0] = {
+		[0] = { label = "osc", color = 17, node_type = 0x2, node_op = 0x0 },
+		{ label = "fm", color = 27, node_type = 0x2, node_op = 0x1 },
+		{ label = "ring", color = 22, node_type = 0x2, node_op = 0x2 },
+	},
+	{
+		[0] = { label = "filt", color = 14, node_type = 0x8, node_op = 0x0 },
+		{ label = "echo", color = 31, node_type = 0x9, node_op = 0x0 },
+		{ label = "shap", color = 9, node_type = 0x0a, node_op = 0x0 },
+	},
+}
+
+
+function ui_routing.attach_node_chooser(parent, el)
+	el.width = 118
+	el.height = 50
+	parent:attach(el)
+	
+	for i = 1, #placement_buttons do
+		app.routing_widget:attach(placement_buttons[i])
+	end
+
+	function el:draw()
+		--- rectfill(0, 0, self.width - 1, self.height - 1, 0)
+		if #placement_buttons > 0 then
+			print("choose position", 4, 12, 22)
+			return
+		end
+		if sfx.root.free_nodes == 0 then
+			print("(all modules are used)", 4, 12, 22)
+			return
+		end
+		print("add module:", 4, 2, 22)
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				local col = node_choice[row][column].color
+				rectfill(x, y, x + (node_width - 6), y + 8, col)
+				ui.print_centered(
+					node_choice[row][column].label,
+					x + ((node_width - 6) \ 2) + 1,
+					y + 2,
+					63
+				)
+			end
+		end
+	end
+	
+	function el:hover(msg)
+		self.cursor = 1
+		if (#placement_buttons > 0) return
+		if (sfx.root.free_nodes == 0) return
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				if
+					x <= msg.mx and msg.mx <= x + (node_width - 6)
+					and y <= msg.my and msg.my <= y + 8
+				then
+					self.cursor = "pointer"
+				end
+			end
+		end
+	end
+
+	function el:click(msg)
+		return true -- don't want to deselect the node!
+	end
+	
+	function el:tap(msg)
+		if #placement_buttons > 0 then
+			ui_routing.clear_placement_buttons()
+			return
+		end
+		if (sfx.root.free_nodes == 0) return
+		local ox, oy = 4, 12
+		for row = 0, #node_choice do
+			for column = 0, #(node_choice[row]) do
+				local x = ox + column * node_width
+				local y = oy + row * (8 + 4)
+				if
+					x <= msg.mx and msg.mx <= x + (node_width - 6)
+					and y <= msg.my and msg.my <= y + 8
+				then
+					start_new_node(
+						node_choice[row][column].node_type,
+						node_choice[row][column].node_op
+					)
+				end
+			end
+		end
+	end
+	
+
+	return el
+end
+
+
+return ui_routing
+:: src/ui_settings.lua
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-25 19:59:24",revision=1419]]
+local settings = require "src/settings.lua"
+local ui = require "src/ui.lua"
+
+
+local ui_settings = {}
+
+
+local function create_button(el)
+	if not el.width then
+		if el.label then
+			el.width = 8 + (4 * #el.label)
+		else
+			el.width = 9
+		end
+	end
+	if not el.height then
+		el.height = 9
+	end
+	if not el.fg then
+		el.fg = 5
+	end
+	if not el.bg then
+		el.bg = 7
+	end
+	el.cursor = "pointer"
+	function el:draw()
+		rectfill(1, 0, self.width - 2, 0, self.bg)
+		rectfill(0, 1, self.width - 1, self.height - 2, self.bg)
+		rectfill(1, self.height - 1, self.width - 2, self.height - 1, self.bg)
+		local label = self.get_label and self:get_label() or self.label
+		if label then
+			print(label, (self.width \ 2) - (2 * #label), 2, self.fg)
+		end
+	end
+	function el:hover()
+		return true
+	end
+	function el:click()
+		return true
+	end
+	function el:doubleclick()
+		return true
+	end
+	function el:tap()
+		if self.action then
+			self:action()
+		end
+	end
+	return el
+end
+
+
+function ui_settings.open()
+	local el = { x = 150, y = 12, width = 480 - 300, height = 270 - 11 - 24 }
+	ui.open_modal(el)
+	el:attach(ui.create_label { x = 20, y = 30, label = "Keys for playing notes", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 50, label = "- layout:", fg = 5})
+	el:attach(ui.create_menu_button {
+		x = 58, y = 50 - 2,
+		bg = 7,
+		get_label = function()
+			return settings.user.pitched_layout
+		end,
+		fg = 59,
+		highlight = 15,
+		items = {
+			{
+				label = "piano-like",
+				action = function()
+					settings.change_keys(settings.piano_keys)
+					settings.change_user { pitched_layout = "piano-like" }
+				end
+			},
+			{
+				label = "guitar-like",
+				action = function()
+					settings.change_keys(settings.isomorphic_keys)
+					settings.change_user { pitched_layout = "guitar-like" }
+				end
+			},
+			{
+				label = "chromatic",
+				action = function()
+					settings.change_keys(settings.chromatic_keys)
+					settings.change_user { pitched_layout = "chromatic" }
+				end
+			},
+		}		
+	})
+	el:attach(ui.create_label { x = 20, y = 90, label = "mouse movements (knobs, sliders, ...)", fg = 5})
+	el:attach(ui.create_label { x = 20, y = 110, label = "- direction:", fg = 5})
+	el:attach(ui.create_menu_button {
+		x = 70, y = 110 - 2,
+		bg = 7,
+		get_label = function()
+			return settings.user.drag_horizontal and "horizontal" or "vertical"
+		end,
+		fg = 59,
+		highlight = 15,
+		items = {
+			{
+				label = "vertical",
+				action = function()
+					settings.change_user { drag_horizontal = false }
+				end
+			},
+			{
+				label = "horizontal",
+				action = function()
+					settings.change_user { drag_horizontal = true }
+				end
+			},
+		}		
+	})	
+	el:attach(ui.create_label { x = 20, y = 130, label = "- sensitivity:", fg = 5})
+	el:attach_field {
+		x = 78, y = 130 - 1,
+		width = 30, height = 7,
+		get = function() return settings.user.drag_sensitivity end,
+		set = function(self, val)
+			local v = mid(0.0, tonum(val), 8.0)
+			if (v == 0) v = 0.5
+			settings.change_user { drag_sensitivity = v }
+		end
+	}
+	el:attach(ui.create_label { x = 20, y = 150, label = "- precise sensitivity:", fg = 5})
+	el:attach_field {
+		x = 110, y = 150 - 1,
+		width = 30, height = 7,
+		get = function() return settings.user.drag_sensitivity_precise end,
+		set = function(self, val)
+			local v = mid(0.0, tonum(val), 8.0)
+			if (v == 0) v = 0.125
+			settings.change_user { drag_sensitivity_precise = v }
+		end
+	}
+	
+	el:attach(create_button {
+		x = 140, y = el.height - 16,
+		label = "close",
+		action = function(self)
+			ui.close_modal()
+		end,
+	})
+	
+	function el:draw()
+		rect(0, 0, self.width - 1, self.height - 1, 61)
+		rect(1, 1, self.width - 2, self.height - 2, 22)
+		rectfill(2, 2, self.width - 3, self.height - 3, 6)
+		rectfill(2, 2, self.width - 3, 2 + 10, 2)
+		print("settings", (self.width \ 2) - (2 * #"settings"), 5, 7)
+	end
+	
+	function el:click()
+		return true
+	end
+end
+
+
+return ui_settings
+:: src/ui_visual.lua
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-25 19:59:24",revision=2667]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
 
 
-local visual = {}
+local ui_visual = {}
 
 
 local overlay = nil
 
 
-function visual.close()
+function ui_visual.close()
 	if overlay then
 		overlay:detach()
 		overlay = nil
@@ -4803,10 +4810,10 @@ end
 -- Wavetables ----------------------------------------------------------------
 
 
-function visual.open_wavetable(target)
-	if (overlay) visual.close()
+function ui_visual.open_wavetable(target)
+	if (overlay) ui_visual.close()
 	
-	overlay = visual.attach_wavetable(ui.head(), target, {
+	overlay = ui_visual.attach_wavetable(ui.head(), target, {
 		x = 90, y = 4,
 		width = 385, height = 97,
 	})
@@ -4837,7 +4844,7 @@ local function draw_wave(
 end
 
 
-function visual.attach_wavetable(parent, target, el)
+function ui_visual.attach_wavetable(parent, target, el)
 	parent:attach(el)
 	function el:draw()
 		rectfill(0, 0, self.width - 1, self.height - 1, 59)
@@ -4876,7 +4883,7 @@ end
 
 local frame_counter = 0
 
-function visual.attach_oscilloscope(parent, channel, el)
+function ui_visual.attach_oscilloscope(parent, channel, el)
 	parent:attach(el)
 	function el:draw()
 		local node_id = self.node_id or app.node or 0
@@ -4932,8 +4939,8 @@ end
 
 
 
-function visual.open_custom_envelope(env_id)
-	if (overlay) visual.close()
+function ui_visual.open_custom_envelope(env_id)
+	if (overlay) ui_visual.close()
 	
 	local env_type = sfx.env_type(app.instrument, env_id)
 	if (env_type != 2) return
@@ -4945,13 +4952,13 @@ function visual.open_custom_envelope(env_id)
 	}
 	
 	function overlay:draw()
-		visual.draw_custom_envelope(overlay)
+		ui_visual.draw_custom_envelope(overlay)
 		rect(0, 0, self.width - 1, self.height - 1, 22)
 	end
 end
 
 
-function visual.draw_custom_envelope(self)
+function ui_visual.draw_custom_envelope(self)
 	local bar_width = self.width \ 16
 	rectfill(1, 1, self.width - 2, self.height - 2, 59)
 	local start = sfx.env_start(app.instrument, self.env_id)
@@ -4995,9 +5002,265 @@ function visual.draw_custom_envelope(self)
 end
 
 
-return visual
-:: src/wavetables/basic_waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-25 15:38:28",revision=2276]]
+return ui_visual
+:: src/ui_wavetable.lua
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-01-25 19:59:24",revision=893]]
+local pfx = require "src/sfx.lua"
+local Wavetable = require "src/wavetable.lua"
+local ui = require "src/ui.lua"
+
+
+local ui_wavetable = {}
+
+
+local wt = nil
+local wave = 0
+
+
+function ui_wavetable.attach(parent, el)
+	el.width = 480 - 2 * 4
+	el.height = 270 - 11 - 100
+	parent:attach(el)
+	
+
+	-- TODO	
+	wt = Wavetable.new(256, 32)
+	wt:set_wavetable(drakma_cosine2saw2reso)
+
+	
+	function el:update()
+		if not wt then return end
+		
+		local _, _, _, _, wheel_y = mouse()
+		if wheel_y > 0 and wave > 0 then
+			wave -= 1
+		elseif wheel_y < 0 and wave < wt.height - 1 then
+			wave += 1
+		end
+	
+		if keyp("1") then
+			wt:set_wavetable(cz_saw)
+		end	
+		if keyp("2") then
+			wt:set_wavetable(cz_square)
+		end	
+		if keyp("3") then
+			wt:set_wavetable(cz_pulse)
+		end	
+		if keyp("4") then
+			wt:set_wavetable(cz_doublesine)
+		end	
+		if keyp("5") then
+			wt:set_wavetable(cz_sawpulse)
+		end	
+		if keyp("6") then
+			wt:set_wavetable(cz_reso1)
+		end	
+		if keyp("7") then
+			wt:set_wavetable(cz_reso2)
+		end	
+		if keyp("8") then
+			wt:set_wavetable(cz_reso3)
+		end
+		if keyp("9") then
+			wt:set_wavetable(split(cz_saw, cz_reso1))
+		end
+		
+		if keyp("q") then
+			wt:set_wavetable(drakma_cosine2saw)
+		end
+		if keyp("w") then
+			wt:set_wavetable(drakma_triangle2saw)
+		end
+		if keyp("e") then
+			wt:set_wavetable(drakma_sine2saw)
+		end
+		if keyp("r") then
+			wt:set_wavetable(drakma_square2saw)
+		end
+		if keyp("t") then
+			wt:set_wavetable(drakma_cosine2saw2reso)
+		end
+		if keyp("a") then
+			wt:set_wavetable(drakma_cosine2square)
+		end
+		if keyp("s") then
+			wt:set_wavetable(drakma_triangle2square)
+		end
+		if keyp("d") then
+			wt:set_wavetable(drakma_triangle2square2saw)
+		end
+		if keyp("f") then
+			wt:set_wavetable(drakma_pulsewidth)
+		end
+		if keyp("g") then
+			wt:set_wavetable(drakma_sawpulse)
+		end
+		if keyp("z") then
+			wt:set_wavetable(drakma_saw2reso)
+		end
+		if keyp("x") then
+			wt:set_wavetable(drakma_square2reso)
+		end
+		if keyp("c") then
+			wt:set_wavetable(drakma_triangle2reso)
+		end
+		if keyp("v") then
+			wt:set_wavetable(drakma_sawpulse2reso)
+		end
+		if keyp("b") then
+			wt:set_wavetable(drakma_sawpulse2resoalt)
+		end
+	end
+	
+	
+	function el:draw()
+		--print("(the wavetable editor is coming soon!)", 158, 70, 5)
+		---[[
+		print("num_instruments: "..pfx.num_instruments(), 4, 4, 0)
+		print("instruments_address: "..string.format("%x",pfx.instruments_address()), 4, 14, 0)
+		print("tracks_address: "..string.format("%x",pfx.tracks_address()), 4, 24, 0)
+		print("patterns_address: "..string.format("%x",pfx.patterns_address()), 4, 34, 0)
+		-- Temporary wavetable display		
+		if not wt then return end
+		local ox <const> = 270
+		local oy <const> = el.height // 2
+		rrectfill(ox, oy - 50, 200, 101, 0, 59)
+		line(ox, oy, ox + 200 - 1, oy, 60)
+		local last_y
+		for i = 0, 199 do
+			local sample = (i * wt.width) // 200
+			local value = wt:get(wave, sample)
+			local y = oy - math.floor(0.5 + 50 * value)
+			if last_y then
+				line(ox + i, last_y, ox + i, y, 27)
+			end
+			pset(ox + i, y, 26)
+			last_y = y
+		end
+		print(string.format("%d", wave), ox + 4, oy - 60, 19)
+		--]]
+	end
+end
+
+
+return ui_wavetable
+:: src/waves.lua
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-25 19:59:24",revision=2547]]
+----------------------------------------------------------------------------------------------------
+-- Transforms
+----------------------------------------------------------------------------------------------------
+
+
+function nes_slope(func, coeff)
+	local coeff = coeff or 2
+	return function(x, w)
+		local value = 2 * func(x, w) - 1
+		if value > 0.0 then
+			value -= x * coeff
+		else
+			value -= (1 - x) * coeff
+		end
+		value /= 1 + coeff
+		local y = 0.5 + value / 2
+		return y
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function bitcrunch(func, res)
+	res = res and (res - 1) or 15
+	return function(x, w)
+		return math.floor(0.5 + res * func(x, w)) / res
+	end
+end
+
+
+function phase(func, ph)
+	return function(x, w)
+		return func(x + ph, w)
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function split(funcA, funcB)
+	return function(x, w)
+		if x < 0.5 then
+			return funcA(2 * x, w)
+		else
+			return funcB(2 * x - 1, w)
+		end
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function mask(func1, func2)
+	return function(x, w)
+		return 1 - (1 - func1(x, w)) * (1 - func2(x, w))
+	end
+end
+
+
+function multiply(func1, func2)
+	return function(x, w)
+		return func1(x, w) * func2(x, w)
+	end
+end
+
+
+function multiply_bipolar(func1, func2)
+	return function(x, w)
+		local value1 = 2 * func1(x, w) - 1
+		local value2 = 2 * func2(x, w) - 1
+		return 0.5 + (value1 * value2) / 2
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function inverse(func)
+	return function(x, w)
+		return 1 - func(x, w)
+	end
+end
+
+
+function reverse(func)
+	return function(x, w)
+		return func(x, 1 - w)
+	end
+end
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+function sequence(...)
+	local funcs = {...}
+	local count = #funcs
+	return function(x, w)
+		local idx = 1 + math.floor(0.5 + w * (count - 1))
+		return funcs[idx](x, w * count % 1.000000000001) -- TODO
+	end
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Basic Waves
+----------------------------------------------------------------------------------------------------
+
+
 function w_cos(x, w)
 	return 0.5 + cos(x) / 2
 end
@@ -5103,8 +5366,13 @@ nes_pulse75 = nes_slope(w_pulse75, 1)
 
 nes_waveforms = sequence(nes_triangle, nes_pulse75,
 	nes_pulse50, nes_pulse25, nes_pulse12)
-:: src/wavetables/phase_distortion.lua
---[[pod_format="raw",created="2026-01-23 20:31:27",modified="2026-01-25 15:38:28",revision=2332]]
+
+
+----------------------------------------------------------------------------------------------------
+-- Phase Distortion
+----------------------------------------------------------------------------------------------------
+
+
 --[[
 	y = a * x + b
 	0 = a * 0 + b
@@ -5240,19 +5508,16 @@ drakma_cosine2saw =
 	)
 
 
-drakma_sine2saw =
+drakma_triangle2saw =
 	distort(
-		w_sin,
-		doublebend(
-			bend(0.5, 0.5, 0.0, 0.5),
-			bend(0.5, 0.5, 1.0, 0.5)
-		)
+		inverse(w_triangle),
+		bend(0.5, 0.5, 1.0, 0.5)
 	)
 
 
-drakma_triangle2saw =
+drakma_sine2saw =
 	distort(
-		phase(w_triangle, 0.25),
+		w_sin,
 		doublebend(
 			bend(0.5, 0.5, 0.0, 0.5),
 			bend(0.5, 0.5, 1.0, 0.5)
@@ -5355,116 +5620,11 @@ drakma_sawpulse2resoalt =
 		)
 	)
 
-:: src/wavetables/transform.lua
---[[pod_format="raw",created="2026-01-24 18:59:35",modified="2026-01-25 15:38:28",revision=1228]]
+:: src/wavetable.lua
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-25 19:59:24",revision=2882]]
+-- TODO: move into pfx
 
-
-function nes_slope(func, coeff)
-	local coeff = coeff or 2
-	return function(x, w)
-		local value = 2 * func(x, w) - 1
-		if value > 0.0 then
-			value -= x * coeff
-		else
-			value -= (1 - x) * coeff
-		end
-		value /= 1 + coeff
-		local y = 0.5 + value / 2
-		return y
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function bitcrunch(func, res)
-	res = res and (res - 1) or 15
-	return function(x, w)
-		return math.floor(0.5 + res * func(x, w)) / res
-	end
-end
-
-
-function phase(func, ph)
-	return function(x, w)
-		return func(x + ph, w)
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function split(funcA, funcB)
-	return function(x, w)
-		if x < 0.5 then
-			return funcA(2 * x, w)
-		else
-			return funcB(2 * x - 1, w)
-		end
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function mask(func1, func2)
-	return function(x, w)
-		return 1 - (1 - func1(x, w)) * (1 - func2(x, w))
-	end
-end
-
-
-function multiply(func1, func2)
-	return function(x, w)
-		return func1(x, w) * func2(x, w)
-	end
-end
-
-
-function multiply_bipolar(func1, func2)
-	return function(x, w)
-		local value1 = 2 * func1(x, w) - 1
-		local value2 = 2 * func2(x, w) - 1
-		return 0.5 + (value1 * value2) / 2
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function inverse(func)
-	return function(x, w)
-		return 1 - func(x, w)
-	end
-end
-
-
-function reverse(func)
-	return function(x, w)
-		return func(x, 1 - w)
-	end
-end
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-function sequence(...)
-	local funcs = {...}
-	local count = #funcs
-	return function(x, w)
-		local idx = 1 + math.floor(0.5 + w * (count - 1))
-		return funcs[idx](x, w * count % 1.000000000001)
-	end
-end
-
-:: src/wavetables/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-25 15:38:28",revision=2611]]
-Wavetable = structure {
+local Wavetable = structure {
 	-- width: Int -- number of samples in a wave
 	-- height: Int -- number of waves in the wavetable
 	-- samples: Array[Int]
@@ -5472,10 +5632,11 @@ Wavetable = structure {
 
 
 function Wavetable.new(width, height)
-	local samples = {}
-	for i = 0, width * height do
-		samples[i] = 0.0
-	end
+--	local samples = {}
+--	for i = 0, width * height do
+--		samples[i] = 0.0
+--	end
+	samples = userdata("i16", width, height)
 	return Wavetable {
 		width = width,
 		height = height,
@@ -5485,17 +5646,20 @@ end
 
 
 function Wavetable:get(wave, sample)
-	assert(0 <= wave and wave <= self.height) -- TODO: should be < height?
-	assert(0 <= sample and sample <= self.width) -- TODO: should be < width?
-	return self.samples[wave * self.width + sample] or 0.0
+	assert(0 <= wave and wave < self.height) -- TODO: should be < height?
+--	assert(0 <= sample and sample < self.width) -- TODO: should be < width?
+	local sample = sample % self.width
+	local value = self.samples:get(sample, wave)
+	return value / 0x7fff
 end
 
 
 function Wavetable:set(wave, sample, value)
-	assert(0 <= wave and wave <= self.height) -- TODO: should be < height?
-	assert(0 <= sample and sample <= self.width) -- TODO: should be < width?
+	assert(0 <= wave and wave < self.height) -- TODO: should be < height?
+	assert(0 <= sample and sample < self.width) -- TODO: should be < width?
 	assert(-1.0 <= value and value <= 1.0)
-	self.samples[wave * self.width + sample] = value
+	local sample = sample % self.width
+	self.samples:set(sample, wave, value * 0x7fff)
 end
 
 
@@ -5507,7 +5671,7 @@ function Wavetable:set_wave(wave, func)
 	local length <const> = self.width
 	for i = 0, self.width - 1 do
 		local value = 2 * func(i / length) - 1
-		self.samples[start + i] = value
+		self:set(wave, i, value)
 	end
 end
 
@@ -5517,156 +5681,23 @@ function Wavetable:set_wavetable(func)
 	-- `x` is in [0,1] (instead of [0, pi])
 	-- `w` is in [0,1] (0 = first wave of the wt, 1 = last wave)
 	-- `result` is in [0, 1] (instead of [-1, +1])
-	for wave = 0, self.height do
-		local w = wave / self.height
+	for wave = 0, self.height - 1 do
+		local w = wave / (self.height - 1)
 		local wavefunc = function(x) return func(x, w) end
 		self:set_wave(wave, wavefunc)
 	end
 end
 
-:: src/wt_editor.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-01-25 15:38:28",revision=622]]
-local pfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
 
-
-wt_editor = {}
-
-
-wt = nil
-wave = 0
-
-
-function wt_editor.attach(parent, el)
-	el.width = 480 - 2 * 4
-	el.height = 270 - 11 - 100
-	parent:attach(el)
-	
-
-	-- TODO	
-	wt = Wavetable.new(480, 63)
-	wt:set_wavetable(drakma_cosine2saw2reso)
-
-	
-	function el:update()
-		if not wt then return end
-		
-		local _, _, _, _, wheel_y = mouse()
-		if wheel_y > 0 and wave > 0 then
-			wave -= 1
-		elseif wheel_y < 0 and wave < wt.height then
-			wave += 1
-		end
-	
-		if keyp("1") then
-			wt:set_wavetable(cz_saw)
-		end	
-		if keyp("2") then
-			wt:set_wavetable(cz_square)
-		end	
-		if keyp("3") then
-			wt:set_wavetable(cz_pulse)
-		end	
-		if keyp("4") then
-			wt:set_wavetable(cz_doublesine)
-		end	
-		if keyp("5") then
-			wt:set_wavetable(cz_sawpulse)
-		end	
-		if keyp("6") then
-			wt:set_wavetable(cz_reso1)
-		end	
-		if keyp("7") then
-			wt:set_wavetable(cz_reso2)
-		end	
-		if keyp("8") then
-			wt:set_wavetable(cz_reso3)
-		end
-		if keyp("9") then
-			wt:set_wavetable(split(cz_saw, cz_reso1))
-		end
-		
-		if keyp("q") then
-			wt:set_wavetable(drakma_cosine2saw)
-		end
-		if keyp("w") then
-			wt:set_wavetable(drakma_sine2saw)
-		end
-		if keyp("e") then
-			wt:set_wavetable(drakma_triangle2saw)
-		end
-		if keyp("r") then
-			wt:set_wavetable(drakma_square2saw)
-		end
-		if keyp("t") then
-			wt:set_wavetable(drakma_cosine2saw2reso)
-		end
-		if keyp("a") then
-			wt:set_wavetable(drakma_cosine2square)
-		end
-		if keyp("s") then
-			wt:set_wavetable(drakma_triangle2square)
-		end
-		if keyp("d") then
-			wt:set_wavetable(drakma_triangle2square2saw)
-		end
-		if keyp("f") then
-			wt:set_wavetable(drakma_sawpulse)
-		end
-		if keyp("z") then
-			wt:set_wavetable(drakma_saw2reso)
-		end
-		if keyp("x") then
-			wt:set_wavetable(drakma_square2reso)
-		end
-		if keyp("c") then
-			wt:set_wavetable(drakma_triangle2reso)
-		end
-		if keyp("v") then
-			wt:set_wavetable(drakma_sawpulse2reso)
-		end
-		if keyp("b") then
-			wt:set_wavetable(drakma_sawpulse2resoalt)
-		end
-	end
-	
-	
-	function el:draw()
-		--print("(the wavetable editor is coming soon!)", 158, 70, 5)
-		---[[
-		print("num_instruments: "..pfx.num_instruments(), 4, 4, 0)
-		print("instruments_address: "..string.format("%x",pfx.instruments_address()), 4, 14, 0)
-		print("tracks_address: "..string.format("%x",pfx.tracks_address()), 4, 24, 0)
-		print("patterns_address: "..string.format("%x",pfx.patterns_address()), 4, 34, 0)
-		-- Temporary wavetable display		
-		if not wt then return end
-		local ox <const> = 270
-		local oy <const> = el.height // 2
-		rrectfill(ox, oy - 50, 200, 101, 0, 59)
-		line(ox, oy, ox + 200 - 1, oy, 60)
-		local last_y
-		for i = 0, 199 do
-			local sample = (i * wt.width) // 200
-			local value = wt:get(wave, sample)
-			local y = oy - math.floor(0.5 + 50 * value)
-			if last_y then
-				line(ox + i, last_y, ox + i, y, 27)
-			end
-			pset(ox + i, y, 26)
-			last_y = y
-		end
-		print(string.format("%d", wave), ox + 4, oy - 60, 19)
-		--]]
-	end
-end
+return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-25 15:38:28",revision=1114]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-25 19:59:24",revision=1385]]
 - add 4/4 config
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818181818181818180701010718181818181818070718181807010107181818181818071818071818070101071818071818180718180718180701010718180718180718181807181807010107181807181807181818181818070101071818180707181818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-01-25 15:38:28",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.4",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#0",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="sfx/0.sfxi",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818181818181818180701010718181818181818070718181807010107181818181818071818071818070101071818071818180718180718180701010718180718180718181807181807010107181807181807181818181818070101071818180707181818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-01-25 19:59:24",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.4",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#0",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="sfx/0.sfxi",workspace_index=7}}]]
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 15:38:28",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 19:59:24",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 MS0yNSAwODoyNzo1MiIscmV2aXNpb249OTcyOV1dbHo0AHoGAACvOAAA8yV7WzBdPXtibXA9cHh1
@@ -5875,14 +5906,14 @@ Ud6Z5rjf6tBq1M12IUZmHc02KopiRdCp1LOBHMHZ0QAA4cCC7wIHkTJrZNpOGq0IGgAAgE2Igomj
 Ne2sKEoMZQIAAPfJpJPUziRgZZ1JJ0_fb-Tdaz9ApQAAwFecPt-Y-r9X-j93ENXN134D1wAAABB0
 RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 15:38:28",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 19:59:24",stored="2024-03-24 00:48:06"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
 My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-01-25 15:38:28",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-01-25 19:59:24",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
@@ -5912,7 +5943,7 @@ ZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAA
 oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
 MwEAMTAwMgEAoDAwMTYxNjE2Iik=
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 15:38:28",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 19:59:24",stored="2024-03-24 00:48:06"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDExOjI5OjU2Iixtb2RpZmllZD0iMjAyNi0w
 MS0yNSAxNToxNDoyMiIscmV2aXNpb249MTMzXV1sejQAKgEAAAIYAAD-MXB4dQADKAAABAAED0AQ
@@ -5923,15 +5954,16 @@ crA6AB2mYQ9uD2QOD2EfbkUAH0BFABsv8AkwAP------MR--AQCsscgPQAAPEEAPJA8oBACQKQ8k
 H-8fJg8nBADyAP--IlAdUP0iXh1e-SLwcCsAL-2wCgD-------------------98UP2w8P85
 :: sfx/0.sfxi
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTI1IDA4OjMwOjE3Iixtb2RpZmllZD0iMjAyNi0w
-MS0yNSAxNToxNTozNSIscmV2aXNpb249MTJdXWx6NABMAQAA_BkAAP8wcHh1AAMoAAAEAAQPQBAC
+MS0yNSAxOTozMzo0NiIscmV2aXNpb249MTVdXWx6NACAAQAAJhoAAP8wcHh1AAMoAAAEAAQPQBAC
 DgABoAEgAqAOAA8QAA3wygECA0APD5AEBQYHQAyQCAkKC0AMkA8MDw0PDgxADPD-AQDr8xKqARAG
-DyAQASABIAHwAAIQAg4QAQ-cEA8hIAEPyyAPxqATABJQEwD6JCMgD6jwow8oD--wxAIAD-gKD-8P
+DyAQASABIAHwAAIQAg4QAQ-cEA8hIAEPyyAPxKATABJQEwD6JCMgD6jwow8oD--wxAIAD-gKD-8P
 gA-3Dw0BcA9zD28PZg90Dg9wD3UPbA9zD2VgARAGDlwAECBHAFcwD0CQARAAIuASDABmDSAB4AMC
 DAAXBAwAFwUMABYGDAAh8AiNABrGiwCQdw9pD2QPZQ9zjwDvcg9vD3UPdA9pD24PZyCTAAARDZIA
-F6BVAB8ADAAoD5EAAl90D2EfbJEAAh8QkQAGLvDDSgAv8AkvAP------FR--AQCsz8gPQAAPEED-
--7DwcAsA----------------------8UUP_w8P85
+F6BVAB8ADAAoD5EAAl90D2EfbJEAAh8QkQAGwJANAiAOUAEgAeAPEgoA-wICIAHgAgjwDwnwDwrg
+D0DwJ2kAAYJhH2wOD24Pb-8AH3BdAAYu8MM_AC-wCS8A-----_Uf-wEArM-ID0AADxBA--_w8HAL
+AP----------------------FFD-sPD-OQ==
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-01-25 15:38:28",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-01-25 19:59:24",stored="2024-04-07 08:14:00"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-01-25 15:38:28"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-01-25 19:59:24"]]
 :: [eoc]
