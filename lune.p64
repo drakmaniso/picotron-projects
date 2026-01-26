@@ -1,0 +1,857 @@
+picotron cartridge // www.picotron.net
+version 2
+
+:: src/
+:: src/test/
+:: lune.lua
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2025-12-14 12:10:28",revision=167]]
+----------------------------------------------------------------------------------------------
+
+
+function newtype(meta)
+	meta.__index = meta
+	meta.type = meta
+	setmetatable(
+		meta,
+		{
+			__call =
+				function(mt, instance)
+					setmetatable(instance, mt)
+					return instance
+				end,
+		}
+	)
+	return meta
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+_modules = {}
+
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name)
+	local src = fetch(filename) 
+	if (type(src) != "string") panic("could not include " .. filename)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("Syntax error:", tostr(err))
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+function panic(...)
+	local args = { ... }
+	foreach(
+		args,
+		function(str)
+			send_message(3, { event = "report_error", content = str })
+		end
+	)
+	stop()
+end
+
+
+--------------------------------------------------------------------------------------------
+:: main.lua
+--[[pod_format="raw",created="2025-01-17 10:35:48",modified="2025-12-14 12:10:28",revision=800]]
+include "lune.lua"
+local lexing = require "src/lexing.lua"
+local parsing = require "src/parsing.lua"
+
+
+local source = [[foo == 33]]
+
+--local source = fetch "src/test/lexemes.txt"
+local lexer = lexing.Lexer.new(source)
+
+local token = lexer:next()
+while token.tag ~= "EOF" do
+	lexer:print(token)
+	token = lexer:next()
+end
+print("")
+
+local parser = parsing.Parser.new(lexer)
+local tree = parser:expression()
+
+:: src/ast.lua
+--[[pod_format="raw",created="2025-03-21 21:06:47",modified="2025-12-14 12:10:28",revision=76]]
+-- module ast --------------------------------------------------------------------------
+
+
+local Binary = newtype {
+	-- left: Expr
+	-- operator: Token
+	-- right: Expr
+}
+
+
+local Unary = newtype {
+	-- operator: Token
+	-- right: Expr
+}
+:: src/lexing.lua
+--[[pod_format="raw",created="2025-03-16 10:06:23",modified="2025-12-14 12:10:28",revision=898]]
+-- module lexing --------------------------------------------------------------------------
+
+
+local Lexer = newtype {
+	-- source: String
+	-- current: Integer
+}
+
+
+local Token = newtype {
+	-- tag: String
+	-- start: Integer
+	-- fin: Integer
+}
+
+
+--------------------------------------------------------------------------------------------
+
+
+function Lexer.new(source)
+	return Lexer {
+		source = source,
+		current = 1,
+	}
+end
+
+
+------------------------------------------------------------------------------------------
+
+
+local symbols
+
+
+function Lexer:next()
+	local function token(tag, start, fin)
+		return Token { tag = tag, start = start, fin = fin }
+	end
+	self:skip_whitespace()
+	local start <const> = self.current
+	local char <const> = self:peek()
+	if char == nil then
+		return token("EOF", start, self.current)
+	end
+	if is_letter(char) then
+		return token(self:consume_identifier(), start, self.current - 1)
+	end
+	if is_digit(char) then
+		return token(self:consume_number(), start, self.current - 1)
+	end
+	local consume_symbols = symbols[char]
+	if type(consume_symbols) == "function" then
+		return token(consume_symbols(self), start, self.current - 1)
+	end
+	return token(self:consume_invalid_char(), start, self.current - 1)
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+function Lexer:peek()
+	if self.current > #self.source then
+		return nil
+	end
+	return self.source:byte(self.current)
+end
+
+
+function Lexer:peek_next()
+	if self.current + 1 > #self.source then
+		return nil
+	end
+	return self.source:byte(self.current + 1)
+end
+
+
+function Lexer:take()
+	if self.current > #self.source then
+		return
+	end
+	self.current += 1
+end
+
+
+--------------------------------------------------------------------------------------------
+
+
+function Lexer:skip_whitespace(s)
+	while true do
+		local char = self:peek()
+		if char == 32 or char == 9 then -- " " or "\t"
+			self:take()
+		else
+			return
+		end
+	end
+end
+
+
+----------------------------------------------------------------------------------------------
+
+
+local keywords = {
+	"and", "break", "do", "else", "elseif", "end",
+	"false", "for", "function", "goto", "if", "in",
+	"local", "nil", "not", "or", "repeat", "return",
+	"then", "true", "until", "while",
+}
+
+
+local keywords_tokens = {}
+for keyword in all(keywords) do
+	add(keywords_tokens, keyword:upper())
+end
+
+
+function Lexer:consume_identifier()
+	local start = self.current
+	self:take()
+	while is_letter_or_digit(self:peek()) do
+		self:take()
+	end
+	for keyword_index, keyword in ipairs(keywords) do
+		if self.current - start == #keyword then
+			local ps, pk = start, 1
+			while pk <= #keyword and self.source:byte(ps) == keyword:byte(pk) do
+				ps += 1
+				pk += 1
+			end
+			if pk == #keyword + 1 then
+				return keywords_tokens[keyword_index]
+			end
+		end
+	end
+	
+	return "ID"
+end
+
+
+----------------------------------------------------------------------------------------------
+
+
+function Lexer:consume_number()
+	self:take()
+	while is_digit(self:peek()) do
+		self:take()
+	end
+	return "NUMBER"
+end
+
+
+function Lexer:consume_comment()
+	-- TODO: how to handle multi-line comments? "--[[ ... ]]--"
+	-- maybe just an error if the first char after "--" is "["?
+	while self:peek() ~= nil and self:peek() ~= 10 do
+		self:take()
+	end
+	return "COMMENT"
+end
+
+
+function Lexer:consume_invalid_char()
+	self:take()
+	return "INVALID"
+end
+
+
+----------------------------------------------------------------------------------------------
+
+
+symbols = {
+	[ord("\n")] =
+		function(s)
+			s:take()
+			return "\n"
+		end,
+	[ord(";")] = function(s) s:take(); return ";" end,
+	[ord("=")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- second "="
+				return "=" -- Double EQUAL
+			end
+			s:take()
+			return "=="
+		end,
+	[ord(",")] = function(s) s:take(); return "," end,
+	[ord(":")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 58 then -- second ":"
+				return ":"
+			end
+			s:take()
+			return "::"
+		end,
+	[ord(".")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 46 then -- second "."
+				return "."
+			end
+			s:take()
+			if s:peek() ~= 46 then -- third
+				return ".."
+			end
+			s:take()
+			return "..."
+		end,
+	[ord("[")] = function(s) s:take(); return "[" end,
+	[ord("]")] = function(s) s:take(); return "]" end,
+	[ord("(")] = function(s) s:take(); return "(" end,
+	[ord(")")] = function(s) s:take(); return ")" end,
+	[ord("{")] = function(s) s:take(); return "{" end,
+	[ord("}")] = function(s) s:take(); return "}" end,
+	[ord("+")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 43 then -- second "+"
+				if s:peek() ~= 61 then -- "="
+					return "+"
+				end
+				s:take()
+				return "+="
+			end
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				s:take()
+				return "+="
+			end
+			s:take()
+			return "++="
+		end,
+	[ord("-")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 45 then -- second "-"
+				if s:peek() ~= 61 then -- "="
+					return "-"
+				end
+				s:take()
+				return "-="
+			end
+			return s:consume_comment()
+		end,
+	[ord("*")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "*"
+			end
+			s:take()
+			return "*="
+		end,
+	[ord("/")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 47 then -- second "/"
+				if s:peek() ~= 61 then -- "="
+					return "/"
+				end
+				s:take()
+				return "/="
+			end
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				s:take()
+				return "//"
+			end
+			s:take()
+			return "//="
+		end,
+	[ord("^")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "^"
+			end
+			s:take()
+			return "^="
+		end,
+	[ord("%")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "%"
+			end
+			s:take()
+			return "%="
+		end,
+	[ord("&")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "&"
+			end
+			s:take()
+			return "&="
+		end,
+	[ord("~")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "~"
+			end
+			s:take()
+			return "~="
+		end,
+	[ord("|")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				return "|"
+			end
+			s:take()
+			return "|="
+		end,
+	[ord("<")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 60 then -- second "<"
+				if s:peek() ~= 61 then -- "="
+					return "<"
+				end
+				s:take()
+				return "<="
+			end
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				s:take()
+				return "<<"
+			end
+			s:take()
+			return "<<="
+		end,
+	[ord(">")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 62 then -- second ">"
+				if s:peek() ~= 61 then -- "="
+					return ">"
+				end
+				s:take()
+				return ">="
+			end
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				s:take()
+				return ">>"
+			end
+			s:take()
+			return ">>="
+		end,
+	[ord(".")] =
+		function(s)
+			s:take()
+			if s:peek() ~= 46 then -- second "."
+				s:take()
+				return "."
+			end
+			s:take()
+			if s:peek() ~= 61 then -- "="
+				s:take()
+				return ".."
+			end
+			s:take()
+			return "..="
+		end,
+	[ord("#")] = function(s) s:take(); return "#" end,
+
+}
+
+
+--------------------------------------------------------------------------------------------
+
+
+function is_letter(char)
+	if not char then return false end
+	return (char >= 97 and char <= 122) -- between "a" and "z"
+		or (char >= 65 and char <= 90) -- between "A" and "Z"
+		or (char == 95) -- "_"
+end
+
+
+function is_digit(char)
+	return char and char >= 48 and char <= 57
+end
+
+
+function is_letter_or_digit(char)
+	return is_letter(char) or is_digit(char)
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+function Lexer:print(token)
+	if token.tag == "NL" then
+		print("NL")
+	elseif token.tag == "ID" or token.tag == "NUMBER" or token.tag == "COMMENT" then
+		print(	token.tag .. "(" .. self.source:sub(token.start, token.fin) .. ") \0")
+	else
+		print(token.tag .. " \0")
+	end
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+return {
+	Lexer = Lexer,
+}
+:: src/parsing.lua
+--[[pod_format="raw",created="2025-03-21 19:54:29",modified="2025-12-14 12:10:28",revision=139]]
+-- module parsing ------------------------------------------------------------------------
+
+
+local ast = require "src/ast.lua"
+local lexing = require "src/lexing.lua"
+
+
+local Parser = newtype {
+	-- lexer: lexing.Lexer
+	-- current: lexing.Token
+	-- previous: lexing.Token
+}
+
+
+--------------------------------------------------------------------------------------------
+
+
+function Parser.new(lexer)
+	return Parser {
+		lexer = lexer,
+		current = lexer:next(),
+		previous = nil,
+	}
+end
+
+
+--------------------------------------------------------------------------------------------
+
+
+function Parser:expression()
+	return self:comparison()
+end
+
+
+function Parser:comparison()
+	local expr = self:term()
+	while self:match("==", "~=", "<", ">", "<=", ">=") do
+		local operator = self.previous
+		local right = self:term()
+		expr = ast.BinaryExpr { left = expr, operator = operator, right = right }
+ 	end
+end
+
+
+function Parser:term()
+	local expr = self:factor()
+	while self:match("+", "-") do
+		local operator = self.previous
+		local right = self:factor()
+		expr = ast.BinaryExpr { left = expr, operator = operator, right = right }
+ 	end
+end
+
+
+function Parser:factor()
+	local expr = self:unary()
+	while self:match("*", "/") do
+		local operator = self.previous
+		local right = self:unary()
+		expr = ast.BinaryExpr { left = expr, operator = operator, right = right }
+ 	end
+end
+
+
+function Parser:unary()
+	if self:match("-", "not") then
+		local operator = self.previous
+		local right = self:primary()
+		expr = ast.UnaryExpr { operator = operator, right = right }
+ 	end
+end
+
+
+function Parser:primary()
+	if self:match("-", "not") then
+		local operator = self.previous
+		local right = self:primary()
+		expr = ast.UnaryExpr { operator = operator, right = right }
+ 	end
+end
+
+
+--------------------------------------------------------------------------------------------
+
+
+function Parser:match(...)
+	for tag in all {...} do
+		if self:check(tag) then
+			self:take()
+			return true
+		end
+	end
+	return false
+end
+
+
+function Parser:check(tag)
+	return self.current.tag == tag
+end
+
+
+function Parser:take()
+	if self.current.tag == "EOF" then return end
+	self.previous = self.current
+	self.current = self.lexer:next()
+end
+
+
+---------------------------------------------------------------------------------------------
+
+
+return {
+	Parser = Parser,
+}
+:: src/test/lexemes.txt
+--[[pod_format="raw",created="2025-03-20 08:59:51",modified="2025-12-14 12:10:28",revision=146]]
+-- Keywords
+and break do else elseif end
+false for function goto if in
+local nil not or repeat return
+then true until while
+
+-- Identifiers
+foo _foo foo_ foo_bar __foo
+bar1 bar23 bar4foo5
+a_very_very_very_very_veryyyy_looooooooong_identifier
+
+-- Numbers
+123 123.45 012 0.666
+
+-- Binary operators
++ += ++ ++=
+- -= --
+* *=
+/ /= // //=
+^ ^=
+% %=
+& &=
+~ ~=
+< <= << <<=
+> >= >> >>=
+. .. ..=
+= ==
+#
+
+:: .info.pod
+--[[pod,created="2025-01-17 10:37:45",modified="2025-12-14 12:10:28",runtime=24,workspaces={{location="main.lua",workspace_index=1}}]]
+:: label.qoi
+b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-qKIefI-wf65AD7yP8H_ooh58j-BEvI-wRLM
+P-39-doSxD-XEtI-Esk-wBLSP-65AD7EP8AS2D-AEtA--qKIeeM-wBLNPxLUPxLFP8AS1D8Szj-9
+8f65AD7AP8ASwD-H-qKIecE-wBLBP8sSwT-IEsQ-xhLGP8kSPxI-zRLFP8YSxT-HEt8-EtI--rkA
+PsU-Etk-EtA--qKIeeQ-Es0-EtQ-EsY-EtQ-Es4--fD_uQA_wD-CEsA-xv6iiHnBP8ASwT-GEsI-
+EsE-yBI-whI-xhLGP8oSP9ISPxI-1hLGP8ASPxLBP8ASwD-AEsA-wRLFPxLAPxLAPxLAP8ASyD-_
+uQA_xT8SwT-AEsA-EsA-EsA-wBLAPxI-wBLEPxLAPxLAPxLAP8ASxj-_ooh5wT-BEsE-wBLAPxI-
+wBLAP8ESwD-AEsA-Ej-AEsQ-EsA-EsA-EsA-wBLDPxLKP8ASwT-BEj-CEsQ-EsA-EsA-EsA-wBLK
+PxLOP-3w-rkAPsA-whLAP8b_ooh5wT-AEsE-xhLCPxLBP8gSP8ISP8YSxj-GEsc-yhLBPxLBP8YS
+xT-HEsY-Ej8SPxLCPxLAPxLAPxLAPxLEPxLAPxLAPxLCPxLHP-65AD7FPxLAPxLAPxI-EsA-Ej8S
+wD8SP8ASxj8SwD8SwD8Swj8SxT-_ooh5wT8SwD8Swj8SP8ASwT8Swj8SwD8SP8ASxj8SwD8SwD8S
+wj8Swj8SzD8SPxLDPxLGPxLAPxLAPxLCPxLJPxLGPxLFP-3w-rkAPsA-whLAP8b_ooh5xj-GEsI-
+zBI-whI-xhLGP8YSwD-DEsA-yhI-Ej-aEsY-Ej8SPxLAP8ESwD8SwD8SwD8SxD8SwD8SwD8SwD-B
+Esc--rkAPsU-EsA-whLAP8ASwD-CEj8Sxz8SwD8SwD8SwD-BEsU--qKIecE-EsA-EsA-wRI-EsM-
+wBLAP8ISPxLHPxLAPxLAPxLAP8ESwj8Syj-BEsA-wBLBPxLGPxLAPxLAPxLAP8ESyT8SxT-BEsQ-
+-fD_uQA_wD-CEsA-xv6iiHk-EsI-Ej-GEsU-yRI-wBLBP9YSwD-DEsA-yhLFP8YSxT-HEsY-EsE-
+Ej8SwD8SwD8SwD8SwD8SxD8SwD8SwD8SPxLAPxLHP-65AD7FPxLAPxLCPxLAPxI-EsI-Esc-EsA-
+EsA-Ej8SwD8SxT-_ooh5wT-BEsA-EsA-Ej8SxT8SPxLCPxLHPxLAPxLAPxI-EsA-EsI-Esk-EsA-
+EsI-EsA-EsY-EsA-EsA-Ej8SwD8SyT8Sxj8SxT-98P65AD7AP8ISwD-G-qKIeT8Swj8SP8YSxT-H
+EsE-wBLBP8YSxj-GEsA-wxLAP8sSxD-WEsY-EsE-EsA-wRI-wRI-EsA-EsA-EsE-wBLAP8ESwD-B
+Esc--rkAPsU-wBLAP8ESPxLAPxLAP8ESPxLDPxLBP8ASwD-BEsA-wRLFP-6iiHnBPxLDP8ESPxLC
+P8ESwT-BEj8Swz8SwT-AEsA-wRLAP8ESwj8Syj-BEj-BEsI-wBLAPxLBP8ASwD-BEsA-wRLJPxLO
+P-3x-rkAPsA-wBLAP8f_ooh5xj-GEsU-xxLBP8sSwD-CEsA-xhLHP_kS9D-_uQA_9D-_ooh5wT8S
+8D8S9D8Szj-9-f34EvQ--rkAPvQ--qKIefQ-EvQ-Es4--f391P4kY7DZ-h0rU-39-f39-f3J-oN2
+nMYg2Sj9-f39-f39yRDA-sLDx8IQwCDZKMP_-3eowyj9-f39-f39EDvEECDSKCDEKMMdwyjWECjE
+EMAoyxDAKP39-f39-c0QO8QQINEowCDEKMMdwyjWECjFECjMECj9-f39-f3NEDvEECDSKCDEKMMd
+wyjIEMAoECjBEMAowRDBKBAowBAowBAowhDAKMYQKMIQwCjAECjAECjAEMAowBAoEMAo-f39-f31
+EDvEECDSKCDEKMMdwyjIECgQKBAoECjAECgQKMAQKBAowBAowBAowRAowBAoxRAowRAowBAoECjA
+ECgQKMAQKBDAKP39-f399xA7EMI7ECDSKCDEKMMdwxDCKMQQKBAoECgQKMAQKBAowBAoECjAECjA
+ECjBEMIoxRAowRDCKMAQwCjAEMIoECjHEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIo
+EMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIo
+EMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIo
+EMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIoEMIo
+EMIoEMIoEMIoEMM7xBAg0iggxCjDHcMoyBAowRAoECjAECgQKMAQKBAowBAowBAowRAoyBAowRAo
+whAowBAoECjCECj9-f39-fgQOxDCOxAg0SjBIMMowx3DKMgQKMEQKMAQwCjBEMEowBDBKMEQwCjA
+EMEoxhDAKMAQwSgQKMAQKMAQwSgQKP39-f39_BA7xBAg2SjDHcMo-f39-f39-RA7xBAg2Sj9-f39
+-f39yRA7xBAg2Sj9-f39-f39yRA7xBAg2Sj9-f39-f39yRDAO8IQwCDRKMAgxCj9-f39-f39yRDG
+INAoIMAoIMMo-f39-f39-ckQxiDTKCDDKP39-f39-f3JEMYg0iggxCj9-f39-f39yRDGINEoIMUo
+-f39-f39-ckQxiDQKCDGKP39-f39-f3JEMYg0CjCIMMo-f39-f39-ckQxiDZKP39-f39-f3JEMYg
+2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg0SjAIMQo-f39-f39-ckQxiDQ
+KCDAKCDDKP39-f39-f3JEMYg0yggwyj9-f39-f39yRDGINEowCDEKP39-f39-f3JEMYg0yggwyj9
+-f39-f39yRDGINAoIMAoIMMo-f39-f39-ckQxiDRKMAgxCj9-f39-f39yRDGINko-f39-f39-ckQ
+xiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDSKCDEKMMdwCjQHcAoxzvA
+KP3AOyjWP8Ao-f39-f3EEMYg0SjAIMQoxB0o0R0oxjsowDso-Tso1j8o-f39-f3FEMYg0CggKCDE
+KMQdKMIdwCjBHcEowB3BKMAdKMY7KMM7wSjAO8EoO8EowDvBKME7wCjAOyg7wCjOO8EowTvAKMA7
+KME7KDvCKDsowDsoO8EowTvAKMY-KP39-f39xRDGINAoICggxCjEHSjBHSjAHSgdKMIdKMAdKMAd
+KMc7wCjAOyjCOyjAOyg7KMA7KDsowDsoOyjAOyg7wCjGP8IoxDsowDsoOyjAOyg7KME7KMA7KME7
+KMA7KDsowDsoOyjAOyjEPyj9-f39-cYQxiDQKMIgwyjEHSjBHSjAHSgdKMIdKMAdKMAdKMk7KDso
+wjsowDsoOyjAOyg7KMA7KDvCKDso0TsowDsoO8IoOyg7KDsowDsowTsowDsoOyjAOyg7wijFPyj9
+-f39-cUQxiDSKCDEKMQdKMEdKMAdKB0owh0owB0owB0oxjsowDsoOyjCOyjAOyg7KMA7KDsowDso
+OyjCOyjHP8IoxDsowDsoOyjCOyg7KDsowDsowTsowDsoOyjAOyg7KMg-KP39-f39xRDGINIoIMQo
+xR3AKMAdwCjBHcEowB3BKMEdwCjFO8AowTvBKMA7wSg7KMA7KDsowDsowDvBKDso0TsowDsowDvB
+KMA7KDsowjvAKMA7wSg7wSjBO8EoxT8o-f39-f3FEMYg2Sj97TsoOyjNP8Ao-f39-f3EEMYg2Sj9
+6zvAKMA7KP39-f391RDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg0CjCIMMo-cwQwCjBECjH
+ECj9-f39-ekQxiDQKCDGKP3LECjAECjAECj9-f39-fMQxiDQKCDGKOIQwSjAEMAowBAowBAoECgQ
+wCjAEMEowBDAKMoQKMIQwigQKBDAKBDAKMAQwSjBEMEo-f39-f3eEMYg0CjBIMQo4RAowhAowBAo
+ECjAECgQwCjBECjCECjAECjAECjHEMAowRAowRDAKMIQKMAQKMAQKBAowBAo-f39-f3eEMYg0ygg
+wyjSEMIoEMIoxRDAKMAQKMAQKBAowBAoECjCECjCEMIozBAowBAowRAowxAowBAowBAoECjAECj9
+-f39-d4QxiDTKCDDKOQQKBAowBAoECjAECgQKMIQKMIQKMMQKMYQKMAQKMAQKMEQKMMQKMAQKMAQ
+KBAowBAo-f39-f3eEMYg0CjBIMQo4RDBKMEQwCjBEMEoECjDEMEowBDBKMoQwCjCEMAoECjCEMEo
+ECjAECjAEMEo-f39-f3eEMYg2Sj95hAo-f39-f3eEMYg2Sj95BDAKP39-f393xDGINko-f39-f39
+-ckQxiDZKP39-f39-f3JEMYg0SjAIMQo-cIQKMsQwSjFECj9-f39-eoQxiDQKCDGKP3CECjMECjG
+ECj9-f39-eoQxiDQKCDGKOIQwSgQKMAQKBAoEMAoECgQwCjAEMAowBDBKMAQwijKECjAEMEowBDC
+KMAQwCjBEMEowBDAKMAQKBDAKP39-f391BDGINAowSDEKOEQKMIQKMAQKBDAKMEQwCjBECjAECgQ
+KMAQKMAQKMIQKMcQKMAQKMAQKMAQKMEQKMAQKBAowBAoECjAECgQwCj9-f39-dYQxiDQKCDAKCDD
+KNIQwigQwijEECjCECjAECgQKMIQKMIQwigQKMAQKMAQKMwQKMAQKMAQKMAQKMEQwigQKMAQKBDC
+KBAo-f39-f3XEMYg0CggwCggwyjhECjCECjAECgQKMIQKMIQKMIQKMAQKMAQKMIQKMcQKMAQKMAQ
+KMAQKMEQKMIQKMAQKBAowhAo-f39-f3XEMYg0SjAIMQo4hDBKMAQwSgQKMIQKMMQwSgQKMAQKMEQ
+wCjJEMEoECjAECjBEMAowBDBKMAQwSjAEMEoECj9-f39-dcQxiDZKP3mECj9-f39-d4QxiDZKP3k
+EMAo-f39-f3fEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDQKMIgwyjEP8Ao-f39-f39-cEQ
+xiDTKCDDKMU-KP39-f39-f3BEMYg0yggwyjFPyj9-f39-f39wRDGINIoIMQoxj8o-f39-f39-cAQ
+xiDRKCDFKMU-KP39-f39-f3BEMYg0SggxSjFPyj9-f39-f39wRDGINEoIMUoxT8o-f39-f39-cEQ
+xiDZKMQ-wCj9-f39-f39wRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDG
+INEowCDEKP39-f39-f3JEMYg0CggwCggwyj9-f39-f39yRDGINAoIMAoIMMo-f39-f39-ckQxiDR
+KMAgxCj9-f39-f39yRDGINAoIMAoIMMo-f39-f39-ckQxiDQKCDAKCDDKP39-f39-f3JEMYg0SjA
+IMQo-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39
+-f39-f3JEMYg0SjAIMQo-f39-f39-ckQxiDQKCDAKCDDKP39-f39-f3JEMYg0CggwCggwyj9-f39
+-f39yRDGINEowSDDKP39-f39-f3JEMYg0yggwyj9-f39-f39yRDGINMoIMMo-f39-f39-ckQxiDR
+KMAgxCj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko
+-f39-f39-ckQxiDNKCDBKMAgxCjDHcAo0B3AKMY7wyjEOyjsOyjWP8Ao-f39-f3NEMYgzCjAIMAo
+IMAoIMMoxB0o0R0oyDsoxjso7Dso1j8o-f39-f3OEMYgzSggwCggKMAgwyjEHSjCHcAowR3BKMAd
+wSjAHSjIOyjCO8AowDsowDsowDvAKMA7wSjPO8EowTvAKMA7KME7KDvCKDsowDsoO8EowTvAKMY-
+KP39-f39zhDGIM0oIMAowCAoIMMoxB0owR0owB0oHSjCHSjAHSjAHSjIOyjBOyjAOyg7KDsowDso
+wDsoOyjAOyjEP8IoxDsowDsoOyjAOyg7KME7KMA7KME7KMA7KDsowDsoOyjAOyjEPyj9-f39-c8Q
+xiDNKCDAKCDAKCDDKMQdKMEdKMAdKB0owh0owB0owB0oyDsowTsowDsoO8AowTvCKDsowDsozjso
+wDsoO8IoOyg7KDsowDsowTsowDsoOyjAOyg7wijFPyj9-f39-c4QxiDNKCDAKCDAKCDDKMQdKMEd
+KMAdKB0owh0owB0owB0oyDsowTsowDsoOyg7KMA7KMI7KMA7KMQ-wijEOyjAOyg7KMI7KDsoOyjA
+OyjBOyjAOyg7KMA7KDsoyD8o-f39-f3OEMYgzCjBIMAowCDEKMUdwCjAHcAowR3BKMAdwSjBHcAo
+xjsowjvAKMA7KMA7KMA7wSg7KMA7KM47KMA7KMA7wSjAOyg7KMI7wCjAO8EoO8EowTvBKMU-KP39
+-f39zhDGINko-eQ7KDsozT-AKP39-f39zRDGINko-eI7wCjAOyj9-f39-d4QxiDZKP39-f39-f3J
+EMYg2Sj9-f39-f39yRDGIM0oIMIoIMQo4hAo1hDAKMEQKMcQKP39-f39_BDGIMwowCDBKMAgxCji
+ECjVECjAECjAECj9-f39-f3EEMYgzSggwiggxCjhEMIowBDBKMAQwSjJECjCEMIoECgQwCgQwCjA
+EMEowRDBKP39-f397RDGIM0oIMIoIMQo4hAowRAowBAoECjAECjAECjHEMAowRAowRDAKMIQKMAQ
+KMAQKBAowBAo-f39-f3tEMYgzSggwiggxCjSEMIoEMIoxRAowRAowBAoECjAECjMECjAECjBECjD
+ECjAECjAECgQKMAQKP39-f397RDGIM0oIMIoIMQo4hAowRAowBAoECjAECjAECjGECjAECjAECjB
+ECjDECjAECjAECgQKMAQKP39-f397RDGIMwowSDAKMEgwyjjEMAowBDBKMAQwSjKEMAowhDAKBAo
+whDBKBAowBAowBDBKP39-f397RDGINko7hAo5BAo-f39-f3tEMYg2SjsEMAo4xDAKP39-f397hDG
+INko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzSggwSjAIMQo5xAozBAoyxDBKMUQKP39-f399BDG
+IMwowCDAKCDAKCDDKOcQKMwQKMwQKMYQKP39-f399BDGIM0oIMMoIMMo4hDBKBDCKMAQwSgQKBDA
+KBDCKMoQKMAQwSjAEMIowBDAKMEQwSjAEMAowBAoEMAo-f39-f3eEMYgzSggwiggxCjhECjDECjB
+ECjAECgQwCjCECjCECjHECjAECjAECjAECjBECjAECgQKMAQKBAowBAoEMAo-f39-f3gEMYgzSgg
+wSggxSjSEMIoEMIoxRDAKMEQKMEQKMAQKBAowxAozBAowBAowBAowBAowRDCKBAowBAoEMIoECj9
+-f39-eEQxiDNKCDAKCDGKOQQKMAQKMEQKMAQKBAowxAowhAoxxAowBAowBAowBAowRAowhAowBAo
+ECjCECj9-f39-eEQxiDMKMEgKMIgwyjhEMEowhDAKMAQwSgQKMQQwCjJEMEoECjAECjBEMAowBDB
+KMAQwSjAEMEoECj9-f39-eEQxiDZKP3cECj9-f39-egQxiDZKP3aEMAo-f39-f3pEMYg2Sj9-f39
+-f39yRDGINko-f39-f39-ckQxiDNKCDBKMAgxCjjEMAowBAozxDBKMUQKP39-f39-cEQxiDMKMAg
+wCggwCggwyjiECjVECjGECj9-f39-f3BEMYgzSggwyggwyjiECjBEMAowBDBKMsQKMAQwSjAEMIo
+wBDAKMEQwSjAEMAowBAoEMAo-f39-f3pEMYgzSggwSjAIMQo4RDCKMAQKMAQKMAQKMAQKMcQKMAQ
+KMAQKMAQKMEQKMAQKBAowBAoECjAECgQwCj9-f39-esQxiDNKCDDKCDDKNIQwigQwijFECjCECjA
+ECjAECjKECjAECjAECjAECjBEMIoECjAECgQwigQKP39-f397BDGIM0oIMAoIMAoIMMo4hAowhAo
+wBAowBAowBAoxxAowBAowBAowBAowRAowhAowBAoECjCECj9-f39-ewQxiDMKMEgwCjAIMQo4hAo
+wRDBKBAowBAoyRDBKBAowBAowRDAKMAQwSjAEMEowBDBKBAo-f39-f3sEMYg2Sj90RAo-f39-f3z
+EMYg2Sj9zxDAKP39-f399BDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzSggwiggxCjEP8Ao
+-f39-f39-cEQxiDMKMAgwSjAIMQoxT8o-f39-f39-cEQxiDNKCDAKCAoIMQoxT8o-f39-f39-cEQ
+xiDNKCDAKCAoIMQoxj8o-f39-f39-cAQxiDNKCDAKMIgwyjFPyj9-f39-f39wRDGIM0oIMIoIMQo
+xT8o-f39-f39-cEQxiDMKMEgwSggxCjFPyj9-f39-f39wRDGINkoxD-AKP39-f39-f3BEMYg2Sj9
+-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzSggwCjCIMMo-f39-f39-ckQxiDM
+KMAgwCggxij9-f39-f39yRDGIM0oIMAoIMYo-f39-f39-ckQxiDNKCDAKMEgxCj9-f39-f39yRDG
+IM0oIMMoIMMo-f39-f39-ckQxiDNKCDDKCDDKP39-f39-f3JEMYgzCjBICjBIMQo-f39-f39-ckQ
+xiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzSgg
+wSjAIMQo-f39-f39-ckQxiDMKMAgwCggxij9-f39-f39yRDGIM0oIMAoIMYo-f39-f39-ckQxiDN
+KCDAKMEgxCj9-f39-f39yRDGIM0oIMAoIMAoIMMo-f39-f39-ckQxiDNKCDAKCDAKCDDKP39-f39
+-f3JEMYgzCjBIMAowCDEKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39
+-f39-f3JEMYg2Sj9-f39-f39yRDGIM0oIMAowiDDKP39-f39-f3JEMYgzCjAIMMoIMMo-f39-f39
+-ckQxiDNKCDDKCDDKP39-f39-f3JEMYgzSggwiggxCj9-f39-f39yRDGIM0oIMEoIMUowxDCKBDC
+KBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDC
+KBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDC
+KBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDC
+KBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDC
+KBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDCKBDGIM0oIMEoIMUo-f39-f39-ckQxiDMKMEg
+wCggxSj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko
+-f39-f39-ckQxiDNKCDBKMAgxCj9-f39-f39yRDGIMwowCDAKCDAKCDDKP39-f39-f3JEMYgzSgg
+wCggwCggwyj9-f39-f39yRDGIM0oIMEowCDEKP39-f39-f3JEMYgzSggwCggwCggwyj9-f39-f39
+yRDGIM0oIMAoIMAoIMMo-f39-f39-ckQxiDMKMEgwCjAIMQo-f39-f39-ckQxiDZKP39-f39-f3J
+EMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzSggwSjAIMQo-f39-f39
+-ckQxiDMKMAgwCggwCggwyj9-f39-f39yRDGIM0oIMAoIMAoIMMo-f39-f39-ckQxiDNKCDBKMEg
+wyj9-f39-f39yRDGIM0oIMMoIMMo-f39-f39-ckQxiDNKCDDKCDDKP39-f39-f3JEMYgzCjBIMAo
+wCDEKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9
+-f39-f39yRDGIMwowCDBKMAgxCjFHcAozx0owh0o0DvAKPQ-KN8-KP39-f32EMYgyyggwCggKCDA
+KCDDKMQdKNEdKNQ7KMA7KPI-KOE-KP39-f31EMYgziggKCAowCDDKMQdKMEdKMAdKB3BKMEdwSgd
+wigdwCjBHcAowB3BKMU7KMM7wSjAO8EoO8EowDvBKME7wCjAOyg7wCjDO8EowTvAKMA7KME7KMA-
+KMI7wSjAO8AowDsowDsoOyg7wCjAO8EowDvAKMI-KP39-f31EMYgzSggwCjAICggwyjDHcIoHSjA
+HSgdKMAdKB0owx0owh0owB0owB0oHSjAHSjFO8AowDsowjsowDsoOyjAOyg7KMA7KDsowDsoO8Ao
+xTsowDsoOyjAOyg7KME7KMA-KME7KMI7KMA7KDsowDsoO8AowTsowjsowDsowT8o-f39-fUQxiDM
+KCDBKCDAKCDDKMQdKMEdKMAdKB0owB0oHSjDHSjCHSjAHSjAHSgdKMAdKMc7KDsowjsowDsoOyjA
+Oyg7KMA7KDvCKDsoxjsowDsoO8IoOyg7KDsowD8owjvAKMA7KMA7KDsowDsoOyjCOyjCO8IowT8o
+-f39-fUQxiDLKCDCKCDAKCDDKMQdKMEdKMAdKB0owB0oHSjDHSjCHSjAHSjAHSgdKMAdKMQ7KMA7
+KDsowjsowDsoOyjAOyg7KMA7KDsowjsoxjsowDsoOyjCOyg7KDsowD8oxDsoOyjAOyg7KMA7KDso
+wjsowjsoxD8o-f39-fUQxiDLKMIgwCjAIMQoxB0owh3BKB0owB0owB3BKMEdwCgdwSjAHcAowB0o
+wB0oxTvAKME7wSjAO8EoOyjAOyg7KMA7KMA7wSg7KMM-KMA7KMA7KMA7wSjAOyg7KME-KME7wSjB
+O8AowTvBKDsowzvBKMA7wSjBPyj9-f399RDGINko-eo-KN8-KP39-f32EMYg2Sj9-f39-f39yRDG
+INko-f39-f39-ckQxiDZKP39-f39-f3JEMYgzCjAIMIoIMQo3R0o1jvAKOQ-wCj9-f39-eMQxiDL
+KCDAKCDAKMAgxCjdHSjVOyjAOyjjPyj9-f39-eQQxiDOKCDBKCDEKNIdKB3AKMAdwCjAHcIoHSjA
+HSgdKB3AKB3BKMU7KMM7wSjAO8EoO8EowDvBKME7wCjAOyg7wCjFPyj9-f39-eQQxiDNKCDCKCDE
+KNIdwCjBHSjAHSjAHSjBHSjAHSgdwCjBHSjAHSjFO8AowDsowjsowDsoOyjAOyg7KMA7KDsowDso
+O8Aoxj8o-f39-f3lEMYgzCggwyggxCjSHSjCHcIowB0owR0owB0oHSjCHSjAHSjHOyg7KMI7KMA7
+KDsowDsoOyjAOyg7wig7KMg-KP39-f395BDGIMsoIMQoIMQo0h0owh0owx0owR0owB0oHSjCHSjA
+HSjEOyjAOyg7KMI7KMA7KDsowDsoOyjAOyg7KMI7KMg-KP39-f395BDGIMsowiDAKMEgwyjSHSjD
+HcEowR3AKMAdwSgdKMIdKMAdKMU7wCjBO8EowDvBKDsowDsoOyjAOyjAO8EoOyjIPyj9-f39-eQQ
+xiDZKP3gP8Ao-f39-f3jEMYg2Sj9-f39-f39yRDGINko-f39-f39-ckQxiDZKP39-f39-f3JEMYg
+zCjAIMEowCDEKP39-f39-f3JEMYgyyggwCggKCDAKCDDKP39-f39-f3JEMYgziggwiggwyjiO8Eo
+wDvAKMA7KMA7KDsoO8AowDvBKMA7wCjQO8EowDvAKMA7KMA7KDsoO8AowDvBKMA7wCj9-f39-dkQ
+xiDNKCDCKCDEKOE7KMI7KMA7KDsowDsoO8AowTsowjsowDsoxD-CKMQ7KMI7KMA7KDsowDsoO8Ao
+wTsowjsowDso-f39-f3YEMYgzCggwiggxSjiO8AowDsowDsoOyjAOyg7KMI7KMI7wijPO8AowDso
+wDsoOyjAOyg7KMI7KMI7wij9-f39-dgQxiDLKCDCKCDGKOQ7KDsowDsoOyjAOyg7KMI7KMI7KMc-
+wijHOyg7KMA7KDsowDsoOyjCOyjCOyj9-f39-dsQxiDLKMIgKMIgwyjhO8EowTvAKME7wSg7KMM7
+wSjAO8EozjvBKME7wCjBO8EoOyjDO8EowDvBKME-KP39-f391BDGINko-e8-KP39-f391RDGINko
+-f39-f39-ckQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGIMwowCDBKMAgxCj9wjso0v4prf8o
+-f39-f3tEMYgyyggwCggKCDAKCDDKP3COyjRCsAo-f39-f3tEMYgziggwiggwyjiO8EoOyjAOyg7
+KDvAKDsoO8AowDvAKMA7wSjAO8Io0Aoo-f39-f3tEMYgzSggwSjAIMQo4TsowjsowDsoO8AowTvA
+KME7KMA7KDsowDsowDsoxj-CKMYKKP39-f397RDGIMwoIMQoIMMo4TsowjsowDsoOyjCOyjCO8Io
+OyjAOyjAOyjSCij9-f39-e0QxiDLKCDCKCDAKCDDKOE7KMI7KMA7KDsowjsowjsowjsowDsowDso
+xj-CKMYKKP39-f397RDGIMsowiDAKMAgxCjiO8EowDvBKDsowjsowzvBKDsowDsowTvAKM8KwSjB
+Pyj9-f39-egQxiDZKP3bPyj9-f39-ekQxiDZKP39-f39-f3JEMYg2Sj9-f39-f39yRDGINko-f39
+-f39-ckQxiDMKMAgwiggxCjTP8Ao-f39-f398BDGIMsoIMAoIMAowCDEKNQ-KP39-f39-fAQxiDO
+KCAoICggxCjUPyj9-f39-f3wEMYAAAAAAAAAAQ==
+:: src/.info.pod
+--[[pod,created="2025-03-16 10:06:10",modified="2025-12-14 12:10:28"]]
+:: src/test/.info.pod
+--[[pod,created="2025-03-20 08:59:16",modified="2025-12-14 12:10:28"]]
+:: [eoc]
