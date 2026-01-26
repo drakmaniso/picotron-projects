@@ -2,616 +2,463 @@ picotron cartridge // www.picotron.net
 version 2
 
 :: gfx/
-:: gfx/0.gfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIscmV2aXNpb249OTcxOF1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
-AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
-DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
-ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
--wFAJ2AHMDdAJ0AXQDfAF-AbVgALHTlWAPYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOg
-JgBPwBfwFGQAHfIGIq8RMM4gTgduIE4XXiBOJ04gTjc_CAAhF14YAF-OMK7wE1cAHp2uMM4gziA_
-Rz4EAB-OUgAjH-AxAErgCwYEACdgByAHUAeQB5BaAi8nYEAACx43QAARIJYBUSAHAFdQCgAiQFdy
-Ah8QTAAeEjeLAAcEAB83QwAeBo4AAoYACQwAD08AHmBHUAeQJ3AdAS9HUDsAIEAHkDdgBgAPOwAd
-ExBJAQFRASM3EFkBH5CbAR4E2wEgEBdOAT9gN1DdAS4kEBdNAT8QN1CQACRFIAdQR_IBD5IAKAPV
-ARVHCgAOUAAPcwIULzdgcQIjDnEDDzEAn58THQT-GJvw-201AByP8Jv-GE-w-w43AB1v_v8YdfCI
-NgAdX-_A-xiIOQEeDzEArIIHBwRyTzsSTgIAH3I7AAsvMTE8AAFyDi8RDhIOLQQAD0MAHDAMBgQ_
-CBFAWwNREAcQFxBnAwQIABMwGAAQQGIID1kADB4wWQD-CghwBwAIYBcACAdgFwgAB3AIBwAHYAgQ
-F1BLABpTBQUEByD8AwQIAA9BAAwcNkEAIEBHVgQfYDcAHRBgUAkvR0A3AB0h8ASnAA83ABrwBAkJ
-BMAHcBdgJyBnEAcQJyAHEBfkCR-ATQIZAUQAQBAHMBcICp8QBxBnICdgF3BEAB43kGcQAgAfkM8C
-HP8BMA8WQB4wLiA_MC5AHlAOED8AHP8BEA8WUB5ALjA_IC4wHkAOMD8AGXEMDATwAidw6QUVQAIA
-APUFz0AXACdAJ3AnkAfwBX0CDQ-RAx0vMTMyACzxGRcXBPD5AfAFAQcB8AQBFwHwAwEnAQAB8AAB
-NwEHAeABFxEnAeARBxEfABIHHwAg8AMKAE8FAfAMaQwZCmoABEsAEAIFALABAUcB8AAhByHwAhkA
-H1VXAB0TblcAAlIAVREHEfADZgBFBCHwBA0AEAMcAAFzAATDAB9ubAAZkBkZBPD-KgHwBz0AcAYB
-BxEAARArAQAQAAAjAfAD0BFHAScBsAEHAUcRBxHAAVcRQwFgN0HwADEAQgEQBX8AMwQBJ68APwcB
-MH4ADA7dAQ9BAj4KMgD8KR8fBPAeBfBDBfABBfACDzpHDvAGDocO8APH8AHn4PcBcAUwDvcBDjAF
-YPcDDz_QDvcDDpD3BQ2ABAAAGQCgDUAFMPcDHRAFYDMA-xcNsPcBHcDnHeDHHcAFIA6HDh0ABaAF
-QA0ORw4tIAWABXBtUAXwcK0ACx82rAAKEEasAKGGDvADxvAB5uD2rAAR9qwAEfasAIz2Aw6Q9gUN
-gAQAIg72rAAS9qwAEPasAIH2AR3A5h3gxqwAFYasAB9GrAAq-CcH8EMH8AEH8AIPPE87DzzwBg6P
-Ow7wA83wAe3g-QFwBzAO-QEOMAdg-QMPOpAO-QMOkP0FDIAEAAAZAKAMQAcw-QMcEAdgMwD-FQyw
--QEcwO0c4M0cwAcgDo0OHAAHoAdADA5NDiwgB4AHcGxQB68AHkHgB-AOAwAfJLQATSDwAbMAIfAD
-sAAfwK4AIACXA7AVB-ACB6AH8BlPO6wA8w9vOw884K87gAcgziAHYA88zg2Q7g86cP4BcP4BDGAE
-APASMAcQ-gEMAAdQ7hxwDc4NDJDOHKCuHMANbg0coAcgDE4sDRBvUEwwB-A-CgYZcBkZBLAH8AiR
-AAADBg_TAD1f8ABM8ESQABn-AQkHBPAFTzogbhBuEG4gTgARBBrQCQcEoE87IG4QDk8PDj8AH6CC
-BD0cNoYH-wBXAGcwBwA3ADcABzBnAFfKCA0P8gQfDzIA--------------------------------
------------------11QPTEwfX0=
-:: gfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
 :: map/
-:: map/0.map
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
-YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
-MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
-:: map/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
 :: pal/
-:: pal/0.pal
-b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
-MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
-ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
-dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
-dWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5fdG9nZ2xlcz17WzBdPXRy
-dWUsdHJ1ZSxmYWxzZSxmYWxzZX0sbG9ja2VkPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
-LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
-cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
-ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
-bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
-LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxtb2RpZmllZD0iMjAy
-NC0wNS0wMSAxMDoxODo1NiIsb2twYWxfdmVyc2lvbj0iMC4wLjQiLHJldmlzaW9uPTEzNTAsdGVz
-dF9jdWJlX2NvbG9ycz17WzBdPXsxNSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1
-fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwx
-NywxOX0sezI4LDEyLDE2fSx7MTIsMTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9
-LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUs
-MjF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9fSx3aGl0ZXN0X2NvbG9yPTddXWx6NAAwAQAAFQIA
-APUFdXNlcmRhdGEoImkzMiIsNjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUyMzYw
-MDVmNTc0ZjAwYzJjM2M3MDBmZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlhZCQA
-YDgzNzY5YyAAMTc3YTgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQy
-ZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAA
-oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
-MwEAMTAwMgEAoDAwMTYxNjE2Iik=
-:: pal/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTA0LTEwIDA0OjUyOjUxIl1d
 :: sfx/
-:: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDExOjI5OjU2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIscmV2aXNpb249MTA4XV1sejQAcgEAACwYAADwJ3B4dQADKAAABAAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAAXwFwAfD-AQDr-Sm_ARAG
-DyAQASABIAHwAAIQAgwQASAPISABMA-AD2jwwg8oDznwxg-4Cg--D4AP9w8NAfAJARAGDDIA-w0P
-5RABMA_AoAggD6ZQAg_G8AMJ8A8K8HcPKA--QQASAHMAP0DwwzAA------91H-8BAKz1c8gPQAAC
-QA9QH1E-Uh8pPygPKV9ELyYvJ59PLxwfGx8aLxk-GD8ZDxqP--Anjg8_DzsPNg8zDzAPLQ8qDygP
-JQ8jDx8PHA8aDxgPFQ8UDxIPEA8PDw4PDQ8MCgkIBhUEEyIRICEwARIxUE7wcA9AAA8QQH8lfzR-
-JP4Y8Aj_GPwI-hgYAPIINP4ocP4ofP4of3bwKB_fH48ffx9v8CgeAE-_sPBwCgD-------------
-------9mUP6w8P85
-:: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDEyOjIyOjEwIixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIscmV2aXNpb249MTgyXV1sejQALgEAAP4XAAD-MHB4dQADKAAABAAED0AQ
-Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-MeqgEQ
-Bg8gEAEgASAB8AACEAIOEAEPMxAPISABDyMgD4CQDxECIA5QAiAB4A8SCgAFKAASzSgAEN0oAPoZ
-BAjwDwnwDwrQAg9A8AcPHA8r8MQDAA-4Cg--D4AP9w8NAfAJARAGDmsAECBBAP8bMA_AkAEJ8A8I
-EAQPGg-cATAGD_oPQgHwAQrgDzUAD0DwZQ878AcPKvCvTwAUn0Dwww8oD--wxjAA------9vH-8B
-AKzyCsgPQAAPEEB-KH8m--8g8AD9IP8yAP0g8HAYAC-9sAoA--------------------fFD9sPD-
-OQ==
-:: sfx/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Il1d
 :: src/
 :: src/ui/
-:: src/ui/checkbox.lua
---[[pod_format="raw",created="2024-05-03 10:50:08",modified="2024-05-03 11:13:38",revision=37]]
-local head = require "src/ui/head"
+:: drak.lua
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-25 13:07:45",revision=1140]]
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name .. '.lua')
+	local src = fetch(filename) 
+
+	if (type(src) != "string") panic("could not include " .. filename)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("Syntax error:", tostr(err))
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
 
 
-local checkbox = {}
-
-
-function checkbox.create(el)
-	el.width = 9 + (4 * #el.label or "")
-	el.height = 7
-	el.cursor = "pointer"
-	head.head():new(el)
-	if (not el.visible) el.visible = function() return true end
-	function el:draw()
-		if (not self:visible()) return
-		rect(0, 0, 6, 6,  el.ckeck_border or 59)
---		rectfill(1, 1, 5, 5, el.check_bg or 61)
-		if self.get() then
-			rectfill(2, 2, 4, 4, el.check_fg or 17)
+function panic(...)
+	local args = { ... }
+	foreach(
+		args,
+		function(str)
+			send_message(3, { event = "report_error", content = str })
 		end
-		print(el.label, 10, 1, el.fg or 5)
+	)
+	stop()
+end
+
+
+-- Table utility functions --------------------------------------------------------
+
+
+function table_deep_copy(t, already)
+	if (not already) already = {}
+	if type(t) == "table" then
+		if already and already[t] then
+			return already[t]
+		end
+		local new = {}
+		already[t] = new
+		for k, v in pairs(t) do
+			new[k] = table_deep_copy(v, already)
+		end
+		return new
+	else
+		return t
 	end
-	function el:tap()
-		if (not self:visible()) return
-		self.set(not self.get())
+end
+
+
+function tostrrec(t)
+	if type(t) != "table" then
+		return tostr(t)
 	end
+	
+	local s = nil
+	for k, v in pairs(t) do
+		if not(s) then
+			s = "{ "
+		else
+			s ..= ", "
+		end
+		s ..= tostr(k) .. " = " .. tostrrec(v)
+	end
+	s ..= " }"
+
+	return s
+end
+
+
+-- Char utilities -----------------------------------------------------------------
+
+
+function keyp_num()
+	if (keyp("9")) return 9
+	if (keyp("8")) return 8
+	if (keyp("7")) return 7
+	if (keyp("6")) return 6
+	if (keyp("5")) return 5
+	if (keyp("4")) return 4
+	if (keyp("3")) return 3
+	if (keyp("2")) return 2
+	if (keyp("1")) return 1
+	if (keyp("0")) return 0
+	return nil
+end
+
+
+function keyp_hex()
+	if (keyp("f")) return 0xf
+	if (keyp("e")) return 0xe
+	if (keyp("d")) return 0xd
+	if (keyp("c")) return 0xc
+	if (keyp("b")) return 0xb
+	if (keyp("a")) return 0xa
+	if (keyp("9")) return 0x9
+	if (keyp("8")) return 0x8
+	if (keyp("7")) return 0x7
+	if (keyp("6")) return 0x6
+	if (keyp("5")) return 0x5
+	if (keyp("4")) return 0x4
+	if (keyp("3")) return 0x3
+	if (keyp("2")) return 0x2
+	if (keyp("1")) return 0x1
+	if (keyp("0")) return 0x0
+	return nil
+end
+
+function is_num_char(c)
+	if (not c) return
+	return ("0" <= c) and (c <= "9")
+end
+
+
+function is_hexa_char(c)
+	if (not c) return
+	local is_num = ("0" <= c) and (c <= "9")
+	local is_hex_alpha = ("a" <= c) and (c <= "f")
+	return is_num or is_hex_alpha
+end
+
+
+function p8_centered_print(s, x, y, col)
+	local count = #s
+	print(s, x - ((count * 4) \ 2), y, col)
+end
+
+
+
+-- Drawing -------------------------------------------------------------------------
+
+
+-- From Sophie on the discord
+function get_drawspace()
+    return {
+        cam_x=peek4(0x5510),
+        cam_y=peek4(0x5514),
+        clip_l=peek2(0x5528),
+        clip_t=peek2(0x552a),
+        clip_r=peek2(0x552c),
+        clip_b=peek2(0x552e),
+    }
+end
+
+
+function set_drawspace(drawspace)
+    poke4(0x5510,drawspace.cam_x)
+    poke4(0x5514,drawspace.cam_y)
+    poke2(0x5528,drawspace.clip_l)
+    poke2(0x552a,drawspace.clip_t)
+    poke2(0x552c,drawspace.clip_r)
+    poke2(0x552e,drawspace.clip_b)
+end
+
+:: main.lua
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-25 13:07:45",revision=10311]]
+include "drak.lua"
+local app = require "src/app"
+local sfx = require "src/sfx"
+local file = require "src/file"
+local detail = require "src/detail"
+local ed_inst = require "src/ed_inst"
+local ed_trak = require "src/ed_trak"
+local ed_patt = require "src/ed_patt"
+local ed_song = require "src/ed_song"
+local note_grid = require "src/note_grid"
+local routing = require "src/routing"
+local settings = require "src/settings"
+local settings_ui = require "src/settings_ui"
+local ui = require "src/ui"
+
+
+function _init()
+	window {
+		tabbed = true,
+		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
+	}
+
+	wrangle_working_file(
+		file.save,
+		file.load,
+		file.default_filename
+	)
+		
+	on_event("drop_items", file.handle_drop_items)
+
+	menuitem { divider = true, id = "settings_divider", label = "" }
+	menuitem {
+		id = "settings",
+		label = "\^:0000000000000000 Settings",
+		action = function() settings_ui.open() end,
+	}	
+		
+	settings.load()
+	
+	poke(0x4000, get(fetch("/system/fonts/p8.font")))
+	
+	poke4(0x5000, get(fetch("pal/0.pal")))
+end
+
+
+function _update()
+	if keyp(settings.keys.play) then
+		sfx.play_or_pause()
+	end
+	if app.refresh_gui then
+		generate_gui()
+		app.refresh_gui = false
+	end
+	ui.head():update_all()
+end
+
+
+function _draw()
+	if app.view == "inst" then
+		cls(6)
+	else
+		cls(62)
+	end
+	ui.head():draw_all()
+	print(string.format("\014% 3.0f", stat(1) * 100.0) .. "%", 464, 247, 7)
+	print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 460, 253, 7)
+end
+
+
+function generate_gui()
+	local cell_width = 14
+	local cell_height = 29
+	ui.create_head()
+	local top_panel = attach_top_panel(ui.head(), { x = 0, y = 0 })
+	if app.view == "patt" then
+		ed_patt.attach_pattern_selector(top_panel, { x = 118, y = 0})
+		detail.attach_pattern_flow_toggles(top_panel, { x = 322, y = 3 })
+		ed_patt.attach_channel_panel(ui.head(), { x = 0, y = 16})
+		note_grid.attach(ui.head(), { x = app.channels_width, y = 16 })
+	elseif app.view == "trak" then
+		ed_trak.attach(ui.head(), { x = 0, y = 16 })
+	elseif app.view == "inst" then
+		ed_inst.attach(ui.head(), { x = 0, y = 16 })
+	elseif app.view == "song" then
+		ed_song.attach(ui.head(), { x = 0, y = 16 })
+	end
+	if app.detail then
+		detail.attach_panel(ui.head(), { x = 480 - app.detail_width, y = 16})
+	end
+end
+
+
+function attach_top_panel(parent, el)
+	el.width = 480
+	el.height = 16
+	parent:attach(el)
+
+	attach_view_selector(el, { x = 22, y = 0 })
+	attach_play_button(el, { x = 1, y = 0 })
+	attach_detail_button(el, { x = 480 - 16, y = 0})
+	attach_note_attributes(el, { x = 380, y = 0})
+		
+	function el:draw()
+		rectfill(0, 0, el.width, el.height, 2)
+	end	
+
 	return el
 end
 
 
-return checkbox
-:: src/ui/head.lua
---[[pod_format="raw",created="2024-05-03 11:05:48",modified="2024-05-03 11:10:12",revision=16]]
-local head = {}
-
-
-local head_el = false
-
-
-function head.create()
-	head_el = create_gui()
-end
-
-
-function head.head()
-	return head_el
-end
-
-
-return head
-:: src/ui/knob.lua
---[[pod_format="raw",created="2024-04-22 11:46:43",modified="2025-03-17 12:24:14",revision=368]]
-local head = require "src/ui/head"
-local mouse = require "src/ui/mouse"
-
-
-local knob = {}
-
-
-function knob.create(el)
-	if el.small then
-		el.x += 3
-		el.y += 5
-		el.width, el.height = 25, 25
-		el.cx, el.cy, el.r = 12, 12, 7
-		el.sprite = 58
-	else
-		el.width, el.height = 31, 31
-		el.cx, el.cy, el.r = 15, 15, 9
-		el.sprite = 56
-	end
-	el.cursor = get_spr(50)
-	head.head():new(el)
-	
+function attach_play_button(parent, el)
+	el.width = 16
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
 
 	function el:draw()
-		local target = self.min_val and self or self.parent
-		local sprite = (target.min_val < 0)
-			and (self.sprite + 1) or self.sprite
-		spr(sprite, 0, 0)	
-		local range = target.max_val - target.min_val
-		-- primary value
-		local val = self:get()
-		local a = ((val - target.min_val) / range) * 0.75
-		local x = self.cx + flr(0.5 + self.r * cos(0.625 - a))
-		local y = self.cy + flr(0.5 + self.r * sin(0.625 - a))
-		-- secondary value: arc and needle
-		if self:has_secondary() then
-			local val2 = self:get_secondary()
-			local a2 = ((val2 - target.min_val) / range) * 0.75
-			local r = self.small and 6 or 7.75
-			local incr = self.small and 0.01 or 0.01
-			local function line_to(aa, col)
-				local xx = self.cx + flr(0.5 + r * cos(0.625 - aa))
-				local yy = self.cy + flr(0.5 + r * sin(0.625 - aa))
-				line(self.cx, self.cy, xx, yy, 18)
-			end
-			local in_between =
-				(a < a2) 
-					and function(ai) return a < ai and ai < a2 end
-					or function(ai) return a2 < ai and ai < a end
-			line()
-			line_to((a < a2) and a or a2)
-			for ai = 0.0, 0.75, incr do
-				if in_between(ai) then
-					line_to(ai)
-				end
-			end
-			line_to((a < a2) and a2 or a)
-			local x2 = self.cx + flr(0.5 + (self.r - 1) * cos(0.625 - a2))
-			local y2 = self.cy + flr(0.5 + (self.r - 1) * sin(0.625 - a2))
-			line(self.cx, self.cy, x2, y2, self.dragged_secondary and 7 or 29)
-		end	
-		-- primary needle
-		local needle_col = self.dragged and 7 or 15
-		if self.white then
-			needle_col = self.dragged and 5 or 22
-		end
-		line(self.cx, self.cy, x, y, needle_col)
+		spr(stat(464) == 0 and 4 or 5, 0, 0)
 	end
 	
+	function el:click()
+		sfx.play_or_pause()
+	end
+	
+	return el
+end
 
-	function el:click(msg)
-		local target = self.min_val and self or self.parent
-		self.cursor = 0
-		self.dragged = msg.mb == 1
-		self.dragged_secondary = msg.mb == 2
-		mouse.lock(target.sensitivity)
-		return true
+
+function attach_view_selector(parent, el)
+	el.width = 4 * 20
+	el.height = 16
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw()
+		print("inst", 2, 6, app.view == "inst" and 7 or 62)
+		print("clip", 2 + 20, 6, app.view == "trak" and 7 or 62)
+		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
+		print("song", 2 + 60 + 1, 6, app.view == "song" and 7 or 62)
 	end
 	
+	function el:click(msg)
+		if msg.mx < 20 then
+			app.view = "inst"
+		elseif msg.mx < 2 * 20 then
+			app.view = "trak"
+		elseif msg.mx < 3 * 20 then
+			app.view = "patt"
+		else
+			app.view = "song"
+		end
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+
+-- Default note attributes --------------------------------------------------------------
+
+
+function attach_note_attributes(parent, el)
+	el.width = 78
+	el.height = 16
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		local note = app.base_note % 12
+		local octave = app.base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		pal(7, self.dragged_note and 7 or 7)
+		if is_sharp then
+			spr(8 + note, 2, 6)
+		else
+			spr(8 + note, 8, 6)
+		end
+		pal(7, 7)
+		print(
+			"\014" .. string.format("%1x", octave),
+			2 + 12, 7,
+			self.dragged_note and 7 or 22
+		)
+		local x = 20
+		rectfill(x, 8, x + 20, 10, 59)
+		rectfill(
+			x, 8,
+			x + min(20 * (app.base_volume / 64), 20), 10,
+			self.dragged_volume and 7 or 17
+		)
+		if self.dragged_volume then
+			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
+		end
+		print(
+			"\014inst " .. string.format("%d", app.base_instrument),
+			44, 7,
+			self.dragged_instrument and 7 or 14 -- col 26
+		)
+	end	
+	
+	function el:click(msg)
+		-- TODO: replace with pull-down menus
+		if msg.mx < 18 then
+			self.dragged_note = true
+		elseif msg.mx < 42 then
+			self.dragged_volume = true
+		else
+			self.dragged_instrument = true
+		end
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		if self.dragged_note then
+			local delta = ui.mouselock(0.125)
+			app.base_note = mid(0, app.base_note - (12 * delta), 120)
+		elseif self.dragged_volume then
+			local delta = ui.mouselock(0.125)
+			app.base_volume = mid(0, app.base_volume - delta, 0x40) -- TODO: handle vol > 64
+		elseif self.dragged_instrument then
+			local delta = ui.mouselock(0.125)
+			app.base_instrument = mid(0, app.base_instrument - delta, 0xfe)
+			-- TODO: temporary, remove
+			app.instrument = app.base_instrument
+			app.node = 0
+			routing.clear_placement_buttons()
+		end
+	end
+	
+	function el:release(msg)
+		ui.mouseunlock()
+		self.cursor = get_spr(50)
+		self.dragged_note = nil
+		self.dragged_volume = nil
+		if self.dragged_instrument and app.view == "inst" then
+			app.refresh_gui = true
+		end
+		self.dragged_instrument = nil
+	end
 
 	function el:doubleclick(msg)
-		local target = self.min_val and self or self.parent
-		if msg.mb == 1 then
-			self:set(target.init_val)
-		elseif msg.mb == 2 then
-			self:set_secondary(target.init_val)
-		end
-		return true
-	end
-	
-
-	function el:drag(msg)
-		local target = self.min_val and self or self.parent
-		local delta = mouse.lock(target.sensitivity)
-
-		local old = self:get()
-		local new = old - delta
-		local old2, new2 = 0, 0
-		if self:has_secondary() and msg.mb == 2 then
-			old2 = self:get_secondary()
-			new2 = old2 - delta
-		end
-
-		if delta < 0 then
-			self.down_barrier = nil
-			if self.up_barrier then
-				self.up_barrier += delta
-				if self.up_barrier <= 0 then
-					self.up_barrier = nil
-				else
-					return
-				end
-			end
-		elseif delta > 0 then
-			self.up_barrier = nil
-			if self.down_barrier then
-				self.down_barrier -= delta
-				if self.down_barrier <= 0 then
-					self.down_barrier = nil
-				else
-					return
-				end
-			end
-		end
-		if old > 0 and new <= 0 then
-			new = 0
-			self.down_barrier = 24
-		end
-		if old < 0 and new >= 0 then
-			new = 0
-			self.up_barrier = 24
-		end
-		if old2 > 0 and new2 <= 0 then
-			new2 = 0
-			self.down_barrier = 24
-		end
-		if old2 < 0 and new2 >= 0 then
-			new2 = 0
-			self.up_barrier = 24
-		end
-		
-		if msg.mb == 1 then
-			self:set(new)
-		elseif msg.mb == 2 then
-			self:set_secondary(new2)
+		if msg.mx < 18 then
+			app.base_note = 48
+		elseif msg.mx < 42 then
+			app.base_volume = 0x32
+		else
+			app.base_instrument = 01
 		end
 	end
 	
-
-	function el:release(msg)
-		self.cursor = get_spr(50)
-		self.dragged = false
-		self.dragged_secondary = false
-		mouse.unlock()
-		self.up_barrier = nil
-		self.down_barrier = nil
-	end
-	
-
 	return el
 end
 
 
-return knob
-:: src/ui/label.lua
---[[pod_format="raw",created="2024-05-03 10:58:09",modified="2024-05-03 11:11:44",revision=11]]
-local head = require "src/ui/head"
-
-local label = {}
-
-
-function label.create(el)
-	el.width = 4 * #el.label + 4
-	el.height = 5
-	head.head():new(el)
-	function el:draw()
-		print(el.label, 0, 0, el.fg or 5)
-	end
-	return el
-end
-
-
-return label
-:: src/ui/menu.lua
---[[pod_format="raw",created="2024-04-30 07:13:12",modified="2024-05-03 11:12:34",revision=113]]
-local head = require "src/ui/head"
-
-
-local menu = {}
-
-
-local popup = false
-
-
-function menu.create_button(el)
-	local label = el.get_label()
-	el.width = (4 * #label) + 12
-	el.height = 9
+function attach_detail_button(parent, el)
+	el.width = 16
+	el.height = 16
 	el.cursor = "pointer"
-	head.head():new(el)
-	el.opened = false
+	parent:attach(el)
+	
 	function el:draw()
-		if self.bg then
-			rectfill(0, 0, self.width - 1, self.height - 1, self.bg)
-		end
-		local label = self:get_label()
-		print(label, 2, 2, self.fg or 7)
-		pal(7, self.fg or 7)
-		spr(self.opened and 38 or 37, self.width - 7, 2)
-		pal(7, 7)
-	end
+		pal(7, app.detail and 7 or 62)
+		spr(45, 1, 3)
+		pal(7, 7)		
+	end	
+	
 	function el:tap()
-		self.opened = true
-		menu.open {
-			x = self.sx, y = self.sy + 9,
-			highlight = self.highlight,
-			onclose = function()
-				self.opened = false
-				local label = el.get_label()
-				self.width = (4 * #label) + 12
-			end,
-			items = self.items,
-		}
+		app.detail = not app.detail
+		app.refresh_gui = true
 	end
+	
 	return el
 end
 
+:: manual.txt
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-25 13:07:45",revision=38]]
 
-function menu.open(menu)
-	for i = 1, #menu.items do
-		if menu.items[i].get_label then
-			menu.items[i].label = menu.items[i].get_label()
-		end
-		if (not menu.items[i].label) menu.items[i].label = "---"
-	end
-	local entry_height = 9
-	-- Calculate popup size
-	if not menu.width then
-		menu.width = 0
-		for i = 1, #menu.items do
-			menu.width = max(menu.width, #menu.items[i].label or 0)
-		end
-		menu.width = 8 + (4 * menu.width)
-	end
-	if not menu.height then
-		menu.height = max(12, 4 + (#menu.items * entry_height))
-	end
-	if menu.y + menu.height > head.head().height then
-		menu.y = menu.y - 7 - menu.height
-	end
-
-	-- Modal layer	
-	popup = head.head():attach {
-		x = 0, y = 0,
-		width = head.head().width, height = head.head().height,
-		draw = function(self)
-			local ox, oy = menu.x, menu.y
-			rectfill(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.bg or 7)
-			rect(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.border or 5)
-			for i = 1, #menu.items do
-				local y = oy + 2 + (entry_height * (i - 1))
-				if self.highlighted == i then
-					rectfill(
-						ox + 1, y,
-						ox + menu.width - 2, y + entry_height - 1,
-						menu.highlight or 15
-					) 
-				end
-				print(
-					menu.items[i].label,
-					ox + 4, y + 2,
-					menu.items[i].fg or menu.fg or 62
-				)
-			end
-		end,
-		hover = function(self)
-			local ox, oy = menu.x, menu.y
-			local mx, my, mb = mouse()
-			if
-				ox <= mx and mx < ox + menu.width
-				and oy <= my and my < oy + menu.height
-			then
-				self.cursor = "pointer"
-				self.highlighted = 1 + ((my - oy - 4) \ entry_height)
-			else
-				self.cursor = "pointer"
-				self.highlighted = false
-			end
-		end,
-		click = function(self)
-			if popup then
-				popup:detach()
-			end
-			popup = false
-			if self.highlighted and menu.items[self.highlighted]
-				and menu.items[self.highlighted].action
-			then
-				menu.items[self.highlighted].action()
-			end
-			if (menu.onclose) menu.onclose()
-		end
-	}
-end
-
-
-function menu.has_menu()
-	return popup != false
-end
-
-
-return menu
-:: src/ui/modal.lua
---[[pod_format="raw",created="2024-04-30 07:41:00",modified="2024-05-03 11:13:08",revision=77]]
-local head = require "src/ui/head"
-
-
-local modal = {}
-
-
-local layer = false
-
-
-function modal.open(el)
-	layer = head.head():attach {
-		x = 0, y = 0,
-		width = head.head().width, height = head.head().height,
-		draw = function(self)
-			poke(0x550b, 0x3f)
-			---fillp(0b0101101001011010)
-			---fillp(0b0001001001001000)
-			---fillp(0b1110110110110111)
-			fillp(0b0011011011001001)
-			rectfill(0, 0, self.width - 1, self.height - 1, 61)
-			fillp()
-			poke(0x550b, 0x00)
-		end,
-		click = function(self)
-			modal.close()
-		end
-	}
-	layer:attach(el)
-	return el
-end
-
-
-function modal.has_modal()
-	return layer
-end
-
-
-function modal.close()
-	if layer then
-		layer:detach()
-	end
-	layer = false
-end
-
-
-return modal
-:: src/ui/mouse.lua
---[[pod_format="raw",created="2024-04-25 12:13:32",modified="2024-05-03 11:13:38",revision=25]]
-local settings = require "src/settings"
-
-
-local mouse = {}
-
-
-function mouse.lock(sensitivity, precise)
-	local s = settings.user.drag_sensitivity
-	if precise or key("shift") then
-		s = settings.user.drag_sensitivity_precise
-	end
-	s *= sensitivity or 1
-	local dx, dy = mouselock(0x4|0x8, s, 0.0)
-	if settings.user.drag_horizontal then
-		return -dx
-	end
-	return dy
-end
-
-
-function mouse.unlock()
-	mouselock(false)
-end
-
-
-return mouse
-:: src/ui/num_field.lua
---[[pod_format="raw",created="2024-04-30 06:55:37",modified="2024-05-03 11:13:38",revision=30]]
-local head = require "src/ui/head"
-
-
-local num_field = {}
-
-
-function num_field.create(el)
-	el.width = el.width or 62
-	el.height = 12
-	head.head():new(el)
-	if (not el.visible) el.visible = function() return true end
-	el.dragged = nil
-	function el:draw()
-		local label_fg = self.label_fg or 5
-		local field_fg = self.field_fg or 22
-		local dragged_fg = self.dragged_fg or 7
-		local field_bg = self.field_bg or 59
-		local dragged_bg = self.dragged_bg or 59
-		if (not self.visible()) return
-		local val = self.get()
-		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and dragged_bg or field_bg)
-		print(el.label, 3, 1, label_fg)
-		if val then
-			print(string.format("%3d", val), self.width - 22, 1, self.dragged and dragged_fg or field_fg)
-		else
-			print("-", self.width - 4, 1, self.dragged and dragged_fg or field_fg)
-		end
-	end
-	function el:hover(msg)
-		if msg.mx >= self.width - 21 then
-			--- self.cursor = "pointer"
-			self.cursor = get_spr(50)
-		else
-			self.cursor = 1
-		end
-	end
-	function el:click(msg)
-		if (not self.visible()) return
-		if (self.onclick) self.onclick(msg)
-		if msg.mx >= self.width - 21 then
-			self.dragged = true
-			self.cursor = 0 -- TODO: capture mouse
-		end
-	end
-	function el:drag(msg)
-		if (not el.visible()) return
-		if self.dragged then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
-			new = mid(0, self.get() - delta, 0xff)
-			self.set(new)
-		end
-	end
-	function el:release(msg)
-		self.dragged = nil
-		mouselock(false)
-		if (self.onrelease) self.onrelease(msg)
-	end
-	return el
-end
-
-
-return num_field
-:: src/ui/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTIyIDExOjQ2OjM0Iixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSJdXQ==
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2025-03-17 17:38:31",revision=7078]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-25 13:07:45",revision=7116]]
 local app = {}
 
 -- Global state
@@ -630,7 +477,7 @@ app.base_instrument = 00
 
 app.refresh_gui = true
 
-app.view = "inst" -- "patt" or "trak" or "inst" or "song"
+app.view = "patt" -- "patt" or "trak" or "inst" or "song"
 app.detail = false
 app.env_advanced = { [0] = false, false, false, false }
 
@@ -654,7 +501,7 @@ app.mod_height = app.synth_height
 
 return app
 :: src/detail.lua
---[[pod_format="raw",created="2024-04-12 07:24:11",modified="2024-04-30 07:08:16",revision=1128]]
+--[[pod_format="raw",created="2024-04-12 07:24:11",modified="2026-01-25 13:07:45",revision=1166]]
 local app = require "src/app"
 local note_grid = require "src/note_grid"
 local sfx = require "src/sfx"
@@ -884,7 +731,7 @@ end
 
 return detail
 :: src/ed_inst.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2025-03-17 17:05:34",revision=4768]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-25 13:07:45",revision=4806]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local settings = require "src/settings"
@@ -1145,7 +992,7 @@ end
 
 return ed_inst
 :: src/ed_patt.lua
---[[pod_format="raw",created="2024-04-10 10:06:40",modified="2024-04-24 07:25:15",revision=2708]]
+--[[pod_format="raw",created="2024-04-10 10:06:40",modified="2026-01-25 13:07:45",revision=2746]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local ui = require "src/ui"
@@ -1280,7 +1127,7 @@ end
 
 return ed_patt
 :: src/ed_song.lua
---[[pod_format="raw",created="2024-04-17 10:12:11",modified="2024-04-17 10:30:04",revision=11]]
+--[[pod_format="raw",created="2024-04-17 10:12:11",modified="2026-01-25 13:07:45",revision=49]]
 local app = require "src/app"
 
 
@@ -1304,7 +1151,7 @@ end
 
 return ed_song
 :: src/ed_trak.lua
---[[pod_format="raw",created="2024-04-10 15:48:56",modified="2024-04-17 10:12:07",revision=92]]
+--[[pod_format="raw",created="2024-04-10 15:48:56",modified="2026-01-25 13:07:45",revision=130]]
 local app = require "src/app"
 
 
@@ -1328,7 +1175,7 @@ end
 
 return ed_trak
 :: src/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2024-05-03 10:56:48",revision=2668]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-25 13:07:45",revision=2706]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local ui = require "src/ui"
@@ -1640,7 +1487,7 @@ end
 
 return envelopes
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2025-03-17 12:50:33",revision=1457]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-25 13:07:45",revision=1495]]
 local app = require "src/app"
 
 
@@ -1880,7 +1727,7 @@ end
 
 return file
 :: src/note_grid.lua
---[[pod_format="raw",created="2024-04-11 06:36:17",modified="2024-04-24 07:25:15",revision=1808]]
+--[[pod_format="raw",created="2024-04-11 06:36:17",modified="2026-01-25 13:07:45",revision=1846]]
 local app = require "src/app"
 local settings = require "src/settings"
 local sfx = require "src/sfx"
@@ -2419,7 +2266,7 @@ end
 
 return note_grid
 :: src/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2024-05-03 10:48:34",revision=2598]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-25 13:07:45",revision=2636]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 
@@ -2909,7 +2756,7 @@ end
 
 return routing
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2024-04-30 07:57:00",revision=2363]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-25 13:07:45",revision=2401]]
 local settings = {}
 
 local settings_folder = "/appdata/visitrack/"
@@ -3024,7 +2871,7 @@ end
 
 return settings
 :: src/settings_ui.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2024-05-03 11:02:44",revision=35]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-25 13:07:45",revision=73]]
 local settings = require "src/settings"
 local ui = require "src/ui"
 
@@ -3186,38 +3033,52 @@ end
 
 return settings_ui
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2025-03-17 17:38:31",revision=6819]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-25 13:07:45",revision=7628]]
 local sfx = {}
 
 
-local sfx_index = 0x030000
-local sfx_instr = 0x040000
-local sfx_track = 0x050000
-local sfx_wave = 0xf00000 -- maybe not? (search discord)
+local num_instrument
+local num_tracks
+local num_patterns
+local header_flags
+local base_pat -- default 0x030100
+local base_syn -- default 0x040000
+local base_trk -- default 0x050000
 
 
-local num_instrument = 0
-local num_tracks = 0
-local num_patterns = 0
-local header_flags = 0
-local insts_addr = 0
-local tracks_addr = 0
-local patterns_addr = 0
+function sfx.read_header(addr)
+	local addr = addr or 0x030000
+	num_instruments = peek2(addr)
+	num_tracks = peek2(addr + 2)
+	num_patterns = peek2(addr + 4)
+	header_flags = peek2(addr + 6)
+	-- unused: peek2(addr + 8)
+	base_syn = addr + peek4(addr + 0x10)
+	base_trk = addr + peek4(addr + 0x14)
+	base_pat = addr + peek4(addr + 0x18) + 0x100
+end
 
 
-function sfx.read_header()
-	num_instruments = peek2(sfx_index)
-	num_tracks = peek2(sfx_index + 2)
-	num_patterns = peek2(sfx_index + 4)
-	header_flags = peek2(sfx_index + 6)
-	-- unused: peek2(sfx_index + 8)
-	insts_addr = peek4(sfx_index + 10)
-	tracks_addr = peek4(sfx_index + 14)
-	patterns_addr = peek4(sfx_index + 18)
-	?header_flags
-	?string.format("%x", insts_addr)
-	?string.format("%x", tracks_addr)
-	?string.format("%x", patterns_addr)
+sfx.read_header()
+
+
+function sfx.num_instruments()
+	return num_instruments
+end
+
+
+function sfx.instruments_address()
+	return base_syn
+end
+
+
+function sfx.tracks_address()
+	return base_trk
+end
+
+
+function sfx.patterns_address()
+	return base_pat
 end
 
 
@@ -3232,52 +3093,52 @@ end
 
 
 function sfx.channel_is_muted(pattern, channel)
-	local channel_mutes = peek(0x30100 + (pattern * 20) + 9)
+	local channel_mutes = peek(base_pat + (pattern * 20) + 9)
 	local muted = (channel_mutes & (1 << channel)) == 0
 	return muted
 end
 
 
 function sfx.mute_channel(pattern, channel, mute)
-	local channel_mutes = peek(0x30100 + (pattern * 20) + 9)
+	local channel_mutes = peek(base_pat + (pattern * 20) + 9)
 	channel_mutes &= ~(1 << channel)
 	channel_mutes |= (mute and 0 or 1) << channel
-	poke(0x30100 + (pattern * 20) + 9, channel_mutes)
+	poke(base_pat + (pattern * 20) + 9, channel_mutes)
 end
 
 
 function sfx.pattern_track(pattern, channel)
-	return peek(0x30100 + pattern * 20 + channel)
+	return peek(base_pat + pattern * 20 + channel)
 end
 
 
 function sfx.track_speed(track)
-	return peek(0x50000 + (track * 328) + 2)
+	return peek(base_trk + (track * 328) + 2)
 end
 
 
 function sfx.set_track_speed(track, val)
-	return poke(0x50000 + (track * 328) + 2, val)
+	return poke(base_trk + (track * 328) + 2, val)
 end
 
 
 function sfx.track_loop0(track)
-	return peek(0x50000 + (track * 328) + 3)
+	return peek(base_trk + (track * 328) + 3)
 end
 
 
 function sfx.set_track_loop0(track, val)
-	return poke(0x50000 + (track * 328) + 3, val)
+	return poke(base_trk + (track * 328) + 3, val)
 end
 
 
 function sfx.track_loop1(track)
-	return peek(0x50000 + (track * 328) + 4)
+	return peek(base_trk + (track * 328) + 4)
 end
 
 
 function sfx.set_track_loop1(track, val)
-	return poke(0x50000 + (track * 328) + 4, val)
+	return poke(base_trk + (track * 328) + 4, val)
 end
 
 
@@ -3285,74 +3146,74 @@ end
 
 
 function sfx.track_pitch(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step)
+	return peek(base_trk + 8 + (track * 328) + step)
 end
 
 
 function sfx.set_track_pitch(track, step, v)
-	return poke(0x50000 + 8 + (track * 328) + step, v)
+	return poke(base_trk + 8 + (track * 328) + step, v)
 end
 
 
 function sfx.track_instrument(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + 64)
+	return peek(base_trk + 8 + (track * 328) + step + 64)
 end
 
 
 function sfx.set_track_instrument(track, step, v)
-	return poke(0x50000 + 8 + (track * 328) + step + 64, v)
+	return poke(base_trk + 8 + (track * 328) + step + 64, v)
 end
 
 
 function sfx.track_volume(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + (2 * 64))
+	return peek(base_trk + 8 + (track * 328) + step + (2 * 64))
 end
 
 
 function sfx.set_track_volume(track, step, v)
-	return poke(0x50000 + 8 + (track * 328) + step + (2 * 64), v)
+	return poke(base_trk + 8 + (track * 328) + step + (2 * 64), v)
 end
 
 
 function sfx.track_fx(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + (3 * 64))
+	return peek(base_trk + 8 + (track * 328) + step + (3 * 64))
 end
 
 
 function sfx.set_track_fx(track, step, v)
-	return poke(0x50000 + 8 + (track * 328) + step + (3 * 64), v)
+	return poke(base_trk + 8 + (track * 328) + step + (3 * 64), v)
 end
 
 
 function sfx.track_fx_params(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
+	return peek(base_trk + 8 + (track * 328) + step + (4 * 64))
 end
 
 
 function sfx.track_fx_param0(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64)) >> 4
+	return peek(base_trk + 8 + (track * 328) + step + (4 * 64)) >> 4
 end
 
 
 function sfx.track_fx_param1(track, step)
-	return peek(0x50000 + 8 + (track * 328) + step + (4 * 64)) & 0xf
+	return peek(base_trk + 8 + (track * 328) + step + (4 * 64)) & 0xf
 end
 
 
 function sfx.set_track_fx_params(track, step, v)
-	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), v)
+	return poke(base_trk + 8 + (track * 328) + step + (4 * 64), v)
 end
 
 
 function sfx.set_track_fx_param0(track, step, v)
-	local previous = peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
-	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), (previous & 0x0f) | (v << 4))
+	local previous = peek(base_trk + 8 + (track * 328) + step + (4 * 64))
+	return poke(base_trk + 8 + (track * 328) + step + (4 * 64), (previous & 0x0f) | (v << 4))
 end
 
 
 function sfx.set_track_fx_param1(track, step, v)
-	local previous = peek(0x50000 + 8 + (track * 328) + step + (4 * 64))
-	return poke(0x50000 + 8 + (track * 328) + step + (4 * 64), (previous & 0xf0) | (v & 0x0f))
+	local previous = peek(base_trk + 8 + (track * 328) + step + (4 * 64))
+	return poke(base_trk + 8 + (track * 328) + step + (4 * 64), (previous & 0xf0) | (v & 0x0f))
 end
 
 
@@ -3360,46 +3221,46 @@ end
 
 
 function sfx.pattern_loop_start(pattern)
-	return (peek(0x30100 + (pattern * 20) + 8) & 0x01) != 0
+	return (peek(base_pat + (pattern * 20) + 8) & 0x01) != 0
 end
 
 
 function sfx.set_pattern_loop_start(pattern, bool)
-	local old = peek(0x30100 + (pattern * 20) + 8)
+	local old = peek(base_pat + (pattern * 20) + 8)
 	if bool then
-		poke(0x30100 + (pattern * 20) + 8, old | 0x01)
+		poke(base_pat + (pattern * 20) + 8, old | 0x01)
 	else
-		poke(0x30100 + (pattern * 20) + 8, old & (~ 0x01))
+		poke(base_pat + (pattern * 20) + 8, old & (~ 0x01))
 	end
 end
 
 
 function sfx.pattern_loop_end(pattern)
-	return (peek(0x30100 + (pattern * 20) + 8) & 0x02) != 0
+	return (peek(base_pat + (pattern * 20) + 8) & 0x02) != 0
 end
 
 
 function sfx.set_pattern_loop_end(pattern, bool)
-	local old = peek(0x30100 + (pattern * 20) + 8)
+	local old = peek(base_pat + (pattern * 20) + 8)
 	if bool then
-		poke(0x30100 + (pattern * 20) + 8, old | 0x02)
+		poke(base_pat + (pattern * 20) + 8, old | 0x02)
 	else
-		poke(0x30100 + (pattern * 20) + 8, old & (~ 0x02))
+		poke(base_pat + (pattern * 20) + 8, old & (~ 0x02))
 	end
 end
 
 
 function sfx.pattern_loop_stop(pattern)
-	return (peek(0x30100 + (pattern * 20) + 8) & 0x04) != 0
+	return (peek(base_pat + (pattern * 20) + 8) & 0x04) != 0
 end
 
 
 function sfx.set_pattern_loop_stop(pattern, bool)
-	local old = peek(0x30100 + (pattern * 20) + 8)
+	local old = peek(base_pat + (pattern * 20) + 8)
 	if bool then
-		poke(0x30100 + (pattern * 20) + 8, old | 0x04)
+		poke(base_pat + (pattern * 20) + 8, old | 0x04)
 	else
-		poke(0x30100 + (pattern * 20) + 8, old & (~ 0x04))
+		poke(base_pat + (pattern * 20) + 8, old & (~ 0x04))
 	end
 end
 
@@ -3413,14 +3274,14 @@ end
 
 
 function sfx.instrument_flag(instrument, flag)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local addr = inst_addr + 0x1df
 	return (peek(addr) & flag) > 0
 end
 
 
 function sfx.set_instrument_flag(instrument, flag, value)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local addr = inst_addr + 0x1df
 	local other_flags = peek(addr) & (~ flag)
 	if value then
@@ -3432,7 +3293,7 @@ end
 
 
 function sfx.toggle_instrument_flag(instrument, flag)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local addr = inst_addr + 0x1df
 	local previous = peek(addr)
 	poke(addr, previous ^^ flag)
@@ -3588,7 +3449,7 @@ end
 
 function sfx.delete_node(instrument, node_id)
 	local deleted_node_parent = sfx.node_parent(instrument, node_id)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	-- move everything up
 	for j = node_id, 7 do
 		memcpy(inst_addr + j * 0x20, inst_addr + (j + 1) * 0x20, 0x20)
@@ -3607,7 +3468,7 @@ end
 
 
 function sfx.insert_node(instrument, node_id, parent_id, child_id)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node_id * 0x20
 	-- move everything down
 	for j = 7, node_id + 1, -1 do
@@ -3634,65 +3495,65 @@ end
 
 
 function sfx.node_parent(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr + 0) & 0x7	
 end
 
 function sfx._set_node_parent(instrument, node, parent)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local previous = peek(node_addr + 0)
 	poke(node_addr + 0, (previous & ~0x7) | (parent & 0x7))
 end
 
 function sfx.node_op(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr) >> 4
 end
 
 function sfx.set_node_op(instrument, node, op)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local previous = peek(node_addr)
 	poke(node_addr, (previous & 0x0f) | (op << 4))
 end
 
 function sfx.node_type(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr + 1) & 0xf
 end
 
 function sfx.set_node_type(instrument, node, type)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local previous = peek(node_addr + 1)
 	poke(node_addr + 1, (previous & 0xf0) | (type & 0x0f))
 end
 
 function sfx.node_osc_wavetable(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr + 1) >> 4
 end
 
 function sfx.set_node_osc_wavetable(instrument, node, wt)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local previous = peek(node_addr + 1)
 	poke(node_addr + 1, (previous & 0x0f) | (wt << 4))
 end
 
 function sfx.node_flags(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	return peek(node_addr + 2)
 end
 
 function sfx.set_node_flags(instrument, node, flags)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	poke(node_addr + 2, flags)
 end
@@ -3701,38 +3562,38 @@ end
 
 -- 0 <= p <= 7
 function sfx.node_param(instrument, node, p)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	local flags,val1,val0,env = peek(node_addr + 4 + (4 * p), 4)
 	return flags, val1, val0, env
 end
 
 function sfx.set_node_param_flags(instrument, node, p, flags)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	poke(node_addr + 4 + (4 * p), flags)
 end
 
 function sfx.set_node_param_val1(instrument, node, p, val1)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	poke(node_addr + 4 + (4 * p) + 1, val1)
 end
 
 function sfx.set_node_param_val0(instrument, node, p, val0)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	poke(node_addr + 4 + (4 * p) + 2, val0)
 end
 
 function sfx.set_node_param_env(instrument, node, p, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local node_addr = inst_addr + node * 0x20
 	poke(node_addr + 4 + (4 * p) + 3, env)
 end
 
 function sfx.node_wavetable_info(instrument, node)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local wt_4defs_addr = inst_addr + 0x1e0 -- start of the 4 wt definitions
 	local node_addr = inst_addr + node * 0x20
 	local wt_index = (peek(node_addr+1)>>4)
@@ -3748,106 +3609,759 @@ end
 
 
 function sfx.env_type(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr)
 end
 
 
 function sfx.set_env_type(instrument, env, type)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr, type)
 end
 
 
 function sfx.env_flags(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 1)
 end
 
 
 function sfx.set_env_flags(instrument, env, flags)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 1, flags)
 end
 
 
 function sfx.env_speed(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 2)
 end
 
 
 function sfx.set_env_speed(instrument, env, val)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 2, val)
 end
 
 
 function sfx.env_loop0(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 3)
 end
 
 
 function sfx.set_env_loop0(instrument, env, val)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 3, val)
 end
 
 
 function sfx.env_loop1(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 4)
 end
 
 
 function sfx.set_env_loop1(instrument, env, val)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 4, val)
 end
 
 
 function sfx.env_start(instrument, env)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 5)
 end
 
 
 function sfx.set_env_start(instrument, env, val)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 5, val)
 end
 
 
 function sfx.env_param(instrument, env, param)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return peek(env_addr + 8 + param)
 end
 
 
 function sfx.set_env_param(instrument, env, param, val)
-	local inst_addr = 0x40000 + instrument * 0x200
+	local inst_addr = base_syn + instrument * 0x200
 	local env_addr = inst_addr + 256 + env * 24
 	return poke(env_addr + 8 + param, val)
 end
 
 
 return sfx
+:: src/syn_menus.lua
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-25 13:07:45",revision=1689]]
+local app = require "src/app"
+local envelopes = require "src/envelopes"
+local sfx = require "src/sfx"
+local ui = require "src/ui"
+
+
+local syn_menus = {}
+
+
+-- Relationship menu -----------------------------------------------------
+
+
+function syn_menus.open_relationship(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	
+	if node_type == 0x2 and self.parent.param == 2 then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 55,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						self.parent.min_val, self.parent.max_val = -128, 127
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						self.parent.min_val, self.parent.max_val = 0, 255
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+				{ divider = true },
+				{
+					label = 
+						(flags & 0x20 > 0)
+							and "\|f\^:7f415d5d5d417f00\|h quantized"
+							or "\|f\^:7f41414141417f00\|h quantized",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 0x02 and self.parent.param == 0)
+		or (node_type == 10 and self.parent.param == 3)
+		or (node_type == 8 and self.parent.param == 2)
+	then
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 52,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x02)
+						and "\|f\^:1c225d5d5d221c00\|h multiply"
+						or "\|f\^:1c22414141221c00\|h multiply",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: mul parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 end,
+				},
+			}
+		}
+	elseif
+		(node_type == 8 and self.parent.param ~= 2)
+		or (node_type == 9)
+		or (node_type == 10 and self.parent.param ~= 3)
+	then
+		-- no menu
+	else
+		ui.open_menu {
+			x = self.sx - 10, y = self.sy + 7,
+			width = 40,
+			items = {
+				{
+					label = (flags & 0x03 == 0x00)
+						and "\|f\^:1c225d5d5d221c00\|h set"
+						or "\|f\^:1c22414141221c00\|h set",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: replace parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 end,
+				},
+				{
+					label = (flags & 0x03 == 0x01)
+						and "\|f\^:1c225d5d5d221c00\|h add"
+						or "\|f\^:1c22414141221c00\|h add",
+					action = function()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						-- set bit: add parent
+						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 end,
+				},
+			}
+		}
+	end
+end
+
+
+-- Multiplier menu -------------------------------------------------------------
+
+
+function syn_menus.open_multiplier(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	
+	local mult_options = { 
+		[0] = 
+		{ label = "none", val = 0x00 | 0x00 },
+		{ label = "*4", val = 0x00 | 0x40 },
+		{ label = "/4", val = 0x20 | 0x40 },
+		{ label = "*16", val = 0x00 | 0x80 },
+		{ label = "/16", val = 0x20 | 0x80 },
+		{ label = "*64", val = 0x00 | 0xc0 },
+		{ label = "/64", val = 0x20 | 0xc0 },
+	}
+	local mult_menu_items = {}
+	for i = 0, #mult_options do
+		add(mult_menu_items, 
+			{
+				label = (env & 0xe0 == mult_options[i].val)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
+					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
+				fg = i == 0 and 5 or 24,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
+				 end,
+			}
+		)
+	end
+
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 36,
+		items = mult_menu_items,
+	}
+end
+
+
+-- Envelope menu ------------------------------------------------------------------
+
+
+function syn_menus.open_envelope(self)
+	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local has_env = flags & 0x04 > 0
+	local has_free_run = flags & 0x08 > 0
+	local has_random = flags & 0x10 > 0
+	local env_id = env & 0x0f
+	ui.open_menu {
+		x = self.sx - 10, y = self.sy + 7,
+		width = 51,
+		items = {
+			{
+				label = (not has_env and not has_random)
+					and "\|f\^:1c225d5d5d221c00\|h none"
+					or "\|f\^:1c22414141221c00\|h none",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
+				 end,
+			},
+			{
+				label = (has_env and env_id == 0)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(0))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 1)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(1))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
+				 end,
+			},
+			{
+				label = (has_env and env_id == 2)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(2))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
+				end,
+			},
+			{
+				label = (has_env and env_id == 3)
+					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(3))
+					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
+				fg = 18,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
+					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
+				end,
+			},
+			{
+				label = has_random
+						and "\|f\^:1c225d5d5d221c00\|h random"
+						or "\|f\^:1c22414141221c00\|h random",
+				fg = 30,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
+				 end,
+			},
+			{
+				divider = true,
+			},
+			{
+				label = has_free_run
+							and "\|f\^:7f415d5d5d417f00\|h free run"
+							or "\|f\^:7f41414141417f00\|h free run",
+				fg = 5,
+				action = function()
+					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
+				 end,
+			},
+		}
+	}
+end
+
+
+return syn_menus
+:: src/syn_param.lua
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-25 13:07:45",revision=3011]]
+local app = require "src/app"
+local sfx = require "src/sfx"
+local syn_menus = require "src/syn_menus"
+local ui = require "src/ui"
+
+
+local syn_param = {}
+
+
+-- Field ----------------------------------------------------------------------
+
+
+local function attach_field(parent, el)
+	el.width = 4 * 4 + 3
+	el.height = 7
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	function el:draw()
+		rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if (not self.visible) or self.visible(self) then
+			local val = self:get()
+			local fg = self.fg or 59
+			local str
+			if self.to_str then
+				str = self:to_str(val)
+			else
+				str = tostr(val)
+			end
+			if #str > 4 then
+				print(str, 0, 1, self.dragged and 7 or fg)
+			elseif self.centered then
+				p8_centered_print(str, 10, 1, self.dragged and 7 or fg)
+			else
+				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
+			end
+		end
+	end
+	
+
+	function el:hover()
+		if (not self.visible) or self.visible(self) then
+			self.cursor = get_spr(50)
+		else
+			self.cursor = 1
+		end
+	end
+	
+
+	function el:click(msg)
+		if self.visible and (not self.visible(self)) then
+			return true
+		end
+		self.cursor = 0
+		self.dragged = true
+		ui.mouselock(1.0, true)
+		if self.onclick then
+			self:onclick(msg)
+		elseif self.parent.onclick then
+			self.parent:onclick(msg)
+		end
+		return true
+	end
+	
+	function el:doubleclick()
+		return true
+	end
+	
+
+	function el:drag(msg)
+		local delta = ui.mouselock(1.0, true)
+		local old = self:get()
+		local new = old - delta
+		self:set(new)
+	end
+
+	
+	function el:release()
+		self.cursor = get_spr(50)
+		self.dragged = false
+		ui.mouseunlock()
+		self.up_barrier = nil
+		self.down_barrier = nil
+		if self.onrelease then
+			self:onrelease()
+		elseif self.parent.onrelease then
+			self.parent:onrelease()
+		end
+	end
+	
+
+	return el
+end
+
+
+local function attach_relationship(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if flags & 0x03 == 0x01 then
+			print("\^:2070200000000000", -1, 2, 60)
+		elseif flags & 0x03 == 0x02 then
+			print("\^:5020500000000000", -1, 2, 60)
+		elseif flags & 0x03 > 0 then
+			print("?", 3, 1, 60)
+		else
+			pset(4, 3, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_relationship(self)
+	end
+	return el
+end
+
+
+local function attach_multiplier(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
+		if self.mini then
+			if (env & 0xc0 > 0) then
+				print("!", 0, 1, 24)
+			else
+				pset(1, 3, 58)
+			end
+			return
+		end
+		if (env & 0xc0 > 0) then
+			str2 = (env & 0x20 == 0) and 
+				"\^:5020500000000000" or  -- *
+				"\^:4020100000000000"     -- /
+			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
+			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
+			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
+			clip()
+			print(str2, -4, 2, 24)
+		else
+			pset(2, 3, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_multiplier(self)
+	end
+	return el
+end
+
+
+local function attach_envelope(parent, el)
+	el.width, el.height = 7, 7
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+		if flags & 0x04 > 0 then
+			local fg, bg = 7, 18
+			if flags & 0x08 > 0 then
+				fg, bg = bg, fg
+			end
+			line(1, 0, self.width - 1 - 1, 0, bg)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
+			print(string.format("%x", env & 0x0f), 2, 1, fg)
+		elseif flags & 0x10 > 0 then
+			line(1, 0, self.width - 1 - 1, 0, 30)
+			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
+			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
+			print("r", 2, 1, 7)
+		else
+			line(2, 1, self.width - 1 - 2, 1, 58)
+			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
+			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
+		end
+	end
+	function el:tap()
+		syn_menus.open_envelope(self)
+	end
+	return el
+end
+
+
+-- Getters and setters ------------------------------------------------------
+
+
+local function get_val1(self)
+	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val1 >= 128) val1 -= 256
+	end
+	return val1
+end
+
+
+local function set_val1(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function get_val0(self)
+	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	if (self.parent.max_val < 128) then
+		if (val0 >= 128) val0 -= 256
+	end
+	return val0
+end
+
+
+local function set_val0(self, val)
+	val = mid(self.parent.min_val, val, self.parent.max_val)
+	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
+end
+
+
+local function has_env(self)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	return flags & (0x4 | 0x10) > 0
+end
+
+
+local function smart_str(self, val)
+	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
+	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
+		local num = 1 + val % 16
+		local den = 1 + val \ 16
+		return num .. "/" .. den
+	end
+	return tostr(val)
+end
+
+
+-- The widget -----------------------------------------------------------------
+
+
+function syn_param.attach(parent, x, y, el, style)
+	el.x, el.y = x, y
+	el.small = small
+	el.width, el.height = 35, 58
+	el.small = style.small
+	el.emphasis = style.emphasis
+	parent:attach(el)
+	el:attach(ui.create_knob {
+		x = 2, y = 10,
+		small = style.small,
+		get = get_val1,
+		set = set_val1,
+		has_secondary = has_env,
+		get_secondary = get_val0,
+		set_secondary = set_val0,
+	})
+	attach_relationship(
+		el,
+		{
+			x = 0, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 41,
+			centered = true,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 28, y = 41,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 8, y = 51,
+			fg = 18, centered = true,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 28, y = 51,
+		}
+	)
+	
+	function el:draw()
+		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
+		if self.emphasis then
+			rectfill(0, 0, self.width - 1, 8, 5)
+		else
+			rectfill(0, 0, self.width - 1, 8, 5)
+		end
+		p8_centered_print(
+			el.long_label or el.label,
+			(self.width \ 2) + 1, 2,
+			self.emphasis and 6 or 6
+		)
+	end	
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+	
+	return el
+end
+
+
+-- Mini widget ---------------------------------------------------------------------
+
+
+function syn_param.attach_mini(parent, el)
+	el.x = el.x or 0
+	el.y = el.y or (12 + 10 * el.param)
+	el.width = parent.width
+	el.height = 10
+	parent:attach(el)
+	attach_relationship(
+		el,
+		{
+			x = 24, y = 0,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7, y = 0,
+			get = get_val1,
+			set = set_val1,
+			to_str = smart_str,
+		}
+	)
+	attach_multiplier(
+		el,
+		{
+			x = 24 + 7 + 20, y = 0,
+			mini = true,
+		}
+	)
+	attach_field(
+		el,
+		{
+			x = 24 + 7 + 20 + 4, y = 0,
+			fg = 18,
+			visible = has_env,
+			get = get_val0,
+			set = set_val0,
+			to_str = smart_str,
+		}
+	)
+	attach_envelope(
+		el,
+		{
+			x = 24 + 7 + 20 + 4 + 20, y = 0,
+		}
+	)
+	function el:draw()
+		print(self.label, 24 - (4 * #self.label), 1, 5)
+		---print(self.label, 2, 1, 5)
+	end
+	
+	function el:click() return true end
+	function el:doubleclick() return true end
+end
+
+
+return syn_param
 :: src/synth.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2025-03-17 17:38:31",revision=8226]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-25 13:07:45",revision=8264]]
 local app = require "src/app"
 local envelopes = require "src/envelopes"
 local syn_param = require "src/syn_param"
@@ -4478,661 +4992,8 @@ end
 
 
 return synth
-:: src/syn_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2025-03-17 17:38:31",revision=1651]]
-local app = require "src/app"
-local envelopes = require "src/envelopes"
-local sfx = require "src/sfx"
-local ui = require "src/ui"
-
-
-local syn_menus = {}
-
-
--- Relationship menu -----------------------------------------------------
-
-
-function syn_menus.open_relationship(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	
-	if node_type == 0x2 and self.parent.param == 2 then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 55,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						self.parent.min_val, self.parent.max_val = 0, 255
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-				{ divider = true },
-				{
-					label = 
-						(flags & 0x20 > 0)
-							and "\|f\^:7f415d5d5d417f00\|h quantized"
-							or "\|f\^:7f41414141417f00\|h quantized",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
-					 end,
-				},
-			}
-		}
-	elseif
-		(node_type == 0x02 and self.parent.param == 0)
-		or (node_type == 10 and self.parent.param == 3)
-		or (node_type == 8 and self.parent.param == 2)
-	then
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 52,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x02)
-						and "\|f\^:1c225d5d5d221c00\|h multiply"
-						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
-				},
-			}
-		}
-	elseif
-		(node_type == 8 and self.parent.param ~= 2)
-		or (node_type == 9)
-		or (node_type == 10 and self.parent.param ~= 3)
-	then
-		-- no menu
-	else
-		ui.open_menu {
-			x = self.sx - 10, y = self.sy + 7,
-			width = 40,
-			items = {
-				{
-					label = (flags & 0x03 == 0x00)
-						and "\|f\^:1c225d5d5d221c00\|h set"
-						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
-				},
-				{
-					label = (flags & 0x03 == 0x01)
-						and "\|f\^:1c225d5d5d221c00\|h add"
-						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
-				},
-			}
-		}
-	end
-end
-
-
--- Multiplier menu -------------------------------------------------------------
-
-
-function syn_menus.open_multiplier(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	
-	local mult_options = { 
-		[0] = 
-		{ label = "none", val = 0x00 | 0x00 },
-		{ label = "*4", val = 0x00 | 0x40 },
-		{ label = "/4", val = 0x20 | 0x40 },
-		{ label = "*16", val = 0x00 | 0x80 },
-		{ label = "/16", val = 0x20 | 0x80 },
-		{ label = "*64", val = 0x00 | 0xc0 },
-		{ label = "/64", val = 0x20 | 0xc0 },
-	}
-	local mult_menu_items = {}
-	for i = 0, #mult_options do
-		add(mult_menu_items, 
-			{
-				label = (env & 0xe0 == mult_options[i].val)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
-					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
-				fg = i == 0 and 5 or 24,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
-				 end,
-			}
-		)
-	end
-
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 36,
-		items = mult_menu_items,
-	}
-end
-
-
--- Envelope menu ------------------------------------------------------------------
-
-
-function syn_menus.open_envelope(self)
-	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local has_env = flags & 0x04 > 0
-	local has_free_run = flags & 0x08 > 0
-	local has_random = flags & 0x10 > 0
-	local env_id = env & 0x0f
-	ui.open_menu {
-		x = self.sx - 10, y = self.sy + 7,
-		width = 51,
-		items = {
-			{
-				label = (not has_env and not has_random)
-					and "\|f\^:1c225d5d5d221c00\|h none"
-					or "\|f\^:1c22414141221c00\|h none",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~(0x4 | 0x8 | 0x10))
-				 end,
-			},
-			{
-				label = (has_env and env_id == 0)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(0))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(0)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 0)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 1)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(1))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(1)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 1)
-				 end,
-			},
-			{
-				label = (has_env and env_id == 2)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(2))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(2)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 2)
-				end,
-			},
-			{
-				label = (has_env and env_id == 3)
-					and ("\|f\^:1c225d5d5d221c00\|h " .. envelopes.make_label(3))
-					or ("\|f\^:1c22414141221c00\|h " .. envelopes.make_label(3)),
-				fg = 18,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x10) | 0x4)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & 0xf0) | 3)
-				end,
-			},
-			{
-				label = has_random
-						and "\|f\^:1c225d5d5d221c00\|h random"
-						or "\|f\^:1c22414141221c00\|h random",
-				fg = 30,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x4) | 0x10)
-				 end,
-			},
-			{
-				divider = true,
-			},
-			{
-				label = has_free_run
-							and "\|f\^:7f415d5d5d417f00\|h free run"
-							or "\|f\^:7f41414141417f00\|h free run",
-				fg = 5,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x08)
-				 end,
-			},
-		}
-	}
-end
-
-
-return syn_menus
-:: src/syn_param.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2025-03-17 17:38:31",revision=2973]]
-local app = require "src/app"
-local sfx = require "src/sfx"
-local syn_menus = require "src/syn_menus"
-local ui = require "src/ui"
-
-
-local syn_param = {}
-
-
--- Field ----------------------------------------------------------------------
-
-
-local function attach_field(parent, el)
-	el.width = 4 * 4 + 3
-	el.height = 7
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	function el:draw()
-		rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if (not self.visible) or self.visible(self) then
-			local val = self:get()
-			local fg = self.fg or 59
-			local str
-			if self.to_str then
-				str = self:to_str(val)
-			else
-				str = tostr(val)
-			end
-			if #str > 4 then
-				print(str, 0, 1, self.dragged and 7 or fg)
-			elseif self.centered then
-				p8_centered_print(str, 10, 1, self.dragged and 7 or fg)
-			else
-				print(str, 2 + 4*4 - 4*#str, 1, self.dragged and 7 or fg)
-			end
-		end
-	end
-	
-
-	function el:hover()
-		if (not self.visible) or self.visible(self) then
-			self.cursor = get_spr(50)
-		else
-			self.cursor = 1
-		end
-	end
-	
-
-	function el:click(msg)
-		if self.visible and (not self.visible(self)) then
-			return true
-		end
-		self.cursor = 0
-		self.dragged = true
-		ui.mouselock(1.0, true)
-		if self.onclick then
-			self:onclick(msg)
-		elseif self.parent.onclick then
-			self.parent:onclick(msg)
-		end
-		return true
-	end
-	
-	function el:doubleclick()
-		return true
-	end
-	
-
-	function el:drag(msg)
-		local delta = ui.mouselock(1.0, true)
-		local old = self:get()
-		local new = old - delta
-		self:set(new)
-	end
-
-	
-	function el:release()
-		self.cursor = get_spr(50)
-		self.dragged = false
-		ui.mouseunlock()
-		self.up_barrier = nil
-		self.down_barrier = nil
-		if self.onrelease then
-			self:onrelease()
-		elseif self.parent.onrelease then
-			self.parent:onrelease()
-		end
-	end
-	
-
-	return el
-end
-
-
-local function attach_relationship(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		---rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if flags & 0x03 == 0x01 then
-			print("\^:2070200000000000", -1, 2, 60)
-		elseif flags & 0x03 == 0x02 then
-			print("\^:5020500000000000", -1, 2, 60)
-		elseif flags & 0x03 > 0 then
-			print("?", 3, 1, 60)
-		else
-			pset(4, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_relationship(self)
-	end
-	return el
-end
-
-
-local function attach_multiplier(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		--rectfill(0, 0, self.width - 1, self.height - 1, 58)
-		if self.mini then
-			if (env & 0xc0 > 0) then
-				print("!", 0, 1, 24)
-			else
-				pset(1, 3, 58)
-			end
-			return
-		end
-		if (env & 0xc0 > 0) then
-			str2 = (env & 0x20 == 0) and 
-				"\^:5020500000000000" or  -- *
-				"\^:4020100000000000"     -- /
-			if (env & 0xc0 == 0x40) str2 = str2 .. "\-c\^:5070400000000000" -- 4
-			if (env & 0xc0 == 0x80) str2 = str2 .. "\^:1372770000000000" -- 16
-			if (env & 0xc0 == 0xc0) str2 = str2 .. "\^:5177470000000000" -- 64
-			clip()
-			print(str2, -4, 2, 24)
-		else
-			pset(2, 3, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_multiplier(self)
-	end
-	return el
-end
-
-
-local function attach_envelope(parent, el)
-	el.width, el.height = 7, 7
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		local flags, _, _, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-		if flags & 0x04 > 0 then
-			local fg, bg = 7, 18
-			if flags & 0x08 > 0 then
-				fg, bg = bg, fg
-			end
-			line(1, 0, self.width - 1 - 1, 0, bg)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, bg)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, bg)
-			print(string.format("%x", env & 0x0f), 2, 1, fg)
-		elseif flags & 0x10 > 0 then
-			line(1, 0, self.width - 1 - 1, 0, 30)
-			rectfill(0, 1, self.width - 1 - 0, self.height - 1 - 1, 30)
-			line(1, self.height - 1 - 0, self.width - 1 - 1, self.height - 1 - 0, 30)
-			print("r", 2, 1, 7)
-		else
-			line(2, 1, self.width - 1 - 2, 1, 58)
-			rectfill(1, 2, self.width - 1 - 1, self.height - 1 - 2, 58)
-			line(2, self.height - 1 - 1, self.width - 1 - 2, self.height - 1 - 1, 58)
-		end
-	end
-	function el:tap()
-		syn_menus.open_envelope(self)
-	end
-	return el
-end
-
-
--- Getters and setters ------------------------------------------------------
-
-
-local function get_val1(self)
-	local _, val1, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val1 >= 128) val1 -= 256
-	end
-	return val1
-end
-
-
-local function set_val1(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val1(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function get_val0(self)
-	local _, _, val0, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	if (self.parent.max_val < 128) then
-		if (val0 >= 128) val0 -= 256
-	end
-	return val0
-end
-
-
-local function set_val0(self, val)
-	val = mid(self.parent.min_val, val, self.parent.max_val)
-	sfx.set_node_param_val0(app.instrument, self.parent.node_id, self.parent.param, val)
-end
-
-
-local function has_env(self)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	return flags & (0x4 | 0x10) > 0
-end
-
-
-local function smart_str(self, val)
-	local flags, _, _, _ = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	local node_type = sfx.node_type(app.instrument, self.parent.node_id)
-	if node_type == 0x02 and self.parent.param == 0x02 and (flags & 0x03 == 0x02) then
-		local num = 1 + val % 16
-		local den = 1 + val \ 16
-		return num .. "/" .. den
-	end
-	return tostr(val)
-end
-
-
--- The widget -----------------------------------------------------------------
-
-
-function syn_param.attach(parent, x, y, el, style)
-	el.x, el.y = x, y
-	el.small = small
-	el.width, el.height = 35, 58
-	el.small = style.small
-	el.emphasis = style.emphasis
-	parent:attach(el)
-	el:attach(ui.create_knob {
-		x = 2, y = 10,
-		small = style.small,
-		get = get_val1,
-		set = set_val1,
-		has_secondary = has_env,
-		get_secondary = get_val0,
-		set_secondary = set_val0,
-	})
-	attach_relationship(
-		el,
-		{
-			x = 0, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 41,
-			centered = true,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 28, y = 41,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 8, y = 51,
-			fg = 18, centered = true,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 28, y = 51,
-		}
-	)
-	
-	function el:draw()
-		---rectfill(0, 0, self.width - 1, self.height - 1, 7)
-		if self.emphasis then
-			rectfill(0, 0, self.width - 1, 8, 5)
-		else
-			rectfill(0, 0, self.width - 1, 8, 5)
-		end
-		p8_centered_print(
-			el.long_label or el.label,
-			(self.width \ 2) + 1, 2,
-			self.emphasis and 6 or 6
-		)
-	end	
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-	
-	return el
-end
-
-
--- Mini widget ---------------------------------------------------------------------
-
-
-function syn_param.attach_mini(parent, el)
-	el.x = el.x or 0
-	el.y = el.y or (12 + 10 * el.param)
-	el.width = parent.width
-	el.height = 10
-	parent:attach(el)
-	attach_relationship(
-		el,
-		{
-			x = 24, y = 0,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7, y = 0,
-			get = get_val1,
-			set = set_val1,
-			to_str = smart_str,
-		}
-	)
-	attach_multiplier(
-		el,
-		{
-			x = 24 + 7 + 20, y = 0,
-			mini = true,
-		}
-	)
-	attach_field(
-		el,
-		{
-			x = 24 + 7 + 20 + 4, y = 0,
-			fg = 18,
-			visible = has_env,
-			get = get_val0,
-			set = set_val0,
-			to_str = smart_str,
-		}
-	)
-	attach_envelope(
-		el,
-		{
-			x = 24 + 7 + 20 + 4 + 20, y = 0,
-		}
-	)
-	function el:draw()
-		print(self.label, 24 - (4 * #self.label), 1, 5)
-		---print(self.label, 2, 1, 5)
-	end
-	
-	function el:click() return true end
-	function el:doubleclick() return true end
-end
-
-
-return syn_param
 :: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2025-03-17 09:25:34",revision=559]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-25 13:07:45",revision=597]]
 local ui = {}
 
 
@@ -5180,8 +5041,512 @@ ui.create_checkbox = checkbox.create
 
 
 return ui
+:: src/ui/checkbox.lua
+--[[pod_format="raw",created="2024-05-03 10:50:08",modified="2026-01-25 13:07:45",revision=75]]
+local head = require "src/ui/head"
+
+
+local checkbox = {}
+
+
+function checkbox.create(el)
+	el.width = 9 + (4 * #el.label or "")
+	el.height = 7
+	el.cursor = "pointer"
+	head.head():new(el)
+	if (not el.visible) el.visible = function() return true end
+	function el:draw()
+		if (not self:visible()) return
+		rect(0, 0, 6, 6,  el.ckeck_border or 59)
+--		rectfill(1, 1, 5, 5, el.check_bg or 61)
+		if self.get() then
+			rectfill(2, 2, 4, 4, el.check_fg or 17)
+		end
+		print(el.label, 10, 1, el.fg or 5)
+	end
+	function el:tap()
+		if (not self:visible()) return
+		self.set(not self.get())
+	end
+	return el
+end
+
+
+return checkbox
+:: src/ui/head.lua
+--[[pod_format="raw",created="2024-05-03 11:05:48",modified="2026-01-25 13:07:45",revision=54]]
+local head = {}
+
+
+local head_el = false
+
+
+function head.create()
+	head_el = create_gui()
+end
+
+
+function head.head()
+	return head_el
+end
+
+
+return head
+:: src/ui/knob.lua
+--[[pod_format="raw",created="2024-04-22 11:46:43",modified="2026-01-25 13:07:45",revision=406]]
+local head = require "src/ui/head"
+local mouse = require "src/ui/mouse"
+
+
+local knob = {}
+
+
+function knob.create(el)
+	if el.small then
+		el.x += 3
+		el.y += 5
+		el.width, el.height = 25, 25
+		el.cx, el.cy, el.r = 12, 12, 7
+		el.sprite = 58
+	else
+		el.width, el.height = 31, 31
+		el.cx, el.cy, el.r = 15, 15, 9
+		el.sprite = 56
+	end
+	el.cursor = get_spr(50)
+	head.head():new(el)
+	
+
+	function el:draw()
+		local target = self.min_val and self or self.parent
+		local sprite = (target.min_val < 0)
+			and (self.sprite + 1) or self.sprite
+		spr(sprite, 0, 0)	
+		local range = target.max_val - target.min_val
+		-- primary value
+		local val = self:get()
+		local a = ((val - target.min_val) / range) * 0.75
+		local x = self.cx + flr(0.5 + self.r * cos(0.625 - a))
+		local y = self.cy + flr(0.5 + self.r * sin(0.625 - a))
+		-- secondary value: arc and needle
+		if self:has_secondary() then
+			local val2 = self:get_secondary()
+			local a2 = ((val2 - target.min_val) / range) * 0.75
+			local r = self.small and 6 or 7.75
+			local incr = self.small and 0.01 or 0.01
+			local function line_to(aa, col)
+				local xx = self.cx + flr(0.5 + r * cos(0.625 - aa))
+				local yy = self.cy + flr(0.5 + r * sin(0.625 - aa))
+				line(self.cx, self.cy, xx, yy, 18)
+			end
+			local in_between =
+				(a < a2) 
+					and function(ai) return a < ai and ai < a2 end
+					or function(ai) return a2 < ai and ai < a end
+			line()
+			line_to((a < a2) and a or a2)
+			for ai = 0.0, 0.75, incr do
+				if in_between(ai) then
+					line_to(ai)
+				end
+			end
+			line_to((a < a2) and a2 or a)
+			local x2 = self.cx + flr(0.5 + (self.r - 1) * cos(0.625 - a2))
+			local y2 = self.cy + flr(0.5 + (self.r - 1) * sin(0.625 - a2))
+			line(self.cx, self.cy, x2, y2, self.dragged_secondary and 7 or 29)
+		end	
+		-- primary needle
+		local needle_col = self.dragged and 7 or 15
+		if self.white then
+			needle_col = self.dragged and 5 or 22
+		end
+		line(self.cx, self.cy, x, y, needle_col)
+	end
+	
+
+	function el:click(msg)
+		local target = self.min_val and self or self.parent
+		self.cursor = 0
+		self.dragged = msg.mb == 1
+		self.dragged_secondary = msg.mb == 2
+		mouse.lock(target.sensitivity)
+		return true
+	end
+	
+
+	function el:doubleclick(msg)
+		local target = self.min_val and self or self.parent
+		if msg.mb == 1 then
+			self:set(target.init_val)
+		elseif msg.mb == 2 then
+			self:set_secondary(target.init_val)
+		end
+		return true
+	end
+	
+
+	function el:drag(msg)
+		local target = self.min_val and self or self.parent
+		local delta = mouse.lock(target.sensitivity)
+
+		local old = self:get()
+		local new = old - delta
+		local old2, new2 = 0, 0
+		if self:has_secondary() and msg.mb == 2 then
+			old2 = self:get_secondary()
+			new2 = old2 - delta
+		end
+
+		if delta < 0 then
+			self.down_barrier = nil
+			if self.up_barrier then
+				self.up_barrier += delta
+				if self.up_barrier <= 0 then
+					self.up_barrier = nil
+				else
+					return
+				end
+			end
+		elseif delta > 0 then
+			self.up_barrier = nil
+			if self.down_barrier then
+				self.down_barrier -= delta
+				if self.down_barrier <= 0 then
+					self.down_barrier = nil
+				else
+					return
+				end
+			end
+		end
+		if old > 0 and new <= 0 then
+			new = 0
+			self.down_barrier = 24
+		end
+		if old < 0 and new >= 0 then
+			new = 0
+			self.up_barrier = 24
+		end
+		if old2 > 0 and new2 <= 0 then
+			new2 = 0
+			self.down_barrier = 24
+		end
+		if old2 < 0 and new2 >= 0 then
+			new2 = 0
+			self.up_barrier = 24
+		end
+		
+		if msg.mb == 1 then
+			self:set(new)
+		elseif msg.mb == 2 then
+			self:set_secondary(new2)
+		end
+	end
+	
+
+	function el:release(msg)
+		self.cursor = get_spr(50)
+		self.dragged = false
+		self.dragged_secondary = false
+		mouse.unlock()
+		self.up_barrier = nil
+		self.down_barrier = nil
+	end
+	
+
+	return el
+end
+
+
+return knob
+:: src/ui/label.lua
+--[[pod_format="raw",created="2024-05-03 10:58:09",modified="2026-01-25 13:07:45",revision=49]]
+local head = require "src/ui/head"
+
+local label = {}
+
+
+function label.create(el)
+	el.width = 4 * #el.label + 4
+	el.height = 5
+	head.head():new(el)
+	function el:draw()
+		print(el.label, 0, 0, el.fg or 5)
+	end
+	return el
+end
+
+
+return label
+:: src/ui/menu.lua
+--[[pod_format="raw",created="2024-04-30 07:13:12",modified="2026-01-25 13:07:45",revision=151]]
+local head = require "src/ui/head"
+
+
+local menu = {}
+
+
+local popup = false
+
+
+function menu.create_button(el)
+	local label = el.get_label()
+	el.width = (4 * #label) + 12
+	el.height = 9
+	el.cursor = "pointer"
+	head.head():new(el)
+	el.opened = false
+	function el:draw()
+		if self.bg then
+			rectfill(0, 0, self.width - 1, self.height - 1, self.bg)
+		end
+		local label = self:get_label()
+		print(label, 2, 2, self.fg or 7)
+		pal(7, self.fg or 7)
+		spr(self.opened and 38 or 37, self.width - 7, 2)
+		pal(7, 7)
+	end
+	function el:tap()
+		self.opened = true
+		menu.open {
+			x = self.sx, y = self.sy + 9,
+			highlight = self.highlight,
+			onclose = function()
+				self.opened = false
+				local label = el.get_label()
+				self.width = (4 * #label) + 12
+			end,
+			items = self.items,
+		}
+	end
+	return el
+end
+
+
+function menu.open(menu)
+	for i = 1, #menu.items do
+		if menu.items[i].get_label then
+			menu.items[i].label = menu.items[i].get_label()
+		end
+		if (not menu.items[i].label) menu.items[i].label = "---"
+	end
+	local entry_height = 9
+	-- Calculate popup size
+	if not menu.width then
+		menu.width = 0
+		for i = 1, #menu.items do
+			menu.width = max(menu.width, #menu.items[i].label or 0)
+		end
+		menu.width = 8 + (4 * menu.width)
+	end
+	if not menu.height then
+		menu.height = max(12, 4 + (#menu.items * entry_height))
+	end
+	if menu.y + menu.height > head.head().height then
+		menu.y = menu.y - 7 - menu.height
+	end
+
+	-- Modal layer	
+	popup = head.head():attach {
+		x = 0, y = 0,
+		width = head.head().width, height = head.head().height,
+		draw = function(self)
+			local ox, oy = menu.x, menu.y
+			rectfill(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.bg or 7)
+			rect(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.border or 5)
+			for i = 1, #menu.items do
+				local y = oy + 2 + (entry_height * (i - 1))
+				if self.highlighted == i then
+					rectfill(
+						ox + 1, y,
+						ox + menu.width - 2, y + entry_height - 1,
+						menu.highlight or 15
+					) 
+				end
+				print(
+					menu.items[i].label,
+					ox + 4, y + 2,
+					menu.items[i].fg or menu.fg or 62
+				)
+			end
+		end,
+		hover = function(self)
+			local ox, oy = menu.x, menu.y
+			local mx, my, mb = mouse()
+			if
+				ox <= mx and mx < ox + menu.width
+				and oy <= my and my < oy + menu.height
+			then
+				self.cursor = "pointer"
+				self.highlighted = 1 + ((my - oy - 4) \ entry_height)
+			else
+				self.cursor = "pointer"
+				self.highlighted = false
+			end
+		end,
+		click = function(self)
+			if popup then
+				popup:detach()
+			end
+			popup = false
+			if self.highlighted and menu.items[self.highlighted]
+				and menu.items[self.highlighted].action
+			then
+				menu.items[self.highlighted].action()
+			end
+			if (menu.onclose) menu.onclose()
+		end
+	}
+end
+
+
+function menu.has_menu()
+	return popup != false
+end
+
+
+return menu
+:: src/ui/modal.lua
+--[[pod_format="raw",created="2024-04-30 07:41:00",modified="2026-01-25 13:07:45",revision=115]]
+local head = require "src/ui/head"
+
+
+local modal = {}
+
+
+local layer = false
+
+
+function modal.open(el)
+	layer = head.head():attach {
+		x = 0, y = 0,
+		width = head.head().width, height = head.head().height,
+		draw = function(self)
+			poke(0x550b, 0x3f)
+			---fillp(0b0101101001011010)
+			---fillp(0b0001001001001000)
+			---fillp(0b1110110110110111)
+			fillp(0b0011011011001001)
+			rectfill(0, 0, self.width - 1, self.height - 1, 61)
+			fillp()
+			poke(0x550b, 0x00)
+		end,
+		click = function(self)
+			modal.close()
+		end
+	}
+	layer:attach(el)
+	return el
+end
+
+
+function modal.has_modal()
+	return layer
+end
+
+
+function modal.close()
+	if layer then
+		layer:detach()
+	end
+	layer = false
+end
+
+
+return modal
+:: src/ui/mouse.lua
+--[[pod_format="raw",created="2024-04-25 12:13:32",modified="2026-01-25 13:07:45",revision=63]]
+local settings = require "src/settings"
+
+
+local mouse = {}
+
+
+function mouse.lock(sensitivity, precise)
+	local s = settings.user.drag_sensitivity
+	if precise or key("shift") then
+		s = settings.user.drag_sensitivity_precise
+	end
+	s *= sensitivity or 1
+	local dx, dy = mouselock(0x4|0x8, s, 0.0)
+	if settings.user.drag_horizontal then
+		return -dx
+	end
+	return dy
+end
+
+
+function mouse.unlock()
+	mouselock(false)
+end
+
+
+return mouse
+:: src/ui/num_field.lua
+--[[pod_format="raw",created="2024-04-30 06:55:37",modified="2026-01-25 13:07:45",revision=68]]
+local head = require "src/ui/head"
+
+
+local num_field = {}
+
+
+function num_field.create(el)
+	el.width = el.width or 62
+	el.height = 12
+	head.head():new(el)
+	if (not el.visible) el.visible = function() return true end
+	el.dragged = nil
+	function el:draw()
+		local label_fg = self.label_fg or 5
+		local field_fg = self.field_fg or 22
+		local dragged_fg = self.dragged_fg or 7
+		local field_bg = self.field_bg or 59
+		local dragged_bg = self.dragged_bg or 59
+		if (not self.visible()) return
+		local val = self.get()
+		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and dragged_bg or field_bg)
+		print(el.label, 3, 1, label_fg)
+		if val then
+			print(string.format("%3d", val), self.width - 22, 1, self.dragged and dragged_fg or field_fg)
+		else
+			print("-", self.width - 4, 1, self.dragged and dragged_fg or field_fg)
+		end
+	end
+	function el:hover(msg)
+		if msg.mx >= self.width - 21 then
+			--- self.cursor = "pointer"
+			self.cursor = get_spr(50)
+		else
+			self.cursor = 1
+		end
+	end
+	function el:click(msg)
+		if (not self.visible()) return
+		if (self.onclick) self.onclick(msg)
+		if msg.mx >= self.width - 21 then
+			self.dragged = true
+			self.cursor = 0 -- TODO: capture mouse
+		end
+	end
+	function el:drag(msg)
+		if (not el.visible()) return
+		if self.dragged then
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			new = mid(0, self.get() - delta, 0xff)
+			self.set(new)
+		end
+	end
+	function el:release(msg)
+		self.dragged = nil
+		mouselock(false)
+		if (self.onrelease) self.onrelease(msg)
+	end
+	return el
+end
+
+
+return num_field
 :: src/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2025-03-17 11:45:43",revision=1283]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-25 13:07:45",revision=1321]]
 local app = require "src/app"
 local sfx = require "src/sfx"
 local ui = require "src/ui"
@@ -5396,177 +5761,46 @@ end
 
 
 return visual
-:: src/.info.pod
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIixtb2RpZmllZD0iMjAyNS0w
-My0xNyAxNzozODozMSIsc3RvcmVkPSIyMDI0LTA0LTA3IDA4OjE0OjAwIl1d
-:: drak.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2024-04-19 11:56:33",revision=1102]]
+:: todo.txt
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-25 13:07:45",revision=39]]
+- add 4/4 config
 
--- A 'require' function similar to standard Lua.
--- Idea from elgopher on the BBS
-function require(name)
-	if (_modules == nil) _modules = {}
-
-	local cached = _modules[name]
-	if (cached) return cached
-
-	local filename = fullpath(name .. '.lua')
-	local src = fetch(filename) 
-
-	if (type(src) != "string") panic("could not include " .. filename)
-
-	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
-	-- chunk name (for error reporting)
-	-- mode ("t" for text only -- no binary chunk loading)
-	-- _ENV upvalue
-	-- @ is a special character that tells debugger the string is a filename
-	local func, err = load(src, "@" .. filename, "t", _ENV)
-	if (not func) panic("Syntax error:", tostr(err))
-
-	local module = func()
-	_modules[name] = module
-
-	return module
-end
-
-
-function panic(...)
-	local args = { ... }
-	foreach(
-		args,
-		function(str)
-			send_message(3, { event = "report_error", content = str })
-		end
-	)
-	stop()
-end
-
-
--- Table utility functions --------------------------------------------------------
-
-
-function table_deep_copy(t, already)
-	if (not already) already = {}
-	if type(t) == "table" then
-		if already and already[t] then
-			return already[t]
-		end
-		local new = {}
-		already[t] = new
-		for k, v in pairs(t) do
-			new[k] = table_deep_copy(v, already)
-		end
-		return new
-	else
-		return t
-	end
-end
-
-
-function tostrrec(t)
-	if type(t) != "table" then
-		return tostr(t)
-	end
-	
-	local s = nil
-	for k, v in pairs(t) do
-		if not(s) then
-			s = "{ "
-		else
-			s ..= ", "
-		end
-		s ..= tostr(k) .. " = " .. tostrrec(v)
-	end
-	s ..= " }"
-
-	return s
-end
-
-
--- Char utilities -----------------------------------------------------------------
-
-
-function keyp_num()
-	if (keyp("9")) return 9
-	if (keyp("8")) return 8
-	if (keyp("7")) return 7
-	if (keyp("6")) return 6
-	if (keyp("5")) return 5
-	if (keyp("4")) return 4
-	if (keyp("3")) return 3
-	if (keyp("2")) return 2
-	if (keyp("1")) return 1
-	if (keyp("0")) return 0
-	return nil
-end
-
-
-function keyp_hex()
-	if (keyp("f")) return 0xf
-	if (keyp("e")) return 0xe
-	if (keyp("d")) return 0xd
-	if (keyp("c")) return 0xc
-	if (keyp("b")) return 0xb
-	if (keyp("a")) return 0xa
-	if (keyp("9")) return 0x9
-	if (keyp("8")) return 0x8
-	if (keyp("7")) return 0x7
-	if (keyp("6")) return 0x6
-	if (keyp("5")) return 0x5
-	if (keyp("4")) return 0x4
-	if (keyp("3")) return 0x3
-	if (keyp("2")) return 0x2
-	if (keyp("1")) return 0x1
-	if (keyp("0")) return 0x0
-	return nil
-end
-
-function is_num_char(c)
-	if (not c) return
-	return ("0" <= c) and (c <= "9")
-end
-
-
-function is_hexa_char(c)
-	if (not c) return
-	local is_num = ("0" <= c) and (c <= "9")
-	local is_hex_alpha = ("a" <= c) and (c <= "f")
-	return is_num or is_hex_alpha
-end
-
-
-function p8_centered_print(s, x, y, col)
-	local count = #s
-	print(s, x - ((count * 4) \ 2), y, col)
-end
-
-
-
--- Drawing -------------------------------------------------------------------------
-
-
--- From Sophie on the discord
-function get_drawspace()
-    return {
-        cam_x=peek4(0x5510),
-        cam_y=peek4(0x5514),
-        clip_l=peek2(0x5528),
-        clip_t=peek2(0x552a),
-        clip_r=peek2(0x552c),
-        clip_b=peek2(0x552e),
-    }
-end
-
-
-function set_drawspace(drawspace)
-    poke4(0x5510,drawspace.cam_x)
-    poke4(0x5514,drawspace.cam_y)
-    poke2(0x5528,drawspace.clip_l)
-    poke2(0x552a,drawspace.clip_t)
-    poke2(0x552c,drawspace.clip_r)
-    poke2(0x552e,drawspace.clip_b)
-end
-
+:: .info.pod
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-01-25 13:07:45",notes="A music tracker for editing \".sfx\"\nfiles.",runtime=24,stored="2024-04-16 11:37:51",title="VisiTrack",version="0.0.3",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4}}]]
+:: gfx/.info.pod
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 13:07:45",stored="2024-03-24 00:48:06"]]
+:: gfx/0.gfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249OTcxOF1dbHo0AF8GAACVOAAA8yV7WzBdPXtibXA9cHh1
+AEMgCAgEQAdgF1AHAAdABwAHICcwN0AXoCxmbGFncz0wLHBhbl94CADHeT0wLHpvb209OH0sQgDx
+DyIIBPATBzAHAPcDAAcQByAHIAdgB9AHAAcwBxAHAAQAYAAHIBcAFwQAEUAYAAAaAAFuAAAOACMX
+ICQAQBAHICcUAABEABMwOgARECQAIBAXGAAv8BOXAAsZMZcA9QIQEATwKyeQV2BXEAdgJ0AHYAIA
+-wFAJ2AHMDdAJ0AXQDfAF-AbVgALHTlWAPYHJBfABxAHsAcQB6AHMAeQBzAHgBcABwIAE4AWABOg
+JgBPwBfwFGQAHfIGIq8RMM4gTgduIE4XXiBOJ04gTjc_CAAhF14YAF-OMK7wE1cAHp2uMM4gziA_
+Rz4EAB-OUgAjH-AxAErgCwYEACdgByAHUAeQB5BaAi8nYEAACx43QAARIJYBUSAHAFdQCgAiQFdy
+Ah8QTAAeEjeLAAcEAB83QwAeBo4AAoYACQwAD08AHmBHUAeQJ3AdAS9HUDsAIEAHkDdgBgAPOwAd
+ExBJAQFRASM3EFkBH5CbAR4E2wEgEBdOAT9gN1DdAS4kEBdNAT8QN1CQACRFIAdQR_IBD5IAKAPV
+ARVHCgAOUAAPcwIULzdgcQIjDnEDDzEAn58THQT-GJvw-201AByP8Jv-GE-w-w43AB1v_v8YdfCI
+NgAdX-_A-xiIOQEeDzEArIIHBwRyTzsSTgIAH3I7AAsvMTE8AAFyDi8RDhIOLQQAD0MAHDAMBgQ_
+CBFAWwNREAcQFxBnAwQIABMwGAAQQGIID1kADB4wWQD-CghwBwAIYBcACAdgFwgAB3AIBwAHYAgQ
+F1BLABpTBQUEByD8AwQIAA9BAAwcNkEAIEBHVgQfYDcAHRBgUAkvR0A3AB0h8ASnAA83ABrwBAkJ
+BMAHcBdgJyBnEAcQJyAHEBfkCR-ATQIZAUQAQBAHMBcICp8QBxBnICdgF3BEAB43kGcQAgAfkM8C
+HP8BMA8WQB4wLiA_MC5AHlAOED8AHP8BEA8WUB5ALjA_IC4wHkAOMD8AGXEMDATwAidw6QUVQAIA
+APUFz0AXACdAJ3AnkAfwBX0CDQ-RAx0vMTMyACzxGRcXBPD5AfAFAQcB8AQBFwHwAwEnAQAB8AAB
+NwEHAeABFxEnAeARBxEfABIHHwAg8AMKAE8FAfAMaQwZCmoABEsAEAIFALABAUcB8AAhByHwAhkA
+H1VXAB0TblcAAlIAVREHEfADZgBFBCHwBA0AEAMcAAFzAATDAB9ubAAZkBkZBPD-KgHwBz0AcAYB
+BxEAARArAQAQAAAjAfAD0BFHAScBsAEHAUcRBxHAAVcRQwFgN0HwADEAQgEQBX8AMwQBJ68APwcB
+MH4ADA7dAQ9BAj4KMgD8KR8fBPAeBfBDBfABBfACDzpHDvAGDocO8APH8AHn4PcBcAUwDvcBDjAF
+YPcDDz_QDvcDDpD3BQ2ABAAAGQCgDUAFMPcDHRAFYDMA-xcNsPcBHcDnHeDHHcAFIA6HDh0ABaAF
+QA0ORw4tIAWABXBtUAXwcK0ACx82rAAKEEasAKGGDvADxvAB5uD2rAAR9qwAEfasAIz2Aw6Q9gUN
+gAQAIg72rAAS9qwAEPasAIH2AR3A5h3gxqwAFYasAB9GrAAq-CcH8EMH8AEH8AIPPE87DzzwBg6P
+Ow7wA83wAe3g-QFwBzAO-QEOMAdg-QMPOpAO-QMOkP0FDIAEAAAZAKAMQAcw-QMcEAdgMwD-FQyw
+-QEcwO0c4M0cwAcgDo0OHAAHoAdADA5NDiwgB4AHcGxQB68AHkHgB-AOAwAfJLQATSDwAbMAIfAD
+sAAfwK4AIACXA7AVB-ACB6AH8BlPO6wA8w9vOw884K87gAcgziAHYA88zg2Q7g86cP4BcP4BDGAE
+APASMAcQ-gEMAAdQ7hxwDc4NDJDOHKCuHMANbg0coAcgDE4sDRBvUEwwB-A-CgYZcBkZBLAH8AiR
+AAADBg_TAD1f8ABM8ESQABn-AQkHBPAFTzogbhBuEG4gTgARBBrQCQcEoE87IG4QDk8PDj8AH6CC
+BD0cNoYH-wBXAGcwBwA3ADcABzBnAFfKCA0P8gQfDzIA--------------------------------
+-----------------11QPTEwfX0=
 :: label.png
 b64$iVBORw0KGgoAAAANSUhEUgAAAeAAAAEOCAIAAADe_FMwAAAmUElEQVR4Ae2dX2hcyZ3vj3r7
 LlwIzHLXktZgu910Mi_BJgOBPGg6mc0Fj8N4BNIo9oJbNzFtgyU17euZ7rQgLXkk9VzU6c74SshW
@@ -5742,313 +5976,66 @@ wKbv9MzF3lLHNpW3llu3dpxYju2QeK2fa8mkkyRob3ZJ3N7sknbS0t7sWhR0p9N18AM7OxoAwE08
 Ud6Z5rjf6tBq1M12IUZmHc02KopiRdCp1LOBHMHZ0QAA4cCC7wIHkTJrZNpOGq0IGgAAgE2Igomj
 Ne2sKEoMZQIAAPfJpJPUziRgZZ1JJ0_fb-Tdaz9ApQAAwFecPt-Y-r9X-j93ENXN134D1wAAABB0
 RVh0TG9kZVBORwAyMDExMDIyMeNZtsEAAAAASUVORK5CYII=
-:: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2025-03-17 17:38:31",revision=10273]]
-include "drak.lua"
-local app = require "src/app"
-local sfx = require "src/sfx"
-local file = require "src/file"
-local detail = require "src/detail"
-local ed_inst = require "src/ed_inst"
-local ed_trak = require "src/ed_trak"
-local ed_patt = require "src/ed_patt"
-local ed_song = require "src/ed_song"
-local note_grid = require "src/note_grid"
-local routing = require "src/routing"
-local settings = require "src/settings"
-local settings_ui = require "src/settings_ui"
-local ui = require "src/ui"
-
-
-function _init()
-	window {
-		tabbed = true,
-		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
-	}
-
-	wrangle_working_file(
-		file.save,
-		file.load,
-		file.default_filename
-	)
-		
-	on_event("drop_items", file.handle_drop_items)
-
-	menuitem { divider = true, id = "settings_divider", label = "" }
-	menuitem {
-		id = "settings",
-		label = "\^:0000000000000000 Settings",
-		action = function() settings_ui.open() end,
-	}	
-		
-	settings.load()
-	
-	poke(0x4000, get(fetch("/system/fonts/p8.font")))
-	
-	poke4(0x5000, get(fetch("pal/0.pal")))
-end
-
-
-function _update()
-	if keyp(settings.keys.play) then
-		sfx.play_or_pause()
-	end
-	if app.refresh_gui then
-		generate_gui()
-		app.refresh_gui = false
-	end
-	ui.head():update_all()
-end
-
-
-function _draw()
-	if app.view == "inst" then
-		cls(6)
-	else
-		cls(62)
-	end
-	ui.head():draw_all()
-	print(string.format("\014% 3.0f", stat(1) * 100.0) .. "%", 464, 247, 7)
-	print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 460, 253, 7)
-end
-
-
-function generate_gui()
-	local cell_width = 14
-	local cell_height = 29
-	ui.create_head()
-	local top_panel = attach_top_panel(ui.head(), { x = 0, y = 0 })
-	if app.view == "patt" then
-		ed_patt.attach_pattern_selector(top_panel, { x = 118, y = 0})
-		detail.attach_pattern_flow_toggles(top_panel, { x = 322, y = 3 })
-		ed_patt.attach_channel_panel(ui.head(), { x = 0, y = 16})
-		note_grid.attach(ui.head(), { x = app.channels_width, y = 16 })
-	elseif app.view == "trak" then
-		ed_trak.attach(ui.head(), { x = 0, y = 16 })
-	elseif app.view == "inst" then
-		ed_inst.attach(ui.head(), { x = 0, y = 16 })
-	elseif app.view == "song" then
-		ed_song.attach(ui.head(), { x = 0, y = 16 })
-	end
-	if app.detail then
-		detail.attach_panel(ui.head(), { x = 480 - app.detail_width, y = 16})
-	end
-end
-
-
-function attach_top_panel(parent, el)
-	el.width = 480
-	el.height = 16
-	parent:attach(el)
-
-	attach_view_selector(el, { x = 22, y = 0 })
-	attach_play_button(el, { x = 1, y = 0 })
-	attach_detail_button(el, { x = 480 - 16, y = 0})
-	attach_note_attributes(el, { x = 380, y = 0})
-		
-	function el:draw()
-		rectfill(0, 0, el.width, el.height, 2)
-	end	
-
-	return el
-end
-
-
-function attach_play_button(parent, el)
-	el.width = 16
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		spr(stat(464) == 0 and 4 or 5, 0, 0)
-	end
-	
-	function el:click()
-		sfx.play_or_pause()
-	end
-	
-	return el
-end
-
-
-function attach_view_selector(parent, el)
-	el.width = 4 * 20
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		print("inst", 2, 6, app.view == "inst" and 7 or 62)
-		print("clip", 2 + 20, 6, app.view == "trak" and 7 or 62)
-		print("patt", 2 + 40 + 1, 6, app.view == "patt" and 7 or 62)
-		print("song", 2 + 60 + 1, 6, app.view == "song" and 7 or 62)
-	end
-	
-	function el:click(msg)
-		if msg.mx < 20 then
-			app.view = "inst"
-		elseif msg.mx < 2 * 20 then
-			app.view = "trak"
-		elseif msg.mx < 3 * 20 then
-			app.view = "patt"
-		else
-			app.view = "song"
-		end
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-
--- Default note attributes --------------------------------------------------------------
-
-
-function attach_note_attributes(parent, el)
-	el.width = 78
-	el.height = 16
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		local note = app.base_note % 12
-		local octave = app.base_note \ 12
-		local is_sharp = (note == 1) or (note == 3) or (note == 6)
-			or (note == 8) or (note == 10)
-		pal(7, self.dragged_note and 7 or 7)
-		if is_sharp then
-			spr(8 + note, 2, 6)
-		else
-			spr(8 + note, 8, 6)
-		end
-		pal(7, 7)
-		print(
-			"\014" .. string.format("%1x", octave),
-			2 + 12, 7,
-			self.dragged_note and 7 or 22
-		)
-		local x = 20
-		rectfill(x, 8, x + 20, 10, 59)
-		rectfill(
-			x, 8,
-			x + min(20 * (app.base_volume / 64), 20), 10,
-			self.dragged_volume and 7 or 17
-		)
-		if self.dragged_volume then
-			print("\014" .. string.format("%2d", app.base_volume), 27, 2, 7)
-		end
-		print(
-			"\014inst " .. string.format("%d", app.base_instrument),
-			44, 7,
-			self.dragged_instrument and 7 or 14 -- col 26
-		)
-	end	
-	
-	function el:click(msg)
-		-- TODO: replace with pull-down menus
-		if msg.mx < 18 then
-			self.dragged_note = true
-		elseif msg.mx < 42 then
-			self.dragged_volume = true
-		else
-			self.dragged_instrument = true
-		end
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		if self.dragged_note then
-			local delta = ui.mouselock(0.125)
-			app.base_note = mid(0, app.base_note - (12 * delta), 120)
-		elseif self.dragged_volume then
-			local delta = ui.mouselock(0.125)
-			app.base_volume = mid(0, app.base_volume - delta, 0x40) -- TODO: handle vol > 64
-		elseif self.dragged_instrument then
-			local delta = ui.mouselock(0.125)
-			app.base_instrument = mid(0, app.base_instrument - delta, 0xfe)
-			-- TODO: temporary, remove
-			app.instrument = app.base_instrument
-			app.node = 0
-			routing.clear_placement_buttons()
-		end
-	end
-	
-	function el:release(msg)
-		ui.mouseunlock()
-		self.cursor = get_spr(50)
-		self.dragged_note = nil
-		self.dragged_volume = nil
-		if self.dragged_instrument and app.view == "inst" then
-			app.refresh_gui = true
-		end
-		self.dragged_instrument = nil
-	end
-
-	function el:doubleclick(msg)
-		if msg.mx < 18 then
-			app.base_note = 48
-		elseif msg.mx < 42 then
-			app.base_volume = 0x32
-		else
-			app.base_instrument = 01
-		end
-	end
-	
-	return el
-end
-
-
-function attach_detail_button(parent, el)
-	el.width = 16
-	el.height = 16
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		pal(7, app.detail and 7 or 62)
-		spr(45, 1, 3)
-		pal(7, 7)		
-	end	
-	
-	function el:tap()
-		app.detail = not app.detail
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-:: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2024-04-14 09:49:39",revision=0]]
-
-:: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2024-04-10 20:46:41",revision=1]]
-- add 4/4 config
-
-:: .info.pod
-b64$LS1bW3BvZCxhdXRob3I9ImRyYWttYW5pc28iLGNyZWF0ZWQ9IjIwMjQtMDQtMTYgMTM6MzU6
-MTMiLGljb249dXNlcmRhdGEoInU4IiwxNiwxNiwiMDAwMDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEw
-MDAwMDAwMDAwMDEwNzA3MDcwNzA3MDcwNzA3MDcwNzAxMDAwMDAwMDEwNzBkMGQwZDBkMGQwZDBk
-MGQwZDBkMDcwMTAwMDEwNzBkMGQwZDBkMGQwZDA3MGQwZDBkMGQwZDA3MDEwMTA3MGQwZDBkMGQw
-ZDBkMDcwNzBkMGQwZDBkMDcwMTAxMDcwZDBkMGQwZDBkMGQwNzBkMDcwZDBkMGQwNzAxMDEwNzBk
-MGQwZDBkMGQwZDA3MGQwNzBkMGQwZDA3MDEwMTA3MGQwZDBkMGQwNzA3MDcwZDBkMGQwZDBkMDcw
-MTAxMDcwZDBkMGQwNzA3MDcwNzBkMGQwZDBkMGQwNzAxMDEwNzBkMGQwZDBkMDcwNzBkMGQwZDBk
-MGQwZDA3MDEwMTA3MGQwZDBkMGQwZDBkMGQwZDBkMGQwZDBkMDcwMTAxMDYwNzBkMGQwZDBkMGQw
-ZDBkMGQwZDBkMDcwNjAxMDEwNjA2MDcwNzA3MDcwNzA3MDcwNzA3MDcwNjA2MDEwMDAxMDYwNjA2
-MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAwMTA2MDYwNjA2MDYwNjA2MDYwNjA2MDEwMDAwMDAw
-MDAwMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAiKSxtb2RpZmllZD0iMjAyNS0wMy0xNyAxNzoz
-ODozMSIsbm90ZXM9IkEgbXVzaWMgdHJhY2tlciBhbmQgaW5zdHJ1bWVudFxuZWRpdG9yIGZvciBc
-Ii5zZnhcIiBmaWxlcyIscnVudGltZT0xNSxzdG9yZWQ9IjIwMjQtMDQtMTYgMTE6Mzc6NTEiLHRp
-dGxlPSJWaXNpVHJhY2siLHZlcnNpb249IjAuMC4zIix3b3Jrc3BhY2VzPXt7bG9jYXRpb249Im1h
-aW4ubHVhIzU5Iix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvYXBwLmx1YSMxIix3
-b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9uPSJzcmMvc2Z4Lmx1YSMyNDkiLHdvcmtzcGFjZV9p
-bmRleD0xfSx7bG9jYXRpb249InNyYy9zeW50aC5sdWEjMzQiLHdvcmtzcGFjZV9pbmRleD0xfSx7
-bG9jYXRpb249InNyYy9zeW5fcGFyYW0ubHVhIzMyMyIsd29ya3NwYWNlX2luZGV4PTF9LHtsb2Nh
-dGlvbj0ic3JjL3N5bl9tZW51cy5sdWEjMTAyIix3b3Jrc3BhY2VfaW5kZXg9MX0se2xvY2F0aW9u
-PSJnZngvMC5nZngiLHdvcmtzcGFjZV9pbmRleD0yfSx7bG9jYXRpb249Im1hcC8wLm1hcCIsd29y
-a3NwYWNlX2luZGV4PTN9LHtsb2NhdGlvbj0ic2Z4LzAuc2Z4Iix3b3Jrc3BhY2VfaW5kZXg9NH0s
-e2xvY2F0aW9uPSJzZngvMS5zZngiLHdvcmtzcGFjZV9pbmRleD03fX1dXQ==
+:: map/.info.pod
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 13:07:45",stored="2024-03-24 00:48:06"]]
+:: map/0.map
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
+YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
+MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
+:: pal/.info.pod
+--[[pod,created="2024-04-10 04:52:51",modified="2026-01-25 13:07:45",stored="2024-04-10 04:52:51"]]
+:: pal/0.pal
+b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
+MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUs
+dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
+dWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxoaWRkZW5fdG9nZ2xlcz17WzBdPXRy
+dWUsdHJ1ZSxmYWxzZSxmYWxzZX0sbG9ja2VkPXtbMF09dHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVl
+LHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0
+cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsdHJ1
+ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZh
+bHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNl
+LGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlLGZhbHNlfSxtb2RpZmllZD0iMjAy
+NC0wNS0wMSAxMDoxODo1NiIsb2twYWxfdmVyc2lvbj0iMC4wLjQiLHJldmlzaW9uPTEzNTAsdGVz
+dF9jdWJlX2NvbG9ycz17WzBdPXsxNSwzMSw0fSx7MzEsNCwyMH0sezQsMjAsMjF9LHsxMCw5LDI1
+fSx7OSwyNSwyNH0sezgsMjQsMn0sezI2LDExLDI3fSx7MTEsMjcsM30sezI3LDMsMTl9LHsyOCwx
+NywxOX0sezI4LDEyLDE2fSx7MTIsMTYsMX0sezYsMjksMTN9LHsyOSwxMywxOH0sezEzLDE4LDF9
+LHs3LDIzLDE0fSx7MjMsMTQsMTN9LHsxNCwzMCwxOH0sezcsNiwyMn0sezYsMjIsNX0sezIyLDUs
+MjF9LHsxLDEsMX0sezEsMSwxfSx7MSwxLDF9fSx3aGl0ZXN0X2NvbG9yPTddXWx6NAAwAQAAFQIA
+APUFdXNlcmRhdGEoImkzMiIsNjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUyMzYw
+MDVmNTc0ZjAwYzJjM2M3MDBmZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlhZCQA
+YDgzNzY5YyAAMTc3YTgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAwNzQy
+ZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBiMsAA
+oDY0ZGZmNjAwYmSJAACWAEAwZGFiQABfODU2ZDABAL7wBDlmYTBhNjAwMWUzNzNjMDAzNzQnASEw
+MwEAMTAwMgEAoDAwMTYxNjE2Iik=
+:: sfx/.info.pod
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-25 13:07:45",stored="2024-03-24 00:48:06"]]
+:: sfx/0.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDExOjI5OjU2Iixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249MTA4XV1sejQAcgEAACwYAADwJ3B4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgMEBQYHAA--kAgJCgsPDA8NDw4PDxAAXwFwAfD-AQDr-Sm_ARAG
+DyAQASABIAHwAAIQAgwQASAPISABMA-AD2jwwg8oDznwxg-4Cg--D4AP9w8NAfAJARAGDDIA-w0P
+5RABMA_AoAggD6ZQAg_G8AMJ8A8K8HcPKA--QQASAHMAP0DwwzAA------91H-8BAKz1c8gPQAAC
+QA9QH1E-Uh8pPygPKV9ELyYvJ59PLxwfGx8aLxk-GD8ZDxqP--Anjg8_DzsPNg8zDzAPLQ8qDygP
+JQ8jDx8PHA8aDxgPFQ8UDxIPEA8PDw4PDQ8MCgkIBhUEEyIRICEwARIxUE7wcA9AAA8QQH8lfzR-
+JP4Y8Aj_GPwI-hgYAPIINP4ocP4ofP4of3bwKB_fH48ffx9v8CgeAE-_sPBwCgD-------------
+------9mUP6w8P85
+:: sfx/1.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDEyOjIyOjEwIixtb2RpZmllZD0iMjAyNS0w
+My0xNyAxNzozODozMSIscmV2aXNpb249MTgyXV1sejQALgEAAP4XAAD-MHB4dQADKAAABAAED0AQ
+Ag4AAaABIAKgDgAPEAAN8MoBAgNADw_QBAUGB0AMkAgJCgtADJAPDA8NDw4MQAzw-wEA6-MeqgEQ
+Bg8gEAEgASAB8AACEAIOEAEPMxAPISABDyMgD4CQDxECIA5QAiAB4A8SCgAFKAASzSgAEN0oAPoZ
+BAjwDwnwDwrQAg9A8AcPHA8r8MQDAA-4Cg--D4AP9w8NAfAJARAGDmsAECBBAP8bMA_AkAEJ8A8I
+EAQPGg-cATAGD_oPQgHwAQrgDzUAD0DwZQ878AcPKvCvTwAUn0Dwww8oD--wxjAA------9vH-8B
+AKzyCsgPQAAPEEB-KH8m--8g8AD9IP8yAP0g8HAYAC-9sAoA--------------------fFD9sPD-
+OQ==
+:: src/.info.pod
+--[[pod,created="2024-04-07 08:14:00",modified="2026-01-25 13:07:45",stored="2024-04-07 08:14:00"]]
+:: src/ui/.info.pod
+--[[pod,created="2024-04-22 11:46:34",modified="2026-01-25 13:07:45"]]
 :: [eoc]
