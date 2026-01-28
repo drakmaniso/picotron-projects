@@ -8,7 +8,7 @@ version 2
 :: src/
 :: src/wavetables/
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-28 16:04:34",revision=16763]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-28 21:09:31",revision=16955]]
 include "src/lune.lua"
 --include "src/misc.lua"
 include "src/waves.lua"
@@ -21,6 +21,7 @@ local ui_routing = require "src/ui_routing.lua"
 local ui_settings = require "src/ui_settings.lua"
 local ui_synth = require "src/ui_synth.lua"
 local ui_tracker = require "src/ui_tracker.lua"
+local ui_visual = require "src/ui_visual.lua"
 
 
 function _init()
@@ -91,12 +92,11 @@ local previously_focused = nil
 
 function _update()
 	-- Keyboard Focus
---	local currently_focused = ui.head() and ui.head():get_keyboard_focus_element()
---	if currently_focused == nil and previously_focused ~= nil then
---		notify("*** focus related checkpoint ***")
---		app.checkpoint()
---	end
---	previously_focused = currently_focused
+	local currently_focused = ui.head() and ui.head():get_keyboard_focus_element()
+	if currently_focused ~= previously_focused then
+		ui_visual.close()
+	end
+	previously_focused = currently_focused
 	-- GUI Refresh
 	if app.refresh_gui then
 		generate_gui()
@@ -109,9 +109,13 @@ function _update()
 	end
 	if key("ctrl") then
 		if keyp("z") then
-			app.undo()
+			if key("shift") then
+				app.redo()
+			else
+				app.undo()
+			end
 		end
-		if keyp("y") or (key("shift") and keyp("z")) then
+		if keyp("y") then
 			app.redo()
 		end
 	end
@@ -270,7 +274,7 @@ function attach_instrument_selector(parent, el)
 	function el:drag(msg)
 		if self.dragged then
 			local delta = ui.mouselock(0.125)
-			app.base_instrument = mid(0, app.base_instrument - delta, 0xfe)
+			app.base_instrument = mid(0, app.instrument - delta, 0xfe)
 			-- TODO: temporary, remove
 			app.instrument = app.base_instrument
 			app.node = 0
@@ -358,7 +362,7 @@ function attach_volume_selector(parent, el)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-28 16:04:34",revision=6490]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-28 21:09:31",revision=6682]]
 # WaveMaker
 
 ## Tracker
@@ -399,7 +403,7 @@ end
 
 ## Synth
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-28 16:04:34",revision=13568]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-28 21:09:31",revision=13760]]
 local sfx = require "src/sfx.lua"
 
 
@@ -471,13 +475,6 @@ function app.init_undo()
 		end,
 		function(state)
 			state.sfx:poke(0x40000)
-			local need_ui_refresh =
-				app.view ~= state.app.view
-				or app.node ~= state.app.node
-				or app.wt ~= state.app.wt
-				or app.detail ~= state.app.detail
-				or app.track_header ~= state.app.track_header
-				or app.end_advanced ~= state.app.end_advanced
 			-- Global State
 			app.pattern = state.app.pattern
 			app.track = state.app.track
@@ -494,9 +491,7 @@ function app.init_undo()
 			app.height_row = state.app.height_row
 			app.env_advanced = state.app.env_advanced
 			-- Refresh
-			if need_refresh then
-				app.refresh_gui = true
-			end
+			app.refresh_gui = true
 		end,
 		0x81 -- (0x1 binary  0x80 pxu rle)
 	)
@@ -554,7 +549,7 @@ end
 
 return app
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-28 16:04:34",revision=7947]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-28 21:09:31",revision=8139]]
 local app = require "src/app.lua"
 
 
@@ -719,7 +714,7 @@ end
 function init_track(addr)
 --	printh("init_track "..addr)
 	poke2(addr, 64) -- len
-	poke(addr+2,16) -- spd
+	poke(addr+2,0) -- spd
 	poke(addr+3,0)  -- loop0
 	poke(addr+4,0)  -- loop1
 	poke(addr+5,0)  -- delay
@@ -810,7 +805,7 @@ end
 
 return file
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-28 16:04:34",revision=8299]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-28 21:09:31",revision=8491]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -903,7 +898,7 @@ function structure(meta)
 end
 
 :: src/misc.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-28 16:04:34",revision=7592]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-28 21:09:31",revision=7784]]
 -- Table utility functions --------------------------------------------------------
 
 
@@ -1030,7 +1025,7 @@ function set_drawspace(drawspace)
 end
 
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-01-28 16:04:34",revision=2705]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-01-28 21:09:31",revision=2897]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 
@@ -1108,8 +1103,8 @@ end
 
 
 function selection.move_step(delta)
+	local max_length = sfx.pattern_max_length(app.pattern)
 	for cursor in all(cursors) do
-		local max_length = sfx.maximum_track_length()
 		cursor.min = mid(cursor.min + delta, 0, max_length - 1)
 		cursor.max = mid(cursor.max + delta, 0, max_length - 1)
 	end
@@ -1271,7 +1266,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-28 16:04:34",revision=8853]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-28 21:09:31",revision=9045]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -1386,16 +1381,16 @@ end
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-28 16:04:34",revision=13339]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-28 21:09:31",revision=13531]]
 local sfx = {}
 
 
-function sfx.maximum_track_length()
+--function sfx.maximum_track_length()
 	-- This seem to be hardcoded?
 	-- I can't find anywhere in the doc where this
 	-- would be configured...
-	return 64
-end
+--	return 64
+--end
 
 ----------------------------------------------------------------------------------------------------
 -- Stat
@@ -1638,6 +1633,25 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Track Info
 ----------------------------------------------------------------------------------------------------
+
+
+function sfx.track_max_length(track)
+	return peek2(base_trk + (track * 328))
+end
+
+
+function sfx.set_track_max_length(track, value)
+	poke2(base_trk + (track * 328), value)
+end
+
+
+function sfx.pattern_max_length(pattern)
+	local max_length = 0
+	for channel = 0, 7 do
+		max_length = max(sfx.track_max_length(sfx.pattern_track(pattern, channel)), max)
+	end
+	return max_length
+end
 
 
 function sfx.track_speed(track)
@@ -2248,7 +2262,7 @@ end
 
 return sfx
 :: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-28 16:04:34",revision=7049]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-28 21:09:31",revision=7241]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 
@@ -2802,7 +2816,7 @@ end
 
 return ui
 :: src/ui_envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-28 16:04:34",revision=9158]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-28 21:09:31",revision=9350]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -3043,6 +3057,7 @@ function ui_envelopes.attach_slider(parent, el)
 		end
 	end]]
 	function el:click(msg)
+		app.checkpoint()
 		self.cursor = 0
 		self.dragged = true
 	end
@@ -3114,7 +3129,7 @@ end
 
 return ui_envelopes
 :: src/ui_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-28 16:04:34",revision=8141]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-28 21:09:31",revision=8333]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -3387,7 +3402,7 @@ end
 
 return ui_menus
 :: src/ui_nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-28 16:04:34",revision=14716]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-28 21:09:31",revision=14908]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -4039,7 +4054,7 @@ end
 
 return ui_nodes
 :: src/ui_notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-01-28 16:04:34",revision=4288]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-01-28 21:09:31",revision=4480]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx.lua"
@@ -4226,10 +4241,12 @@ function ui_notegrid.attach(parent, el)
 		local track_length <const> = sfx.track_length(track)
 		local track_loop0 <const> = sfx.track_loop0(track)
 		local track_loop1 <const> = sfx.track_loop1(track)
+		local track_is_looping <const> = sfx.track_is_looping(track)
 		local start <const> = self.start
 		local nb_rows <const> = math.ceil(self.height / app.height_row)
 		local selection_mask <const> = selection.mask()
-		local maximum_pattern_length <const> = sfx.maximum_track_length()
+		local track_max_length <const> = sfx.track_max_length(track)
+		-- TODO: pattern_max_length
 		-- Hot Loop for the Notes
 		for row = 0, nb_rows - 1 do
 			local step <const> = start + row
@@ -4238,11 +4255,8 @@ function ui_notegrid.attach(parent, el)
 			local y_text <const> = y + math.ceil((app.height_row - 5) / 2)
 			if step < 0 then
 				goto continue
-			elseif step >= maximum_pattern_length then
-				if step == track_loop1 then
-					-- TODO: useless? (max length => this can never loop)
-					spr(22, x, y - 8)
-				end
+			elseif step >= track_max_length then
+				--line(x, y, x + app.width_column - 2, y, 36)
 				break
 			end
 			local is_greyed = step >= track_length
@@ -4263,13 +4277,37 @@ function ui_notegrid.attach(parent, el)
 			local fxp1 <const> = sfx.track_fx_param1(track, step)
 			local note <const> = freq % 12
 			local octave <const> = freq // 12
+			-- Cursors and Selection
+			if is_selected and self.parent:has_keyboard_focus() then -- TODO
+				if selection_mask & selection.note ~= 0 then
+					rrectfill(x_note, y, w_note, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.octave ~= 0 then
+					rrectfill(x_octave, y, w_octave, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.inst_hi ~= 0 then
+					rrectfill(x_inst_hi, y, w_inst_hi, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.inst_lo ~= 0 then
+					rrectfill(x_inst_lo - 1, y, w_inst_lo + 1, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.vol_hi ~= 0 then
+					rrectfill(x_vol_hi, y, w_vol_hi, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.vol_lo ~= 0 then
+					rrectfill(x_vol_lo - 1, y, w_vol_lo + 1, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.fx ~= 0 then
+					rrectfill(x_fx, y, w_fx, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.fx_hi ~= 0 then
+					rrectfill(x_fx_hi - 1, y, w_fx_hi, app.height_row, 0, 37)
+				end
+				if selection_mask & selection.fx_lo ~= 0 then
+					rrectfill(x_fx_lo - 2, y, w_fx_lo + 2, app.height_row, 0, 37)
+				end
+			end
 			-- Note and Octave
-			if is_selected and selection_mask & selection.note ~= 0 then
-				rrectfill(x_note, y, w_note, app.height_row, 0, 37)
-			end
-			if is_selected and selection_mask & selection.octave ~= 0 then
-				rrectfill(x_octave, y, w_octave, app.height_row, 0, 37)
-			end
 			if freq != 0xff then
 				pal(7, is_greyed and 58 or fg2_note)
 				spr(72 + note, x + 4, y_text)
@@ -4283,12 +4321,6 @@ function ui_notegrid.attach(parent, el)
 				spr(65, x + 4, y_text)
 			end
 			-- Instrument
-			if is_selected and selection_mask & selection.inst_hi ~= 0 then
-				rrectfill(x_inst_hi, y, w_inst_hi, app.height_row, 0, 37)
-			end
-			if is_selected and selection_mask & selection.inst_lo ~= 0 then
-				rrectfill(x_inst_lo - 1, y, w_inst_lo + 1, app.height_row, 0, 37)
-			end
 			if inst != 0xff then
 				pal(7, is_greyed and 58 or fg2_inst)
 				spr(256 + inst, x + 20, y_text)
@@ -4297,12 +4329,6 @@ function ui_notegrid.attach(parent, el)
 				spr(64, x + 20, y_text)
 			end
 			-- Volume
-			if is_selected and selection_mask & selection.vol_hi ~= 0 then
-				rrectfill(x_vol_hi, y, w_vol_hi, app.height_row, 0, 37)
-			end
-			if is_selected and selection_mask & selection.vol_lo ~= 0 then
-				rrectfill(x_vol_lo - 1, y, w_vol_lo + 1, app.height_row, 0, 37)
-			end
 			if vol != 0xff then
 				pal(7, is_greyed and 58 or fg2_vol)
 				spr(256 + vol, x + 31, y_text)
@@ -4311,15 +4337,6 @@ function ui_notegrid.attach(parent, el)
 				spr(64, x + 31, y_text)
 			end
 			-- FX
-			if is_selected and selection_mask & selection.fx ~= 0 then
-				rrectfill(x_fx, y, w_fx, app.height_row, 0, 37)
-			end
-			if is_selected and selection_mask & selection.fx_hi ~= 0 then
-				rrectfill(x_fx_hi - 1, y, w_fx_hi, app.height_row, 0, 37)
-			end
-			if is_selected and selection_mask & selection.fx_lo ~= 0 then
-				rrectfill(x_fx_lo - 2, y, w_fx_lo + 2, app.height_row, 0, 37)
-			end
 			if fx != 0x0 then
 				print(chr(fx), x + 42, y_text, is_greyed and 58 or fg2_fx) -- TODO: replace with sprites
 				pal(7, is_greyed and 58 or fg1_fx)
@@ -4329,11 +4346,17 @@ function ui_notegrid.attach(parent, el)
 				spr(66, x + 42, y_text)
 			end
 			-- Loop Markers
-			if step == track_length then
-				spr(22, x, y - 8)
-			end
-			if step > 0 and track_loop1 > 0 and step == track_loop0 then
-				spr(21, x, y)
+			if track_is_looping then
+				if step == track_length then
+					spr(22, x, y - 8)
+				end
+				if step > 0 and step == track_loop0 then
+					spr(21, x, y)
+				end
+			else
+				if step == track_length then
+					line(x + 6, y - 1, x + app.width_column - 2 - 6, y - 1, 36)
+				end
 			end
 			pal(7, 7)
 			::continue::
@@ -4400,7 +4423,7 @@ end
 
 return ui_notegrid
 :: src/ui_params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-28 16:04:34",revision=9463]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-28 21:09:31",revision=9655]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -4818,7 +4841,7 @@ end
 
 return ui_params
 :: src/ui_routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-28 16:04:34",revision=9088]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-28 21:09:31",revision=9280]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -5354,7 +5377,7 @@ end
 
 return ui_routing
 :: src/ui_settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-28 16:04:34",revision=6525]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-28 21:09:31",revision=6717]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui.lua"
 
@@ -5512,7 +5535,7 @@ end
 
 return ui_settings
 :: src/ui_synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-28 16:04:34",revision=11257]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-28 21:09:31",revision=11449]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx.lua"
@@ -5798,7 +5821,7 @@ end
 
 return ui_synth
 :: src/ui_tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-01-28 16:04:34",revision=4419]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-01-28 21:09:31",revision=4611]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -5825,6 +5848,7 @@ local attach_play_button
 
 function ui_tracker.attach(parent, el)
 	parent:attach(el)
+	el:set_keyboard_focus(true)
 	
 	el.headers = {}
 	el.notegrids = {}
@@ -5888,9 +5912,19 @@ function ui_tracker.attach(parent, el)
 		line(3, el.height - 58, width_panel - 4, el.height - 58, 58)
 		line(3, el.height - 57, width_panel - 4, el.height - 57, 57)
 	end	
-	
+
 	function el:update()
-		self:show_playing_step()
+		-- 
+--		local currently_focused = ui.head():get_keyboard_focus_element()
+--		if currently_focused ~= self.previously_focused then
+--			self:set_keyboard_focus(true)
+--		end
+--		self.previously_focused = currently_focused
+		if not ui.head():get_keyboard_focus_element() then
+			self:set_keyboard_focus(true)
+		end
+		-- Hangle Playing Scrolling
+		self:handle_playing_scroll()
 		if sfx.music_is_playing() then
 			return
 		end
@@ -5899,7 +5933,7 @@ function ui_tracker.attach(parent, el)
 			local step = selection.cursor_step()
 			if step and step == 0 and app.pattern > 0 then
 				app.pattern -= 1
-				selection.set_cursor_step(sfx.maximum_track_length())
+				selection.set_cursor_step(sfx.pattern_max_length(app.pattern))
 			else				
 				selection.move_step(-1)
 			end
@@ -5911,7 +5945,7 @@ function ui_tracker.attach(parent, el)
 		if keyp("down") then
 			local step = selection.cursor_step()
 			if
-				step and step == sfx.maximum_track_length() - 1
+				step and step == sfx.pattern_max_length(app.pattern) - 1
 				 and app.pattern < sfx.num_patterns() - 1
 			then
 				app.pattern += 1
@@ -5952,9 +5986,13 @@ function ui_tracker.attach(parent, el)
 		end
 	end
 	
+	function el:click(msg)
+		self:set_keyboard_focus(true)
+	end
+	
 	--
 	
-	function el:show_playing_step()
+	function el:handle_playing_scroll()
 		if sfx.music_is_playing() then
 			if not self.was_playing then
 				self:save_position()
@@ -6026,7 +6064,7 @@ function ui_tracker.attach(parent, el)
 	
 	function el:scrolling_guardrail(mode)
 		local nb_rows = flr(self.notegrids[1].height // app.height_row)
-		local max_length = sfx.maximum_track_length()
+		local max_length = sfx.pattern_max_length(app.pattern)
 		local min_step, max_step
 		if mode == "overshoot" then -- TODO: add settings?
 			min_step = - (nb_rows // 2)
@@ -6213,7 +6251,10 @@ function attach_row_counter(parent, el)
 	function el:draw()
 --		rrectfill(0, 0, self.width, self.height, 0, 57)
 		local step = selection.cursor_step()
-		if step then
+		if sfx.music_is_playing() then
+			ui.print_centered("row", 11, 1, 58)
+			ui.print_centered(string.format("%02d", sfx.playing_row()), 11, 10, 5)
+		elseif step then
 			ui.print_centered("row", 11, 1, 58)
 			ui.print_centered(string.format("%02d", step), 11, 10, 5)
 		end
@@ -6275,7 +6316,7 @@ end
 
 return ui_tracker
 :: src/ui_trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-01-28 16:04:34",revision=1868]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-01-28 21:09:31",revision=2060]]
 local app = require "src/app.lua"
 local ui = require "src/ui.lua"
 local sfx = require "src/sfx.lua"
@@ -6400,7 +6441,7 @@ end
 
 return ui_trakdial
 :: src/ui_visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-28 16:04:34",revision=7773]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-28 21:09:31",revision=7965]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local ui = require "src/ui.lua"
@@ -6619,7 +6660,7 @@ end
 
 return ui_visual
 :: src/ui_wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-01-28 16:04:34",revision=5999]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-01-28 21:09:31",revision=6191]]
 local sfx = require "src/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui.lua"
@@ -6763,7 +6804,7 @@ end
 
 return ui_wavetable
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-28 16:04:34",revision=7653]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-28 21:09:31",revision=7845]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -7238,7 +7279,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-28 16:04:34",revision=7988]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-28 21:09:31",revision=8180]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -7308,7 +7349,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-28 16:04:34",revision=6491]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-28 21:09:31",revision=6683]]
 - show hollow cursor when notegrid doesn't have keyboard focus
 - fix keyboard focus for notegrid
 - fix num fields in track dialog and settings
@@ -7323,9 +7364,9 @@ return Wavetable
 - add auto-hide ruler on the left side for row numbers
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-01-28 16:04:34",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.4",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#74",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfxi",workspace_index=8}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-01-28 21:09:31",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.4",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#74",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfxi",workspace_index=8}}]]
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 16:04:34",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 21:09:31",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 MS0yOCAwODo1MzoxNSIscmV2aXNpb249OTkwOV1dbHo0AO4IAAArOwAA8yV7WzBdPXtibXA9cHh1
@@ -7844,14 +7885,14 @@ IDs8IDvJPDs8O8g8Ozw7yDw7PDvIPDs8O-3HPCA7-f395zwgO8c8Ozw7yDw7PDvIPDs8O8g8Ozw7
 _yDAOyDBO8AgO8A8IDv9-DwgO-39-ec8IDv98SA7wSA7IDvBPCA7-fw8IDv9-f3nPCA7-e8gwTvB
 IDsgOyA7PCA7-fw8IDv9-f3nPCA7-fs8-f3BIDz9-f3oIDz9-AAAAAAAAAAB
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 16:04:34",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 21:09:31",stored="2024-03-24 00:48:06"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
 My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-01-28 16:04:34",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-01-28 21:09:31",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -7904,32 +7945,39 @@ NTZiODMwMGYxYTFiYTAwYWZhYzgIAUA0ZWZiOAH-H2M5NTYyMDA5M2U4OWEwMDNjOTU5MjAwOGVk
 Y2Q5MDA5NDczYjQwMGNhYTllYTABAB7wFDc2Nzc3ZDAwZDZkN2RhMDA5ZmEwYTYwMDFlMzczYzAw
 Mzc0JwEhMDMBADEwMDIBAKAwMDE2MTYxNiIp
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 16:04:34",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-01-28 21:09:31",stored="2024-03-24 00:48:06"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTE3IDExOjI5OjU2Iixtb2RpZmllZD0iMjAyNi0w
-MS0yOCAwNDoyMDo0OCIscmV2aXNpb249MTQ1XV1sejQAggEAAG8VAAD-NHB4dQADKAAABAAED0AQ
+MS0yOCAxOTo1MzozMyIscmV2aXNpb249MTQ2XV1sejQAfgEAAGwVAAD-NHB4dQADKAAABAAED0AQ
 Ag4AAaABIAKgDgAPEAAN8MoBAgMP-zAPH5AEBQYHMAcPD5AICQoLQAyQDwwPDQ8ODEAM8P8BAOvw
 PaoBEAYPIBABIAEgAfAAAhACDhABIA8hIAEwD4GQDxECIA5QAg8hEAHwqA8oD--wxg-4Cg--D4AP
 9w8NAXAPZg9pD3IPcw90Dg9pD24JAP8CD3IPdQ9tD2UPbg90AAEQBg5bAAI-QPDDTwABr28PdA9o
-D2UPcrA6AB2mYQ9uD2QOD2EfbkUAH0BFABsv8AkwAP------MR--AQCs9wLID0AADxAPFQ8bIA8r
-L-8PKAQAABAAFyYEAGsr--8PAC0CAEv9Dw4tAgDh-Q-wNA9QEA8M8A4D8AlhAONADyj9LwD9Lw9g
--S-wcBMAYCstDyj9K0QAECs2AGIr8DcD8CgcACP9sCYAUQMEIA8kOwATDjoALgQKEwAPJgAALg8O
-FAABVwAfBQgA----------------JFD9sPD-OQ==
-:: sfx/0.sfxi
+D2UPcrA6AB2mYQ9uD2QOD2EfbkUAH0BFABsv8AkwAP------MR--AQCs58gPQAAPEA4wDysv-w8o
+BAAAEAAXJgQAayv--w8ALQIAS-0PDi0CAOH9D-A0D1AQDwzwDgPwCV4A40APKP0vAP0vD2D9L-Bw
+EwBgKy0PKP0rRAAQKzYAYivwNwPwKBwAI-2wJgBRAwQgDyQ7ABMOOgAuBAoTAA8mAAAuDw4UAAFX
+AB8FCAD---------------8kUP2w8P85
+:: sfx/00.sfxi
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTI3IDIwOjE0OjEwIixtb2RpZmllZD0iMjAyNi0w
-MS0yOCAxNTo1ODowOCIscmV2aXNpb249NzVdXWx6NACOAgAAXxgAAPAmcHh1AAMoAAAEAAQPQBAC
-DgABoAEgAqAOAA8QAA3wygESBAMCCAAP-5AICQoLDwwPDQ8ODw8QAP8gDQ8RDxIPEw8UDxUPFg8X
-BA--kA8YDxkPGg8bDxwPHQ8eDx8AD--w-----6MB8P8BAObwS-UBEAYPGQcAAQ8aDzcAASAB8AAC
-EAYPIAARIA8hIAEgBA_BD8EB8MEPKA--8AYPOvCtAQAP_AoP-w_AD-cPDQFwD3APdQ9sD3MPZQ8g
-D3QPbw8gD3MPYQ93QFkAQyAQASBUAEQCDBABUwBDzw-JAlMAbxUBoAnwlFIABP8IDA93D2kPZA90
-D2gMD20Pbw9kEAEQBgxVAADxATAOkA8RAiAMUAIPNxAB8KhcABjGVwAv8Ak7AAYv8MMvAP------
-KR--AQCs9AbIDgANQC8VDxgPFQ8cHxUfHA8VD-8EAAwYAE8vDg8MLAAZsqAP-wAFAAWgBeAFCABf
-MA4NDA0EACmfAA9tAAMgAwADBgAVIPAw4QDCPy0fMB8yHzQlCAUIDAAyPzA1CQAZGBQAQpEV8QAF
-ADOdFf0FALIAL3YwG1A7QCtAKwgA-wjADwXgLcAH4C0wDiANIA9FBQ9IBQ9MBQkAEh5RFQAPMAAM
-HwACACwfDQIALK7wcA4QDwgPGCAVnwAP6gA3PyUABQIAKUAnAPcsqQBNDQwgNVwAD6cANT9FAAUC
-ACbAJf8DLvBwDgAdMPWwCAAsDUAIAPEVDyQPJQ8mDycPKA8pDyoPKw8sDy0PLg8v9SSw9SS89SQP
-dw9yXgr4DHAPYQ9zD2QPZg9jCw9iD24DDy0PKw88Dz7wXlAADwgAHDsADiASAA8IAP----------
-----2VD1sPD-OQ==
+MS0yOCAyMDowNjowOSIscmV2aXNpb249ODhdXWx6NACoAgAA7xcAAP9ZcHh1AAMoAAAEAAQPQBAC
+DgABoAEgAqAOAA8QAA3wvg--oAECAwQAAggADJAICQoLDwwPDQ8ODw8ADJANDxEPEg8TDxQPFQ8W
+DxcEDJAPGA8ZDxoPGw8cDx0PHg8fAAzw-----6MB8P8BAObwBfUBEAYPIA8HAAEADzcAASAB8AAC
+EgDxMgARIA8hIAEgBA_eD8EB8MEPKA8p8AYPOvCtAQAP_AoMD4AP9w8NAXAPcA91D2wPcw9lDyAP
+dA9vDyAPcw9hD3dAWAAzEAEgUwBEAgcQAVIAQM8PyQJSAI8M8BUBoAnwlFAAA-8IBw93D2kPZA90
+D2gHD20Pbw9kEAEQBgdTAACAMA6QBQIgB1AaAEAEoA8SDABwAg83EAHwiGUAF8ZgAC-wCUQAABAF
+QwAv8MMsAP-----SH-8BAKzxFsgOAA1ALxUPGA8VDxwfFR8cDxUMAwwDDCMPGAMPHBMYAwwvDg8O
+ABAIDQABGwA0CwMIGQCToAwADAAMoAzgCABfMA4NBw0EACmfAA9tAAkgCQAJBgAVIPAwwgDCPy0f
+MB8yHzQsBAwEDAAyPzA8CQAZFBQAQpEc8QAFADOdHP0FALIAL3YwFlA2QCZAJggA-wjADwXgLcAC
+4C0wDiANIA9FDA9IDA9MDAkAEh5RFQAPMAAMHwACACwfDQIALK7wcA4QDwgPDCAcnwAP6gA3PywA
+DAIAKUAiAPIsqQBNDQcgPFwAD6cANT9MAAwCACbALP8DLvBwDgAdMPywCAAsDUAIAIAPJA8lDyYP
+J-cJ8QkPKg8rDywPLQ8uDy-8JLD8JLf8JA93D3LvCfgMcA9hD3MPZA9mD2MGD2IPbgkPLQ8rDzwP
+PvBeUAAPCAAcOwAOIBIADwgA---------------ZUPyw8P85
+:: sfx/1.sfxi
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTI4IDIwOjAyOjI2Iixtb2RpZmllZD0iMjAyNi0w
+MS0yOCAyMDowMjoyNiIscmV2aXNpb249MF1dbHo0AN0AAAC7FwAA8CdweHUAAygAAAQABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
+EwD-Bg8YDxkPGg8bDxwPHQ8eDx8AD--w-wEA6-8nqgEQBg8gEAEgASAB8AACEAIMEAEgDyEgATAP
+QPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD------70f-wEArPQDyA9AAA1A--_w8HAPQAAI
+AAggDAAvDUAKAP-------------------3VQ-7Dw-zk=
 :: sfx/worst_case_note_grid.sfxi
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTI3IDE5OjU5OjM0Iixtb2RpZmllZD0iMjAyNi0w
 MS0yNyAyMDowMjo1MyIscmV2aXNpb249Ml1dbHo0AAkBAACyIQAA8CdweHUAAygAAAQABA9AEAIO
@@ -7939,7 +7987,7 @@ QPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD------70f-wEArO-ID0AADUAPLQ8yDzUPMggA
 Zc-wMPwwDz4Pdg9tD3YIAGWPDAAPNwAMAA4EACYPSgH4Lw4ASQH---------61---7DwcAoA----
 ----------------NFD-sPD-OQ==
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-01-28 16:04:34",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-01-28 21:09:31",stored="2024-04-07 08:14:00"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-01-28 16:04:34"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-01-28 21:09:31"]]
 :: [eoc]
