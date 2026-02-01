@@ -7,7 +7,7 @@ version 2
 :: src/
 :: src/ui/
 :: defaults/settings.lua
---[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-01 20:50:57",revision=2313]]
+--[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-01 22:07:20",revision=2505]]
 return {
 	window_mode = "tabbed",
 	default_theme = "dark",
@@ -15,11 +15,11 @@ return {
 	cursor_hide_if_selection = true,
 }
 :: defaults/shortcuts.lua
---[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-01 20:50:57",revision=2312]]
+--[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-01 22:07:20",revision=2504]]
 return {
 }
 :: defaults/theme_dark.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 20:50:57",revision=3761]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 22:07:20",revision=3953]]
 return {
 	-- UI
 	ui_bg = 17,
@@ -53,7 +53,7 @@ return {
 	lua_unknown = 8,
 }
 :: defaults/theme_light.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 20:50:57",revision=3762]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 22:07:20",revision=3954]]
 return {
 	-- UI
 	ui_bg = 22,
@@ -87,7 +87,7 @@ return {
 	lua_unknown = 8,
 }
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-01 20:50:57",revision=8976]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-01 22:07:20",revision=9168]]
 ----------------------------------------------------------------------------------------
 
 
@@ -686,7 +686,7 @@ end
 ------------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-01 20:50:57",revision=7129]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-01 22:07:20",revision=7321]]
 # Codron
 
 ## Keybinds
@@ -737,7 +737,7 @@ Multi-cursors and multi-selection:
 - Movement keys: exit find, cancel selection.
 
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-01 20:50:57",revision=6746]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-01 22:07:20",revision=6938]]
 
 local multiclipboard = {}
 
@@ -765,7 +765,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-01 20:50:57",revision=10618]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-01 22:07:20",revision=10810]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2216,7 +2216,7 @@ return {
 	new = new,
 }
 :: src/config.lua
---[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-01 20:50:57",revision=3759]]
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-01 22:07:20",revision=3951]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2394,7 +2394,7 @@ return M
 ----------------------------------------------------------------------------------------
 
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-01 20:50:57",revision=4797]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-01 22:07:20",revision=4989]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2697,6 +2697,15 @@ local function new_folder(path)
 			end
 		end
 	end
+
+	function self:foreach_direct_children(fun, level)
+		for node in all(children) do
+			local found = fun(node, level)
+			if found then
+				return found
+			end
+		end
+	end
 	
 	return self
 end
@@ -2898,7 +2907,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 20:50:57",revision=3971]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 22:07:20",revision=4163]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -2997,7 +3006,7 @@ function structure(meta)
 end
 
 :: src/ui/banner.lua
---[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-01 20:50:57",revision=1968]]
+--[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-01 22:07:20",revision=2160]]
 ------------------------------------------------------------------------------------
 
 
@@ -3098,7 +3107,7 @@ end
 ------------------------------------------------------------------------------------
 
 :: src/ui/button.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 20:50:57",revision=2874]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 22:07:20",revision=3066]]
 -------------------------------------------------------------------------------------
 
 
@@ -3154,7 +3163,7 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-01 20:50:57",revision=10755]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-01 22:07:20",revision=10947]]
 -------------------------------------------------------------------------------------------
 
 
@@ -3931,7 +3940,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-01 20:50:57",revision=5648]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-01 22:07:20",revision=5840]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4253,7 +4262,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-01 20:50:57",revision=6150]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-01 22:07:20",revision=6342]]
 ----------------------------------------------------------------------------------------
 
 
@@ -4313,7 +4322,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/iconbutton.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 20:50:57",revision=2873]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 22:07:20",revision=3065]]
 -------------------------------------------------------------------------------------
 
 
@@ -4362,7 +4371,7 @@ return function(self)
 	return self
 end
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-01 20:50:57",revision=9241]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-01 22:07:20",revision=9433]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4439,42 +4448,19 @@ return function(editor)
 	--]]
 
 	-- Private fields
+	local displayed_rows = {}
+	local closed_folders = {}
 	
-	
-	function self:hover(msg)
-		self.cursor = 1
-		if msg.mx >= self.width - 2 then
-			self.cursor = 9 -- TODO: replace with horiz. double arrow
-		else
-			self.cursor = "pointer"
+	local function populate_displayed_nodes(node, level)
+		log("node="..pod(node:path())..", level="..pod(level))
+		if level ~= 0 then
+			add(displayed_rows, { node = node, level = level })
+		end
+		if node:is_folder() and not closed_folders[node:path()] then
+			node:foreach_direct_children(populate_displayed_nodes, level + 1)
 		end
 	end
-	
-	
-	function self:click(msg)
-		local y = header_height
-		local row = 0
-		filetree.foreach(
-			function(node, level)
-				row += 1
-				if level == 0 then return end
-				if row < self.starting_row then return end
-				if y <= msg.my and msg.my < y + row_height then
-					if node:is_file() then
-						editor:set_node(node)
-					end
-				end
-				y += row_height
-			end
-		)
-	end
-	
-	
-	function self:mousewheel(msg)
-		self.starting_row -= msg.wheel_y
-		self.starting_row = max(self.starting_row, 1)
-	end
-	
+
 	
 	function self:update(msg)
 		if self:has_keyboard_focus() then
@@ -4492,6 +4478,39 @@ return function(editor)
 			recent_level = 0
 		end
 		]]
+		displayed_rows = {}
+		populate_displayed_nodes(filetree.root(), 0)
+	end
+	
+	
+	function self:hover(msg)
+		self.cursor = 1
+		local row = self.starting_row + (msg.my - header_height) // row_height
+		if not displayed_rows[row] then return end
+		local node = displayed_rows[row].node
+		if node and node:is_folder() then
+			self.cursor = "pointer"
+		end
+	end
+	
+	
+	function self:click(msg)
+		local row = self.starting_row + (msg.my - header_height) // row_height
+		if not displayed_rows[row] then return end
+		local node = displayed_rows[row].node
+		if node:is_file() then
+			editor:set_node(node)
+		elseif node:is_folder() then
+			closed_folders[node:path()] = not closed_folders[node:path()]
+		end
+	end
+	
+	
+	function self:mousewheel(msg)
+		local max_row_count = self.height // 9
+		local max_scroll_row = max(#displayed_rows - max_row_count + 1, 1)
+		self.starting_row -= msg.wheel_y
+		self.starting_row = mid(self.starting_row, 1, max_scroll_row)
 	end
 	
 
@@ -4503,9 +4522,7 @@ return function(editor)
 			self.width - 1, self.height - 1,
 			theme.ui_bg
 		)
-
---		line(4, 15, self.width - 5, 15, theme.ui_fg)
-		-- TODO: save clip state
+		-- TODO: save clip state?
 		clip(
 			self.x + padding_left - 2,
 			self.y + header_height,
@@ -4514,41 +4531,36 @@ return function(editor)
 		)
 		--rrectfill(0, 0, self.width, self.height, 0, 2)
 		local x, y = padding_left, header_height + 2
-		local row = 0
-		filetree.foreach(
-			function(node, level)
-				row += 1
-				if row < self.starting_row then return end
-				if node:is_folder() and level == 0 then return end
-				level = max(1, level)
-				local str = "\014"
-				str ..= node:path():basename()
-				if node:is_folder() then str ..= "/" end
-				local c = theme.ui_fg
-				if node:is_file() and not node:is_on_disk() then
-					c = theme.ui_fg_warning
-				elseif node:is_file() and node:is_stale() then
-					c = theme.ui_fg_warning
-				elseif node:is_file() 
-					and node:buffer():has_match()
-					and editor:in_multifile_search()
-				then
-					c = theme.ui_fg_highlight
-				elseif node == current and editor:in_multifile_search() then
-					c = theme.ui_fg_highlight
-				end
-				if node == current then
-					rectfill(
-						x + 6 * (level - 1) - 2, y - 2,
-						self.width - padding_right, y + 6,
-						c
-					)
-					c = theme.ui_bg
-				end
-				print(str, x + 6 * (level - 1), y, c)
-				y += row_height
+		for row = self.starting_row, #displayed_rows do
+			local node, level = displayed_rows[row].node, displayed_rows[row].level
+			level = max(1, level)
+			local str = "\014"
+			str ..= node:path():basename()
+			if node:is_folder() then str ..= "/" end
+			local c = theme.ui_fg
+			if node:is_file() and not node:is_on_disk() then
+				c = theme.ui_fg_warning
+			elseif node:is_file() and node:is_stale() then
+				c = theme.ui_fg_warning
+			elseif node:is_file() 
+				and node:buffer():has_match()
+				and editor:in_multifile_search()
+			then
+				c = theme.ui_fg_highlight
+			elseif node == current and editor:in_multifile_search() then
+				c = theme.ui_fg_highlight
 			end
-		)
+			if node == current then
+				rectfill(
+					x + 6 * (level - 1) - 2, y - 2,
+					self.width - padding_right, y + 6,
+					c
+				)
+				c = theme.ui_bg
+			end
+			print(str, x + 6 * (level - 1), y, c)
+			y += row_height
+		end
 		clip()
 	end
 
@@ -4560,7 +4572,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 20:50:57",revision=7207]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 22:07:20",revision=7399]]
 --------------------------------------------------------------------------------------------
 
 --[[
@@ -4671,7 +4683,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-01 20:50:57",revision=8333]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-01 22:07:20",revision=8525]]
 -------------------------------------------------------------------------------------------
 
 
@@ -5103,7 +5115,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-01 20:50:57",revision=7164]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-01 22:07:20",revision=7356]]
 # Things To Do
 
 ## Before First Release
@@ -5124,11 +5136,11 @@ return {
 - Add: horizontal drag with right click, but gated with pressure.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-01 20:50:57",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2}}]]
+--[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-01 22:07:41",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="gfx/0.gfx#1",workspace_index=2}}]]
 :: defaults/.info.pod
---[[pod,created="2025-03-31 13:01:37",modified="2026-02-01 20:50:57"]]
+--[[pod,created="2025-03-31 13:01:37",modified="2026-02-01 22:07:41"]]
 :: fonts/.info.pod
---[[pod,created="2025-03-23 21:36:31",modified="2026-02-01 20:50:57"]]
+--[[pod,created="2025-03-23 21:36:31",modified="2026-02-01 22:07:41"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -5178,10 +5190,10 @@ BQMgdgFhMAgMCB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUG
 BQYgDAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYw
 BAYPFARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: gfx/.info.pod
---[[pod,created="2025-03-22 17:37:31",modified="2026-02-01 20:50:57"]]
+--[[pod,created="2025-03-22 17:37:31",modified="2026-02-01 22:07:41"]]
 :: gfx/0.gfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
-NC0xNCAxMjo1MDo0NiIscmV2aXNpb249OTA3MF1dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNi0w
+Mi0wMSAyMjowNzo0MSIscmV2aXNpb249OTA3MV1dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
 AEMgEBAE8FYHEAfAF9AXwAcQB-BWLGZsYWdzPTAscGFuX3gIAMd5PTAsem9vbT04fSw_AJEICARw
 JxBHMDcCAE9HECdwPgALHDE_ANeAFxAXABcwFwAXEBcQDAAfgEgAIRV3RgAfd0QAHgAIAR-w_wAM
 DzEAjc8LCwTwE2fgZ_Bn8BM4AAstMTA5APECCCcAB2AXEAdABwAHIAcwB0AEAI9AByAHYCfwCk8A
@@ -5512,7 +5524,7 @@ KM47wCjBOyg7KME7KNA7KMk7KME7wCjFO8IowDvAKME7wCjBO8AowTso-f391zXBKDUoNSg1wSjA
 EP3DOtEo0jsoxzsoxjsowzsowTsoOyjLOyjDOyjAOyjAOyjOOyjBOyg7KMI7KM87KMg7KME7KMA7
 KMQ7KMI7KMA7KDsowDsoOyjAOyjBOyj9-f3jEMUAAAAAAAAAAQ==
 :: src/.info.pod
---[[pod,created="2025-03-22 18:20:11",modified="2026-02-01 20:50:57"]]
+--[[pod,created="2025-03-22 18:20:11",modified="2026-02-01 22:07:41"]]
 :: src/ui/.info.pod
---[[pod,created="2025-03-23 10:19:01",modified="2026-02-01 20:50:57"]]
+--[[pod,created="2025-03-23 10:19:01",modified="2026-02-01 22:07:41"]]
 :: [eoc]
