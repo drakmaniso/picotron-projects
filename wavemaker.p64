@@ -7,10 +7,11 @@ version 2
 :: pal/
 :: sfx/
 :: src/
+:: src/sfx/
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",modified="2026-02-01 18:03:11",revision=349]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",modified="2026-02-01 20:30:57",revision=532]]
 Version 0.0.6:
 
 - Fixed a crash when copying (regression; thanks to @Thelxinoe5 for the
@@ -24,7 +25,7 @@ Version 0.0.5: (#wavemaker-2)
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 18:03:11",revision=13117]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 20:30:57",revision=13300]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -123,12 +124,12 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",revision=21581]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-01 20:30:57",revision=21764]]
 include "lune.lua"
 --include "src/misc.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local file = require "src/file.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -286,15 +287,15 @@ end
 
 local fps_prev = 0
 function _draw()
-	call_protected(function() ui.head():draw_all() end)
+	call_protected(
+		function()
+			ui.head():draw_all()
+		end
+	)
+	-- Show FPS when in dev
 	if is_loaded_cart then
-		--print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 459, 246, 57)
 		fps = flr(0.5 + stat(1) * 100.0)
-		print(
-			string.format("%3.0f%%", max(fps, prev_fps)),
-			463, true and 4 or 250, 
-			57
-		)		
+		print(string.format("%3.0f%%", max(fps, prev_fps)), 463, true and 4 or 250, 57)		
 		prev_fps = fps
 	end
 end
@@ -311,408 +312,8 @@ function generate_gui()
 	end
 end
 
-
-----------------------------------------------------------------------------------------------------
--- View Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_view_selector(parent, el)
-	el.width = 22
-	el.height = 34
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw(msg)
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		local clicked = msg.mb == 1
-		if clicked and false then
-			rrectfill(0, 0, self.width, self.height, 0, 58)
-		end
-		pal(7, app.view == "tracker" and 59 or 58)
-		pal(57, app.view == "tracker" and 7 or 57)
-		spr(1, 3, 0)
-		pal(7, app.view == "synth" and 59 or 58)
-		pal(57, app.view == "synth" and 7 or 57)
-		spr(3, 3, 18)
-		pal(7, 7)
-		pal(57, 57)
-	end
-	
-	function el:click(msg)
-		if app.view == "synth" then
-			app.view = "tracker"
-		else
-			app.view = "synth"
-		end
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Octave Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_octave_selector(parent, el)
-	el.width = 22
-	el.height = 10
-	el.cursor = get_spr(50)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		-- Base Note
-		local note = app.base_note % 12
-		local octave = app.base_note \ 12
-		local is_sharp = (note == 1) or (note == 3) or (note == 6)
-			or (note == 8) or (note == 10)
-		local ox_note <const> = is_sharp and 3 or 3 + 4
-		local fg <const> = 5
-		pal(7, self.dragged and 7 or fg)
-		spr(84 + note, ox_note, 2)
-		local x_oct = ox_note + (is_sharp and 12 or 6)
-		pal(7, 7)
-		print(
-			"\014" .. string.format("%1x", octave),
-			x_oct, 2 + 1,
-			self.dragged and 7 or fg
-		)
-	end	
-	
-	function el:click(msg)
-		self.dragged = true
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		local delta = ui.mouselock(0.125)
-		app.base_note = mid(0, app.base_note - (12 * delta), 120)
-	end
-	
-	function el:release(msg)
-		ui.mouseunlock()
-		self.cursor = get_spr(50)
-		self.dragged = nil
-	end
-
-	function el:doubleclick(msg)
-		app.base_note = 48
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Instrument Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_instrument_selector(parent, el)
-	el.width = 22
-	el.height = 16
-	el.cursor = get_spr(53)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		print("\014inst", 4, 1, 58)
-		if self:has_keyboard_focus() then
-			rrectfill(6, 7, 11, 9, 0, 59)
-			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
-		else
-			local sprite = app.instrument_disabled and 64 or (256 + app.instrument)
-			pal(7, self.dragged and 7 or 44)
-			spr(sprite, 8, 9)
-			pal(7, 7)
-		end
-	end	
-
-	function el:update()
-		if self:has_keyboard_focus() then
-			while peektext() do
-				if #self.str < 2 then
-					self.str = self.str .. readtext()
-				else
-					readtext()
-				end
-			end
-			
-			local val = tonumber(self.str, 16)
-			self.str_is_valid = val ~= nil
-
-			if keyp("backspace") then
-				self.str = sub(self.str, 1, -2)
-			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			elseif keyp("enter") or (val and #self.str == 2) then
-				if val then
-					app.instrument = mid(val, 0, 0xff)
-				end
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			end
-		end
-	end
-	
-	function el:click(msg)
-		-- TODO: replace with pull-down menus
-		self.dragged = true
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		if self.dragged then
-			local delta = ui.mouselock(0.125)
-			-- TODO: allow "ff"
-			local instrument = mid(0, app.instrument - delta, 0xff)
-			if instrument ~= app.instrument then
-				app.instrument = instrument
-				app.node = 0
-				-- TODO: cannot refresh gui in real time (lose mouselock)
-				-- instead, recreate just the router?
-				self.need_refresh_gui = true
-				ui_routing.clear_placement_buttons()
-			end
-		end
-	end
-	
-	function el:tap(msg)
-		if msg.last_mb == 1 then
-			self:set_keyboard_focus(true)
-			readtext(true)
-			self.str = ""
-		elseif msg.last_mb == 2 then
-			app.instrument_disabled = not app.instrument_disabled
-		end
-	end
-	
-	function el:release(msg)
-		if self.need_refresh_gui then
-			app.refresh_gui = true
-		end
-		ui.mouseunlock()
-		self.cursor = get_spr(53)
-		self.dragged = nil
-	end
-
-	function el:doubleclick(msg)
-		app.instrument = 0
-	end
-	
-	function el:mousewheel(msg)
-		-- TODO: allow "ff"
-		app.instrument = mid(app.instrument + msg.wheel_y, 0, 0xff)
-		-- TODO: only refresh router
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Volume Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_volume_selector(parent, el)
-	el.width = 22
-	el.height = 16
-	el.cursor = get_spr(53)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		print("\014vol", 6, 1, 58)
-		if self:has_keyboard_focus() then
-			rrectfill(6, 7, 11, 9, 0, 59)
-			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
-		else
-			local sprite = app.base_volume_disabled and 64 or (256 + app.base_volume)
-			pal(7, self.dragged and 7 or 46)
-			spr(sprite, 8, 9)
-			pal(7, 7)
-		end
-	end	
-
-	function el:update()
-		if self:has_keyboard_focus() then
-			while peektext() do
-				if #self.str < 2 then
-					self.str = self.str .. readtext()
-				else
-					readtext()
-				end
-			end
-			
-			local val = tonumber(self.str, 16)
-			self.str_is_valid = val ~= nil
-
-			if keyp("backspace") then
-				self.str = sub(self.str, 1, -2)
-			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			elseif keyp("enter") or (val and #self.str == 2) then
-				if val then
-					app.base_volume = mid(val, 0, 0xff)
-				end
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			end
-		end
-	end
-	
-	function el:click(msg)
-		self.dragged = true
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		if self.dragged then
-			local delta = ui.mouselock(0.125)
-			app.base_volume = mid(0, app.base_volume - delta, 0xff)
-		end
-	end
-	
-	function el:tap(msg)
-		if msg.last_mb == 1 then
-			self:set_keyboard_focus(true)
-			readtext(true)
-			self.str = ""
-		elseif msg.last_mb == 2 then
-			app.base_volume_disabled = not app.base_volume_disabled
-		end
-	end
-	
-	function el:release(msg)
-		if self.need_refresh_gui then
-			readtext(true)
-			app.refresh_gui = true
-		end
-		ui.mouseunlock()
-		self.cursor = get_spr(53)
-		self.dragged = nil
-	end
-
-	function el:doubleclick(msg)
-		app.instrument = 0
-	end
-	
-	function el:mousewheel(msg)
-		app.base_volume = mid(app.base_volume + msg.wheel_y, 0, 0xff)
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Step Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_step_selector(parent, el)
-	el.width = 22
-	el.height = 16
-	el.cursor = get_spr(53)
-	parent:attach(el)
-	
-	el.drag_start = nil
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		print("\014step", 4, 1, 58)
-		if self:has_keyboard_focus() then
-			rrectfill(6, 7, 11, 9, 0, 59)
-			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
-		else
-			local str = string.format("%02d", app.jump_step)
-			print(str, 8, 9, self.dragged and 7 or 5)
-		end
-	end	
-
-	function el:update()
-		if self:has_keyboard_focus() then
-			while peektext() do
-				if #self.str < 2 then
-					self.str = self.str .. readtext()
-				else
-					readtext()
-				end
-			end
-
-			local val = tonumber(self.str)
-			self.str_is_valid = val ~= nil
-
-			if keyp("backspace") then
-				self.str = sub(self.str, 1, -2)
-			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			elseif keyp("enter") or (val and #self.str == 2) then
-				if val then
-					app.jump_step = mid(math.floor(val), 0, 99)
-				end
-				self:set_keyboard_focus(false)
-				app.was_in_text_field = true
-			end
-		end
-	end
-	
-	function el:click(msg)
-		self.dragged = true
-		self.cursor = 0
-	end
-	
-	function el:drag(msg)
-		if self.dragged then
-			local delta = ui.mouselock(0.125)
-			local val = math.floor(app.jump_step - delta)
-			app.jump_step = mid(val, 0, 99)
-		end
-	end
-	
-	function el:tap(msg)
-		self:set_keyboard_focus(true)
-		readtext(true)
-		self.str = ""
-	end
-	
-	function el:release(msg)
-		if self.need_refresh_gui then
-			app.refresh_gui = true
-		end
-		ui.mouseunlock()
-		self.cursor = get_spr(53)
-		self.dragged = nil
-	end
-
-	function el:doubleclick(msg)
-		app.instrument = 0
-	end
-	
-	function el:mousewheel(msg)
-		app.jump_step = mid(app.jump_step + msg.wheel_y, 0, 99)
-	end
-	
-	return el
-end
-
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-02-01 18:03:11",revision=11308]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-02-01 20:30:57",revision=11491]]
 # WaveMaker
 
 ## Tracker
@@ -761,9 +362,9 @@ Note: not everything is implemented yet.
 
 ## Synth
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-01 18:03:11",revision=18386]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-01 20:30:57",revision=18569]]
 local settings = require "src/settings.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 
 
 local app = {}
@@ -966,9 +567,9 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-01 18:03:11",revision=12765]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-01 20:30:57",revision=12948]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 
 
 local file = {}
@@ -1248,7 +849,7 @@ end
 
 return file
 :: src/misc.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-02-01 18:03:11",revision=12410]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-02-01 20:30:57",revision=12593]]
 -- Table utility functions --------------------------------------------------------
 
 
@@ -1375,9 +976,9 @@ function set_drawspace(drawspace)
 end
 
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-01 18:03:11",revision=7523]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-01 20:30:57",revision=7706]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 
 
 local selection = {}
@@ -2056,7 +1657,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-01 18:03:11",revision=13671]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-01 20:30:57",revision=13854]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -2170,8 +1771,8 @@ end
 
 
 return settings
-:: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-01 18:03:11",revision=18157]]
+:: src/sfx/sfx.lua
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-01 20:30:57",revision=18340]]
 local sfx = {}
 
 
@@ -3066,9 +2667,9 @@ end
 
 return sfx
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-01 18:03:11",revision=13976]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-01 20:30:57",revision=14159]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
 local ui = require "src/ui/ui.lua"
 local ui_visual = require "src/ui/visual.lua"
@@ -3077,8 +2678,9 @@ local ui_visual = require "src/ui/visual.lua"
 local ui_envelopes = {}
 
 	
-
--- Envelope panel -----------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Envelope Panel
+-------------------------------------------------------------------------------
 
 
 local env_type_names = { [0] = "adsr", "lfo", "custom" }
@@ -3119,7 +2721,7 @@ function ui_envelopes.attach_panel(parent, el)
 		ui_envelopes.attach_advanced_button(el, { x = el.width - 12, y = 0 })
 	end
 
-	if not app.env_advanced[el.env_id] then 
+	if el.large or not app.env_advanced[el.env_id] then 
 
 		local env_type = sfx.env_type(app.instrument, el.env_id)	
 		if env_type == 0 then
@@ -3248,8 +2850,11 @@ function ui_envelopes.attach_panel(parent, el)
 	
 	function el:draw()
 		rectfill(0, 0, self.width, 8, 18)
-		---rectfill(0, 9, self.width, self.height, 6)
-		ui_envelopes.draw_corners(self)
+		-- Draw corners of the title bar
+		pset(0, 0, 6)
+		pset(el.width - 1, 0, 6)
+		pset(0, 8, 6)
+		pset(el.width - 1, 8, 6)
 	end
 	
 	function el:click()
@@ -3259,13 +2864,26 @@ function ui_envelopes.attach_panel(parent, el)
 	return el
 end
 
-	
-function ui_envelopes.draw_corners(el)
-	pset(0, 0, 6)
-	pset(el.width - 1, 0, 6)
-	pset(0, 8, 6)
-	pset(el.width - 1, 8, 6)
+
+function ui_envelopes.attach_advanced_button(parent, el)
+	el.width = 10
+	el.height = 10
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		spr(39, 1, 1)
+	end
+	function el:tap()
+		app.env_advanced[parent.env_id] = not app.env_advanced[parent.env_id]
+		app.refresh_gui = true
+	end
+	return el
 end
+
+	
+-------------------------------------------------------------------------------
+-- Slider Widget
+-------------------------------------------------------------------------------
 
 
 function ui_envelopes.attach_slider(parent, el)
@@ -3314,7 +2932,7 @@ function ui_envelopes.attach_slider(parent, el)
 	end
 	function el:drag(msg)
 		if self.dragged then
-			local delta = ui.mouselock()
+			local delta = ui.mouse_lock()
 			local old = sfx.env_param(app.instrument, self.env_id, self.param)
 			local new = old - delta
 			new = mid(0, new, 255)
@@ -3322,7 +2940,7 @@ function ui_envelopes.attach_slider(parent, el)
 		end
 	end
 	function el:release(msg)
-		ui.mouseunlock()
+		ui.mouse_unlock()
 		self.cursor = "dial"
 		self.dragged = nil
 	end
@@ -3330,23 +2948,9 @@ function ui_envelopes.attach_slider(parent, el)
 end
 
 
-function ui_envelopes.attach_advanced_button(parent, el)
-	el.width = 10
-	el.height = 10
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		spr(39, 1, 1)
-	end
-	function el:tap()
-		app.env_advanced[parent.env_id] = not app.env_advanced[parent.env_id]
-		app.refresh_gui = true
-	end
-	return el
-end
-
-
--- Custrom envelopes ------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Custom Envelopes Editor
+-------------------------------------------------------------------------------
 
 
 function ui_envelopes.attach_custom_editor(parent, el)
@@ -3380,9 +2984,9 @@ end
 
 return ui_envelopes
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-01 18:03:11",revision=12959]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-01 20:30:57",revision=13142]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_envelopes = require "src/ui/envelopes.lua"
 
@@ -3390,7 +2994,9 @@ local ui_envelopes = require "src/ui/envelopes.lua"
 local ui_menus = {}
 
 
--- Relationship menu -----------------------------------------------------
+-------------------------------------------------------------------------------
+-- Relationship Menu
+-------------------------------------------------------------------------------
 
 
 function ui_menus.open_relationship(self)
@@ -3516,7 +3122,9 @@ function ui_menus.open_relationship(self)
 end
 
 
--- Multiplier menu -------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Multiplier Menu
+-------------------------------------------------------------------------------
 
 
 function ui_menus.open_multiplier(self)
@@ -3556,7 +3164,9 @@ function ui_menus.open_multiplier(self)
 end
 
 
--- Envelope menu ------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Envelope Menu
+-------------------------------------------------------------------------------
 
 
 function ui_menus.open_envelope(self)
@@ -3653,9 +3263,9 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-01 18:03:11",revision=19534]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-01 20:30:57",revision=19717]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_envelopes = require "src/ui/envelopes.lua"
 local ui_params = require "src/ui/params.lua"
@@ -3665,7 +3275,127 @@ local ui_visual = require "src/ui/visual.lua"
 local ui_nodes = {}
 
 
--- Node panels --------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
+function instrument_flag_toggle(el)
+	el.width = el.width or 35
+	el.height = el.height or 9
+	el.label = el.label or "---"
+	el.cursor = "pointer"
+	
+	function el:draw()
+		palt(59, true)
+		pal(2, 0)
+		pal(17, 18)
+		if sfx.instrument_flag(app.instrument, el.flag) then
+			spr(33, 0, 1)
+		else
+			spr(32, 0, 1)
+		end
+		pal(17, 17)
+		pal(2, 2)
+		palt(59, false)
+		print(el.label, 10, 2, 5)
+	end
+	
+	function el:tap()
+		sfx.toggle_instrument_flag(app.instrument, el.flag)
+	end
+	
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+
+
+function draw_corners(el)
+	pset(0, 0, 6)
+	pset(el.width - 1, 0, 6)
+	pset(0, 8, 6)
+	pset(el.width - 1, 8, 6)
+end
+
+
+-------------------------------------------------------------------------------
+
+
+function attach_mute_toggle(parent, el)
+	el.x = 1
+	el.y = 1
+	el.width = 3 + 4 * #(el.label .. " " .. el.node_id) + 3
+	el.height = 9
+	el.cursor = "pointer"
+	parent:attach(el)
+	el.muted = (sfx.node_flags(app.instrument, el.node_id) & 0x2) > 0
+	function el:draw()
+		local label = self.label .. " " .. self.node_id
+		print(label, 3, 1, 63)
+		if self.muted then
+			line(1, 3, 3 + 4 * #label, 3, 24)
+		end
+	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
+	end
+	function el:tap()
+		self.muted = not self.muted
+		local flags = sfx.node_flags(app.instrument, self.node_id)
+		if self.muted then
+			flags |= 0x2
+		else
+			flags &= ~0x2
+		end
+		sfx.set_node_flags(app.instrument, self.node_id, flags)
+	end
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+
+
+function attach_close_button(parent, el)
+	el.x = parent.width - 10
+	el.y = 2
+	el.width = 12
+	el.height = 9
+	el.cursor = "pointer"
+	parent:attach(el)
+	function el:draw()
+		pal(7, 63)
+		spr(36, 0, 0)
+		pal(7, 7)
+	end
+	function el:click()
+		return true -- don't pass to panel to avoid selection
+	end
+	function el:tap()
+		if app.node then
+			if app.node == self.node_id then
+				if #(sfx.nodes[app.node].children) > 0 then
+					app.node = sfx.nodes[app.node].children[1].id
+				else
+					app.node = sfx.nodes[app.node].parent.id
+				end
+			end
+		end
+		sfx.delete_node(app.instrument, self.node_id)
+		if app.node and app.node > self.node_id then
+			app.node = max(0, self.node_id - 1)
+		end
+		app.refresh_gui = true
+	end
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+-- Node Panels
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.attach_node_panel(parent, el)
@@ -3695,7 +3425,9 @@ function ui_nodes.attach_node_panel(parent, el)
 end
 
 
--- Unused slot -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Unused slot
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_unused(parent, el)
@@ -3714,7 +3446,9 @@ function ui_nodes.populate_unused(parent, el)
 end
 
 
--- Root Synth Node ---------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Root Synth Node
+-------------------------------------------------------------------------------
 
 
 local instrument_name_field
@@ -3739,8 +3473,8 @@ function ui_nodes.populate_root(parent, el)
 		ui_params.attach_mini(el, params[3])
 --		ui_params.attach(el, 130, 84, params[2], { small = true })
 --		ui_params.attach(el, 170, 84, params[3], { small = true })
-		el:attach(ui_nodes.instrument_flag_toggle { x = 120, y = 84, label = "wide", flag = 0x02 })
-		el:attach(ui_nodes.instrument_flag_toggle { x = 160, y = 84, label = "retrig", flag = 0x01 })
+		el:attach(instrument_flag_toggle { x = 120, y = 84, label = "wide", flag = 0x02 })
+		el:attach(instrument_flag_toggle { x = 160, y = 84, label = "retrig", flag = 0x01 })
 		ui_visual.attach_oscilloscope(el, 8, { x = 20, y = 14, width = 184, height = 66 })
 
 		-- TODO: replace with a custom field
@@ -3772,12 +3506,12 @@ function ui_nodes.populate_root(parent, el)
 		ui_params.attach_mini(el, params[3])
 		--- slider.attach(el, { label = "p0", param = 4, node_id = el.node_id } )
 		--- slider.attach(el, { label = "p1", param = 5, node_id = el.node_id } )
-		el:attach(ui_nodes.instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
-		el:attach(ui_nodes.instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
+		el:attach(instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
+		el:attach(instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
 	end
 	function el:draw()
 		rectfill(0, 0, self.width, 8, 7)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 		print("instrument ", 4, 2, 22)
 		print(string.format("%02x", app.instrument), 50, 2, 44)
 		print(":", 58, 2, 58)
@@ -3788,7 +3522,10 @@ function ui_nodes.populate_root(parent, el)
 end
 
 
--- Oscillator -------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Oscillator
+-------------------------------------------------------------------------------
+
 
 
 local wt_labels = { [0] = "wt0", "wt1", "wt2", "wt3" }
@@ -3820,8 +3557,8 @@ function ui_nodes.populate_osc(parent, el)
 		params[2].max_val = 255
 	end
 
-	ui_nodes.attach_mute_toggle(el, { label = "osc", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "osc", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
 		ui_params.attach(el, 60, 16, params[1], { small = true })
@@ -3874,14 +3611,16 @@ function ui_nodes.populate_osc(parent, el)
 		
 	function el:draw()
 		rectfill(0, 0, self.width, 8, 17)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	
 	return el
 end
 
 
--- FM modulator -------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- FM modulator
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_fm(parent, el)
@@ -3901,8 +3640,8 @@ function ui_nodes.populate_fm(parent, el)
 		params[2].max_val = 255
 	end
 
-	ui_nodes.attach_mute_toggle(el, { label = "fm", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "fm", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
 		ui_params.attach(el, 60, 16, params[1], { small = true })
@@ -3955,14 +3694,16 @@ function ui_nodes.populate_fm(parent, el)
 		
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 27)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	
 	return el
 end
 
 
--- Ring mod -------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Ring mod
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_ring(parent, el)
@@ -3982,8 +3723,8 @@ function ui_nodes.populate_ring(parent, el)
 		params[2].max_val = 255
 	end
 
-	ui_nodes.attach_mute_toggle(el, { label = "ring", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "ring", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
 		ui_params.attach(el, 60, 16, params[1], { small = true })
@@ -4036,14 +3777,16 @@ function ui_nodes.populate_ring(parent, el)
 		
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 22)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	
 	return el
 end
 
 
--- Filter ----------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Filter
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_filt(parent, el)
@@ -4055,8 +3798,8 @@ function ui_nodes.populate_filt(parent, el)
 	}
 	for i = 0, #params do params[i].node_id = el.node_id end
 	
-	ui_nodes.attach_mute_toggle(el, { label = "filt", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "filt", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 34, 50, params[0], {})
 		ui_params.attach(el, 94, 50, params[2], {})
@@ -4068,7 +3811,7 @@ function ui_nodes.populate_filt(parent, el)
 	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 14)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -4076,7 +3819,9 @@ function ui_nodes.populate_filt(parent, el)
 end
 
 
--- Delay --------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Delay
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_echo(parent, el)
@@ -4087,8 +3832,8 @@ function ui_nodes.populate_echo(parent, el)
 	}
 	for i = 0, #params do params[i].node_id = el.node_id end
 	
-	ui_nodes.attach_mute_toggle(el, { label = "echo", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "echo", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 59, 84, params[0], {})
 		ui_params.attach(el, 130, 84, params[1], {})
@@ -4098,7 +3843,7 @@ function ui_nodes.populate_echo(parent, el)
 	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 31)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -4106,7 +3851,9 @@ function ui_nodes.populate_echo(parent, el)
 end
 
 
--- Waveshaper ------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Waveshaper
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_shap(parent, el)
@@ -4119,8 +3866,8 @@ function ui_nodes.populate_shap(parent, el)
 	}
 	for i = 0, #params do params[i].node_id = el.node_id end
 	
-	ui_nodes.attach_mute_toggle(el, { label = "shap", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "shap", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	if el.large then
 		ui_params.attach(el, 20, 84, params[0], {})
 		ui_params.attach(el, 60, 84, params[3], { small = true })
@@ -4136,7 +3883,7 @@ function ui_nodes.populate_shap(parent, el)
 	end
 	function el:draw()
 		rectfill(0, 0, self.width, 9, 9)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -4144,7 +3891,9 @@ function ui_nodes.populate_shap(parent, el)
 end
 
 
--- Unknown --------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Unknown
+-------------------------------------------------------------------------------
 
 
 function ui_nodes.populate_unknown(parent, el)
@@ -4159,8 +3908,8 @@ function ui_nodes.populate_unknown(parent, el)
 	}
 	for i = 0, #params do params[i].node_id = el.node_id end
 	
-	ui_nodes.attach_mute_toggle(el, { label = "???", node_id = el.node_id })
-	ui_nodes.attach_close_button(el, { node_id = el.node_id })
+	attach_mute_toggle(el, { label = "???", node_id = el.node_id })
+	attach_close_button(el, { node_id = el.node_id })
 	ui_params.attach_mini(el, params[0])
 	ui_params.attach_mini(el, params[1])
 	ui_params.attach_mini(el, params[2])
@@ -4169,7 +3918,7 @@ function ui_nodes.populate_unknown(parent, el)
 	ui_params.attach_mini(el, params[5])
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 30)
-		ui_nodes.draw_corners(self)
+		draw_corners(self)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -4177,136 +3926,12 @@ function ui_nodes.populate_unknown(parent, el)
 end
 
 
--------------------------------------------------------------------------------------------------
-
-
-function ui_nodes.instrument_flag_toggle(el)
-	el.width = el.width or 35
-	el.height = el.height or 9
-	el.label = el.label or "---"
-	el.cursor = "pointer"
-	
-	function el:draw()
-		palt(59, true)
-		pal(2, 0)
-		pal(17, 18)
-		if sfx.instrument_flag(app.instrument, el.flag) then
-			spr(33, 0, 1)
-		else
-			spr(32, 0, 1)
-		end
-		pal(17, 17)
-		pal(2, 2)
-		palt(59, false)
-		print(el.label, 10, 2, 5)
-	end
-	
-	function el:tap()
-		sfx.toggle_instrument_flag(app.instrument, el.flag)
-	end
-	
-	return el
-end
-
-
-------------------------------------------------------------------------------------------------	
-
-
-function ui_nodes.draw_corners(el)
---[[
-	if app.node and app.node == el.node_id then 
-		clip()
-		rect(-1, -1, el.width, el.height, 24)
-		pset(-1, -1, app.editor_bg)
-		pset(el.width, -1, app.editor_bg)
-		pset(-1, el.height, app.editor_bg)
-		pset(el.width, el.height, app.editor_bg)
-		col = 24
-	end
---]]
-	pset(0, 0, 6)
-	pset(el.width - 1, 0, 6)
-	pset(0, 8, 6)
-	pset(el.width - 1, 8, 6)
-end
-
-
--- Title bar widgets -------------------------------------------------------------
-
-
-function ui_nodes.attach_mute_toggle(parent, el)
-	el.x = 1
-	el.y = 1
-	el.width = 3 + 4 * #(el.label .. " " .. el.node_id) + 3
-	el.height = 9
-	el.cursor = "pointer"
-	parent:attach(el)
-	el.muted = (sfx.node_flags(app.instrument, el.node_id) & 0x2) > 0
-	function el:draw()
-		local label = self.label .. " " .. self.node_id
-		print(label, 3, 1, 63)
-		if self.muted then
-			line(1, 3, 3 + 4 * #label, 3, 24)
-		end
-	end
-	function el:click()
-		return true -- don't pass to panel to avoid selection
-	end
-	function el:tap()
-		self.muted = not self.muted
-		local flags = sfx.node_flags(app.instrument, self.node_id)
-		if self.muted then
-			flags |= 0x2
-		else
-			flags &= ~0x2
-		end
-		sfx.set_node_flags(app.instrument, self.node_id, flags)
-	end
-	return el
-end
-
-
-function ui_nodes.attach_close_button(parent, el)
-	el.x = parent.width - 10
-	el.y = 2
-	el.width = 12
-	el.height = 9
-	el.cursor = "pointer"
-	parent:attach(el)
-	function el:draw()
-		pal(7, 63)
-		spr(36, 0, 0)
-		pal(7, 7)
-	end
-	function el:click()
-		return true -- don't pass to panel to avoid selection
-	end
-	function el:tap()
-		if app.node then
-			if app.node == self.node_id then
-				if #(sfx.nodes[app.node].children) > 0 then
-					app.node = sfx.nodes[app.node].children[1].id
-				else
-					app.node = sfx.nodes[app.node].parent.id
-				end
-			end
-		end
-		sfx.delete_node(app.instrument, self.node_id)
-		if app.node and app.node > self.node_id then
-			app.node = max(0, self.node_id - 1)
-		end
-		app.refresh_gui = true
-	end
-	return el
-end
-
-
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-01 18:03:11",revision=9106]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-01 20:30:57",revision=9289]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_trakdial = require "src/ui/trakdial.lua"
 
@@ -4314,21 +3939,13 @@ local ui_trakdial = require "src/ui/trakdial.lua"
 local ui_notegrid = {}
 
 
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
 local note_names <const> = {"c ","c\|f+","d ","d\|f+","e ","f ","f\|f+","g ","g\|f+","a ","a\|f+", "b "}
 local note_names <const> = {"c ","c+","d ","d+","e ","f ","f+","g ","g+","a ","a+", "b "}
-local hex_0 <const> = {}
-for i = 0, 15 do
-	hex_0[i] = string.format("%1x", i)
-end
-local hex_00 <const> = {}
-for i = 0, 255 do
-	hex_00[i] = string.format("%02x", i)
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Note Grid
-----------------------------------------------------------------------------------------------------
 
 
 local w_note <const> = 11
@@ -4356,6 +3973,11 @@ local fgd_vol = 46
 local fg_vol = 47
 local fgd_fx = 48
 local fg_fx = 49
+
+
+-------------------------------------------------------------------------------
+-- Note Grid
+-------------------------------------------------------------------------------
 
 
 function ui_notegrid.attach(parent, el)
@@ -4591,38 +4213,12 @@ function ui_notegrid.attach(parent, el)
 end
 
 
--- Unused, kept for reference
-function render_row(x, y, note, octave, inst, vol, fx, fxp0, fxp2)
-	-- First method, naive printing: horrible performance	
-
---				print(note_names[note+1],  x + 4, y_text , 43)
---					print (tostr(freq \ 12), x +  13, y_text, 42)
---					print("?", x + 13, y_text, 58)
---				print("\|e.", x + 4, y_text, 42)
---				print("\|e.", x + 13, y_text, 42)
---				print(hex_00[inst], x + 20, y_text, 45)
---				print("\|e..", x + 20, y_text, 44)
---				print(hex_00[vol], x + 31, y_text, 47)
---				print("\|e..", x + 31, y_text, 46)
---				print(hex_00[(fxp0 << 4) | fxp1], x + 46, y_text, 48)
---				print("\|e...", x + 42, y_text, 48)
-
-	-- Second method, using the same technique as Zep's sfx
-
---	local render = string.format("\f{%s\-h%s\-f %s\-f %s\-f %s%s",
---		note_names[note+1], octave < 10 and tostr(octave) or "?" ,
---		hex_00[inst], hex_00[vol],
---		fx > 32 and chr(fx) or "?", hex_00[(fxp0 << 4) | fxp1])
---	print(render, x + 4, y + 2, 7)
-end
-
-
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Track Header
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 
--- TODO: should be in separate module
+-- TODO: should be in separate file
 
 
 function ui_notegrid.attach_header(parent, el)
@@ -4743,7 +4339,7 @@ function ui_notegrid.attach_header(parent, el)
 	end
 	
 	function el:release(msg)
-		ui.mouseunlock()
+		ui.mouse_unlock()
 		self.clicked_trackdial = false
 	end
 	
@@ -4757,12 +4353,12 @@ function ui_notegrid.attach_header(parent, el)
 end
 
 
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Tool-Rack
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 
--- TODO: should be in separate module
+-- TODO: should be in separate file
 
 
 function ui_notegrid.attach_inspector(parent, el)
@@ -4792,10 +4388,686 @@ end
 
 
 return ui_notegrid
-:: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-01 18:03:11",revision=14281]]
+:: src/ui/panel.lua
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-01 20:30:57",revision=70]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local selection = require "src/selection.lua"
+local sfx = require "src/sfx/sfx.lua"
+local ui = require "src/ui/ui.lua"
+local ui_panel = {}
+
+
+----------------------------------------------------------------------------------------------------
+-- View Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_view_selector(parent, el)
+	el.width = 22
+	el.height = 34
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw(msg)
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		local clicked = msg.mb == 1
+		if clicked and false then
+			rrectfill(0, 0, self.width, self.height, 0, 58)
+		end
+		pal(7, app.view == "tracker" and 59 or 58)
+		pal(57, app.view == "tracker" and 7 or 57)
+		spr(1, 3, 0)
+		pal(7, app.view == "synth" and 59 or 58)
+		pal(57, app.view == "synth" and 7 or 57)
+		spr(3, 3, 18)
+		pal(7, 7)
+		pal(57, 57)
+	end
+	
+	function el:click(msg)
+		if app.view == "synth" then
+			app.view = "tracker"
+		else
+			app.view = "synth"
+		end
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Octave Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_octave_selector(parent, el)
+	el.width = 22
+	el.height = 10
+	el.cursor = get_spr(50)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		-- Base Note
+		local note = app.base_note % 12
+		local octave = app.base_note \ 12
+		local is_sharp = (note == 1) or (note == 3) or (note == 6)
+			or (note == 8) or (note == 10)
+		local ox_note <const> = is_sharp and 3 or 3 + 4
+		local fg <const> = 5
+		pal(7, self.dragged and 7 or fg)
+		spr(84 + note, ox_note, 2)
+		local x_oct = ox_note + (is_sharp and 12 or 6)
+		pal(7, 7)
+		print(
+			"\014" .. string.format("%1x", octave),
+			x_oct, 2 + 1,
+			self.dragged and 7 or fg
+		)
+	end	
+	
+	function el:click(msg)
+		self.dragged = true
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		local delta = ui.mouse_lock(0.125)
+		app.base_note = mid(0, app.base_note - (12 * delta), 120)
+	end
+	
+	function el:release(msg)
+		ui.mouse_unlock()
+		self.cursor = get_spr(50)
+		self.dragged = nil
+	end
+
+	function el:doubleclick(msg)
+		app.base_note = 48
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Instrument Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_instrument_selector(parent, el)
+	el.width = 22
+	el.height = 16
+	el.cursor = get_spr(53)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		print("\014inst", 4, 1, 58)
+		if self:has_keyboard_focus() then
+			rrectfill(6, 7, 11, 9, 0, 59)
+			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
+		else
+			local sprite = app.instrument_disabled and 64 or (256 + app.instrument)
+			pal(7, self.dragged and 7 or 44)
+			spr(sprite, 8, 9)
+			pal(7, 7)
+		end
+	end	
+
+	function el:update()
+		if self:has_keyboard_focus() then
+			while peektext() do
+				if #self.str < 2 then
+					self.str = self.str .. readtext()
+				else
+					readtext()
+				end
+			end
+			
+			local val = tonumber(self.str, 16)
+			self.str_is_valid = val ~= nil
+
+			if keyp("backspace") then
+				self.str = sub(self.str, 1, -2)
+			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			elseif keyp("enter") or (val and #self.str == 2) then
+				if val then
+					app.instrument = mid(val, 0, 0xff)
+				end
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			end
+		end
+	end
+	
+	function el:click(msg)
+		-- TODO: replace with pull-down menus
+		self.dragged = true
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		if self.dragged then
+			local delta = ui.mouse_lock(0.125)
+			-- TODO: allow "ff"
+			local instrument = mid(0, app.instrument - delta, 0xff)
+			if instrument ~= app.instrument then
+				app.instrument = instrument
+				app.node = 0
+				-- TODO: cannot refresh gui in real time (lose mouselock)
+				-- instead, recreate just the router?
+				self.need_refresh_gui = true
+				ui_routing.clear_placement_buttons()
+			end
+		end
+	end
+	
+	function el:tap(msg)
+		if msg.last_mb == 1 then
+			self:set_keyboard_focus(true)
+			readtext(true)
+			self.str = ""
+		elseif msg.last_mb == 2 then
+			app.instrument_disabled = not app.instrument_disabled
+		end
+	end
+	
+	function el:release(msg)
+		if self.need_refresh_gui then
+			app.refresh_gui = true
+		end
+		ui.mouse_unlock()
+		self.cursor = get_spr(53)
+		self.dragged = nil
+	end
+
+	function el:doubleclick(msg)
+		app.instrument = 0
+	end
+	
+	function el:mousewheel(msg)
+		-- TODO: allow "ff"
+		app.instrument = mid(app.instrument + msg.wheel_y, 0, 0xff)
+		-- TODO: only refresh router
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Volume Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_volume_selector(parent, el)
+	el.width = 22
+	el.height = 16
+	el.cursor = get_spr(53)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		print("\014vol", 6, 1, 58)
+		if self:has_keyboard_focus() then
+			rrectfill(6, 7, 11, 9, 0, 59)
+			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
+		else
+			local sprite = app.base_volume_disabled and 64 or (256 + app.base_volume)
+			pal(7, self.dragged and 7 or 46)
+			spr(sprite, 8, 9)
+			pal(7, 7)
+		end
+	end	
+
+	function el:update()
+		if self:has_keyboard_focus() then
+			while peektext() do
+				if #self.str < 2 then
+					self.str = self.str .. readtext()
+				else
+					readtext()
+				end
+			end
+			
+			local val = tonumber(self.str, 16)
+			self.str_is_valid = val ~= nil
+
+			if keyp("backspace") then
+				self.str = sub(self.str, 1, -2)
+			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			elseif keyp("enter") or (val and #self.str == 2) then
+				if val then
+					app.base_volume = mid(val, 0, 0xff)
+				end
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			end
+		end
+	end
+	
+	function el:click(msg)
+		self.dragged = true
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		if self.dragged then
+			local delta = ui.mouse_lock(0.125)
+			app.base_volume = mid(0, app.base_volume - delta, 0xff)
+		end
+	end
+	
+	function el:tap(msg)
+		if msg.last_mb == 1 then
+			self:set_keyboard_focus(true)
+			readtext(true)
+			self.str = ""
+		elseif msg.last_mb == 2 then
+			app.base_volume_disabled = not app.base_volume_disabled
+		end
+	end
+	
+	function el:release(msg)
+		if self.need_refresh_gui then
+			readtext(true)
+			app.refresh_gui = true
+		end
+		ui.mouse_unlock()
+		self.cursor = get_spr(53)
+		self.dragged = nil
+	end
+
+	function el:doubleclick(msg)
+		app.instrument = 0
+	end
+	
+	function el:mousewheel(msg)
+		app.base_volume = mid(app.base_volume + msg.wheel_y, 0, 0xff)
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Step Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_step_selector(parent, el)
+	el.width = 22
+	el.height = 16
+	el.cursor = get_spr(53)
+	parent:attach(el)
+	
+	el.drag_start = nil
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		print("\014step", 4, 1, 58)
+		if self:has_keyboard_focus() then
+			rrectfill(6, 7, 11, 9, 0, 59)
+			print(self.str or "", 8, 9, self.str_is_valid and 7 or 8)
+		else
+			local str = string.format("%02d", app.jump_step)
+			print(str, 8, 9, self.dragged and 7 or 5)
+		end
+	end	
+
+	function el:update()
+		if self:has_keyboard_focus() then
+			while peektext() do
+				if #self.str < 2 then
+					self.str = self.str .. readtext()
+				else
+					readtext()
+				end
+			end
+
+			local val = tonumber(self.str)
+			self.str_is_valid = val ~= nil
+
+			if keyp("backspace") then
+				self.str = sub(self.str, 1, -2)
+			elseif keyp("escape") or (keyp("enter") and #self.str == 0) then
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			elseif keyp("enter") or (val and #self.str == 2) then
+				if val then
+					app.jump_step = mid(math.floor(val), 0, 99)
+				end
+				self:set_keyboard_focus(false)
+				app.was_in_text_field = true
+			end
+		end
+	end
+	
+	function el:click(msg)
+		self.dragged = true
+		self.cursor = 0
+	end
+	
+	function el:drag(msg)
+		if self.dragged then
+			local delta = ui.mouse_lock(0.125)
+			local val = math.floor(app.jump_step - delta)
+			app.jump_step = mid(val, 0, 99)
+		end
+	end
+	
+	function el:tap(msg)
+		self:set_keyboard_focus(true)
+		readtext(true)
+		self.str = ""
+	end
+	
+	function el:release(msg)
+		if self.need_refresh_gui then
+			app.refresh_gui = true
+		end
+		ui.mouse_unlock()
+		self.cursor = get_spr(53)
+		self.dragged = nil
+	end
+
+	function el:doubleclick(msg)
+		app.instrument = 0
+	end
+	
+	function el:mousewheel(msg)
+		app.jump_step = mid(app.jump_step + msg.wheel_y, 0, 99)
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Pattern Selector
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_pattern_selector(parent, el)
+	el.width = 22
+	el.height = 16
+--	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 49)
+		ui.print_centered("patt", 12, 1, 58)
+		ui.print_centered(string.format("%02d", app.pattern), 12, 9, 5) -- 12 or 19
+		pal(7, self.clicked_prev and 13 or 58)
+		pal(7, self.clicked_next and 13 or 58)
+		pal(7, 7)
+	end
+		
+	function el:click(msg)
+		if msg.my < 10 then
+			-- nothing
+		elseif msg.my < 25 then
+			self.clicked_prev = true
+			app.pattern = mid(app.pattern - 1, 0, sfx.num_patterns() - 1)
+		elseif msg.my > 25 then
+			self.clicked_next = true
+			app.pattern = mid(app.pattern + 1, 0, sfx.num_patterns() - 1)
+		end
+	end
+	
+	function el:release(msg)
+		self.clicked_prev = false
+		self.clicked_next = false
+	end
+	
+	function el:mousewheel(msg)
+		app.pattern = mid(app.pattern + msg.wheel_y, 0, sfx.num_patterns() - 1)
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Pattern Arrows
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_pattern_arrows(parent, el)
+	el.width = 22
+	el.height = 21
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw(msg)
+		--rrectfill(0, 0, self.width, self.height, 0, 47) line(0, 9+1, self.width, 9+1, 7)
+		if false and msg.has_pointer and msg.my < 9 then
+			rrectfill(3, 0, self.width - 4, 10, 0, 57)
+		elseif false and msg.has_pointer and msg.my > 9 then
+			rrectfill(3, 11, self.width - 4, 10, 0, 57)
+		end
+		pal(7, self.clicked_prev and 13 or 58)
+		spr(29, 8, 4)
+		pal(7, self.clicked_next and 13 or 58)
+		spr(30, 8, 12)
+		pal(7, 7)
+	end
+	
+	function el:click(msg)
+		if msg.my < 9 then
+			self.clicked_prev = true
+			app.pattern = mid(app.pattern - 1, 0, sfx.num_patterns() - 1)
+		elseif msg.my > 9 then
+			self.clicked_next = true
+			app.pattern = mid(app.pattern + 1, 0, sfx.num_patterns() - 1)
+		end
+	end
+	
+	function el:release(msg)
+		self.clicked_prev = false
+		self.clicked_next = false
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Pattern Flags
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_pattern_flags(parent, el)
+	el.width = 22
+	el.height = 10 + 2 * 11
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 43)
+		ui.print_centered("loop", 12, 1, 58)
+		pal(58, sfx.pattern_loop_start(app.pattern) and 37
+			or (self.clicked_loop_start and 13 or 58))
+		spr(40, 2, 10)
+		pal(58, sfx.pattern_loop_end(app.pattern) and 37
+			or (self.clicked_loop_end and 13 or 58))
+		spr(41, 13, 10)
+		pal(58, sfx.pattern_loop_stop(app.pattern) and 37
+			or (self.clicked_loop_stop and 13 or 58))
+		spr(42, 7, 10 + 11)
+		pal(58, 58)
+	end	
+	
+	function el:hover(msg)
+		if msg.my < 10 then
+			self.cursor = 1
+		else
+			self.cursor = "pointer"
+		end
+	end
+	
+	function el:click(msg)
+		if msg.my < 10 then
+			-- nothing
+		elseif msg.my < 22 then
+			if msg.mx < 12 then
+				self.clicked_loop_start = true
+			else
+				self.clicked_loop_end = true
+			end
+		else
+			self.clicked_loop_stop = true
+		end
+	end
+	
+	function el:tap(msg)
+		if msg.my < 10 then
+			-- nothing
+		elseif msg.my < 22 then
+			if msg.mx < 12 then
+				local is_on = sfx.pattern_loop_start(app.pattern)
+				sfx.set_pattern_loop_start(app.pattern, not is_on)
+			else
+				local is_on = sfx.pattern_loop_end(app.pattern)
+				sfx.set_pattern_loop_end(app.pattern, not is_on)
+			end
+		else
+			local is_on = sfx.pattern_loop_stop(app.pattern)
+			sfx.set_pattern_loop_stop(app.pattern, not is_on)
+		end
+	end
+	
+	function el:release(msg)
+		self.clicked_loop_start = false
+		self.clicked_loop_end = false
+		self.clicked_loop_stop = false
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Row Counter
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_row_counter(parent, el)
+	el.width = 20
+	el.height = 16
+	parent:attach(el)
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 43)
+		local step = selection.min_step()
+		if sfx.music_is_playing() then
+			ui.print_centered("row", 11, 1, 58)
+			ui.print_centered(string.format("%02d", sfx.playing_row()), 11, 10, 5)
+		elseif step then
+			ui.print_centered("row", 11, 1, 58)
+			ui.print_centered(string.format("%02d", step), 11, 10, 5)
+		end
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Inspector Button
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_inspector_button(parent, el)
+	el.width = 20
+	el.height = 16
+	parent:attach(el)
+	
+	el.cursor = "pointer"
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		pal(58, app.inspector_visible and 37 or 58)
+		spr(45, 5, 2)
+		pal(58, 58)
+	end	
+	
+	function el:click(msg)
+		app.inspector_visible = not app.inspector_visible
+		app.refresh_gui = true
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Record Button
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_edit_button(parent, el)
+	el.width = 22
+	el.height = 17
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 43)
+		spr(app.is_editing and 7 or 6, 3, 1)
+	end
+	
+	function el:click()
+		app.is_editing = not app.is_editing
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Play Button
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_play_button(parent, el)
+	el.width = 22
+	el.height = 18
+	el.cursor = "pointer"
+	parent:attach(el)
+
+	function el:draw()
+		--rrectfill(0, 0, self.width, self.height, 0, 45)
+		spr(sfx.music_is_playing() and 5 or 4, 3, 1)
+	end
+	
+	function el:click()
+		app.play_or_pause("follow_playhead")
+	end
+	
+	return el
+end
+
+
+return ui_panel
+:: src/ui/params.lua
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-01 20:30:57",revision=14464]]
+local app = require "src/app.lua"
+local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
 local ui = require "src/ui/ui.lua"
 local ui_menus = require "src/ui/menus.lua"
@@ -4804,7 +5076,9 @@ local ui_menus = require "src/ui/menus.lua"
 local ui_params = {}
 
 
--- Field ----------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Local Functions
+-------------------------------------------------------------------------------
 
 
 local function attach_field(parent, el)
@@ -4881,7 +5155,7 @@ local function attach_field(parent, el)
 		end
 		self.cursor = 0
 		self.dragged = true
-		ui.mouselock(1.0, true)
+		ui.mouse_lock(1.0, true)
 		if self.onclick then
 			self:onclick(msg)
 		elseif self.parent.onclick then
@@ -4907,7 +5181,7 @@ local function attach_field(parent, el)
 
 	
 	function el:drag(msg)
-		local delta = ui.mouselock(1.0, true)
+		local delta = ui.mouse_lock(1.0, true)
 		local old = self:get()
 		local new = old - delta
 		self:set(new)
@@ -4917,7 +5191,7 @@ local function attach_field(parent, el)
 	function el:release()
 		self.cursor = get_spr(53)
 		self.dragged = false
-		ui.mouseunlock()
+		ui.mouse_unlock()
 		self.up_barrier = nil
 		self.down_barrier = nil
 		-- TODO: it would be nice to keep the visual modal open
@@ -5028,7 +5302,9 @@ local function attach_envelope(parent, el)
 end
 
 
--- Getters and setters ------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Local Functions: Getters and Setters
+-------------------------------------------------------------------------------
 
 
 local function get_val1(self)
@@ -5079,7 +5355,9 @@ local function smart_str(self, val)
 end
 
 
--- The widget -----------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Full Widget with Knob
+-------------------------------------------------------------------------------
 
 
 function ui_params.attach(parent, x, y, el, style)
@@ -5159,7 +5437,9 @@ function ui_params.attach(parent, x, y, el, style)
 end
 
 
--- Mini widget ---------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Mini Widget
+-------------------------------------------------------------------------------
 
 
 function ui_params.attach_mini(parent, el)
@@ -5219,21 +5499,23 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-01 18:03:11",revision=13906]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-01 20:30:57",revision=14089]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 
 
 local ui_routing = {}
 
 
--- Locals ------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
 
 
-local node_width = 26
-local node_height = 16 -- TODO: if 7 vertical nodes, lower to 14
-local node_gap = 14
+local node_width <const> = 26
+local node_height <const> = 16 -- TODO: if 7 vertical nodes, lower to 15?
+local node_gap <const> = 14
 
 
 local placement_buttons = {}
@@ -5755,12 +6037,17 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-01 18:03:11",revision=11343]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-01 20:30:57",revision=11526]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
 
 local ui_settings = {}
+
+
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
 
 
 local function create_button(el)
@@ -5806,6 +6093,11 @@ local function create_button(el)
 	end
 	return el
 end
+
+
+-------------------------------------------------------------------------------
+-- Settings Dialog
+-------------------------------------------------------------------------------
 
 
 function ui_settings.open()
@@ -5913,13 +6205,14 @@ end
 
 return ui_settings
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-01 18:03:11",revision=16075]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-01 20:30:57",revision=16258]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_envelopes = require "src/ui/envelopes.lua"
 local ui_nodes = require "src/ui/nodes.lua"
+local ui_panel = require "src/ui/panel.lua"
 local ui_routing = require "src/ui/routing.lua"
 local ui_visual = require "src/ui/visual.lua"
 local ui_wavetable = require "src/ui/wavetable.lua"
@@ -5927,9 +6220,20 @@ local ui_wavetable = require "src/ui/wavetable.lua"
 
 local ui_synth = {}
 
+
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
 local instr_chooser = false
 
 local width_panel <const> = 24
+
+
+-------------------------------------------------------------------------------
+-- Synth View
+-------------------------------------------------------------------------------
 
 
 function ui_synth.attach(parent, el)
@@ -5948,10 +6252,10 @@ function ui_synth.attach(parent, el)
 	app.routing_widget = ui_routing.attach(el, { x = width_panel + 90 - 4, y = 4 })
 	--TODO: ui_visual.attach_oscilloscope(el, 8, { node_id = 0, horiz_scale = 1, vert_scale = 2, fg1 = 19, fg2 = 19, x = 90, y = 4, width = 385, height = 97 })
 
-	attach_view_selector(el, { x = 0, y = 4 })
-	attach_octave_selector(el, { x = 0, y = 45 })
-	attach_instrument_selector(el, { x = 0, y = 57 })
-	attach_volume_selector(el, { x = 0, y = 75 })
+	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
+	ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
+	ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
+	ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
 	
 	local dx = app.synth_width + app.synth_gap
 	local dy = app.synth_height + app.synth_gap
@@ -6117,7 +6421,9 @@ function ui_synth.attach(parent, el)
 end
 
 
--- Instrument chooser --------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Instrument chooser
+-------------------------------------------------------------------------------
 
 
 function ui_synth.attach_instr_chooser(parent, el)
@@ -6179,22 +6485,34 @@ end
 
 return ui_synth
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-01 18:03:11",revision=9237]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-01 20:30:57",revision=9420]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
 local ui = require "src/ui/ui.lua"
 local ui_notegrid = require "src/ui/notegrid.lua"
+local ui_panel = require "src/ui/panel.lua"
 
 local ui_tracker = {}
+
+
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
 
 local instr_chooser = false
 
 local last_pitch = 0xff -- last pitch played on the keyboard
 
 local width_panel <const> = 24
+
+
+-------------------------------------------------------------------------------
+-- Tracker Widget
+-------------------------------------------------------------------------------
 
 
 function ui_tracker.attach(parent, el)
@@ -6235,20 +6553,20 @@ function ui_tracker.attach(parent, el)
 		})
 	end
 	
-	attach_view_selector(el, { x = 0, y = 4 })
-	el.octave_selector = attach_octave_selector(el, { x = 0, y = 45 })
-	el.instrument_selector = attach_instrument_selector(el, { x = 0, y = 57 })
-	el.volume_selector = attach_volume_selector(el, { x = 0, y = 75 })
-	el.step_selector = attach_step_selector(el, { x = 0, y = 93 })
+	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
+	el.octave_selector = ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
+	el.instrument_selector = ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
+	el.volume_selector = ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
+	el.step_selector = ui_panel.attach_step_selector(el, { x = 0, y = 93 })
 
-	attach_pattern_selector(el, { x = 0, y = 116 })
-	attach_pattern_arrows(el, { x = 0, y = 132 })
-	attach_pattern_flags(el, { x = 0, y = 153 })
+	ui_panel.attach_pattern_selector(el, { x = 0, y = 116 })
+	ui_panel.attach_pattern_arrows(el, { x = 0, y = 132 })
+	ui_panel.attach_pattern_flags(el, { x = 0, y = 153 })
 
-	attach_row_counter(el, { x = 1, y = el.height - 68 })
-	attach_inspector_button(el, { x = 1, y = el.height - 51 })
-	attach_edit_button(el, { x = 0, y = el.height - 35 })
-	attach_play_button(el, { x = 0, y = el.height - 18 })
+	ui_panel.attach_row_counter(el, { x = 1, y = el.height - 68 })
+	ui_panel.attach_inspector_button(el, { x = 1, y = el.height - 51 })
+	ui_panel.attach_edit_button(el, { x = 0, y = el.height - 35 })
+	ui_panel.attach_play_button(el, { x = 0, y = el.height - 18 })
 
 	function el:draw()
 		local w <const> = self.width
@@ -6934,284 +7252,102 @@ function ui_tracker.attach(parent, el)
 end
 
 
-----------------------------------------------------------------------------------------------------
--- Pattern Selector
-----------------------------------------------------------------------------------------------------
-
-
-function attach_pattern_selector(parent, el)
-	el.width = 22
-	el.height = 16
---	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 49)
-		ui.print_centered("patt", 12, 1, 58)
-		ui.print_centered(string.format("%02d", app.pattern), 12, 9, 5) -- 12 or 19
-		pal(7, self.clicked_prev and 13 or 58)
-		pal(7, self.clicked_next and 13 or 58)
-		pal(7, 7)
-	end
-		
-	function el:click(msg)
-		if msg.my < 10 then
-			-- nothing
-		elseif msg.my < 25 then
-			self.clicked_prev = true
-			app.pattern = mid(app.pattern - 1, 0, sfx.num_patterns() - 1)
-		elseif msg.my > 25 then
-			self.clicked_next = true
-			app.pattern = mid(app.pattern + 1, 0, sfx.num_patterns() - 1)
-		end
-	end
-	
-	function el:release(msg)
-		self.clicked_prev = false
-		self.clicked_next = false
-	end
-	
-	function el:mousewheel(msg)
-		app.pattern = mid(app.pattern + msg.wheel_y, 0, sfx.num_patterns() - 1)
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Pattern Arrows
-----------------------------------------------------------------------------------------------------
-
-
-function attach_pattern_arrows(parent, el)
-	el.width = 22
-	el.height = 21
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw(msg)
-		--rrectfill(0, 0, self.width, self.height, 0, 47) line(0, 9+1, self.width, 9+1, 7)
-		if false and msg.has_pointer and msg.my < 9 then
-			rrectfill(3, 0, self.width - 4, 10, 0, 57)
-		elseif false and msg.has_pointer and msg.my > 9 then
-			rrectfill(3, 11, self.width - 4, 10, 0, 57)
-		end
-		pal(7, self.clicked_prev and 13 or 58)
-		spr(29, 8, 4)
-		pal(7, self.clicked_next and 13 or 58)
-		spr(30, 8, 12)
-		pal(7, 7)
-	end
-	
-	function el:click(msg)
-		if msg.my < 9 then
-			self.clicked_prev = true
-			app.pattern = mid(app.pattern - 1, 0, sfx.num_patterns() - 1)
-		elseif msg.my > 9 then
-			self.clicked_next = true
-			app.pattern = mid(app.pattern + 1, 0, sfx.num_patterns() - 1)
-		end
-	end
-	
-	function el:release(msg)
-		self.clicked_prev = false
-		self.clicked_next = false
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Pattern Flags
-----------------------------------------------------------------------------------------------------
-
-
-function attach_pattern_flags(parent, el)
-	el.width = 22
-	el.height = 10 + 2 * 11
-	el.cursor = "pointer"
-	parent:attach(el)
-	
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 43)
-		ui.print_centered("loop", 12, 1, 58)
-		pal(58, sfx.pattern_loop_start(app.pattern) and 37
-			or (self.clicked_loop_start and 13 or 58))
-		spr(40, 2, 10)
-		pal(58, sfx.pattern_loop_end(app.pattern) and 37
-			or (self.clicked_loop_end and 13 or 58))
-		spr(41, 13, 10)
-		pal(58, sfx.pattern_loop_stop(app.pattern) and 37
-			or (self.clicked_loop_stop and 13 or 58))
-		spr(42, 7, 10 + 11)
-		pal(58, 58)
-	end	
-	
-	function el:hover(msg)
-		if msg.my < 10 then
-			self.cursor = 1
-		else
-			self.cursor = "pointer"
-		end
-	end
-	
-	function el:click(msg)
-		if msg.my < 10 then
-			-- nothing
-		elseif msg.my < 22 then
-			if msg.mx < 12 then
-				self.clicked_loop_start = true
-			else
-				self.clicked_loop_end = true
-			end
-		else
-			self.clicked_loop_stop = true
-		end
-	end
-	
-	function el:tap(msg)
-		if msg.my < 10 then
-			-- nothing
-		elseif msg.my < 22 then
-			if msg.mx < 12 then
-				local is_on = sfx.pattern_loop_start(app.pattern)
-				sfx.set_pattern_loop_start(app.pattern, not is_on)
-			else
-				local is_on = sfx.pattern_loop_end(app.pattern)
-				sfx.set_pattern_loop_end(app.pattern, not is_on)
-			end
-		else
-			local is_on = sfx.pattern_loop_stop(app.pattern)
-			sfx.set_pattern_loop_stop(app.pattern, not is_on)
-		end
-	end
-	
-	function el:release(msg)
-		self.clicked_loop_start = false
-		self.clicked_loop_end = false
-		self.clicked_loop_stop = false
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Row Counter
-----------------------------------------------------------------------------------------------------
-
-
-function attach_row_counter(parent, el)
-	el.width = 20
-	el.height = 16
-	parent:attach(el)
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 43)
-		local step = selection.min_step()
-		if sfx.music_is_playing() then
-			ui.print_centered("row", 11, 1, 58)
-			ui.print_centered(string.format("%02d", sfx.playing_row()), 11, 10, 5)
-		elseif step then
-			ui.print_centered("row", 11, 1, 58)
-			ui.print_centered(string.format("%02d", step), 11, 10, 5)
-		end
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Inspector Button
-----------------------------------------------------------------------------------------------------
-
-
-function attach_inspector_button(parent, el)
-	el.width = 20
-	el.height = 16
-	parent:attach(el)
-	
-	el.cursor = "pointer"
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 47)
-		pal(58, app.inspector_visible and 37 or 58)
-		spr(45, 5, 2)
-		pal(58, 58)
-	end	
-	
-	function el:click(msg)
-		app.inspector_visible = not app.inspector_visible
-		app.refresh_gui = true
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Record Button
-----------------------------------------------------------------------------------------------------
-
-
-function attach_edit_button(parent, el)
-	el.width = 22
-	el.height = 17
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 43)
-		spr(app.is_editing and 7 or 6, 3, 1)
-	end
-	
-	function el:click()
-		app.is_editing = not app.is_editing
-	end
-	
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Play Button
-----------------------------------------------------------------------------------------------------
-
-
-function attach_play_button(parent, el)
-	el.width = 22
-	el.height = 18
-	el.cursor = "pointer"
-	parent:attach(el)
-
-	function el:draw()
-		--rrectfill(0, 0, self.width, self.height, 0, 45)
-		spr(sfx.music_is_playing() and 5 or 4, 3, 1)
-	end
-	
-	function el:click()
-		app.play_or_pause("follow_playhead")
-	end
-	
-	return el
-end
-
-
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-01 18:03:11",revision=6686]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-01 20:30:57",revision=6869]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 
 
 local ui_trakdial = {}
 
 
-local create_track_selector
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
+local function draw_dialog_window(x, y, width, height, label)
+	rrectfill(x, y, width, height, 0, 6)
+	local xw, yh = x + width - 2, y + height - 2
+	line(x + 1, yh, x + 1, y + 1, 57)
+	line(x + 2, yh, x + 2, y + 1, 57)
+	line(x + 1, y + 1, xw, y + 1, 57)
+	line(x + 1, y + 2, xw, y + 2, 57)
+	line(xw, yh, xw, y + 1, 58)
+	line(xw - 1, yh, xw - 1, y + 2, 58)
+	line(x + 1, yh, xw, yh, 58)
+	line(x + 2, yh - 1, xw, yh - 1, 58)
+	rrect(x + 0, y + 0, width, height, 0, 0)
+--	rrectfill(x + 4, y + 4, width - 8, 11, 0, 5)
+--	ui.print_centered(label, x + width // 2, y + 7, 5)
+end
+
+
+local function create_track_selector(el)
+	el.width = 80
+	el.height = 13
+	ui.head():new(el)
+	
+	function el:draw(msg)
+--		rrect(0, 0, self.width, self.height, 0, 47)
+		if msg.has_pointer and msg.mx < 20 then
+			rrectfill(2, 2, 17, 9, 0, 57)
+		end
+		if msg.has_pointer and msg.mx > self.width - 20 then
+			rrectfill(self.width - 2 - 17, 2, 17, 9, 0, 57)
+		end
+		pal(7, self.previous_clicked and 13 or 58)
+		spr(43, 7, 3)
+		pal(7, self.next_clicked and 13 or 58)
+		spr(44, self.width - 7 - 7, 3)
+		pal(7, 7)
+		ui.print_centered(string.format("track %03d", self.parent:track()),
+			self.width // 2, 4, 5)
+	end
+	
+	function el:hover(msg)
+		if msg.mx < 20 then
+			self.cursor = "pointer"
+		elseif msg.mx > self.width - 20 then
+			self.cursor = "pointer"
+		else
+			self.cursor = 1
+		end
+	end
+	
+	function el:click(msg)
+		if msg.mx < 20 then
+			self.previous_clicked = true
+		elseif msg.mx > self.width - 20 then
+			self.next_clicked = true
+		end
+	end
+	
+	function el:tap(msg)
+		local track = self.parent:track()
+		if msg.mx < 20 then
+			track = mid(track - 1, 0, sfx.num_tracks())
+			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
+		elseif msg.mx > self.width - 20 then
+			track = mid(track + 1, 0, sfx.num_tracks())
+			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
+		end
+	end
+	
+	function el:release(msg)
+		self.previous_clicked = false
+		self.next_clicked = false
+	end
+	
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+-- Track Dialog
+-------------------------------------------------------------------------------
 
 
 function ui_trakdial.create(el)
@@ -7344,86 +7480,9 @@ function ui_trakdial.create(el)
 end
 
 
-function draw_dialog_window(x, y, width, height, label)
-	rrectfill(x, y, width, height, 0, 6)
-	local xw, yh = x + width - 2, y + height - 2
-	line(x + 1, yh, x + 1, y + 1, 57)
-	line(x + 2, yh, x + 2, y + 1, 57)
-	line(x + 1, y + 1, xw, y + 1, 57)
-	line(x + 1, y + 2, xw, y + 2, 57)
-	line(xw, yh, xw, y + 1, 58)
-	line(xw - 1, yh, xw - 1, y + 2, 58)
-	line(x + 1, yh, xw, yh, 58)
-	line(x + 2, yh - 1, xw, yh - 1, 58)
-	rrect(x + 0, y + 0, width, height, 0, 0)
---	rrectfill(x + 4, y + 4, width - 8, 11, 0, 5)
---	ui.print_centered(label, x + width // 2, y + 7, 5)
-end
-
-
-create_track_selector = function(el)
-	el.width = 80
-	el.height = 13
-	ui.head():new(el)
-	
-	function el:draw(msg)
---		rrect(0, 0, self.width, self.height, 0, 47)
-		if msg.has_pointer and msg.mx < 20 then
-			rrectfill(2, 2, 17, 9, 0, 57)
-		end
-		if msg.has_pointer and msg.mx > self.width - 20 then
-			rrectfill(self.width - 2 - 17, 2, 17, 9, 0, 57)
-		end
-		pal(7, self.previous_clicked and 13 or 58)
-		spr(43, 7, 3)
-		pal(7, self.next_clicked and 13 or 58)
-		spr(44, self.width - 7 - 7, 3)
-		pal(7, 7)
-		ui.print_centered(string.format("track %03d", self.parent:track()),
-			self.width // 2, 4, 5)
-	end
-	
-	function el:hover(msg)
-		if msg.mx < 20 then
-			self.cursor = "pointer"
-		elseif msg.mx > self.width - 20 then
-			self.cursor = "pointer"
-		else
-			self.cursor = 1
-		end
-	end
-	
-	function el:click(msg)
-		if msg.mx < 20 then
-			self.previous_clicked = true
-		elseif msg.mx > self.width - 20 then
-			self.next_clicked = true
-		end
-	end
-	
-	function el:tap(msg)
-		local track = self.parent:track()
-		if msg.mx < 20 then
-			track = mid(track - 1, 0, sfx.num_tracks())
-			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
-		elseif msg.mx > self.width - 20 then
-			track = mid(track + 1, 0, sfx.num_tracks())
-			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
-		end
-	end
-	
-	function el:release(msg)
-		self.previous_clicked = false
-		self.next_clicked = false
-	end
-	
-	return el
-end
-
-
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-01 18:03:11",revision=11867]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-01 20:30:57",revision=12050]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -7466,7 +7525,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 
-function ui.mouselock(sensitivity, precise)
+function ui.mouse_lock(sensitivity, precise)
 	local s = settings.user.drag_sensitivity
 	if precise or key("shift") then
 		s = settings.user.drag_sensitivity_precise
@@ -7480,7 +7539,7 @@ function ui.mouselock(sensitivity, precise)
 end
 
 
-function ui.mouseunlock()
+function ui.mouse_unlock()
 	mouselock(false)
 end
 
@@ -7890,7 +7949,7 @@ function ui.create_knob(el)
 		local target = self.min_val and self or self.parent
 		self.dragged = msg.mb == 1
 		self.dragged_secondary = msg.mb == 2
-		ui.mouselock(target.sensitivity)
+		ui.mouse_lock(target.sensitivity)
 		return true
 	end
 	
@@ -7908,7 +7967,7 @@ function ui.create_knob(el)
 
 	function el:drag(msg)
 		local target = self.min_val and self or self.parent
-		local delta = ui.mouselock(target.sensitivity)
+		local delta = ui.mouse_lock(target.sensitivity)
 
 		local old = self:get()
 		local new = old - delta
@@ -7967,7 +8026,7 @@ function ui.create_knob(el)
 	function el:release(msg)
 		self.dragged = false
 		self.dragged_secondary = false
-		ui.mouseunlock()
+		ui.mouse_unlock()
 		self.up_barrier = nil
 		self.down_barrier = nil
 	end
@@ -7979,37 +8038,24 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-01 18:03:11",revision=12591]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-01 20:30:57",revision=12774]]
 local app = require "src/app.lua"
-local sfx = require "src/sfx.lua"
+local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 
 
 local ui_visual = {}
 
 
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
 local overlay = nil
 
 
-function ui_visual.close()
-	if overlay then
-		overlay:detach()
-		overlay = nil
-	end
-end
-
-
--- Wavetables ----------------------------------------------------------------
-
-
-function ui_visual.open_wavetable(target)
-	if (overlay) ui_visual.close()
-	
-	overlay = ui_visual.attach_wavetable(ui.head(), target, {
-		x = 110, y = 4,
-		width = 366, height = 97,
-	})
-end
+-------------------------------------------------------------------------------
 
 
 local function draw_wave(
@@ -8033,6 +8079,34 @@ local function draw_wave(
 		pset(i, oy - h, col1)
  		last_h = h
 	end
+end
+
+
+-------------------------------------------------------------------------------
+-- Closing any Visual Modal
+-------------------------------------------------------------------------------
+
+
+function ui_visual.close()
+	if overlay then
+		overlay:detach()
+		overlay = nil
+	end
+end
+
+
+-------------------------------------------------------------------------------
+-- Wavetable Visual and Widget
+-------------------------------------------------------------------------------
+
+
+function ui_visual.open_wavetable(target)
+	if (overlay) ui_visual.close()
+	
+	overlay = ui_visual.attach_wavetable(ui.head(), target, {
+		x = 110, y = 4,
+		width = 366, height = 97,
+	})
 end
 
 
@@ -8071,7 +8145,9 @@ function ui_visual.attach_wavetable(parent, target, el)
 end
 
 
--- Oscilloscope ---------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Oscilloscope Visual
+-------------------------------------------------------------------------------
 
 
 function ui_visual.attach_oscilloscope(parent, channel, el)
@@ -8128,9 +8204,9 @@ function ui_visual.attach_oscilloscope(parent, channel, el)
 end
 
 
--- Custom envelopes ----------------------------------------------------
-
-
+-------------------------------------------------------------------------------
+-- Custom Envelopes Visual and Widget
+-------------------------------------------------------------------------------
 
 
 function ui_visual.open_custom_envelope(env_id)
@@ -8198,8 +8274,8 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-01 18:03:11",revision=10817]]
-local sfx = require "src/sfx.lua"
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-01 20:30:57",revision=11000]]
+local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -8207,8 +8283,18 @@ local ui = require "src/ui/ui.lua"
 local ui_wavetable = {}
 
 
+-------------------------------------------------------------------------------
+-- Locals
+-------------------------------------------------------------------------------
+
+
 local wt = nil
 local wave = 25
+
+
+-------------------------------------------------------------------------------
+-- Wavetable Temporary Widget
+-------------------------------------------------------------------------------
 
 
 function ui_wavetable.attach(parent, el)
@@ -8344,7 +8430,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-01 18:03:11",revision=3620]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-01 20:30:57",revision=3803]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -8430,7 +8516,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-01 18:03:11",revision=12471]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-01 20:30:57",revision=12654]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -8905,7 +8991,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-01 18:03:11",revision=12806]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-01 20:30:57",revision=12989]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -8975,7 +9061,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-02-01 18:03:11",revision=11176]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-02-01 20:30:57",revision=11359]]
 - fix selection appearing on other patterns
 - fix first note on the track
 - fix selection drag (cannot collapse)
@@ -8999,9 +9085,9 @@ return Wavetable
 - add auto-hide ruler on the left side for row numbers
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-01 18:03:12",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.7",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#43",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfx",workspace_index=8}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-01 20:30:57",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.7",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#43",workspace_index=2},{location="map/0.map",workspace_index=3},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-01 18:03:11"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-01 20:30:57"]]
 :: fonts/p8_mod.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMwIDA3OjEyOjQzIixtb2RpZmllZD0iMjAyNi0w
 MS0zMCAwNzoxNDozNCIscmV2aXNpb249Ml1dbHo0AHsFAACjBQAA8INweHUAAygACAAABAQIBhAD
@@ -9031,7 +9117,7 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 20:30:57",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 MS0zMSAxODo0NzoyOCIscmV2aXNpb249OTk2Nl1dbHo0AGoJAAA4PAAA8yV7WzBdPXtibXA9cHh1
@@ -9501,14 +9587,14 @@ xzzWNcE4NccVwTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXEFcE1wiw1LDXBLDXCGjXBGjUaNf3P
 ODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNf3PODXHFcE1wiw1LDUsNSw1who1wRo1GjXUODXHFcE1
 wiw1LDXALDXDGjXBGjUaNdEAAAAAAAAAAQ==
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 20:30:57",stored="2024-03-24 00:48:06"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
 My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-01 18:03:11",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-01 20:30:57",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -9562,20 +9648,13 @@ NTYyMDA5M2U4OWEwMDNjOTU5MjAwOGVkY2Q5MDA5NDczYjRgAPADYTllYTAwYTc3YTU0MDBmMWFh
 oAB-NjI3YTkxMAEABvAUNzY3NzdkMDBkNmQ3ZGEwMDlmYTBhNjAwMWUzNzNjMDAzNzQnASEwMwEA
 MTAwMgEAoDAwMTYxNjE2Iik=
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
-:: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTAxIDE1OjIxOjA3Iixtb2RpZmllZD0iMjAyNi0w
-Mi0wMSAxODowMjowNSIscmV2aXNpb249OV1dbHo0ADEBAADBCgAA8CdweHUAAygAAAQABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
-EwD-Bg8YDxkPGg8bDxwPHQ8eDx8AD--w-wEA6-8nqgEQBg8wEAEgASAB8AACEAIMEAEgDyEgATAP
-QPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD------70f-wEArPMEyA9AAA1ADzYPMQ8yDzMP
-MRw--wsA8QQ2Dzf--yBgPkD_IG8vPkP_IPBwLABY-rDwcAQIAEAADzIuLgDiDzj_KQAuIP4pAy4j
--hkdABWeHAATPiMA8wAiAC4gPiD_IgMuIz4j-hhEABMGHgB7LSD_LSP_F2IAP7Dw-wEA-_FQ----
--yg=
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 20:30:57",stored="2024-03-24 00:48:06"]]
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-01 18:03:12",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-01 20:30:57",stored="2024-04-07 08:14:00"]]
+:: src/sfx/.info.pod
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-01 20:30:57"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-01 18:03:12"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-01 20:30:57"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-01 18:03:12"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-01 20:30:57"]]
 :: [eoc]
