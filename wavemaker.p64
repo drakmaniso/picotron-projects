@@ -7,18 +7,124 @@ version 2
 :: pal/
 :: sfx/
 :: src/
+:: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",modified="2026-01-31 20:44:44",revision=100]]
-Version 0.0.5: (#wavemaker-?)
+--[[pod_format="raw",created="2026-01-31 19:58:41",modified="2026-02-01 18:03:11",revision=349]]
+Version 0.0.6:
 
-- fixed crash when clicking on empty and muted track
-- added colored border around the note editor when
-  editing mode is on, for bette awareness
+- Fixed a crash when copying (regression; thanks to @Thelxinoe5 for the
+  report)
+
+Version 0.0.5: (#wavemaker-2)
+
+- Fixed a crash when clicking on empty and muted track, or muting a track
+  containing the cursor (thanks to @cheez_itz_12oz on the discord for the report).
+- Added a colored border around the note editor in recording mode, for better
+  awareness.
+
+:: lune.lua
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 18:03:11",revision=13117]]
+----------------------------------------------------------------------------------------------------
+-- Logging and Errors
+----------------------------------------------------------------------------------------------------
+
+
+is_loaded_cart =
+	env().argv[0] == "/ram/cart/main.lua"
+	or env().argv[0] == "/system/apps/terminal.lua"
+
+
+if is_loaded_cart then
+	function log(str)
+		local path = debug.getinfo(2).source
+		if path[1] == "@" then path = path:sub(2, -1) end
+		local line = debug.getinfo(2).currentline
+		printh(path .. ":" .. line .. ": " .. (str or ""))
+	end
+else
+	function log(_str) end
+end
+
+
+function error(msg, level, title)
+	level = (level or 1) + 1
+	-- TODO: check if debug.getinfo(level)
+	local path = debug.getinfo(level).source
+	local line = debug.getinfo(level).currentline
+	local str = sub(path, 2) .. ":" .. string.format("%d", line) .. ": " .. msg
+	send_message(3, { event = "report_error", content = "*" .. (title or "error") })
+	send_message(3, { event = "report_error", content = str })
+	send_message(3, { event = "report_error", content = debug.traceback("", level) })
+end
+
+
+function panic(msg, level, title)
+	level = (level or 1) + 1
+	error(msg, level, title or "panic")
+	stop()
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Require
+----------------------------------------------------------------------------------------------------
+
+
+_modules = {}
+
+
+-- A 'require' function similar to standard Lua.
+-- Idea from elgopher on the BBS
+function require(name)
+	if (_modules == nil) _modules = {}
+
+	local cached = _modules[name]
+	if (cached) return cached
+
+	local filename = fullpath(name)
+	local src = fetch(filename)
+	if (type(src) != "string") panic("could not include " .. filename, 2)
+
+	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
+	-- chunk name (for error reporting)
+	-- mode ("t" for text only -- no binary chunk loading)
+	-- _ENV upvalue
+	-- @ is a special character that tells debugger the string is a filename
+	local func, err = load(src, "@" .. filename, "t", _ENV)
+	if (not func) panic("\n"..tostr(err), 2, "Syntax error:")
+
+	local module = func()
+	_modules[name] = module
+
+	return module
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Structure
+----------------------------------------------------------------------------------------------------
+
+
+function structure(meta)
+	meta.__index = meta
+	meta.type = meta
+	setmetatable(
+		meta,
+		{
+			__call =
+				function(mt, instance)
+					setmetatable(instance, mt)
+					return instance
+				end,
+		}
+	)
+	return meta
+end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-01-31 20:44:44",revision=21332]]
-include "src/lune.lua"
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",revision=21581]]
+include "lune.lua"
 --include "src/misc.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -27,19 +133,63 @@ local file = require "src/file.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
-local ui = require "src/ui.lua"
-local ui_routing = require "src/ui_routing.lua"
-local ui_settings = require "src/ui_settings.lua"
-local ui_synth = require "src/ui_synth.lua"
-local ui_tracker = require "src/ui_tracker.lua"
-local ui_visual = require "src/ui_visual.lua"
+local ui = require "src/ui/ui.lua"
+local ui_routing = require "src/ui/routing.lua"
+local ui_settings = require "src/ui/settings.lua"
+local ui_synth = require "src/ui/synth.lua"
+local ui_tracker = require "src/ui/tracker.lua"
+local ui_visual = require "src/ui/visual.lua"
+
+
+function call_protected(func)
+	if is_loaded_cart then
+		func()
+	else
+		local ok, err = pcall(func)
+		if not ok then
+			-- Save the crashed file
+			local ud = userdata("u8", 0x40000)
+			for i=0,0x3f do
+				set(ud, i * 0x1000, peek(0x30000 + i * 0x1000, 0x1000))
+			end
+			local crashloc = pwf()
+			if type(crashloc) ~= "string" then
+				crashloc = env().argv[1]
+			end
+			if type(crashloc) ~= "string" then
+				crashloc = "/ram/cart/sfx/0.sfx"
+			end
+			if crashloc:sub(-4, -1) == ".sfx" then
+				crashloc = crashloc:sub(1, -5)
+			end
+			store(crashloc .. ".CRASH.sfx", ud)
+			store(crashloc .. ".CRASH.txt", type(err) == "string" and err or pod(err))
+			-- Report the error
+			if type(err) == "string" then
+				send_message(3, { event = "report_error", content = "*runtime error"})
+				for s in err:gmatch("[^\n]+") do
+					send_message(3, { event = "report_error", content = s })
+				end
+			else
+				send_message(3, { event = "report_error", content = "*unknown runtime error"})
+				send_message(3, { event = "report_error", content = pod(err) })
+			end
+		end
+	end
+end
+
 
 
 function _init()
+	log("-------------------------------------------------------------------------------")
+	log("                                 WaveMaker")
+	log("-------------------------------------------------------------------------------")
+	log("Path: " .. pod(env().argv[0]))
+	log("Opening: " .. pod(env().argv[1]))
+
 	window {
 		tabbed = true,
 		capture_escapes = true,
---		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICATAF0AHEBcgBxAXEAcgFxAHQBfA")
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
 	}
 
@@ -117,7 +267,7 @@ function _update()
 		generate_gui()
 		app.refresh_gui = false
 	end
-	ui.head():update_all()
+	call_protected(function() ui.head():update_all() end)
 	-- Keys
 	if key("ctrl") then
 		if keyp("z") then
@@ -136,12 +286,17 @@ end
 
 local fps_prev = 0
 function _draw()
-	ui.head():draw_all()
-	--print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 459, 246, 57)
-	fps = flr(0.5 + stat(1) * 100.0)
-	print(string.format("%3.0f%%", max(fps, prev_fps)),
-		463, true and 4 or 250, 57)
-	prev_fps = fps
+	call_protected(function() ui.head():draw_all() end)
+	if is_loaded_cart then
+		--print(string.format("\014% 3.0f", stat(0) / (1024 * 1024)) .. "MB", 459, 246, 57)
+		fps = flr(0.5 + stat(1) * 100.0)
+		print(
+			string.format("%3.0f%%", max(fps, prev_fps)),
+			463, true and 4 or 250, 
+			57
+		)		
+		prev_fps = fps
+	end
 end
 
 
@@ -557,7 +712,7 @@ function attach_step_selector(parent, el)
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-01-31 20:44:44",revision=11059]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",modified="2026-02-01 18:03:11",revision=11308]]
 # WaveMaker
 
 ## Tracker
@@ -606,7 +761,7 @@ Note: not everything is implemented yet.
 
 ## Synth
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-01-31 20:44:44",revision=18137]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-01 18:03:11",revision=18386]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx.lua"
 
@@ -618,6 +773,7 @@ local app = {}
 -- Transient State
 ----------------------------------------------------------------------------------------------------
 
+app.current_location = nil
 
 app.window_focused = false
 
@@ -810,7 +966,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-01-31 20:44:44",revision=12516]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-01 18:03:11",revision=12765]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 
@@ -1091,101 +1247,8 @@ end
 
 
 return file
-:: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-31 20:44:44",revision=12868]]
-----------------------------------------------------------------------------------------------------
--- Logging and Errors
-----------------------------------------------------------------------------------------------------
-
-
-if env().argv[0] == "/system/apps/terminal.lua" then
-	function log(str)
-		local path = debug.getinfo(2).source
-		if path[1] == "@" then path = path:sub(2, -1) end
-		local line = debug.getinfo(2).currentline
-		printh(path .. ":" .. line .. ": " .. (str or ""))
-	end
-else
-	function log(_str) end
-end
-
-
-function error(msg, level, title)
-	level = (level or 1) + 1
-	local path = debug.getinfo(level).source
-	local line = debug.getinfo(level).currentline
-	local str = sub(path, 2) .. ":" .. string.format("%d", line) .. ": " .. msg
-	send_message(3, { event = "report_error", content = "*" .. (title or "error") })
-	send_message(3, { event = "report_error", content = str })
-	send_message(3, { event = "report_error", content = debug.traceback("", level) })
-end
-
-
-function panic(msg, level, title)
-	level = (level or 1) + 1
-	error(msg, level, title or "panic")
-	stop()
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Require
-----------------------------------------------------------------------------------------------------
-
-
-_modules = {}
-
-
--- A 'require' function similar to standard Lua.
--- Idea from elgopher on the BBS
-function require(name)
-	if (_modules == nil) _modules = {}
-
-	local cached = _modules[name]
-	if (cached) return cached
-
-	local filename = fullpath(name)
-	local src = fetch(filename)
-	if (type(src) != "string") panic("could not include " .. filename, 2)
-
-	-- https://www.lua.org/manual/5.4/manual.html#pdf-load
-	-- chunk name (for error reporting)
-	-- mode ("t" for text only -- no binary chunk loading)
-	-- _ENV upvalue
-	-- @ is a special character that tells debugger the string is a filename
-	local func, err = load(src, "@" .. filename, "t", _ENV)
-	if (not func) panic("\n"..tostr(err), 2, "Syntax error:")
-
-	local module = func()
-	_modules[name] = module
-
-	return module
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Structure
-----------------------------------------------------------------------------------------------------
-
-
-function structure(meta)
-	meta.__index = meta
-	meta.type = meta
-	setmetatable(
-		meta,
-		{
-			__call =
-				function(mt, instance)
-					setmetatable(instance, mt)
-					return instance
-				end,
-		}
-	)
-	return meta
-end
-
 :: src/misc.lua
---[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-01-31 20:44:44",revision=12161]]
+--[[pod_format="raw",created="2024-04-07 07:42:45",modified="2026-02-01 18:03:11",revision=12410]]
 -- Table utility functions --------------------------------------------------------
 
 
@@ -1312,7 +1375,7 @@ function set_drawspace(drawspace)
 end
 
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-01-31 20:44:44",revision=7274]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-01 18:03:11",revision=7523]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 
@@ -1770,7 +1833,7 @@ end
 function selection.max_channel()
 	local max = -1
 	for c, v in pairs(channels) do
-		if v and (s > max) then
+		if v and (c > max) then
 			max = c
 		end
 	end
@@ -1993,7 +2056,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-01-31 20:44:44",revision=13422]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-01 18:03:11",revision=13671]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -2108,7 +2171,7 @@ end
 
 return settings
 :: src/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-01-31 20:44:44",revision=17908]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-01 18:03:11",revision=18157]]
 local sfx = {}
 
 
@@ -3002,569 +3065,13 @@ end
 
 
 return sfx
-:: src/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-01-31 20:44:44",revision=11618]]
-local app = require "src/app.lua"
-local settings = require "src/settings.lua"
-local undo = require "src/undo.lua"
-
-
-local ui = {}
-
-
-----------------------------------------------------------------------------------------------------
--- Head
-----------------------------------------------------------------------------------------------------
-
-
-local head = false
-
-
-function ui.create_head()
-	head = create_gui()
-end
-
-
-function ui.head()
-	return head
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Misc
-----------------------------------------------------------------------------------------------------
-
-
-function ui.print_centered(s, x, y, col)
-	local count = #s
-	print(s, x - ((count * 4) \ 2), y, col)
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Mouse
-----------------------------------------------------------------------------------------------------
-
-
-function ui.mouselock(sensitivity, precise)
-	local s = settings.user.drag_sensitivity
-	if precise or key("shift") then
-		s = settings.user.drag_sensitivity_precise
-	end
-	s *= sensitivity or 1
-	local dx, dy = mouselock(0x4|0x8, s, 0.0)
-	if settings.user.drag_horizontal then
-		return -dx
-	end
-	return dy
-end
-
-
-function ui.mouseunlock()
-	mouselock(false)
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Modal
-----------------------------------------------------------------------------------------------------
-
-
-local layer = false
-
-
-function ui.open_modal(el)
-	layer = ui.head():attach {
-		x = 0, y = 0,
-		width = ui.head().width, height = ui.head().height,
-		draw = function(self)
-			if self.dim_background then
-				poke(0x550b, 0x3f)
-				---fillp(0b0101101001011010)
-				---fillp(0b0001001001001000)
-				---fillp(0b1110110110110111)
-				fillp(0b0011011011001001)
-				rectfill(0, 0, self.width - 1, self.height - 1, 61)
-				fillp()
-				poke(0x550b, 0x00)
-			end
-		end,
-		click = function(self)
-			ui.close_modal()
-		end,
-		mousewheel = function(self)
-			return false -- does not work?
-		end
-	}
-	if not el.x then
-		el.x = layer.width // 2 - el.width // 2
-	end
-	if not el.y then
-		el.y = layer.height // 2 - el.height // 2
-	end
-	layer:attach(el)
-	return el
-end
-
-
-function ui.has_modal()
-	return layer
-end
-
-
-function ui.close_modal()
-	if layer then
-		layer:detach()
-	end
-	layer = false
-end
-
-
-function ui.has_modal_or_menu()
-	return ui.has_modal() or ui.has_menu()
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Chooser
-----------------------------------------------------------------------------------------------------
-
-
-function ui.chooser(options, callback)
-	-- Copied from system 0.2.2b
-	if (type(options) == "string") options = {path = options}
-	if (type(options) ~= "table") options = {}
-
-	options.path = fullpath(options.path or ".") -- can be relative to pwd; default to pwd()
-	if (not options.path) return "could not resolve path"
-	if (fstat(options.path) ~= "folder") return "path not found"
-
-	local intention = options.intention or "choose_items"
-	local intention_event = nil
-
-	if (callback) intention_event = "_chooser_response_"..stat(333) -- unique id
-
-	create_process("/system/apps/filenav.p64",{
-		window_attribs = {autoclose = true, workspace = "current"},
-		intention = intention,
-		intention_event = intention_event,
-		title = options.title, -- window title
-		prompt = options.prompt, -- "Choose a File" (bottom left in intention pane)
-		verb = options.verb, -- "Open" ~ (bottom right button in intention pane)
-		path = options.path  -- starting path
-	})
-
-	if (callback) then
-		-- create a unique, use-once handler 
-		-- to do: mechanism to delete event handler when filenav never gets a chance to respond
-		-- (but maybe too complex -- is harmless to have ~100 or so dormant event handlers sitting around)
-		on_event(intention_event, function(msg)
-			callback(msg)
-			on_event(intention_event) -- delete
-		end)
-	end
-	
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Label
-----------------------------------------------------------------------------------------------------
-
-
-function ui.create_label(el)
-	el.width = 4 * #el.label + 4
-	el.height = 5
-	ui.head():new(el)
-	function el:draw()
-		print(el.label, 0, 0, el.fg or 5)
-	end
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Checkbox
-----------------------------------------------------------------------------------------------------
-
-
-function ui.create_checkbox(el)
-	el.width = 9 + (4 * #el.label or "")
-	el.height = 7
-	el.cursor = "pointer"
-	ui.head():new(el)
-	if (not el.visible) el.visible = function() return true end
-	function el:draw()
-		if (not self:visible()) return
-		rect(0, 0, 6, 6,  el.check_border or 59)
-		if el.check_bg then
-			rectfill(1, 1, 5, 5, el.check_bg)
-		end
-		if self.get() then
-			rectfill(2, 2, 4, 4, el.check_fg or 17)
-		end
-		print(el.label, 10, 1, el.fg or 5)
-	end
-	function el:tap()
-		if (not self:visible()) return
-		self.set(not self.get())
-	end
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Numeric Field
-----------------------------------------------------------------------------------------------------
-
--- TODO: is this still used?
-function ui.create_num_field(el)
-	el.width = el.width or 62
-	el.height = 12
-	ui.head():new(el)
-	if (not el.visible) el.visible = function() return true end
-	el.dragged = nil
-	function el:draw()
-		local label_fg = self.label_fg or 5
-		local field_fg = self.field_fg or 22
-		local dragged_fg = self.dragged_fg or 7
-		local field_bg = self.field_bg or 59
-		local dragged_bg = self.dragged_bg or 59
-		if (not self.visible()) return
-		local val = self.get()
-		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and dragged_bg or field_bg)
-		print(el.label, 3, 1, label_fg)
-		if val then
-			print(string.format("%3d", val), self.width - 22, 1, self.dragged and dragged_fg or field_fg)
-		else
-			print("-", self.width - 4, 1, self.dragged and dragged_fg or field_fg)
-		end
-	end
-	function el:hover(msg)
-		if msg.mx >= self.width - 21 then
-			--- self.cursor = "pointer"
-			self.cursor = get_spr(50)
-		else
-			self.cursor = 1
-		end
-	end
-	function el:click(msg)
-		if (not self.visible()) return
-		if (self.onclick) self.onclick(msg)
-		if msg.mx >= self.width - 21 then
-			self.dragged = true
-			self.cursor = 0 -- TODO: capture mouse
-		end
-	end
-	function el:drag(msg)
-		if (not el.visible()) return
-		if self.dragged then
-			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
-			new = mid(0, self.get() - delta, 0xff)
-			self.set(new)
-		end
-	end
-	function el:release(msg)
-		self.dragged = nil
-		mouselock(false)
-		if (self.onrelease) self.onrelease(msg)
-	end
-	return el
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Menu
-----------------------------------------------------------------------------------------------------
-
-
-local popup = false
-
-
-function ui.create_menu_button(el)
-	local label = el.get_label()
-	el.width = (4 * #label) + 12
-	el.height = 9
-	el.cursor = "pointer"
-	ui.head():new(el)
-	el.opened = false
-	function el:draw()
-		if self.bg then
-			rectfill(0, 0, self.width - 1, self.height - 1, self.bg)
-		end
-		local label = self:get_label()
-		print(label, 2, 2, self.fg or 7)
-		pal(7, self.fg or 7)
-		spr(self.opened and 38 or 37, self.width - 7, 2)
-		pal(7, 7)
-	end
-	function el:tap()
-		self.opened = true
-		ui.open_menu {
-			x = self.sx, y = self.sy + 9,
-			highlight = self.highlight,
-			onclose = function()
-				self.opened = false
-				local label = el.get_label()
-				self.width = (4 * #label) + 12
-			end,
-			items = self.items,
-		}
-	end
-	return el
-end
-
-
-function ui.open_menu(menu)
-	for i = 1, #menu.items do
-		if menu.items[i].get_label then
-			menu.items[i].label = menu.items[i].get_label()
-		end
-		if (not menu.items[i].label) menu.items[i].label = "---"
-	end
-	local entry_height = 9
-	-- Calculate popup size
-	if not menu.width then
-		menu.width = 0
-		for i = 1, #menu.items do
-			menu.width = max(menu.width, #menu.items[i].label or 0)
-		end
-		menu.width = 8 + (4 * menu.width)
-	end
-	if not menu.height then
-		menu.height = max(12, 4 + (#menu.items * entry_height))
-	end
-	if menu.y + menu.height > ui.head().height then
-		menu.y = menu.y - 7 - menu.height
-	end
-
-	-- Modal layer	
-	popup = ui.head():attach {
-		x = 0, y = 0,
-		width = ui.head().width, height = ui.head().height,
-		draw = function(self)
-			local ox, oy = menu.x, menu.y
-			rectfill(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.bg or 7)
-			rect(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.border or 5)
-			for i = 1, #menu.items do
-				local y = oy + 2 + (entry_height * (i - 1))
-				if self.highlighted == i then
-					rectfill(
-						ox + 1, y,
-						ox + menu.width - 2, y + entry_height - 1,
-						menu.highlight or 15
-					) 
-				end
-				print(
-					menu.items[i].label,
-					ox + 4, y + 2,
-					menu.items[i].fg or menu.fg or 62
-				)
-			end
-		end,
-		hover = function(self)
-			local ox, oy = menu.x, menu.y
-			local mx, my, mb = mouse()
-			if
-				ox <= mx and mx < ox + menu.width
-				and oy <= my and my < oy + menu.height
-			then
-				self.cursor = "pointer"
-				self.highlighted = 1 + ((my - oy - 4) \ entry_height)
-			else
-				self.cursor = "pointer"
-				self.highlighted = false
-			end
-		end,
-		click = function(self)
-			if popup then
-				popup:detach()
-			end
-			popup = false
-			if self.highlighted and menu.items[self.highlighted]
-				and menu.items[self.highlighted].action
-			then
-				menu.items[self.highlighted].action()
-			end
-			if (menu.onclose) menu.onclose()
-		end
-	}
-end
-
-
-function ui.has_menu()
-	return popup != false
-end
-
-
-----------------------------------------------------------------------------------------------------
--- Knob
-----------------------------------------------------------------------------------------------------
-
-
-function ui.create_knob(el)
-	if el.small then
-		el.x += 3
-		el.y += 5
-		el.width, el.height = 25, 25
-		el.cx, el.cy, el.r = 12, 12, 7
-		el.sprite = 58
-	else
-		el.width, el.height = 31, 31
-		el.cx, el.cy, el.r = 15, 15, 9
-		el.sprite = 56
-	end
-	el.cursor = "dial"
-	ui.head():new(el)
-	
-
-	function el:draw()
-		local target = self.min_val and self or self.parent
-		local sprite = (target.min_val < 0)
-			and (self.sprite + 1) or self.sprite
-		spr(sprite, 0, 0)	
-		local range = target.max_val - target.min_val
-		-- primary value
-		local val = self:get()
-		local a = ((val - target.min_val) / range) * 0.75
-		local x = self.cx + flr(0.5 + self.r * cos(0.625 - a))
-		local y = self.cy + flr(0.5 + self.r * sin(0.625 - a))
-		-- secondary value: arc and needle
-		if self:has_secondary() then
-			local val2 = self:get_secondary()
-			local a2 = ((val2 - target.min_val) / range) * 0.75
-			local r = self.small and 6 or 7.75
-			local incr = self.small and 0.01 or 0.01
-			local function line_to(aa, col)
-				local xx = self.cx + flr(0.5 + r * cos(0.625 - aa))
-				local yy = self.cy + flr(0.5 + r * sin(0.625 - aa))
-				line(self.cx, self.cy, xx, yy, 18)
-			end
-			local in_between =
-				(a < a2) 
-					and function(ai) return a < ai and ai < a2 end
-					or function(ai) return a2 < ai and ai < a end
-			line()
-			line_to((a < a2) and a or a2)
-			for ai = 0.0, 0.75, incr do
-				if in_between(ai) then
-					line_to(ai)
-				end
-			end
-			line_to((a < a2) and a2 or a)
-			local x2 = self.cx + flr(0.5 + (self.r - 1) * cos(0.625 - a2))
-			local y2 = self.cy + flr(0.5 + (self.r - 1) * sin(0.625 - a2))
-			line(self.cx, self.cy, x2, y2, self.dragged_secondary and 7 or 29)
-		end	
-		-- primary needle
-		local needle_col = self.dragged and 7 or 15
-		if self.white then
-			needle_col = self.dragged and 5 or 22
-		end
-		line(self.cx, self.cy, x, y, needle_col)
-	end
-	
-
-	function el:click(msg)
-		undo.checkpoint()
-		local target = self.min_val and self or self.parent
-		self.dragged = msg.mb == 1
-		self.dragged_secondary = msg.mb == 2
-		ui.mouselock(target.sensitivity)
-		return true
-	end
-	
-
-	function el:doubleclick(msg)
-		local target = self.min_val and self or self.parent
-		if msg.mb == 1 then
-			self:set(target.init_val)
-		elseif msg.mb == 2 then
-			self:set_secondary(target.init_val)
-		end
-		return true
-	end
-	
-
-	function el:drag(msg)
-		local target = self.min_val and self or self.parent
-		local delta = ui.mouselock(target.sensitivity)
-
-		local old = self:get()
-		local new = old - delta
-		local old2, new2 = 0, 0
-		if self:has_secondary() and msg.mb == 2 then
-			old2 = self:get_secondary()
-			new2 = old2 - delta
-		end
-
-		if delta < 0 then
-			self.down_barrier = nil
-			if self.up_barrier then
-				self.up_barrier += delta
-				if self.up_barrier <= 0 then
-					self.up_barrier = nil
-				else
-					return
-				end
-			end
-		elseif delta > 0 then
-			self.up_barrier = nil
-			if self.down_barrier then
-				self.down_barrier -= delta
-				if self.down_barrier <= 0 then
-					self.down_barrier = nil
-				else
-					return
-				end
-			end
-		end
-		if old > 0 and new <= 0 then
-			new = 0
-			self.down_barrier = 24
-		end
-		if old < 0 and new >= 0 then
-			new = 0
-			self.up_barrier = 24
-		end
-		if old2 > 0 and new2 <= 0 then
-			new2 = 0
-			self.down_barrier = 24
-		end
-		if old2 < 0 and new2 >= 0 then
-			new2 = 0
-			self.up_barrier = 24
-		end
-		
-		if msg.mb == 1 then
-			self:set(new)
-		elseif msg.mb == 2 then
-			self:set_secondary(new2)
-		end
-	end
-	
-
-	function el:release(msg)
-		self.dragged = false
-		self.dragged_secondary = false
-		ui.mouseunlock()
-		self.up_barrier = nil
-		self.down_barrier = nil
-	end
-	
-
-	return el
-end
-
-
-return ui
-:: src/ui_envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-01-31 20:44:44",revision=13727]]
+:: src/ui/envelopes.lua
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-01 18:03:11",revision=13976]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local undo = require "src/undo.lua"
-local ui = require "src/ui.lua"
-local ui_visual = require "src/ui_visual.lua"
+local ui = require "src/ui/ui.lua"
+local ui_visual = require "src/ui/visual.lua"
 
 
 local ui_envelopes = {}
@@ -3872,12 +3379,12 @@ end
 
 
 return ui_envelopes
-:: src/ui_menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-01-31 20:44:44",revision=12710]]
+:: src/ui/menus.lua
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-01 18:03:11",revision=12959]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local ui_envelopes = require "src/ui_envelopes.lua"
+local ui = require "src/ui/ui.lua"
+local ui_envelopes = require "src/ui/envelopes.lua"
 
 
 local ui_menus = {}
@@ -4145,14 +3652,14 @@ end
 
 
 return ui_menus
-:: src/ui_nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-01-31 20:44:44",revision=19285]]
+:: src/ui/nodes.lua
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-01 18:03:11",revision=19534]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local ui_envelopes = require "src/ui_envelopes.lua"
-local ui_params = require "src/ui_params.lua"
-local ui_visual = require "src/ui_visual.lua"
+local ui = require "src/ui/ui.lua"
+local ui_envelopes = require "src/ui/envelopes.lua"
+local ui_params = require "src/ui/params.lua"
+local ui_visual = require "src/ui/visual.lua"
 
 
 local ui_nodes = {}
@@ -4795,13 +4302,13 @@ end
 
 
 return ui_nodes
-:: src/ui_notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-01-31 20:44:44",revision=8857]]
+:: src/ui/notegrid.lua
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-01 18:03:11",revision=9106]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local ui_trakdial = require "src/ui_trakdial.lua"
+local ui = require "src/ui/ui.lua"
+local ui_trakdial = require "src/ui/trakdial.lua"
 
 
 local ui_notegrid = {}
@@ -5285,13 +4792,13 @@ end
 
 
 return ui_notegrid
-:: src/ui_params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-01-31 20:44:44",revision=14032]]
+:: src/ui/params.lua
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-01 18:03:11",revision=14281]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
 local undo = require "src/undo.lua"
-local ui = require "src/ui.lua"
-local ui_menus = require "src/ui_menus.lua"
+local ui = require "src/ui/ui.lua"
+local ui_menus = require "src/ui/menus.lua"
 
 
 local ui_params = {}
@@ -5711,11 +5218,11 @@ end
 
 
 return ui_params
-:: src/ui_routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-01-31 20:44:44",revision=13657]]
+:: src/ui/routing.lua
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-01 18:03:11",revision=13906]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
+local ui = require "src/ui/ui.lua"
 
 
 local ui_routing = {}
@@ -6247,10 +5754,10 @@ end
 
 
 return ui_routing
-:: src/ui_settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-01-31 20:44:44",revision=11094]]
+:: src/ui/settings.lua
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-01 18:03:11",revision=11343]]
 local settings = require "src/settings.lua"
-local ui = require "src/ui.lua"
+local ui = require "src/ui/ui.lua"
 
 
 local ui_settings = {}
@@ -6405,17 +5912,17 @@ end
 
 
 return ui_settings
-:: src/ui_synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-01-31 20:44:44",revision=15826]]
+:: src/ui/synth.lua
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-01 18:03:11",revision=16075]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
-local ui_envelopes = require "src/ui_envelopes.lua"
-local ui_nodes = require "src/ui_nodes.lua"
-local ui_routing = require "src/ui_routing.lua"
-local ui_visual = require "src/ui_visual.lua"
-local ui_wavetable = require "src/ui_wavetable.lua"
+local ui = require "src/ui/ui.lua"
+local ui_envelopes = require "src/ui/envelopes.lua"
+local ui_nodes = require "src/ui/nodes.lua"
+local ui_routing = require "src/ui/routing.lua"
+local ui_visual = require "src/ui/visual.lua"
+local ui_wavetable = require "src/ui/wavetable.lua"
 
 
 local ui_synth = {}
@@ -6671,15 +6178,15 @@ end
 
 
 return ui_synth
-:: src/ui_tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-01-31 20:44:44",revision=8988]]
+:: src/ui/tracker.lua
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-01 18:03:11",revision=9237]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx.lua"
 local undo = require "src/undo.lua"
-local ui = require "src/ui.lua"
-local ui_notegrid = require "src/ui_notegrid.lua"
+local ui = require "src/ui/ui.lua"
+local ui_notegrid = require "src/ui/notegrid.lua"
 
 local ui_tracker = {}
 
@@ -7694,10 +7201,10 @@ end
 
 
 return ui_tracker
-:: src/ui_trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-01-31 20:44:44",revision=6437]]
+:: src/ui/trakdial.lua
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-01 18:03:11",revision=6686]]
 local app = require "src/app.lua"
-local ui = require "src/ui.lua"
+local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx.lua"
 
 
@@ -7915,11 +7422,567 @@ end
 
 
 return ui_trakdial
-:: src/ui_visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-01-31 20:44:44",revision=12342]]
+:: src/ui/ui.lua
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-01 18:03:11",revision=11867]]
+local app = require "src/app.lua"
+local settings = require "src/settings.lua"
+local undo = require "src/undo.lua"
+
+
+local ui = {}
+
+
+----------------------------------------------------------------------------------------------------
+-- Head
+----------------------------------------------------------------------------------------------------
+
+
+local head = false
+
+
+function ui.create_head()
+	head = create_gui()
+end
+
+
+function ui.head()
+	return head
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Misc
+----------------------------------------------------------------------------------------------------
+
+
+function ui.print_centered(s, x, y, col)
+	local count = #s
+	print(s, x - ((count * 4) \ 2), y, col)
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Mouse
+----------------------------------------------------------------------------------------------------
+
+
+function ui.mouselock(sensitivity, precise)
+	local s = settings.user.drag_sensitivity
+	if precise or key("shift") then
+		s = settings.user.drag_sensitivity_precise
+	end
+	s *= sensitivity or 1
+	local dx, dy = mouselock(0x4|0x8, s, 0.0)
+	if settings.user.drag_horizontal then
+		return -dx
+	end
+	return dy
+end
+
+
+function ui.mouseunlock()
+	mouselock(false)
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Modal
+----------------------------------------------------------------------------------------------------
+
+
+local layer = false
+
+
+function ui.open_modal(el)
+	layer = ui.head():attach {
+		x = 0, y = 0,
+		width = ui.head().width, height = ui.head().height,
+		draw = function(self)
+			if self.dim_background then
+				poke(0x550b, 0x3f)
+				---fillp(0b0101101001011010)
+				---fillp(0b0001001001001000)
+				---fillp(0b1110110110110111)
+				fillp(0b0011011011001001)
+				rectfill(0, 0, self.width - 1, self.height - 1, 61)
+				fillp()
+				poke(0x550b, 0x00)
+			end
+		end,
+		click = function(self)
+			ui.close_modal()
+		end,
+		mousewheel = function(self)
+			return false -- does not work?
+		end
+	}
+	if not el.x then
+		el.x = layer.width // 2 - el.width // 2
+	end
+	if not el.y then
+		el.y = layer.height // 2 - el.height // 2
+	end
+	layer:attach(el)
+	return el
+end
+
+
+function ui.has_modal()
+	return layer
+end
+
+
+function ui.close_modal()
+	if layer then
+		layer:detach()
+	end
+	layer = false
+end
+
+
+function ui.has_modal_or_menu()
+	return ui.has_modal() or ui.has_menu()
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Chooser
+----------------------------------------------------------------------------------------------------
+
+
+function ui.chooser(options, callback)
+	-- Copied from system 0.2.2b
+	if (type(options) == "string") options = {path = options}
+	if (type(options) ~= "table") options = {}
+
+	options.path = fullpath(options.path or ".") -- can be relative to pwd; default to pwd()
+	if (not options.path) return "could not resolve path"
+	if (fstat(options.path) ~= "folder") return "path not found"
+
+	local intention = options.intention or "choose_items"
+	local intention_event = nil
+
+	if (callback) intention_event = "_chooser_response_"..stat(333) -- unique id
+
+	create_process("/system/apps/filenav.p64",{
+		window_attribs = {autoclose = true, workspace = "current"},
+		intention = intention,
+		intention_event = intention_event,
+		title = options.title, -- window title
+		prompt = options.prompt, -- "Choose a File" (bottom left in intention pane)
+		verb = options.verb, -- "Open" ~ (bottom right button in intention pane)
+		path = options.path  -- starting path
+	})
+
+	if (callback) then
+		-- create a unique, use-once handler 
+		-- to do: mechanism to delete event handler when filenav never gets a chance to respond
+		-- (but maybe too complex -- is harmless to have ~100 or so dormant event handlers sitting around)
+		on_event(intention_event, function(msg)
+			callback(msg)
+			on_event(intention_event) -- delete
+		end)
+	end
+	
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Label
+----------------------------------------------------------------------------------------------------
+
+
+function ui.create_label(el)
+	el.width = 4 * #el.label + 4
+	el.height = 5
+	ui.head():new(el)
+	function el:draw()
+		print(el.label, 0, 0, el.fg or 5)
+	end
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Checkbox
+----------------------------------------------------------------------------------------------------
+
+
+function ui.create_checkbox(el)
+	el.width = 9 + (4 * #el.label or "")
+	el.height = 7
+	el.cursor = "pointer"
+	ui.head():new(el)
+	if (not el.visible) el.visible = function() return true end
+	function el:draw()
+		if (not self:visible()) return
+		rect(0, 0, 6, 6,  el.check_border or 59)
+		if el.check_bg then
+			rectfill(1, 1, 5, 5, el.check_bg)
+		end
+		if self.get() then
+			rectfill(2, 2, 4, 4, el.check_fg or 17)
+		end
+		print(el.label, 10, 1, el.fg or 5)
+	end
+	function el:tap()
+		if (not self:visible()) return
+		self.set(not self.get())
+	end
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Numeric Field
+----------------------------------------------------------------------------------------------------
+
+-- TODO: is this still used?
+function ui.create_num_field(el)
+	el.width = el.width or 62
+	el.height = 12
+	ui.head():new(el)
+	if (not el.visible) el.visible = function() return true end
+	el.dragged = nil
+	function el:draw()
+		local label_fg = self.label_fg or 5
+		local field_fg = self.field_fg or 22
+		local dragged_fg = self.dragged_fg or 7
+		local field_bg = self.field_bg or 59
+		local dragged_bg = self.dragged_bg or 59
+		if (not self.visible()) return
+		local val = self.get()
+		rectfill(self.width - 24, 0, self.width - 10, 6, self.dragged and dragged_bg or field_bg)
+		print(el.label, 3, 1, label_fg)
+		if val then
+			print(string.format("%3d", val), self.width - 22, 1, self.dragged and dragged_fg or field_fg)
+		else
+			print("-", self.width - 4, 1, self.dragged and dragged_fg or field_fg)
+		end
+	end
+	function el:hover(msg)
+		if msg.mx >= self.width - 21 then
+			--- self.cursor = "pointer"
+			self.cursor = get_spr(50)
+		else
+			self.cursor = 1
+		end
+	end
+	function el:click(msg)
+		if (not self.visible()) return
+		if (self.onclick) self.onclick(msg)
+		if msg.mx >= self.width - 21 then
+			self.dragged = true
+			self.cursor = 0 -- TODO: capture mouse
+		end
+	end
+	function el:drag(msg)
+		if (not el.visible()) return
+		if self.dragged then
+			local _, delta = mouselock(true, key("shift") and 0.025 or 0.125, 0)
+			new = mid(0, self.get() - delta, 0xff)
+			self.set(new)
+		end
+	end
+	function el:release(msg)
+		self.dragged = nil
+		mouselock(false)
+		if (self.onrelease) self.onrelease(msg)
+	end
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Menu
+----------------------------------------------------------------------------------------------------
+
+
+local popup = false
+
+
+function ui.create_menu_button(el)
+	local label = el.get_label()
+	el.width = (4 * #label) + 12
+	el.height = 9
+	el.cursor = "pointer"
+	ui.head():new(el)
+	el.opened = false
+	function el:draw()
+		if self.bg then
+			rectfill(0, 0, self.width - 1, self.height - 1, self.bg)
+		end
+		local label = self:get_label()
+		print(label, 2, 2, self.fg or 7)
+		pal(7, self.fg or 7)
+		spr(self.opened and 38 or 37, self.width - 7, 2)
+		pal(7, 7)
+	end
+	function el:tap()
+		self.opened = true
+		ui.open_menu {
+			x = self.sx, y = self.sy + 9,
+			highlight = self.highlight,
+			onclose = function()
+				self.opened = false
+				local label = el.get_label()
+				self.width = (4 * #label) + 12
+			end,
+			items = self.items,
+		}
+	end
+	return el
+end
+
+
+function ui.open_menu(menu)
+	for i = 1, #menu.items do
+		if menu.items[i].get_label then
+			menu.items[i].label = menu.items[i].get_label()
+		end
+		if (not menu.items[i].label) menu.items[i].label = "---"
+	end
+	local entry_height = 9
+	-- Calculate popup size
+	if not menu.width then
+		menu.width = 0
+		for i = 1, #menu.items do
+			menu.width = max(menu.width, #menu.items[i].label or 0)
+		end
+		menu.width = 8 + (4 * menu.width)
+	end
+	if not menu.height then
+		menu.height = max(12, 4 + (#menu.items * entry_height))
+	end
+	if menu.y + menu.height > ui.head().height then
+		menu.y = menu.y - 7 - menu.height
+	end
+
+	-- Modal layer	
+	popup = ui.head():attach {
+		x = 0, y = 0,
+		width = ui.head().width, height = ui.head().height,
+		draw = function(self)
+			local ox, oy = menu.x, menu.y
+			rectfill(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.bg or 7)
+			rect(ox, oy, ox + menu.width - 1, oy + menu.height - 1, menu.border or 5)
+			for i = 1, #menu.items do
+				local y = oy + 2 + (entry_height * (i - 1))
+				if self.highlighted == i then
+					rectfill(
+						ox + 1, y,
+						ox + menu.width - 2, y + entry_height - 1,
+						menu.highlight or 15
+					) 
+				end
+				print(
+					menu.items[i].label,
+					ox + 4, y + 2,
+					menu.items[i].fg or menu.fg or 62
+				)
+			end
+		end,
+		hover = function(self)
+			local ox, oy = menu.x, menu.y
+			local mx, my, mb = mouse()
+			if
+				ox <= mx and mx < ox + menu.width
+				and oy <= my and my < oy + menu.height
+			then
+				self.cursor = "pointer"
+				self.highlighted = 1 + ((my - oy - 4) \ entry_height)
+			else
+				self.cursor = "pointer"
+				self.highlighted = false
+			end
+		end,
+		click = function(self)
+			if popup then
+				popup:detach()
+			end
+			popup = false
+			if self.highlighted and menu.items[self.highlighted]
+				and menu.items[self.highlighted].action
+			then
+				menu.items[self.highlighted].action()
+			end
+			if (menu.onclose) menu.onclose()
+		end
+	}
+end
+
+
+function ui.has_menu()
+	return popup != false
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Knob
+----------------------------------------------------------------------------------------------------
+
+
+function ui.create_knob(el)
+	if el.small then
+		el.x += 3
+		el.y += 5
+		el.width, el.height = 25, 25
+		el.cx, el.cy, el.r = 12, 12, 7
+		el.sprite = 58
+	else
+		el.width, el.height = 31, 31
+		el.cx, el.cy, el.r = 15, 15, 9
+		el.sprite = 56
+	end
+	el.cursor = "dial"
+	ui.head():new(el)
+	
+
+	function el:draw()
+		local target = self.min_val and self or self.parent
+		local sprite = (target.min_val < 0)
+			and (self.sprite + 1) or self.sprite
+		spr(sprite, 0, 0)	
+		local range = target.max_val - target.min_val
+		-- primary value
+		local val = self:get()
+		local a = ((val - target.min_val) / range) * 0.75
+		local x = self.cx + flr(0.5 + self.r * cos(0.625 - a))
+		local y = self.cy + flr(0.5 + self.r * sin(0.625 - a))
+		-- secondary value: arc and needle
+		if self:has_secondary() then
+			local val2 = self:get_secondary()
+			local a2 = ((val2 - target.min_val) / range) * 0.75
+			local r = self.small and 6 or 7.75
+			local incr = self.small and 0.01 or 0.01
+			local function line_to(aa, col)
+				local xx = self.cx + flr(0.5 + r * cos(0.625 - aa))
+				local yy = self.cy + flr(0.5 + r * sin(0.625 - aa))
+				line(self.cx, self.cy, xx, yy, 18)
+			end
+			local in_between =
+				(a < a2) 
+					and function(ai) return a < ai and ai < a2 end
+					or function(ai) return a2 < ai and ai < a end
+			line()
+			line_to((a < a2) and a or a2)
+			for ai = 0.0, 0.75, incr do
+				if in_between(ai) then
+					line_to(ai)
+				end
+			end
+			line_to((a < a2) and a2 or a)
+			local x2 = self.cx + flr(0.5 + (self.r - 1) * cos(0.625 - a2))
+			local y2 = self.cy + flr(0.5 + (self.r - 1) * sin(0.625 - a2))
+			line(self.cx, self.cy, x2, y2, self.dragged_secondary and 7 or 29)
+		end	
+		-- primary needle
+		local needle_col = self.dragged and 7 or 15
+		if self.white then
+			needle_col = self.dragged and 5 or 22
+		end
+		line(self.cx, self.cy, x, y, needle_col)
+	end
+	
+
+	function el:click(msg)
+		undo.checkpoint()
+		local target = self.min_val and self or self.parent
+		self.dragged = msg.mb == 1
+		self.dragged_secondary = msg.mb == 2
+		ui.mouselock(target.sensitivity)
+		return true
+	end
+	
+
+	function el:doubleclick(msg)
+		local target = self.min_val and self or self.parent
+		if msg.mb == 1 then
+			self:set(target.init_val)
+		elseif msg.mb == 2 then
+			self:set_secondary(target.init_val)
+		end
+		return true
+	end
+	
+
+	function el:drag(msg)
+		local target = self.min_val and self or self.parent
+		local delta = ui.mouselock(target.sensitivity)
+
+		local old = self:get()
+		local new = old - delta
+		local old2, new2 = 0, 0
+		if self:has_secondary() and msg.mb == 2 then
+			old2 = self:get_secondary()
+			new2 = old2 - delta
+		end
+
+		if delta < 0 then
+			self.down_barrier = nil
+			if self.up_barrier then
+				self.up_barrier += delta
+				if self.up_barrier <= 0 then
+					self.up_barrier = nil
+				else
+					return
+				end
+			end
+		elseif delta > 0 then
+			self.up_barrier = nil
+			if self.down_barrier then
+				self.down_barrier -= delta
+				if self.down_barrier <= 0 then
+					self.down_barrier = nil
+				else
+					return
+				end
+			end
+		end
+		if old > 0 and new <= 0 then
+			new = 0
+			self.down_barrier = 24
+		end
+		if old < 0 and new >= 0 then
+			new = 0
+			self.up_barrier = 24
+		end
+		if old2 > 0 and new2 <= 0 then
+			new2 = 0
+			self.down_barrier = 24
+		end
+		if old2 < 0 and new2 >= 0 then
+			new2 = 0
+			self.up_barrier = 24
+		end
+		
+		if msg.mb == 1 then
+			self:set(new)
+		elseif msg.mb == 2 then
+			self:set_secondary(new2)
+		end
+	end
+	
+
+	function el:release(msg)
+		self.dragged = false
+		self.dragged_secondary = false
+		ui.mouseunlock()
+		self.up_barrier = nil
+		self.down_barrier = nil
+	end
+	
+
+	return el
+end
+
+
+return ui
+:: src/ui/visual.lua
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-01 18:03:11",revision=12591]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx.lua"
-local ui = require "src/ui.lua"
+local ui = require "src/ui/ui.lua"
 
 
 local ui_visual = {}
@@ -8134,11 +8197,11 @@ end
 
 
 return ui_visual
-:: src/ui_wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-01-31 20:44:44",revision=10568]]
+:: src/ui/wavetable.lua
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-01 18:03:11",revision=10817]]
 local sfx = require "src/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
-local ui = require "src/ui.lua"
+local ui = require "src/ui/ui.lua"
 
 
 local ui_wavetable = {}
@@ -8281,7 +8344,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-01-31 20:44:44",revision=3371]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-01 18:03:11",revision=3620]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -8367,7 +8430,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-01-31 20:44:44",revision=12222]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-01 18:03:11",revision=12471]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -8842,7 +8905,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-01-31 20:44:44",revision=12557]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-01 18:03:11",revision=12806]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -8912,7 +8975,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-01-31 20:44:44",revision=10927]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",modified="2026-02-01 18:03:11",revision=11176]]
 - fix selection appearing on other patterns
 - fix first note on the track
 - fix selection drag (cannot collapse)
@@ -8936,9 +8999,9 @@ return Wavetable
 - add auto-hide ruler on the left side for row numbers
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-01-31 20:44:44",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.5",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#43",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/1.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfx",workspace_index=8}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-01 18:03:12",notes="An instrument and wavetable\neditor for \".sfx\" files",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.7",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#43",workspace_index=2},{location="map/0.map",workspace_index=3},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfx",workspace_index=8}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-01-31 20:44:44"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-01 18:03:11"]]
 :: fonts/p8_mod.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMwIDA3OjEyOjQzIixtb2RpZmllZD0iMjAyNi0w
 MS0zMCAwNzoxNDozNCIscmV2aXNpb249Ml1dbHo0AHsFAACjBQAA8INweHUAAygACAAABAQIBhAD
@@ -8968,7 +9031,7 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-31 20:44:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 MS0zMSAxODo0NzoyOCIscmV2aXNpb249OTk2Nl1dbHo0AGoJAAA4PAAA8yV7WzBdPXtibXA9cHh1
@@ -9438,14 +9501,14 @@ xzzWNcE4NccVwTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXEFcE1wiw1LDXBLDXCGjXBGjUaNf3P
 ODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNf3PODXHFcE1wiw1LDUsNSw1who1wRo1GjXUODXHFcE1
 wiw1LDXALDXDGjXBGjUaNdEAAAAAAAAAAQ==
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-31 20:44:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
 :: map/0.map
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNS0w
 My0xNyAxNzozODozMSIscmV2aXNpb249OTM2OF1dbHo0AGcAAABWEAAA8Ah7e2JtcD11c2VyZGF0
 YSgiaTE2IiwzMgMALyIwAQD--------------------78QgiKSxoaWRkZW49ZmFsc2UscGFuX3g9
 MAgAwnk9MCx0aWxlX2g9OAkAwHc9OCx6b29tPTF9fQ==
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-01-31 20:44:44",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-01 18:03:11",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -9499,23 +9562,20 @@ NTYyMDA5M2U4OWEwMDNjOTU5MjAwOGVkY2Q5MDA5NDczYjRgAPADYTllYTAwYTc3YTU0MDBmMWFh
 oAB-NjI3YTkxMAEABvAUNzY3NzdkMDBkNmQ3ZGEwMDlmYTBhNjAwMWUzNzNjMDAzNzQnASEwMwEA
 MTAwMgEAoDAwMTYxNjE2Iik=
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-01-31 20:44:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-01 18:03:11",stored="2024-03-24 00:48:06"]]
 :: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMxIDEyOjUxOjExIixtb2RpZmllZD0iMjAyNi0w
-MS0zMSAyMDo0MDoxMCIscmV2aXNpb249MTNdXWx6NAAoAQAApgoAAPAncHh1AAMoAAAEAAQPQBAC
-DgABoAEgAqAOAA8QAA3wygECAwQFBgcAD-_QCAkKCw8MDw0PDg8PEADwAA0PEQ8SDxMPFA8VDxYP
-FxMA-wYPGA8ZDxoPGw8cDx0PHg8fAA--8P8BAOv-J6oBEAYPMBABIAEgAfAAAhACDBABIA8hIAEw
-D0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDDAA------_9H-8BAKzwC8gPQAANQAwPMQ8yDzMP
-Qg9DDzwPPf--KH93BQDjL---KPBwD0AAHTD--7AKAPEAj-88Dzf--ytA-itPL-4iFgD1Eg1ADzUP
-Ng83Dzg_LA8yDgP_IgBuAB4ADgD_Ij8vPjQOBCgAX-6w8HAFCAADH-8BAP-hUP----8o
-:: sfx/1.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMxIDE2OjA4OjQ0Iixtb2RpZmllZD0iMjAyNi0w
-MS0zMSAxNjowODo0NCIscmV2aXNpb249MF1dbHo0AKUAAAAoCgAA-zBweHUAAygAAAQABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-J6oBEAYP
-MBABIAEgAfAAAhACDhABIA8hIAEwD0Dwww8oD--wxg-4Cg--D4AP9w8NAfAJARAGDjAA------_9
-H-8BAKzPyA9AAA8QQP--sPBwCwANH-8BAP-mUP----9N
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTAxIDE1OjIxOjA3Iixtb2RpZmllZD0iMjAyNi0w
+Mi0wMSAxODowMjowNSIscmV2aXNpb249OV1dbHo0ADEBAADBCgAA8CdweHUAAygAAAQABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDBAUGBwAP-5AICQoLDwwPDQ8ODw8QAPAADQ8RDxIPEw8UDxUPFg8X
+EwD-Bg8YDxkPGg8bDxwPHQ8eDx8AD--w-wEA6-8nqgEQBg8wEAEgASAB8AACEAIMEAEgDyEgATAP
+QPDDDygP--DGD-gKD-8PgA-3Dw0B8AkBEAYMMAD------70f-wEArPMEyA9AAA1ADzYPMQ8yDzMP
+MRw--wsA8QQ2Dzf--yBgPkD_IG8vPkP_IPBwLABY-rDwcAQIAEAADzIuLgDiDzj_KQAuIP4pAy4j
+-hkdABWeHAATPiMA8wAiAC4gPiD_IgMuIz4j-hhEABMGHgB7LSD_LSP_F2IAP7Dw-wEA-_FQ----
+-yg=
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-01-31 20:44:44",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-01 18:03:12",stored="2024-04-07 08:14:00"]]
+:: src/ui/.info.pod
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-01 18:03:12"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-01-31 20:44:44"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-01 18:03:12"]]
 :: [eoc]
