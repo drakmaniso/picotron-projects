@@ -7,7 +7,7 @@ version 2
 :: src/
 :: src/ui/
 :: defaults/settings.lua
---[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-01-25 20:34:05",revision=1548]]
+--[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-01 20:50:57",revision=2313]]
 return {
 	window_mode = "tabbed",
 	default_theme = "dark",
@@ -15,11 +15,11 @@ return {
 	cursor_hide_if_selection = true,
 }
 :: defaults/shortcuts.lua
---[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-01-25 20:34:05",revision=1547]]
+--[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-01 20:50:57",revision=2312]]
 return {
 }
 :: defaults/theme_dark.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-01-25 20:34:05",revision=2996]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 20:50:57",revision=3761]]
 return {
 	-- UI
 	ui_bg = 17,
@@ -39,7 +39,7 @@ return {
 	editor_bg_error = 2,
 	editor_bg_match = 0,
 	editor_bg_selection = 10,
-	editor_bg_special = 9,
+	editor_bg_special = 25,
 	editor_cursor = 14,
 	editor_cursor_special = 30,
 	lua_text = 6,
@@ -53,7 +53,7 @@ return {
 	lua_unknown = 8,
 }
 :: defaults/theme_light.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-01-25 20:34:05",revision=2997]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-01 20:50:57",revision=3762]]
 return {
 	-- UI
 	ui_bg = 22,
@@ -87,7 +87,7 @@ return {
 	lua_unknown = 8,
 }
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-01-25 20:34:05",revision=8211]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-01 20:50:57",revision=8976]]
 ----------------------------------------------------------------------------------------
 
 
@@ -220,7 +220,7 @@ function _draw()
 	cls(8) -- TODO: remove
 	ui_head.draw()
 	print(string.format("\014%4.0f", stat(1) * 100.0) .. "%", 452, 246, 0)
-	print(string.format("\014%3.0f", stat(0) / (1024 * 1024)) .. "MB", 452, 253, 0)
+--	print(string.format("\014%3.0f", stat(0) / (1024 * 1024)) .. "MB", 452, 253, 0)
 end
 
 
@@ -241,13 +241,11 @@ end
 
 
 function get_requested_path()
-	local requested_path = env().argv[1] or "/ram/cart/main.lua"
-	local this_prog = env().argv[0]
-	if this_prog == "/system/apps/terminal.lua" then
-		-- Codron is the loaded cart, use a fake path.
-		requested_path = "/test/test2/main.lua"
-	end
-	return requested_path
+	local this_is_loaded_cart = env().argv[0] == "/system/apps/terminal.lua"
+	local default_path = this_is_loaded_cart
+		and "/test/test2/main.lua"
+		or "/ram/cart/main.lua"
+	return env().argv[1] or default_path
 end
 
 
@@ -283,9 +281,9 @@ end
 function broadcast_requested_path(requested_path)
 	log("broadcasting " .. pod(requested_path))
 	local this_prog = env().argv[0]
-	if this_prog == "/system/apps/terminal.lua" then
+	if this_prog == "/ram/cart/main.lua" then
 		-- Codron is the loaded cart, fix the program path.
-		this_prog = "/ram/cart/main.lua"
+		this_prog = "/system/apps/terminal.lua"
 	end
 
 	local matching_proc_ids = {}
@@ -295,12 +293,15 @@ function broadcast_requested_path(requested_path)
 			matching_proc_ids[#matching_proc_ids + 1] = process.id
 		end
 	end
-	
+
 	for proc_id in all(matching_proc_ids) do
 		if proc_id ~= pid() then
 			log("sending switch_to message to [" .. string.format("%03d", proc_id) .. "]")
 			send_message(proc_id, { event = "switch_to", path = requested_path })
 		end
+	end
+	if #matching_proc_ids == 0 then
+		log("(no matching process found)")
 	end
 end
 
@@ -326,8 +327,8 @@ function open_window(main_path, requested_path)
 	
 	window {
 		location = location,
-		-- `unique_location` doesn't seem to serve any purpose?
-		unique_location = tabbed or fullscreen,
+		jump_to_matching_window = true,
+--		unique_location = tabbed or fullscreen, -- TODO: is deprecated since
 		pauseable = false,
 		immortal = false,
 		capture_escapes = true,
@@ -447,8 +448,14 @@ function install_event_handlers()
 --						err = err,
 					autosave = msg.autosave
 				})
-			end			
-			editor:buffer():unmark_all()
+			end
+			filetree.foreach(
+				function(node, level)
+					if node:is_file() then
+						node:buffer():unmark_all()
+					end
+				end
+			)		
 		end
 	)
 	on_event(
@@ -606,7 +613,10 @@ function update_menu_items()
 				{
 					path = folder, -- TODO: !!!!!!!!
 					open_with = open_with,
-					window_attribs = { workspace = "current", autoclose = true }
+					window_attribs = {
+						workspace = "current",
+						autoclose = true
+					}
 				}
 			)
 		end
@@ -676,7 +686,7 @@ end
 ------------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-01-25 20:34:05",revision=6364]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-01 20:50:57",revision=7129]]
 # Codron
 
 ## Keybinds
@@ -727,7 +737,7 @@ Multi-cursors and multi-selection:
 - Movement keys: exit find, cancel selection.
 
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-01-25 20:34:05",revision=5981]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-01 20:50:57",revision=6746]]
 
 local multiclipboard = {}
 
@@ -755,7 +765,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-01-25 20:34:05",revision=9853]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-01 20:50:57",revision=10618]]
 -------------------------------------------------------------------------------------------
 
 
@@ -1119,6 +1129,7 @@ function new(text)
 	function self:search_all(target, plain)
 		-- TODO: support multi-line targets?
 		matches = {}
+		if target == "" then return end
 		for row = 1, #text do
 			local col = 1
 			while col <= #text[row] do
@@ -1136,6 +1147,11 @@ function new(text)
 			row += 1
 		end
 		return nil
+	end
+	
+	
+	function self:has_match()
+		return #matches > 0
 	end
 	
 	
@@ -2200,7 +2216,7 @@ return {
 	new = new,
 }
 :: src/config.lua
---[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-01-25 20:34:05",revision=2994]]
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-01 20:50:57",revision=3759]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2378,7 +2394,7 @@ return M
 ----------------------------------------------------------------------------------------
 
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-01-25 20:34:05",revision=4032]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-01 20:50:57",revision=4797]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2613,6 +2629,12 @@ local function new_folder(path)
 		end
 	end
 	
+	function self:first_child()
+		if #children > 0 then
+			return children[1]
+		end
+	end
+	
 	function self:child(path)
 		for child in all(children) do
 			if path == child:path() then
@@ -2794,6 +2816,34 @@ end
 -------------------------------------------------------------------------------------------
 
 
+local function first_file()
+	local result = root
+	while result and result:is_folder() do
+		result = result:first_child()
+	end
+	if result and result:is_file() then
+		return result
+	end
+end
+
+
+local function next_file(node)
+	local next_one = false
+	return root:foreach(
+		function(n)
+			if n == node then
+				next_one = true
+			elseif next_one and n:is_file() then
+				return n
+			end
+		end
+	)
+end
+
+
+-------------------------------------------------------------------------------------------
+
+
 local function save_all()
 	root:save_all()
 	
@@ -2838,6 +2888,8 @@ return {
 	root = root_node,
 	foreach = foreach_node,
 	find = find,
+	first_file = first_file,
+	next_file = next_file,
 	save_all = save_all,
 	printh = printh_nodes,
 }
@@ -2846,13 +2898,19 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-25 20:34:05",revision=3206]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 20:50:57",revision=3971]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
 
 
-if env().argv[0] == "/system/apps/terminal.lua" or env().argv[1] == "--log" then
+local is_indev =
+	env().argv[0] == "/ram/cart/main.lua"
+	or env().argv[0] == "/system/apps/terminal.lua"
+	or env().argv[1] == "--log"
+
+
+if is_indev then
 	function log(str)
 		local path = debug.getinfo(2).source
 		if path[1] == "@" then path = path:sub(2, -1) end
@@ -2939,7 +2997,7 @@ function structure(meta)
 end
 
 :: src/ui/banner.lua
---[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-01-25 20:34:05",revision=1203]]
+--[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-01 20:50:57",revision=1968]]
 ------------------------------------------------------------------------------------
 
 
@@ -3040,7 +3098,7 @@ end
 ------------------------------------------------------------------------------------
 
 :: src/ui/button.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-01-25 20:34:05",revision=2109]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 20:50:57",revision=2874]]
 -------------------------------------------------------------------------------------
 
 
@@ -3096,13 +3154,14 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-01-25 20:34:05",revision=9990]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-01 20:50:57",revision=10755]]
 -------------------------------------------------------------------------------------------
 
 
 local app = require "src/app.lua"
 local buffers = require "src/buffers.lua"
 local config = require "src/config.lua"
+local filetree = require "src/filetree.lua" -- TODO: used only for "esc" key
 local ui_findbox = require "src/ui/findbox.lua"
 local ui_head = require "src/ui/head.lua"
 
@@ -3165,7 +3224,7 @@ return function()
 	
 	function self:set_node(node)
 		if not findbox.hidden then
-			findbox:stop_search()
+--			findbox:stop_search()
 			local current = recent[#recent]
 			if current then
 				current:buffer():deselect_all()
@@ -3201,6 +3260,12 @@ return function()
 		local current = recent[#recent]
 		if not current then return nil end
 		return current:buffer()
+	end
+	
+	
+	function self:in_multifile_search()
+		if findbox.hidden then return false end
+		return findbox:in_multifile_search()
 	end
 	
 
@@ -3454,9 +3519,20 @@ return function()
 		-- is unreliable.
 		if keyp("f") and key("ctrl") then
 			if key("shift") then
-				findbox:launch_search(findbox.hidden, "backward")
+				findbox:launch_search("backward")
 			else
-				findbox:launch_search(findbox.hidden, "forward")
+				findbox:launch_search("forward")
+			end
+		end
+		if keyp("h") and key("ctrl") then
+--			local first_file = filetree.first_file()
+--			if first_file then
+--				self:set_node(first_file)
+--			end
+			if key("shift") then
+				findbox:launch_search("backward", "multifile")
+			else
+				findbox:launch_search("forward", "multifile")
 			end
 		end
 		
@@ -3500,6 +3576,13 @@ return function()
 				moved = true
 			elseif keyp("escape") then
 				buffer:set_cursor(buffer:active_cursor_pos())
+				filetree.foreach(
+					function(node, level)
+						if node:is_file() then
+							node:buffer():unmark_all()
+						end
+					end
+				)		
 			end
 		end
 	
@@ -3661,7 +3744,7 @@ return function()
 			(buffer:number_of_selections() > 1)
 			and theme.editor_bg_special
 			or theme.editor_bg_selection
-		if not findbox.hidden then selection_color = 9 end
+--		if not findbox.hidden then selection_color = 16 end -- TODO: remove?
 		buffer:foreach_selection(
 			function(start_col, start_row, end_col, end_row, _active)
 				for row = start_row, end_row do
@@ -3715,6 +3798,10 @@ return function()
 						line(x - 1, y - 2, x - 1, y + 8, cursor_color)
 					else
 						rectfill(x, y - 2, x + cursor_width, y + 8, cursor_color)
+						local char = buffer:text(row)[col]
+						if char then
+							print(char, x, y, theme.editor_bg)
+						end
 					end
 				end
 			)
@@ -3801,13 +3888,14 @@ return function()
 		end
 		
 		if true then
-			local w = 4 * 5
+			local col, row = current:buffer():active_cursor_pos()
+			local row_str = string.format("\014%4d", key("alt") and col or row)
+			local w = 4 * 4 + 4
+			local y = self.height - 8
 			local x = self.width - w - scrollbar_width
-			if msg.my > 8 or msg.mx < x then
-				rectfill(x, 0, x + w - 1, 8, theme.ui_bg)
-				local _, row = current:buffer():active_cursor_pos()
-				local row_str = string.format("\014%4d", row)
-				print(row_str, x + 2, 2, theme.ui_fg) 
+			if not (msg.my >= y and msg.mx >= x) then
+				rrectfill(x, y, w, 8, 0, theme.ui_bg)
+				print(row_str, x + 2, y + 2, theme.ui_fg) 
 			end
 		end
 		
@@ -3824,10 +3912,12 @@ return function()
 			rect(x - 6, y - 5, x + max_width + 5, y + (#recent * 11) + 1, theme.ui_fg)
 			for i = #recent, 1, -1 do
 				local n = recent[i]
+				local fg = theme.ui_fg
 				if n == recent[#recent - (recent_pick % #recent)] then
-					rectfill(x - 4, y - 2, x + max_width + 3, y + 9, theme.ui_bg_active)
+					rectfill(x - 4, y - 2, x + max_width + 3, y + 9, fg)
+					fg = theme.ui_bg
 				end
-				print(n:relative_path(), x, y, theme.ui_fg)
+				print(n:relative_path(), x, y, fg)
 				y += 11
 			end
 		end
@@ -3841,11 +3931,12 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-01-25 20:34:05",revision=4883]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-01 20:50:57",revision=5648]]
 -------------------------------------------------------------------------------------------
 
 
 local config = require "src/config.lua"
+local filetree = require "src/filetree.lua"
 local ui_head = require "src/ui/head.lua"
 
 
@@ -3862,16 +3953,24 @@ return function(editor)
 	
 	
 	-- Private fields
+	local onode -- Origin node (for multifile)
 	local ocol, orow = 1, 1 -- Origin
-	local acol, arow = 1, 1 -- Anchor, i.e. starting position for search
+	local anode -- Anchore node (starting file for search)
+	local acol, arow = 1, 1 -- Anchor (starting position for search)
 	local target = "" -- The text we're looking for
 	local direction = "forward"
+	local multifile = false
 	local previous_target = ""
 	local no_match = false
 
 	
 	function self:target()
 		return target
+	end
+	
+	
+	function self:in_multifile_search()
+		return multifile
 	end
 	
 	
@@ -3883,26 +3982,75 @@ return function(editor)
 	local function update_search(and_show)
 		local buffer = editor:buffer()
 		if target == "" then
-			acol, arow = ocol, orow
-			buffer:clear_matches()
-			buffer:set_cursor(acol, arow)
+			editor:set_node(onode)
+			buffer = editor:buffer()
+			buffer:set_cursor(ocol, orow)
 			if and_show then
 				editor:center_cursor()
 			end
+			anode = onode
+			acol, arow = ocol, orow
+			filetree.foreach(
+				function(node)
+					if node:is_file() then
+						node:buffer():clear_matches()
+					end
+				end
+			)
+			return
+		end
+		
+		if multifile then
+			filetree.foreach(
+				function(node)
+					if node:is_file() then
+						node:buffer():search_all(target, true)
+					end
+				end
+			)
 		else
 			buffer:search_all(target, true)
 		end
+		
+		if anode ~= editor:node() then
+			anode = editor:node()
+		end
+			
 		local found = false
 		if direction == "forward" then
-			buffer:set_cursor(ocol, orow)
+--			buffer:set_cursor(ocol, orow) -- TODO: remove
 			for scol, srow, ecol, erow in buffer:matches() do
 				if (srow == arow and scol >= acol) or (srow > arow) then
 					buffer:select(scol, srow, ecol, erow)
 					found = true
 					break
 				end
-			end
-			if not found then
+			end				
+			if not found and multifile then
+				local next_file = editor:node()
+				repeat
+					next_file = filetree.next_file(next_file)
+				until next_file == nil or next_file:buffer():has_match()
+				if not next_file then
+					next_file = filetree.first_file()
+					while next_file ~= nil
+						and next_file ~= editor:node()
+						and next_file:buffer():has_match() == false
+					do
+						next_file = filetree.next_file(next_file)
+					end
+				end
+				if next_file then
+					editor:set_node(next_file)
+					buffer = editor:buffer()
+					arow, acol = 1, 1
+					for scol, srow, ecol, erow in buffer:matches() do
+						buffer:select(scol, srow, ecol, erow)
+						found = true
+						break
+					end				
+				end
+			elseif not found then
 				for scol, srow, ecol, erow in buffer:matches() do
 					buffer:select(scol, srow, ecol, erow)
 					found = true
@@ -3931,9 +4079,35 @@ return function(editor)
 			editor:center_cursor(true)
 		end
 	end
+
+	
+	-- Called by the editor
+	function self:launch_search(dir, multi)
+		direction = dir
+		multifile = (multi == "multifile")
+		local buffer = editor:buffer()
+		self:set_keyboard_focus(true)
+		if self.hidden then
+			self.hidden = false
+			if buffer:number_of_selections() > 0 then 
+				local scol, srow, ecol, erow = buffer:current_selection(cursor)
+				target = buffer:range_string(scol, srow, ecol, erow)
+			end
+			onode = editor:node()
+			ocol, orow, _, _ = buffer:current_selection()
+			if not ocol then
+				ocol, orow = buffer:active_cursor_pos()
+			end
+			acol, arow = ocol, orow
+			no_match = false
+			update_search(false)
+		else
+			self:search_next()
+		end
+	end
 	
 	
-	local function relaunch_search()
+	function self:search_next()
 		local buffer = editor:buffer()
 		if target == "" then
 			target = previous_target
@@ -3945,42 +4119,23 @@ return function(editor)
 				acol, arow = buffer:active_cursor_pos()
 			end
 		end
-	end
-
-	
-	-- Called by the editor
-	function self:launch_search(first_launch, dir)
-		direction = dir
-		local buffer = editor:buffer()
-		self:set_keyboard_focus(true)
-		if first_launch then
-			self.hidden = false
-			if buffer:number_of_selections() > 0 then 
-				local scol, srow, ecol, erow = buffer:current_selection(cursor)
-				target = buffer:range_string(scol, srow, ecol, erow)
-			end
-			ocol, orow, _, _ = buffer:current_selection()
-			if not ocol then
-				ocol, orow = buffer:active_cursor_pos()
-			end
-			acol, arow = ocol, orow
-			no_match = false
-			update_search(false)
-		else
-			relaunch_search()
-			update_search(true)
-		end
+		update_search(true)
 	end
 	
 	
 	function self:stop_search()
-		local buffer = editor:buffer()
 		self:set_keyboard_focus(false)
 		acol, arow = 1, 1
 		previous_target = target
 		target = ""
 		self.hidden = true
-		buffer:clear_matches()
+		filetree.foreach(
+			function(node)
+				if node:is_file() then
+					node:buffer():clear_matches()
+				end
+			end
+		)
 	end
 	
 	
@@ -4016,25 +4171,34 @@ return function(editor)
 			buffer:delete_selection()
 			self:stop_search()
 		elseif keyp("escape") then
+			editor:set_node(onode)
+			buffer = editor:buffer()
 			buffer:set_cursor(ocol, orow)
 			self:stop_search()
 			editor:center_cursor()
 		elseif keyp("pagedown") or (keyp("tab") and not key("shift")) then
 			direction = "forward"
-			relaunch_search()
-			update_search(true)
+			self:search_next()
 		elseif keyp("pageup") or (keyp("tab") and key("shift")) then
 			direction = "backward"
-			relaunch_search()
-			update_search(true)
+			self:search_next()
+		elseif keyp("h") then
+			if target ~= "" then
+				filetree.foreach(
+					function(node)
+						if node:is_file() then
+							node:buffer():search_all(target)
+						end
+					end
+				)
+			end
 		elseif key("ctrl") and keyp("w") then
 			-- TODO: same problem as double ctrl-f...
 			-- need to come from the editor instead.
 			--[[buffer:next_word(false)
 			buffer:previous_word(false)
 			buffer:next_word(true)
-			relaunch_search()
-			update_search(true)]]
+			self:search_next()]]
 		elseif key("ctrl") and keyp("a") then
 			buffer:select_all_matches()
 			self:stop_search()
@@ -4089,7 +4253,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-01-25 20:34:05",revision=5385]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-01 20:50:57",revision=6150]]
 ----------------------------------------------------------------------------------------
 
 
@@ -4149,7 +4313,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/iconbutton.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-01-25 20:34:05",revision=2108]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-01 20:50:57",revision=2873]]
 -------------------------------------------------------------------------------------
 
 
@@ -4198,7 +4362,7 @@ return function(self)
 	return self
 end
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-01-25 20:34:05",revision=8476]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-01 20:50:57",revision=9241]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4219,8 +4383,8 @@ local arrow_left <const> = "\^:080c0e0c08000000"
 
 
 local row_height <const> = 9
-local header_height <const> = 20
-local footer_height <const> = 8
+local header_height <const> = 2 -- was 20
+local footer_height <const> = 0 -- was 8
 local padding_left <const> = 3
 local padding_right <const> = 1
 
@@ -4234,8 +4398,11 @@ return function(editor)
 		y = 0,
 		width = 60,
 		height = 260,
+		starting_row = 1,
 	}
 	ui_head.new(self)
+	
+	--[[
 	self:attach(ui_iconbutton {
 		x = 1, y = 1,
 		width = 13, height = 13,
@@ -4269,7 +4436,7 @@ return function(editor)
 				)
 			end,
 	})
-
+	--]]
 
 	-- Private fields
 	
@@ -4286,9 +4453,12 @@ return function(editor)
 	
 	function self:click(msg)
 		local y = header_height
+		local row = 0
 		filetree.foreach(
 			function(node, level)
+				row += 1
 				if level == 0 then return end
+				if row < self.starting_row then return end
 				if y <= msg.my and msg.my < y + row_height then
 					if node:is_file() then
 						editor:set_node(node)
@@ -4299,8 +4469,10 @@ return function(editor)
 		)
 	end
 	
-
-	function self:tap(msg)
+	
+	function self:mousewheel(msg)
+		self.starting_row -= msg.wheel_y
+		self.starting_row = max(self.starting_row, 1)
 	end
 	
 	
@@ -4331,37 +4503,8 @@ return function(editor)
 			self.width - 1, self.height - 1,
 			theme.ui_bg
 		)
-		--[=[do
-			local x = 2
---			rectfill(0, 0, self.width - 1, header_height - 6, 28)
-			pal(7, theme.ui_fg)
-			if false then -- only for fullscreen
-				spr(8, x, 2); x += 11
-			end
-			spr(9, x, 2); x += 11
-			print("\014all\-h" .. arrow_down, 20 + 6*0, 2 + 3, 7)
-			--spr(10, x, 2); x += 11
-			--spr(9, x, 2); x += 11
-			spr(11, self.width - 11 - 3, 2)
-			pal(7, 7)
-		end]=]
-		line(4, 15, self.width - 5, 15, theme.ui_fg)
-		do
---			line(4, self.height - 9, self.width - 5, self.height - 9, theme.ui_fg)
-			pal(7, theme.ui_fg)
---			spr(12, 0, self.height - 8)
---			spr(13, self.width - 11, self.height - 8)
-			pal(7, 7)
-			local row = 0
-			if current then
-				local _, r = current:buffer():active_cursor_pos()
-				row = r
-			end
-			row = string.format("%d", row)
---			local x = self.width - 4*(#row) - 4
-			local x = (self.width // 2) - ((4 * #row) // 2) - 1
-			print("\014" .. row, x, self.height - 6, theme.ui_fg)
-		end
+
+--		line(4, 15, self.width - 5, 15, theme.ui_fg)
 		-- TODO: save clip state
 		clip(
 			self.x + padding_left - 2,
@@ -4369,35 +4512,40 @@ return function(editor)
 			self.width - padding_left - padding_right,
 			self.height - header_height - footer_height
 		)
---		rectfill(0, 0, self.width - 1, self.height - 12, 2)
+		--rrectfill(0, 0, self.width, self.height, 0, 2)
 		local x, y = padding_left, header_height + 2
+		local row = 0
 		filetree.foreach(
 			function(node, level)
+				row += 1
+				if row < self.starting_row then return end
 				if node:is_folder() and level == 0 then return end
 				level = max(1, level)
 				local str = "\014"
 				str ..= node:path():basename()
 				if node:is_folder() then str ..= "/" end
 				local c = theme.ui_fg
+				if node:is_file() and not node:is_on_disk() then
+					c = theme.ui_fg_warning
+				elseif node:is_file() and node:is_stale() then
+					c = theme.ui_fg_warning
+				elseif node:is_file() 
+					and node:buffer():has_match()
+					and editor:in_multifile_search()
+				then
+					c = theme.ui_fg_highlight
+				elseif node == current and editor:in_multifile_search() then
+					c = theme.ui_fg_highlight
+				end
 				if node == current then
 					rectfill(
 						x + 6 * (level - 1) - 2, y - 2,
 						self.width - padding_right, y + 6,
-						theme.ui_bg_active
+						c
 					)
-				end
-				if node:is_file() and not node:is_on_disk() then
-					c = theme.ui_fg_warning
-				end
-				if node:is_file() and node:is_stale() then
-					c = theme.ui_fg_warning
+					c = theme.ui_bg
 				end
 				print(str, x + 6 * (level - 1), y, c)
-				--[[
-				for i = 0, level - 2 do
-					line(x + i*6 + 1, y - 2, x + i*6 + 1, y + 6, theme.ui_fg_active)
-				end
-				]]--
 				y += row_height
 			end
 		)
@@ -4412,7 +4560,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-01-25 20:34:05",revision=6442]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-01 20:50:57",revision=7207]]
 --------------------------------------------------------------------------------------------
 
 --[[
@@ -4523,7 +4671,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-01-25 20:34:05",revision=7568]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-01 20:50:57",revision=8333]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4955,7 +5103,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-01-25 20:34:05",revision=6399]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-01 20:50:57",revision=7164]]
 # Things To Do
 
 ## Before First Release
@@ -4976,11 +5124,11 @@ return {
 - Add: horizontal drag with right click, but gated with pressure.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-01-25 20:34:05",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2}}]]
+--[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-01 20:50:57",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx",workspace_index=2}}]]
 :: defaults/.info.pod
---[[pod,created="2025-03-31 13:01:37",modified="2026-01-25 20:34:05"]]
+--[[pod,created="2025-03-31 13:01:37",modified="2026-02-01 20:50:57"]]
 :: fonts/.info.pod
---[[pod,created="2025-03-23 21:36:31",modified="2026-01-25 20:34:05"]]
+--[[pod,created="2025-03-23 21:36:31",modified="2026-02-01 20:50:57"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -5002,35 +5150,35 @@ D10PKg8UCDAPVTALD3MPYw9zHAAxHA9-bwDxBCIQD38PIg8UCAQPIg9-AAsPdx8-APMDEA8KDwQA
 D1APIBAPEQ8qD0QABwBxCw9rD3cPa0cAQQ9-AAUCAPQCb1UQD34PQg9SD0oPQg9_EAEMAEABEAEN
 CgAfDQkA----aFAPSg0BAA==
 :: fonts/p9.font
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjQzOjIxIixtb2RpZmllZD0iMjAyNS0w
-My0yNyAxNTowNToxNCIscmV2aXNpb249NDldXWx6NACBBQAApgUAAPCPcHh1AAMoAAgAAAQECAYQ
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIzIDIxOjQzOjIxIixtb2RpZmllZD0iMjAyNi0w
+Mi0wMSAwODo1NzowNiIscmV2aXNpb249NThdXWx6NACEBQAApwUAAPCQcHh1AAMoAAgAAAQECAYQ
 A-ABD5DwBglgDyAwDvA0RzAnQAcFB0AFAgVABQAFQCUwBAYHBgQgAQMHAwEgByFAJAcgBQcCBwJA
 AnABAlATIBVQAgUCwCIAAiAVUAUHBQcFIAcDBgcCIAUEAgEFIBMGBQcgAgFQAiECIAIkAiAFAgcC
-BTACBwJgAgFAB4ACIBgUEhAHJQcgAyIHIAcEBwEGAPEJBgQHIBUHFCAHAQcEByARBwUHIAc0IAcF
-CQDwDQUHFDACAAJAAgACASAEAgECBDAHAAcwAQIEAgE8APA0AAIgAhUBBjAGBQcFMBMFBzAGEQYw
-AxUDMAcDAQYwBwMRMAYBBQcwFQcFMAcSBzAHEgMwBQMVMCEGMBcVMAMlMAYVAzwA8BUBMAIFAwYw
-AwUDBTAGAQQDMAciMCUGMBUHAjAVFzAFEgUwBQcWAPEgBAEHIAMhAyASFBgQBiQGIAIFkAcgAgRQ
-BwUHFSAHBQMFByAGIQYgAyUHIAcBAwEGAFARIAYRBeMAMBUgB-cA8AgiAyAVAxUgMQcgDw8vFQ8R
-IAM1IAYlA_wAYBEgAhUDBkkA8A4VIAYBBwQDIAcyIDUGICUHAiAdHxUPDyAVAhUgFSgB8hQHBAIB
-ByAGAgMCBiBCIAMCBgIDMAQHAUACBQIwT38gD1UPKgQA8EkgD0EPfx9dDz4gDB9jD3cMIA0PRA0L
-DSAEDzwPHA8eDxAgDxwPLhwPHCAPNhwPHAggCg82D3cPNgogGgwKDxQgCgwPfw8qDzogDA9nD2MP
-ZwwgD38PXQ9-VwDwESAPOBgfDiAMD2MPaw9jDCAICgwKCEAPVUAMD3MPYw9zEgDwFQ9-DA8iIAwK
-CAoMIAwPdx9jDDAFD1IOQA0PKgswDA9rD3cPa1QA8DkACQAJIE9VIA8OBA8eDy0PJiANHyEPJQIg
-DwwPHh4KIAgGCA8kDxogD04EDA9FDyYgDyIPXx8SDwogBggPPA0PBiAPEA8MAgPRAPB4Ig96HyIP
-EiAGDgACDzwgCAcPEAIDICIPIgogCAwIAwggDxIPPw8SAgogBw8QD34EDzggAg8HDzICASAPDwIP
-Dg8QCiAMH0AODxggDA8QGAUgCA84BAIHIAEPBw8SD3gPGCAPeg9CAg8KD3IgDwkMD0sPbQ9mIA8a
-DycPIg9zASAHD0ofSQ9GZwAROgQA8WMaIA8jD2IfIgogAwAIDyoPTTADDxIPIQ9AIA99D3kNDz0P
-XSAMBwgGDy4gDwYPJA9_DyYFIA8kD04ED0YHIA8KBw9aD0YPMCAGBAYPRA84IA8UDA8kGCAPOg9W
-D1IPMAggBAoEBg8GIAgCDA4KIB8iDya8APICCw8kD3IPMCAEDzYPLA8mD2QTADRCDzCtAPBNIw8S
-IA8OD2QKDygPeCAEAg8GDysPGUAPDgUIMA8KDx8PEgQwBA8PDxUPDTAEAw8GDw4gDA4PFAQCIA8w
-CA8OGCAIDA8iDgsgDCgMIAUPfgsPFA8SIAQMDyQPIgFsAUAMCCAHDQDxAAUIIAQPfA8SBQggDC4M
-IOMA8QIkDgUgDwYODyYFAyAMDgULCTkAAI0BIA8iHQDwBAMgDA8iDy0PMAMgCggMCAQgHyoVACAK
-AAwA4BQKDyQEIAgMGAQwChAMlQBAKAUPLI8A8w0wD14IIC4FDw4gBR8kD0QPQiACBhIKIAweBQMg
-dgFhMAgMCB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUGBQYg
-DAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYwBAYP
-FARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
+BTACBwJgAgFAB4ACIBgUEhAHJQcgAgMSByAHBAcBBgDxCQYEByAVBxQgBwEHBAcgEQcFByAHNCAH
+BQkA8A0FBxQwAgACQAIAAgEgBAIBAgQwBwAHMAECBAIBPADwNAACIAIVAQYwBgUHBTATBQcwBhEG
+MAMVAzAHAwEGMAcDETAGAQUHMBUHBTAHEgcwBxIDMAUDFTAhBjAXFTADJTAGFQM8APAVATACBQMG
+MAMFAwUwBgEEAzAHIjAlBjAVBwIwFRcwBRIFMAUHFgDwHwQBByADIQMgEhQYEAYkBiACBZAHIAIE
+UAcFBxUgBwUDBQcgBiEGIAMlAyAHAQPfAKABAxEgBhEFBiAVIgDwCiIHIAckAyAVAxUgMQcgDw8v
+FQ8RIAM1IAYxAIAFBxEgAhUDBkkA8A4VIAYBBwQDIAcyIDUGICUHAiAdHxUPDyAVAhUgFSgB8hQH
+BAIBByAGAgMCBiBCIAMCBgIDMAQHAUACBQIwT38gD1UPKgQA8EkgD0EPfx9dDz4gDB9jD3cMIA0P
+RA0LDSAEDzwPHA8eDxAgDxwPLhwPHCAPNhwPHAggCg82D3cPNgogGgwKDxQgCgwPfw8qDzogDA9n
+D2MPZwwgD38PXQ9-VwDwESAPOBgfDiAMD2MPaw9jDCAICgwKCEAPVUAMD3MPYw9zEgDwFQ9-DA8i
+IAwKCAoMIAwPdx9jDDAFD1IOQA0PKgswDA9rD3cPa1QA8DkACQAJIE9VIA8OBA8eDy0PJiANHyEP
+JQIgDwwPHh4KIAgGCA8kDxogD04EDA9FDyYgDyIPXx8SDwogBggPPA0PBiAPEA8MAgPRAPB4Ig96
+HyIPEiAGDgACDzwgCAcPEAIDICIPIgogCAwIAwggDxIPPw8SAgogBw8QD34EDzggAg8HDzICASAP
+DwIPDg8QCiAMH0AODxggDA8QGAUgCA84BAIHIAEPBw8SD3gPGCAPeg9CAg8KD3IgDwkMD0sPbQ9m
+IA8aDycPIg9zASAHD0ofSQ9GZwAROgQA8WMaIA8jD2IfIgogAwAIDyoPTTADDxIPIQ9AIA99D3kN
+Dz0PXSAMBwgGDy4gDwYPJA9_DyYFIA8kD04ED0YHIA8KBw9aD0YPMCAGBAYPRA84IA8UDA8kGCAP
+Og9WD1IPMAggBAoEBg8GIAgCDA4KIB8iDya8APICCw8kD3IPMCAEDzYPLA8mD2QTADRCDzCtAPBN
+Iw8SIA8OD2QKDygPeCAEAg8GDysPGUAPDgUIMA8KDx8PEgQwBA8PDxUPDTAEAw8GDw4gDA4PFAQC
+IA8wCA8OGCAIDA8iDgsgDCgMIAUPfgsPFA8SIAQMDyQPIgFsAUAMCCAHDQDxAAUIIAQPfA8SBQgg
+DC4MIOMA8QIkDgUgDwYODyYFAyAMDgULCTkAAI0BIA8iHQDwBAMgDA8iDy0PMAMgCggMCAQgHyoV
+ACAKAAwA4BQKDyQEIAgMGAQwChAMlQBAKAUPLI8A8w0wD14IIC4FDw4gBR8kD0QPQiACBhIKIAwe
+BQMgdgFhMAgMCB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUG
+BQYgDAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYw
+BAYPFARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: gfx/.info.pod
---[[pod,created="2025-03-22 17:37:31",modified="2026-01-25 20:34:05"]]
+--[[pod,created="2025-03-22 17:37:31",modified="2026-02-01 20:50:57"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNS0w
 NC0xNCAxMjo1MDo0NiIscmV2aXNpb249OTA3MF1dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
@@ -5364,7 +5512,7 @@ KM47wCjBOyg7KME7KNA7KMk7KME7wCjFO8IowDvAKME7wCjBO8AowTso-f391zXBKDUoNSg1wSjA
 EP3DOtEo0jsoxzsoxjsowzsowTsoOyjLOyjDOyjAOyjAOyjOOyjBOyg7KMI7KM87KMg7KME7KMA7
 KMQ7KMI7KMA7KDsowDsoOyjAOyjBOyj9-f3jEMUAAAAAAAAAAQ==
 :: src/.info.pod
---[[pod,created="2025-03-22 18:20:11",modified="2026-01-25 20:34:05"]]
+--[[pod,created="2025-03-22 18:20:11",modified="2026-02-01 20:50:57"]]
 :: src/ui/.info.pod
---[[pod,created="2025-03-23 10:19:01",modified="2026-01-25 20:34:05"]]
+--[[pod,created="2025-03-23 10:19:01",modified="2026-02-01 20:50:57"]]
 :: [eoc]
