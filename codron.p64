@@ -7,7 +7,7 @@ version 2
 :: src/
 :: src/ui/
 :: defaults/settings.lua
---[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-02 08:50:37",revision=2808]]
+--[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-03 09:05:09",revision=2830]]
 return {
 	window_mode = "tabbed",
 	default_theme = "dark",
@@ -16,11 +16,11 @@ return {
 	cursor_hide_if_typing = true,
 }
 :: defaults/shortcuts.lua
---[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-02 08:50:37",revision=2807]]
+--[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-03 09:05:09",revision=2829]]
 return {
 }
 :: defaults/theme_dark.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-02 08:50:37",revision=4256]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-03 09:05:09",revision=4278]]
 return {
 	-- UI
 	ui_bg = 17,
@@ -54,7 +54,7 @@ return {
 	lua_unknown = 8,
 }
 :: defaults/theme_light.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-02 08:50:37",revision=4257]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-03 09:05:09",revision=4279]]
 return {
 	-- UI
 	ui_bg = 22,
@@ -88,7 +88,7 @@ return {
 	lua_unknown = 8,
 }
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-02 08:50:37",revision=9471]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-03 09:05:09",revision=9493]]
 ----------------------------------------------------------------------------------------
 
 
@@ -700,7 +700,7 @@ end
 ------------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-02 08:50:37",revision=7624]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-03 09:05:09",revision=7646]]
 # Codron
 
 ## Keybinds
@@ -751,7 +751,7 @@ Multi-cursors and multi-selection:
 - Movement keys: exit find, cancel selection.
 
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-02 08:50:37",revision=7241]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-03 09:05:09",revision=7263]]
 
 local multiclipboard = {}
 
@@ -779,7 +779,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-02 08:50:37",revision=11113]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-03 09:05:09",revision=11135]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2257,7 +2257,7 @@ return {
 	new = new,
 }
 :: src/config.lua
---[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-02 08:50:37",revision=4254]]
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-03 09:05:09",revision=4276]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2435,7 +2435,7 @@ return M
 ----------------------------------------------------------------------------------------
 
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-02 08:50:37",revision=5292]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-03 09:05:09",revision=5314]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2992,7 +2992,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-02 08:50:37",revision=4466]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-03 09:05:09",revision=4488]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -3091,7 +3091,7 @@ function structure(meta)
 end
 
 :: src/ui/banner.lua
---[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-02 08:50:37",revision=2463]]
+--[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-03 09:05:09",revision=2485]]
 ------------------------------------------------------------------------------------
 
 
@@ -3194,7 +3194,7 @@ end
 ------------------------------------------------------------------------------------
 
 :: src/ui/button.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-02 08:50:37",revision=3369]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-03 09:05:09",revision=3391]]
 -------------------------------------------------------------------------------------
 
 
@@ -3250,7 +3250,7 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-02 08:50:37",revision=11250]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-03 09:05:09",revision=11272]]
 -------------------------------------------------------------------------------------------
 
 
@@ -3312,6 +3312,7 @@ return function()
 	local click_counter = 0
 	local drag_select_mode = "char"
 	local typing_mx, typing_my -- indicated that typing is in progress (hide cursor)
+	local capture_escapes -- caches the state of `window { capture_escapes }`
 	
 	
 	function self:set_banner(b)
@@ -3574,6 +3575,15 @@ return function()
 		local current = recent[#recent]
 		if not current then return nil end
 		local buffer = current:buffer()
+		
+		local need_escape_key = buffer:number_of_selections() > 0
+			or buffer:number_of_cursors() > 1
+			or (not findbox.hidden)
+		if capture_escapes ~= need_escape_key then
+			capture_escapes = need_escape_key
+			window { capture_escapes = capture_escapes }
+		end
+	
 		findbox.width = 36 + 5 * #findbox:target()
 		findbox.x = ((self.width - scrollbar_width) // 2) - (findbox.width // 2)
 		findbox.y = self.height - findbox.height
@@ -4038,7 +4048,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-02 08:50:37",revision=6143]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-03 09:05:09",revision=6165]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4360,7 +4370,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-02 08:50:37",revision=6645]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-03 09:05:09",revision=6667]]
 ----------------------------------------------------------------------------------------
 
 
@@ -4420,7 +4430,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/iconbutton.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-02 08:50:37",revision=3368]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-03 09:05:09",revision=3390]]
 -------------------------------------------------------------------------------------
 
 
@@ -4469,7 +4479,7 @@ return function(self)
 	return self
 end
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-02 08:50:37",revision=9736]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-03 09:05:09",revision=9758]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4677,7 +4687,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-02 08:50:37",revision=7702]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-03 09:05:09",revision=7724]]
 --------------------------------------------------------------------------------------------
 
 --[[
@@ -4788,7 +4798,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-02 08:50:37",revision=8828]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-03 09:05:09",revision=8850]]
 -------------------------------------------------------------------------------------------
 
 
@@ -5220,7 +5230,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-02 08:50:37",revision=7659]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-03 09:05:09",revision=7681]]
 # Things To Do
 
 ## Before First Release
@@ -5240,11 +5250,11 @@ return {
 - Add: horizontal drag with right click, but gated with pressure.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-02 08:50:37",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#1",workspace_index=2}}]]
+--[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-03 09:05:09",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#1",workspace_index=2}}]]
 :: defaults/.info.pod
---[[pod,created="2025-03-31 13:01:37",modified="2026-02-02 08:50:37"]]
+--[[pod,created="2025-03-31 13:01:37",modified="2026-02-03 09:05:09"]]
 :: fonts/.info.pod
---[[pod,created="2025-03-23 21:36:31",modified="2026-02-02 08:50:37"]]
+--[[pod,created="2025-03-23 21:36:31",modified="2026-02-03 09:05:09"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -5294,7 +5304,7 @@ BQMgdgFhMAgMCB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUG
 BQYgDAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYw
 BAYPFARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: gfx/.info.pod
---[[pod,created="2025-03-22 17:37:31",modified="2026-02-02 08:50:37"]]
+--[[pod,created="2025-03-22 17:37:31",modified="2026-02-03 09:05:09"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNi0w
 Mi0wMSAyMjowNzo0MSIscmV2aXNpb249OTA3MV1dbHo0ALoBAAAJMwAA8yF7WzBdPXtibXA9cHh1
@@ -5592,7 +5602,7 @@ MSjAMSjAPyjFNijCPyj9-f39-cgQxRX6KOExwSjAMcAowjHAKMAxwCjAMSjCMcEoMSjAMSjAMcEo
 MSjAMSjBPyjCNsAowj8owz8o0wcowgcowgco-f39-eEQxRX6KP3RPyjGPyjEPyj9-f39-cMQxRX6
 KP3gPyj9-f39-cQQxRX6KP39-f39-ecQxRX6KP39-f39-ecQxQAAAAAAAAAB
 :: src/.info.pod
---[[pod,created="2025-03-22 18:20:11",modified="2026-02-02 08:50:37"]]
+--[[pod,created="2025-03-22 18:20:11",modified="2026-02-03 09:05:09"]]
 :: src/ui/.info.pod
---[[pod,created="2025-03-23 10:19:01",modified="2026-02-02 08:50:37"]]
+--[[pod,created="2025-03-23 10:19:01",modified="2026-02-03 09:05:09"]]
 :: [eoc]
