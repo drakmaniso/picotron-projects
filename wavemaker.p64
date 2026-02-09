@@ -11,7 +11,7 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-09 17:49:30",revision=6755]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-09 20:35:36",revision=7010]]
 Version 0.0.8:
 
 - Changed: instruments have the "retrigger" flag on by default.
@@ -63,7 +63,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-09 17:49:30",revision=19523]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-09 20:35:36",revision=19778]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-09 17:49:30",revision=27987]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-09 20:35:36",revision=28242]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -378,7 +378,7 @@ function generate_gui()
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-09 17:49:30",revision=17735]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-09 20:35:36",revision=17990]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -505,7 +505,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-09 17:49:30",revision=4652]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-09 20:35:36",revision=4907]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -1325,7 +1325,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-09 17:49:30",revision=24792]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-09 20:35:36",revision=25047]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1400,7 +1400,7 @@ app.bar_length = 4 * app.beat_length
 
 app.view = "tracker" -- "tracker" or "synth"
 app.detail = false -- TODO: remove?
-app.toolrack_tab = nil
+app.toolrack_tab = 1
 app.toolrack_track_scrollstart = 0
 app.row_height = 8
 app.starting_row = 0
@@ -1552,7 +1552,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-09 17:49:30",revision=19171]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-09 20:35:36",revision=19426]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -1872,7 +1872,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-09 17:49:30",revision=13929]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-09 20:35:36",revision=14184]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2719,7 +2719,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-09 17:49:30",revision=20077]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-09 20:35:36",revision=20332]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -2879,7 +2879,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-09 17:49:30",revision=24563]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-09 20:35:36",revision=24818]]
 local sfx = {}
 
 
@@ -3112,6 +3112,41 @@ end
 
 function sfx.set_pattern_track(pattern, channel, track)
 	poke(paddr() + pattern * 20 + channel, track)
+end
+
+
+function sfx.remove_pattern(pattern)
+	local last_pattern = sfx.num_patterns() - 1
+	local addr = paddr() + pattern * 20
+	local size = (last_pattern - pattern) * 20
+	memcpy(addr, addr + 20, size)
+	local last_addr = paddr() + last_pattern * 20
+	memset(last_addr, 0, 20)
+end
+
+
+function sfx.insert_pattern(pattern)
+	local last_pattern = sfx.num_patterns() - 1
+	local addr = paddr() + pattern * 20
+	local size = (last_pattern - pattern) * 20
+	memcpy(addr + 20, addr, size)
+	memset(addr, 0, 20)
+end
+
+
+function sfx.copy_pattern(pattern)
+	local addr = paddr() + pattern * 20
+	local ud = userdata("u8", 20)
+	ud:peek(addr)
+	return ud
+end
+
+
+function sfx.paste_pattern(pattern, ud)
+	local width, height, typ = ud:attribs()
+	assert(width == 20 and height == 1 and typ == "u8")
+	local addr = paddr() + pattern * 20
+	ud:poke(addr)
 end
 
 
@@ -3807,7 +3842,7 @@ end
 
 return sfx
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-09 17:49:30",revision=20382]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-09 20:35:36",revision=20637]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4124,7 +4159,7 @@ end
 
 return ui_envelopes
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-09 17:49:30",revision=19365]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-09 20:35:36",revision=19620]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -4403,7 +4438,7 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-09 17:49:30",revision=25940]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-09 20:35:36",revision=26195]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5068,7 +5103,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-09 17:49:30",revision=15512]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-09 20:35:36",revision=15767]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -5665,7 +5700,7 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-09 17:49:30",revision=6293]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-09 20:35:36",revision=6548]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -6413,7 +6448,7 @@ end
 
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-09 17:49:30",revision=20687]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-09 20:35:36",revision=20942]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -6707,7 +6742,7 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-09 17:49:30",revision=20312]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-09 20:35:36",revision=20567]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -7261,7 +7296,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-09 17:49:30",revision=17749]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-09 20:35:36",revision=18004]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -7391,7 +7426,7 @@ end
 
 return ui_settings
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-09 17:49:30",revision=22481]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-09 20:35:36",revision=22736]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -7671,7 +7706,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-09 17:49:30",revision=2258]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-09 20:35:36",revision=2513]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local selection = require "src/selection.lua"
@@ -7708,7 +7743,7 @@ end
 -------------------------------------------------------------------------------
 
 
-local patt_width <const> = 27
+local patt_width <const> = 26
 local function create_pattern_list(el)
 	el.start = 0
 	ui.head():new(el)
@@ -7732,12 +7767,12 @@ local function create_pattern_list(el)
 				--line(x + px, 0, x + px, self.height, 37)
 			end
 			local bg = pattern == app.pattern and 17 or 60
-			rrectfill(x + 2, y + 4, patt_width - 4, 18, 1, bg)
+			rrectfill(x + 2, y + 4, patt_width - 3, 18, 1, bg)
 			if pattern > 0 then
 				line(x, y + 13, x + 1, y + 13, 60)
 			end
 			if pattern < max_pattern then
-				line(x + patt_width - 2, y + 13, x + patt_width - 1, y + 13, 60)
+				line(x + patt_width - 1, y + 13, x + patt_width - 1, y + 13, 60)
 			end
 			local fg = channels == 0 and 59 or 57
 			print(string.format("%02d", pattern), x + 6, y + 7, fg)
@@ -7756,6 +7791,10 @@ local function create_pattern_list(el)
 				spr(13, x + 2 + 8 * 2, y + 23)
 			end
 		end
+		if self.drop_point then
+			local x = 1 + (self.drop_point - self.start) * patt_width
+			line(x, 3, x, self.height - 9, 57)
+		end
 		-- Borders
 		clip()
 		line()
@@ -7769,11 +7808,70 @@ local function create_pattern_list(el)
 		line(2, self.height - 1, 57)
 		line(1, self.height - 2, 57)
 	end
-	function el:click(msg)
+	
+	function el:hover(msg)
 		local nb_cols = (self.width - 2) // patt_width
 		local idx = self.start + msg.mx // patt_width
-		app.pattern = mid(idx, 0, sfx.num_patterns() - 1)
+		local local_x = msg.mx % patt_width
+		if
+			(msg.my > 4) and (msg.my < 4 + 20)
+		then
+			self.cursor = "grab"
+		else
+			self.cursor = 1
+		end
 	end
+	
+	function el:click(msg)
+		local nb_cols = (self.width - 2) // patt_width
+		local pattern = self.start + msg.mx // patt_width
+		if msg.my < 24 and (msg.mb == 1 or msg.mb == 2) then
+			app.pattern = mid(pattern, 0, sfx.num_patterns() - 1)
+		end
+	end
+	
+	function el:drag(msg)
+		if msg.my0 >= 24 then return end
+		self.cursor = "grab"
+		local nb_cols = (self.width - 2) // patt_width
+		local idx0 = self.start + msg.mx0 // patt_width
+		local idx = self.start + (msg.mx + patt_width // 2) // patt_width
+		if msg.mx < msg.mx0 - 6 or msg.mx > msg.mx0 + 6 then
+			self.drop_point = idx
+			self.dragged_pattern = idx0
+			self.drag_duplicate = msg.mb == 2
+		else
+			self.drop_point = nil
+			self.dragged_pattern = nil
+			self.drag_duplicate = nil
+		end
+	end
+	
+	function el:release(msg)
+		local num_patterns = sfx.num_patterns()
+		if self.drop_point and self.drop_point >= 0 and self.drop_point < num_patterns then
+			undo.checkpoint()
+			local ud = sfx.copy_pattern(self.dragged_pattern)
+			sfx.insert_pattern(self.drop_point)
+			sfx.paste_pattern(self.drop_point, ud)
+			if self.drag_duplicate then
+				app.pattern = self.drop_point
+			else
+				if self.drop_point <= self.dragged_pattern then
+					sfx.remove_pattern(self.dragged_pattern + 1)
+					app.pattern = self.drop_point
+				else
+					sfx.remove_pattern(self.dragged_pattern)
+					app.pattern = self.drop_point - 1
+				end
+			end
+		end
+		self.cursor = 1
+		self.drop_point = nil
+		self.dragged_pattern = nil
+		self.drag_duplicate = nil
+	end
+	
 	function el:mousewheel(msg)
 		local nb_cols = (self.width - 2) // patt_width
 		self.start -= msg.wheel_y
@@ -8166,12 +8264,12 @@ local tabs = {
 	[0] =
 	{ name = "help", height = 40, generate = generate_help_tools }, 
 	{ name = "patterns", height = 46, generate = generate_pattern_tools }, 
-	{ name = "tracks", height = 152, generate = generate_track_tools }, 
+	{ name = "tracks", height = 118, generate = generate_track_tools }, 
 	{ name = "loops", height = 32, generate = generate_loop_tools }, 
 	{ name = "tempo", height = 46, generate = generate_tempo_tools }, 
 	{ name = "notes", height = 60, generate = generate_note_tools }, 
 	{ name = "chords", height = 40, generate = generate_harmo_tools }, 
-	{ name = "mixer", height = 40, generate = generate_mixer_tools }, 
+	{ name = "visual", height = 40, generate = generate_mixer_tools }, 
 }
 
 
@@ -8256,7 +8354,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-09 17:49:30",revision=15643]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-09 20:35:36",revision=15898]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -9114,7 +9212,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-09 17:49:30",revision=13092]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-09 20:35:36",revision=13347]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -9409,7 +9507,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-09 17:49:30",revision=18273]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-09 20:35:36",revision=18528]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -10285,7 +10383,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-09 17:49:30",revision=18997]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-09 20:35:36",revision=19252]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -10521,7 +10619,7 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-09 17:49:30",revision=17223]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-09 20:35:36",revision=17478]]
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
@@ -10677,7 +10775,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-09 17:49:30",revision=10026]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-09 20:35:36",revision=10281]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -10767,7 +10865,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-09 17:49:30",revision=18877]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-09 20:35:36",revision=19132]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -11242,7 +11340,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-09 17:49:30",revision=19212]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-09 20:35:36",revision=19467]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -11312,7 +11410,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-09 17:49:30",revision=17582]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-09 20:35:36",revision=17837]]
 # Things To Do
 
 ## Before Next Release
@@ -11356,9 +11454,9 @@ return Wavetable
 - add tools in the tool rack: contextual help, editing, harmony, "midi fx", ...
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-09 17:49:30",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.8",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#19",workspace_index=2},{location="pal/0.pal",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-09 20:35:36",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.0.8",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#16",workspace_index=2},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-09 17:49:30"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-09 20:35:36"]]
 :: fonts/p8_mod.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMwIDA3OjEyOjQzIixtb2RpZmllZD0iMjAyNi0w
 MS0zMCAwNzoxNDozNCIscmV2aXNpb249Ml1dbHo0AHsFAACjBQAA8INweHUAAygACAAABAQIBhAD
@@ -11388,10 +11486,10 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 17:49:30",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 20:35:36",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
-Mi0wOSAxNjoxMDoxMyIscmV2aXNpb249MTAwNThdXWx6NADhCgAAlD0AAPMle1swXT17Ym1wPXB4
+Mi0wOSAxODo0NDowNiIscmV2aXNpb249MTAwNjFdXWx6NADhCgAAlD0AAPMle1swXT17Ym1wPXB4
 dQBDIAgIBMAXQAcQFyAHEBcQByAXEAdAF8AsZmxhZ3M9MCxwYW5feAgA13k9MCx6b29tPTExfSxD
 APYPEBAE8AgvOcAOBx6wDhceoA4nHpAOBw4XDpAOBx4HBgDiDgceYD4HLmAeNw6ADkcEAH8eJx6Q
 TvAGcAALHThvAPAKCj85kC4XDnAuNw5QLlcOUA5HHgcOUA4nPgYAQQcuEA4IADIOEC4IAP8TAB4n
@@ -11443,430 +11541,229 @@ AR8yJxAHAgAPowAeLwBHbgAfTzcANxCjACEfAHIXHgBCHx-wBAgNDzIAwgD9Ch8TMgAfD8gAHw8y
 AP-----------------------------------69QPTEwfX0=
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-sMATPk-wf6iiHnMP-39-f39-BLEP9f_wwBM
-0j-AEss-wBLWP-6iiHnOP-39-f3OEsE-wBLBP8oSwT-GEsQ-xRLGP8cSPxI-2f7DAEw-zf6iiHnF
-P8YSxT-H-sMATNE-EsA-Esk-Etg--qKIec4--f39-cASwT-AEsE-xBLBP8ASwT-FEsI-EsE-xhI-
-whI-xRLGP8gSP8gSxj-I-sMATMA-0P6iiHk-Ej-W-sMATNE-Ej-AEsQ-wRLAPxLBPxLAPxLRP-6i
-iHnOP-39-f3AEsA-whLAP8QSwT-AEsE-xRLCPxLBP8YSP8ISP8USxj-EEsc-xBLCP8ESP8j_wwBM
-PxI-y-6iiHnBPxLBP8YSxT-H-sMATNE-wBI-EsM-EsI-whI-EsA-EtE--qKIecY-EsU--f39-cAS
-wD-CEsA-xBLGP8USwj-KEj-CEj-FEsY-xBLAP8MSwD-EEsI-wRI-yP7DAEw-Ej-L-qKIeT8SP9r_
-wwBM0T8SwD8SxD-AEsE-EsI-wBLSP-6iiHnFP8ESxD-9-f39wBLAP8ISwD-EEj8Swj8SP8USxT-H
-Ej-AEsE-0xLAP8MSwD-EEj-BEsI-xv7DAEzBP83_ooh5xT-GEsU-x-7DAEzRPxLAPxLGPxLAPxLB
-PxLAPxLRP-6iiHnGPxLFP-39-f3AEsA-whLAP8QSPxLCPxI-xRLFP8USwT-AEsE-xRLGP8QSwD-D
-EsA-xBI-wRLCP8X_wwBMwj-O-qKIecQ-1v7DAEzSP8ASwT8SwD-BEsE-EsE-EsA-EtE--qKIec4-
--f39-cASwT-AEsE-xBLGP8USxT-FEsE-yhLAP8ISwD-EEsc-xBLGP8b_wwBMwD-tEvs--qKIec4-
--f39-f393P7DAEz7P-6iiHnOP-39-f399v7W19rV-p_gpiD9-f39-f390zwgjInUPCA7-f39-f39
--dI8IDvUPCA79TwgO-U8IDv1PCA79TwgO-U8IDv1PCA79TwgO-U8IDvUPCA79TwgO-U8IDv1PCA7
-9TwgO-U8IDv1PCA79TwgO-U8IDvUPCA7wjzDO8r_X1dPwTsuwTsuwTvNPME7wzwgO8I8wzvKLsE7
-LsE7LsA7zjzBO8M8IDvCPMM7yi7BOy7BOy7BO808wTvDPCA7wjzDO8ouwTsuwTsuwTvNPME7wzwg
-O8I8wzvKLsE7LsE7LjsuO808wTvDPCA7wjzDO8ouwTsuwTsuwTvNPME7wzwgO8I8wzvKLsE7LsE7
-LjvPPME7wzwgO8I8wzvKLsE7LsE7LsE7ySA7IDsgwTsgOyA7PCA7yD-BO8c8IDvCPP51TpfBPP7C
-w8fKLjsuOy47LjsuOy471TwgO8I8-nVOl8E8-sLDx8ouOy47LjsuO8AuO9Y8IDvCPP51TpfBPP7C
-w8fKLjsuOy47LjvBLjvVPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47wS471TwgO8I8-nVOl8E8-sLD
-x8ouOy47LjsuOy47LjvVPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47LjvXPCA7wjz_dU6XwTz_wsPH
-yi47LjsuOy47LjvXPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47wS47ySA7IDsgOyA7wSA7PCA7yD-_
-Hjc8P8A7xjwgO8I8-nVOl8E8-sLDx8ouOy47LjsuOy47LjvNPME7wzwgO8I8-nVOl8E8-sLDx8ou
-Oy47LjsuO8AuO848wTvDPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47LsE7zTzBO8M8IDvCPP51TpfB
-PP7Cw8fKLjsuOy47LjvALsA7zTzBO8M8IDvCPP51TpfBPP7Cw8fKLjsuOy47LjsuwTvNPME7wzwg
-O8I8-nVOl8E8-sLDx8ouOy47LjsuOy7BO808wTvDPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47LsE7
-zTzBO8M8IDvCPP51TpfBPP7Cw8fKLjsuOy47LjvBLjvJIME7IME7wCA7wDwgO8g-BsA-wDvFPCA7
-wjz_dU6XwTz_wsPHyi47LjsuOy47LjsuO9U8IDvCPP51TpfBPP7Cw8fKLjsuOy47LjvALjvWPCA7
-wjz_dU6XwTz_wsPHyi47LjsuOy47LjvXPCA7wjz_dU6XwTz_wsPHyi47LjsuOy47wS471TwgO8I8
--nVOl8E8-sLDx8ouOy47LjsuO8EuO9U8IDvCPP51TpfBPP7Cw8fKLjsuOy47LjvBLjvVPCA7wjz_
-dU6XwTz_wsPHyi47LjsuOy47LjsuO9U8IDvCPP51TpfBPP7Cw8fKLjsuOy47LjvBLjvLIDvBIDsg
-O8E8IDvIPwbBP8A7xDwgO8I8wzvKLsE7LsE7LsE7zTzBO8M8IDvCPMM7yi7BOy7BOy7BO808wTvD
-PCA7wjzDO8ouwTsuwTsuwTvNPME7wzwgO8I8wzvKLsE7LsE7LsE7zTzBO8M8IDvCPMM7yi7BOy7B
-O8EuO808wTvDPCA7wjzDO8ouwTsuwTsuwTvNPME7wzwgO8I8wzvKLsE7LsE7LsE7zTzBO8M8IDvC
-PMM7yi7BOy7BO8EuO8sgOzzAIDsgOyA7PCA7yD8GPwbAPzvEPCA79TwgO-U8IDv1PCA79TwgO-U8
-IDv1PCA79TwgO-U8IDvIPwY-wAY-O8Q8IDv1PCA79TwgO-U8IDv1PCA79TwgO-U8IDv1PCA79Twg
-O8g-Bj-ABj87xDwgO-39-f39-f3SPCA7yD8GPwY-wDvEPP39-f39-f3VIDvFP8IGP8E7xTz_iiTK
-0P5MYXTk-gAAACr2NSr2NSr2NSr2NSr2NSr2NSr2NSA7xD-ABsI-O8c8DdAq5DUq9jUq9jUq9jUq
-9jUq9jUq9jUq9jUgO8Q-BsM-O8c8DcH_9-Ciwg3E-vGqbQ3CKsD_k_iawSosKsT_jtzZwSoawSrQ
-NSr2NSrCOMEqxBXBKsIswSosKiwqwhrBKhrBKtA1KvY1KsI4wSrEFcEqwizBKiwqxBrBKhrBKtA1
-KsE4wSrFFcEqwizBKizBKsIawSoawSrQNSrCOMEqxBUqxCzBKiwqxBrBKhrBKtA1KsI4wSrEFSrE
-LMEqLMAqwxrBKhrBKtA1IDvEPwbDPzvHPA3BOA3HFQ3CKsAsKiwqLCrGGioaKhoq0DUq9jUqwTgq
-wjjAKsMVKsIsKiwqLCosKsQaKhoqGirQNSr2NSrBOCrCOMAqwxUqwiwqLCosKsYaKhoqGirQNSrB
-OCrAOCo4wCrBFSrELCosKsEsKsQaKhoqGirQNSrBOCrHFSrELCosKiwqxhoqGioaKtA1KsE4KscV
-KsQsKiwqwCwqxRoqGioaKtA1IDvEP8AGwT-AO8c8DcE4wQ3FFQ0VDcAqwCwqLCoswSrCGsEqGioa
-Ksf_lHO0KsY1Ksb_sa1vKsz_XJViKsj_PJWSKsocKsY1KsE4KjjAKjjAKsEVwSrCLCosKizBKsIa
-wSoaKhoqxxwqxjUqxjIqzCAqyBAqyhwqxjUqwTgqOMAqOMAqwRXBKsIsKiwqLMEqwhrBKhoqGirH
-HCrGNSrBOCrAOCo4wCrBFcEqwiwqLCrBLCrCGsEqGioaKsccKsY1KsE4KjjAKsQVKhUqwiwqLCos
-wSrCGsEqGioaKsccKsY1KsE4KscVKhUqwiwqLCrALCrDGsEqGioaKsccKsY1-tbX2jvFP8M7yDwN
-wTgNxxXBDcAqwCwqLCosKiwqwhoqwRoqGirQNSr2NSrBOCrAOCrEFSrELCosKsEsKsIaKsEaKhoq
-0DUq9jUqwTgqwDgqxBUqxCwqLCosKiwqwhoqwRoqGirQNSrBOCrAOCrGFSrCLCosKsEsKsIaKsEa
-Khoq0DUqwTgqwDgqxBXBKsIsKiwqLCosKsIaKsEaKhoq0DUqwTgqxxXBKsIsKiwqwCwqwxoqwRoq
-GirQNSA71DwNwTgNyRUNwCrALMEqLMEqwhrBKhrBKtA1KvY1KsI4wSrEFcEqwizBKsEsKsIawSoa
-wSrQNSr2NSrCOMEqxBXBKsIswSoswSrCGsEqGsEq0DUqwTjBKsUVwSrCLMEqwSwqwhrBKhrBKtA1
-KsI4wSrGFSrCLMEqLMEqwhrBKhrBKtA1KsI4wSrGFSrCLMEqLMEqwhrBKhrBKtA1IDvUPA3QKuQ1
-KvY1KvY1KvY1KvY1KvY1KvY1KvY1IDvUPDXCODX9-f39-d04Nf3tIDvUPDXCODX9-f39-d04Nf3t
-IDvUPDXCODXNLME1LDXEGsE1GsE1-f3LOME1xBXBNcIswTUsNSw1whrBNRrBNdQ4wjXEFcE1wizB
-NSw1xBrBNRrBNf3QODXNLME1LDXEGsE1GsE1-cwgO8MgwjvLPDXCODXNLDUsNSw1xho1GjUaNf39
-yjg1wjjANcMVNcIsNSw1LDUsNcIaNRo1GjXWODXJFTXCLDUsNSw1xho1GjUaNf3QODXNLDUsNSw1
-xho1GjUaNf3MIDvCIMA8wCDAO8o8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXK
-HDXPMjXMIDXIEDXKHDXKODU4wDU4wDXBFcE1wiw1LDUswTXCGjUaNRrBNcccNco4wTXFFcE1wiw1
-LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNcs4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXMIDXI
-EDXKHDXH-tbX2jvCIDwgwDwgO8o8NcI4Nc0sNSw1LDUsNcIaNcEaNRo1-f3KODXAODXEFTXELDUs
-NcEsNcIaNRo1wRo11Dg1yRU1wiw1LDUsNSw1who1wRo1GjX90Dg1zSw1LDUsNSw1who1wRo1GjX9
-zCA7wSDAPCDAPCDAO8k8NcI4Nc0swTUswTXCGsE1GsE1-f3LOME1xBXBNcIswTXBLDXCGsE1GsE1
-1Dg1xxXBNcIswTUswTXCGsE1GsE1-dA4Nc0swTUswTXCGsE1GsE1-cwgO8EgPCDCPCA7yTw1wjg1
--f39-f3dODX97SA7wCDAPCDCPCDGO8I8NcI4Nf39-f393Tg1-e0gO8AgPDsgOyA7IDwgOyA7IDwg
-O8I8NcI4Nf39-f393Tg1-e0gO8AgxjwgwjwgwDvCPDXCODXNLME1LDXEGsE1GsE1-dA4wTXEFcE1
-wizBNSw1LDXCGsE1GsE1-c84wTXFFcE1wizBNSw1xBrBNRrBNf3QODXNLME1LDXEGsE1GsE1-cwg
-O8cgPCDCPCA7wzw1wjg1zSw1LDUsNcYaNRo1GjX9zzg1wjjANcMVNcIsNSw1LDUsNcQaNRo1GjX9
-zzg1wDg1OMA1wxU1wiw1LDUsNcYaNRo1GjX90Dg1zSw1LDUsNcYaNRo1GjX9zCA7xyDAPCDAPCDA
-O8M8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXKODU4wDU4wDXBFcE1wiw1
-LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNco4NcA4NTjANcEVwTXCLDUsNSzBNcIawTUaNRo1
-xxw1zzI1zCA1yBA1yhw1yzg1zSw1LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNcf_1tfaO8gg
-PCDAPCA7xDw1wjg1zSw1LDUsNSw1who1wRo1GjX9zzg1wDg1xhU1wiw1LDXBLDXCGjXBGjUaNf3P
-ODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNf3QODXNLDUsNSw1LDXCGjXBGjUaNf3MIDvIIMA8wCDA
-O8Q8NcI4Nc0swTUswTXCGsE1GsE1-dA4wTXEFcE1wizBNcEsNcIawTUawTX9zzjBNcUVwTXCLME1
-LME1whrBNRrBNf3QODXNLME1LME1whrBNRrBNf3MIDvJIMI7xTw1wjg1-f39-f3dODX97SA71Dw1
-wjg1-f39-f3dODX97SA71Dw1wjg1-f39-f39-c8gO9Q8NcI4Nc0swTUsNcQawTUawTX9-cs4wTXE
-FcE1wizBNSw1LDXCGsE1GsE11TjBNcQVwTXCLME1LDXEGsE1GsE1-f39wiA71Dw1wjg1zSw1LDUs
-NcYaNRo1GjX9-co4NcI4wDXDFTXCLDUsNSw1LDXCGjUaNRo11jg1yRU1wiw1LDUsNcYaNRo1GjX9
--f3CIDvAPNA7wDw1wjg1zSw1LDUswTXCGsE1GjUaNcccNc8yNcz_XJViNcgQNcocNc8yNcwgNcgQ
-NcocNco4NTjANTjANcEVwTXCLDUsNSzBNcIaNRo1GsE1xxw1yjg1xxXBNcIsNSw1LME1whrBNRo1
-GjXHHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXKHDXH-tbX2jvAINA7wDw1wjg1
-zSw1LDUsNSw1who1wRo1GjX9-co4NcA4NcYVNcIsNSw1wSw1who1GjXBGjXUODXJFTXCLDUsNSw1
-LDXCGjXBGjUaNf39-cIgO9Q8NcI4Nc0swTUswTXCGsE1GsE1-f3LOME1xBXBNcIswTXBLDXCGsE1
-GsE11TjBNcQVwTXCLME1LME1whrBNRrBNf39-cIgO9Q8NcI4Nf39-f39-f3PIDvUPP4rOUb2NT32
-NT32NT32NT32NT32NT32NT32NSA71Dw99jU99jU99jU99jU99jU99jU99jU99jUgO8UuwTvKPD3B
-OME9xRU9xCzBPSw9xBrBPRrBPdA1PcI4wT3EFT3ELME9LME9whrBPRrBPdA1PcI4wT3EFcE9wizB
-PSw9LD3CGsE9GsE90DU99jU9wjjBPcQVwT3CLME9LD3EGsE9GsE90DU99jU99jU9wjjBPcQVPcQs
-wT0swD3DGsE9GsE90DUgO8QuO8EuOy47LjvFPD3BOD3AOD04wD3BFT3ELD0sPSw9xho9Gj0aPdA1
-PcE4PccVPcQsPSw9LD3GGj0aPRo90DU9wTg9wjjAPcMVPcIsPSw9LD0sPcQaPRo9Gj3QNT32NT3B
-OD3COMA9wxU9wiw9LD0sPcYaPRo9Gj3QNT32NT32NT3BOD3HFT3ELD0sPcAsPcUaPRo9Gj3QNSA7
-xC47wy47LjvFPD3BOD3AOD04wD3BFT0VPcIsPSw9LME9whrBPRo9Gj3HHD3GNT3BOD3HFT0VPcIs
-PSw9LME9whrBPRo9Gj3HHD3GNT3BOD04wD04wD3BFcE9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcYy
-Pcz_XJViPcgQPcocPcY1PcE4PTjAPTjAPcEVwT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9xjI9zCA9
-yBA9yhw9xjU9xjI9zCA9yBA9yhw9xjU9wTg9xxU9FT3CLD0sPcAsPcMawT0aPRo9xxw9xjX_1tfa
-O8QuO8MuwTvFPD3BOD3AOD3EFcE9wiw9LD0sPSw9who9wRo9Gj3QNT3BOD3HFcE9wiw9LD3BLD3C
-Gj3BGj0aPdA1PcE4PcA4PcQVPcQsPSw9wSw9who9wRo9Gj3QNT32NT3BOD3AOD3EFT3ELD0sPSw9
-LD3CGj3BGj0aPdA1PfY1PfY1PcE4PccVwT3CLD0sPcAsPcMaPcEaPRo90DUgO8QuO8EuO8EuO8U8
-PcE4wT3HFT3CLME9LME9whrBPRrBPdA1PcI4wT3GFT3CLME9LME9whrBPRrBPdA1PcI4wT3EFcE9
-wizBPcEsPcIawT0awT3QNT32NT3COME9xBXBPcIswT0swT3CGsE9GsE90DU99jU99jU9wjjBPcYV
-PcIswT0swT3CGsE9GsE90DUgO8UuwTvCLjvFPD32NT32NT32NT32NT32NT32NT32NT32NSA71Dw1
--f39-f39-dQgO9Q8Nf39-f39-f3UIDvUPDX9-fE4wTXEFcE1wizBNSw1LDXCGsE1GsE11DjCNcQV
-wTXCLME1LDXEGsE1GsE1-f39wiA71Dw1-f3wODXCOMA1wxU1wiw1LDUsNSw1who1GjUaNdY4NckV
-NcIsNSw1LDXGGjUaNRo1-f39wiA71Dw1xjI1zP5clWI1yBA1yhw1zzI1zCA1yBA1yhw1zzI1zCA1
-yBA1yhw1yjg1OMA1OMA1wRXBNcIsNSw1LME1who1GjUawTXHHDXKOME1xRXBNcIsNSw1LME1whrB
-NRo1GjXHHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXKHDXH-tbX2jvBPME7PMA7
-wTzAOzzBO8I8Nf398Dg1wDg1xBU1xCw1LDXBLDXCGjUaNcEaNdQ4NckVNcIsNSw1LDUsNcIaNcEa
-NRo1-f39wiA7wjw7wDw7PDs8O8I8O8M8Nf398TjBNcQVwTXCLME1wSw1whrBNRrBNdQ4NccVwTXC
-LME1LME1whrBNRrBNf39-cIgO8I8O8A8Ozw7PME7wDw7wzw1-f39-f39-dQgO8I8O8A8Ozw7wTw7
-wDw7wzw1-f39-f39-dQgO8E8wTs8Ozw7PMA7wTw7wzw1-f39-f39-dQgO9Q8NcE4wjXEFTXELME1
-LDXEGsE1GsE1-dA4wTXEFcE1wizBNSw1LDXCGsE1GsE1-c84wTXFFcE1wizBNSw1xBrBNRrBNf39
--cIgO9Q8NcE4NccVNcQsNSw1LDXGGjUaNRo1-c84NcI4wDXDFTXCLDUsNSw1LDXEGjUaNRo1-c84
-NcA4NTjANcMVNcIsNSw1LDXGGjUaNRo1-f39wiA71Dw1wTjBNcUVNRU1wiw1LDUswTXCGsE1GjUa
-NcccNc8yNcz_XJViNcgQNcocNco4NTjANTjANcEVwTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1
-yBA1yhw1yjg1wDg1OMA1wRXBNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXPMjXMIDXI
-EDXKHDXPMjXMIDXIEDXKHDXH-tbX2jvF-lyVYsE7IME7xjw1wTg1xxXBNcIsNSw1LDUsNcIaNcEa
-NRo1-c84NcA4NcYVNcIsNSw1wSw1who1wRo1GjX9zzg1wDg1xhU1wiw1LDUsNSw1who1wRo1GjX9
--f3C-tbX2jvF-lyVYjsgOyA7IDvGPDXBODXJFTXCLME1LME1whrBNRrBNf3QOME1xBXBNcIswTXB
-LDXCGsE1GsE1-c84wTXFFcE1wizBNSzBNcIawTUawTX9-f3C-tbX2jvF-lyVYjsgOyA7IDvGPDX9
--f39-f391P7W19o7xf5clWI7IDsgOyA7xjw1wjg1-f39-f39-c-_1tfaO8X_XJViwTsgwTvGPDXC
-ODX9-f39-f39z-7W19o71Dw1wjg1zSzBNSw1xBrBNRrBNdU4wTXEFTXELME1LME1whrBNRrBNf3Q
-OME1xBXBNcIswTUsNSw1whrBNRrBNdU4wTXEFcE1wizBNSw1xBrBNRrBNf39-cIgO9Q8NcI4Nc0s
-NSw1LDXGGjUaNRo11Dg1xxU1xCw1LDUsNcYaNRo1GjX9zzg1wjjANcMVNcIsNSw1LDUsNcIaNRo1
-GjXWODXJFTXCLDUsNSw1xho1GjUaNf39-cIgO9Q8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXKODXH
-FTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXKODU4wDU4wDXBFcE1wiw1LDUs
-wTXCGjUaNRrBNcccNco4NccVwTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1zzI1zCA1
-yBA1yhw1zzI1zCA1yBA1yhw1x-7W19o71Dw1wjg1zSw1LDUsNSw1who1wRo1GjXUODXHFcE1wiw1
-LDXBLDXCGjXBGjUaNf3PODXAODXGFTXCLDUsNcEsNcIaNRo1wRo11Dg1yRU1wiw1LDUsNSw1who1
-wRo1GjX9-f3CIDvUPDXCODXNLME1LME1whrBNRrBNdU4wTXGFTXCLME1LME1whrBNRrBNf3QOME1
-xBXBNcIswTXBLDXCGsE1GsE11TjBNcQVwTXCLME1LME1whrBNRrBNf39-cIgO8M8Ozw7wDzAOzw7
-xjw1wjg1-f39-f39-c8gO8M8Ozw7PDs8Ozw7xjw9wjg98TU99jU99jU99jU99jU99jU99jU99jUg
-O8M8Ozw7PDs8Ozw7xjw9wjg98TU99jU99jU99jU99jU99jU99jU99jUgO8M8wTs8Ozw7PDvGPD3C
-OD3NLME9LD3EGsE9GsE90DU99jU9wjjBPcQVwT3CLME9LD0sPcIawT0awT3QNT32NT3COME9xBXB
-PcIswT0sPcQawT0awT3QNT32NT32NT3COME9xBU9xCzBPSzAPcMawT0awT3QNSA7xDw7wDzAO8A8
-wTvEPD3COD3NLD0sPSw9xho9Gj0aPdA1PfY1PcE4PcI4wD3DFT3CLD0sPSw9LD3EGj0aPRo90DU9
-9jU9wTg9wjjAPcMVPcIsPSw9LD3GGj0aPRo90DU99jU99jU9wTg9xxU9xCw9LD3ALD3FGj0aPRo9
-0DUgO9Q8PcI4Pc0sPSw9LME9whrBPRo9Gj3HHD3GNT3GMj3M-lyVYj3IED3KHD3GNT3BOD04wD04
-wD3BFcE9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcYyPcwgPcgQPcocPcY1PcE4PTjAPTjAPcEVwT3C
-LD0sPSzBPcIawT0aPRo9xxw9xjU9xjI9zCA9yBA9yhw9xjU9xjI9zCA9yBA9yhw9xjU9wTg9xxU9
-FT3CLD0sPcAsPcMawT0aPRo9xxw9xjX_1tfaO9Q8PcI4Pc0sPSw9LD0sPcIaPcEaPRo90DU99jU9
-wTg9wDg9xBU9xCw9LD3BLD3CGj3BGj0aPdA1PfY1PcE4PcA4PcQVPcQsPSw9LD0sPcIaPcEaPRo9
-0DU99jU99jU9wTg9xxXBPcIsPSw9wCw9wxo9wRo9Gj3QNSA71Dw9wjg9zSzBPSzBPcIawT0awT3Q
-NT32NT3COME9xBXBPcIswT3BLD3CGsE9GsE90DU99jU9wjjBPcQVwT3CLME9LME9whrBPRrBPdA1
-PfY1PfY1PcI4wT3GFT3CLME9LME9whrBPRrBPdA1IDvFEME7EME7xjw9wjg98TU99jU99jU99jU9
-9jU99jU99jU99jUgO8cQOxA7yDw1wjg1-f39-f39-c8gO8UQwTsQwDvHPDXCODX9-f39-f39zyA7
-xRA7wRA7yDw1wjg1zSzBNSw1xBrBNRrBNf39yzjBNcQVwTXCLME1LDUsNcIawTUawTXUOMI1xBXB
-NcIswTUsNcQawTUawTX9-f3CIDvFEME7EDvIPDXCODXNLDUsNSw1xho1GjUaNf39yjg1wjjANcMV
-NcIsNSw1LDUsNcIaNRo1GjXWODXJFTXCLDUsNSw1xho1GjUaNf39-cIgO9Q8NcI4Nc0sNSw1LME1
-whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXPMjXMIDXIEDXKHDXKODU4wDU4wDXBFcE1wiw1LDUs
-wTXCGjUaNRrBNcccNco4wTXFFcE1wiw1LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNc8yNcwg
-NcgQNcocNc8yNcwgNcgQNcocNcf_1tfaO9Q8NcI4Nc0sNSw1LDUsNcIaNcEaNRo1-f3KODXAODXE
-FTXELDUsNcEsNcIaNRo1wRo11Dg1yRU1wiw1LDUsNSw1who1wRo1GjX9-f3CIDvUPDXCODXNLME1
-LME1whrBNRrBNf39yzjBNcQVwTXCLME1wSw1whrBNRrBNdQ4NccVwTXCLME1LME1whrBNRrBNf39
--cIgO9Q8NcI4Nf39-f39-f3PIDvUPDXCODX9-f39-f39zyA7wjzAOzzBOzzBOzzBO8I8Nf39-f39
--f3UIDvBPDvCPDvAPDvBPDs8O8I8NcE4wTXFFTXELME1LDXEGsE1GsE1-dA4wTXEFcE1wizBNSw1
-LDXCGsE1GsE1-c84wTXFFcE1wizBNSw1xBrBNRrBNdQ4wTXFFcE1wizBNSzBNcIawTUawTXUOME1
-xRU1xCzBNSw1xBrBNRrBNf3MIDvBPME7wDw7wDzAO8A8wTvCPDXBODXAODU4wDXBFTXELDUsNSw1
-xho1GjUaNf3PODXCOMA1wxU1wiw1LDUsNSw1xBo1GjUaNf3PODXAODU4wDXDFTXCLDUsNSw1xho1
-GjUaNdQ4NcA4NcQVNcQsNSw1wSw1xBo1GjUaNdQ4NcA4NTjANcEVNcQsNSw1LDXGGjUaNRo1-cwg
-O8M8O8A8O8A8O8E8O8Q8NcE4NcA4NTjANcEVNRU1wiw1LDUswTXCGsE1GjUaNcccNc8yNcz_XJVi
-NcgQNcocNco4NTjANTjANcEVwTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1yjg1wDg1
-OMA1wRXBNcIsNSw1LME1whrBNRo1GjXHHDXKODXAODXEFcE1wiw1LDXBLDXCGsE1GjUaNcccNco4
-NcA4NTjANcEVNRU1wiw1LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNcf_1tfaO8E8wDvBPDvA
-PME7PDvEPDXBODXAODXEFcE1wiw1LDUsNSw1who1wRo1GjX9zzg1wDg1xhU1wiw1LDXBLDXCGjXB
-GjUaNf3PODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNdQ4NcA4NcYVNcIsNSw1wSw1who1wRo1GjXU
-ODXAODXEFcE1wiw1LDUsNSw1who1wRo1GjX9zCA71Dw1wTjBNccVNcIswTUswTXCGsE1GsE1-dA4
-wTXEFcE1wizBNcEsNcIawTUawTX9zzjBNcUVwTXCLME1LME1whrBNRrBNdQ4wTXFFcE1wizBNcEs
-NcIawTUawTXUOME1xxU1wizBNSzBNcIawTUawTX9zCA71Dw1-f39-f39-dQgO9Q8NcI4Nf39-f39
-3Tg1-e0gO8UuwTsuwDvHPDXCODX9-f39-d04Nf3tIDvFLjsuO8AuO8c8NcI4Nc0swTUsNcQawTUa
-wTX9-cs4wTXEFcE1wizBNSw1LDXCGsE1GsE11TjBNcQVwTXCLME1LDXEGsE1GsE1-dA4Nc0swTUs
-NcQawTUawTX9zCA7xS47LjvALjvHPDXCODXNLDUsNSw1xho1GjUaNf39yjg1wjjANcMVNcIsNSw1
-LDUsNcIaNRo1GjXWODXJFTXCLDUsNSw1xho1GjUaNf3QODXNLDUsNSw1xho1GjUaNf3MIDvFLjsu
-O8AuO8c8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXPMjXMIDXIEDXKHDXK
-ODU4wDU4wDXBFcE1wiw1LDUswTXCGjUaNRrBNcccNco4NccVwTXCLDUsNSzBNcIawTUaNRo1xxw1
-zzI1zCA1yBA1yhw1yzg1zSw1LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNcf_1tfaO8UuwTsu
-wTvGPDXCODXNLDUsNSw1LDXCGjXBGjUaNf39yjg1wDg1xhU1wiw1LDXBLDXCGjUaNcEaNdQ4NckV
-NcIsNSw1LDUsNcIaNcEaNRo1-dA4Nc0sNSw1LDUsNcIaNcEaNRo1-cwgO9Q8NcI4Nc0swTUswTXC
-GsE1GsE1-f3LOME1xBXBNcIswTXBLDXCGsE1GsE11TjBNcQVwTXCLME1LME1whrBNRrBNf3QODXN
-LME1LME1whrBNRrBNf3MIDvUPDXCODX9-f39-d04Nf3tIDvUPD32NT32NT32NT32NT32NT32NT32
-NT32NSA71Dw99jU99jU99jU99jU99jU99jU99jU99jUgO8A80DvAPD32NT32NT3COME9xBXBPcIs
-wT0sPSw9whrBPRrBPdA1PfY1PcI4wT3EFcE9wizBPSw9xBrBPRrBPdA1PcE4wT3FFcE9wizBPSzB
-PcIawT0awT3QNT3BOMI9xBU9xCzBPSw9xBrBPRrBPdA1PcI4wT3EFT3ELME9LMA9wxrBPRrBPdA1
-IDvAINA7wDw99jU99jU9wTg9wjjAPcMVPcIsPSw9LD0sPcQaPRo9Gj3QNT32NT3BOD3COMA9wxU9
-wiw9LD0sPcYaPRo9Gj3QNT3BOD3AOD04wD3BFT3ELD0sPcEsPcQaPRo9Gj3QNT3BOD3HFT3ELD0s
-PSw9xho9Gj0aPdA1PcE4PccVPcQsPSw9wCw9xRo9Gj0aPdA1IDvUPD3GMj3M-lyVYj3IED3KHD3G
-NT3GMj3MID3IED3KHD3GNT3BOD04wD04wD3BFcE9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcYyPcwg
-PcgQPcocPcY1PcE4PTjAPTjAPcEVwT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9wTg9wDg9OMA9wRXB
-PcIsPSw9wSw9whrBPRo9Gj3HHD3GNT3BOME9xRU9FT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9wTg9
-xxU9FT3CLD0sPcAsPcMawT0aPRo9xxw9xjX_1tfaO9Q8PfY1PfY1PcE4PcA4PcQVPcQsPSw9wSw9
-who9wRo9Gj3QNT32NT3BOD3AOD3EFT3ELD0sPSw9LD3CGj3BGj0aPdA1PcE4PcA4PcYVPcIsPSw9
-wSw9who9wRo9Gj3QNT3BOD3HFcE9wiw9LD0sPSw9who9wRo9Gj3QNT3BOD3HFcE9wiw9LD3ALD3D
-Gj3BGj0aPdA1IDvUPD32NT32NT3COME9xBXBPcIswT3BLD3CGsE9GsE90DU99jU9wjjBPcQVwT3C
-LME9LME9whrBPRrBPdA1PcE4wT3FFcE9wizBPcEsPcIawT0awT3QNT3BOD3JFT3CLME9LME9whrB
-PRrBPdA1PcI4wT3GFT3CLME9LME9whrBPRrBPdA1IDvUPD32NT32NT32NT32NT32NT32NT32NT32
-NSA7wTzBOzzBOzzBOzzBO8I8Nf39-f394jg1-e0gO8E8Ozw7PDs8O8A8O8E8O8M8Nf39-f394jg1
--e0gO8E8wTs8wTvAPDvBPDvDPDX9-fE4wTXEFcE1wizBNSw1LDXCGsE1GsE11DjCNcQVwTXCLME1
-LDXEGsE1GsE1-dA4Nc0swTUsNcQawTUawTX9zCA7wTw7wTw7PDvAPDvBPDvDPDX9-fA4NcI4wDXD
-FTXCLDUsNSw1LDXCGjUaNRo11jg1yRU1wiw1LDUsNcYaNRo1GjX90Dg1zSw1LDUsNcYaNRo1GjX9
-zCA7wTw7wTw7PDvAPDvBPDvDPDXGMjXM-lyVYjXIEDXKHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXK
-HDXKODU4wDU4wDXBFcE1wiw1LDUswTXCGjUaNRrBNcccNco4wTXFFcE1wiw1LDUswTXCGsE1GjUa
-NcccNc8yNcwgNcgQNcocNcs4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXH-tbX2jvU
-PDX9-fA4NcA4NcQVNcQsNSw1wSw1who1GjXBGjXUODXJFTXCLDUsNSw1LDXCGjXBGjUaNf3QODXN
-LDUsNSw1LDXCGjXBGjUaNf3MIDvUPDX9-fE4wTXEFcE1wizBNcEsNcIawTUawTXUODXHFcE1wizB
-NSzBNcIawTUawTX90Dg1zSzBNSzBNcIawTUawTX9zCA71Dw1-f39-f3iODX97SA7xS7BOy7BO8Y8
-Nf39-f394jg1-e0gO8UuOy47LjsuO8Y8Nf39-f39-f3UIDvFLjsuOy47LjvGPDXBOME1xRU1xCzB
-NSw1xBrBNRrBNf3QOME1xBXBNcIswTUsNSw1whrBNRrBNf3POME1xRXBNcIswTUsNcQawTUawTXU
-OMI1xBXBNcIswTUswTXCGsE1GsE11TjBNcQVNcQswTUsNcQawTUawTX9zCA7xS47LjsuOy47xjw1
-wTg1wDg1OMA1wRU1xCw1LDUsNcYaNRo1GjX9zzg1wjjANcMVNcIsNSw1LDUsNcQaNRo1GjX9zzg1
-wDg1OMA1wxU1wiw1LDUsNcYaNRo1GjXUODXHFTXELDUsNcEsNcQaNRo1GjXUODXHFTXELDUsNSw1
-xho1GjUaNf3MIDvFLsE7LsE7xjw1wTg1wDg1OMA1wRU1FTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1
-zP5clWI1yBA1yhw1yjg1OMA1OMA1wRXBNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXK
-ODXAODU4wDXBFcE1wiw1LDUswTXCGsE1GjUaNcccNco4wTXFFcE1wiw1LDXBLDXCGsE1GjUaNccc
-Nco4NccVNRU1wiw1LDUswTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNcf_1tfaO9Q8NcE4NcA4NcQV
-wTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXGFTXCLDUsNcEsNcIaNcEaNRo1-c84NcA4NcYVNcIs
-NSw1LDUsNcIaNcEaNRo11Dg1yRU1wiw1LDXBLDXCGjXBGjUaNdQ4NccVwTXCLDUsNSw1LDXCGjXB
-GjUaNf3MIDvUPDXBOME1xxU1wizBNSzBNcIawTUawTX90DjBNcQVwTXCLME1wSw1whrBNRrBNf3P
-OME1xRXBNcIswTUswTXCGsE1GsE11Dg1xxXBNcIswTXBLDXCGsE1GsE11TjBNcYVNcIswTUswTXC
-GsE1GsE1-cwgO9Q8Nf39-f39-f3UIDvUPDXCODX9-f3nODX98Tg1-e0gO9Q8NcI4Nf39-ec4Nf3x
-ODX97SA71Dw1wjg1zSzBNSw1xBrBNRrBNf39yzjBNcQVwTXCLME1LDUsNcIawTUawTXVODXNLME1
-LDXEGsE1GsE1-dA4Nc0swTUsNcQawTUawTX9zCA7yDw7yTw1wjg1zSw1LDUsNcYaNRo1GjX9-co4
-NcI4wDXDFTXCLDUsNSw1LDXCGjUaNRo11zg1zSw1LDUsNcYaNRo1GjX90Dg1zSw1LDUsNcYaNRo1
-GjX9zCA7xzzBO8g8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXPMjXMIDXI
-EDXKHDXKODU4wDU4wDXBFcE1wiw1LDUswTXCGjUaNRrBNcccNcs4Nc0sNSw1LME1whrBNRo1GjXH
-HDXPMjXMIDXIEDXKHDXLODXNLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1x-7W19o7xjzD
-O8c8NcI4Nc0sNSw1LDUsNcIaNcEaNRo1-f3KODXAODXGFTXCLDUsNcEsNcIaNRo1wRo11Tg1zSw1
-LDUsNSw1who1wRo1GjX90Dg1zSw1LDUsNSw1who1wRo1GjX9zCA7xTzFO8Y8NcI4Nc0swTUswTXC
-GsE1GsE1-f3LOME1xBXBNcIswTXBLDXCGsE1GsE11Tg1zSzBNSzBNcIawTUawTX90Dg1zSzBNSzB
-NcIawTUawTX9zCA71Dw1wjg1-f395zg1-fE4Nf3tIDvUPCr2NSr2NSr2NSr2NSr2NSr2NSrCOCrx
-NSr2NSA71Dwq9jUq9jUq9jUq9jUq9jUq9jUqwjgq8TUq9jUgO9Q8KsE4wirEFSrELMEqLCrEGsEq
-GsEq0DUq9jUqwjjBKsQVwSrCLMEqLCosKsIawSoawSrQNSr2NSrCOMEqxBXBKsIswSosKsQawSoa
-wSrQNSrBOMEqxRXBKsIswSoswSrCGsEqGsEq0DUqwjgqzSzBKiwqxBrBKhrBKtA1KsI4wSrEFSrE
-LMEqLMAqwxrBKhrBKtA1IDvUPCrBOCrHFSrELCosKiwqxhoqGioaKtA1KvY1KsE4KskVKsIsKiwq
-LCosKsQaKhoqGirQNSr2NSrBOCrJFSrCLCosKiwqxhoqGioaKtA1KsE4KsA4KsQVKsQsKiwqwSwq
-xBoqGioaKtA1KsI4Ks0sKiwqLCrGGioaKhoq0DUqwTgqxxUqxCwqLCrALCrFGioaKhoq0DUgO8U8
-xTvGPCrBOMEqxRUqFSrCLCosKizBKsIawSoaKhoqxxwqxjUqxjIqzP5clWIqyBAqyhwqxjUqwTgq
-xxXBKsIsKiwqLMEqwhrBKhoqGirHHCrGNSrGMirMICrIECrKHCrGNSrBOCo4wCrEFcEqwiwqLCos
-wSrCGsEqGioaKsccKsY1KsE4KsA4KsQVwSrCLCosKsEsKsIawSoaKhoqxxwqxjUqwjgqzSwqLCos
-wSrCGsEqGioaKsccKsY1KsE4KscVKhUqwiwqLCrALCrDGsEqGioaKsccKsY1-tbX2jvGPMM7xzwq
-wTgqxxXBKsIsKiwqLCosKsIaKsEaKhoq0DUq9jUqwTgqyRUqwiwqLCrBLCrCGirBGioaKtA1KvY1
-KsE4KsA4KsYVKsIsKiwqLCosKsIaKsEaKhoq0DUqwTgqwDgqxhUqwiwqLCrBLCrCGirBGioaKtA1
-KsI4Ks0sKiwqLCosKsIaKsEaKhoq0DUqwTgqxxXBKsIsKiwqwCwqwxoqwRoqGirQNSA7xzzBO8g8
-KsE4KskVKsIswSoswSrCGsEqGsEq0DUq9jUqwjjBKsQVwSrCLMEqwSwqwhrBKhrBKtA1KvY1KsI4
-wSrEFcEqwizBKizBKsIawSoawSrQNSrBOMEqxRXBKsIswSrBLCrCGsEqGsEq0DUqwjgqzSzBKizB
-KsIawSoawSrQNSrCOMEqxhUqwizBKizBKsIawSoawSrQNSA7yDw7yTwq9jUq9jUq9jUq9jUq9jUq
-9jUqwjgq8TUq9jUgO9Q8NcI4Nf39-f393Tg1-e0gO9Q8NcI4Nf39-f39-f3PIDvUPDXCODXNLME1
-LDXEGsE1GsE1-f3LOME1xBXBNcIswTUsNSw1whrBNRrBNdQ4wTXFFTXELME1LDXEGsE1GsE1-f39
-wiA71Dw1wjg1zSw1LDUsNcYaNRo1GjX9-co4NckVNcIsNSw1LDUsNcIaNRo1GjXWODXAODXEFTXE
-LDUsNSw1xho1GjUaNf39-cIgO9Q8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXK
-HDXPMjXMIDXIEDXKHDXKODXHFcE1wiw1LDUswTXCGjUaNRrBNcccNco4NcA4NcQVNRU1wiw1LDUs
-wTXCGsE1GjUaNcccNc8yNcwgNcgQNcocNc8yNcwgNcgQNcocNc8yNcwgNcgQNcocNcf_1tfaO8E8
-O8I8wDvAPMA7PME7wjw1wjg1zSw1LDUsNSw1who1wRo1GjX9-co4NckVNcIsNSw1wSw1who1GjXB
-GjXUODXAODXEFcE1wiw1LDUsNSw1who1wRo1GjX9-f3CIDvBPDvBPDs8Ozw7PDs8Ozw7wjw1wjg1
-zSzBNSzBNcIawTUawTX9-cs4wTXEFcE1wizBNcEsNcIawTUawTXUOME1xxU1wizBNSzBNcIawTUa
-wTX9-f3CIDvBPDvBPDs8Ozw7PDs8wTvCPDXCODX9-f39-f39zyA7wTw7wTw7PDs8Ozw7PDvEPDXC
-ODX9-f39-f39zyA7wTzBOzzAO8A8wDvAPDvEPDX9-f39-f391CA71Dw1wjjBNcQVNcQswTUsNcQa
-wTUawTX90DjBNcQVNcQswTUsNSw1whrBNRrBNf3QOME1xBXBNcIswTUsNcQawTUawTX9zzjBNcUV
-NcQswTUsNcQawTUawTX9zCA71Dw1wTg1xxU1xCw1LDUsNcYaNRo1GjX9zzg1xxU1xCw1LDUsNSw1
-xBo1GjUaNf3PODXAODU4wDXDFTXCLDUsNSw1xho1GjUaNf3PODXAODU4wDXBFTXELDUsNSw1xho1
-GjUaNf3MIDvUPDXBODU4wDXEFTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXK
-ODXHFTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXKOMI1OMA1wRXBNcIsNSw1LME1
-whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXKODXAODU4wDXBFTUVNcIsNSw1LME1whrBNRo1GjXHHDXP
-MjXMIDXIEDXKHDXH-tbX2jvUPDXBODXAODXEFcE1wiw1LDUsNSw1who1wRo1GjX9zzg1xxXBNcIs
-NSw1wSw1who1wRo1GjX9zzg1wDg1xhU1wiw1LDUsNSw1who1wRo1GjX9zzg1wDg1xBXBNcIsNSw1
-LDUsNcIaNcEaNRo1-cwgO9Q8NcI4wTXGFTXCLME1LME1whrBNRrBNf3QOME1xhU1wizBNcEsNcIa
-wTUawTX9zzg1wDg1xBXBNcIswTUswTXCGsE1GsE1-c84wTXHFTXCLME1LME1whrBNRrBNf3MIDvC
-IMM7xCDBO8I8Nf39-f39-f3UIDvCIDzBIDvDIMA8IMA7wTw1wjg1-f39-f3dODX97SA7wiA8IME7
-wiDAPMEgwDvAPDXCODX9-f39-d04Nf3tIDvAIME8IME7wiA8wyA7wDw1wjg1zSzBNSw1xBrBNRrB
-Nf39yzjBNcQVNcQswTUsNSw1whrBNRrBNdQ4wjXEFcE1wizBNSw1xBrBNRrBNf3QODXNLME1LDXE
-GsE1GsE1-cwgO8AgPMMgO8IgwTwgwTvAPDXCODXNLDUsNSw1xho1GjUaNf39yjg1xxU1xCw1LDUs
-NSw1who1GjUaNdY4NckVNcIsNSw1LDXGGjUaNRo1-dA4Nc0sNSw1LDXGGjUaNRo1-cwgO8AgwDzB
-IMA7wiDBPCA7wjw1wjg1zSw1LDUswTXCGsE1GjUaNcccNc8yNcz_XJViNcgQNcocNc8yNcwgNcgQ
-NcocNco4NccVNRU1wiw1LDUswTXCGjUaNRrBNcccNco4wTXFFcE1wiw1LDUswTXCGsE1GjUaNccc
-Nc8yNcwgNcgQNcocNcs4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXH-tbX2jvBIMA8
-IMA7wyA8wSA7wjw1wjg1zSw1LDUsNSw1who1wRo1GjX9-co4NccVwTXCLDUsNcEsNcIaNRo1wRo1
-1Dg1yRU1wiw1LDUsNSw1who1wRo1GjX90Dg1zSw1LDUsNSw1who1wRo1GjX9zCA7wiDBO8QgwzvC
-PDXCODXNLME1LME1whrBNRrBNf39yzjBNcYVNcIswTXBLDXCGsE1GsE11Dg1xxXBNcIswTUswTXC
-GsE1GsE1-dA4Nc0swTUswTXCGsE1GsE1-cwgO9Q8NcI4Nf39-f393Tg1-e0gO9Q8PfY1PfY1PfY1
-PfY1PfY1PfY1PfY1PfY1IDvUPD32NT32NT32NT32NT32NT32NT32NT32NSA7xSDFO8Y8PcE4wj3E
-FT3ELME9LD3EGsE9GsE90DU9wjjBPcQVPcQswT0swT3CGsE9GsE90DU9wjjBPcQVwT3CLME9LD0s
-PcIawT0awT3QNT32NT3COME9xBXBPcIswT0sPcQawT0awT3QNT3COME9xBU9xCzBPSzBPcIawT0a
-wT3QNT3BOMI9xBU9xCzBPSw9xBrBPRrBPdA1PcI4wT3EFT3ELME9LMA9wxrBPRrBPdA1IDvFIDzD
-IDvGPD3BOD3HFT3ELD0sPSw9xho9Gj0aPdA1PcE4PccVPcQsPSw9LD3GGj0aPRo90DU9wTg9yRU9
-wiw9LD0sPSw9xBo9Gj0aPdA1PfY1PcE4PckVPcIsPSw9LD3GGj0aPRo90DU9wTg9wDg9OMA9wRU9
-xCw9LD3BLD3EGj0aPRo90DU9wTg9xxU9xCw9LD0sPcYaPRo9Gj3QNT3BOD3HFT3ELD0sPcAsPcUa
-PRo9Gj3QNSA7xSA8wyA7xjw9wTjBPcUVPRU9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcE4PccVPRU9
-wiw9LD0swT3CGsE9Gj0aPcccPcY1PcE4PccVwT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9xjI9zP5c
-lWI9yBA9yhw9xjU9wTg9OMA9xBXBPcIsPSw9LME9whrBPRo9Gj3HHD3GNT3BOMI9OMA9wRU9FT3C
-LD0sPcEsPcIawT0aPRo9xxw9xjU9wTjBPcUVPRU9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcE4PccV
-PRU9wiw9LD3ALD3DGsE9Gj0aPcccPcY1-tbX2jvFIDzDIDvGPD3BOD3HFcE9wiw9LD0sPSw9who9
-wRo9Gj3QNT3BOD3HFcE9wiw9LD3BLD3CGj3BGj0aPdA1PcE4PckVPcIsPSw9wSw9who9wRo9Gj3Q
-NT32NT3BOD3AOD3GFT3CLD0sPSw9LD3CGj3BGj0aPdA1PcE4PcA4PcQVwT3CLD0sPcEsPcIaPcEa
-PRo90DU9wTg9xxXBPcIsPSw9LD0sPcIaPcEaPRo90DU9wTg9xxXBPcIsPSw9wCw9wxo9wRo9Gj3Q
-NSA7xSA8wyA7xjw9wTg9yRU9wizBPSzBPcIawT0awT3QNT3COME9xhU9wizBPSzBPcIawT0awT3Q
-NT3COME9xBXBPcIswT3BLD3CGsE9GsE90DU99jU9wjjBPcQVwT3CLME9LME9whrBPRrBPdA1PcE4
-PcA4PcYVPcIswT3BLD3CGsE9GsE90DU9wTg9yRU9wizBPSzBPcIawT0awT3QNT3COME9xhU9wizB
-PSzBPcIawT0awT3QNSA7xSA8wyA7xjw99jU99jU99jU99jU99jU99jU99jU99jUgO8UgxTvGPDXC
-ODX9-f39-d04Nf3tIDvUPDXCODX9-f39-d04Nf3tIDvUPDXCODXNLME1LDXEGsE1GsE1-f3LOME1
-xBXBNcIswTUsNSw1whrBNRrBNdQ4wTXFFTXELME1LDXEGsE1GsE1-dA4Nc0swTUsNcQawTUawTX9
-zCA71Dw1wjg1zSw1LDUsNcYaNRo1GjX9-co4NckVNcIsNSw1LDUsNcIaNRo1GjXWODXAODXEFTXE
-LDUsNSw1xho1GjUaNf3QODXNLDUsNSw1xho1GjUaNf3MIDvUPDXCODXNLDUsNSzBNcIawTUaNRo1
-xxw1zzI1zP5clWI1yBA1yhw1zzI1zCA1yBA1yhw1yjg1xxXBNcIsNSw1LME1who1GjUawTXHHDXK
-ODXAODXEFTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXLODXNLDUsNSzBNcIawTUa
-NRo1xxw1zzI1zCA1yBA1yhw1x-7W19o7wDzQO8A8NcI4Nc0sNSw1LDUsNcIaNcEaNRo1-f3KODXJ
-FTXCLDUsNcEsNcIaNRo1wRo11Dg1wDg1xBXBNcIsNSw1LDUsNcIaNcEaNRo1-dA4Nc0sNSw1LDUs
-NcIaNcEaNRo1-cwgO8Ag0DvAPDXCODXNLME1LME1whrBNRrBNf39yzjBNcQVwTXCLME1wSw1whrB
-NRrBNdQ4wTXHFTXCLME1LME1whrBNRrBNf3QODXNLME1LME1whrBNRrBNf3MIDvUPDXCODX9-f39
--d04Nf3tIDvUPDXCODX9-f39-d04Nf3tIDvUPDX9-f39-f391CA71Dw1wTjBNcUVNcQswTUsNcQa
-wTUawTX90DjBNcQVNcQswTUsNSw1whrBNRrBNf3QOME1xBXBNcIswTUsNcQawTUawTXVOME1xBXB
-NcIswTUswTXCGsE1GsE11TjBNcQVwTXCLME1LDXEGsE1GsE1-cwgO8M8wTvAPMA7PDs8O8Q8NcE4
-NcA4NTjANcEVNcQsNSw1LDXGGjUaNRo1-c84NccVNcQsNSw1LDUsNcQaNRo1GjX9zzg1wDg1OMA1
-wxU1wiw1LDUsNcYaNRo1GjXUODXHFTXELDUsNcEsNcQaNRo1GjXUODXAODU4wDXDFTXCLDUsNSw1
-xho1GjUaNf3MIDvDPDs8Ozw7PDs8Ozw7xDw1wTg1wDg1OMA1wRU1FTXCLDUsNSzBNcIawTUaNRo1
-xxw1zzI1zP5clWI1yBA1yhw1yjg1xxU1FTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1
-yjjCNTjANcEVwTXCLDUsNSzBNcIawTUaNRo1xxw1yjg1xxXBNcIsNSw1wSw1whrBNRo1GjXHHDXK
-OMI1OMA1wRXBNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXH-tbX2jvDPMA7wDw7PDs8
-Ozw7xDw1wTg1wDg1xBXBNcIsNSw1LDUsNcIaNcEaNRo1-c84NccVwTXCLDUsNcEsNcIaNcEaNRo1
--c84NcA4NcYVNcIsNSw1LDUsNcIaNcEaNRo11Dg1yRU1wiw1LDXBLDXCGjXBGjUaNdQ4NcA4NcYV
-NcIsNSw1LDUsNcIaNcEaNRo1-cwgO8M8Ozw7PDs8OzzBO8Q8NcE4wTXHFTXCLME1LME1whrBNRrB
-Nf3QOME1xhU1wizBNcEsNcIawTUawTX9zzg1wDg1xBXBNcIswTUswTXCGsE1GsE11TjBNcQVwTXC
-LME1wSw1whrBNRrBNdQ4NcA4NcQVwTXCLME1LME1whrBNRrBNf3MIDvDPDs8OzzAO8A8wTvEPDX9
--f39-f391CA71Dw1wjg1-f39-f3dODX97SA71Dw1wjg1-f39-f3dODX97SA71Dw1wjg1zSzBNSw1
-xBrBNRrBNdU4wTXEFTXELME1LME1whrBNRrBNf3QOME1xBU1xCzBNSw1LDXCGsE1GsE11DjCNcQV
-wTXCLME1LDXEGsE1GsE1-dA4Nc0swTUsNcQawTUawTX9zCA71Dw1wjg1zSw1LDUsNcYaNRo1GjXU
-ODXHFTXELDUsNSw1xho1GjUaNf3PODXHFTXELDUsNSw1LDXCGjUaNRo11jg1yRU1wiw1LDUsNcYa
-NRo1GjX90Dg1zSw1LDUsNcYaNRo1GjX9zCA7xS7BOy7BO8Y8NcI4Nc0sNSw1LME1whrBNRo1GjXH
-HDXKODXHFTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXKODXHFTUVNcIsNSw1
-LME1who1GjUawTXHHDXKOME1xRXBNcIsNSw1LME1whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXLODXN
-LDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1x-7W19o7xS47LjsuOy47xjw1wjg1zSw1LDUs
-NSw1who1wRo1GjXUODXHFcE1wiw1LDXBLDXCGjXBGjUaNf3PODXHFcE1wiw1LDXBLDXCGjUaNcEa
-NdQ4NckVNcIsNSw1LDUsNcIaNcEaNRo1-dA4Nc0sNSw1LDUsNcIaNcEaNRo1-cwgO8UuOy47Ljsu
-O8Y8NcI4Nc0swTUswTXCGsE1GsE11TjBNcYVNcIswTUswTXCGsE1GsE1-dA4wTXGFTXCLME1wSw1
-whrBNRrBNdQ4NccVwTXCLME1LME1whrBNRrBNf3QODXNLME1LME1whrBNRrBNf3MIDvFLjsuOy47
-LjvGPDXCODX9-f39-d04Nf3tIDvFLsE7LsE7xjw99jU99jU99jU99jU99jU99jU99jU99jUgO9Q8
-PfY1PfY1PfY1PfY1PfY1PfY1PfY1PfY1IDvUPD3BOMI9xBU9xCzBPSw9xBrBPRrBPdA1PfY1PcE4
-wT3FFcE9wizBPSw9LD3CGsE9GsE90DU99jU9wjjBPcQVwT3CLME9LD3EGsE9GsE90DU99jU99jU9
-wjjBPcQVPcQswT0swD3DGsE9GsE90DUgO9Q8PcE4PccVPcQsPSw9LD3GGj0aPRo90DU99jU9wTg9
-wDg9OMA9wxU9wiw9LD0sPSw9xBo9Gj0aPdA1PfY1PcE4PckVPcIsPSw9LD3GGj0aPRo90DU99jU9
-9jU9wTg9xxU9xCw9LD3ALD3FGj0aPRo90DUgO9Q8PcE4wT3FFT0VPcIsPSw9LME9whrBPRo9Gj3H
-HD3GNT3GMj3M-lyVYj3IED3KHD3GNT3BOD3AOD04wD3BFcE9wiw9LD0swT3CGsE9Gj0aPcccPcY1
-PcYyPcwgPcgQPcocPcY1PcE4PTjAPcQVwT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9xjI9zCA9yBA9
-yhw9xjU9xjI9zCA9yBA9yhw9xjU9wTg9xxU9FT3CLD0sPcAsPcMawT0aPRo9xxw9xjX_1tfaO8gg
-wzvFPD3BOD3HFcE9wiw9LD0sPSw9who9wRo9Gj3QNT32NT3BOD3AOD3GFT3CLD0sPcEsPcIaPcEa
-PRo90DU99jU9wTg9wDg9xhU9wiw9LD0sPSw9who9wRo9Gj3QNT32NT32NT3BOD3HFcE9wiw9LD3A
-LD3DGj3BGj0aPdA1IDvHIMA8wSDAO8Q8PcE4PckVPcIswT0swT3CGsE9GsE90DU99jU9wTjBPcUV
-wT3CLME9wSw9whrBPRrBPdA1PfY1PcI4wT3EFcE9wizBPSzBPcIawT0awT3QNT32NT32NT3COME9
-xhU9wizBPSzBPcIawT0awT3QNSA7xiDAPCDBPCDAO8M8PfY1PfY1PfY1PfY1PfY1PfY1PfY1PfY1
-IDvGIDwgwzwgO8M8NcI4Nf39-f39-f3PIDvGIDwgwzwgO8M8NcI4Nf39-f39-f3PIDvGIDwgwzwg
-O8M8NcI4Nc0swTUsNcQawTUawTX9-co4wTXFFcE1wizBNSw1LDXCGsE1GsE11DjBNcUVNcQswTUs
-NcQawTUawTX9-f3CIDvFIME8IME8IMA7wzw1wjg1zSw1LDUsNcYaNRo1GjX9-co4NcA4NTjANcMV
-NcIsNSw1LDUsNcIaNRo1GjXWODXAODXEFTXELDUsNSw1xho1GjUaNf39-cIgO8QgwDzAIDzBIMA7
-xDw1wjg1zSw1LDUswTXCGsE1GjUaNcccNc8yNcz_XJViNcgQNcocNc8yNcwgNcgQNcocNco4NcA4
-NTjANcEVwTXCLDUsNSzBNcIaNRo1GsE1xxw1yjg1wDg1xBU1FTXCLDUsNSzBNcIawTUaNRo1xxw1
-zzI1zCA1yBA1yhw1zzI1zCA1yBA1yhw1zzI1zCA1yBA1yhw1x-7W19o7wyDAPMEgwzvFPDXCODXN
-LDUsNSw1LDXCGjXBGjUaNf39yjg1wDg1xhU1wiw1LDXBLDXCGjUaNcEaNdQ4NcA4NcQVwTXCLDUs
-NSw1LDXCGjXBGjUaNf39-cIgO8MgPMEgwDvJPDXCODXNLME1LME1whrBNRrBNf39yjjBNcUVwTXC
-LME1wSw1whrBNRrBNdQ4wTXHFTXCLME1LME1whrBNRrBNf39-cIgO8MgwDwgwDvKPDXCODX9-f39
--f39zyA7xCDBO8s8NcI4Nf39-f39-f3PIDvUPDX9-f39-f391CA71Dw1wTjBNcUVNcQswTUsNcQa
-wTUawTX9zzjBNcUVNcQswTUsNSw1whrBNRrBNf3QOME1xBXBNcIswTUsNcQawTUawTX9zzjBNcUV
-NcQswTUsNcQawTUawTX9zCA71Dw1wTg1wDg1OMA1wRU1xCw1LDUsNcYaNRo1GjX9zzg1wDg1OMA1
-wRU1xCw1LDUsNSw1xBo1GjUaNf3PODXAODU4wDXDFTXCLDUsNSw1xho1GjUaNf3PODXAODU4wDXB
-FTXELDUsNSw1xho1GjUaNf3MIDvB-nVOl83_wsPHwjw1wTg1wDg1OMA1wRU1FTXCLDUsNSzBNcIa
-wTUaNRo1xxw1zzI1zP5clWI1yBA1yhw1yjg1wDg1OMA1wRU1FTXCLDUsNSzBNcIawTUaNRo1xxw1
-zzI1zCA1yBA1yhw1yjjCNTjANcEVwTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1yjg1
-wDg1OMA1wRU1FTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1x-7W19o7wP51TpfP-sLD
-x8E8NcE4NcA4NcQVwTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXEFcE1wiw1LDXBLDXCGjXBGjUa
-Nf3PODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXEFcE1wiw1LDUsNSw1who1wRo1GjX9
-zCA7wP51TpfP-sLDx8E8NcE4wTXHFTXCLME1LME1whrBNRrBNf3POME1xxU1wizBNcEsNcIawTUa
-wTX9zzg1wDg1xBXBNcIswTUswTXCGsE1GsE1-c84wTXHFTXCLME1LME1whrBNRrBNf3MIDvA-nVO
-l8-_wsPHwTw1-f39-f39-dQgO8D_dU6Xz-7Cw8fBPDXCODX9-f39-d04Nf3tIDvA-nVOl8U-wTvF
--sLDx8E8NcI4Nf39-f393Tg1-e0gO8D_dU6XxD-DO8T_wsPHwTw1wjg1zSzBNSw1xBrBNRrBNf39
-yjjBNcUVNcQswTUsNSw1whrBNRrBNdQ4wjXEFcE1wizBNSw1xBrBNRrBNf3QODXNLME1LDXEGsE1
-GsE1-cwgO8D_dU6XxD-DO8T_wsPHwTw1wjg1zSw1LDUsNcYaNRo1GjX9-co4NcA4NTjANcEVNcQs
-NSw1LDUsNcIaNRo1GjXWODXJFTXCLDUsNSw1xho1GjUaNf3QODXNLDUsNSw1xho1GjUaNf3MIDvA
--nVOl8Q-wzvE-sLDx8E8NcI4Nc0sNSw1LME1whrBNRo1GjXHHDXPMjXM-lyVYjXIEDXKHDXPMjXM
-IDXIEDXKHDXKODXAODU4wDXBFTUVNcIsNSw1LME1who1GjUawTXHHDXKOME1xRXBNcIsNSw1LME1
-whrBNRo1GjXHHDXPMjXMIDXIEDXKHDXLODXNLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1yhw1
-x-7W19o7wP51TpfFP8E7xf7Cw8fBPDXCODXNLDUsNSw1LDXCGjXBGjUaNf39yjg1wDg1xBXBNcIs
-NSw1wSw1who1GjXBGjXUODXJFTXCLDUsNSw1LDXCGjXBGjUaNf3QODXNLDUsNSw1LDXCGjXBGjUa
-Nf3MIDvA-nVOl8-_wsPHwTw1wjg1zSzBNSzBNcIawTUawTX9-co4wTXHFTXCLME1wSw1whrBNRrB
-NdQ4NccVwTXCLME1LME1whrBNRrBNf3QODXNLME1LME1whrBNRrBNf3MIDvA-nVOl8-_wsPHwTw1
-wjg1-f39-f3dODX97SA7wP51TpfP-sLDx8E8PfY1PfY1PfY1PfY1PfY1PfY1PfY1PfY1IDvA-nVO
-l8-_wsPHwTw99jU99jU99jU99jU99jU99jU99jU99jUgO8H_dU6Xzf7Cw8fCPD3COME9xBXBPcIs
-wT0sPcQawT0awT3QNT3COME9xBXBPcIswT0swT3CGsE9GsE90DU9wTjBPcUVwT3CLME9LD0sPcIa
-wT0awT3QNT32NT3COME9xBXBPcIswT0sPcQawT0awT3QNT32NT32NT3COME9xBU9xCzBPSzAPcMa
-wT0awT3QNSA71Dw9wTg9wDg9OMA9wxU9wiw9LD0sPcYaPRo9Gj3QNT3BOD3JFT3CLD0sPSw9xho9
-Gj0aPdA1PcE4PcA4PTjAPcMVPcIsPSw9LD0sPcQaPRo9Gj3QNT32NT3BOD3JFT3CLD0sPSw9xho9
-Gj0aPdA1PfY1PfY1PcE4PccVPcQsPSw9wCw9xRo9Gj0aPdA1IDvUPD3BOMI9OMA9wRXBPcIsPSw9
-LME9whrBPRo9Gj3HHD3GNT3BOD04wD3EFcE9wiw9LD0swT3CGsE9Gj0aPcccPcY1PcE4PcA4PTjA
-PcEVwT3CLD0sPSzBPcIawT0aPRo9xxw9xjU9xjI9zP5clWI9yBA9yhw9xjU9wTg9OMA9xBXBPcIs
-PSw9LME9whrBPRo9Gj3HHD3GNT3GMj3MID3IED3KHD3GNT3GMj3MID3IED3KHD3GNT3BOD3HFT0V
-PcIsPSw9wCw9wxrBPRo9Gj3HHD3GNf7W19o7wf51TpfN-sLDx8I8PcE4PcA4PcYVPcIsPSw9LD0s
-PcIaPcEaPRo90DU9wTg9wDg9xhU9wiw9LD3BLD3CGj3BGj0aPdA1PcE4PcA4PcYVPcIsPSw9wSw9
-who9wRo9Gj3QNT32NT3BOD3AOD3GFT3CLD0sPSw9LD3CGj3BGj0aPdA1PfY1PfY1PcE4PccVwT3C
-LD0sPcAsPcMaPcEaPRo90DUgO8D_dU6Xz-7Cw8fBPD3BOD3AOD3EFcE9wizBPSzBPcIawT0awT3Q
-NT3COME9xBXBPcIswT0swT3CGsE9GsE90DU9wTjBPcUVwT3CLME9wSw9whrBPRrBPdA1PfY1PcI4
-wT3EFcE9wizBPSzBPcIawT0awT3QNT32NT32NT3COME9xhU9wizBPSzBPcIawT0awT3QNSA7wP51
-TpfP-sLDx8E8PfY1PfY1PfY1PfY1PfY1PfY1PfY1PfY1IDvA-nVOl8-_wsPHwTw1wjg1-f39-f39
--c8gO8D_dU6XxT87x-7Cw8fBPDXCODX9-f39-f39zyA7wP51TpfFP8A7xv7Cw8fBPDXCODXNLME1
-LDXEGsE1GsE1-f3KOME1xRXBNcIswTUsNSw1whrBNRrBNdQ4wTXFFTXELME1LDXEGsE1GsE1-f39
-wiA7wP51TpfFP8E7xf7Cw8fBPDXCODXNLDUsNSw1xho1GjUaNf39yjg1wDg1OMA1wxU1wiw1LDUs
-NSw1who1GjUaNdY4NcA4NcQVNcQsNSw1LDXGGjUaNRo1-f39wiA7wP51TpfFP8I7xP7Cw8fBPDXC
-ODXNLDUsNSzBNcIawTUaNRo1xxw1zzI1zP5clWI1yBA1yhw1zzI1zCA1yBA1yhw1yjg1wDg1OMA1
-wRXBNcIsNSw1LME1who1GjUawTXHHDXKODXAODXEFTUVNcIsNSw1LME1whrBNRo1GjXHHDXPMjXM
-IDXIEDXKHDXPMjXMIDXIEDXKHDXPMjXMIDXIEDXKHDXH-tbX2jvA-nVOl8U-wTvF-sLDx8E8NcI4
-Nc0sNSw1LDUsNcIaNcEaNRo1-f3KODXAODXGFTXCLDUsNcEsNcIaNRo1wRo11Dg1wDg1xBXBNcIs
-NSw1LDUsNcIaNcEaNRo1-f39wiA7wP51TpfFP8A7xv7Cw8fBPDXCODXNLME1LME1whrBNRrBNf39
-yjjBNcUVwTXCLME1wSw1whrBNRrBNdQ4wTXHFTXCLME1LME1whrBNRrBNf39-cIgO8D_dU6XxT87
-x-7Cw8fBPDXCODX9-f39-f39zyA7wP51TpfP-sLDx8E8NcI4Nf39-f39-f3PIDvA-nVOl8-_wsPH
-wTw1-f39-f39-dQgO8D_dU6Xz-7Cw8fBPDXCOME1xBU1xCzBNSw1xBrBNRrBNf3POME1xRU1xCzB
-NSw1LDXCGsE1GsE1-dA4wTXEFcE1wizBNSw1xBrBNRrBNf3QOME1xBU1xCzBNSw1xBrBNRrBNdU4
-wTXEFTXELME1LMA1wxrBNRrBNdEgO8H_dU6Xzf7Cw8fCPDXBODXHFTXELDUsNSw1xho1GjUaNf3P
-ODXAODU4wDXBFTXELDUsNSw1LDXEGjUaNRo1-c84NcA4NTjANcMVNcIsNSw1LDXGGjUaNRo1-c84
-NccVNcQsNSw1LDXGGjUaNRo11Dg1xxU1xCw1LDXALDXFGjUaNRo10SA71Dw1wTg1xxU1FTXCLDUs
-NSzBNcIawTUaNRo1xxw1zzI1zP5clWI1yBA1yhw1yjg1wDg1OMA1wRU1FTXCLDUsNSzBNcIawTUa
-NRo1xxw1zzI1zCA1yBA1yhw1yjjCNTjANcEVwTXCLDUsNSzBNcIawTUaNRo1xxw1zzI1zCA1yBA1
-yhw1yjg1xxU1FTXCLDUsNSzBNcIawTUaNRo1xxw1yjg1xxU1FTXCLDUsNcAsNcMawTUaNRo1xxw1
-xzzWNcE4NccVwTXCLDUsNSw1LDXCGjXBGjUaNf3PODXAODXEFcE1wiw1LDXBLDXCGjXBGjUaNf3P
-ODXAODXGFTXCLDUsNSw1LDXCGjXBGjUaNf3PODXHFcE1wiw1LDUsNSw1who1wRo1GjXUODXHFcE1
-wiw1LDXALDXDGjXBGjUaNdEAAAAAAAAAAQ==
+yz8SzD8SzD-AEs4--qKIec4--f39-c4SwT-AEsE-yhLBP8gSP8gSxj-HEj8SP9n_wwBMP83_ooh5
+xT-GEsU-x-7DAEzLPxLMPxLLPxLQP-6iiHnOP-39-f3AEsE-wBLBP8QSwT-AEsE-xRLCPxLBP8gS
+wD-HEsY-yBI-yBLGP8j_wwBMwD-Q-qKIeT8SP9b_wwBMyj-CEsA-wBLBP8ESP8ISxD-BEsA-EsE-
+EsA-Esk--qKIec4--f39-cASwD-CEsA-xBLBP8ASwT-FEsI-EsE-yBI-Ej-GEsY-xBLHP8QSwj-B
+Ej-I-sMATD8SP8v_ooh5wT8SwT-GEsU-x-7DAEzLPxLBPxLAPxI-EsM-EsU-EsI-whI-EsA-Esk-
+-qKIecY-EsU--f39-cASwD-CEsA-xBLGP8USwj-MEj8SP8YSxj-EEsA-wxLAP8QSwj-BEj-I-sMA
+TD8SP8v_ooh5PxI-2v7DAEzLPxLBP8ISwD-AEsE-EsY-wBLBPxLCP8ASyj-_ooh5xT-BEsQ--f39
+-cASwD-CEsA-xBI-EsI-Ej-FEsU-xxLBP9YSwD-DEsA-xBI-wRLCP8b_wwBMwT-N-qKIecU-xhLF
+P8f_wwBMyz8SwT8SxT8SwD8SyD8SwD8SwT8SwD8SyT-_ooh5xj8SxT-9-f39wBLAP8ISwD-EEj8S
+wj8SP8USxT-GEsI-yBLGP8QSwD-DEsA-xBI-wRLCP8X_wwBMwj-O-qKIecQ-1v7DAEzMP8ASwD-B
+Ej-BEsI-wBLAPxLAP8ESwT8SwT8SwD8SyT-_ooh5zj-9-f39wBLBP8ASwT-EEsY-xRLFP8cSwD-J
+EsA-whLAP8QSxz-EEsY-xv7DAEzAP_0S_z-_ooh5zj-9-f39-f3c-sMATPs--qKIec4--f39-f32
+-tbX2tX_n6Cm-nZ3ff39-f39-f3UIIyJ1DwV-f39-f39-dQgO9Q8FdX_QEBEwRURwRURwRXsEcEV
+EcEVEcAV7RHBFRHBFRHBFewRwRURwRURwRXsEcEVEcEVERURFf398zzAFcA8wRU8wRU8FTwVwCA7
+1DwV1REVERURFREVERURFewRFREVERURFcARFe0RFREVERURFcERFewRFREVERURFcERFewRFREV
+ERURFREVERXxERX2ERX2ERXKPBXAPBXBPBU8FcE8FcAgO9Q8FdURFREVERURFREVERXsERURFREV
+ERXAERXtERURFREVERURwRXsERURFREVERXAEcAV7BEVERURFREVEcEV8BHBFfQRwRX0EcEVyTwV
+wDzBFTzBFcA8FcEgO8g-wTvHPBXVERURFREVERURFREV7BEVERURFREVwBEV7REVERURFREVERXu
+ERURFREVERXBERXsERURFREVERXBERXxERX2ERX2ERXKPBXCPBU8FTwVPBXCIDvIP-4eNzw-wDvG
+PBXVEcEVEcEVEcEV7BHBFRHBFRHBFewRwRURwRURwRXsEcEVEcEVEcEV7BHBFRHBFcERFf398zzB
+FTzBFTzBFTwVPBXAIDvIPwbAP8A7xTwV-f39-f39-dQgO8g-BsE-wDvEPBX9-f39-f391CA7yD8G
+PwbAPzvEPP4AAAD9-f39-f391CA7yD8GP8AGPzvEPDX_iiTK0P5MYXTkNSr2NSr2NSr2NSr2Nf39
+7SA7yD8GP8AGPzvEPDUN0CrkNSr2NSr2NSr2NSr2Nf397SA7yD8GPwY-wDvEPDUNwv738KLBDcT_
+8aptDcIqwP6T6JrBKizAKsP_jtzZwCrBGsAq0DUqwjjBKsQVKsQswSoswSrCGsEqGioaKtA1KsI4
+wSrEFcEqwizBKizBKsIawCrBGsAq0DUq9jUq9jX9-e0gO8U-wgY-wTvFPDUNwTgNxxUNwirALCos
+KsAsKsQaKsAaKtI1KsE4KscVKsQsKiwqwSwqwhoqGioaKhoq0DUqwTgqyRUqwiwqLCosKiwqwxoq
+wBoq0jUq9jUq9jX9-e0gO8Q-wAbCPzvHPDUNwTgNxxUNFQ3AKsAsKiwqwCwqxBoqwBoqyf6Uc7Qq
+xjUqwTgqOMAqxBUqFSrCLCosKsAswCrCGioaKhrBKsccKsY1KsE4KscVwSrCLCosKiwqLCrDGirA
+GirJHCrGNSrH-rGtbyrL-lyVYirI-jyVkirKHCrGNSrHMirLICrIECrKHCrGNf397f7W19o7xD8G
+wz87xzw1DcE4DccVwQ3AKsAsKiwqwCwqxBoqwBoq0jUqwTgqwDgqxBXBKsIsKiwqwSwqwhoqGirB
+GirQNSrBOCrHFSrELCosKiwqLCrDGirAGirSNSr2NSr2Nf397SA7xD8Gwz87xzw1DcI4wQ3GFQ3A
+KsAswSoswSrCGsEqwBrAKtA1KsI4wSrGFSrCLMEqLMEqwhrBKsEaKtA1KsI4wSrEFcEqwizBKizB
+KsIawSrAGsAq0DUq9jUq9jX9-e0gO8Q-wAbBP8A7xzw1DdAq5DUq9jUq9jUq9jUq9jX9-e0gO8U-
+wzvIPDX99zg1-f39-f3YIDvUPDX99zg1-f39-f3YIDvUPDX99zg12BrBNcAawDX9-f399SA71Dw1
+-fc4NdoaNRo1-f39-fcgO9Q8NcgyNcv_XJViNcgQNcocNdAyNcsgNcgQNcocNcs4NdAgNcYawDUa
+NckcNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o71Dw1-fc4NdoaNRo1-f39-fcgO8Mg
+wjvLPDX99zg12BrBNcAawDX9-f399SA7wiDAPMAgwDvKPDX99zg1-f39-f3YIDvCIDwgwDwgO8o8
+Nf39-f39-f3UIDvBIMA8IMA8IMA7yTw1-f39-f39-dQgO8EgPCDCPCA7yTw1-DjBNcQVNc8awDXB
+GsA11TjBNcQVwTXNGsE1wBrANf39-f31IDvAIMA8IMI8IMY7wjw1_zg1xxU1xizBNcUaNcAaNdY4
+NcI4wDXDFTXELME1xho1GjX9-f399yA7wCA8OyA7IDsgPCA7IDsgPCA7wjw1yDI1y-5clWI1yBA1
+yhw1yjg1OMA1xBU1FTXELME1xRo1wBo1yRw1yjg1OMA1OMA1wRXBNcQswTXEGsE1GjXJHDXQMjXL
+IDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_1tfaO8AgxjwgwjwgwDvCPDX7ODXAODXEFcE1xCzBNcUa
+NcAaNdY4NcA4NcQVNcYswTXEGjXBGjX9-f399yA7xyA8IMI8IDvDPDX8OME1xhU1zRrBNcAawDXV
+OME1xBXBNc0awTXAGsA1-f39-fUgO8cgwDwgwDwgwDvDPDX9-f39-f391CA7yCA8IMA8IDvEPDX9
+-f39-f391CA7yCDAPMAgwDvEPDX9-f39-f391CA7ySDCO8U8Nf39-f39-f3UIDvUPDX9-f39-f39
+1CA71Dw1yDI1y-5clWI1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1
+0DI1yyA1yBA1yhw1-f31-tbX2jvUPDX9-f39-f391CA71Dw1-f39-f39-dQgO8A80DvAPDX9-f39
+-f391CA7wCDQO8A8Nf4rOUb2NT32NT32NT32NT32Nf397SA71Dw1PfY1PfY1PfY1PfY1PfY1-f3t
+IDvUPDU9wjjBPcQVPc8awD3BGsA90DU9wjjBPcQVPc8awT0aPRo90DU9wjjBPcQVwT3NGsA9wRrA
+PdA1PfY1PfY1-f3tIDvUPDU9wTg9xxU9xizBPcUaPcAaPdI1PcE4PccVPcYswT3EGj0aPRo9Gj3Q
+NT3BOD3JFT3ELME9xRo9wBo90jU99jU99jX9-e0gO9Q8NT3BOD3HFT0VPcQswT3FGj3AGj3JHD3G
+NT3BOD04wD3EFT0VPcQswT3EGj0aPRrBPcccPcY1PcE4PccVwT3ELME9xRo9wBo9yRw9xjU9xzI9
+y-5clWI9yBA9yhw9xjU9xzI9yyA9yBA9yhw9xjX9-e3_1tfaO8P_X1dPwTvMPDU9wTg9xxXBPcQs
+wT3FGj3AGj3SNT3BOD3AOD3EFcE9xCzBPcQaPRo9wRo90DU9wTg9xxU9xizBPcUaPcAaPdI1PfY1
+PfY1-f3tIDvCLjvBLjvCLjsuO8Q8NT3COME9xhU9zRrBPcAawD3QNT3COME9xhU9zRrBPcEaPdA1
+PcI4wT3EFcE9zRrBPcAawD3QNT32NT32Nf397SA7wi47xi47LjvEPDU99jU99jU99jU99jU99jX9
+-e0gO8IuO8YuwTvEPDX9-f39-f391CA7wi47wS47xC47xDw1-f39-f39-dQgO8MuwTvFLjvEPDX9
+9jjCNcQVwTXNGsE1wBrANf39-f31IDvUPDX99jg1yRU1xCzBNcQaNRo1GjX9-f399yA71Dw1yDI1
+y-5clWI1yBA1yhw10DI1yyA1yBA1yhw1yjjBNcUVwTXELME1xBo1GjUaNckcNdAyNcsgNcgQNcoc
+NdAyNcsgNcgQNcocNf399f7W19o71Dw1-fY4NccVNcYswTXEGjUaNRo1-f39-fcgO9Q8Nf32ODXH
+FcE1zRrBNcAawDX9-f399SA71Dw1-f39-f39-dQgO8E8wTs8wDvBPMA7PME7wjw1-fc4Nf39-f39
+2CA7wjw7wDw7PDs8O8I8O8M8Nf33ODX9-f39-dggO8I8O8A8Ozw7PME7wDw7wzw1-DjBNcQVNc8a
+wDXBGsA11Tg1wTjBNcQVwTXJGsE1wBrANf39-f31IDvCPDvAPDs8O8E8O8A8O8M8Nfs4NccVNcYs
+wTXFGjXAGjXXODXAODXCOMA1wxU1yxo1GjX9-f399yA7wTzBOzw7PDs8wDvBPDvDPDXIMjXL-lyV
+YjXIEDXKHDXKODU4wDXEFTUVNcQswTXFGjXAGjXJHDXLODXAODU4wDU4wDXBFcE1wSA1xRrBNRo1
+yRw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1-f31-tbX2jvUPDX7ODXAODXEFcE1xCzBNcUaNcAa
+Ndc4NcA4NcA4NcQVNcsaNcEaNf39-f33IDvUPDX8OME1xhU1zRrBNcAawDXVODXBOME1xBXBNcka
+wTXAGsA1-f39-fUgO9Q8Nf33ODX9-f39-dggO8X_XJViwTsgwTvGPDX9-f39-f391P7W19o7xf5c
+lWI7IDsgOyA7xjw1-f39-f39-dT_1tfaO8X_XJViOyA7IDsgO8Y8Nf39-f39-f3U-tbX2jvF-lyV
+YjsgOyA7IDvGPDX9-f39-f391P7W19o7xf5clWLBOyDBO8Y8NcgyNcsgNcgQNcocNdAyNcsgNcgQ
+NcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o71Dw1-f39-f39
+-dQgO9Q8Nf39-f39-f3UIDvUPDX9-f39-f391CA71Dw1PfY1PfY1PfY1PfY1PfY1-f3tIDvUPDU9
+9jU99jU99jU99jU99jX9-e0gO8M8Ozw7wDzAOzw7xjw1PcI4wT3EFT3PGsA9wRrAPdA1PcI4wT3E
+FT3PGsE9Gj0aPdA1PcI4wT3EFcE9zRrAPcEawD3QNT32NT32Nf397SA7wzw7PDs8Ozw7PDvGPDU9
+wTg9xxU9xizBPcUaPcAaPdI1PcE4PccVPcYswT3EGj0aPRo9Gj3QNT3BOD3JFT3ELME9xRo9wBo9
+0jU99jU99jX9-e0gO8M8Ozw7PDs8Ozw7xjw1PcE4PccVPRU9xCzBPcUaPcAaPckcPcY1PcE4PTjA
+PcQVPRU9xCzBPcQaPRo9GsE9xxw9xjU9wTg9xxXBPcQswT3FGj3AGj3JHD3GNT3HMj3L-lyVYj3I
+ED3KHD3GNT3HMj3LID3IED3KHD3GNf397f7W19o7wzzBOzw7PDs8O8Y8NT3BOD3HFcE9xCzBPcUa
+PcAaPdI1PcE4PcA4PcQVwT3ELME9xBo9Gj3BGj3QNT3BOD3HFT3GLME9xRo9wBo90jU99jU99jX9
+-e0gO8Q8O8A8wDvAPME7xDw1PcI4wT3GFT3NGsE9wBrAPdA1PcI4wT3GFT3NGsE9wRo90DU9wjjB
+PcQVwT3NGsE9wBrAPdA1PfY1PfY1-f3tIDvUPDU99jU99jU99jU99jU99jX9-e0gO9Q8Nf33ODX9
+-f39-dggO9Q8Nf33ODX9-f39-dggO8UQwTsQwTvGPDX99zg12BrBNcAawDX9-f399SA7xxA7EDsQ
+O8Y8Nf33ODXaGjUaNf39-f33IDvFEME7EDsQO8Y8NcgyNcv_XJViNcgQNcocNdAyNcsgNcgQNcoc
+Ncs4NdAgNcYawDUaNckcNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o7xRA7wRA7EDvG
+PDX99zg12ho1GjX9-f399yA7xRDBOxDBO8Y8Nf33ODXYGsE1wBrANf39-f31IDvUPDX99zg1-f39
+-f3YIDvUPDX9-f39-f391CA71Dw1-f39-f39-dQgO9Q8Nfw4wTXEFTXPGsA1wRrANdU4wTXEFcE1
+zRrANcEawDX9-f399SA71Dw1_zg1xxU1xizBNcUaNcAaNdY4NcI4wDXDFTXELME1xRo1wBo1-f39
+-fcgO8E8wTs8Ozw7PME7PME7wjw1yDI1y-5clWI1yBA1yhw1yjg1OMA1xBU1FTXELME1xRo1wBo1
+yRw1yjg1OMA1OMA1wRXBNcQswTXFGjXAGjXJHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_
+1tfaO8I8O8A8Ozw7PME7PDs8O8I8Nfs4NcA4NcQVwTXELME1xRo1wBo11jg1wDg1xBU1xizBNcUa
+NcAaNf39-f33IDvCPDvAPDs8Ozw7PDs8wTvCPDX8OME1xhU1zRrBNcAawDXVOME1xBXBNc0awTXA
+GsA1-f39-fUgO8I8O8A8Ozw7PDs8Ozw7xDw1-f39-f39-dQgO8E8wDvBPMA7PDs8Ozw7xDw1-f39
+-f39-dQgO9Q8Nf39-f39-f3UIDvUPDX9-f39-f391CA71Dw1-f39-f39-dQgO8UuwTsuwDvHPDXI
+MjXL-lyVYjXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXI
+EDXKHDX9-fX_1tfaO8UuOy47wC47xzw1-f39-f39-dQgO8UuOy47wC47xzw1-f39-f39-dQgO8Uu
+Oy47wC47xzw1-f39-f39-dQgO8UuwTsuwTvGPDU99jU99jU99jU99jU99jX9-e0gO9Q8NT32NT32
+NT32NT32NT32Nf397SA71Dw1PcI4wT3EFT3PGsA9wRrAPdA1PcI4wT3EFT3PGsE9Gj0aPdA1PcI4
+wT3EFcE9zRrAPcEawD3QNT32NT32Nf397SA71Dw1PcE4PccVPcYswT3FGj3AGj3SNT3BOD3HFT3G
+LME9xBo9Gj0aPRo90DU9wTg9yRU9xCzBPcUaPcAaPdI1PfY1PfY1-f3tIDvUPDU9wTg9xxU9FT3E
+LME9xRo9wBo9yRw9xjU9wTg9OMA9xBU9FT3ELME9xBo9Gj0awT3HHD3GNT3BOD3HFcE9xCzBPcUa
+PcAaPckcPcY1PccyPcv_XJViPcgQPcocPcY1PccyPcsgPcgQPcocPcY1-f3t-tbX2jvAPNA7wDw1
+PcE4PccVwT3ELME9xRo9wBo90jU9wTg9wDg9xBXBPcQswT3EGj0aPcEaPdA1PcE4PccVPcYswT3F
+Gj3AGj3SNT32NT32Nf397SA7wCDQO8A8NT3COME9xhU9zRrBPcAawD3QNT3COME9xhU9zRrBPcEa
+PdA1PcI4wT3EFcE9zRrBPcAawD3QNT32NT32Nf397SA71Dw1PfY1PfY1PfY1PfY1PfY1-f3tIDvU
+PDX99zg1-f39-f3YIDvUPDX99zg1-f39-f3YIDvUPDX99zg12BrBNcAawDX9-f399SA7wTzBOzzB
+OzzBOzzBO8I8Nf33ODXaGjUaNf39-f33IDvBPDs8Ozw7PDvAPDvBPDvDPDXIMjXL-lyVYjXIEDXK
+HDXQMjXLIDXIEDXKHDXLODXQIDXGGsA1GjXJHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_
+1tfaO8E8wTs8wTvAPDvBPDvDPDX99zg12ho1GjX9-f399yA7wTw7wTw7PDvAPDvBPDvDPDX99zg1
+2BrBNcAawDX9-f399SA7wTw7wTw7PDvAPDvBPDvDPDX99zg1-f39-f3YIDvUPDX9-f39-f391CA7
+1Dw1-f39-f39-dQgO9Q8Nfw4wTXEFTXELME1LME1whrBNRo1GjXUOMI1xBXBNc0awTXAGsA1-f39
+-fUgO8UuwTsuwTvGPDX7ODXHFTXELDUsNcEsNcQaNRo1GjXUODXJFTXELME1xho1GjX9-f399yA7
+xS47LjsuOy47xjw1yDI1y-5clWI1yBA1yhw1yjg1OMA1xBU1FTXCLDUsNSzBNcIawTUawTXHHDXK
+OME1xRXBNcQswTXEGsE1GjXJHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_1tfaO8UuOy47
+LjsuO8Y8Nfs4NcA4NcQVwTXCLDUsNSw1xBo1wxo11Dg1xxU1xizBNcQaNcEaNf39-f33IDvFLjsu
+Oy47LjvGPDX8OME1xhU1wizBNSzBNcIawTXBGjXUODXHFcE1zRrBNcAawDX9-f399SA7xS7BOy7B
+O8Y8Nf39-f39-f3UIDvUPDX8ODX2ODX9-f39-dggO9Q8Nfw4NfY4Nf39-f392CA71Dw1-Dg19jg1
+-f39-f3YIDvUPDX8ODX2ODX9-f39-dggO8U8O8M8O8Y8NcgyNcv_XJViNcgQNcocNcs4NdAgNcgQ
+NcocNcs4NdAgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o7xDzAO8M8wDvF
+PDX8ODX2ODX9-f39-dggO8M8wTvDPME7xDw1-Dg19jg1-f39-f3YIDvCPMI7wzzCO8M8Nfw4NfY4
+Nf39-f392CA7wzzBO8M8wTvEPDUq9jUq9jUq9jUq9jUq9jX9-e0gO8Q8wDvDPMA7xTw1KvY1KvY1
+KvY1KvY1KvY1-f3tIDvFPDvDPDvGPDUqwjjBKsQVKs8awCrBGsAq0DUqwjjBKsQVKsQswSoswSrC
+GsEqGioaKtA1KsI4wSrEFcEqzRrAKsEawCrQNSr2NSr2Nf397SA71Dw1KsE4KscVKsYswSrFGirA
+GirSNSrBOCrHFSrELCosKsEsKsIaKhoqGioaKtA1KsE4KskVKsQswSrFGirAGirSNSr2NSr2Nf39
+7SA71Dw1KsE4KscVKhUqxCzBKsUaKsAaKskcKsY1KsE4KjjAKsQVKhUqwiwqLCrALMAqwhoqGioa
+wSrHHCrGNSrBOCrHFcEqxCzBKsUaKsAaKskcKsY1KscyKsv_XJViKsgQKsocKsY1KscyKssgKsgQ
+KsocKsY1-f3t-tbX2jvUPDUqwTgqxxXBKsQswSrFGirAGirSNSrBOCrAOCrEFcEqwiwqLCrBLCrC
+GioaKsEaKtA1KsE4KscVKsYswSrFGirAGirSNSr2NSr2Nf397SA71Dw1KsI4wSrGFSrNGsEqwBrA
+KtA1KsI4wSrGFSrCLMEqLMEqwhrBKsEaKtA1KsI4wSrEFcEqzRrBKsAawCrQNSr2NSr2Nf397SA7
+1Dw1KvY1KvY1KvY1KvY1KvY1-f3tIDvBPDvCPMA7wDzAOzzBO8I8Nf33ODX9-f39-dggO8E8O8E8
+Ozw7PDs8Ozw7PDvCPDX99zg1-f39-f3YIDvBPDvBPDs8Ozw7PDs8wTvCPDX99zg12BrBNcAawDX9
+-f399SA7wTw7wTw7PDs8Ozw7PDvEPDX99zg12ho1GjX9-f399yA7wTzBOzzAO8A8wDvAPDvEPDXI
+MjXL-lyVYjXIEDXKHDXQMjXLIDXIEDXKHDXLODXQIDXGGsA1GjXJHDXQMjXLIDXIEDXKHDXQMjXL
+IDXIEDXKHDX9-fX_1tfaO9Q8Nf33ODXaGjUaNf39-f33IDvUPDX99zg12BrBNcAawDX9-f399SA7
+1Dw1-fc4Nf39-f392CA71Dw1-f39-f39-dQgO9Q8Nf39-f39-f3UIDvCIMM7xCDBO8I8Nfw4wTXE
+FTXPGsA1wRrANdU4wTXEFcE1zRrBNcAawDX9-f399SA7wiD_ygB-wSA7wyDADCDAO8E8Nfs4NccV
+NcYswTXFGjXAGjXWODXCOMA1wxU1xCzBNcYaNRo1-f39-fcgO8IgDCDBO8IgwAzBIMA7wDw1yDI1
+y-5clWI1yBA1yhw1yjg1OMA1xBU1FTXELME1xRo1wBo1yRw1yjg1OMA1OMA1wRXBNcQswTXEGsE1
+GjXJHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_1tfaO8AgwQwgwTvCIAzDIDvAPDX7ODXA
+ODXEFcE1xCzBNcUaNcAaNdY4NcA4NcQVNcYswTXEGjXBGjX9-f399yA7wCAMwyA7wiDBDCDBO8A8
+Nfw4wTXGFTXNGsE1wBrANdU4wTXEFcE1zRrBNcAawDX9-f399SA7wCDADMEgwDvCIMEMIDvCPDX9
+-f39-f391CA7wSDADCDAO8MgDMEgO8I8Nf39-f39-f3UIDvCIME7xCDDO8I8Nf39-f39-f3UIDvU
+PDX9-f39-f391CA71Dw1-f39-f39-dQgO9Q8NcgyNcv_XJViNcgQNcocNdAyNcsgNcgQNcocNdAy
+NcsgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o7xSDFO8Y8Nf39-f39-f3U
+IDvFIDzDIDvGPDX9-f39-f391CA7xSA8wyA7xjw1-f39-f39-dQgO8UgPMMgO8Y8NT32NT32NT32
+NT32NT32Nf397SA7xSA8wyA7xjw1PfY1PfY1PfY1PfY1PfY1-f3tIDvFIDzDIDvGPDU9wjjBPcQV
+Pc8awD3BGsA90DU9wjjBPcQVPc8awT0aPRo90DU9wjjBPcQVwT3NGsA9wRrAPdA1PfY1PfY1-f3t
+IDvFIMU7xjw1PcE4PccVPcYswT3FGj3AGj3SNT3BOD3HFT3GLME9xBo9Gj0aPRo90DU9wTg9yRU9
+xCzBPcUaPcAaPdI1PfY1PfY1-f3tIDvUPDU9wTg9xxU9FT3ELME9xRo9wBo9yRw9xjU9wTg9OMA9
+xBU9FT3ELME9xBo9Gj0awT3HHD3GNT3BOD3HFcE9xCzBPcUaPcAaPckcPcY1PccyPcv_XJViPcgQ
+PcocPcY1PccyPcsgPcgQPcocPcY1-f3t-tbX2jvUPDU9wTg9xxXBPcQswT3FGj3AGj3SNT3BOD3A
+OD3EFcE9xCzBPcQaPRo9wRo90DU9wTg9xxU9xizBPcUaPcAaPdI1PfY1PfY1-f3tIDvUPDU9wjjB
+PcYVPc0awT3AGsA90DU9wjjBPcYVPc0awT3BGj3QNT3COME9xBXBPc0awT3AGsA90DU99jU99jX9
+-e0gO9Q8NT32NT32NT32NT32NT32Nf397SA71Dw1-f39-f39-dQgO9Q8Nf39-f39-f3UIDvUPDX9
+9jjCNcQVwTXNGsE1wBrANf39-f31IDvUPDX99jg1yRU1xCzBNcQaNRo1GjX9-f399yA71Dw1yDI1
+y-5clWI1yBA1yhw10DI1yyA1yBA1yhw1yjjBNcUVwTXELME1xBo1GjUaNckcNdAyNcsgNcgQNcoc
+NdAyNcsgNcgQNcocNf399f7W19o71Dw1-fY4NccVNcYswTXEGjUaNRo1-f39-fcgO9Q8Nf32ODXH
+FcE1zRrBNcAawDX9-f399SA71Dw1-f39-f39-dQgO9Q8Nf33ODX9-f39-dggO9Q8Nf33ODX9-f39
+-dggO9Q8Nfw4wTXEFTXPGsA1wRrANdU4NcE4wTXEFcE1yRrBNcAawDX9-f399SA71Dw1_zg1xxU1
+xizBNcUaNcAaNdc4NcA4NcI4wDXDFTXLGjUaNf39-f33IDvUPDXIMjXL-lyVYjXIEDXKHDXKODU4
+wDXEFTUVNcQswTXFGjXAGjXJHDXLODXAODU4wDU4wDXBFcE1wSA1xRrBNRo1yRw10DI1yyA1yBA1
+yhw10DI1yyA1yBA1yhw1-f31-tbX2jvUPDX7ODXAODXEFcE1xCzBNcUaNcAaNdc4NcA4NcA4NcQV
+NcsaNcEaNf39-f33IDvUPDX8OME1xhU1zRrBNcAawDXVODXBOME1xBXBNckawTXAGsA1-f39-fUg
+O9Q8Nf33ODX9-f39-dggO9Q8Nf39-f39-f3UIDvUPDX9-f39-f391CA71Dw1-f39-f39-dQgO9Q8
+Nf39-f39-f3UIDvUPDXIMjXL-lyVYjXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXL
+IDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_1tfaO9Q8Nf39-f39-f3UIDvUPDX9-f39-f391CA7wDzQ
+O8A8Nf39-f39-f3UIDvAINA7wDw1PfY1PfY1PfY1PfY1PfY1-f3tIDvUPDU99jU99jU99jU99jU9
+9jX9-e0gO9Q8NT3COME9xBU9zxrAPcEawD3QNT3COME9xBU9zxrBPRo9Gj3QNT3COME9xBXBPc0a
+wD3BGsA90DU99jU99jX9-e0gO9Q8NT3BOD3HFT3GLME9xRo9wBo90jU9wTg9xxU9xizBPcQaPRo9
+Gj0aPdA1PcE4PckVPcQswT3FGj3AGj3SNT32NT32Nf397SA71Dw1PcE4PccVPRU9xCzBPcUaPcAa
+PckcPcY1PcE4PTjAPcQVPRU9xCzBPcQaPRo9GsE9xxw9xjU9wTg9xxXBPcQswT3FGj3AGj3JHD3G
+NT3HMj3L-lyVYj3IED3KHD3GNT3HMj3LID3IED3KHD3GNf397f7W19o7wzzBO8A8wDs8Ozw7xDw1
+PcE4PccVwT3ELME9xRo9wBo90jU9wTg9wDg9xBXBPcQswT3EGj0aPcEaPdA1PcE4PccVPcYswT3F
+Gj3AGj3SNT32NT32Nf397SA7wzw7PDs8Ozw7PDs8O8Q8NT3COME9xhU9zRrBPcAawD3QNT3COME9
+xhU9zRrBPcEaPdA1PcI4wT3EFcE9zRrBPcAawD3QNT32NT32Nf397SA7wzzAO8A8Ozw7PDs8O8Q8
+NT32NT32NT32NT32NT32Nf397SA7wzw7PDs8Ozw7PME7xDw1-fc4Nf39-f392CA7wzw7PDs8wDvA
+PME7xDw1-fc4Nf39-f392CA71Dw1-fc4NdgawTXAGsA1-f39-fUgO9Q8Nf33ODXaGjUaNf39-f33
+IDvUPDXIMjXL-lyVYjXIEDXKHDXQMjXLIDXIEDXKHDXLODXQIDXGGsA1GjXJHDXQMjXLIDXIEDXK
+HDXQMjXLIDXIEDXKHDX9-fX_1tfaO9Q8Nf33ODXaGjUaNf39-f33IDvFLsE7LsE7xjw1-fc4Ndga
+wTXAGsA1-f39-fUgO8UuOy47LjsuO8Y8Nf33ODX9-f39-dggO8UuOy47LjsuO8Y8Nf39-f39-f3U
+IDvFLjsuOy47LjvGPDX9-f39-f391CA7xS7BOy7BO8Y8Nfw4wTXEFTXPGsA1wRrANdU4wTXEFcE1
+zRrANcEawDX9-f399SA71Dw1_zg1xxU1xizBNcUaNcAaNdY4NcI4wDXDFTXELME1xRo1wBo1-f39
+-fcgO9Q8NcgyNcv_XJViNcgQNcocNco4NTjANcQVNRU1xCzBNcUaNcAaNckcNco4NTjANTjANcEV
+wTXELME1xRo1wBo1yRw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1-f31-tbX2jvUPDX7ODXAODXE
+FcE1xCzBNcUaNcAaNdY4NcA4NcQVNcYswTXFGjXAGjX9-f399yA71Dw1-DjBNcYVNc0awTXAGsA1
+1TjBNcQVwTXNGsE1wBrANf39-f31IDvB-nVOl83_wsPHwjw1-f39-f39-dQgO8D_dU6Xz-7Cw8fB
+PDX9-f39-f391CA7wP51TpfP-sLDx8E8Nf39-f39-f3UIDvA-nVOl8-_wsPHwTw1-f39-f39-dQg
+O8D_dU6Xz-7Cw8fBPDX9-f39-f391CA7wP51TpfFP8E7xf7Cw8fBPDXIMjXL-lyVYjXIEDXKHDXQ
+MjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDX9-fX_1tfaO8D_
+dU6XxD-DO8T_wsPHwTw1-f39-f39-dQgO8D_dU6XxD-DO8T_wsPHwTw1-f39-f39-dQgO8D_dU6X
+xD-DO8T_wsPHwTw1-f39-f39-dQgO8D_dU6XxT-BO8X_wsPHwTw1PfY1PfY1PfY1PfY1PfY1-f3t
+IDvA-nVOl8-_wsPHwTw1PfY1PfY1PfY1PfY1PfY1-f3tIDvA-nVOl8-_wsPHwTw1PfY1PcI4wT3E
+FT3ELME9LME9whrBPRo9Gj3QNT32NT32NT32Nf397SA7wP51TpfP-sLDx8E8NT32NT3BOD3HFT3E
+LD0sPcEsPcQaPRo9Gj3QNT32NT32NT32Nf397SA7wP51TpfP-sLDx8E8NT3HMj3L-lyVYj3IED3K
+HD3GNT3BOD04wD3EFT0VPcIsPSw9LME9whrBPRrBPcccPcY1PccyPcsgPcgQPcocPcY1PccyPcsg
+PcgQPcocPcY1PccyPcsgPcgQPcocPcY1-f3t-tbX2jvB-nVOl83_wsPHwjw1PfY1PcE4PcA4PcQV
+wT3CLD0sPSw9xBo9wxo90DU99jU99jU99jX9-e0gO9Q8NT32NT3COME9xhU9wizBPSzBPcIawT3B
+Gj3QNT32NT32NT32Nf397SA71Dw1PfY1PfY1PfY1PfY1PfY1-f3tIDvB-nVOl83_wsPHwjw1-Dg1
+-f39-f390yA7wP51TpfP-sLDx8E8Nfw4Nf39-f39-dMgO8D_dU6Xz-7Cw8fBPDX8ODX9-f39-f3T
+IDvA-nVOl8-_wsPHwTw1-Dg1-f39-f390yA7wP51TpfFPzvH-sLDx8E8NcgyNcv_XJViNcgQNcoc
+Ncs4NdAgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf399f7W19o7
+wP51TpfFP8A7xv7Cw8fBPDX8ODX9-f39-f3TIDvA-nVOl8U-wTvF-sLDx8E8Nfw4Nf39-f39-dMg
+O8D_dU6XxT-CO8T_wsPHwTw1-Dg1-f39-f390yA7wP51TpfFP8E7xf7Cw8fBPDX8ODX9-f39-f3T
+IDvA-nVOl8U-wDvG-sLDx8E8-nZ3ff39-f39-f3UIDvA-nVOl8U-O8f_wsPHwTwV-f39-f39-dQg
+O8D_dU6Xz-7Cw8fBPBXKERURFRHBFREVwRHBFc8RwRURwRURwRURwRURwRURwRURwBXBEcAVyxHB
+FRHBFRHBFcARwBURFREVwBHAFdERFcIRwBXAEcAVEcEVwBHAFdMRwRURwRURwRURwRXAEcAV0xHA
+FcERwBURwRURwRXAEcAV0hHAFREVERXAEcAVEcEVEcAVwRHAFc8RFREVEcEVwBHAFREVERURwRUR
+Ff391SA7wP51TpfP-sLDx8E8FcoRFREVERXBERXBERURFc8RFREVERURFcARFcERFcARFcERFREV
+ERURFREVzhEVwBEVERURFREVERXBERURFREV0xEVwREVERURFREVERURFREV1hEVwBEVwRHBFREV
+ERURFREV0xEVERURFREVwBEVwBEVwREV0xEVwREVERURFREVERURFREVERURFdERFREVwBEVwBEV
+wREVERURFREVERX9-dUgO8D_dU6Xz-7Cw8fBPBXKEcEVEcAVwBEVwRHBFc8RwRURwRXAERXBERXA
+EcAVwBHAFcARFREVEcEVzBEVwBHAFcARwRURFcERwBXAEcEV0REVwREVERURFREVEcEVEcEV1BEV
+wBHAFcARFREVEcEVERURFdMRFREVERURFcARFcARwBXAEcEV0REVwRHBFREVERURwBXAERURFRHB
+Fc8RFREVwBEVwBHBFREVERURwRURFf391SA7wf51TpfN-sLDx8I8FcoRFREVERXBERXBERXRERXB
+ERURFcARFcERFcARFcERFREVERURFcERFcwRFcARFREVERURFREVwREVERXBERXRERXBERURFREV
+ERURFcMRFdQRFcARFcERFREVERXBERURFdMRFREVERURFcARFcARFcMRFdERFcERFREVERURFREV
+ERURFREVwREVzxHBFcARFcIRFREVERURFREVERX9-dUgO9Q8FcoRFREVEcEVEcEVERXRERXBERUR
+FcARFcERFcARwRURFREVERURFRHAFc0RFcARFREVERURFcARwBURFREVEcAV0hHBFRHAFcARwBXA
+ERXBEcAV1REVwBHBFREVERURFcERwBXUERURFRHAFcERFcARwRURwBXTEcAVERURFRHAFcARFREV
+EcAVwBHAFdERFcARwRURwBXBEcAVERURFRHBFf390zzWFf39-f39-f3UAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 17:49:30",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 20:35:36",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-09 17:49:30",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-09 20:35:36",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -11920,13 +11817,13 @@ OTU2MjAwOTNlODlhMDAzYzk1OTIwMDhlZGNkOTAwOTQ3M2I0YADwA2E5ZWEwMGE3N2E1NDAwZjFh
 YaAAfTYyN2E5MTABABA0AgDwGTQwMDc2Nzc3ZDAwZDZkN2RhMDA5ZmEwYTYwMDFlMzczYzAwM2Y1
 NjV4AAEBADEwMDIBAKAwMDE2MTYxNiIp
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 17:49:30",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-09 20:35:36",stored="2024-03-24 00:48:06"]]
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-09 17:49:30",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-09 20:35:36",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-09 17:49:30"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-09 20:35:36"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-09 17:49:30"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-09 20:35:36"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-09 17:49:30"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-09 20:35:36"]]
 :: [eoc]
