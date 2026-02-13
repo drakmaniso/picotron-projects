@@ -11,7 +11,18 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-12 15:48:43",revision=10274]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-13 13:59:32",revision=11084]]
+Version 0.1.2:
+
+- Added: scrollbar; it shows the position of bar divisions and of the current
+  selection.
+- Changed: replaced the "create new track" dialog with a more comprehensive
+  channel dialog, with allows to mute the current track, clone it, create a
+  new empty track, or pick an existing one. The dialog is accessed by clicking
+  on the channel header.
+- Added: right-click a channel header to mute it.
+- Added: double-click a channel header to enter a track number manually.
+
 Version 0.1.1:
 
 - Fixed: opening the new track dialog was resetting the speed of whichever track
@@ -82,7 +93,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-12 15:48:43",revision=23042]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-13 13:59:32",revision=23852]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -181,7 +192,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-12 15:48:43",revision=31506]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-13 13:59:32",revision=32316]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -197,6 +208,9 @@ local ui_settings = require "src/ui/settings.lua"
 local ui_synth = require "src/ui/synth.lua"
 local ui_tracker = require "src/ui/tracker.lua"
 local ui_visual = require "src/ui/visual.lua"
+
+
+local tracker = nil
 
 
 function call_protected(func)
@@ -324,31 +338,36 @@ local previously_focused = nil
 
 
 function _update()
-	-- Keyboard Focus
-	local currently_focused = ui.head() and ui.head():get_keyboard_focus_element()
-	if currently_focused ~= previously_focused then
-		ui_visual.close()
-	end
-	previously_focused = currently_focused
-	-- GUI Refresh
-	if app.refresh_gui then
-		generate_gui()
-		app.refresh_gui = false
-	end
-	call_protected(function() ui.head():update_all() end)
-	-- Keys
-	if key("ctrl") then
-		if keyp("z") then
-			if key("shift") then
-				undo.redo()
-			else
-				undo.undo()
+	call_protected(
+		function()
+			-- Keyboard Focus
+			local currently_focused = ui.head() and ui.head():get_keyboard_focus_element()
+			if currently_focused ~= previously_focused then
+				ui_visual.close()
+			end
+			previously_focused = currently_focused
+			-- GUI Refresh
+			if app.refresh_gui then
+				generate_gui()
+				app.refresh_gui = false
+			end
+			-- GUI Update
+			ui.head():update_all()
+			-- Keys
+			if key("ctrl") then
+				if keyp("z") then
+					if key("shift") then
+						undo.redo()
+					else
+						undo.undo()
+					end
+				end
+				if keyp("y") then
+					undo.redo()
+				end
 			end
 		end
-		if keyp("y") then
-			undo.redo()
-		end
-	end
+	)
 end
 
 
@@ -359,29 +378,30 @@ function _draw()
 		function()
 			ui.head():draw_all()
 			if app.view == "tracker" and app.is_editing then
-				local width = get_display():width()
-				local height = get_display():height()
+				local width = get_display():width() - app.panel_width - 4
+				local height = get_display():height() - 9 - 8
+				if tracker and tracker.notegrids and tracker.notegrids[1] then
+					height = tracker.notegrids[1].height
+				end
 				rrect(
 					app.panel_width, 9, 
-					width - app.panel_width - 4, height - 9 - 8, 
+					width, height, 
 					0, 36
 				)
-				line(width - 4, 9, width - 1, 9, 36)
-				line(width - 4, height - 9, width - 1, height - 9, 36)
+			end
+			-- Show FPS when in dev
+			if is_loaded_cart then
+				fpses[fps_idx] = stat(1)
+				fps_idx = (fps_idx + 1) % 8
+				local fps = 0
+				for v in all(fpses) do
+					fps = max(fps, v)
+				end
+				fps = flr(0.5 + fps * 100.0)
+				print(string.format("%3.0f%%", fps), 463, true and 2 or 250, 58)		
 			end
 		end
 	)
-	-- Show FPS when in dev
-	if is_loaded_cart then
-		fpses[fps_idx] = stat(1)
-		fps_idx = (fps_idx + 1) % 8
-		local fps = 0
-		for v in all(fpses) do
-			fps = max(fps, v)
-		end
-		fps = flr(0.5 + fps * 100.0)
-		print(string.format("%3.0f%%", fps), 463, true and 2 or 250, 58)		
-	end
 end
 
 
@@ -390,14 +410,14 @@ function generate_gui()
 	local width <const> = get_display():width()
 	local height <const> = get_display():height()
 	if app.view == "tracker" then
-		ui_tracker.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
+		tracker = ui_tracker.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
 	elseif app.view == "synth" then
 		ui_synth.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
 	end
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-12 15:48:43",revision=21254]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-13 13:59:32",revision=22064]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -526,7 +546,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-12 15:48:43",revision=8171]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-13 13:59:32",revision=8981]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -1349,7 +1369,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-12 15:48:43",revision=28311]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-13 13:59:32",revision=29121]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1459,6 +1479,48 @@ app.mod_height = app.synth_height
 
 
 ----------------------------------------------------------------------------------------------------
+-- Reverse Track Lookup
+----------------------------------------------------------------------------------------------------
+
+
+local track_patterns = {}
+
+
+function app.update_track_patterns()
+	track_patterns = {}
+	for p = 0, sfx.num_patterns() do
+		for c = 0, 7 do
+			local muted = sfx.channel_is_muted(p, c)
+			if not muted then
+				local track = sfx.pattern_track(p, c)
+				if not track_patterns[track] then
+					track_patterns[track] = {}
+				end
+				add(track_patterns[track], { pattern = p, channel = c })
+			end
+		end
+	end
+end
+
+
+function app.track_patterns(track)
+	return track_patterns[track]
+end
+
+
+function app.set_pattern_track(pattern, channel, track)
+	sfx.set_pattern_track(pattern, channel, track)
+	app.update_track_patterns()
+end
+
+
+function app.mute_channel(pattern, channel, muted)
+	sfx.mute_channel(pattern, channel, muted)
+	app.update_track_patterns()
+end
+
+
+----------------------------------------------------------------------------------------------------
 -- Helpers
 ----------------------------------------------------------------------------------------------------
 
@@ -1494,6 +1556,7 @@ function app.draw_borders(x, y, width, height)
 end
 
 
+local fg_clip <const> = 8
 local fg_high <const> = 51 -- 51, 25
 local fg_mid <const> = 43 -- 43, 10
 local fg_low <const> = 45 -- 45, 11
@@ -1512,7 +1575,11 @@ function app.draw_vert_meter(x, y, width, height, value)
 	else
 		rectfill(x, zone1, x + width - 1, y + height - 1, fg_low)
 		rectfill(x, zone2, x + width - 1, zone1 - 1, fg_mid)
-		rectfill(x, zone2 - 1, x + width - 1, target, fg_high)
+		if value == 1 then
+			rectfill(x, zone2 - 1, x + width - 1, target, fg_clip)
+		else
+			rectfill(x, zone2 - 1, x + width - 1, target, fg_high)
+		end
 	end
 end
 
@@ -1640,7 +1707,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-12 15:48:43",revision=22690]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-13 13:59:32",revision=23500]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -1678,6 +1745,7 @@ function file.load(ud, metadata)
 	app.node = 0
 	app.refresh_gui = true
 	file.load_metadata(metadata)
+	app.update_track_patterns()
 	undo.init()
 end
 
@@ -1966,7 +2034,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-12 15:48:43",revision=17448]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-13 13:59:32",revision=18258]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2813,7 +2881,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-12 15:48:43",revision=23596]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-13 13:59:32",revision=24406]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -2973,7 +3041,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-12 15:48:43",revision=28082]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-13 13:59:32",revision=28892]]
 local sfx = {}
 
 
@@ -3936,7 +4004,7 @@ end
 
 return sfx
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-12 15:48:43",revision=4165]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-13 13:59:32",revision=4975]]
 local soft_wrap = {}
 
 -- Soft-wraps a very tiny subset of markdown.
@@ -4047,7 +4115,7 @@ end
 
 return soft_wrap
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-12 15:48:43",revision=23901]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-13 13:59:32",revision=24711]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4364,7 +4432,7 @@ end
 
 return ui_envelopes
 :: src/ui/help.lua
---[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-12 15:48:43",revision=1416]]
+--[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-13 13:59:32",revision=2226]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local soft_wrap = require "src/soft_wrap.lua"
@@ -4466,7 +4534,7 @@ end
 return ui_help
 
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-12 15:48:43",revision=22884]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-13 13:59:32",revision=23694]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -4745,7 +4813,7 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-12 15:48:43",revision=29459]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-13 13:59:32",revision=30269]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5407,7 +5475,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-12 15:48:43",revision=19031]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-13 13:59:32",revision=19841]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -5454,6 +5522,7 @@ local fgd_vol = 46
 local fg_vol = 47
 local fgd_fx = 48
 local fg_fx = 49
+local fg_greyed = 34
 
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -5466,27 +5535,86 @@ local function channel_not_valid(channel)
 end
 
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+-------------------------------------------------------------------------------
+-- Channel Dialog
+-------------------------------------------------------------------------------
 
 
-local new_track_dialog = nil
+local channel_dialog = nil
+local channel_dialog_start = 0
 
 
-local new_track_dialog_height <const> = 60
+local function init_first_empty_track(track)
+	if sfx.track_size(track) ~= 0 then
+		for t = 0, sfx.num_tracks() - 1 do
+			if sfx.track_size(t) == 0 then
+				track = t
+				break
+			end
+		end
+	end
+	if sfx.track_size(track) == 0 then
+		init_track(track)
+		return track
+	end
+	return nil
+end
 
 
-local function create_new_track_dialog(el)
-	el.width = app.column_width - 1
-	el.height = new_track_dialog_height
+local function create_channel_dialog(el)
 	ui.head():new(el)
 	
-	el.label_loop0 = ui.create_label {
-		x = 4, y = 23, fg = 55,
+	el:attach(ui.create_toggle {
+		x = 5, y = 6,
+		off_spr = get_spr(115), on_spr = get_spr(116),
+		get = function(self) return not sfx.channel_is_muted(app.pattern, el.channel) end,
+		set =
+			function(self)
+				local muted = sfx.channel_is_muted(app.pattern, el.channel)
+				app.mute_channel(app.pattern, el.channel, not muted)
+				ui_notegrid.close_channel_dialog()
+			end,
+	})
+	
+	el:attach(ui.create_button {
+		x = 25, y = 4,
+		label = "clone",
+		action =
+			function(self)
+				undo.checkpoint()
+				local track = sfx.pattern_track(app.pattern, el.channel)
+				track = init_first_empty_track(track)
+				if track then
+					local current_track = sfx.pattern_track(app.pattern, el.channel)
+					for step = 0, sfx.track_size(track) - 1 do
+						sfx.set_track_pitch(track, step, sfx.track_pitch(current_track, step))
+						sfx.set_track_instrument(track, step, sfx.track_instrument(current_track, step))
+						sfx.set_track_volume(track, step, sfx.track_volume(current_track, step))
+						sfx.set_track_fx(track, step, sfx.track_fx(current_track, step))
+						sfx.set_track_fx_params(track, step, sfx.track_fx_params(current_track, step))
+					end
+					sfx.set_track_speed(track, sfx.track_speed(current_track))
+					sfx.set_track_loop0(track, sfx.track_loop0(current_track))
+					sfx.set_track_loop1(track, sfx.track_loop1(current_track))
+					sfx.mute_channel(app.pattern, el.channel, false)
+					app.set_pattern_track(app.pattern, el.channel, track)
+					ui_notegrid.close_channel_dialog()
+				end
+			end
+	})
+	
+	el:attach(ui.create_horiz_divider {
+		x = 0, y = 18,
+		width = el.width - 1,
+	})
+	
+	local oy = 24 -- el.height - 35
+	el:attach(ui.create_label {
+		x = 4, y = oy, fg = 55,
 		label = "length:",
-	}
-	el:attach(el.label_loop0)
+	})
 	el:attach(ui.create_field {
-		x = 4 + 32, y = 23 - 1,
+		x = 4 + 32, y = oy - 1,
 		width = 15, height = 7,
 		get = function(self) return app.new_tracks_length end,
 		set =
@@ -5499,11 +5627,11 @@ local function create_new_track_dialog(el)
 	
 	el:attach(ui.create_label {
 		channel = el.channel, fg = 55,
-		x = 4, y = 33,
+		x = 4, y = oy + 10,
 		label = "speed:",
 	})
 	el:attach(ui.create_field {
-		x = 4 + 32, y = 33 - 1,
+		x = 4 + 32, y = oy + 10 - 1,
 		width = 15, height = 7,
 		get = function(self) return app.new_tracks_speed end,
 		set = 
@@ -5514,26 +5642,77 @@ local function create_new_track_dialog(el)
 	})
 	
 	el:attach(ui.create_button {
-		x = 12, y = el.height - 15,
-		label = "create",
+		x = 25, y = oy + 20,
+		label = " new ",
 		action =
 			function(self)
 				undo.checkpoint()
 				local track = sfx.pattern_track(app.pattern, el.channel)
-				if sfx.track_size(track) ~= 0 then
-					for t = 0, sfx.num_tracks() - 1 do
-						if sfx.track_size(t) == 0 then
-							track = t
-							break
-						end
-					end
+				track = init_first_empty_track(track)
+				if track then
+					sfx.mute_channel(app.pattern, el.channel, false)
+					app.set_pattern_track(app.pattern, el.channel, track)
+					ui_notegrid.close_channel_dialog()
 				end
+			end
+	})
+	
+	el:attach(ui.create_horiz_divider {
+		x = 0, y = 58,
+		width = el.width - 1,
+	})
+		
+	el:attach(ui.create_list {
+		x = 2, y = 63,
+		width = el.width - 4, height = el.height - 66,
+		cursor = "pointer",
+		row_height = 9,
+		nb_columns = 1,
+		channel = el.channel,
+		get_active = function(self) return sfx.pattern_track(app.pattern, self.channel) end,
+		set_active =
+			function(self, track)
+				undo.checkpoint()
 				if sfx.track_size(track) == 0 then
 					init_track(track)
-					sfx.set_pattern_track(app.pattern, el.channel, track)
-					sfx.mute_channel(app.pattern, el.channel, false)
-					new_track_dialog:detach()
-					new_track_dialog = nil
+				end
+				if sfx.channel_is_muted(app.pattern, self.channel) then
+					sfx.mute_channel(app.pattern, self.channel, false)
+				end
+				app.set_pattern_track(app.pattern, self.channel, track)
+			end,
+		on_tap = function(self) ui_notegrid.close_channel_dialog() end,
+		get_start = function(self) return channel_dialog_start end,
+		set_start = function(self, start) channel_dialog_start = start end,
+		get_max = function(self) return sfx.num_tracks() - 1 end,
+		disabled = function(self) return sfx.channel_is_muted(app.pattern, self.channel) end,
+		draw_item =
+			function(self, track, x, y, w, h, has_pointer)
+				local muted = sfx.channel_is_muted(app.pattern, self.channel)
+				local active = sfx.pattern_track(app.pattern, self.channel)
+				local size = sfx.track_size(track)
+				if track == active and not muted then
+					rrectfill(x, y, w, h, 0, 17)
+				elseif has_pointer then
+					rrectfill(x, y, w, h, 0, 60)
+				end
+				local fg = size == 0 and (has_pointer and 59 or 60) or 43
+				print(string.format("%03d", track), x + 3, y + 2, fg)
+				local trk_patts = app.track_patterns(track)
+				if trk_patts then
+					if size > 0 then
+						--print("\^:08047e0408000000", x + 15, y + 2, 58)
+						print("\^:080c7e0c08000000", x + 15, y + 2, 58)
+					end
+					local x = 25
+					for i = 1, #trk_patts do
+						print(
+							string.format("%02d", trk_patts[i].pattern),
+							x, y + 2,
+							trk_patts[i].channel == self.channel and 57 or 57 -- TODO: keep?
+						)
+						x += 12
+					end
 				end
 			end
 	})
@@ -5544,9 +5723,8 @@ local function create_new_track_dialog(el)
 		line(0, 0, self.width - 1, 0, 57)
 		line(self.width - 1, self.height - 1, 0, self.height - 1, 58)
 		line(self.width - 1, self.height - 1, self.width - 1, 0, 58)
-		print("new track", 10, 5, 55)
-		line(6, 14, self.width - 7, 14, 58)
-		line(6, 15, self.width - 7, 15, 57)
+--		line(6, 14, self.width - 7, 14, 58)
+--		line(6, 15, self.width - 7, 15, 57)
 	end
 	function el:click()
 		return true
@@ -5561,6 +5739,14 @@ local function create_new_track_dialog(el)
 		return true
 	end
 	return el
+end
+
+
+function ui_notegrid.close_channel_dialog()
+	if channel_dialog then
+		channel_dialog:detach()
+	end
+	channel_dialog = nil
 end
 
 
@@ -5580,12 +5766,7 @@ function ui_notegrid.attach(parent, el)
 		local muted = sfx.channel_is_muted(app.pattern, self.channel)
 		local track <const> = sfx.pattern_track(app.pattern, self.channel)
 		local track_size <const> = sfx.track_size(track)
---		if new_track_dialog then
---			return
---		end
 		if muted or track_size == 0 then
---			spr(19, 27 - 6, 10 - 6)
-			spr(19, 27 - 6, self.height - 10 - 6)
 			return
 		end
 		local sustain_line_enabled = settings.user.sustain_line_enabled
@@ -5627,9 +5808,9 @@ function ui_notegrid.attach(parent, el)
 			local step_in_beat = step_in_bar % app.beat_length
 			if pattern_is_playing and channel_is_playing and step_is_playing then
 				rrectfill(x, y, app.column_width - 1, app.row_height, 0, 36)
-			elseif step_in_bar == 0 then
+			elseif step_in_bar == 0 and (not is_greyed) then
 				rrectfill(x, y, app.column_width - 1, app.row_height, 0, 35)
-			elseif step_in_beat == 0 then
+			elseif step_in_beat == 0 and (not is_greyed) then
 				rrectfill(x, y, app.column_width - 1, app.row_height, 0, 34)
 			end
 			local freq <const> = sfx.track_pitch(track, step)
@@ -5677,29 +5858,29 @@ function ui_notegrid.attach(parent, el)
 			end
 			if freq != 0xff then
 				if is_sustained and sustain_line_enabled then
-					line(x + 4, y, x + 4, y + app.row_height - 1, is_greyed and 52 or fg_note)
+					line(x + 4, y, x + 4, y + app.row_height - 1, is_greyed and fg_greyed or fg_note)
 					if is_retrig_inst and freq ~= prev_freq then
-						pal(7, is_greyed and 52 or fg_note)
+						pal(7, is_greyed and fg_greyed or fg_note)
 						spr(72 + note, x + 3 + 4, y_text)
 						if octave <= 9 then
-							pal(7, is_greyed and 52 or fg_octave)
+							pal(7, is_greyed and fg_greyed or fg_octave)
 							spr(96 + min(octave, 10), x + 13 + 4, y_text)
 						else
 							-- TODO
 						end
 					end
 				else
-					pal(7, is_greyed and 52 or fg_note)
+					pal(7, is_greyed and fg_greyed or fg_note)
 					spr(72 + note, x + 3, y_text)
 					if octave <= 9 then
-						pal(7, is_greyed and 52 or fg_octave)
+						pal(7, is_greyed and fg_greyed or fg_octave)
 						spr(96 + min(octave, 10), x + 13, y_text)
 					else
 						-- TODO
 					end
 				end
 			else
-				pal(7, is_greyed and 52 or fgd_note)
+				pal(7, is_greyed and fg_greyed or fgd_note)
 				spr(65, x + 4, y_text)
 			end
 			-- Instrument
@@ -5707,15 +5888,15 @@ function ui_notegrid.attach(parent, el)
 				pal(7, self.parent.str_instrument_is_valid and 7 or 8)
 				print(self.parent.str_instrument, x + 20, y_text, 7)
 			elseif inst_square_enabled and inst == prev_inst and inst ~= 0xff then
-				pal(7, is_greyed and 52 or fg_inst)
+				pal(7, is_greyed and fg_greyed or fg_inst)
 				spr(69, x + 20, y_text)
 			elseif inst != 0xff then
 				local unchanged = false and inst == prev_inst
 				local fg = (unchanged and fgd_inst or fg_inst)
-				pal(7, is_greyed and 52 or fg)
+				pal(7, is_greyed and fg_greyed or fg)
 				spr(256 + inst, x + 20, y_text)
 			else
-				pal(7, is_greyed and 52 or fgd_inst)
+				pal(7, is_greyed and fg_greyed or fgd_inst)
 				spr(64, x + 20, y_text)
 			end
 			-- Volume
@@ -5723,15 +5904,15 @@ function ui_notegrid.attach(parent, el)
 				pal(7, self.parent.str_volume_is_valid and 7 or 8)
 				print(self.parent.str_volume, x + 31, y_text, 7)
 			elseif false and vol == prev_vol and vol ~= 0xff then
-				pal(7, is_greyed and 52 or fg_vol)
+				pal(7, is_greyed and fg_greyed or fg_vol)
 				spr(69, x + 31, y_text)
 			elseif vol != 0xff then
 				local unchanged = false and vol == prev_vol
 				local fg = (unchanged and fgd_vol or fg_vol)
-				pal(7, is_greyed and 52 or fg)
+				pal(7, is_greyed and fg_greyed or fg)
 				spr(256 + vol, x + 31, y_text)
 			else
-				pal(7, is_greyed and 52 or fgd_vol)
+				pal(7, is_greyed and fg_greyed or fgd_vol)
 				spr(64, x + 31, y_text)
 			end
 			-- FX
@@ -5739,11 +5920,11 @@ function ui_notegrid.attach(parent, el)
 				pal(7, 7)
 				print(self.parent.str_fx, x + 42, y_text, self.parent.str_fx_is_valid and 7 or 8)
 			elseif fx != 0x0 then
-				print(chr(fx), x + 42, y_text, is_greyed and 52 or fg_fx) -- TODO: replace with sprites
-				pal(7, is_greyed and 52 or fg_fx)
+				print(chr(fx), x + 42, y_text, is_greyed and fg_greyed or fg_fx) -- TODO: replace with sprites
+				pal(7, is_greyed and fg_greyed or fg_fx)
 				spr(256 + ((fxp0 << 4) | fxp1), x + 46, y_text)
 			else
-				pal(7, is_greyed and 52 or fgd_fx)
+				pal(7, is_greyed and fg_greyed or fgd_fx)
 				spr(66, x + 42, y_text)
 			end
 			-- Loop Markers
@@ -5757,19 +5938,6 @@ function ui_notegrid.attach(parent, el)
 			elseif step == track_length then
 				line(x, y - 1, x + app.column_width - 2, y - 1, 37)
 			end
-			-- Awareness Border (for editing mode)
---[[
-			if app.is_editing then
-				line(0, 0, self.width - 1, 0, 36)
-				line(0, self.height - 1, self.width - 1, self.height - 1, 36)
-				if self.channel == 0 then
-					line(0, 0, 0, self.height - 1, 36)
-				end
-				if self.channel == 7 then
-					line(self.width - 1, 0, self.width - 1, self.height - 1, 36)
-				end
-			end
-]]
 			prev_fx = fx
 			if inst ~= 0xff then
 				prev_inst = inst
@@ -5809,11 +5977,8 @@ function ui_notegrid.attach(parent, el)
 	
 	function el:click(msg)
 		local muted = sfx.channel_is_muted(app.pattern, self.channel)
-		if new_track_dialog then
-			new_track_dialog:detach()
-			new_track_dialog = nil
---			sfx.mute_channel(app.pattern, self.channel, true)
---			return
+		if channel_dialog then
+			ui_notegrid.close_channel_dialog()
 		end
 		if muted then return end
 		local track = sfx.pattern_track(app.pattern, self.channel)
@@ -5847,7 +6012,7 @@ function ui_notegrid.attach(parent, el)
 	
 	function el:drag(msg)
 		if sfx.channel_is_muted(app.pattern, self.channel) then return end
-		if new_track_dialog and new_track_dialog.channel == self.channel then
+		if channel_dialog and channel_dialog.channel == self.channel then
 			return
 		end
 		if msg.mb == 2 then
@@ -5861,33 +6026,6 @@ function ui_notegrid.attach(parent, el)
 	function el:release(msg)
 		self.parent.is_selecting = false
 		selection.clear_anchor()
-	end
-	
-	function el:hover(msg)
-		local muted <const> = sfx.channel_is_muted(app.pattern, self.channel)
-		local track <const> = sfx.pattern_track(app.pattern, self.channel)
-		local size <const> = sfx.track_size(track)
-		if (muted or size == 0) and msg.my > self.height - 20 then
-			self.cursor = "pointer"
-		else
-			self.cursor = 1
-		end
-	end
-	
-	function el:tap(msg)
-		local muted <const> = sfx.channel_is_muted(app.pattern, self.channel)
-		local track <const> = sfx.pattern_track(app.pattern, self.channel)
-		local size <const> = sfx.track_size(track)
-		if (muted or size == 0) and msg.my > self.height - 20 then
-			if new_track_dialog then
-				new_track_dialog:detach()
-			end
-			new_track_dialog = create_new_track_dialog {
-				channel = self.channel,
-				x = 0, y = self.height - new_track_dialog_height - 1, 
-			}
-			self:attach(new_track_dialog)
-		end
 	end
 	
 	function el:x_to_part(x)
@@ -5921,14 +6059,21 @@ function ui_notegrid.attach_header(parent, el)
 		local muted <const> = sfx.channel_is_muted(app.pattern, self.channel)
 		local track <const> = sfx.pattern_track(app.pattern, self.channel)
 		local size <const> = sfx.track_size(track)
+		local trk_patts <const> = app.track_patterns(track)
 		-- Background is drawn by `tracker`
 		if self:has_keyboard_focus() then
-			rectfill(20, 1, 20 + 14, 7, 59)
-			print(self.str, 22, 2, self.str_is_valid and 7 or 8)
+			rectfill(20, 1, 20 + 14, 7, 7)
+			print(self.str, 22, 2, self.str_is_valid and 55 or 8)
 		elseif muted or size == 0 then
-			print("\|e\-i.\-e.\-e.", 22, 2, 55)
+			--print("\|e\-i.\-e.\-e.", 22, 2, 55)
+			print(" + ", 22, 2, 55)
 		else
-			print(string.format("%03d", track), 22, 2, 55)		end
+			print(string.format("%03d", track), 22, 2, 55)
+			if trk_patts and #trk_patts > 1 then
+				pset(15, 4, 55) pset(17, 4, 55) pset(19, 4, 55)
+				pset(35, 4, 55) pset(37, 4, 55) pset(39, 4, 55)
+			end
+		end
 	end
 
 	function el:update(msg)
@@ -5953,7 +6098,9 @@ function ui_notegrid.attach_header(parent, el)
 				if val then
 					undo.checkpoint()
 					track = mid(val, 0, sfx.num_tracks() - 1)
-					sfx.set_pattern_track(app.pattern, self.channel, track)
+					sfx.mute_channel(app.pattern, self.channel, false)
+					app.set_pattern_track(app.pattern, self.channel, track)
+					ui_notegrid.close_channel_dialog()
 				end
 				self:set_keyboard_focus(false)
 				app.was_in_text_field = true
@@ -5962,32 +6109,38 @@ function ui_notegrid.attach_header(parent, el)
 	end
 	
 	function el:tap(msg)
+		if self.last_tap and time() - self.last_tap < 0.4 then return end
+		self.last_tap = time()
 		local muted <const> = sfx.channel_is_muted(app.pattern, self.channel)
 		local track = sfx.pattern_track(app.pattern, self.channel)
 		local size <const> = sfx.track_size(track)
-		if size == 0 and not muted then
-			sfx.mute_channel(app.pattern, self.channel, true)
-		elseif msg.last_mb == 2 and msg.mx < 22 and not muted then
-			undo.checkpoint()
-			track -= 1
-			track = mid(track, 0, sfx.num_tracks())
-			sfx.set_pattern_track(app.pattern, self.channel, track)
-			undo.checkpoint()
-		elseif msg.last_mb == 2 and msg.mx > self.width - 22 and not muted then
-			undo.checkpoint()
-			track += 1
-			track = mid(track, 0, sfx.num_tracks())
-			sfx.set_pattern_track(app.pattern, self.channel, track)
-			undo.checkpoint()
-		elseif msg.last_mb == 2 and msg.mx >= 22 and msg.mx <= self.width - 22 then
-			self:set_keyboard_focus(true)
-			readtext(true)
-			self.str = ""
-		else
+		if msg.last_mb == 1 and (not key("ctrl")) then
+			local notegrid = self.parent.notegrids[self.channel]
+			local has_dialog = channel_dialog and channel_dialog.channel == self.channel
+			if channel_dialog then
+				ui_notegrid.close_channel_dialog()
+			end
+			if notegrid and not has_dialog then
+				channel_dialog = create_channel_dialog {
+					channel = self.channel,
+					x = 0, y = 1, width = app.column_width - 1,
+					height = notegrid.height - 2,
+				}
+				notegrid:attach(channel_dialog)
+			end
+--		elseif size == 0 and not muted then
+--			app.mute_channel(app.pattern, self.channel, true)
+		elseif msg.last_mb == 2 then
 			undo.checkpoint()
 			local muted = sfx.channel_is_muted(app.pattern, self.channel)
-			sfx.mute_channel(app.pattern, self.channel, not muted)
+			app.mute_channel(app.pattern, self.channel, not muted)
 		end
+	end
+	
+	function el:doubletap(msg)
+		self:set_keyboard_focus(true)
+		readtext(true)
+		self.str = ""
 	end
 	
 	function el:release(msg)
@@ -6016,7 +6169,12 @@ function ui_notegrid.attach_scrollbar(parent, el)
 		local h = nb_rows * scale + 1
 		rrectfill(0, 0, self.width, self.height, 0, 55)
 		rrectfill(0, y, self.width, h, 0, 56)
-		if not sfx.music_is_playing() then
+		for r = app.bar_length, max_rows, app.bar_length do
+			local y = r * scale
+			line(0, y, 3, y, pget(0, y) == 55 and 0 or 55)
+		end
+		local following_playhead =	sfx.music_is_playing() and app.follow_playhead
+		if selection.has_selection() and (not following_playhead) then
 			selection.for_each_channel_each_step(
 				function(_track, step)
 					local y = step * scale
@@ -6041,7 +6199,7 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-12 15:48:43",revision=9812]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-13 13:59:32",revision=10622]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -6107,8 +6265,8 @@ function ui_panel.attach_octave_selector(parent, el)
 		--rrectfill(0, 0, self.width, self.height, 0, 47)
 		-- Base Note
 		if self:has_keyboard_focus() then
-			rrectfill(4, 1, 15, 9, 0, 59)
-			print(self.str or "", 6, 3, self.str_is_valid and 7 or 8)
+			rrectfill(4, 2, 11, 7, 0, 7)
+			print(self.str or "", 6, 3, self.str_is_valid and 55 or 8)
 		
 		else		
 			local displayed_note = app.base_note
@@ -6234,8 +6392,8 @@ function ui_panel.attach_instrument_selector(parent, el)
 		--rrectfill(0, 0, self.width, self.height, 0, 47)
 		print("\014inst", 2, 1, 58)
 		if self:has_keyboard_focus() then
-			rrectfill(4, 7, 11, 9, 0, 59)
-			print(self.str or "", 6, 9, self.str_is_valid and 7 or 8)
+			rrectfill(4, 8, 11, 7, 0, 7)
+			print(self.str or "", 6, 9, self.str_is_valid and 55 or 8)
 		elseif app.instrument == 0xff and self.saved_instrument then
 			pal(7, 44)
 			spr(64, 6, 9)
@@ -6355,8 +6513,8 @@ function ui_panel.attach_volume_selector(parent, el)
 		--rrectfill(0, 0, self.width, self.height, 0, 47)
 		print("\014vol", 4, 1, 58)
 		if self:has_keyboard_focus() then
-			rrectfill(4, 7, 11, 9, 0, 59)
-			print(self.str or "", 6, 9, self.str_is_valid and 7 or 8)
+			rrectfill(4, 8, 11, 7, 0, 7)
+			print(self.str or "", 6, 9, self.str_is_valid and 55 or 8)
 		else
 			local sprite = 256 + app.base_volume
 			pal(7, self.dragged and 7 or 46)
@@ -6452,8 +6610,8 @@ function ui_panel.attach_step_selector(parent, el)
 		--rrectfill(0, 0, self.width, self.height, 0, 47)
 		print("\014jump", 2, 1, 58)
 		if self:has_keyboard_focus() then
-			rrectfill(4, 7, 11, 9, 0, 59)
-			print(self.str or "", 6, 9, self.str_is_valid and 7 or 8)
+			rrectfill(4, 8, 11, 7, 0, 7)
+			print(self.str or "", 6, 9, self.str_is_valid and 55 or 8)
 		else
 			local str = string.format("%02d", app.jump_step)
 			print(str, 6, 9, self.dragged and 7 or 5)
@@ -6711,8 +6869,8 @@ function ui_panel.attach_meters(parent, el)
 		last_rpeak = rpeak
 		app.draw_vert_meter(ox + 0, oy - hmet + 1, 4, hmet, lpeak)
 		app.draw_vert_meter(ox + 5, oy - hmet + 1, 4, hmet, rpeak)
-		if lpeak == 1 then rrectfill(ox + 1, oy - hmet + 1, 4, 4, 0, 8) end
-		if rpeak == 1 then rrectfill(ox + 7, oy - hmet + 1, 4, 4, 0, 8) end
+--		if lpeak == 1 then rrectfill(ox, oy - hmet + 1, 4, 0.2*hmet, 0, 8) end
+--		if rpeak == 1 then rrectfill(ox + 5, oy - hmet + 1, 4, 0.2*hmet, 0, 8) end
 	end
 	function el:tap(msg)
 		if msg.last_mb == 1 then
@@ -6776,7 +6934,7 @@ end
 
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-12 15:48:43",revision=24206]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-13 13:59:32",revision=25016]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -7099,7 +7257,7 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-12 15:48:43",revision=23831]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-13 13:59:32",revision=24641]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -7653,7 +7811,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-12 15:48:43",revision=21268]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-13 13:59:32",revision=22078]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -7722,28 +7880,28 @@ function ui_settings.open()
 	
 	el:attach(ui.create_label { x = 20, y = 60, label = "visuals:", fg = 55})
 	el:attach(ui.create_toggle {
-		x = 26, y = 72 - 2,
+		x = 26, y = 72 - 1,
 		label = "",
 		fg = 55, check_fg = 18,
 		get = function(self) return settings.user.sustain_line_enabled end,
 		set = function(self, val) settings.change_user({ sustain_line_enabled = val }) end,
 	})
 	el:attach(ui.create_label {
-		x = 64, y = 72,
+		x = 44, y = 72,
 		fg = 55,
 		label = "sustain lines",
 	})
 	el:attach(ui.create_toggle {
-		x = 26, y = 84 - 2,
+		x = 26, y = 84 - 1,
 		label = [[]],
 		fg = 55, check_fg = 18,
 		get = function(self) return settings.user.instrument_square_enabled end,
 		set = function(self, val) settings.change_user({ instrument_square_enabled = val }) end,
 	})
 	el:attach(ui.create_label {
-		x = 64, y = 84,
+		x = 44, y = 84,
 		fg = 55,
-		label = [[":001c1c1c00000000" for "same instrument"]],
+		label = "show unchanged instr. as \^:001c1c1c00000000",
 	})
 	
 	el:attach(ui.create_label { x = 20, y = 140, label = "mouse movements (knobs, sliders, ...)", fg = 55})
@@ -7794,7 +7952,7 @@ end
 return ui_settings
 
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-12 15:48:43",revision=26000]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-13 13:59:32",revision=26810]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -8076,7 +8234,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-12 15:48:43",revision=5777]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-13 13:59:32",revision=6587]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local selection = require "src/selection.lua"
@@ -8090,18 +8248,6 @@ local toolrack = {}
 -------------------------------------------------------------------------------
 -- LOCALS
 -------------------------------------------------------------------------------
-
-
-local function create_horiz_divider(el)
-	el.width = el.width or 15
-	el.height = 2
-	ui.head():new(el)
-	function el:draw(msg)
-		line(0, 0, self.width - 1, 0, 58)
-		line(0, 1, self.width - 1, 1, 57)
-	end
-	return el
-end
 
 
 local function create_nyi(el)
@@ -8316,23 +8462,28 @@ local function attach_track_strip(parent, el)
 	el.height = parent.height - 9
 	parent:attach(el)
 	
+	local nb_rows = (el.height - 13) // 8
 	el.track_list = ui.create_list {
 		x = 2, y = 7,
 		width = app.column_width - 4, height = el.height - 13,
-		row_height = 11,
+		row_height = 8,
 		nb_columns = 3,
+--		start = sfx.pattern_track(app.pattern, el.channel) - nb_rows // 2,
+--		overshoot = nb_rows // 2,
 		channel = el.channel,
 		get_active = function(self) return sfx.pattern_track(app.pattern, self.channel) end,
 		set_active =
 			function(self, idx)
 				undo.checkpoint()
-				sfx.set_pattern_track(app.pattern, self.channel, idx)
 				if sfx.channel_is_muted(app.pattern, self.channel) then
 					sfx.mute_channel(app.pattern, self.channel, false)
 				end
+				app.set_pattern_track(app.pattern, self.channel, idx)
 			end,
 		get_start = function(self) return app.toolrack_track_scrollstart end,
 		set_start = function(self, start) app.toolrack_track_scrollstart = start end,
+--		get_start = function(self) return self.start end,
+--		set_start = function(self, start) self.start = start end,
 		get_max = function(self) return sfx.num_tracks() - 1 end,
 		disabled = function(self) return sfx.channel_is_muted(app.pattern, self.channel) end,
 		draw_item =
@@ -8341,7 +8492,7 @@ local function attach_track_strip(parent, el)
 				local active = sfx.pattern_track(app.pattern, self.channel)
 				local size = sfx.track_size(track)
 				if track == active and not muted then
-					rrectfill(x, y, w, h, 0, 4)
+					rrectfill(x, y, w, h + 1, 0, 4)
 				--[[
 				elseif not muted then
 					for c = 0, 7 do
@@ -8353,7 +8504,7 @@ local function attach_track_strip(parent, el)
 				--]]
 				end
 				local fg = size == 0 and 60 or (trach == active and 7 or 57)
-				print(string.format("%03d", track), x + 3, y + 3, fg)
+				print(string.format("%03d", track), x + 3, y + 2, fg)
 			end
 		
 	}
@@ -8376,7 +8527,7 @@ local function attach_track_strip(parent, el)
 			function(self)
 				undo.checkpoint()
 				local muted = sfx.channel_is_muted(app.pattern, self.channel)
-				sfx.mute_channel(app.pattern, self.channel, not muted)
+				app.mute_channel(app.pattern, self.channel, not muted)
 			end,
 	})
 
@@ -8474,7 +8625,7 @@ local function generate_loop_tool(parent)
 		})
 	end
 	
-	parent:attach(create_horiz_divider {
+	parent:attach(ui.create_horiz_divider {
 		x = 3, y = parent.height - 26,
 		width = parent.width - 6,
 	})
@@ -8596,7 +8747,7 @@ local function generate_speed_tool(parent)
 		})
 	end
 	
-	parent:attach(create_horiz_divider {
+	parent:attach(ui.create_horiz_divider {
 		x = 3, y = parent.height - 26,
 		width = parent.width - 6,
 	})
@@ -8688,13 +8839,28 @@ end
 
 
 -------------------------------------------------------------------------------
--- Inst/Vol Tool
+-- Instrument Tool
 -------------------------------------------------------------------------------
 
 
-local function generate_instvol_tool(parent)
+local function generate_instrument_tool(parent)
 	parent:attach(create_nyi {
-		name = "instrument and volume",
+		name = "instrument",
+		x = 0, y = 0,
+		width = parent.width,
+		height = parent.height - 9,
+	})
+end
+
+
+-------------------------------------------------------------------------------
+-- Volume Tool
+-------------------------------------------------------------------------------
+
+
+local function generate_volume_tool(parent)
+	parent:attach(create_nyi {
+		name = "volume",
 		x = 0, y = 0,
 		width = parent.width,
 		height = parent.height - 9,
@@ -8738,9 +8904,9 @@ end
 
 
 local height_oscillo = 39
-local fg_left = 45 -- 37
-local fg_right = 41 -- 39
-local fg_both = 43 -- 38
+local fg_left = 47 -- 37, 45
+local fg_right = 41 -- 39, 41
+local fg_both = 49 -- 38, 43
 		
 local sample_scale <const> = 26175.0
 
@@ -8787,9 +8953,9 @@ local function create_channel_oscilloscope(el)
 		app.draw_borders(1, oy, self.width - 2, height_oscillo)
 		local ymid = oy + height_oscillo // 2
 		for x = 0, self.width - 3 do
-			local y_left = ymid + peek2(0x90000 + x * 16) / 1638
+			local y_left = flr(0.5 + ymid + peek2(0x90000 + x * 16) / 1638)
 			pset(x + 1, y_left, fg_left)
-			y_right = ymid + peek2(0x90002 + x * 16) / 1638
+			y_right = flr(0.5 + ymid + peek2(0x90002 + x * 16) / 1638)
 			local same_spot = (y_right == y_left)
 			pset(x + 1, y_right, same_spot and fg_both or fg_right)
 		end
@@ -8840,12 +9006,13 @@ local toolrack_tab_width <const> = 40
 local tabs = {
 	[0] =
 	{ name = "pattern", height = 45, generate = generate_pattern_tool }, 
-	{ name = "track", height = 110, generate = generate_track_tool }, 
+--	{ name = "track", height = 110, generate = generate_track_tool }, 
 	{ name = "loop", height = 45, generate = generate_loop_tool }, 
 	{ name = "speed", height = 45, generate = generate_speed_tool }, 
 	{ name = "select", height = 45, generate = generate_select_tool }, 
 	{ name = "note", height = 45, generate = generate_note_tool }, 
-	{ name = "inst/vol", height = 45, generate = generate_instvol_tool }, 
+	{ name = "inst", height = 45, generate = generate_instrument_tool }, 
+	{ name = "volume", height = 45, generate = generate_volume_tool }, 
 	{ name = "effect", height = 45, generate = generate_effect_tool }, 
 	{ name = "chord", height = 45, generate = generate_chord_tool }, 
 	{ name = "level", height = 66, generate = generate_mixer_tool }, 
@@ -8944,7 +9111,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-12 15:48:43",revision=19162]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-13 13:59:32",revision=19972]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -9026,6 +9193,8 @@ function ui_tracker.attach(parent, el)
 		x = el.width - 4, y = y + 1,
 		width = 4, height = h - 2,
 	})
+	
+	ui_notegrid.close_channel_dialog()
 	
 	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
 	el.octave_selector = ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
@@ -9822,7 +9991,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-12 15:48:43",revision=16611]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-13 13:59:32",revision=17421]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -9897,10 +10066,10 @@ local function create_track_selector(el)
 		local track = self.parent:track()
 		if msg.mx < 20 then
 			track = mid(track - 1, 0, sfx.num_tracks() - 1)
-			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
+			app.set_pattern_track(app.pattern, self.parent.channel, track)
 		elseif msg.mx > self.width - 20 then
 			track = mid(track + 1, 0, sfx.num_tracks() - 1)
-			sfx.set_pattern_track(app.pattern, self.parent.channel, track)
+			app.set_pattern_track(app.pattern, self.parent.channel, track)
 		end
 	end
 	
@@ -10117,7 +10286,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-12 15:48:43",revision=21792]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-13 13:59:32",revision=22602]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -10283,6 +10452,23 @@ end
 
 
 ----------------------------------------------------------------------------------------------------
+-- Divider
+----------------------------------------------------------------------------------------------------
+
+
+function ui.create_horiz_divider(el)
+	el.width = el.width or 15
+	el.height = 2
+	ui.head():new(el)
+	function el:draw(msg)
+		line(0, 0, self.width - 1, 0, 58)
+		line(0, 1, self.width - 1, 1, 57)
+	end
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
 -- Label
 ----------------------------------------------------------------------------------------------------
 
@@ -10429,8 +10615,8 @@ end
 function ui.create_toggle(el)
 	el.horiz_padding = el.horiz_padding or 0
 	el.vert_padding = el.vert_padding or 0
-	el.off_spr = el.off_spr or get_spr(17)
-	el.on_spr = el.on_spr or get_spr(18)
+	el.off_spr = el.off_spr or get_spr(115)
+	el.on_spr = el.on_spr or get_spr(116)
  	el.width = el.off_spr:width() + 2 * el.horiz_padding
 	el.height = el.off_spr:height() + 2 * el.vert_padding
 	el.has_pointer = el.has_pointer or function() return true end
@@ -10470,17 +10656,19 @@ end
 function ui.create_list(el)
 	el.row_height = el.row_height or 9
 	el.nb_columns = el.nb_columns or 1
-	el.get_str = el.get_str or function(self) return str(idx) end
+	el.get_str = el.get_str or function(self, idx) return tostr(idx) end
 	el.get_active = el.get_active or function(self) return nil end
 	el.scrolled_to = el.scrolled_to or function(self) end
 	el.get_start = el.get_start or function(self) return self.start end
 	el.set_start = el.set_start or function(self, start) self.start = start end
 	el.get_max = el.get_max or function(self) return 999 end
 	el.disabled = el.disabled or function(self) return false end
-	el.start = 0
+	el.on_tap = el.on_tap or function(self) end
+	el.start = el.start or 0
+	el.overshoot = el.overshoot or 0
 	ui.head():new(el)
 	
-	function el:draw()
+	function el:draw(msg)
 		rrectfill(1, 1, self.width - 2, self.height - 2, 0, 59)
 		clip(self.sx + 1, self.sy + 1, self.width - 2, self.height - 2)
 		local nb_rows = (self.height - 2) // self.row_height
@@ -10501,7 +10689,8 @@ function ui.create_list(el)
 				local w = column_width
 				if col == self.nb_columns - 1 then w += self.width % self.nb_columns end
 				if self.draw_item then
-					self:draw_item(idx, x, y, w, self.row_height)
+					local hovered = msg.has_pointer and row == (msg.my - 2) // self.row_height
+					self:draw_item(idx, x, y, w, self.row_height, hovered)
 				else
 					if idx == active_idx then
 						rrectfill(x, y, w, self.row_height, 0, 17)
@@ -10549,7 +10738,7 @@ function ui.create_list(el)
 	
 	function el:click(msg)
 		local max = self:get_max()
-		local row = msg.my // self.row_height
+		local row = (msg.my - 2) // self.row_height
 		local column_width = (self.width - 2) // self.nb_columns
 		local col = msg.mx // column_width
 		local idx = col + (self:get_start() + row) * self.nb_columns
@@ -10558,13 +10747,24 @@ function ui.create_list(el)
 			self:set_active(idx)
 		end
 	end
+	function el:tap(msg)
+		local max = self:get_max()
+		local row = (msg.my - 2) // self.row_height
+		local column_width = (self.width - 2) // self.nb_columns
+		local col = msg.mx // column_width
+		local idx = col + (self:get_start() + row) * self.nb_columns
+		if idx < 0 or idx > max then return end
+		if msg.last_mb == 1 then
+			self:on_tap(idx)
+		end
+	end
 	
 	function el:mousewheel(msg)
 		local nb_rows = (self.height - 2) // self.row_height
 		local start = self:get_start()
 		local max_row = self:get_max() // self.nb_columns - nb_rows + 1
 		start -= msg.wheel_y
-		start = mid(start, 0, max_row)
+		start = mid(start, 0 - self.overshoot, max_row + self.overshoot)
 		self:set_start(start)
 	end
 
@@ -10648,7 +10848,8 @@ function ui.create_field(el)
 	el.height = 7
 	el.cursor = get_spr(53)
 	ui.head():new(el)
-	el.visible = el.visible or function() return true end
+	el.visible = el.visible or function(self) return true end
+	el.on_confirm = el.on_confirm or function(self) end
 	
 	function el:draw()
 		local fg = self.fg or (self.dragged and 63 or 55)
@@ -10714,6 +10915,7 @@ function ui.create_field(el)
 		elseif keyp("enter") or not self:has_keyboard_focus() then
 			if val then
 				self:set(val)
+				self:on_confirm()
 			end
 			self.str = nil
 			self:set_keyboard_focus(false)
@@ -11069,7 +11271,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-12 15:48:43",revision=22516]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-13 13:59:32",revision=23326]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -11302,7 +11504,7 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-12 15:48:43",revision=20742]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-13 13:59:32",revision=21552]]
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
@@ -11458,7 +11660,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-12 15:48:43",revision=13545]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-13 13:59:32",revision=14355]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -11548,7 +11750,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-12 15:48:43",revision=22396]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-13 13:59:32",revision=23206]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -12023,7 +12225,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-12 15:48:43",revision=22731]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-13 13:59:32",revision=23541]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -12093,7 +12295,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-12 15:48:43",revision=21101]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-13 13:59:32",revision=21911]]
 # Things To Do
 
 ## Before Next Release
@@ -12135,9 +12337,9 @@ return Wavetable
 - add wavetable importer.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-12 15:48:44",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.1.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#33",workspace_index=2},{location="pal/0.pal",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-13 13:59:32",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.1.2",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#115",workspace_index=2},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-12 15:48:44"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-13 13:59:32"]]
 :: fonts/p8_mod.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMwIDA3OjEyOjQzIixtb2RpZmllZD0iMjAyNi0w
 MS0zMCAwNzoxNDozNCIscmV2aXNpb249Ml1dbHo0AHsFAACjBQAA8INweHUAAygACAAABAQIBhAD
@@ -12167,392 +12369,404 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-12 15:48:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 13:59:32",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
-Mi0xMiAxNTozNDo1NiIscmV2aXNpb249MTAxODRdXWx6NAAJDAAAEj8AAPMle1swXT17Ym1wPXB4
+Mi0xMyAxMzowNDo1MSIscmV2aXNpb249MTAyMzZdXWx6NAAwDQAA-0AAAPMle1swXT17Ym1wPXB4
 dQBDIAgIBMAXQAcQFyAHEBcQByAXEAdAF8AsZmxhZ3M9MCxwYW5feAgA13k9MCx6b29tPTExfSxD
 APYPEBAE8AgvOcAOBx6wDhceoA4nHpAOBw4XDpAOBx4HBgDiDgceYD4HLmAeNw6ADkcEAH8eJx6Q
-TvAGcAALHThvAPAKCj85kC4XDnAuNw5QLlcOUA5HHgcOUA4nPgYAQQcuEA4IADIOEC4IAP8TAB4n
+TvAGcAALHTZvAPAKCj85kC4XDnAuNw5QLlcOUA5HHgcOUA4nPgYAQQcuEA4IADIOEC4IAP8TAB4n
 DjAuBw4ADjcOIB4nDgAeFx4gDjcOED4wHhceoD7wCoEAHXITPzmgHhce3ADwBoAeBx4HHnAOBz4H
-DmAeBz4HjgcGDgIAEgcGAGGOBz4HHmAfABFwKwASgBMBAnwAHwN8ABn-DA8NBADPEgD_FAfeF84n
-vjeuJ74Xzgf_FgDOAEcACx43RwBjEQD_IkeeAgAv-iJDACFhEgD_IyeuQQBPrif_I0MAIR8lQwAq
--wcICAQwB2AXUAcAB0AHAAcgJzA3QBewQgAZ0BcFBP87CgRuBG4ETiQCACAuRAIAL-4IlwEZAUUA
-EQg5ABEuRQARTlEAH-5YAhr4CAwMBEBPOVAeLzoeMB4NLg0eIA4NTg0OBgAgEC4YAP8GAB4dDi0e
-AB4tThAOLR5QHg0ecC5wagAZ-wsHCAQvOQAOAB5QDlAOEA4gDhAeEF4wHkAOIEYACywxNEcAkSAP
-OUAeMF4QHkYAnw5QDlAeAA4ALkcAHVLgTzkQTgIAH3A8ABqgDQ0EkA87DzkGgAYAIBZwBgAgJmAG
-ACA2UAYAIEZABgAgVjAGAFEWLzoWIAkAow86Hw4PJQ86BhAPALAPDg85HyUPJA85ABIAECYSABEv
-EAAADwD-AjYPOi8lHyQfOVYOLyQOhi4WYAIZ8QcwCQQPOQb-EhwGDzoPORb-EhoWDzoAEwBRGgYP
-OhAUAFEYFg86IBQAURgGDzowFABRFhYPOkAUAP8AFgYPOlAPOfYYDzpg-hgwfgAZ8AQgCgQQ-zkM
-IA7POA86DsYOAA7fCQDxE9YNDi84FgwmDCYMDQ5GHAYcNg0OHAYMBgwGLAYsDQ42DAYCABMmFgBK
-FhwWHBYAIxYcKgAiHBYSAP8B3A0O1g0ADcwNDsYNIP0MEKUAIvElxg86Ds8SDgAO1g86Dt8SDzoO
-Jh84Bi0GLQYPOg5PEhcMFzwPOg4WDQYNBg0mDSYLDjwHDAIAIiwLFgBKHRYdFhYAIx0WKgAiFxwS
-AO-WCw7cCwALxgsOzAsg_6kAG-8CDQ0E8CoPN7AOkE6QDrAO8Co9AAwPqwIyJy84qQImTzijAiVP
-OJ8CIU84nQIfOJ0CHfoIOAoE8CgfIP8lJC8gDyXwJA4PIA7wJh4DADwO8ChUAMMuMTIzODA5NTIz
-ODFgAKItMS4xMTQyODU3BgACbwAaNW8ARAgEDyVXAAZgAAB1AG8kDi3_JB1oADdPLyQQHgIABBQ_
-eQAE3wAfYHcANKwFBQRgByAnAEdAUQAKhAEsMTY3ABAgeQlvJyAXMAcAOwAdf0BHACcgB2A3AB1g
-AAcwFyAn9wkfIDsAHV9HQEdARzUAGhAH4gB-QCcgRwBnYJ8CGc8HBQRgZwBHICdAByA4ABlBBQUE
-EIkBXxAHMAcQqwAbYAcEEC86IEwD-wMADk0POQ5NDA5NDAAMLQwgLBAXCxoESgAAawY2DgAOYwYU
-DlwGEA5WBp8POQANLyQNIC1eABthDAYEMBcg9QgxAAcQvAs1EAcACAATMBgAP0AXIAEBDh4wWQD-
-CghwBwAIYBcACAdgFwgAB3AIBwAHYAgQF1BLABpRBQUEByCJABUgCAAPjQEaD98CFw_IAzQh8ASn
-AA83ABqlCwoEvzkvOg85DwQA-xYfOQ86nzkPOm85EA4POi4NLhAODS4dHhAObQ4QTh0eUA4NHmAu
-yAca8QALCgQwLzlgHg86DlAeHU5KADMeHS4SCpAOEG4Nng0eDQ4CAC8tvlkAHMrwCG85MA5POg4w
-Dk0EAC9uwEsAGf8DBwcEMAdAFzAnIDcwJ0AXUAcQPgAc7xAHUBdAJzA3ICcwF0AHIAEddb85LyUP
-OQ8EAIEfOQ8lnzkPJYUBHyWFASMvMTCGAQMfJYYBLi8xMIcBBBYlfwEOhwEPTAAS8RkXFwTw_QHw
-BQEHAfAEARcB8AMBJwEAAfAAATcBBwHgARcRJwHgEQcRHwASBx8AIPADCgBPBQHwDIYEGgBrAHKf
-MfACATcBBQD2AAABRwHgITcB0AFnAeBBB1gAH5dYAB4TbsMAAZ8AQgIRBxFMAAGzAEUEIfAEDQAQ
-AxwAGALFAB9ubQAakBkZBPD-KgHwBz4AcAYBBxEAARDKAAAQAAAmAfAD0BFHAScBsAEHAUcRBxHA
-AVcRRgFgN0HwADEARQEQBYAAMwQBJ7AAPwcBMIwNGQ_uAQEkMeCrAVchBwHwAKwBBP4AHyISAiYB
-TwFtAQFHAfABVAEfVVYAGvwpHx8E8B4F8EMF8AEF8AIPOkcO8AYOhw7wA8fwAefg9wFwBTAO9wEO
-MAVg9wMPP5AO9wMOkPcFDYAEAAAZAKANQAUw9wMdEAVgMwD-Fg2w9wEdwOcd4McdwAUgDocOHQAF
-oAVADQ5HDi0gBYAFcG1QBfApDgwfNqwAChBGrAChhg7wA8bwAebg9qwAEfasABH2rACM9gMOkPYF
-DYAEACIO9qwAEvasABD2rACB9gEdwOYd4MasABWGrAAfRqwAKvwnB-BDB-ABB-ACDzxPOw888AYO
-jzsO8APN8AHt4P0BcAcwDv0BDjAHYP0DDzqQDv0DDpD9BQyABAAAGQCgDEAHMP0DHBAHYDMA-xUM
-sP0BHMDtHODNHMAHIA6NDhwAB6AHQAwOTQ4sIAeAB3BsUAevAB5B4AfwDgMAHyS0AE0g8AGzACHw
-A7AAH8CuACAA7QOwFQfwAgegB-AZTzusAPMPbzsPPOCvO4AHIM4gB2APPM4NkO4POnD_AXD_AQxg
-BAD-HDAHEP4BDAAHUO4ccA3ODQyQzhygrhzADW4NHKAHIAxOLAAHgAdQTDAH8D_4BhlwGRkEsAfw
-CJEAP0AHQJMAPl-wAEzwRJAAGf8BCQcE8AVPOiBuEG4QbiBOABEEGtAJBwSgTzsgbhAOTw8OPwAf
-oD8AGsAcHAT-OggwDvYGDzkGABUNBQBQXvYKDQ4EALH9AJYN8AAOJi0OJggALA0QCQC7PiYNvjAO
-lg0Olg0HAB_9NwAMZPAADpb_AmoAGS2BAAQFAC-9B9MIHP8AVwBnMAcANwA3AAcwZwBXNg0dAE4D
-HwFFARqPDAUE8A0H8A41ABqPCwUE8AsH8AtqAB6PCQ8qcA8y8Ak5AB4-DQ8qpAAcrwcFBIAnMCcw
-J4DdBw0PNwA1IRcwDQwvMBc7AB4Aswx-UAdQB2AnIDsAGhAIOwBRMAcwFwAEAC9wJ58KG5QHBQQn
-MAcQByAEAC8nMK8CGgM-ACIAJwQADz8AH683IAdQJzAHUDcgOQAkLwdQOQAfTzBHECc5AB8CowEQ
-AB8PTwcwJyA_ACBvMCcAFwAnPgAlRRAHIDeoAQ9AACJPAFcAJ0AAIxAn2QISMH8AD6sBG3ALBgQA
-J2AHOwGfkAeQByAHYCdgQAAiAHkBAJwQD0QAIxI3gwAHBAAfN0MAIgCGAAQGAA9HACNgR1AHkCdw
-DQEvR1A7ACBAB5A3YAYADzsAHxJAQQEOPwAPwwEaIBAX9wA-YDdQxQEqD0YAKwA8ADRQR1AKAA_K
-ACYBBgAPSAAmAlMCLzdgCgIjrwMFBDcAFwAXADfiBxoxAwUEsBMAcAUPOQAdTycQRxA1ACAvNxCj
-AB4CoQA-NxAHOQAdPzcQJ24AHz83EDdGAR8yJxAHAgAPowAeLwBHbgAfTzcANxCjACEfAOAXHgBr
-IB-wBAgNDzIAwnEHBwSALzkgEx4vIC6CCQ0cNYgMn5BvOQD_CwBukDkAGs8NBwTQrzkA-hcArtA5
-ABoE7Bf_AScOAA5HDzkORw0ORw0ADSfXFw9JAAyAFQkEEP86ASAGEagADvcDDzkO9wMNBACfAA33
-AQ0g-QEQgQEfDzIA------------------------------------GVA9MTB9fQ==
+DmAeBz4HjgcGDgIAEgcGAGGOBz4HHmAfABFwKwASgBMBAnwAHwN8ABn0FA8NBBCvOiAOrxIOAA7N
+DzkOTQdtDA5NF10MDk0nTQwOTTc9CgABFAAAHgCfzQwADK0MIKwQaQALHzdpAAMTEWkAb80MDj1H
+PQUAAx-NZQAtFhJlAAG9AAtgAAEUAA9lAC4fJWUASP8HCAgEMAdgF1AHAAdABwAHICcwN0AXsEIA
+GdAXBQT-OwoEbgRuBE4kAgAgLkQCAC-_CEUACx44RQARCDkAES5FABFOUQAv-gpFABn4CAwMBEBP
+OVAeLzoeMB4NLg0eIA4NTg0OBgAgEC4YAP8GAB4dDi0eAB4tThAOLR5QHg0ecC5wagAZ-wsHCAQv
+OQAOAB5QDlAOEA4gDhAeEF4wHkAOIEYACywxNEcAkSAPOUAeMF4QHkYAnw5QDlAeAA4ALkcAHVLg
+TzkQTgIAH3A8ABqgDQ0EkA87DzkGgAYAIBZwBgAgJmAGACA2UAYAIEZABgAgVjAGAFEWLzoWIAkA
+ow86Hw4PJQ86BhAPALAPDg85HyUPJA85ABIAECYSABEvEAAADwD-AjYPOi8lHyQfOVYOLyQOhi4W
+YAIZ8QcwCQQPOQb-EhwGDzoPORb-EhoWDzoAEwBRGgYPOhAUAFEYFg86IBQAURgGDzowFABRFhYP
+OkAUAP8AFgYPOlAPOfYYDzpg-hgwfgAZ8AQgCgQQ-zkMIA7POA86DsYOAA7fCQDxE9YNDi84Fgwm
+DCYMDQ5GHAYcNg0OHAYMBgwGLAYsDQ42DAYCABMmFgBKFhwWHBYAIxYcKgAiHBYSAP8B3A0O1g0A
+DcwNDsYNIP0MEKUAIlDGDzoOz5QE8RzWDzoO3xIPOg4mHzgGLQYtBg86Dk8SFwwXPA86DhYNBg0G
+DSYNJgsOPAcMAgAiLAsWAEodFh0WFgAjHRYqACIXHBIA79YLDtwLAAvGCw7MCyD7qQAb-wINDQTw
+Kg83sA6QTpAOsA7wKj0ADA_rAjInLzipAiZPOKMCJU84nwIhTzidAh84nQId_gg4CgTwKB8g-yUk
+LyAPJfAkDg8gDvAmHgMAPA7wKFQAwy4xMjM4MDk1MjM4MWAAoi0xLjExNDI4NTcGAAJvABo1bwBE
+CAQPJVcABmAAAHUAbyQOLf4kHWgAN08vJBAeAgAEFD55AATfAB9gdwA0rAUFBGAHICcAR0BRAAqE
+ASwxNjcAECABCm8nIBcwBwA7AB1-QEcAJyAHYDcAHWAABzAXICd-Ch8gOwAdX0dAR0BHNQAaEAfi
+AH9AJyBHAGdgnwIZzwcFBGBnAEcgJ0AHIDgAGUEFBQQQiQFfEAcwBxCrABtgBwQQLzogTAMwAA5N
+6Qm-DA5NDAAMLQwgLBCfCxoESgAAawY2DgAOYwYUDlwGEA5WBp8POQANLyQNIC1eABthDAYEMBcg
+9QgxAAcQRAw1EAcACAATMBgAP0AXIAEBDh4wWQD-CghwBwAIYBcACAdgFwgAB3AIBwAHYAgQF1BL
+ABpRBQUEByCJABUgCAAPjQEaD98CFw_IAzQh8ASnAA83ABqlCwoEvzkvOg85DwQA-xYfOQ86nzkP
+Om85EA4POi4NLhAODS4dHhAObQ4QTh0eUA4NHmAuyAca8QALCgQwLzlgHg86DlAeHU5KADMeHS4S
+CpAOEG4Nng0eDQ4CAC8tvlkAHMrwCG85MA5POg4wDk0EAC9uwEsAGf8DBwcEMAdAFzAnIDcwJ0AX
+UAcQPgAc7xAHUBdAJzA3ICcwF0AHIAEddb85LyUPOQ8EAIEfOQ8lnzkPJYUBHyWFASMvMTCGAQMf
+JYYBLi8xMIcBBBYlfwEOhwEPTAAS8RkXFwTw_QHwBQEHAfAEARcB8AMBJwEAAfAAATcBBwHgARcR
+JwHgEQcRHwASBx8AIPADCgBPBQHwDIYEGgBrAHKfMfACATcBBQD2AAABRwHgITcB0AFnAeBBB1gA
+H5dYAB4TbsMAAZ8AQgIRBxFMAAGzAEUEIfAEDQAQAxwAGALFAB9ubQAakBkZBPD-KgHwBz4AcAYB
+BxEAARDKAAAQAAAmAfAD0BFHAScBsAEHAUcRBxHAAVcRRgFgN0HwADEARQEQBYAAMwQBJ7AAPwcB
+MIwNGQ_uAQEkMeCrAVchBwHwAKwBBP4AHyISAiYBTwFtAQFHAfABVAEfVVYAGvwpHx8E8B4F8EMF
+8AEF8AIPOkcO8AYOhw7wA8fwAefg9wFwBTAO9wEOMAVg9wMPP5AO9wMOkPcFDYAEAAAZAKANQAUw
+9wMdEAVgMwD-Fw2w9wEdwOcd4McdwAUgDocOHQAFoAVADQ5HDi0gBYAFcG1QBfBwwBEZDKwAEEas
+AKGGDvADxvAB5uD2rAAR9qwAEfasAIz2Aw6Q9gUNgAQAIg72rAAS9qwAEPasAIH2AR3A5h3gxqwA
+FYasAB9GrAAq-CcH8EMH8AEH8AIPPE87DzzwBg6POw7wA83wAe3g-QFwBzAO-QEOMAdg-QMPOpAO
+-QMOkP0FDIAEAAAZAKAMQAcw-QMcEAdgMwD-FQyw-QEcwO0c4M0cwAcgDo0OHAAHoAdADA5NDiwg
+B4AHcGxQB68AHkHgB-AOAwAfJLQATSDwAbMAIfADsAAfwK4AIADtA7AVB-ACB6AH8BlPO6wA8w9v
+Ow884K87gAcgziAHYA88zg2Q7g86cP4BcP4BDGAEAP8cMAcQ-gEMAAdQ7hxwDc4NDJDOHKCuHMAN
+bg0coAcgDE4sAAeAB1BMMAfwP7gGGXAZGQSwB-AIkQA-QAdAkwA_X-AATPBEkAAZ-wEJBwTwBU86
+IG4QbhBuIE4AEQQa0AkHBKBPOyBuEA5PDw4-AB_gPwAawBwcBP86CDAO9gYPOQYAFQ0FAFBe9goN
+DgQAsf0Alg3wAA4mLQ4mCAAsDRAJALs_Jg2_MA6WDQ6WDQcAH703AAxk8AAOlv4CagAZLYEABAUA
+L-0H0wgc-wBXAGcwBwA3ADcABzBnAFc2DR0ATgMfAUUBGo8MBQTwDQfwDjUAGo8LBQTwCwfwC2oA
+Ho8JDypwDzLwCTkAHj8NDyqkAByvBwUEgCcwJzAngN0HDQ83ADUhFzANDC8wFzsAHgCzDH9QB1AH
+YCcgOwAaEAg7AFEwBzAXAAQAL3AnnwoblAcFBCcwBxAHIAQALycwrwIaAz8AIgAnBAAPPwAfrzcg
+B1AnMAdQNyA5ACQvB1A5AB9PMEcQJzkAHwKjARAAHw9PBzAnID4AIG8wJwAXACc_ACVFEAcgN6gB
+D0AAIk8AVwAnQAAjECfZAhIwfwAPqwEbcAsGBAAnYAc7AZ_QB5AHIAdgJ2BAACIAeQEAnBAPRAAj
+EjeDAAcEAB83QwAiAIYABAYAD0cAI2BHUAeQJ3ANAS9HUDsAIEAHkDdgBgAPOwAfEkBBAQ4-AA-D
+ARogEBf3AD9gN1DFASoPRgArADwANFBHUAoAD4oAJgEGAA9IACYCUwIvN2AKAiOvAwUENwAXABcA
+N_IHGjEDBQSwEwBwBQ85AB1PJxBHEDUAIC83EKMAHgKhAD83EAc5AB0-NxAnbgAfPzcQN0YBHzIn
+EAcCAA_jAB4vAEduAB9PNwA3EKMAIR8A4BceAPMgH-AECA0PMgDCcQcHBIAvOSATHi8gLoIJDRw1
+iAyfkG85AP4LAG6QOQAazw0HBNCvOQD_FwCu0DkADAw4ACAQjzUYID9fNxhADz8PNwsASA85Dk8H
+ACAADRYATw0gjRBdACEjXzhKGCdfOEwYJV84ThgkXzhQGE9fOC8kZwAdAa8YEDfEAAH5GB86_Rgs
+Hjf5GBQ6_RgSOvkYHzr5GCK-BwcEcE83gE6ATnA4ABqQEAoEEL86IA6-ogHA3Q85Dh0vNw0cDSwd
+CwCSDA0MDQwdDD0LCwCDHA0cLQsOHSwUAI-dCwALvQsgu1ABGgRwADCfDh8GAVQfDg8Xn-8Zow8X
+DyUnDQcdBx0RAHodBw0HDRcNEAAyBw0XEAAXLSwAEb3iAW8MvyQMILyQAA0PgwMsUA4HBBCfwRpQ
+Lw8ubzfKAYAvBx8uDxNvN6QAJC8vCwAxLy4fCQCvAA0vE283DSCdEGcAIyI5BmYAQTkHFg5ZAP4A
+DSYObzcNDiYebA0ADS5sWgAPdgQRDzIA---------------------------------4dQPTEwfX0=
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-qKIefk-wf7DAEz5P8H_ooh5zD-9-f39-BLE
-P9cSyz8SzD8SzD-AEs4--sMATNk-Ess-wBLQP-6iiHnOP-39-c4SwT-AEsE-yhLBP8gSP8gSxj-H
-Ej8SP9n_wwBMP83_ooh5xT-GEsU-xxLLPxLMPxLLPxLQP-7DAEzYP8ASyj8S0j-_ooh5zj-9-f3A
-EsE-wBLBP8QSwT-AEsE-xRLCPxLBP8gSwD-HEsY-yBI-yBLGP8j_wwBMwD-Q-qKIeT8SP9YSyj-C
-EsA-wBLBP8ESP8ISxD-BEsA-EsE-EsA-Esk--sMATM0-wRI-EsE-EsE-EsU-wRLAPxLBPxLAPxLL
-P-6iiHnOP-39-cASwD-CEsA-xBLBP8ASwT-FEsI-EsE-yBI-Ej-GEsY-xBLHP8QSwj-BEj-I-sMA
-TD8SP8v_ooh5wT8SwT-GEsU-xxLLPxLBPxLAPxI-EsM-EsU-EsI-whI-EsA-Esk--sMATMw-EsI-
-EsE-EsE-EsQ-EsI-whI-EsA-Ess--qKIecY-EsU--f39wBLAP8ISwD-EEsY-xRLCP8wSPxI-xhLG
-P8QSwD-DEsA-xBLCP8ESP8j_wwBMPxI-y-6iiHk-Ej-aEss-EsE-whLAP8ASwT8Sxj-AEsE-EsI-
-wBLKP-7DAEzNP8ASwD8SPxI-EsE-EsU-wBLBPxLCP8ASzD-_ooh5xT-BEsQ--f39wBLAP8ISwD-E
-Ej8Swj8SP8USxT-HEsE-1hLAP8MSwD-EEj-BEsI-xv7DAEzBP83_ooh5xT-GEsU-xxLLPxLBPxLF
-PxLAPxLIPxLAPxLBPxLAPxLJP-7DAEzPPxI-Ej8SPxLBPxLHPxLAPxLBPxLAPxLLP-6iiHnGPxLF
-P-39-cASwD-CEsA-xBI-EsI-Ej-FEsU-xhLCP8gSxj-EEsA-wxLAP8QSP8ESwj-F-sMATMI-zv6i
-iHnEP9YSzD-AEsA-wRI-wRLCP8ASwD8SwD-BEsE-EsE-EsA-Esk--sMATMw-wRLBPxI-EsE-wRLA
-PxLAP8ESwT8SwT8SwD8Syz-_ooh5zj-9-f3AEsE-wBLBP8QSxj-FEsU-xxLAP8kSwD-CEsA-xBLH
-P8QSxj-G-sMATMA-7f6iiHn7P-7DAEz7P-6iiHnOP-39-f393BL7P-7DAEz7P-6iiHnOP-39-f32
--tra29X_n6Cm-nZ3ff39-f39-f3UAol71DwV-f39-f39-dQCO9Q8FdX_QEBEwRURwRURwRXsEcEV
-EcEVEcEV7BHBFRHAFcARwRX95xHBFRHAFcARwRXsEcEVEcAVwBHBFewRwRURwRURFf3FPBU8FTzB
-FTwVPBXAAjvUPBXVERURFREVERURFREV7BEVERURFREVERURFewRFREVwBEVwBEVERX95xEVERXA
-ERXCERXsERURFcARFcIRFewRFREVERURFREV-cU8FTwVPBXDPBXAAjvUPBXVERURFREVERURwRXs
-ERURFREVERURwRXsERURFcARFcARFREV7xEVERURFe8RFREVwBEVwBHBFewRFREVwBEVwRHAFewR
-FREVERURFRHBFe8RFREVERXLPMEVPMEVwDwVwQI7yD-BO8c8FdURFREVERURFREVERXsERURFREV
-ERXBERXsERURFcARFcARFREV-ecRFREVwBEVwBEV7hEVERXAERXCERXsERURFREVERURFREV-cU8
-FcE8FTwVwgI7yD-_Hjc8P8A7xjwV1RHBFRHBFRHBFewRwRURwRXBERXsEcEVEcEVEcEV-ecRwRUR
-wRURwRXsEcEVEcEVEcEV7BHBFRHBFRHBFf3FPBU8wRU8FTwVwAI7yD8GwD-AO8U8Ff39-f39-f3U
-AjvIPwbBP8A7xDwV-f39-f39-dQCO8g-Bj8GwD87xDz_AAAA-f39-f39-dQCO8g-Bj-ABj87xDw1
--ookytD_TGF05DUq9jUq9jX4KvY1KvY1KvY19wI7yD8GP8AGPzvEPDUN0CrkNSr2NSr2Nfgq9jUq
-9jUq9jX3AjvIPwY-Bj-AO8Q8NQ3C-vfwosENxP7xqm0NwirA-pPomsEqLMEqwv6O3NnBKhrBKtA1
-KvY1KvY1_CrBOMEqxRUqxCzBKizAKsMawCrAGsEq0DUqwjjBKsQVwSrCLMEqLMAqwxrAKsAawSrQ
-NSrCOMEqxBXBKsIswSoswSrCGsEqGsEq0DX3AjvFP8IGP8E7xTw1DcE4DccVDcIqwCwqLCosKiwq
-xBoqGioaKtA1KvY1KvY1_CrBOCrAOCo4wCrBFSrELCosKsAsKsQaKsAaKhoq0DUqwTgqyRUqwiwq
-LCrALCrEGirAGioaKtA1KsE4KskVKsIsKiwqwSwqxBoqGioaKtA19wI7xD-ABsI-O8c8NQ3BOA3H
-FQ0VDcAqwCwqLCosKiwqwxrAKhoqGirH-pRztCrGNSrH-rGtbyrL-lyVYirI-jyVkirKHCrGNSrH
-MirLICrIECrKHCrGNfgqwTgqwDgqOMAqwRUqFSrCLCosKsAsKsQaKsAaKhoqxxwqxjUqwTgqOMAq
-xBXBKsIsKiwqwCwqxBoqwBoqGirHHCrGNSrBOCrHFcEqwiwqLCoswSrCGsEqGioaKsccKsY19wI7
-xD8Gwz87xzw1DcE4DccVwQ3AKsAsKiwqLCosKsQaKhoqGirQNSr2NSr2NfgqwTgqwDgqxBXBKsIs
-KiwqwCwqxBoqwBoqGirQNSrBOCrAOCrGFSrCLCosKsAsKsQaKsAaKhoq0DUqwTgqxxUqxCwqLCos
-KsQaKsEaKhoq0DX3AjvEPwbDPzvHPDUNwjjBDcYVDcAqwCzBKizBKsIawSoawSrQNSr2NSr2Nfgq
-wTjBKscVKsIswSoswSrCGsEqGsEq0DUqwjjBKsQVwSrCLMEqLMEqwhrBKhrBKtA1KsI4wSrEFcEq
-wizBKizBKsIawSoawSrQNfcCO8Q-wAbBP8A7xzw1DdAq5DUq9jUq9jX4KvY1KvY1KvY19wI7xT-D
-O8g8NcM4Nf39-ec4NfY4NfY4Nf3sAjvUPDXDODX9-f3nODX2ODX2ODX97AI71Dw1wzg1-f395zg1
-9jg19jg12BrANcAawTX9ywI71Dw1wzg1-f395zg19jg19jg12Ro1wBo1GjX9ywI71Dw1wzg10CA1
-yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1-cY4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4
-NdAgNcYaNcAawTXHHDX9wQI71Dw1wzg1-f395zg19jg19jg12Ro1wBo1GjX9ywI7wwLCO8s8NcM4
-Nf39-ec4NfY4NfY4NdgawTUawTX9ywI7wgLAPMACwDvKPDXDODX9-f3nODX2ODX2ODX97AI7wgI8
-AsA8AjvKPDXDODX9-f3nODX2ODX9-ecCO8ECwDwCwDwCwDvJPDXDODX9-f3nODX2ODX9-ecCO8EC
-PALCPAI7yTw1wzg1-f395zg19jg19jjBNcQVwTXNGsA1wBrBNf3LAjvAAsA8AsI8AsY7wjw1wzg1
--f395zg19jg19Tg1yRU1xCzBNcUaNcAaNRo1-csCO8ACPDsCOwI7AjwCOwI7AjwCO8I8NcM4NdAg
-NcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNf3GODXQIDXIEDXKHDXLODXQIDXIEDXKHDXK
-ODXHFcE1xCzBNcUaNcAaNRo1xxw1-cECO8ACxjwCwjwCwDvCPDXDODX9-f3nODX2ODX1ODXHFTXG
-LME1xRo1wBo1GjX9ywI7xwI8AsI8AjvDPDXDODX9-f3nODX2ODX2OME1xBXBNc0awTUawTX9ywI7
-xwLAPALAPALAO8M8NcM4Nf39-ec4NfY4Nf395wI7yAI8AsA8AjvEPDX9-f3tODX2ODX2ODX97AI7
-yALAPMACwDvEPDX9-f3tODX2ODX2ODX97AI7yQLCO8U8NcM4wTXEFcE1zRrBNRrBNdU4wTXEFTXE
-LME1LME1whrBNcAawDXC-sqp6sA1wAbBNQbBNf36ODX2ODX2ODXYGsA1wBo1GjX9ywI71Dw1wjg1
-xxU1xizBNcYaNRo1GjXUODXHFTXELDUsNSw1LDXCGjUaNRo1xAY1BjUGNQY1wQY1-fo4NfY4NfY4
-NdkaNcAaNRo1-csCO9Q8NcI4NccVwTXELME1xBrBNRo1GjXHHDXKODXHFTUVNcIsNSw1LDUsNcIa
-NRo1GjXEBjUGNQY1BjUGwTXLMjXLIDXIEDXKHDX9xjg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg1
-0CA1xho1wBrBNcccNf3BAjvUPDXCODXJFTXELME1xBo1wRo1GjXUODXHFcE1wiw1LDUsNSw1who1
-GjUaNcQGNQY1BjUGNQY1-fw4NfY4NfY4NdkaNcIaNf3LAjvUPDXDOME1xBXBNc0awTUawTXVOME1
-xhU1wizBNSzBNcIawTXAGsA1wgbANcAGwTUGwTX9_jg19jg19jg12BrBNcEaNf3LAjvAPNA7wDw1
--f397Tg19jg19jg1-ewCO8AC0DvAPDX_KzlG9jU9wjg98TU99jX4PcI4PfE1PcI4PfE1PfY19wI7
-1Dw1PfY1PcI4PfE1PfY1_D3COD3xNT3COD3xNT32NfcCO9Q8NT3COME9xBU9zxrBPRrBPdA1PcI4
-PfE1PfY1_D3COD3xNT3COD3xNT3COME9xBXBPc0awT0awT3QNfcCO9Q8NT3BOD3HFT3GLME9xho9
-Gj0aPdA1PcI4PfE1PfY1_D3COD3xNT3COD3xNT3BOD3JFT3ELME9xho9Gj0aPdA19wI71Dw1PcE4
-PTjAPcQVPRU9xCzBPcQawT0awT3HHD3GNT3COD3QID3IED3KHD3GNT3HMj3LID3IED3KHD3GNfg9
-wjg90CA9yBA9yhw9xjU9wjg90CA9yBA9yhw9xjU9wTg9xxXBPcQswT3EGsE9Gj0aPcccPcY19wI7
-w-5fV0-BO8w8NT3BOD3AOD3EFcE9xCzBPcQaPcEaPRo90DU9wjg98TU99jX4PcI4PfE1PcI4PfE1
-PcE4PccVPcYswT3EGj3BGj0aPdA19wI7wi47wS47wi47LjvEPDU9wjjBPcYVPc0awT0awT3QNT3C
-OD3xNT32Nfg9wjg98TU9wjg98TU9wjjBPcQVwT3NGsE9GsE90DX3AjvCLjvGLjsuO8Q8NT32NT3C
-OD3xNT32Nfg9wjg98TU9wjg98TU99jX3AjvCLjvGLsE7xDw1wzg19jg1-f3sODX2ODX2ODX97AI7
-wi47wS47xC47xDw1wzg19jg1-f3sODX2ODX2ODX97AI7wy7BO8UuO8Q8NcM4NfY4Nf397Dg19jg1
-9jg12BrANcAawTX9ywI71Dw1wzg19jg1-f3sODX2ODX2ODXZGjXAGjUaNf3LAjvUPDXDODXQIDXI
-EDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDX9xjg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg1
-0CA1xho1wBrBNcccNf3BAjvUPDXDODX2ODX9-ew4NfY4NfY4NdkaNcAaNRo1-csCO9Q8NcM4NfY4
-Nf397Dg19jg19jg12BrBNRrBNf3LAjvUPDXDODX2ODX9-ew4NfY4NfY4Nf3sAjvBPME7PMA7wTzA
-OzzBO8I8NcM4Nf39-ec4NfY4Nf395wI7wjw7wDw7PDs8O8I8O8M8NcM4Nf39-ec4NfY4Nf395wI7
-wjw7wDw7PDs8wTvAPDvDPDXDODX2OME1xBXBNc0awTUawTXCBsA1wAbBNQbBNcY4wTXEFTXELME1
-LME1whrBNRrBNcIGwDXABsE1BjUGNf3BODX2ODX2OME1xBXBNc0awDXAGsE1-csCO8I8O8A8Ozw7
-wTw7wDw7wzw1wzg19Tg1xxU1xizBNcQaNRo1GjUaNcIGNQY1BjUGNcEGNcU4NccVNcQsNSw1LDUs
-NcIaNRo1GjXEBjUGNQY1BjUGNQY1-cE4NfY4NfU4NckVNcQswTXFGjXAGjUaNf3LAjvBPME7PDs8
-OzzAO8E8O8M8NcM4NdAgNcgQNcocNco4NccVwTXELME1xBo1GjUawTXCBjUGNQY1BjUGwTXFODXH
-FTUVNcIsNSw1LDUsNcIaNRo1GsE1wgY1BjUGNQY1BsE1-cE4NdAgNcgQNcocNcs4NdAgNcgQNcoc
-Nco4NccVwTXELME1xRo1wBo1GjXHHDX9wQI71Dw1wzg19Tg1yRU1xCzBNcQaNRo1GjUaNcIGNQY1
-BjUGNQY1xzg1xxXBNcIsNSw1LDUsNcIaNRo1wRo1wgY1BjUGNQY1wQY1-cE4NfY4NfU4NccVNcYs
-wTXFGjXAGjUaNf3LAjvUPDXDODX2OME1xBXBNc0awTUaNRo1wgbANcAGwTUGwTXGOME1xhU1wizB
-NSzBNcIawTUawTXCBsA1wAbBNcEGNf3BODX2ODX2OME1xBXBNc0awTUawTX9ywI71Dw1wzg1-f39
-5zg19jg1-f3nAjvFIME7IME7xjw1-fc4Nf3xODX2ODX2ODX97AI7xSA7IDsgOyA7xjw1-fc4Nf3x
-ODX2ODX2ODX97AI7xSA7IDsgOyA7xjw1wjjBNcUVNc8awTUawTXVOME1xBU1zxrBNRrBNcIGwDXA
-BsE1BsE1xjg1-fE4NfY4NfY4NdgawDXAGjUaNf3LAjvFIDsgOyA7IDvGPDXCODXAODU4wDXBFTXG
-LME1xho1GjUaNdQ4NccVNcYswTXEGjUaNRo1GjXCBjUGNQY1BjXBBjXGODX98Tg19jg19jg12Ro1
-wBo1GjX9ywI7xSDBOyDBO8Y8NcI4NcA4NTjANcEVNRU1xCzBNcQawTUawTXHHDXKODU4wDXEFTUV
-NcQswTXEGjUaNRrBNcIGNQY1BjUGNQbBNcY4NdAgNcgQNcocNf3GODXQIDXIEDXKHDXLODXQIDXI
-EDXKHDXLODXQIDXGGjXAGsE1xxw1-cECO9Q8NcI4NcA4NcQVwTXELME1xBo1wRo1GjXUODXAODXE
-FcE1xCzBNcQaNRo1GjUaNcIGNQY1BjUGNQY1yDg1-fE4NfY4NfY4NdkaNcIaNf3LAjvUPDXCOME1
-xxU1zRrBNRrBNdU4wTXGFTXNGsE1GjUaNcIGwDXABsE1BsE1xjg1-fE4NfY4NfY4NdgawTXBGjX9
-ywI71Dw1-fc4Nf3xODX2ODX2ODX97AI71Dw1PcI4PfE1PcI4PfE1PcI4PfE1_D3COD3xNT3COD3x
-NT32NfcCO9Q8NT3COD3xNT3COD3xNT3COD3xNfg9wjg98TU9wjg98TU99jX3AjvDPDs8O8A8wDs8
-O8Y8NT3COD3xNT3COD3xNT3COD3xNfg9wjg98TU9wjg98TU9wjjBPcQVwT3NGsE9GsE90DX3AjvD
-PDs8Ozw7PDs8O8Y8NT3COD3xNT3COD3xNT3COD3xNfg9wjg98TU9wjg98TU9wTg9yRU9xCzBPcYa
-PRo9Gj3QNfcCO8M8Ozw7PDs8Ozw7xjw1PcI4PdAgPcgQPcocPcY1PcI4PdAgPcgQPcocPcY1PcI4
-PdAgPcgQPcocPcY1_D3COD3QID3IED3KHD3GNT3COD3QID3IED3KHD3GNT3BOD3HFcE9xCzBPcQa
-wT0aPRo9xxw9xjX3AjvDPME7PDs8Ozw7xjw1PcI4PfE1PcI4PfE1PcI4PfE1_D3COD3xNT3COD3x
-NT3BOD3HFT3GLME9xBo9wRo9Gj3QNfcCO8Q8O8A8wDvAPME7xDw1PcI4PfE1PcI4PfE1PcI4PfE1
-_D3COD3xNT3COD3xNT3COME9xBXBPc0awT0awT3QNfcCO9Q8NT3COD3xNT3COD3xNT3COD3xNfg9
-wjg98TU9wjg98TU99jX3AjvUPDXDODX2ODX9-ew4NfY4NfY4Nf3sAjvUPDXDODX2ODX9-ew4NfY4
-NfY4Nf3sAjvFEME7EME7xjw1wzg19jg19jjBNcQVwTXNGsE1GsE1wgbANcAGwTUGNQY1-cE4NfY4
-NfY4NdgawDXAGsE1-csCO8cQOxA7EDvGPDXDODX2ODX1ODXHFTXGLME1xBo1GjUaNcQGNQY1BjUG
-NQY1BjX9wTg19jg19jg12Ro1wBo1GjX9ywI7xRDBOxA7EDvGPDXDODXQIDXIEDXKHDXLODXQIDXI
-EDXKHDXKODXHFcE1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1-cE4NdAgNcgQNcocNcs4NdAgNcgQ
-NcocNcs4NdAgNcYaNcAawTXHHDX9wQI7xRA7wRA7EDvGPDXDODX2ODX1ODXJFTXELME1xBo1GjXB
-GjXCBjUGNQY1BjXBBjX9wTg19jg19jg12Ro1wBo1GjX9ywI7xRDBOxDBO8Y8NcM4NfY4NfY4wTXE
-FcE1zRrBNRrBNcIGwDXABsE1wQY1-cE4NfY4NfY4NdgawTUawTX9ywI71Dw1wzg19jg1-f3sODX2
-ODX2ODX97AI71Dw1wzg1-f395zg19jg1-f3nAjvUPDXDODX9-f3nODX2ODX9-ecCO9Q8NcM4NfU4
-wTXFFTXPGsE1GsE1wgbANcAGwTUGwTXGOME1xBU1zxrBNRrBNcIGwDXABsE1BjUGNf3BODX2ODX2
-OME1xBXBNc0awDXAGsE1-csCO9Q8NcM4NfU4NcA4NTjANcEVNcYswTXEGjUaNRo1GjXCBjUGNQY1
-BjXBBjXFODXHFTXGLME1xBo1GjUaNcQGNQY1BjUGNQY1BjX9wTg19jg19Tg1yRU1xCzBNcUaNcAa
-NRo1-csCO8E8wTs8Ozw7PME7PME7wjw1wzg10CA1yBA1yhw1yjg1wDg1OMA1wRU1FTXELME1xBo1
-GjUawTXCBjUGNQY1BjUGwTXFODU4wDXEFTUVNcQswTXEGjUaNRrBNcIGNQY1BjUGNQbBNf3BODXQ
-IDXIEDXKHDXLODXQIDXIEDXKHDXKODXHFcE1xCzBNcUaNcAaNRo1xxw1-cECO8I8O8A8Ozw7PME7
-PDs8O8I8NcM4NfU4NcA4NcQVwTXELME1xBo1GjUaNRo1wgY1BjUGNQY1BjXHODXAODXEFcE1xCzB
-NcQaNRo1wRo1wgY1BjUGNQY1wQY1-cE4NfY4NfU4NccVNcYswTXFGjXAGjUaNf3LAjvCPDvAPDs8
-Ozw7PDs8wTvCPDXDODX1OME1xxU1zRrBNRo1GjXCBsA1wAbBNQbBNcY4wTXGFTXNGsE1GsE1wgbA
-NcAGwTXBBjX9wTg19jg19jjBNcQVwTXNGsE1GsE1-csCO8I8O8A8Ozw7PDs8Ozw7xDw1wzg1-f39
-5zg19jg1-f3nAjvBPMA7wTzAOzw7PDs8O8Q8NcM4NfY4NfY4Nf3xODX2ODX2ODX97AI71Dw1wzg1
-9jg19jg1-fE4NfY4NfY4Nf3sAjvUPDXDODX2ODX2ODX98Tg19jg19jg12BrANcAaNRo1-csCO9Q8
-NcM4NfY4NfY4Nf3xODX2ODX2ODXZGjXAGjUaNf3LAjvFLsE7LsA7xzw1wzg10CA1yBA1yhw1yzg1
-0CA1yBA1yhw1yzg10CA1yBA1yhw1-cY4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4NdAgNcYaNcAa
-wTXHHDX9wQI7xS47LjvALjvHPDXDODX2ODX2ODX98Tg19jg19jg12Ro1who1-csCO8UuOy47wC47
-xzw1wzg19jg19jg1-fE4NfY4NfY4NdgawTXBGjX9ywI7xS47LjvALjvHPDXDODX2ODX2ODX98Tg1
-9jg19jg1-ewCO8UuwTsuwTvGPDU99jU9wjg98TU9wjg98TX4PfY1PcI4PfE1PfY19wI71Dw1PfY1
-PcI4PfE1PcI4PfE1_D32NT3COD3xNT32NfcCO9Q8NT3COME9xBU9zxrBPRrBPdA1PcI4PfE1PcI4
-PfE1_D32NT3COD3xNT3COME9xBXBPc0awT0awT3QNfcCO9Q8NT3BOD3HFT3GLME9xho9Gj0aPdA1
-PcI4PfE1PcI4PfE1_D32NT3COD3xNT3BOD3JFT3ELME9xho9Gj0aPdA19wI71Dw1PcE4PccVPRU9
-xCzBPcUawD0aPRo9xxw9xjU9wjg90CA9yBA9yhw9xjU9wjg90CA9yBA9yhw9xjX4PccyPcsgPcgQ
-PcocPcY1PcI4PdAgPcgQPcocPcY1PcE4PccVwT3ELME9xBrBPRo9Gj3HHD3GNfcCO8A80DvAPDU9
-wTg9xxXBPcQswT3GGj0aPRo90DU9wjg98TU9wjg98TX4PfY1PcI4PfE1PcE4PccVPcYswT3EGj3B
-Gj0aPdA19wI7wALQO8A8NT3COME9xhU9zRrBPRrBPdA1PcI4PfE1PcI4PfE1_D32NT3COD3xNT3C
-OME9xBXBPc0awT0awT3QNfcCO9Q8NT32NT3COD3xNT3COD3xNfg99jU9wjg98TU99jX3AjvUPDXD
-ODX2ODX9-f3nODX2ODX97AI71Dw1wzg19jg1-f395zg19jg1-ewCO9Q8NcM4NfY4NfU4wTXFFTXP
-GsE1GsE1wgbANcAGwTUGNQY1-fo4NfY4NdgawDXAGsE1-csCO8E8wTs8wTs8wTs8wTvCPDXDODX2
-ODX1ODXAODU4wDXBFTXGLME1xBo1GjUaNcQGNQY1BjUGNQY1BjX9_jg19jg12Ro1wBo1GjX9ywI7
-wTw7PDs8Ozw7wDw7wTw7wzw1wzg10CA1yBA1yhw1yzg10CA1yBA1yhw1yjg1wDg1OMA1wRU1FTXE
-LME1xBo1GjUawTXCBjUGNQY1BjUGwTX9xjI1yyA1yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1xho1
-wBrBNcccNf3BAjvBPME7PME7wDw7wTw7wzw1wzg19jg19Tg1wDg1xBXBNcQswTXEGjUaNcEaNcIG
-NQY1BjUGNcEGNf36ODX2ODXZGjXAGjUaNf3LAjvBPDvBPDs8O8A8O8E8O8M8NcM4NfY4NfU4wTXH
-FTXNGsE1GsE1wgbANcAGwTXBBjX9_jg19jg12BrBNRrBNf3LAjvBPDvBPDs8O8A8O8E8O8M8NcM4
-NfY4Nf39-ec4NfY4Nf3sAjvUPDXDODX2ODX2ODX9-ew4Nf395wI71Dw1wzg19jg19jg1-f3sODX9
--ecCO9Q8NcM4NfY4NfY4Nf397Dg19jjBNcQVwTXNGsA1wBrBNf3LAjvFLsE7LsE7xjw1wzg19jg1
-9jg1-f3sODX1ODXJFTXELME1xRo1wBo1GjX9ywI7xS47LjsuO8g8NcM4NdAgNcgQNcocNcs4NdAg
-NcgQNcocNcs4NdAgNcgQNcocNf3LMjXLIDXIEDXKHDXLODXQIDXIEDXKHDXKODXHFcE1xCzBNcUa
-NcAaNRo1xxw1-cECO8UuOy47LsE7xjw1wzg19jg19jg1-f3sODX1ODXHFTXGLME1xRo1wBo1GjX9
-ywI7xS47LjvBLjvGPDXDODX2ODX2ODX9-ew4NfY4wTXEFcE1zRrBNRrBNf3LAjvFLsE7LsE7xjw1
-wzg19jg19jg1-f3sODX9-ecCO9Q8Nf33ODX9-ew4NfY4Nf3sAjvUPDX99zg1-f3sODX2ODX97AI7
-1Dw1wzjBNcQVwTXNGsE1GsE11TjBNcQVNc8awTXAGsA1wgbANcAGwTUGwTXGODX9-ew4NfY4Ndga
-wDXAGjUaNf3LAjvUPDXCODXHFTXGLME1xho1GjUaNdQ4NccVNcYswTXEGjUaNRo1xAY1BjUGNQY1
-wQY1xjg1-f3sODX2ODXZGjXAGjUaNf3LAjvFPDvDPDvGPDXCODXHFcE1xCzBNcQawTUaNRo1xxw1
-yjg1xxU1FTXELME1xBo1GjUaNcQGNQY1BjUGNQbBNcY4NdAgNcgQNcocNf3LMjXLIDXIEDXKHDXL
-ODXQIDXIEDXKHDXLODXQIDXGGjXAGsE1xxw1-cECO8Q8wDvDPMA7xTw1wjg1yRU1xCzBNcQaNcEa
-NRo11Dg1xxXBNcQswTXEGjUaNRo1xAY1BjUGNQY1BjXIODX9-ew4NfY4NdkaNcIaNf3LAjvDPME7
-wzzBO8Q8NcM4wTXEFcE1zRrBNRrBNdU4wTXGFTXNGsE1wBrANcIGwDXABsE1BsE1xjg1-f3sODX2
-ODXYGsE1wRo1-csCO8I8wjvDPMI7wzw1-fc4Nf397Dg19jg1-ewCO8M8wTvDPME7xDw1KvY1KsI4
-KvE1KsI4KvE1_Cr2NSrCOCrxNSr2NfcCO8Q8wDvDPMA7xTw1KvY1KsI4KvE1KsI4KvE1_Cr2NSrC
-OCrxNSr2NfcCO8U8O8M8O8Y8NSrCOMEqxBUqzxrBKhrBKtA1KsI4KvE1KsI4KvE1_CrBOMEqxRUq
-zxrAKsAawSrQNSrCOCrxNSrCOMEqxBXAKs4awSoawSrQNfcCO9Q8NSrBOCrHFSrGLMEqxhoqGioa
-KtA1KsI4KvE1KsI4KvE1_CrBOCrAOCrEFSrGLMEqxRoqwBoqGirQNSrCOCrxNSrBOCrIFSrFLMEq
-xhoqGioaKtA19wI71Dw1KsE4KjjAKsQVKhUqxCzBKsQawSoawSrHHCrGNSrCOCrQICrIECrKHCrG
-NSrCOCrQICrIECrKHCrGNfgqwTgqwDgqxBUqFSrELMEqxRoqwBoqGirHHCrGNSrCOCrQICrIECrK
-HCrGNSrBOCo4wCrFFSrFLMEqxBrBKhoqGirHHCrGNfcCO9Q8NSrBOCrAOCrEFcEqxCzBKsQaKsEa
-Khoq0DUqwjgq8TUqwjgq8TX4KsE4KsA4KsQVwSrELMEqxRoqwBoqGirQNSrCOCrxNSrBOCrAOCrF
-FSrFLMEqxBoqwRoqGirQNfcCO9Q8NSrCOMEqxhUqzRrBKhrBKtA1KsI4KvE1KsI4KvE1_CrBOMEq
-xxUqzRrBKhrBKtA1KsI4KvE1KsI4wSrEFcEqzRrBKhrBKtA19wI71Dw1KvY1KsI4KvE1KsI4KvE1
-_Cr2NSrCOCrxNSr2NfcCO8E8O8I8wDvAPMA7PME7wjw1wzg19jg19jg1-fE4NfY4NfY4Nf3sAjvB
-PDvBPDs8Ozw7PDs8Ozw7wjw1wzg19jg19jg1-fE4NfY4NfY4Nf3sAjvBPDvBPDs8Ozw7PDs8wTvC
-PDXDODX2ODX2ODX98Tg19jg19jg12BrANcAawTX9ywI7wTw7wTw7PDs8Ozw7PDvEPDXDODX2ODX2
-ODX98Tg19jg19jg12Ro1wBo1GjX9ywI7wTzBOzzAO8A8wDvAPDvEPDXDODXQIDXIEDXKHDXLODXQ
-IDXIEDXKHDXLODXQIDXIEDXKHDX9xjg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1xho1wBrB
-NcccNf3BAjvUPDXDODX2ODX2ODX98Tg19jg19jg12Ro1wBo1GjX9ywI71Dw1wzg19jg19jg1-fE4
-NfY4NfY4NdgawTUawTX9ywI71Dw1wzg19jg19jg1-fE4NfY4NfY4Nf3sAjvUPDXDODX9-f3nODX2
-ODX9-ecCO9Q8NcM4Nf39-ec4NfY4Nf395wI7wgLDO8QCwTvCPDXDODX2OME1xBXBNc0awTUawTXC
-BsA1wAbBNQbBNcY4wTXEFTXPGsE1GsE1wgbANcAGwTUGNQY1-cE4NfY4NfY4wTXEFcA1zhrANcAa
-wTX9ywI7wgL_ygB-wQI7wwLAPALAO8E8NcM4NfU4NccVNcYswTXEGjUaNRo1GjXCBjUGNQY1BjXB
-BjXFODXHFTXGLME1xBo1GjUaNcQGNQY1BjUGNQY1BjX9wTg19jg19Tg1yBU1xSzBNcUaNcAaNRo1
--csCO8ICDALBO8ICwDzBAsA7wDw1wzg10CA1yBA1yhw1yjg1xxXBNcQswTXEGjUaNRrBNcIGNQY1
-BjUGNQbBNcU4NccVNRU1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1-cE4NdAgNcgQNcocNcs4NdAg
-NcgQNcocNco4NTjANcUVNcUswTXFGjXAGjUaNcccNf3BAjvAAsEMAsE7wgI8wwI7wDw1wzg19Tg1
-yRU1xCzBNcQaNRo1GjUaNcIGNQY1BjUGNQY1xzg1xxXBNcQswTXEGjUaNcEaNcIGNQY1BjUGNcEG
-Nf3BODX2ODX1ODXAODXFFTXFLME1xRo1wBo1GjX9ywI7wAIMwwI7wgLBPALBO8A8NcM4NfY4wTXE
-FcE1zRrBNRo1GjXCBsA1wAbBNQbBNcY4wTXGFTXNGsE1GsE1wgbANcAGwTXBBjX9wTg19jg19jjB
-NcQVwTXNGsE1GsE1-csCO8ACwAzBAsA7wgLBPAI7wjw1wzg1-f395zg19jg1-f3nAjvBAsAMAsA7
-wwI8wQI7wjw1-fc4Nf3xODX2ODX2ODX97AI7wgLBO8QCwzvCPDX99zg1-fE4NfY4NfY4Nf3sAjvU
-PDXCOME1xRU1zxrBNRrBNdU4wTXEFTXPGsE1GsE1wgbANcAGwTUGwTXGODX98Tg19jg19jg12BrA
-NcAaNRo1-csCO9Q8NcI4NcA4NcQVNcYswTXGGjUaNRo11Dg1xxU1xizBNcQaNRo1GjUaNcIGNQY1
-BjUGNcEGNcY4Nf3xODX2ODX2ODXZGjXAGjUaNf3LAjvUPDXCODXAODXEFTUVNcQswTXEGsE1GsE1
-xxw1yjg1OMA1xBU1FTXELME1xBo1GjUawTXCBjUGNQY1BjUGwTXGODXQIDXIEDXKHDX9xjg10CA1
-yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1xho1wBrBNcccNf3BAjvFAsU7xjw1wjg1wDg1xBXBNcQs
-wTXEGjXBGjUaNdQ4NcA4NcQVwTXELME1xBo1GjUaNRo1wgY1BjUGNQY1BjXIODX98Tg19jg19jg1
-2Ro1who1-csCO8UCPMMCO8Y8NcI4wTXHFTXNGsE1GsE11TjBNcYVNc0awTUaNRo1wgbANcAGwTUG
-wTXGODX98Tg19jg19jg12BrBNcEaNf3LAjvFAjzDAjvGPDX99zg1-fE4NfY4NfY4Nf3sAjvFAjzD
-AjvGPDU9wjg98TU9wjg98TU9wjg98TX4PcI4PfE1PcI4PfE1PfY19wI7xQI8wwI7xjw1PcI4PfE1
-PcI4PfE1PcI4PfE1_D3COD3xNT3COD3xNT32NfcCO8UCPMMCO8Y8NT3COD3xNT3COD3xNT3COD3x
-Nfg9wjg98TU9wjg98TU9wjjBPcQVwD3OGsE9GsE90DX3AjvFAsU7xjw1PcI4PfE1PcI4PfE1PcI4
-PfE1_D3COD3xNT3COD3xNT3BOD3IFT3FLME9xho9Gj0aPdA19wI71Dw1PcI4PdAgPcgQPcocPcY1
-PcI4PdAgPcgQPcocPcY1PcI4PdAgPcgQPcocPcY1_D3COD3QID3IED3KHD3GNT3COD3QID3IED3K
-HD3GNT3BOD04wD3FFT3FLME9xBrBPRo9Gj3HHD3GNfcCO9Q8NT3COD3xNT3COD3xNT3COD3xNfg9
-wjg98TU9wjg98TU9wTg9wDg9xRU9xSzBPcQaPcEaPRo90DX3AjvUPDU9wjg98TU9wjg98TU9wjg9
-8TX4PcI4PfE1PcI4PfE1PcI4wT3EFcE9zRrBPRrBPdA19wI71Dw1PcI4PfE1PcI4PfE1PcI4PfE1
-_D3COD3xNT3COD3xNT32NfcCO9Q8NcM4NfY4Nf397Dg19jg19jg1-ewCO8A80DvAPDXDODX2ODX9
--ew4NfY4NfY4Nf3sAjvAAtA7wDw1wzg19jg19jjBNcQVwTXNGsE1GsE1wgbANcAGwTUGNQY1-cE4
-NfY4NfY4NdgawDXAGsE1-csCO9Q8NcM4NfY4NfU4NccVNcYswTXEGjUaNRo1xAY1BjUGNQY1BjUG
-Nf3BODX2ODX2ODXZGjXAGjUaNf3LAjvUPDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXKODXHFcE1
-xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1-cE4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4NdAgNcYa
-NcAawTXHHDX9wQI71Dw1wzg19jg19Tg1yRU1xCzBNcQaNRo1wRo1wgY1BjUGNQY1wQY1-cE4NfY4
-NfY4NdkaNcAaNRo1-csCO9Q8NcM4NfY4NfY4wTXEFcE1zRrBNRrBNcIGwDXABsE1wQY1-cE4NfY4
-NfY4NdgawTUawTX9ywI7wzzKO8M8NcM4NfY4Nf397Dg19jg19jg1-ewCO8I8-h43PMo8O8I8NcM4
-Nf39-ec4NfY4Nf395wI7wTwGwL_nwgbAFsIGwAI7wTw1wzg1-f395zg19jg1-f3nAjvBPAbAFsIG
-wBbCBsACO8E8NcM4NfU4wTXFFTXPGsE1GsE1wv7KqerANcAGwTUGwTXGOME1xBU1zxrBNRrBNcIG
-wDXABsE1BjUGNf3BODX2ODX2OME1xBXANc4awDXAGsE1-csCO8E8-h43PMAWwgbAFsIGwAI7wTw1
-wzg19Tg1wDg1xBU1xizBNcQaNRo1GjUaNcL_yqnqNQY1BjUGNcEGNcU4NccVNcYswTXEGjUaNRo1
-xAY1BjUGNQY1BjUGNf3BODX2ODX1ODXIFTXFLME1xRo1wBo1GjX9ywI7wTz_Hjc8wBbCBsAWwgbA
-AjvBPDXDODXQIDXIEDXKHDXKODXAODXEFTUVNcQswTXEGjUaNRrBNcL_yqnqNQY1BjUGNQbBNcU4
-NTjANcQVNRU1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1-cE4NdAgNcgQNcocNcs4NdAgNcgQNcoc
-Nco4NTjANcUVNcUswTXFGjXAGjUaNcccNf3BAjvBPP4eNzzAFsIGwBbCBsACO8E8NcM4NfU4NcA4
-NcQVwTXELME1xBo1GjUaNRo1wv7Kqeo1BjUGNQY1BjXHODXAODXEFcE1xCzBNcQaNRo1wRo1wgY1
-BjUGNQY1wQY1-cE4NfY4NfU4NcA4NcUVNcUswTXFGjXAGjUaNf3LAjvBPP4eNzzAFsIGwBbCBsAC
-O8E8NcM4NfU4wTXHFTXNGsE1GjUaNcL_yqnqwDXABsE1BsE1xjjBNcYVNc0awTUawTXCBsA1wAbB
-NcEGNd0RNd84NfY4NfY4wTXEFcE1zRrBNRrBNewRNdoCO8E8-h43PMAWwgbAFsIGwAI7wTw1wzg1
--f39xRE13zg19jg1-f3KETXaAjvBPAbAFsIGwBbCBsACO8E8NcM4NfY4NfY4Nf3NEcM13Tg19jg1
-9jg1-c0RwzXYAjvBPAbAFsIGwBbCBsACO8E8NcM4NfY4NfY4Nf3PETXfODX2ODX2ODX9zxE12gI7
-wTwGwBbCBsAWwgbAAjvBPDXDODX2ODX2ODX9zxE13zg19jg19jg12BrANcAaNRo17BE12gI7wTwG
-wBbCBsAWwgbAAjvBPDXDODX2ODX2ODX98Tg19jg19jg12Ro1wBo1GjX9ywI7wTwGwBbCBsAWwgbA
-AjvBPDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDX9xjg10CA1yBA1yhw1yzg1
-0CA1yBA1yhw1yzg10CA1xho1wBrBNcccNf3BAjvBPAbAFsIGwBbCBsACO8E8NcM4NfY4NfY4Nf3x
-ODX2ODX2ODXZGjXCGjX9ywI7wTwGwBbCBsAWwgbAAjvBPDXDODX2ODX2ODX98Tg19jg19jg12BrB
-NcEaNf3LAjvBPAbAFsIGwBbCBsACO8E8NcM4NfY4NfY4Nf3xODX2ODX2ODX97AI7wTwGwBbCBsAW
-wgbAAjvBPDU99jU9wjg98TU9wjg98TX4PcI4PfE1PcI4PfE1PfY19wI7wTwGwBbCBsAWwgbAAjvB
-PDU99jU9wjg98TU9wjg98TX4PcI4PfE1PcI4PfE1PfY19wI7wTwGwBbCBsAWwgbAAjvBPAL9-f39
--f390zwCO8E8BsAWwgbAFsIGwAI7wTwCO-39-f39-f3SPAI7wTwGwBbCBsAWwgbAAjvBPAI7-f39
--f39-dI8AjvBPAbAFsIGwBbCBsACO8E8Ajv9-f39-f390jwCO8E8BsAWwgbAFsIGwAI7wTwCO-39
--f39-f3SPAI7wTwGwBbCBsAWwgbAAjvBPAI7-f39-f39-dI8AjvBPAbAFsIGwBbCBsACO8E8Ajv9
--f39-f390jwCO8E8BsAWwgbAFsIGwAI7wTwCO8U8-f39-f39-cQ7xTwCO8E8BsAWwgbAFsIGwAI7
-wTwCO8Q8Bv39-f39-f3EPDvEPAI7wTwGwBbCBsAWwgbAAjvBPAI7wzwG-f39-f39-cYCO8M8AjvB
-PAbAFsIGwBbCBsACO8E8AjvDPAb9-f39-f39xgI7wzwCO8E8BsAWwgbAFsIGwAI7wTwCO8M8Bv39
--f39-f3GAjvDPAI7wTwGwBbCBsAWwgbAAjvBPAI7wzwGwRbTBsMW0wbDFtMGwxbTBsMW0wbD-gCl
-odMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbAAjvDPAI7wTwG
-wBbCBsAWwgbAAjvBPAI7wzwGwBbVBsEW1QbBFtUGwRbVBsEW1QbBFdUGwRbVBsEW1QbBFtUGwRbV
-BsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QYCO8M8AjvBPAbALMIGwCzCBsACO8E8AjvDPAbA
-FtUGwRbVBsEW1QbBFtUGwRbVBsEV1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW
-1QbBFtUGwRbVBgI7wzwCO8ICBsoCO8I8AjvDPAbAFsICwRYCwRbKBsEWwgLBFgLAFssGwRbCAsEW
-AsEWygbBFsICwRYCwRbKBsEWwgLBFgIWAhbKBsEVwgLBFQLBFcoGwRbCAsEWAhbMBsEWwgLBFgLB
-FsoGwRbCAsEWAsEWygbBFsICwRYCwRbKBsEWwgLAFsACwRbKBsEWwgLAFsACwBbLBsEWwgLAFsAC
-wRbKBsEWwgLAFsACwRbKBsEWwgbAFsAGFgYWygbBFsIGwBbABsEWygbBFsIGwBbABhbMBgI7wzwC
-O8MCyjvDPAI7wzwGwBbCAhYCFgIWAhbKBsEWwgIWAhbAAhbLBsEWwgIWAhbBAhbKBsEWwgIWAhbB
-AhbKBsEWwgIWAhYCFgIWygbBFcICFQIVAhXMBsEWwgIWAhYCFswGwRbCAhYCFsECFsoGwRbCAhYC
-FgIWAhbKBsEWwgIWAhYCFgIWygbBFsMCFsACFgIWygbBFsMCFsECFssGwRbDAhbCAhbKBsEWwwIW
-wgIWygbBFsMGFsAGFgYWygbBFsMGFsAGFswGwRbDBhbABhbMBgI7wzwCO9Q8AjvDPAbAFsICFgIW
-AhYCFsoGwRbCAhYCFsACFssGwRbCAhYCFgLBFsoGwRbCAhYCFsACwBbKBsEWwgIWAhYCwRbKBsEV
-wgIVAhUCwRXKBsEWwgIWAhYCwRbKBsEWwgIWAhbBAhbKBsEWwgIWAhYCwRbKBsEWwgIWAhYCwRbK
-BsEWwwIWwAIWAhbKBsEWwwIWwQIWywbBFsMCFsACwRbKBsEWwwIWwQLAFsoGwRbDBhbABsEWygbB
-FsMGFsAGwRbKBsEWwwYWwAbBFsoGAjvDPAI71DwCO8M8BsAWwgIWAhYCFgIWygbBFsICFgIWwAIW
-ywbBFsICFgIWAhbMBsEWwgIWAhbBAhbKBsEWwgIWAhbBAhbKBsEVwgIVAhXBAhXKBsEWwgIWAhYC
-FgIWygbBFsICFgIWwQIWygbBFsICFgIWAhYCFsoGwRbCAhYCFsECFsoGwRbDAhbAAhYCFsoGwRbD
-AhbBAhbLBsEWwwIWwAIWzAbBFsMCFsICFsoGwRbDBhbCBhbKBsEWwwYWwgYWygbBFsMGFsAGFgYW
-ygYCO8M8AjvUPAI7wzwGwBbCAsEWAsEWygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEWAsEW
-ygbBFsICwRbBAhbKBsEVwgLBFQLBFcoGwRbCAsEWAsEWygbBFsICwRbBAhbKBsEWwgLBFgLBFsoG
-wRbCAsEWwQIWygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEWAsEWygbBFsICwRYCwRbKBsEW
-wgbBFsEGFsoGwRbCBsEWBsEWygbBFsIGwRYGwRbKBgI7wzwCO9Q8AjvDPAbAFtUGwRbVBsEW1QbB
-FtUGwRbVBsEV1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBgI7
-wzwCO8H_dU6Xzf7Cw8fCPAI7wzwGwBb9-cQV1Rb9-f395QI7wzwCO8D_dU6Xz-7Cw8fBPAI7wzwG
-wBbCBhYGFgYWAhYCFgIWBhYGFsIGwRbCAhYCFgIWAhYCFgIWAhYGFsIGwRbCAhYCFgIWAhYCFgIW
-BhYGFsIGwRbCAhYCFgIWAhYCFgIWAhYGFsIGwRbCAhYCFgIWAhYCFgIWAhYGFsIGwRXCAhUCFQIV
-BhUCFQIVAhUGFcIGwRbCAhYCFgIWBhYCFgIWAhYGFsIGwRbCAhYCFgIWBhYCFgIWAhYGFsIGwRbC
-AhYCFgIWBhYCFgIWAhYGFsIGwRbCBhYGFgYWAhYCFgIWAhYGFsIGwRbCBhYGFgYWAhYCFgIWAhYG
-FsIGwRbCBhYGFgYWAhYCFgIWAhYGFsIGwRbCBhYGFgYWAhYCFgIWAhYGFsIGwRbCAhYCFgYWAhYC
-FgIWAhYGFsIGwRbCBhYGFgYWBhYGFgYWBhYGFsIGwRbCBhYGFgYWBhYGFgYWBhYGFsIGwRbCBhYG
-FgYWBhYGFgYWBhYGFsIGAjvDPAI7wP51TpfP-sLDx8E8AjvDPAbAFsIGFgYWBhYCFgIWAhYGFgYW
-wgbBFsICFgIWAhYCFgIWAhYCFgYWwgbBFsICFgIWAhYCFgIWAhYGFgYWwgbBFsICFgIWAhYCFgIW
-AhYCFgYWwgbBFsICFgIWAhYCFgIWAhYCFgYWwgbBFcICFQIVAhUGFQIVAhUCFQYVwgbBFsICFgIW
-AhYGFgIWAhYCFgYWwgbBFsICFgIWAhYGFgIWAhYCFgYWwgbBFsICFgIWAhYGFgIWAhYCFgYWwgbB
-FsIGFgYWBhYCFgIWAhYCFgYWwgbBFsIGFgYWBhYCFgIWAhYCFgYWwgbBFsIGFgYWBhYCFgIWAhYC
-FgYWwgbBFsIGFgYWBhYCFgIWAhYCFgYWwgbBFsICFgIWBhYCFgIWAhYCFgYWwgbBFsIGFgYWBhYG
-FgYWBhYGFgYWwgbBFsIGFgYWBhYGFgYWBhYGFgYWwgbBFsIGFgYWBhYGFgYWBhYGFgYWwgYCO8M8
-AjvA-nVOl8-_wsPHwTwCO8M8BsAW1QbBFtUGwRbVBsEW1QbBFtUGwRXVBsEW1QbBFtUGwRbVBsEW
-1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGAjvDPAI7wP51TpfP-sLDx8E8AjvDPAbAFtUG
-wRbVBsEW1QbBFtUGwRbVBsEV1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbB
-FtUGwRbVBgI7wzwCO8D_dU6XxT-BO8X_wsPHwTwCO8M8BsAW1QbBFtUGwRbVBsEW1QbBFtUGwRXV
-BsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGAjvDPAI7wP51TpfE
-P8M7xP7Cw8fBPAI7wzwGwBbVBsEW1QbBFtUGwRbVBsEW1QbBFdUGwRbVBsEW1QbBFtUGwRbVBsEW
-1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QYCO8M8AjvA-nVOl8Q-wzvE-sLDx8E8AjvDPAbAFtUG
-wRbVBsEW1QbBFtUGwRbVBsEV1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbB
-FtUGwRbVBgI7wzwCO8D_dU6XxD-DO8T_wsPHwTwCO8M8BsEW0wbDFtMGwxbTBsMW0wbDFtMGwxXT
-BsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwAI7wzwCO8D_dU6X
-xT-BO8X_wsPHwTwCO8M8Bv39-f39-f3GAjvDPAI7wP51TpfP-sLDx8E8AjvDPAb9-f39-f39xgI7
-wzwCO8D_dU6Xz-7Cw8fBPAI7wzwG2wIGAgb95QIGAgb95QIGAgb95QIGAgbNAgYCBv3QAjvDPAI7
-wP51TpfP-sLDx8E8AjvDPAbbAgYCwAb95AIGAsAG-eQCBgLABv3kAgYCwAbLAsAGAgb90AI7wzwC
-O8D_dU6Xz-7Cw8fBPAI7wzwG2wLDBv3jAsMG-eMCwwb94wLDBskCwwb90AI7wzwCO8H_dU6Xzf7C
-w8fCPAI7wzwG3QLABv3mAsAG-eYCwAb95gLABssCwAb90gI7wzwCO9Q8AjvDPAbdAgb95wIG-ecC
-Bv3nAgbNAgb90gI7wzwCO9Q8AjvDPAb9-f39-f39xgI7wzwCO8H_dU6Xzf7Cw8fCPAI7xAIG-f39
--f39-cQCO8Q8AjvA-nVOl8-_wsPHwTwCO8UC-f39-f39-cQ7xTwCO8D_dU6Xz-7Cw8fBPAI7-f39
--f39-dI8AjvA-nVOl8-_wsPHwTwCO-39-f39-f3SPAI7wP51TpfFPzvH-sLDx8E8Ajv9-f39-f39
-0jwCO8D_dU6XxT-AO8b_wsPHwTwCO-39-f39-f3SPAI7wP51TpfFP8E7xf7Cw8fBPAI7-f39-f39
--dI8AjvA-nVOl8U-wjvE-sLDx8E8Ajv9-f39-f390jwCO8D_dU6XxT-BO8X_wsPHwTzjAjvsPP39
--f39-QI7wP51TpfFP8A7xv7Cw8fBPP52d33iAjvsPBX9-f39-fwCO8D_dU6XxT87x-7Cw8fBPBXj
-AjvGEcE7EcE7EcE7EcE7EcE7EcE7EcA7yDwV-f39-f39AjvA-nVOl8-_wsPHwTwVyBHBFRHBFRHB
-FcARwBURFREVxgI7xhE7ETsROxE7wBE7wRE7wBE7wRE7ETsROxE7xzwVwBHAFREVERURwRURwBXA
-EcAVwBHBFREVwhHAFc0RFcIRwBXAEcAVEcEVwBHAFdIRwBURwRURwRURwRURwBXBEcAV0BHAFRHB
-FREVwRHBFcARwBURwRXTEcEVEcAVwBHBFRHBFdQRwBURFREVwBHAFRHBFRHAFcERwBXPERXBEcEV
-ERURFRHBFREVwhHAFf3PEcEVwBHAFREVERXDEcEVEcEVwQI7wP51TpfP-sLDx8E8FckRFcARFREV
-ERURFREVwREVERXHAjvFEcE7EcE7wBE7wRE7wBHAO8ARwDvAETsRO8Y8FcARFcERFREVERURFREV
-ERURFREVERXBERXBERXPERXBERURFREVERURFREVERXTERXBERURFREVwREVwREVERURFdERFcER
-FcERFcERFcERFcIRFdQRFcERFREVwBEVwREV1BEVwREVERURFREVERURFREVERURFdERFcERFcER
-FREVERXBERXBERX90REVERURFREVERURFREVwREVERURFREVwQI7wP51TpfP-sLDx8E8FckRFcAR
-wBXAEcEVERXBEcAVyAI7xRE7wRE7ETvAETvBETvAETvBETsROxE7ETvGPBXAERXBEcEVEcEVERUR
-FREVERURwBXAERXBEcEVzREVwREVERURFREVEcEVEcEV0RHBFRHBFRHAFcARwBXAERURFRHBFc8R
-wRURwBXAERXBEcAVwBEVwhEV1BHAFcARFREVwBEVwREV1BEVwRHBFREVERURwBXAERURFRHBFc8R
-FcERwBXAERURFRHAFcARFcERwRX9zxHAFcARFREVERURFcMRFREVERURFcECO8H_dU6Xzf7Cw8fC
-PBXJERXAERURFREVERURFcERFREVyAI7xBE7wRE7ETvAETvBETvAEcE7ETsROxE7ETvFPBXBERXB
-ERURFREVERURFREVERURFREVwREVwxEVzREVwREVERURFREVERXDERXTERURFcERFcERFcERFREV
-wREV0REVERXBERXBERXBERXCERXUERXBERURFcARFcERFdQRFcERFREVERURFREVERURFREVwREV
-zxEVwREVwRHBFREVwREVwxEV-c8RFREVERURFRHBFREVwREVERURFREVwQI71DwVyREVwBEVERUR
-FREVwBHAFREVERXIAjvmPBXCEcAVERURFREVERURFREVERURFRHBFRHBFRHAFc4RwRURwBXAEcAV
-wBEVwRHAFdIRwBXAERXBEcEVEcEVEcAVwBHAFdARwBXAEcEVEcEVEcEVwBHAFcARFdQRwRURwBXA
-EcEVwBEV1RHAFREVERURwBXAERURFRHAFcARwBXQEcEVEcEVwBEVwBHBFRHBFRHAFf3QERURFRHA
-FcARwRXDEcEVEcEVwTzWFeY85hX9-f39-f3CAAAAAAAAAAE=
+P9cS0j-AEss-wBLWP-7DAEzZPxLLP8AS0D-_ooh5zj-9-f3OEsE-wBLBP8oSwT-IEj-IEsY-xxI-
+Ej-Z-sMATD-N-qKIecU-xhLFP8cS0T8SwD8SyT8S2D-_wwBM2D-AEso-EtI--qKIec4--f39wBLB
+P8ASwT-EEsE-wBLBP8USwj8SwT-IEsA-xxLGP8gSP8gSxj-I-sMATMA-0P6iiHk-Ej-WEtE-Ej-A
+EsQ-wRLAPxLBPxLAPxLRP-7DAEzNP8ESPxLBPxLBPxLFP8ESwD8SwT8SwD8Syz-_ooh5zj-9-f3A
+EsA-whLAP8QSwT-AEsE-xRLCPxLBP8gSPxI-xhLGP8QSxz-EEsI-wRI-yP7DAEw-Ej-L-qKIecE-
+EsE-xhLFP8cS0T-AEj8Swz8Swj-CEj8SwD8S0T-_wwBMzD8Swj8SwT8SwT8SxD8Swj-CEj8SwD8S
+yz-_ooh5xj8SxT-9-f3AEsA-whLAP8QSxj-FEsI-zBI-Ej-GEsY-xBLAP8MSwD-EEsI-wRI-yP7D
+AEw-Ej-L-qKIeT8SP9oS0T8SwD8SxD-AEsE-EsI-wBLSP-7DAEzNP8ASwD8SPxI-EsE-EsU-wBLB
+PxLCP8ASzD-_ooh5xT-BEsQ--f39wBLAP8ISwD-EEj8Swj8SP8USxT-HEsE-1hLAP8MSwD-EEj-B
+EsI-xv7DAEzBP83_ooh5xT-GEsU-xxLRPxLAPxLGPxLAPxLBPxLAPxLRP-7DAEzPPxI-Ej8SPxLB
+PxLHPxLAPxLBPxLAPxLLP-6iiHnGPxLFP-39-cASwD-CEsA-xBI-EsI-Ej-FEsU-xhLCP8gSxj-E
+EsA-wxLAP8QSP8ESwj-F-sMATMI-zv6iiHnEP9YS0j-AEsE-EsA-wRLBPxLBPxLAPxLRP-7DAEzM
+P8ESwT8SPxLBP8ESwD8SwD-BEsE-EsE-EsA-Ess--qKIec4--f39wBLBP8ASwT-EEsY-xRLFP8cS
+wD-JEsA-whLAP8QSxz-EEsY-xv7DAEzAP_3_ooh5_z-_wwBM_z-_ooh5zj-9-f39-dwS_z-_wwBM
+_z-_ooh5zj-9-f399v7a2tvQ-p_gpv52d339-f39-f392QKJe888Ff39-f39-f3ZAjvPPBXV-kBA
+RMEVEcEVEcEV7BHBFRHBFRHBFewRwRURwBXAEcEV7BHBFRHAFcARwBXtEcEVEcAVwBHBFewRwRUR
+wBXAEcEV7BHBFRHBFRHBFewRwRURwRURwRXNPMEVPBU8FTwVPBXAAjvPPBXVERURFREVERURFREV
+7BEVERURFREVERURFewRFREVwBEVwBEVERXsERURFcARFcERFe0RFREVwBEVwhEV7BEVERXAERXC
+ERXsERURFcERFREVERXsERURFcERFREVERXNPBXBPBU8FcE8FcACO888Fc4RFREVERXAERURFREV
+ERURwRXAERURFREV3hEVERURFcARFREVERURFRHBFcARFREVERXeERURFREVwBEVERXAERXAERUR
+FcARFREVERXeERURFREVwBEVERXAERXBERXBERURFREV3hEVERURFcARFREVwBEVwBHBFcARFREV
+ERXeERURFREVwBEVERXAERXBEcAVwBEVERURFd4RFREVERXAERURFRHBFRHBFcARFREVERXeERUR
+FREVwBEVERXAEcAVEcEVwBEVERURFcY8wRU8wRXAPBXBAjvGP8E7xDwV1REVERURFREVERURFewR
+FREVERURFcERFewRFREVwBEVwBEVERXsERURFcARFcERFe0RFREVwBEVwBEV7hEVERXAERXCERXs
+ERURFREVwxEV7BEVERXBERXBERXPPBXBPBU8FcICO8Y--h43PD-AO8M8FdURwRURwRURwRXsEcEV
+EcEVwREV7BHBFRHBFRHBFewRwRURwRURwRXsEcEVEcEVEcEV7BHBFRHBFRHBFewRwRURwRXBERXs
+EcEVEcEVwREVzTzBFcE8FTwVPBXAAjvGPwbAP8A7wjwV-f39-f39-dkCO8Y-BsE-wDvBPBX9-f39
+-f392QI7xj8GPwbAPzvBPP4AAAD9-f39-f392QI7xj8GP8AGPzvBPDX_Q2J99jUT9jUT9jX_iiTK
+0BPkNRP2NRP2NRP2NRP2NRXCAjvGPwY-wAY-O8E8NRP2NRP2NRP2NQ3QE_Q1E-Y1E-Y1E-Y1E-Y1
+FcICO8Y-Bj8GP8A7wTw1E8L_9-CiwRPE-vGqbRPE-pPomsETLMETwv6O3NnBExrBE9A1E-Y1E-Y1
+DcI4wQ3EFcENwBPALMETLMATwxrAE8AawRPQNRPBOMETxRUTxCzBEyzAE8MawBPAGsET0DUTwjjB
+E8QVwRPCLMETLMATwxrAE8AawRPQNRP2NRP2Nf52d33CAjvDP8IGP8E7wjw1E8E4E8f_8aptE8Qs
+EywTLBMsE8QaExoTGhPQNRP2NRP2NQ3BOA3JFQ3AE8AsEywTwCwTxBoTwBoTGhPQNRPBOBPAOBM4
+wBPBFRPELBMsE8AsE8QaE8AaExoT0DUTwTgTyRUTwiwTLBPALBPEGhPAGhMaE9A1E-Y1E-Y1-nZ3
+fcICO8I-wAbCPzvEPDUTwTgTx-7xqm0TFRPCLBMsEywTLBPDGsATGhMaE8f_lHO0E8Y1E8f_sa1v
+E8v_XJViE8j_PJWSE8ocE8Y1E8cyE8sgE8gQE8ocE8Y1DcE4DccVwQ3AE8AsEywTwCwTxBoTwBoT
+GhPHHBPGNRPBOBPAOBM4wBPBFRMVE8IsEywTwCwTxBoTwBoTGhPHHBPGNRPBOBM4wBPEFcETwiwT
+LBPALBPEGhPAGhMaE8ccE8Y1E8cyE8sgE8gQE8ocE8Y1E8cyE8sgE8gQE8ocE8Y1-nZ3fcICO8I-
+BsM-O8Q8NRPBOBPH-vGqbcETwiwTLBMsEywTxBoTGhMaE9A1E-Y1E-Y1DcE4DckVDcATwCwTLBPA
+LBPEGhPAGhMaE9A1E8E4E8A4E8QVwRPCLBMsE8AsE8QaE8AaExoT0DUTwTgTwDgTxhUTwiwTLBPA
+LBPEGhPAGhMaE9A1E-Y1E-Y1-nZ3fcICO8I-BsM-O8Q8NRPCOMETxv7xqm0TwizBEyzBE8IawRMa
+wRPQNRP2NRP2NQ3COMENxBXBDcATwCzBEyzBE8IawRMawRPQNRPBOMETxxUTwizBEyzBE8IawRMa
+wRPQNRPCOMETxBXBE8IswRMswRPCGsETGsET0DUT9jUT9jX_dnd9wgI7wj-ABsE-wDvEPDUT9jUT
+9jUT9jUN0BPkNRP2NRP2NRP2NRP2NRXCAjvDP8M7xTw1wzg1-f3sODX2ODX2ODX9-egVwgI7zzw1
+wzg1-f3sODX2ODX2ODX9-egVwgI7zzw1wzg1-f3sODX2ODX2ODX9-egVwgI7zzw1wzg1-f3sODX2
+ODX2ODX9-egVwgI7zzw1wzg10CA1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1yzg10CA1
+yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1xxXC
+AjvPPDXDODX9-ew4NfY4NfY4Nf396BXCAjvBAsI7yDw1wzg1-f3sODX2ODX2ODX9-egVwgI7wALA
+PMACwDvHPDXDODX9-ew4NfY4NfY4Nf396BXCAjvAAjwCwDwCO8c8NcM4Nf397Dg19jg19jg1-f3o
+FcICOwLAPALAPALAO8Y8NcM4Nf397Dg19jg19jg1-f3oFcICOwI8AsI8AjvGPDXDODX9-ew4NfY4
+NfY4Nf396BXCAsE8AsI8AsY7PDXDODX9-ew4NfY4NfY4Nf396BXCAsA8OwI7AjsCPAI7AjsCPAI7
+PDXDODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXI
+EDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHFcICxzwCwjwCwDs8NcM4
+Nf397Dg19jg19jg1-f3oFcICO8UCPALCPAI7wDw1wzg1-f3sODX2ODX2ODX9-egVwgI7xQLAPALA
+PALAO8A8NcM4Nf397Dg19jg19jg1-f3oFcICO8YCPALAPAI7wTw1-f3yODX2ODX2ODX9-egVwgI7
+xgLAPMACwDvBPDX9-fI4NfY4NfY4Nf396BXCAjvHAsI7wjw1wzjBNcT_8aptwTXNGsE1GsE11TjB
+NcQVNcQswTUswTXCGsE1wBrANcL_yqnqwDXABsE1BsE1-cE4NfY4NfY4Nf396P52d33CAjvPPDXC
+ODXH-vGqbTXGLME1xho1GjUaNdQ4NccVNcQsNSw1LDUsNcIaNRo1GjXEBjUGNQY1BjXBBjX9wTg1
+9jg19jg1-f3o-nZ3fcICO888NcI4Ncf_8aptwTXELME1xBrBNRo1GjXHHDXKODXHFTUVNcIsNSw1
+LDUsNcIaNRo1GjXEBjUGNQY1BjUGwTXLMjXLIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXK
+HDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXH-nZ3fcICO888NcI4Ncn_8apt
+NcQswTXEGjXBGjUaNdQ4NccVwTXCLDUsNSw1LDXCGjUaNRo1xAY1BjUGNQY1BjX9wzg19jg19jg1
+-f3o-nZ3fcICO888NcM4wTXE-vGqbcE1zRrBNRrBNdU4wTXGFTXCLME1LME1whrBNcAawDXCBsA1
+wAbBNQbBNf3BODX2ODX2ODX9-ej_dnd9wgI7wDzLO8A8Nf398jg19jg19jg1-f3oFcICO8ACyzvA
+PDX_JzlK9jUNwjgN8TUN9jUNwjgN8TUNwjgN8TUNwjgN8TUN9jUN9jUVwgI7zzw1DfY1DcI4DfE1
+DfY1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1FcICO888NQ3COMENxP7xqm0NzxrBDRrBDdA1DcI4
+DfE1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1-nZ3fcICO888NQ3BOA3H-vGqbQ3GLMENxhoN
+Gg0aDdA1DcI4DfE1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1-nZ3fcICO888NQ3BOA04wA3E
+-vGqbQ0VDcQswQ3EGsENGsENxxwNxjUNwjgN0CANyBANyhwNxjUNxzINyyANyBANyhwNxjUNwjgN
+0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNxzINyyANyBANyhwNxjUN
+xzINyyANyBANyhwNxjX_dnd9wgI7wf5fV0-BO8k8NQ3BOA3AOA3E-vGqbcENxCzBDcQaDcEaDRoN
+0DUNwjgN8TUN9jUNwjgN8TUNwjgN8TUNwjgN8TUN9jUN9jX_dnd9wgI7wC47wS47wi47LjvBPDUN
+wjjBDcb_8aptDc0awQ0awQ3QNQ3COA3xNQ32NQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32Nf52d33C
+AjvALjvGLjsuO8E8NQ32NQ3COA3xNQ32NQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32NRXCAjvALjvG
+LsE7wTw1wzg19jg1-fE4NfY4NfY4Nf396BXCAjvALjvBLjvELjvBPDXDODX2ODX98Tg19jg19jg1
+-f3oFcICO8EuwTvFLjvBPDXDODX2ODX98Tg19jg19jg1-f3oFcICO888NcM4NfY4Nf3xODX2ODX2
+ODX9-egVwgI7zzw1wzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1yyA1yBA1yhw1yzg10CA1yBA1
+yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1yhw1xxXCAjvP
+PDXDODX2ODX98Tg19jg19jg1-f3oFcICO888NcM4NfY4Nf3xODX2ODX2ODX9-egVwgI7zzw1wzg1
+9jg1-fE4NfY4NfY4Nf396BXCAjs8wTs8wDvBPMA7PME7PDXDODX9-ew4NfY4NfY4Nf396BHCAjvA
+PDvAPDs8Ozw7wjw7wDw1wzg1-f3sODX2ODX2ODX9-egVwgI7wDw7wDw7PDs8wTvAPDvAPDXDODX2
+OME1xP7xqm3BNc0awTUawTXCBsA1wAbBNQbBNcY4wTXEFTXELME1LME1whrBNRrBNcIGwDXABsE1
+BjUGNcY4NfY4NfY4Nf396P52d33CAjvAPDvAPDs8O8E8O8A8O8A8NcM4NfU4Ncf_8aptNcYswTXE
+GjUaNRo1GjXCBjUGNQY1BjXBBjXFODXHFTXELDUsNSw1LDXCGjUaNRo1xAY1BjUGNQY1BjUGNcY4
+NfY4NfY4Nf396P52d33CAjs8wTs8Ozw7PMA7wTw7wDw1wzg10CA1yBA1yhw1yjg1x-7xqm3BNcQs
+wTXEGjUaNRrBNcIGNQY1BjUGNQbBNcU4NccVNRU1wiw1LDUsNSw1who1GjUawTXCBjUGNQY1BjUG
+wTXGODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXI
+EDXKHDXH-nZ3fcICO888NcM4NfU4Ncn_8aptNcQswTXEGjUaNRo1GjXCBjUGNQY1BjUGNcc4NccV
+wTXCLDUsNSw1LDXCGjUaNcEaNcIGNQY1BjUGNcEGNcY4NfY4NfY4Nf396P52d33CAjvPPDXDODX2
+OME1xP7xqm3BNc0awTUaNRo1wgbANcAGwTUGwTXGOME1xhU1wizBNSzBNcIawTUawTXCBsA1wAbB
+NcEGNcY4NfY4NfY4Nf396P52d33CAjvPPDXDODX9-ew4NfY4NfY4Nf396BXCAjvDIME7IME7wzw1
+-fc4NfY4NfY4NfY4Nf396BXCAjvDIDsgOyA7IDvDPDX99zg19jg19jg19jg1-f3oFcICO8MgOyA7
+IDsgO8M8NcI4wTXF-vGqbTXPGsE1GsE11TjBNcQVNc8awTUawTXCBsA1wAbBNQbBNcY4NfY4NfY4
+NfY4Nf396P52d33CAjvDIDsgOyA7IDvDPDXCODXAODU4wDXB-vGqbTXGLME1xho1GjUaNdQ4NccV
+NcYswTXEGjUaNRo1GjXCBjUGNQY1BjXBBjXGODX2ODX2ODX2ODX9-ej_dnd9wgI7wyDBOyDBO8M8
+NcI4NcA4NTjANcH_8aptNRU1xCzBNcQawTUawTXHHDXKODU4wDXEFTUVNcQswTXEGjUaNRrBNcIG
+NQY1BjUGNQbBNcY4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4NdAgNcgQNcoc
+NdAyNcsgNcgQNcocNdAyNcsgNcgQNcocNcf_dnd9wgI7zzw1wjg1wDg1xP7xqm3BNcQswTXEGjXB
+GjUaNdQ4NcA4NcQVwTXELME1xBo1GjUaNRo1wgY1BjUGNQY1BjXIODX2ODX2ODX2ODX9-ej_dnd9
+wgI7zzw1wjjBNcf_8aptNc0awTUawTXVOME1xhU1zRrBNRo1GjXCBsA1wAbBNQbBNcY4NfY4NfY4
+NfY4Nf396P52d33CAjvPPDX99zg19jg19jg19jg1-f3oFcICO888NQ3COA3xNQ3COA3xNQ3COA3x
+NQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32NRXCAjvPPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUN
+wjgN8TUNwjgN8TUN9jUN9jUVwgI7wTw7PDvAPMA7PDvDPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN
+8TUNwjgN8TUNwjgN8TUN9jUN9jUVwgI7wTw7PDs8Ozw7PDvDPDUNwjgN8TUNwjgN8TUNwjgN8TUN
+wjgN8TUNwjgN8TUNwjgN8TUN9jUN9jUVwgI7wTw7PDs8Ozw7PDvDPDUNwjgN0CANyBANyhwNxjUN
+wjgN0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNwjgN0CANyBANyhwN
+xjUNwjgN0CANyBANyhwNxjUNxzINyyANyBANyhwNxjUNxzINyyANyBANyhwNxjUVwgI7wTzBOzw7
+PDs8O8M8NQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32NRXCAjvCPDvA
+PMA7wDzBO8E8NQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32NRXCAjvP
+PDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUN9jUN9jUVwgI7zzw1wzg19jg1
+-fE4NfY4NfY4Nf396BXCAjvPPDXDODX2ODX98Tg19jg19jg1-f3oFcICO8MQwTsQwTvDPDXDODX2
+ODX2OME1xP7xqm3BNc0awTUawTXCBsA1wAbBNQY1BjXGODX2ODX2ODX9-ej_dnd9wgI7xRA7EDsQ
+O8M8NcM4NfY4NfU4Ncf_8aptNcYswTXEGjUaNRo1xAY1BjUGNQY1BjUGNcY4NfY4NfY4Nf396P52
+d33CAjvDEME7EDsQO8M8NcM4NdAgNcgQNcocNcs4NdAgNcgQNcocNco4Ncf_8aptwTXELME1xBo1
+GjUawTXCBjUGNQY1BjUGwTXGODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXQMjXL
+IDXIEDXKHDXQMjXLIDXIEDXKHDXH-nZ3fcICO8MQO8EQOxA7wzw1wzg19jg19Tg1yf7xqm01xCzB
+NcQaNRo1wRo1wgY1BjUGNQY1wQY1xjg19jg19jg1-f3oEcICO8MQwTsQwTvDPDXDODX2ODX2OME1
+xBXBNc0awTUawTXCBsA1wAbBNcEGNcY4NfY4NfY4Nf396BHCAjvPPDXDODX2ODX98Tg19jg19jg1
+-f3oEcICO888NcM4Nf397Dg19jg19jg1-f3oEcICO888NcM4Nf397Dg19jg19jg1-f3oEcICO888
+NcM4NfU4wTXFFTXPGsE1GsE1wgbANcAGwTUGwTXGOME1xBU1zxrBNRrBNcIGwDXABsE1BjUGNcY4
+NfY4NfY4Nf396BHCAjvPPDXDODX1ODXAODU4wDXBFTXGLME1xBo1GjUaNRo1wgY1BjUGNQY1wQY1
+xTg1xxU1xizBNcQaNRo1GjXEBjUGNQY1BjUGNQY1xjg19jg19jg1-f3oEcICOzzBOzw7PDs8wTs8
+wTs8NcM4NdAgNcgQNcocNco4NcA4NTjANcEVNRU1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1xTg1
+OMA1xBU1FTXELME1xBo1GjUawTXCBjUGNQY1BjUGwTXGODXQIDXIEDXKHDXLODXQIDXIEDXKHDXL
+ODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHEcICO8A8O8A8Ozw7PME7PDs8Ozw1
+wzg19Tg1wDg1xBXBNcQswTXEGjUaNRo1GjXCBjUGNQY1BjUGNcc4NcA4NcQVwTXELME1xBo1GjXB
+GjXCBjUGNQY1BjXBBjXGODX2ODX2ODX9-egRwgI7wDw7wDw7PDs8Ozw7PME7PDXDODX1OME1xxU1
+zRrBNRo1GjXCBsA1wAbBNQbBNcY4wTXGFTXNGsE1GsE1wgbANcAGwTXBBjXGODX2ODX2ODX9-egR
+wgI7wDw7wDw7PDs8Ozw7PDvBPDXDODX9-ew4NfY4NfY4Nf396BHCAjs8wDvBPMA7PDs8Ozw7wTw1
+wzg19jg19jg19jg19jg19jg1-f3oEcICO888NcM4NfY4NfY4NfY4NfY4NfY4Nf396BHCAjvPPDXD
+ODX2ODX2ODX2ODX2ODX2ODX9-egRwgI7zzw1wzg19jg19jg19jg19jg19jg1-f3oEcICO8MuwTsu
+wDvEPDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQ
+IDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHEcICO8MuOy47wC47
+xDw1wzg19jg19jg19jg19jg19jg1-f3oEcICO8MuOy47wC47xDw1wzg19jg19jg19jg19jg19jg1
+-f3oEcICO8MuOy47wC47xDw1wzg19jg19jg19jg19jg19jg1-f3oEcICO8MuwTsuwTvDPDUN9jUN
+wjgN8TUNwjgN8TUNwjgN8TUN9jUNwjgN8TUN9jUN9jURwgI7zzw1DfY1DcI4DfE1DcI4DfE1DcI4
+DfE1DfY1DcI4DfE1DfY1DfY1wwI7zzw1DcI4wQ3EFQ3PGsENGsEN0DUNwjgN8TUNwjgN8TUNwjgN
+8TUN9jUNwjgN8TUN9jUN9jURwgI7zzw1DcE4DccVDcYswQ3GGg0aDRoN0DUNwjgN8TUNwjgN8TUN
+wjgN8TUN9jUNwjgN8TUN9jUN9jURwgI7zzw1DcE4DccVDRUNxCzBDcUawA0aDRoNxxwNxjUNwjgN
+0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNwjgN0CANyBANyhwNxjUNxzINyyANyBANyhwNxjUN
+wjgN0CANyBANyhwNxjUNxzINyyANyBANyhwNxjUNxzINyyANyBANyhwNxjURwgI7wDzLO8A8NQ3B
+OA3HFcENxCzBDcYaDRoNGg3QNQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ3COA3xNQ32NQ32NRHCAjvA
+Ass7wDw1DcI4wQ3GFQ3NGsENGsEN0DUNwjgN8TUNwjgN8TUNwjgN8TUN9jUNwjgN8TUN9jUN9jUR
+wgI7zzw1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DcI4DfE1DfY1DfY1EcICO888NcM4NfY4Nf3x
+ODX98Tg1-f3oEcICO888NcM4NfY4Nf3xODX98Tg1-f3oEcICO888NcM4NfY4NfU4wTXFFTXPGsE1
+GsE1wgbANcAGwTUGNQY1xjg1-fE4Nf396BHCAjs8wTs8wTs8wTs8wTs8NcM4NfY4NfU4NcA4NTjA
+NcEVNcYswTXEGjUaNRo1xAY1BjUGNQY1BjUGNcY4Nf3xODX9-egRwgI7PDs8Ozw7PDvAPDvBPDvA
+PDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXKODXAODU4wDXBFTUVNcQswTXEGjUaNRrBNcIGNQY1
+BjUGNQbBNcY4NdAgNcgQNcocNdAyNcsgNcgQNcocNcs4NdAgNcgQNcocNdAyNcsgNcgQNcocNdAy
+NcsgNcgQNcocNccRwgI7PME7PME7wDw7wTw7wDw1wzg19jg19Tg1wDg1xBXBNcQswTXEGjUaNcEa
+NcIGNQY1BjUGNcEGNcY4Nf3xODX9-egRwgI7PDvBPDs8O8A8O8E8O8A8NcM4NfY4NfU4wTXHFTXN
+GsE1GsE1wgbANcAGwTXBBjXGODX98Tg1-f3oEcICOzw7wTw7PDvAPDvBPDvAPDXDODX2ODX98Tg1
+-fE4Nf396BHCAjvPPDXDODX2ODX2ODX2ODX98Tg1-f3oEcICO888NcM4NfY4NfY4NfY4Nf3xODX9
+-egRwgI7zzw1wzg19jg19jg19jg1-fE4Nf396BHCAjvDLsE7LsA7xDw1wzg19jg19jg19jg1-fE4
+Nf396BHCAjvDLjsuO8AuO8Q8NcM4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4NdAgNcgQNcocNcs4
+NdAgNcgQNcocNdAyNcsgNcgQNcocNcs4NdAgNcgQNcocNdAyNcsgNcgQNcocNdAyNcsgNcgQNcoc
+NccRwgI7wy47LjvALjvEPDXDODX2ODX2ODX2ODX98Tg1-f3oEcICO8MuOy47wC47xDw1wzg19jg1
+9jg19jg1-fE4Nf396BHCAjvDLsE7LsE7wzw1wzg19jg19jg19jg1-fE4Nf396BHCAjvPPDX99zg1
+9jg1-fE4Nf396BHCAjvPPDX99zg19jg1-fE4Nf396BHCAjvPPDXDOME1xBXBNc0awTUawTXVOME1
+xBU1zxrBNcAawDXCBsA1wAbBNQbBNcY4NfY4Nf3xODX9-egRwgI7zzw1wjg1xxU1xizBNcYaNRo1
+GjXUODXHFTXGLME1xBo1GjUaNcQGNQY1BjUGNcEGNcY4NfY4Nf3xODX9-egRwgI7wzw7wzw7wzw1
+wjg1xxXBNcQswTXEGsE1GjUaNcccNco4NccVNRU1xCzBNcQaNRo1GjXEBjUGNQY1BjUGwTXGODXQ
+IDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQ
+MjXLIDXIEDXKHDXHEcICO8I8wDvDPMA7wjw1wjg1yRU1xCzBNcQaNcEaNRo11Dg1xxXBNcQswTXE
+GjUaNRo1xAY1BjUGNQY1BjXIODX2ODX98Tg1-f3oEcICO8E8wTvDPME7wTw1wzjBNcQVwTXNGsE1
+GsE11TjBNcYVNc0awTXAGsA1wgbANcAGwTUGwTXGODX2ODX98Tg1-f3oEcICO8A8wjvDPMI7wDw1
+-fc4NfY4Nf3xODX9-egRwgI7wTzBO8M8wTvBPDUT9jUTwjgT8TUTwjgT8TUTwjgT8TUT9jUTwjgT
+8TUT9jUT9jURwgI7wjzAO8M8wDvCPDUT9jUTwjgT8TUTwjgT8TUTwjgT8TUT9jUTwjgT8TUT9jUT
+9jURwgI7wzw7wzw7wzw1E8I4wRPEFRPPGsETGsET0DUTwjgT8TUTwjgT8TUTwjgT8TUTwTjBE8UV
+E88awBPAGsET0DUTwjgT8TUT9jUT9jURwgI7zzw1E8E4E8cVE8YswRPGGhMaExoT0DUTwjgT8TUT
+wjgT8TUTwjgT8TUTwTgTwDgTxBUTxizBE8UaE8AaExoT0DUTwjgT8TUT9jUT9jURwgI7zzw1E8E4
+EzjAE8QVExUTxCzBE8QawRMawRPHHBPGNRPCOBPQIBPIEBPKHBPGNRPCOBPQIBPIEBPKHBPGNRPC
+OBPQIBPIEBPKHBPGNRPBOBPAOBPEFRMVE8QswRPFGhPAGhMaE8ccE8Y1E8I4E9AgE8gQE8ocE8Y1
+E8cyE8sgE8gQE8ocE8Y1E8cyE8sgE8gQE8ocE8Y1EcICO888NRPBOBPAOBPEFcETxCzBE8QaE8Ea
+ExoT0DUTwjgT8TUTwjgT8TUTwjgT8TUTwTgTwDgTxBXBE8QswRPFGhPAGhMaE9A1E8I4E-E1E-Y1
+E-Y1EcICO888NRPCOMETxhUTzRrBExrBE9A1E8I4E-E1E8I4E-E1E8I4E-E1E8E4wRPHFRPNGsET
+GsET0DUTwjgT8TUT9jUT9jURwgI7zzw1E-Y1E8I4E-E1E8I4E-E1E8I4E-E1E-Y1E8I4E-E1E-Y1
+E-Y1EcICO888NcM4NfY4NfY4NfY4NfY4NfY4Nf396BHCAjvPPDXDODX2ODX2ODX2ODX2ODX2ODX9
+-egRwgI7zzw1wzg19jg19jg19jg19jg19jg1-f3oEcICO888NcM4NfY4NfY4NfY4NfY4NfY4Nf39
+6BHCAjvPPDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXL
+ODXQIDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHEcICO888NcM4
+NfY4NfY4NfY4NfY4NfY4Nf396BHCAjvPPDXDODX2ODX2ODX2ODX2ODX2ODX9-egRwgI7zzw1wzg1
+9jg19jg19jg19jg19jg1-f3oEcICO888NcM4Nf397Dg19jg19jg1-f3oEcICO888NcM4Nf397Dg1
+9jg19jg1-f3oEcICO888NcM4NfY4wTXEFcE1zRrBNRrBNcIGwDXABsE1BsE1xjjBNcQVNc8awTUa
+wTXCBsA1wAbBNQY1BjXGODX2ODX2ODX9-ewCO888NcM4NfU4NccVNcYswTXEGjUaNRo1GjXCBjUG
+NQY1BjXBBjXFODXHFTXGLME1xBo1GjUaNcQGNQY1BjUGNQY1BjXGODX2ODX2ODX9-egRwgI7zzw1
+wzg10CA1yBA1yhw1yjg1xxXBNcQswTXEGjUaNRrBNcIGNQY1BjUGNQbBNcU4NccVNRU1xCzBNcQa
+NRo1GsE1wgY1BjUGNQY1BsE1xjg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1
+yyA1yBA1yhw10DI1yyA1yBA1yhw1xxHCAjvPPDXDODX1ODXJFTXELME1xBo1GjUaNRo1wgY1BjUG
+NQY1BjXHODXHFcE1xCzBNcQaNRo1wRo1wgY1BjUGNQY1wQY1xjg19jg19jg1-f3oEcICO888NcM4
+NfY4wTXEFcE1zRrBNRo1GjXCBsA1wAbBNQbBNcY4wTXGFTXNGsE1GsE1wgbANcAGwTXBBjXGODX2
+ODX2ODX9-egRwgI7zzw1wzg1-f3sODX2ODX2ODX9-egRwgI7zzw1-fc4NfY4NfY4NfY4Nf396BHC
+AjvPPDX99zg19jg19jg19jg1-f3oEcICO888NcI4wTXFFTXPGsE1GsE11TjBNcQVNc8awTUawTXC
+BsA1wAbBNQbBNcY4NfY4NfY4NfY4Nf396BHCAjvPPDXCODXAODXEFTXGLME1xho1GjUaNdQ4NccV
+NcYswTXEGjUaNRo1GjXCBjUGNQY1BjXBBjXGODX2ODX2ODX2ODX9-egRwgI7zzw1wjg1wDg1xBU1
+FTXELME1xBrBNRrBNcccNco4NTjANcQVNRU1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1xjg10CA1
+yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1yyA1yBA1yhw10DI1
+yyA1yBA1yhw1xxHCAjvAPMs7wDw1wjg1wDg1xBXBNcQswTXEGjXBGjUaNdQ4NcA4NcQVwTXELME1
+xBo1GjUaNRo1wgY1BjUGNQY1BjXIODX2ODX2ODX2ODX9-egRwgI7wALLO8A8NcI4wTXHFTXNGsE1
+GsE11TjBNcYVNc0awTUaNRo1wgbANcAGwTUGwTXGODX2ODX2ODX2ODX9-egRwgI7zzw1-fc4NfY4
+NfY4NfY4Nf396BHCAjvPPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUN9jUN
+9jURwgI7zzw1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1EcICO888
+NQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ3COA3xNQ32NQ32NRHCAjvCPMc7wjw1DcI4
+DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1EcICO8E8-h43PMc8O8E8NQ3C
+OA3QIA3IEA3KHA3GNQ3COA3QIA3IEA3KHA3GNQ3COA3QIA3IEA3KHA3GNQ3COA3QIA3IEA3KHA3G
+NQ3COA3QIA3IEA3KHA3GNQ3COA3QIA3IEA3KHA3GNQ3HMg3LIA3IEA3KHA3GNQ3HMg3LIA3IEA3K
+HA3GNRHCAjvAPAa-p8IGFsIGAjvAPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN
+8TUN9jUN9jURwgI7wDwGFsIGFsIGAjvAPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUN
+wjgN8TUN9jUN9jURwgI7wDwGFsIGFsIGAjvAPDUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN8TUNwjgN
+8TUNwjgN8TUN9jUN9jURwgI7wDwGFsIGFsIGAjvAPDXDODX2ODX98Tg19jg19jg1-f3oEcICO8A8
+BhbCBhbCBgI7wDw1wzg19jg1-fE4NfY4NfY4Nf396BHCAjvAPAYWwgYWwgYCO8A8NcM4NfY4NfY4
+wTXEFcE1zRrBNRrBNcL_yqnqwDXABsE1BjUGNcY4NfY4NfY4Nf396BHCAjvAPP4eNzwWwgYWwgYC
+O8A8NcM4NfY4NfU4NccVNcYswTXEGjUaNRo1xP7Kqeo1BjUGNQY1BjUGNcY4NfY4NfY4Nf396BHC
+AjvAPP4eNzwWwgYWwgYCO8A8NcM4NdAgNcgQNcocNcs4NdAgNcgQNcocNco4NccVwTXELME1xBo1
+GjUawTXC-sqp6jUGNQY1BjUGwTXGODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXQ
+MjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHEcICO8A8-h43PBbCBhbCBgI7wDw1wzg19jg19Tg1yRU1
+xCzBNcQaNRo1wRo1wv7Kqeo1BjUGNQY1wQY1xjg19jg19jg1-f3oEcICO8A8-h43PBbCBhbCBgI7
+wDw1wzg19jg19jjBNcQVwTXNGsE1GsE1wv7KqerANcAGwTXBBjXGODX2ODX2ODX9-egRwgI7wDz_
+Hjc8FsIGFsIGAjvAPDXDODX2ODX98Tg19jg19jg1-f3oEcICO8A8BhbCBhbCBgI7wDw1wzg1-f3s
+ODX2ODX2ODX9-egRwgI7wDwGFsIGFsIGAjvAPDXDODX9-ew4NfY4NfY4Nf396BHCAjvAPAYWwgYW
+wgYCO8A8NcM4NfU4wTXFFTXPGsE1GsE1wv7KqerANcAGwTUGwTXGOME1xBU1zxrBNRrBNcIGwDXA
+BsE1BjUGNcY4NfY4NfY4Nf396BHCAjvAPP4eNzwWwgYWwgYCO8A8NcM4NfU4NcA4NcQVNcYswTXE
+GjUaNRo1GjXC-sqp6jUGNQY1BjXBBjXFODXHFTXGLME1xBo1GjUaNcQGNQY1BjUGNQY1BjXGODX2
+ODX2ODX9-egRwgI7wDz_Hjc8FsIGFsIGAjvAPDXDODXQIDXIEDXKHDXKODXAODXEFTUVNcQswTXE
+GjUaNRrBNcL_yqnqNQY1BjUGNQbBNcU4NTjANcQVNRU1xCzBNcQaNRo1GsE1wgY1BjUGNQY1BsE1
+xjg10CA1yBA1yhw1yzg10CA1yBA1yhw1yzg10CA1yBA1yhw10DI1yyA1yBA1yhw10DI1yyA1yBA1
+yhw1xxHCAjvAPP4eNzwWwgYWwgYCO8A8NcM4NfU4NcA4NcQVwTXELME1xBo1GjUaNRo1wv7Kqeo1
+BjUGNQY1BjXHODXAODXEFcE1xCzBNcQaNRo1wRo1wgY1BjUGNQY1wQY1xjg19jg19jg1-f3oEcIC
+O8A8-h43PBbCBhbCBgI7wDw1wzg19TjBNccVNc0awTUaNRo1wv7KqerANcAGwTUGwTXGOME1xhU1
+zRrBNRrBNcIGwDXABsE1wQY1xjg19jg19jg1-f3oEcICO8A8-h43PBbCBhbCBgI7wDw1wzg1-f3s
+ODX2ODX2ODX9-egRwgI7wDwGFsIGFsIGAjvAPDXDODX2ODX2ODX2ODX2ODX2ODX9-egRwgI7wDwG
+FsIGFsIGAjvAPDXDODX2ODX2ODX2ODX2ODX2ODX9-egRwgI7wDwGFsIGFsIGAjvAPDXDODX2ODX2
+ODX2ODX2ODX2ODX9-egRwgI7wDwGFsIGFsIGAjvAPDXDODX2ODX2ODX2ODX2ODX2ODX9-egRwgI7
+wDwGFsIGFsIGAjvAPDXDODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXLODXQIDXI
+EDXKHDXLODXQIDXIEDXKHDXLODXQIDXIEDXKHDXQMjXLIDXIEDXKHDXQMjXLIDXIEDXKHDXHEcIC
+O8A8BhbCBhbCBgI7wDw1wzg19jg19jg19jg19jg19jg1-f3oEcICO8A8BhbCBhbCBgI7wDw1wzg1
+9jg19jg19jg19jg19jg1-f3oEcICO8A8BhbCBhbCBgI7wDw1wzg19jg19jg19jg19jg19jg1-f3o
+EcICO8A8BhbCBhbCBgI7wDw1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1
+EcICO8A8BhbCBhbCBgI7wDw1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1
+EcICO8A8BhbCBhbCBgI7wDw1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1
+EcICO8A8BhbCBhbCBgI7wDw1DfY1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DcI4DfE1DfY1DfY1
+wwI7wDwGFsIGFsIGAjvAPAL9-f39-f392DwCO8A8BhbCBhbCBgI7wDwCO-39-f39-f3XPAI7wDwG
+FsIGFsIGAjvAPAI7-f39-f39-dc8AjvAPAYWwgYWwgYCO8A8Ajv9-f39-f391zwCO8A8BhbCBhbC
+BgI7wDwCO-39-f39-f3XPAI7wDwGFsIGFsIGAjvAPAI7wjz9-f39-f39zzvCPAI7wDwGFsIGFsIG
+AjvAPAI7wTwG-f39-f39-c88O8E8AjvAPAYWwgYWwgYCO8A8AjvAPAb9-f39-f390QI7wDwCO8A8
+BhbCBhbCBgI7wDwCO8A8BtoCwQYCBgIG-eECwQYCBgIG-eECwQYCBgIG-eECwQYCBgIG-eECwQYC
+BgIGwAI7wDwCO8A8BhbCBhbCBgI7wDwCO8A8BtoCBv3nAgb95wIG-ecCBv3nAgbGAjvAPAI7wDwG
+FsIGFsIGAjvAPAI7wDwG2gIG-ecCBv3nAgb95wIG-ecCBsYCO8A8AjvAPAYWwgYWwgYCO8A8AjvA
+PAbaAgbAAgb95AIGwAIG-eQCBsACBv3kAgbAAgb95AIGwAIGwwI7wDwCO8A8BhbCBhbCBgI7wDwC
+O8A8BtoCBsACwAb94wIGwALABv3jAgbAAsAG-eMCBsACwAb94wIGwALABsICO8A8AjvAPAYWwgYW
+wgYCO8A8AjvAPAbaAsQG-eICxAb94gLEBv3iAsQG-eICxAbBAjvAPAI7wDwGFsIGFsIGAjvAPAI7
+wDwG3QLABv3mAsAG-eYCwAb95gLABv3mAsAGwgI7wDwCO8A8BhbCBhbCBgI7wDwCO8A8Bt0CBv3n
+Agb95wIG-ecCBv3nAgbDAjvAPAI7wDwGLMIGLMIGAjvAPAI7wDwG-f39-f39-dECO8A8AjvBAgbH
+AjvBPAI7wDwGwRbTBsP_AKWh0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbD
+FtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFsYCO8A8AjvCAsc7wjwCO8A8BsAW1QbBFdUGwRbVBsEW
+1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbH
+AjvAPAI7zzwCO8A8BsAW1QbBFdUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUG
+wRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbHAjvAPAI7zzwCO8A8BsAWwgLBFgLBFsoGwRXCAsEV
+AsAVywbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEWAhYCFsoGwRbCAsEWAsEWygbBFsICwRYC
+FswGwRbCAsEWAsEWygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsAWwALBFsoGwRbCAsAWwALA
+FssGwRbCAsAWwALBFsoGwRbCAsAWwALBFsoGwRbCAsAWwAIWAhbKBsEWwgLAFsACwRbKBsEWwgLA
+FsACFswGwRbCAsAWwALAO8A8AjvPPAI7wDwGwBbCAhYCFgIWAhbKBsEVwgIVAhXAAhXLBsEWwgIW
+AhbBAhbKBsEWwgIWAhbBAhbKBsEWwgIWAhYCFgIWygbBFsICFgIWAhbMBsEWwgIWAhYCFswGwRbC
+AhYCFsECFsoGwRbCAhYCFgIWAhbKBsEWwgIWAhYCFgIWygbBFsMCFsACFgIWygbBFsMCFsECFssG
+wRbDAhbCAhbKBsEWwwIWwgIWygbBFsMCFsACFgIWygbBFsMCFsACFswGwRbDAhbAAhbMBsEWwwIW
+wQI7wDwCO888AjvAPAbAFsICFgIWAhYCFsoGwRXCAhUCFcACFcsGwRbCAhYCFgLBFsoGwRbCAhYC
+FsACwBbKBsEWwgIWAhYCwRbKBsEWwgIWAhYCwRbKBsEWwgIWAhYCwRbKBsEWwgIWAhbBAhbKBsEW
+wgIWAhYCwRbKBsEWwgIWAhYCwRbKBsEWwwIWwAIWAhbKBsEWwwIWwQIWywbBFsMCFsACwRbKBsEW
+wwIWwQLAFsoGwRbDAhbAAsEWygbBFsMCFsACwRbKBsEWwwIWwALBFsoGwRbDAhbBAjvAPAI7wTzJ
+O8E8AjvAPAbAFsICFgIWAhYCFsoGwRXCAhUCFcACFcsGwRbCAhYCFgIWzAbBFsICFgIWwQIWygbB
+FsICFgIWwQIWygbBFsICFgIWwQIWygbBFsICFgIWAhYCFsoGwRbCAhYCFsECFsoGwRbCAhYCFgIW
+AhbKBsEWwgIWAhbBAhbKBsEWwwIWwAIWAhbKBsEWwwIWwQIWywbBFsMCFsACFswGwRbDAhbCAhbK
+BsEWwwIWwgIWygbBFsMCFsICFsoGwRbDAhbAAhYCFsoGwRbDAhbBAjvAPAI7wDz_dU6XyTz_wsPH
+wDwCO8A8BsAWwgLBFgLBFsoGwRXCAsEVAsEVygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEW
+wQIWygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEWwQIWygbBFsICwRYCwRbKBsEWwgLBFsEC
+FsoGwRbCAsEWAsEWygbBFsICwRYCwRbKBsEWwgLBFgLBFsoGwRbCAsEWAsEWygbBFsICwRbBAhbK
+BsEWwgLBFgLBFsoGwRbCAsEWAsEWygbBFsICwRbAAjvAPAI7PP51TpfLAol7PAI7wDwGwBbVBsEV
+1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbV
+BsEW1QbBFscCO8A8Ajs8-nVOl8sCiXs8AjvAPAbAFtgV1Rb9-f39-f3cAjvAPAI7PP51TpfDP8E7
+wwKJezwCO8A8BsAWwgYWBhYGFgIWAhYCFgYWBhbCBsEVwgIVAhUCFQIVAhUCFQIVAhXCBsEWwgIW
+AhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbC
+BsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWBhbCBsEWwgIWAhYCFgIWAhYC
+FgIWBhbCBsEWwgIWAhYCFgIWAhYCFgIWBhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYC
+FgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEW
+wgIWAhYCFgIWAhYCFgIWAhbCBsEWwgYWAhYCFgIWAhYCFgIWBhbCBsEWwgYWAhYCFgYWAhYCFgIW
+BhbCBsEWwgYWAhYCFgYWAhYCFgIWAhbCBsEWwgIWAhYCwDvAPAI7PP51TpfCP8M7wgKJezwCO8A8
+BsAWwgYWBhYGFgIWAhYCFgYWBhbCBsEVwgIVAhUCFQIVAhUCFQIVAhXCBsEWwgIWAhYCFgIWAhYC
+FgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYC
+FgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWBhbCBsEWwgIWAhYCFgIWAhYCFgIWBhbCBsEW
+wgIWAhYCFgIWAhYCFgIWBhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIW
+AhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIWAhYCFgIWAhbCBsEWwgIWAhYCFgIW
+AhYCFgIWAhbCBsEWwgYWAhYCFgIWAhYCFgIWBhbCBsEWwgYWAhYCFgYWAhYCFgIWBhbCBsEWwgYW
+AhYCFgYWAhYCFgIWAhbCBsEWwgIWAhYCwDvAPAI7PP51TpfCP8M7wgKJezwCO8A8BsAW1QbBFdUG
+wRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbB
+FtUGwRbHAjvAPAI7PP51TpfCP8M7wgKJezwCO8A8BsAW1QbBFdUGwRbVBsEW1QbBFtUGwRbVBsEW
+1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbHAjvAPAI7PP51TpfD
+P8E7wwKJezwCO8A8BsAW1QbBFdUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUG
+wRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbHAjvAPAI7PP51TpfLAol7PAI7wDwGwBbVBsEV1QbB
+FtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW
+1QbBFscCO8A8Ajs8-nVOl8sCiXs8AjvAPAbAFtUGwRXVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbV
+BsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEW1QbBFtUGwRbVBsEWxwI7wDwCO8AC-nVOl8kCiXvA
+PAI7wDwGwRbTBsMV0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbTBsMW0wbDFtMGwxbT
+BsMW0wbDFtMGwxbTBsMW0wbDFsYCO8A8AjvBAsk7wTwCO8A8Bv39-f39-f3RAjvAPAI7zzwCO8A8
+Bv39-f39-f3RAjvAPAI7zzwCO8A8Bv39-f39-f3RAjvAPAI7wTzJO8E8AjvBAgb9-f39-f39zwI7
+wTwCO8A8-nVOl8k8-sLDx8A8AjvCAv39-f39-f3PO8I8Ajs8-nVOl8sCiXs8Ajv9-f39-f391zwC
+Ozz_dU6Xwz87xQKJezwCO-39-f39-f3XPAI7PP51TpfDP8A7xAKJezwCO-39-f39-f3XPAI7PP51
+TpfDP8E7wwKJezwCO-39-f39-f3XPAI7PP51TpfDP8I7wgKJezwCO-51Tpfm-sLDxzz9-f39-f3s
+Ajs8-nVOl8M-wTvDAol7PAI7-nVOl8ICwTsCwTsCwTsCwTsCwTsCwTsCwDvH-sLDx8A8-nZ3ff39
+-f39-esCOzz_dU6Xwz-AO8QCiXs8Ajv_dU6XwgI7AjsCOwI7wAI7wQI7wAI7wQI7AjsCOwI7xv7C
+w8c8Ff39-f39-ewCOzz_dU6Xwz87xQKJezwCO-51TpfCAsE7AsE7wAI7wQI7wALAO8ACwDvAAjsC
+O8X_wsPHwDwVxxEVwhHAFcARwBURwRXWEcAVEcEVEcEVEcEVEcAV0xHAFRHBFREVwRHBFcARwBUR
+wRXTEcAVwRHAFRHBFRHBFdcRwRURwBXBEcAVEcEV0xEVERXAEcAVERXBERURFRHBFRHBFc8RwRUR
+wRURwRURwRXAEcAVEcEV0hHAFREVERXAEcAVEcEVEcAV1BEVwRHBFREVERURwRURFe4RwRXAEcAV
+ERURFcMRwRURwRXBAjs8-nVOl8sCiXs8Ajv_dU6XwgI7wQI7AjvAAjvBAjvAAjvBAjsCOwI7AjvF
+-sLDxzwVyBEVwREVERURFREVERURFdURFcERFREVERXBERXBERURFdERFcERFcERFcERFcERFcIR
+FdQRFREVERURFcARFcARFdoRFcARFREVERXCERXUERURFREVERURFcERFREVEcEVERXRERXBERXB
+ERXBERXBERXCERXSERXBERURFREVERURFREVERURFdMRFcERFcERFREVERXBERXuERURFREVERUR
+FREVERXBERURFREVERXBAjvAAv51TpfJAol7wDwCO-51TpfCAjvBAjsCO8ACO8ECO8ACwTsCOwI7
+AjsCO8T_wsPHwDwVyBEVwREVERURFREVEcEV1RHBFRHBFRHAFcARwBXAERURFdERwRURwBXAERXB
+EcAVwBEVwhEV1BEVERURFREVwBEVwBHAFdkRFcARFREVEcEVwBEV1BEVERURFREVERXBERURFREV
+ERURwBXQEcAVwBHAFcARwBXAEcAVwBEVwhEV0hEVwRHBFREVERURwBXAERURFdMRFcERwBXAERUR
+FRHAFcARFe4RwBXAERURFREVERXDERURFREVERXBAjvBAsk7wTwCO-51Tpfj-sLDxzwVyREVwREV
+ERURFREVERXZERURFcERFcERFcERFREV0xEVERXBERXBERXBERXCERXUERURFREVERXAERXAERXa
+ERXAERURFcERFcARFdQRwRURFREVERXBERURFREVERURFdERFcERFcERFcERFcERFcIRFdIRFcER
+FREVERURFREVERURFREV0xEVwREVwRHBFREVwREV7hEVERURFREVEcEVERXBERURFREVERXBAjvP
+PAI75TwVyRHBFRHAFcARwBXAERXXEcAVwBEVwRHBFRHBFRHAFdIRwBXAEcEVEcEVEcEVwBHAFcAR
+FdQRFREVEcAVwREVwBHBFdcRwRURFREVEcAVwREV1REVwBHAFcARwRXAEcAVERURFRHBFc8RwRUR
+FcERFcERwRXAEcAVwBEV0xHAFREVERURwBXAERURFRHAFdQRwRURwRXAERXAEcEVEcEV7BEVERUR
+wBXAEcEVwxHBFRHBFcE80QI85RX9-f39-f3vAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-12 15:48:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 13:59:32",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-12 15:48:44",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-13 13:59:32",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLGZh
@@ -12579,8 +12793,8 @@ ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRydWUsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFs
 c2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2Us
 ZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2V9LG1vZGlmaWVk
-PSIyMDI2LTAyLTEyIDA3OjIzOjU1Iixva3BhbF92ZXJzaW9uPSIwLjAuOCIscGlja2Vyc19tb2Rl
-PSJsaW5lYXJfaHVlIixyZXZpc2lvbj0xNTkyLHRlc3RfY3ViZV9jb2xvcnM9e1swXT17MTUsMzEs
+PSIyMDI2LTAyLTEzIDA2OjEwOjU1Iixva3BhbF92ZXJzaW9uPSIwLjEuMSIscGlja2Vyc19tb2Rl
+PSJsaW5lYXJfaHVlIixyZXZpc2lvbj0xNTk3LHRlc3RfY3ViZV9jb2xvcnM9e1swXT17MTUsMzEs
 NH0sezMxLDQsMjB9LHs0LDIwLDIxfSx7MTAsOSwyNX0sezksMjUsMjR9LHs4LDI0LDJ9LHsyNiwx
 MSwyN30sezExLDI3LDN9LHsyNywzLDE5fSx7MjgsMTcsMTl9LHsyOCwxMiwxNn0sezEyLDE2LDF9
 LHs2LDI5LDEzfSx7MjksMTMsMTh9LHsxMywxOCwxfSx7NywyMywxNH0sezIzLDE0LDEzfSx7MTQs
@@ -12600,19 +12814,19 @@ FQIAAPUFdXNlcmRhdGEoImkzMiIsNjQsIjABAMAxZDJiNTMwMDdlMjUIAPAXMDA4NzUxMDBhYjUy
 MzYwMDVmNTc0ZjAwYzJjM2M3MDBmZmYxZTgIAEAwMDRkCAARYTYAYGZmZWMyNwoAIGU0OABAMjlh
 ZCQAYDgzNzY5YyAAMTc3YTgAwGNjYWEwMDFjNWVhYzAA8B1hNWExMDA3NTRlOTcwMDEyNTM1OTAw
 NzQyZjI5MDA0OTJkMzgwMGEyODg3OUAA8ANhY2M1MDBjMzAwNGMwMGViNmJGAGA5MGVjNDIKACBi
-MsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQABWODU2ZDABAEA4MTQxsABQYjM5NDZUAPAENjE3NDAw
-OTkyYzcxMDBjYTAwN8gAMGEyNAwAQDEwNmHIAPA3YmM2NjgzMDBmYTliYmEwMGIxYWQ2ZjAwZjdm
-MGEyMDA1Yzk1NjIwMDkzZTg5YTAwM2M5NTkyMDA4ZWRjZDkwMDk0NzNiNGAA8ANhOWVhMDBhNzdh
-NTQwMGYxYWGgAH02MjdhOTEwAQAQNAIA8ho0MDA3Njc3N2QwMGRhZGFkYjAwOWZhMGE2MDAxZTM3
+MsAAoDY0ZGZmNjAwYmSJAACWAEAwZGFiQABWODU2ZDABAEA4MTQxsADwDTczOTRhMDA0MzYyN2Qw
+MDk5MmM3MTAwY2EwMDfIADBhMjQMAEAxMDZhyADwN2JjNjY4MzAwZmE5YmJhMDBiMWFkNmYwMGY3
+ZjBhMjAwNWM5NTYyMDA5M2U4OWEwMDNjOTU5MjAwOGVkY2Q5MDA5NDczYjRgAPADYTllYTAwYTc3
+YTU0MDBmMWFhoAB9MjAzMDNlMAEAEDQCAHA0MDA3Njc3qADyD2RhZGFkYjAwOWZhMGE2MDAxZTM3
 M2MwMDNmNTY1YagBJjAwCACAMTYxNjE2Iik=
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-12 15:48:44",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 13:59:32",stored="2024-03-24 00:48:06"]]
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-12 15:48:44",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-13 13:59:32",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-12 15:48:44"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-13 13:59:32"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-12 15:48:44"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-13 13:59:32"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-12 15:48:44"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-13 13:59:32"]]
 :: [eoc]
