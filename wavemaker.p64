@@ -11,17 +11,18 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-13 21:26:50",revision=11369]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-14 07:12:23",revision=11871]]
 Version 0.1.2:
 
-- Added: scrollbar; it shows the position of bar divisions and of the current
-  selection.
+- Added: scrollbar for the tracker; it also shows the position of bar divisions
+  and of the current selection.
+- Added: oscilloscope for the synth nodes.
 - Changed: replaced the "create new track" dialog with a more comprehensive
   channel dialog, with allows to mute the current track, clone it, create a
   new empty track, or pick an existing one. The dialog is accessed by clicking
   on the channel header.
-- Changed: the oscilloscopes in the "level" tool are now synced on zero-crossings
-  (thanks to abledbody on discord for the suggestion).
+- Changed: all the oscilloscopes are now synced on zero-crossings (thanks to
+  abledbody on discord for the suggestion).
 - Added: right-click a channel header to mute it.
 - Added: double-click a channel header to enter a track number manually.
 - Changed: the DELETE key now doesn't jump to next row; use the "'" (single
@@ -99,7 +100,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-13 21:26:50",revision=24137]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-14 07:12:23",revision=24639]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -198,7 +199,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-13 21:26:50",revision=32601]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-14 07:12:23",revision=33103]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -424,7 +425,7 @@ function generate_gui()
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-13 21:26:50",revision=22349]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-14 07:12:23",revision=22851]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -553,7 +554,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-13 21:26:50",revision=9266]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-14 07:12:23",revision=9768]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -1376,7 +1377,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-13 21:26:50",revision=29406]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-14 07:12:23",revision=29908]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1449,7 +1450,7 @@ app.bar_length = 4 * app.beat_length
 
 -- UI State
 
-app.view = "tracker" -- "tracker" or "synth"
+app.view = "synth" -- "tracker" or "synth"
 app.detail = false -- TODO: remove?
 app.toolrack_tab = nil
 app.toolrack_track_scrollstart = 0
@@ -1714,7 +1715,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-13 21:26:50",revision=23785]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-14 07:12:23",revision=24287]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -2041,7 +2042,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-13 21:26:50",revision=18543]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-14 07:12:23",revision=19045]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2888,7 +2889,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-13 21:26:50",revision=24691]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-14 07:12:23",revision=25193]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -3048,7 +3049,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-13 21:26:50",revision=29177]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-14 07:12:23",revision=29679]]
 local sfx = {}
 
 
@@ -4011,7 +4012,7 @@ end
 
 return sfx
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-13 21:26:50",revision=5260]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-14 07:12:23",revision=5762]]
 local soft_wrap = {}
 
 -- Soft-wraps a very tiny subset of markdown.
@@ -4122,7 +4123,7 @@ end
 
 return soft_wrap
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-13 21:26:50",revision=24996]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-14 07:12:23",revision=25498]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4367,8 +4368,8 @@ function ui_envelopes.attach_slider(parent, el)
 		spr(61, 2, oy + el.slider_height - 1 - h - 3)
 		pal(15, 15)
 		clip()
-		ui.print_centered(self.label, 4 + 3, 0, 5)
-		ui.print_centered(tostr(val), 4 + 3, self.height - 7, self.dragged and 59 or 58)
+		ui.print_centered(self.label, 4 + 3, 0, 56)
+		ui.print_centered(tostr(val), 4 + 3, self.height - 7, self.dragged and 55 or 56)
 	end
 	--[[function el:update(msg)
 		if (app.has_modal()) return
@@ -4439,7 +4440,7 @@ end
 
 return ui_envelopes
 :: src/ui/help.lua
---[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-13 21:26:50",revision=2511]]
+--[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-14 07:12:23",revision=3013]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local soft_wrap = require "src/soft_wrap.lua"
@@ -4541,7 +4542,7 @@ end
 return ui_help
 
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-13 21:26:50",revision=23979]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-14 07:12:23",revision=24481]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -4820,7 +4821,7 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-13 21:26:50",revision=30554]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-14 07:12:23",revision=31056]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -4863,17 +4864,6 @@ function instrument_flag_toggle(el)
 	end
 	
 	return el
-end
-
-
--------------------------------------------------------------------------------
-
-
-function draw_corners(el)
-	pset(0, 0, 6)
-	pset(el.width - 1, 0, 6)
-	pset(0, 8, 6)
-	pset(el.width - 1, 8, 6)
 end
 
 
@@ -4990,13 +4980,13 @@ end
 function ui_nodes.populate_unused(parent, el)
 	function el:draw()
 		clip()
-		local x, y = 19, 14
+		local x, y = 21, 14
 		pal(7, 58)
-		sspr(63, 0, 0, 7, 7, x, y, x + (7 * 4), y + (7 * 4))
---		spr(62, x, y)
+--		sspr(63, 0, 0, 7, 7, x, y, 10 * 4, 10 * 4)
+		spr(62, 28, 24)
 		pal(7, 7)
 		if self.node_id == 7 then
-			print("pfx6416", 52, 63, 22)
+			print("pfx6416", 52, 66, 58)
 		end
 	end
 	return el
@@ -5022,20 +5012,20 @@ function ui_nodes.populate_root(parent, el)
 	for i = 0, #params do params[i].node_id = el.node_id end
 
 	if el.large then
-		ui_params.attach(el, 15, 88, params[0], { emphasis = true})
-		ui_params.attach(el, 55, 88, params[1], { small = true })
-		ui_params.attach(el, 135, 88, params[2], { small = true })
-		ui_params.attach(el, 175, 88, params[3], { small = true })
-		ui_visual.attach_oscilloscope(el, 8, { x = 20, y = 18, width = 186, height = 66 })
+		ui_params.attach(el, 20, 16, params[0], { emphasis = true})
+		ui_params.attach(el, 60, 16, params[1], { small = true })
+		ui_params.attach(el, 20, 90, params[2], { small = true })
+		ui_params.attach(el, 60, 90, params[3], { small = true })
+		el:attach(instrument_flag_toggle { x = 180, y = 0, label = "retrig", flag = 0x01 })
+		el:attach(instrument_flag_toggle { x = 62, y = 77, label = "wide", flag = 0x02 })
 
 		-- TODO: replace with a custom field
 		-- also: add the same field to the mini version
-		el:attach(instrument_flag_toggle { x = 170, y = 4, label = "retrig", flag = 0x01 })
-		el:attach(instrument_flag_toggle { x = 96, y = 112, label = "wide", flag = 0x02 })
+		el:attach(ui.create_label { x = 68, y = 2, fg = 55, label = "name:" })
 		instrument_name_field = el:attach_text_editor{
-			x = 71, y = 5,
-			width = 72, height = 7,
-			bgcol = 57, fgcol = 59, curcol = 2,
+			x = 90, y = 1,
+			width = 80, height = 7,
+			bgcol = 7, fgcol = 59, curcol = 2,
 			block_scrolling = true, max_lines = 1,
 			margin_top = 1,
 			key_callback = {
@@ -5057,17 +5047,20 @@ function ui_nodes.populate_root(parent, el)
 		ui_params.attach_mini(el, params[1])
 		ui_params.attach_mini(el, params[2])
 		ui_params.attach_mini(el, params[3])
-		el:attach(instrument_flag_toggle { x = 5, y = 51, label = "wide", flag = 0x02 })
-		el:attach(instrument_flag_toggle { x = 45, y = 51, label = "retrig", flag = 0x01 })
+		el:attach(instrument_flag_toggle { x = 16, y = 51, label = "wide", flag = 0x02 })
+		el:attach(instrument_flag_toggle { x = 42, y = 0, label = "retrig", flag = 0x01 })
 	end
 	function el:draw()
 		if self.large then
-			print("instrument ", 14, 6, 5)
-			print(string.format("%02x", app.instrument), 58, 6, 44)
-			print(":", 66, 6, 58)
-		else
+			rrectfill(1, 0, 57, 9, 1, 7)
 			print("instrument ", 4, 2, 5)
 			print(string.format("%02x", app.instrument), 48, 2, 44)
+			spr(62, 150, 60)
+			print("pfx6416", 194, 142, 58)
+		else
+			rrectfill(1, 0, 33, 9, 1, 7)
+			print("inst ", 4, 2, 5)
+			print(string.format("%02x", app.instrument), 24, 2, 44)
 		end
 	end
 	function el:click() return true end
@@ -5096,11 +5089,6 @@ local osc_params = {
 
 function ui_nodes.populate_osc(parent, el)
 	local params = unpod(pod(osc_params))
-	-- closures are not copied by unpod/pod?
-	params[4].onclick = function(self) ui_visual.open_wavetable(self) end
-	params[4].onrelease = function(self) ui_visual.close() end
-	params[5].onclick = params[4].onclick
-	params[5].onrelease = params[4].onrelease
 	
 	for i = 0, #params do params[i].node_id = el.node_id end
 	local flags, _, _, _ = sfx.node_param(app.instrument, el.node_id, 2)
@@ -5137,6 +5125,11 @@ function ui_nodes.populate_osc(parent, el)
 			}
 		})
 	else
+		-- closures are not copied by unpod/pod?
+		params[4].onclick = function(self) ui_visual.open_wavetable(self) end
+		params[4].onrelease = function(self) ui_visual.close() end
+		params[5].onclick = params[4].onclick
+		params[5].onrelease = params[4].onrelease
 		ui_params.attach_mini(el, params[0])
 		ui_params.attach_mini(el, params[1])
 		ui_params.attach_mini(el, params[2])
@@ -5164,8 +5157,7 @@ function ui_nodes.populate_osc(parent, el)
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
 		
 	function el:draw()
-		rectfill(0, 0, self.width, 8, 17)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 17)
 	end
 	
 	return el
@@ -5247,8 +5239,7 @@ function ui_nodes.populate_fm(parent, el)
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
 		
 	function el:draw()
-		rectfill(0, 0, self.width, 9, 27)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 27)
 	end
 	
 	return el
@@ -5330,8 +5321,7 @@ function ui_nodes.populate_ring(parent, el)
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
 		
 	function el:draw()
-		rectfill(0, 0, self.width, 9, 22)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 22)
 	end
 	
 	return el
@@ -5364,8 +5354,7 @@ function ui_nodes.populate_filt(parent, el)
 		ui_params.attach_mini(el, params[1])
 	end
 	function el:draw()
-		rectfill(0, 0, self.width, 9, 14)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 14)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -5396,8 +5385,7 @@ function ui_nodes.populate_echo(parent, el)
 		ui_params.attach_mini(el, params[1])
 	end
 	function el:draw()
-		rectfill(0, 0, self.width, 9, 31)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 31)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -5427,8 +5415,6 @@ function ui_nodes.populate_shap(parent, el)
 		ui_params.attach(el, 60, 84, params[3], { small = true })
 		ui_params.attach(el, 130, 84, params[2], {})
 		ui_params.attach(el, 170, 84, params[1], {})
-		local oscillo_id = sfx.nodes[el.node_id].parent.id
-		ui_visual.attach_oscilloscope(el, 8, { x = 11, y = 16, width = 92, height = 60, node_id = oscillo_id })
 	else
 		ui_params.attach_mini(el, params[0])
 		ui_params.attach_mini(el, params[1])
@@ -5436,8 +5422,7 @@ function ui_nodes.populate_shap(parent, el)
 		ui_params.attach_mini(el, params[3])
 	end
 	function el:draw()
-		rectfill(0, 0, self.width, 9, 9)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 9)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -5471,8 +5456,7 @@ function ui_nodes.populate_unknown(parent, el)
 	ui_params.attach_mini(el, params[4])
 	ui_params.attach_mini(el, params[5])
 	function el:draw()
-		rectfill(0, 0, self.width, self.height, 30)
-		draw_corners(self)
+		rrectfill(1, 0, self.width - 1, 9, 1, 30)
 	end
 	function el:click() return true end
 	function el:doubleclick() app.node = self.node_id; app.refresh_gui = true end
@@ -5482,7 +5466,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-13 21:26:50",revision=20126]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-14 07:12:23",revision=20628]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -5572,7 +5556,7 @@ local function create_channel_dialog(el)
 	ui.head():new(el)
 	
 	el:attach(ui.create_toggle {
-		x = 5, y = 6,
+		x = 5, y = 4,
 		off_spr = get_spr(115), on_spr = get_spr(116),
 		get = function(self) return not sfx.channel_is_muted(app.pattern, el.channel) end,
 		set =
@@ -5583,8 +5567,66 @@ local function create_channel_dialog(el)
 			end,
 	})
 	
+	el:attach(ui.create_list {
+		x = 2, y = 13,
+		width = el.width - 4, height = el.height - 70,
+		cursor = "pointer",
+		row_height = 9,
+		nb_columns = 1,
+		channel = el.channel,
+		get_active = function(self) return sfx.pattern_track(app.pattern, self.channel) end,
+		set_active =
+			function(self, track)
+				undo.checkpoint()
+				if sfx.track_size(track) == 0 then
+					init_track(track)
+				end
+				if sfx.channel_is_muted(app.pattern, self.channel) then
+					sfx.mute_channel(app.pattern, self.channel, false)
+				end
+				app.set_pattern_track(app.pattern, self.channel, track)
+			end,
+		on_tap = function(self) ui_notegrid.close_channel_dialog() end,
+		get_start = function(self) return channel_dialog_start end,
+		set_start = function(self, start) channel_dialog_start = start end,
+		get_max = function(self) return sfx.num_tracks() - 1 end,
+		disabled = function(self) return sfx.channel_is_muted(app.pattern, self.channel) end,
+		draw_item =
+			function(self, track, x, y, w, h, has_pointer)
+				local muted = sfx.channel_is_muted(app.pattern, self.channel)
+				local active = sfx.pattern_track(app.pattern, self.channel)
+				local size = sfx.track_size(track)
+				if track == active then
+					rrectfill(x, y, w, h, 0, muted and 19 or 17)
+				elseif has_pointer then
+					rrectfill(x, y, w, h, 0, 60)
+				end
+				local fg = size == 0 and (has_pointer and 59 or 60) or 57
+				print(string.format("%03d", track), x + 3, y + 2, fg)
+				local trk_patts = app.track_patterns(track)
+				if trk_patts then
+					if size > 0 then
+						--print("\^:08047e0408000000", x + 15, y + 2, 58)
+						print("\^:080c7e0c08000000", x + 15, y + 2, 58)
+					end
+					local x = 25
+					for i = 1, #trk_patts do
+						print(
+							string.format("%02d", trk_patts[i].pattern),
+							x, y + 2,
+							trk_patts[i].channel == self.channel and 58 or 58 -- TODO: keep?
+						)
+						x += 12
+					end
+				end
+			end
+	})
+	
+	local oy = el.height - 35
+	local x_button = app.column_width - 33 -- 14
+	
 	el:attach(ui.create_button {
-		x = 25, y = 4,
+		x = x_button, y = oy - 19,
 		label = "clone",
 		action =
 			function(self)
@@ -5611,11 +5653,10 @@ local function create_channel_dialog(el)
 	})
 	
 	el:attach(ui.create_horiz_divider {
-		x = 0, y = 18,
+		x = 0, y = oy - 5, -- 58,
 		width = el.width - 1,
 	})
 	
-	local oy = 24 -- el.height - 35
 	el:attach(ui.create_label {
 		x = 4, y = oy, fg = 55,
 		label = "length:",
@@ -5649,7 +5690,7 @@ local function create_channel_dialog(el)
 	})
 	
 	el:attach(ui.create_button {
-		x = 25, y = oy + 20,
+		x = x_button, y = oy + 20,
 		label = " new ",
 		action =
 			function(self)
@@ -5664,74 +5705,12 @@ local function create_channel_dialog(el)
 			end
 	})
 	
-	el:attach(ui.create_horiz_divider {
-		x = 0, y = 58,
-		width = el.width - 1,
-	})
-		
-	el:attach(ui.create_list {
-		x = 2, y = 63,
-		width = el.width - 4, height = el.height - 66,
-		cursor = "pointer",
-		row_height = 9,
-		nb_columns = 1,
-		channel = el.channel,
-		get_active = function(self) return sfx.pattern_track(app.pattern, self.channel) end,
-		set_active =
-			function(self, track)
-				undo.checkpoint()
-				if sfx.track_size(track) == 0 then
-					init_track(track)
-				end
-				if sfx.channel_is_muted(app.pattern, self.channel) then
-					sfx.mute_channel(app.pattern, self.channel, false)
-				end
-				app.set_pattern_track(app.pattern, self.channel, track)
-			end,
-		on_tap = function(self) ui_notegrid.close_channel_dialog() end,
-		get_start = function(self) return channel_dialog_start end,
-		set_start = function(self, start) channel_dialog_start = start end,
-		get_max = function(self) return sfx.num_tracks() - 1 end,
-		disabled = function(self) return sfx.channel_is_muted(app.pattern, self.channel) end,
-		draw_item =
-			function(self, track, x, y, w, h, has_pointer)
-				local muted = sfx.channel_is_muted(app.pattern, self.channel)
-				local active = sfx.pattern_track(app.pattern, self.channel)
-				local size = sfx.track_size(track)
-				if track == active and not muted then
-					rrectfill(x, y, w, h, 0, 17)
-				elseif has_pointer then
-					rrectfill(x, y, w, h, 0, 60)
-				end
-				local fg = size == 0 and (has_pointer and 59 or 60) or 43
-				print(string.format("%03d", track), x + 3, y + 2, fg)
-				local trk_patts = app.track_patterns(track)
-				if trk_patts then
-					if size > 0 then
-						--print("\^:08047e0408000000", x + 15, y + 2, 58)
-						print("\^:080c7e0c08000000", x + 15, y + 2, 58)
-					end
-					local x = 25
-					for i = 1, #trk_patts do
-						print(
-							string.format("%02d", trk_patts[i].pattern),
-							x, y + 2,
-							trk_patts[i].channel == self.channel and 57 or 57 -- TODO: keep?
-						)
-						x += 12
-					end
-				end
-			end
-	})
-	
 	function el:draw()
 		rrectfill(0, 0, self.width, self.height, 0, 6)
 		line(0, 0, 0, self.height - 1, 57)
 		line(0, 0, self.width - 1, 0, 57)
 		line(self.width - 1, self.height - 1, 0, self.height - 1, 58)
 		line(self.width - 1, self.height - 1, self.width - 1, 0, 58)
---		line(6, 14, self.width - 7, 14, 58)
---		line(6, 15, self.width - 7, 15, 57)
 	end
 	function el:click()
 		return true
@@ -6060,6 +6039,7 @@ function ui_notegrid.attach_header(parent, el)
 	el.width = app.column_width
 	el.height = app.track_header_height
 	el.cursor = "pointer"
+	el.blink_timer = 0
 	parent:attach(el)
 	
 	function el:draw(msg)
@@ -6070,7 +6050,10 @@ function ui_notegrid.attach_header(parent, el)
 		-- Background is drawn by `tracker`
 		if self:has_keyboard_focus() then
 			rectfill(20, 1, 20 + 14, 7, 7)
-			print(self.str, 22, 2, self.str_is_valid and 55 or 8)
+			local x_cursor = print(self.str, 22, 2, self.str_is_valid and 55 or 8)
+			if self.blink_timer % 32 > 16 then
+				line(x_cursor - 1, 1, x_cursor - 1, 7, 14)
+			end
 		elseif muted or size == 0 then
 			--print("\|e\-i.\-e.\-e.", 22, 2, 55)
 			print(" + ", 22, 2, 55)
@@ -6085,6 +6068,7 @@ function ui_notegrid.attach_header(parent, el)
 
 	function el:update(msg)
 		if self:has_keyboard_focus() then
+			self.blink_timer += 1
 			while peektext() do
 				if #self.str < 3 then
 					self.str = self.str .. readtext()
@@ -6206,7 +6190,7 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-13 21:26:50",revision=10907]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-14 07:12:23",revision=11409]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -6941,7 +6925,7 @@ end
 
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-13 21:26:50",revision=25301]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-14 07:12:23",revision=25803]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -7157,7 +7141,6 @@ function ui_params.attach(parent, x, y, el, style)
 	el:attach(ui.create_field {
 		x = 8, y = 41,
 		centered = true,
---		bg_sprite = 113,
 		get = get_val1,
 		set = set_val1,
 		to_str = smart_str,
@@ -7171,7 +7154,6 @@ function ui_params.attach(parent, x, y, el, style)
 	el:attach(ui.create_field {
 		x = 8, y = 51,
 		fg = 18, centered = true,
---		bg_sprite = 113,
 		visible = has_env,
 		get = get_val0,
 		set = set_val0,
@@ -7225,7 +7207,6 @@ function ui_params.attach_mini(parent, el)
 	)
 	el:attach(ui.create_field {
 		x = 24 + 7, y = 0,
---		bg_sprite = 113,
 		get = get_val1,
 		set = set_val1,
 		to_str = smart_str,
@@ -7240,7 +7221,6 @@ function ui_params.attach_mini(parent, el)
 	el:attach(ui.create_field {
 		x = 24 + 7 + 20 + 4, y = 0,
 		fg = 18,
---		bg_sprite = 113,
 		visible = has_env,
 		get = get_val0,
 		set = set_val0,
@@ -7264,10 +7244,11 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-13 21:26:50",revision=24926]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-14 07:12:23",revision=25428]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
+local ui_visual = require "src/ui/visual.lua"
 local undo = require "src/undo.lua"
 
 
@@ -7507,14 +7488,16 @@ end
 
 function ui_routing.attach(parent, el)
 	parent:attach(el)
-	ui_routing.attach_node_chooser(el, { x = el.width - 87, y = 56 })
+	ui_routing.attach_node_chooser(el, { x = el.width - 87, y = 58 })
+	ui_visual.attach_oscilloscope(el, 8, {
+		x = el.width - 87, y = 4,
+		width = 81, height = 50,
+		border = 60,
+		horiz_scale = 2,
+	})
 	
 	function el:draw()
 		rectfill(0, 0, self.width, self.height, 59)
---		pset(0, 0, 6)
---		pset(self.width - 1, 0, 6)
---		pset(0, self.height - 1, 6)
---		pset(self.width - 1, self.height - 1, 6)
 		-- Overview and Wavetable buttons
 		for i, label in ipairs({"all","wt 0","wt 1","wt 2","wt 3"}) do
 			local bg = (i == 1) and 7 or 58
@@ -7593,7 +7576,7 @@ function ui_routing.attach(parent, el)
 			local str = "??? "
 			local fg = 63
 			local bg = 30
-			if node == sfx.root then str = "inst"; fg = 22; bg = 7
+			if node == sfx.root then str = "main"; fg = 22; bg = 7
 			elseif node.type == 2 then
 				if node.op == 0 then str = "osc " .. n; bg = 17
 				elseif node.op == 1 then str = "fm " .. n; bg = 27
@@ -7743,7 +7726,7 @@ function ui_routing.attach_node_chooser(parent, el)
 			print("(8 nodes max)", 22, 28, 22)
 			return
 		end
-		print("add module:", 4, 2, 22)
+		print("add module:", 4, 2, 57)
 		local ox, oy = 4, 12
 		for row = 0, #node_choice do
 			for column = 0, #(node_choice[row]) do
@@ -7816,7 +7799,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-13 21:26:50",revision=22363]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-14 07:12:23",revision=22865]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -7957,7 +7940,7 @@ end
 return ui_settings
 
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-13 21:26:50",revision=27095]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-14 07:12:23",revision=27597]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -8241,7 +8224,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-13 21:26:50",revision=6872]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-14 07:12:23",revision=7374]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local selection = require "src/selection.lua"
@@ -9141,7 +9124,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-13 21:26:50",revision=20257]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-14 07:12:23",revision=20759]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -10033,7 +10016,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-13 21:26:50",revision=17706]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-14 07:12:23",revision=18208]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -10328,7 +10311,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-13 21:26:50",revision=22887]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-14 07:12:23",revision=23389]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -10362,7 +10345,7 @@ end
 
 function ui.print_centered(s, x, y, col)
 	local count = #s
-	print(s, x - ((count * 4) \ 2), y, col)
+	return print(s, x - ((count * 4) \ 2), y, col)
 end
 
 
@@ -10723,6 +10706,7 @@ function ui.create_list(el)
 		local max = self:get_max()
 		local first_row = 0
 		local start = self:get_start()
+		local bg_active = self:disabled() and 19 or 17
 		if start < 0 then
 			first_row = -start
 		end
@@ -10739,17 +10723,20 @@ function ui.create_list(el)
 					self:draw_item(idx, x, y, w, self.row_height, hovered)
 				else
 					if idx == active_idx then
-						rrectfill(x, y, w, self.row_height, 0, 17)
+						rrectfill(x, y, w, self.row_height, 0, bg_active)
 					end
 					print(self:get_str(idx), x + 3, y + 2, 57)
 				end
 			end
 		end
-		if self:disabled() then
-		elseif (active_idx // self.nb_columns) < start then
-			spr(9, self.width // 2 - 11, 1)
+		if (active_idx // self.nb_columns) < start then
+			pal(17, bg_active)
+			spr(9, self.width // 2 - 13, 1)
+			pal(17, 17)
 		elseif (active_idx // self.nb_columns) > start + nb_rows then
-			spr(10, self.width // 2 - 11, self.height - 6)
+			pal(17, bg_active)
+			spr(10, self.width // 2 - 13, self.height - 7)
+			pal(17, 17)
 		end
 		-- Borders
 		clip()
@@ -10896,6 +10883,7 @@ function ui.create_field(el)
 	ui.head():new(el)
 	el.visible = el.visible or function(self) return true end
 	el.on_confirm = el.on_confirm or function(self) end
+	el.blink_timer = 0
 	
 	function el:draw()
 		local fg = self.fg or (self.dragged and 63 or 55)
@@ -10904,12 +10892,7 @@ function ui.create_field(el)
 			fg = self.str_is_valid and 63 or 8
 			bg = 7
 		end
-		if self.bg_sprite then
-			clip()
-			spr(self.bg_sprite, -1, -1)
-		else
-			rectfill(0, 0, self.width - 1, self.height - 1, bg)
-		end
+		rectfill(0, 0, self.width - 1, self.height - 1, bg)
 		if (not self.visible) or self:visible() then
 			local str
 			if self:has_keyboard_focus() then
@@ -10922,10 +10905,14 @@ function ui.create_field(el)
 					str = tostr(val)
 				end
 			end
+			local x_cursor = 0
 			if self.centered then
-				ui.print_centered(str, 10, 1, fg)
+				x_cursor = ui.print_centered(str, 10, 1, fg)
 			else
-				print(str, self.width - 1 - 4*#str, 1, fg)
+				x_cursor = print(str, self.width - 1 - 4*#str, 1, fg)
+			end
+			if self:has_keyboard_focus() and self.blink_timer % 32 > 16 then
+				line(x_cursor - 1, 0, x_cursor - 1, 6, 14)
 			end
 		end
 	end
@@ -10938,6 +10925,7 @@ function ui.create_field(el)
 		end
 		self.hidden = false
 		if self:has_keyboard_focus() then
+			self.blink_timer += 1
 			while peektext() do
 				if #self.str < 4 then
 					self.str = self.str .. readtext()
@@ -11317,7 +11305,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-13 21:26:50",revision=23611]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-14 07:12:23",revision=24113]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -11341,21 +11329,23 @@ local function draw_wave(
 		wt_addr, wt_width, wt_height,
 		wave, phase,
 		display_width, display_height,
-		col1, col2
+		fg
 )
 	local oy = display_height \ 2
 	local pos_addr = wt_addr + (wave * wt_height >> 8) * wt_width * 2
-	local last_h = nil
-	for i = 0, (display_width - 1) do
+	local function pos_at(i)
 		local sample = i / display_width
 		sample += (phase / 256.0) % 1.0
 		sample = flr(0.5 + sample * wt_width)
 		local val = peek2(pos_addr + sample * 2)
 		local h = flr(0.5 + ((val * display_height) / 72000))
-		if last_h then
-			line(i, oy - last_h, i, oy - h, col2)
-		end
-		pset(i, oy - h, col1)
+		return h
+	end
+	local last_h = pos_at(0)
+	for i = 0, (display_width - 1) do
+		local h = pos_at(i)
+		local dx = abs(h - last_h) > 3 and 0 or -1
+		line(i + dx, oy - last_h, i, oy - h, fg)
  		last_h = h
 	end
 end
@@ -11383,8 +11373,9 @@ function ui_visual.open_wavetable(target)
 	if (overlay) ui_visual.close()
 	
 	overlay = ui_visual.attach_wavetable(ui.head(), target, {
-		x = 110, y = 4,
-		width = 366, height = 97,
+		x = 374, y = 8,
+		width = 81, height = 50,
+		border = 60,
 	})
 end
 
@@ -11401,23 +11392,27 @@ function ui_visual.attach_wavetable(parent, target, el)
 		local flags, _, _, _ = sfx.node_param(app.instrument, target.node_id, target.param)
 		if flags & (0x04 | 0x10) > 0  then
 			draw_wave(wt_addr, wt_width, wt_height, wave0, phase,
-				self.width, self.height, 60, 60)
+				self.width, self.height, 48)
 		end
 		-- Show val1
 		draw_wave(wt_addr, wt_width, wt_height, wave1, phase,
-			self.width, self.height, 17, 19)
+			self.width, self.height, 43)
 		-- Border
 		clip()
-		line()
-		line(1, -1, 58)
-		line(self.width - 2, -1, 58)
-		line(self.width, 1, 58)
-		line(self.width, self.height - 2, 57)
-		line(self.width - 2, self.height, 57)
-		line(1, self.height, 57)
-		line(-1, self.height - 2, 57)
-		line(-1, 1, 58)
-		line(1, -1, 58)
+		if self.border then
+			rrect(-1, -1, self.width + 2, self.height + 2, 2, self.border)
+		else
+			line()
+			line(1, -1, 58)
+			line(self.width - 2, -1, 58)
+			line(self.width, 1, 58)
+			line(self.width, self.height - 2, 57)
+			line(self.width - 2, self.height, 57)
+			line(1, self.height, 57)
+			line(-1, self.height - 2, 57)
+			line(-1, 1, 58)
+			line(1, -1, 58)
+		end
 		clip(self.sx, self.sy, self.width, self.height)
 	end
 	return el
@@ -11434,13 +11429,30 @@ function ui_visual.attach_oscilloscope(parent, channel, el)
 	el.frame_counter = 0
 	function el:draw()
 		local node_id = self.node_id or app.node or 0
-		local horiz_scale = self.horiz_scale or 1
+		local horiz_scale = self.horiz_scale or 2
 		local vert_scale = self.vert_scale or 1
-		local bg, fg1, fg2, border = self.bg or 59, self.fg1 or 49, self.fg2 or 48, self.border or 22
+		local bg, fg1, fg2 = self.bg or 59, self.fg1 or 49, self.fg2 or 48
+		local node_kind = sfx.node_type(app.instrument, node_id)
+		local should_draw_waveform = false
+		if node_id == 0 then
+			-- Nothing to do, but no early return
+		elseif node_kind == 2 then -- OSC
+			local node_op = sfx.node_op(app.instrument, node_id)
+			if node_op == 1 or node_op == 2 then
+--				while
+--					node_id ~= 0 
+--					and not (sfx.node_type(app.instrument, node_id) == 2
+--						and sfx.node_op(app.instrument, node_id) == 0)
+--				do
+					node_id = sfx.node_parent(app.instrument, node_id)
+--				end
+			end
+		else
+			return
+		end
 		rectfill(0, 0, self.width - 1, self.height - 1, bg)
 		-- Oscilloscope
 		local tick_addr = 0x200000 + node_id * 8192
-
 		-- `tick_len` is never used by sfx.p64...
 		-- but the second `stat` is necessary to get
 		-- audio data into `tick_addr`
@@ -11452,11 +11464,11 @@ function ui_visual.attach_oscilloscope(parent, channel, el)
 		local last_sgn = sgn(peek2(tick_addr))
 		local zero_crossing = 0
 		for i = 0, tick_len - horiz_scale * self.width, 2 do
-			local sleft = peek2(tick_addr + i)
+			local sample = peek2(tick_addr + i)
 			if zero_crossing == 0 then
 				if last_sgn > 0 then
-					last_sgn = sgn(sleft)
-				elseif sgn(sleft) > last_sgn then
+					last_sgn = sgn(sample)
+				elseif sgn(sample) > last_sgn then
 					zero_crossing = i
 					break
 				end
@@ -11467,25 +11479,27 @@ function ui_visual.attach_oscilloscope(parent, channel, el)
 			local sample = flr(x * horiz_scale) -- i.e. horizontal scaling of the waveform
 			local val = peek2(tick_addr + zero_crossing + sample * 2)
 			local y = (self.height / 2) - (vert_scale * (val * self.height) / 72000)
---			if last_y then
-				line(x - 1, last_y, x, y, fg1)
---			end
---			pset(x, y, fg1)
+			local dx = abs(y - last_y) > 3 and 0 or -1
+			line(x + dx, last_y, x, y, fg1)
 			last_y = y
 		end
 
 		-- Border
 		clip()
-		line()
-		line(1, -1, 58)
-		line(self.width - 2, -1, 58)
-		line(self.width, 1, 58)
-		line(self.width, self.height - 2, 57)
-		line(self.width - 2, self.height, 57)
-		line(1, self.height, 57)
-		line(-1, self.height - 2, 57)
-		line(-1, 1, 58)
-		line(1, -1, 58)
+		if self.border then
+			rrect(-1, -1, self.width + 2, self.height + 2, 2, self.border)
+		else
+			line()
+			line(1, -1, 58)
+			line(self.width - 2, -1, 58)
+			line(self.width, 1, 58)
+			line(self.width, self.height - 2, 57)
+			line(self.width - 2, self.height, 57)
+			line(1, self.height, 57)
+			line(-1, self.height - 2, 57)
+			line(-1, 1, 58)
+			line(1, -1, 58)
+		end
 		clip(self.sx, self.sy, self.width, self.height)
 	end
 	return el
@@ -11562,7 +11576,7 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-13 21:26:50",revision=21837]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-14 07:12:23",revision=22339]]
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
@@ -11718,7 +11732,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-13 21:26:50",revision=14640]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-14 07:12:23",revision=15142]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -11808,7 +11822,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-13 21:26:50",revision=23491]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-14 07:12:23",revision=23993]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -12283,7 +12297,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-13 21:26:50",revision=23826]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-14 07:12:23",revision=24328]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -12353,7 +12367,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-13 21:26:50",revision=22196]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-14 07:12:23",revision=22698]]
 # Things To Do
 
 ## Before Next Release
@@ -12395,9 +12409,9 @@ return Wavetable
 - add wavetable importer.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-13 21:26:50",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.1.2",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#115",workspace_index=2},{location="pal/0.pal",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-14 07:12:23",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.1.2",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#62",workspace_index=2},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfx",workspace_index=9}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-13 21:26:50"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-14 07:12:23"]]
 :: fonts/p8_mod.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAxLTMwIDA3OjEyOjQzIixtb2RpZmllZD0iMjAyNi0w
 MS0zMCAwNzoxNDozNCIscmV2aXNpb249Ml1dbHo0AHsFAACjBQAA8INweHUAAygACAAABAQIBhAD
@@ -12427,10 +12441,10 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 21:26:50",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-14 07:12:23",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
-Mi0xMyAxMzowNDo1MSIscmV2aXNpb249MTAyMzZdXWx6NAAwDQAA-0AAAPMle1swXT17Ym1wPXB4
+Mi0xNCAwNzowMzo1NCIscmV2aXNpb249MTAyNDFdXWx6NABjDQAAREEAAPMle1swXT17Ym1wPXB4
 dQBDIAgIBMAXQAcQFyAHEBcQByAXEAdAF8AsZmxhZ3M9MCxwYW5feAgA13k9MCx6b29tPTExfSxD
 APYPEBAE8AgvOcAOBx6wDhceoA4nHpAOBw4XDpAOBx4HBgDiDgceYD4HLmAeNw6ADkcEAH8eJx6Q
 TvAGcAALHTZvAPAKCj85kC4XDnAuNw5QLlcOUA5HHgcOUA4nPgYAQQcuEA4IADIOEC4IAP8TAB4n
@@ -12438,58 +12452,59 @@ DjAuBw4ADjcOIB4nDgAeFx4gDjcOED4wHhceoD7wCoEAHXITPzmgHhce3ADwBoAeBx4HHnAOBz4H
 DmAeBz4HjgcGDgIAEgcGAGGOBz4HHmAfABFwKwASgBMBAnwAHwN8ABn0FA8NBBCvOiAOrxIOAA7N
 DzkOTQdtDA5NF10MDk0nTQwOTTc9CgABFAAAHgCfzQwADK0MIKwQaQALHzdpAAMTEWkAb80MDj1H
 PQUAAx-NZQAtFhJlAAG9AAtgAAEUAA9lAC4fJWUASP8HCAgEMAdgF1AHAAdABwAHICcwN0AXsEIA
-GdAXBQT-OwoEbgRuBE4kAgAgLkQCAC-_CEUACx44RQARCDkAES5FABFOUQAv-gpFABn4CAwMBEBP
-OVAeLzoeMB4NLg0eIA4NTg0OBgAgEC4YAP8GAB4dDi0eAB4tThAOLR5QHg0ecC5wagAZ-wsHCAQv
-OQAOAB5QDlAOEA4gDhAeEF4wHkAOIEYACywxNEcAkSAPOUAeMF4QHkYAnw5QDlAeAA4ALkcAHVLg
-TzkQTgIAH3A8ABqgDQ0EkA87DzkGgAYAIBZwBgAgJmAGACA2UAYAIEZABgAgVjAGAFEWLzoWIAkA
-ow86Hw4PJQ86BhAPALAPDg85HyUPJA85ABIAECYSABEvEAAADwD-AjYPOi8lHyQfOVYOLyQOhi4W
-YAIZ8QcwCQQPOQb-EhwGDzoPORb-EhoWDzoAEwBRGgYPOhAUAFEYFg86IBQAURgGDzowFABRFhYP
-OkAUAP8AFgYPOlAPOfYYDzpg-hgwfgAZ8AQgCgQQ-zkMIA7POA86DsYOAA7fCQDxE9YNDi84Fgwm
-DCYMDQ5GHAYcNg0OHAYMBgwGLAYsDQ42DAYCABMmFgBKFhwWHBYAIxYcKgAiHBYSAP8B3A0O1g0A
-DcwNDsYNIP0MEKUAIlDGDzoOz5QE8RzWDzoO3xIPOg4mHzgGLQYtBg86Dk8SFwwXPA86DhYNBg0G
-DSYNJgsOPAcMAgAiLAsWAEodFh0WFgAjHRYqACIXHBIA79YLDtwLAAvGCw7MCyD7qQAb-wINDQTw
-Kg83sA6QTpAOsA7wKj0ADA_rAjInLzipAiZPOKMCJU84nwIhTzidAh84nQId_gg4CgTwKB8g-yUk
-LyAPJfAkDg8gDvAmHgMAPA7wKFQAwy4xMjM4MDk1MjM4MWAAoi0xLjExNDI4NTcGAAJvABo1bwBE
-CAQPJVcABmAAAHUAbyQOLf4kHWgAN08vJBAeAgAEFD55AATfAB9gdwA0rAUFBGAHICcAR0BRAAqE
-ASwxNjcAECABCm8nIBcwBwA7AB1-QEcAJyAHYDcAHWAABzAXICd-Ch8gOwAdX0dAR0BHNQAaEAfi
-AH9AJyBHAGdgnwIZzwcFBGBnAEcgJ0AHIDgAGUEFBQQQiQFfEAcwBxCrABtgBwQQLzogTAMwAA5N
-6Qm-DA5NDAAMLQwgLBCfCxoESgAAawY2DgAOYwYUDlwGEA5WBp8POQANLyQNIC1eABthDAYEMBcg
-9QgxAAcQRAw1EAcACAATMBgAP0AXIAEBDh4wWQD-CghwBwAIYBcACAdgFwgAB3AIBwAHYAgQF1BL
-ABpRBQUEByCJABUgCAAPjQEaD98CFw_IAzQh8ASnAA83ABqlCwoEvzkvOg85DwQA-xYfOQ86nzkP
-Om85EA4POi4NLhAODS4dHhAObQ4QTh0eUA4NHmAuyAca8QALCgQwLzlgHg86DlAeHU5KADMeHS4S
-CpAOEG4Nng0eDQ4CAC8tvlkAHMrwCG85MA5POg4wDk0EAC9uwEsAGf8DBwcEMAdAFzAnIDcwJ0AX
-UAcQPgAc7xAHUBdAJzA3ICcwF0AHIAEddb85LyUPOQ8EAIEfOQ8lnzkPJYUBHyWFASMvMTCGAQMf
-JYYBLi8xMIcBBBYlfwEOhwEPTAAS8RkXFwTw_QHwBQEHAfAEARcB8AMBJwEAAfAAATcBBwHgARcR
-JwHgEQcRHwASBx8AIPADCgBPBQHwDIYEGgBrAHKfMfACATcBBQD2AAABRwHgITcB0AFnAeBBB1gA
-H5dYAB4TbsMAAZ8AQgIRBxFMAAGzAEUEIfAEDQAQAxwAGALFAB9ubQAakBkZBPD-KgHwBz4AcAYB
-BxEAARDKAAAQAAAmAfAD0BFHAScBsAEHAUcRBxHAAVcRRgFgN0HwADEARQEQBYAAMwQBJ7AAPwcB
-MIwNGQ_uAQEkMeCrAVchBwHwAKwBBP4AHyISAiYBTwFtAQFHAfABVAEfVVYAGvwpHx8E8B4F8EMF
-8AEF8AIPOkcO8AYOhw7wA8fwAefg9wFwBTAO9wEOMAVg9wMPP5AO9wMOkPcFDYAEAAAZAKANQAUw
-9wMdEAVgMwD-Fw2w9wEdwOcd4McdwAUgDocOHQAFoAVADQ5HDi0gBYAFcG1QBfBwwBEZDKwAEEas
-AKGGDvADxvAB5uD2rAAR9qwAEfasAIz2Aw6Q9gUNgAQAIg72rAAS9qwAEPasAIH2AR3A5h3gxqwA
-FYasAB9GrAAq-CcH8EMH8AEH8AIPPE87DzzwBg6POw7wA83wAe3g-QFwBzAO-QEOMAdg-QMPOpAO
--QMOkP0FDIAEAAAZAKAMQAcw-QMcEAdgMwD-FQyw-QEcwO0c4M0cwAcgDo0OHAAHoAdADA5NDiwg
-B4AHcGxQB68AHkHgB-AOAwAfJLQATSDwAbMAIfADsAAfwK4AIADtA7AVB-ACB6AH8BlPO6wA8w9v
-Ow884K87gAcgziAHYA88zg2Q7g86cP4BcP4BDGAEAP8cMAcQ-gEMAAdQ7hxwDc4NDJDOHKCuHMAN
-bg0coAcgDE4sAAeAB1BMMAfwP7gGGXAZGQSwB-AIkQA-QAdAkwA_X-AATPBEkAAZ-wEJBwTwBU86
-IG4QbhBuIE4AEQQa0AkHBKBPOyBuEA5PDw4-AB_gPwAawBwcBP86CDAO9gYPOQYAFQ0FAFBe9goN
-DgQAsf0Alg3wAA4mLQ4mCAAsDRAJALs_Jg2_MA6WDQ6WDQcAH703AAxk8AAOlv4CagAZLYEABAUA
-L-0H0wgc-wBXAGcwBwA3ADcABzBnAFc2DR0ATgMfAUUBGo8MBQTwDQfwDjUAGo8LBQTwCwfwC2oA
-Ho8JDypwDzLwCTkAHj8NDyqkAByvBwUEgCcwJzAngN0HDQ83ADUhFzANDC8wFzsAHgCzDH9QB1AH
-YCcgOwAaEAg7AFEwBzAXAAQAL3AnnwoblAcFBCcwBxAHIAQALycwrwIaAz8AIgAnBAAPPwAfrzcg
-B1AnMAdQNyA5ACQvB1A5AB9PMEcQJzkAHwKjARAAHw9PBzAnID4AIG8wJwAXACc_ACVFEAcgN6gB
-D0AAIk8AVwAnQAAjECfZAhIwfwAPqwEbcAsGBAAnYAc7AZ_QB5AHIAdgJ2BAACIAeQEAnBAPRAAj
-EjeDAAcEAB83QwAiAIYABAYAD0cAI2BHUAeQJ3ANAS9HUDsAIEAHkDdgBgAPOwAfEkBBAQ4-AA-D
-ARogEBf3AD9gN1DFASoPRgArADwANFBHUAoAD4oAJgEGAA9IACYCUwIvN2AKAiOvAwUENwAXABcA
-N_IHGjEDBQSwEwBwBQ85AB1PJxBHEDUAIC83EKMAHgKhAD83EAc5AB0-NxAnbgAfPzcQN0YBHzIn
-EAcCAA_jAB4vAEduAB9PNwA3EKMAIR8A4BceAPMgH-AECA0PMgDCcQcHBIAvOSATHi8gLoIJDRw1
-iAyfkG85AP4LAG6QOQAazw0HBNCvOQD_FwCu0DkADAw4ACAQjzUYID9fNxhADz8PNwsASA85Dk8H
-ACAADRYATw0gjRBdACEjXzhKGCdfOEwYJV84ThgkXzhQGE9fOC8kZwAdAa8YEDfEAAH5GB86_Rgs
-Hjf5GBQ6_RgSOvkYHzr5GCK-BwcEcE83gE6ATnA4ABqQEAoEEL86IA6-ogHA3Q85Dh0vNw0cDSwd
-CwCSDA0MDQwdDD0LCwCDHA0cLQsOHSwUAI-dCwALvQsgu1ABGgRwADCfDh8GAVQfDg8Xn-8Zow8X
-DyUnDQcdBx0RAHodBw0HDRcNEAAyBw0XEAAXLSwAEb3iAW8MvyQMILyQAA0PgwMsUA4HBBCfwRpQ
-Lw8ubzfKAYAvBx8uDxNvN6QAJC8vCwAxLy4fCQCvAA0vE283DSCdEGcAIyI5BmYAQTkHFg5ZAP4A
-DSYObzcNDiYebA0ADS5sWgAPdgQRDzIA---------------------------------4dQPTEwfX0=
+GfEDGwYEIC87UC5QLkAeDxEeMB4NBABTIB4tHhAEAP8AAB5NPk0_TS5tHm0ebf4MXgALHDheAHL-
+OwxvER87BABTLztPET8EAGUfOwAeLxFmADUgHg1_ACBALpEAHyBqABmgDAwEQE85UB4vOkIAmC4N
+HiAODU4NDgYAIBAuGABAAB4dDtQA3y1OEA4tHlAeDR5wLnBqABn-CgcIBC85AA4AHlAOUA4QDiAO
+EB4QXjAeQA6wAAwsMTRHAJEgDzlAHjBeEB5GAJ8OUA5QHgAOAC5HAB1S4E85EE4CAB9wPAAaoA0N
+BJAPOw85BoAGACAWcAYAICZgBgAgNlAGACBGQAYAIFYwBgBRFi86FiAJAKMPOh8ODyUPOgYQDwCw
+Dw4POR8lDyQPOQASABAmEgARLxAAAA8A-wI2DzovJR8kHzlWDi8kDoYuFp4CGfEHMAkEDzkG-xIc
+Bg86DzkW-xIaFg86ABMAURoGDzoQFABRGBYPOiAUAFEYBg86MBQAURYWDzpAFAD-ABYGDzpQDzn2
+GA86YP4YMH4AGfAEIAoEEP85DCAOzzgPOg7GDgAO3wkA8RPWDQ4vOBYMJgwmDA0ORhwGHDYNDhwG
+DAYMBiwGLA0ONgwGAgATJhYAShYcFhwWACMWHCoAIhwWEgD-AdwNDtYNAA3MDQ7GDSD9DBClACJQ
+xg86Ds-SBPEc1g86Dt8SDzoOJh84Bi0GLQYPOg5PEhcMFzwPOg4WDQYNBg0mDSYLDjwHDAIAIiwL
+FgBKHRYdFhYAIx0WKgAiFxwSAO-WCw7cCwALxgsOzAsg_6kAG-8CDQ0E8CoPN7AOkE6QDrAO8Co9
+AAwPqwIyJy84qQImTzijAiVPOJ8CIU84nQIfOJ0CHfoIOAoE8CgfIP8lJC8gDyXwJA4PIA7wJh4D
+ADwO8ChUAMMuMTIzODA5NTIzODFgAKItMS4xMTQyODU3BgACbwAaNW8ARAgEDyVXAAZgAAB1AG8k
+Di3_JB1oADdPLyQQHgIABBQ_eQAE3wAfYHcANKwFBQRgByAnAEdAUQAKhAEsMTY3ABAgPwpvJyAX
+MAcAOwAdf0BHACcgB2A3AB1gAAcwFyAnvQofIDsAHV9HQEdARzUAGhAH4gB-QCcgRwBnYJ8CGc8H
+BQRgZwBHICdAByA4ABlBBQUEEIkBXxAHMAcQqwAbYAcEEC86IEwDMAAOTScKvwwOTQwADC0MICwQ
+3QsaBEoAAGsGNg4ADmMGFA5cBhAOVgafDzkADS8kDSAtXgAbYQwGBDAXIDMJMQAHEIIMNRAHAAgA
+EzAYAD9AFyABAQ4eMFkA-woIcAcACGAXAAgHYBcIAAdwCAcAB2AIEBdQSwAaUQUFBAcgiQAVIAgA
+D40BGg-fAhcPiAM0IfAEpwAPNwAapQsKBL85LzoPOQ8EAP8WHzkPOp85DzpvORAODzouDS4QDg0u
+HR4QDm0OEE4dHlAODR5gLsgHGvEACwoEMC85YB4POg5QHh1OSgAzHh0uEgqQDhBuDZ4NHg0OAgAv
+Lb5ZABzK8AhvOTAOTzoOMA5NBAAvbsBLABn-AwcHBDAHQBcwJyA3MCdAF1AHED4AHO8QB1AXQCcw
+NyAnMBdAByABHXW-OS8lDzkPBACBHzkPJZ85DyWFAR8lhQEjLzEwhgEDHyWGAS4vMTCHAQQWJX8B
+DocBD0wAEvEZFxcE8PkB8AUBBwHwBAEXAfADAScBAAHwAAE3AQcB4AEXEScB4BEHER8AEgcfACDw
+AwoATwUB8AyGBBoAawBynzHwAgE3AQUA9gAAAUcB4CE3AdABZwHgQQdYAB_XWAAeE27DAAGfAEIC
+EQcRTAABswBFBCHwBA0AEAMcABgCxQAfbm0AGpAZGQTw-yoB8Ac_AHAGAQcRAAEQygAAEAAAJgHw
+A9ARRwEnAbABBwFHEQcRwAFXEUYBYDdB8AAxAEUBEAWAADMEASewAD8HATCMDRkPrgEBJDHgqwFX
+IQcB8ACsAQT_AB8iEgImAU8BbQEBRwHwAVQBH1VWABr8KR8fBPAeBfBDBfABBfACDzpHDvAGDocO
+8APH8AHn4PcBcAUwDvcBDjAFYPcDDz_QDvcDDpD3BQ2ABAAAGQCgDUAFMPcDHRAFYDMA-xcNsPcB
+HcDnHeDHHcAFIA6HDh0ABaAFQA0ORw4tIAWABXBtUAXwcP4RGQysABBGrAChhg7wA8bwAebg9qwA
+EfasABH2rACM9gMOkPYFDYAEACIO9qwAEvasABD2rACB9gEdwOYd4MasABWGrAAfRqwAKvwnB-BD
+B-ABB-ACDzxPOw888AYOjzsO8APN8AHt4P0BcAcwDv0BDjAHYP0DDzqQDv0DDpD9BQyABAAAGQCg
+DEAHMP0DHBAHYDMA-xUMsP0BHMDtHODNHMAHIA6NDhwAB6AHQAwOTQ4sIAeAB3BsUAevAB5B4Afw
+DgMAHyS0AE0g8AGzACHwA7AAH8CuACAA7QOwFQfwAgegB-AZTzusAPMPbzsPPOCvO4AHIM4gB2AP
+PM4NkO4POnD_AXD_AQxgBAD-HDAHEP4BDAAHUO4ccA3ODQyQzhygrhzADW4NHKAHIAxOLAAHgAdQ
+TDAH8D_4BhlwGRkEsAfwCJEAP0AHQJMAPl-wAEzwRJAAGf8BCQcE8AVPOiBuEG4QbiBOABEEGtAJ
+BwSgTzsgbhAOTw8OPwAfoD8AGt8cHAT-OggwDv84Bg85BwAA8QZe-QoPOQ79CgwO-ACdDPAADi0s
+Di0IACwMEAkAuz4tDL4wDp0MDp0MBwAfvDcADGDwAA6d-gJmAAAEAGwsDv0GDDAFAB-8IgoNDNoI
+-wBXAGcwBwA3ADcABzBnAFc9DR0AVQMfAUwBGo8MBQTwDQfwDjUAGo8LBQTwCwfwC2oAHo8JDypw
+DzLwCTkAHj8NDyqkAByvBwUEgCcwJzAngOQHDQ83ADUhFzAUDC8wFzsAHgC6DH9QB1AHYCcgOwAa
+EAg7AFEwBzAXAAQAL3AnpgoblAcFBCcwBxAHIAQALycwAwQZBD8AIgAnBAAPPwAfrzcgB1AnMAdQ
+NyA5ACQvB1A5AB9PMEcQJzkAHwKjARAAJg9PBzAnID4AIG8wJwAXACc_ACVFEAcgN6gBD0AAIk8A
+VwAnQAAjECfZAhIwfwAPqwEbcAsGBAAnYAc7AZ_QB5AHIAdgJ2BAACIAeQEAoxAPRAAjEjeDAAcE
+AB83QwAiAIYABAYAD0cAI2BHUAeQJ3ANAS9HUDsAIEAHkDdgBgAPOwAfEkBBAQ4-AA-DARogEBf3
+AD9gN1DFASoPRgArADwANFBHUAoAD4oAJgEGAA9IACYCUwIvN2AKAiOvAwUENwAXABcAN_IHGjED
+BQS3EwBwBQ85AB1PJxBHEDUAIC83EKMAHgKhAD83EAc5AB0-NxAnbgAfPzcQN0YBHzInEAcCAA_j
+AB4vAEduAB9PNwA3EKMAIR8A5xceADghH-AECA0PMgDCcQcHBIAvOSAaHi8gLoIJDRw1jwyfkG85
+AP4LAG6QOQAazw0HBNCvOQD_FwCu0OkLGVANBwQQjzwYID9fPhhADz8PNwsASA85Dk8HACAADRYA
+Tw0gjRBdACEjXzhRGCdfOFMYJV84VRgkXzhXGE9fOC8kZwAdAbYYEDfEAAEAGR86ABksHjcAGRQ6
+ABkSOgAZHzoAGSK-BwcEcE83gE6ATnA4ABqQEAoEEL86IA6-ogHA3Q85Dh0vNw0cDSwdCwCSDA0M
+DQwdDD0LCwCDHA0cLQsOHSwUAI-dCwALvQsgu1ABGgRwADCfDh8GAVQfDg8XnwYaow8XDyUnDQcd
+Bx0RAHodBw0HDRcNEAAyBw0XEAAXLSwAEb3iAW8MvyQMILyQAA0PgwMsUA4HBBCfyBpQLw8ubzfK
+AYAvBx8uDxNvN6QAJC8vCwAxLy4fCQCvAA0vE283DSCdEGcAIyI5BmYAQTkHFg5ZAP4ADSYObzcN
+DiYebA0ADS5sWgAPdgQRDzIA---------------------------------4dQPTEwfX0=
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-qKIefk-wf7DAEz5P8H_ooh5zD-9-f39-BLE
 P9cS0j-AEss-wBLWP-7DAEzZPxLLP8AS0D-_ooh5zj-9-f3OEsE-wBLBP8oSwT-IEj-IEsY-xxI-
@@ -12822,9 +12837,9 @@ FdQRFREVEcAVwREVwBHBFdcRwRURFREVEcAVwREV1REVwBHAFcARwRXAEcAVERURFRHBFc8RwRUR
 FcERFcERwRXAEcAVwBEV0xHAFREVERURwBXAERURFRHAFdQRwRURwRXAERXAEcEVEcEV7BEVERUR
 wBXAEcEVwxHBFRHBFcE80QI85RX9-f39-f3vAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 21:26:50",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-14 07:12:23",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-13 21:26:50",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-14 07:12:23",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLGZh
@@ -12878,13 +12893,20 @@ ZjBhMjAwNWM5NTYyMDA5M2U4OWEwMDNjOTU5MjAwOGVkY2Q5MDA5NDczYjRgAPADYTllYTAwYTc3
 YTU0MDBmMWFhoAB9MjAzMDNlMAEAEDQCAHA0MDA3Njc3qADyD2RhZGFkYjAwOWZhMGE2MDAxZTM3
 M2MwMDNmNTY1YagBJjAwCACAMTYxNjE2Iik=
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-13 21:26:50",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-14 07:12:23",stored="2024-03-24 00:48:06"]]
+:: sfx/0.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTE0IDA0OjU1OjIwIixtb2RpZmllZD0iMjAyNi0w
+Mi0xNCAwNzowOTo0NiIscmV2aXNpb249NF1dbHo0AMEAAAAgCgAA-zBweHUAAygAAAQABA9AEAIO
+AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOvwE6oBEAYP
+MBABIAEgAfAAAhACDhABIA8hIAHgDxECIA8gUAELAFASAiAPKwsA-w3wiA8oD--wxAIAD-gKD-8P
+gA-3Dw0B8AkBEAYORQAAUTAPQPDDMgAfxjAA------_fH-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-
+----KQ==
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-13 21:26:50",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-14 07:12:23",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-13 21:26:50"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-14 07:12:23"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-13 21:26:50"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-14 07:12:23"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-13 21:26:50"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-14 07:12:23"]]
 :: [eoc]
