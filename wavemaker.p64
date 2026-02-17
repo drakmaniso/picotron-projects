@@ -11,7 +11,7 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-16 21:53:52",revision=14439]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=14555]]
 Version 0.2.1, aka #wavemaker-???:
 
 - Fixed: the number of patterns is now 128 like in the default tracker; this
@@ -113,7 +113,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-16 21:53:52",revision=27207]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-17 08:01:33",revision=27323]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-16 21:53:52",revision=35671]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",revision=35787]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -448,7 +448,7 @@ function generate_gui()
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-16 21:53:52",revision=25419]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=25535]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -580,7 +580,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-16 21:53:52",revision=12336]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-17 08:01:33",revision=12452]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -1403,7 +1403,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-16 21:53:52",revision=32476]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-17 08:01:33",revision=32592]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1742,7 +1742,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-16 21:53:52",revision=26855]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-17 08:01:33",revision=26971]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -2071,7 +2071,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-16 21:53:52",revision=21613]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-17 08:01:33",revision=21729]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2918,7 +2918,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-16 21:53:52",revision=27761]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-17 08:01:33",revision=27877]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -3078,7 +3078,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-16 21:53:52",revision=32247]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-17 08:01:33",revision=32363]]
 local sfx = {}
 
 
@@ -4083,7 +4083,7 @@ end
 
 return sfx
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-16 21:53:52",revision=8330]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-17 08:01:33",revision=8446]]
 local soft_wrap = {}
 
 -- Soft-wraps a very tiny subset of markdown.
@@ -4194,7 +4194,7 @@ end
 
 return soft_wrap
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-16 21:53:52",revision=28066]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-17 08:01:33",revision=28182]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4236,9 +4236,32 @@ function ui_envelopes.attach_panel(parent, el)
 		fg = 7,
 		highlight = 29,
 		items = {
-			{ label = "adsr", action = function() sfx.set_env_type(app.instrument, el.env_id, 0); app.refresh_gui = true end },
-			{ label = "lfo", action = function() sfx.set_env_type(app.instrument, el.env_id, 1); app.refresh_gui = true end },
-			{ label = "custom", action = function() sfx.set_env_type(app.instrument, el.env_id, 2); app.refresh_gui = true end },
+			{
+				label = "adsr",
+				action =
+					function()
+						undo.checkpoint()
+						sfx.set_env_type(app.instrument, el.env_id, 0)
+						app.refresh_gui = true
+					end 
+			},
+			{
+				label = "lfo",
+				action = function()
+					undo.checkpoint()
+					sfx.set_env_type(app.instrument, el.env_id, 1)
+					app.refresh_gui = true
+				end
+			},
+			{
+				label = "custom",
+				action =
+					function()
+						undo.checkpoint()
+						sfx.set_env_type(app.instrument, el.env_id, 2)
+						app.refresh_gui = true
+					end
+				},
 		}
 	})
 	
@@ -4263,11 +4286,18 @@ function ui_envelopes.attach_panel(parent, el)
 			
 		elseif env_type == 1 then
 			-- LFO -----------------------------------------------
+			--[[ not yet implemented?
 			local items = {}
 			for i = 0, #lfo_shape_names do
-				add(items, { label = lfo_shape_names[i], action = function() sfx.set_env_param(app.instrument, el.env_id, 5, i) end })
+				add(items, {
+					label = lfo_shape_names[i],
+					action =
+						function()
+							undo.checkpoint()
+							sfx.set_env_param(app.instrument, el.env_id, 5, i)
+						end
+				})
 			end
-			--[[ not yet implemented?
 			ui_envelopes.attach_menu_button(el, {
 				x = xsliders + 14, y = 12, 
 				env_id = el.env_id,
@@ -4280,8 +4310,14 @@ function ui_envelopes.attach_panel(parent, el)
 				items = items,
 			})
 			]]--
-			ui_envelopes.attach_slider(el, { x = xsliders + 8, y = 13, slider_height = 40, env_id = el.env_id, param = 4, label = "freq" })
-			ui_envelopes.attach_slider(el, { x = xsliders + 34, y = 13, slider_height = 40, env_id = el.env_id, param = 6, label = "phase" })
+			ui_envelopes.attach_slider(el, {
+				x = xsliders + 8, y = 13, slider_height = 40,
+				env_id = el.env_id, param = 4, label = "freq"
+			})
+			ui_envelopes.attach_slider(el, {
+				x = xsliders + 34, y = 13, slider_height = 40,
+				env_id = el.env_id, param = 6, label = "phase"
+			})
 			
 
 		else
@@ -4290,13 +4326,16 @@ function ui_envelopes.attach_panel(parent, el)
 				x = xsliders + 4, y = 13,
 				label = "lerp",
 				fg = 56,
-				get = function(self) return
-					(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
-				end,
-				set = function(self, v)
-					local flags = sfx.env_flags(app.instrument, el.env_id)
-					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
-				end,
+				get =
+					function(self) return
+						(sfx.env_flags(app.instrument, el.env_id) & 0x01) > 0
+					end,
+				set =
+					function(self, v)
+						undo.checkpoint()
+						local flags = sfx.env_flags(app.instrument, el.env_id)
+						sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x01) | (v and 0x01 or 0x00))
+					end,
 			})
 			ui_envelopes.attach_custom_editor(el, { x = xsliders + 0, y = 21 })
 			--[[
@@ -4313,73 +4352,125 @@ function ui_envelopes.attach_panel(parent, el)
 	end
 	
 	if el.large or app.env_advanced[el.env_id] then
-		local visifun = function(self) return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end
+		local visifun =
+			function(self)
+				return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0)
+					or (sfx.env_type(app.instrument, el.env_id) == 2)
+			end
 		el:attach(ui.create_toggle {
 			x = xloop + 4, y = 14,
 			label = "loop",
 			fg = 56,
-			visible = function(self) return sfx.env_type(app.instrument, el.env_id) != 2 end,
-			get = function(self) return
-				(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
-			end,
-			set = function(self, v)
-				local flags = sfx.env_flags(app.instrument, el.env_id)
-				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
-			end,
+			visible =
+				function(self)
+					return sfx.env_type(app.instrument, el.env_id) != 2
+				end,
+			get =
+				function(self) return
+					(sfx.env_flags(app.instrument, el.env_id) & 0x10) > 0
+				end,
+			set =
+				function(self, v)
+					undo.checkpoint()
+					local flags = sfx.env_flags(app.instrument, el.env_id)
+					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x10) | (v and 0x10 or 0x00))
+				end,
 		})
 		el:attach(ui.create_label { x = xloop + 3, y = 25, label = "speed\-f:", visible = visifun })
 		el:attach(ui.create_field {
 			x = xloop + 34, y = 24,
 			fg = 36,
 			visible = visifun,
-			get = function(self) return sfx.env_speed(app.instrument, el.env_id) end,
+			get =
+				function(self)
+					return sfx.env_speed(app.instrument, el.env_id)
+					end,
 			set = 
 				function(self, v)
-					 sfx.set_env_speed(app.instrument, el.env_id, mid(v, 0, 255))
+					sfx.set_env_speed(app.instrument, el.env_id, mid(v, 0, 255))
 				end,
 		})
 		el:attach(ui.create_label { x = xloop + 3, y = 35, label = "start\-f:", visible = visifun })
 		el:attach(ui.create_field {
 			x = xloop + 34, y = 34,
 			fg = 12,
-			onclick = function(self) if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
-			onrelease = function(self) if (not el.large) ui_visual.close() end,
+			onclick =
+				function(self)
+					if (not el.large) ui_visual.open_custom_envelope(el.env_id)
+				end,
+			onrelease =
+				function(self)
+					if (not el.large) ui_visual.close()
+				end,
 			visible = visifun,
-			get = function(self) return sfx.env_start(app.instrument, el.env_id) end,
-			set = function(self, v) sfx.set_env_start(app.instrument, el.env_id, mid(v, 0, 255)) end,
+			get =
+				function(self)
+					return sfx.env_start(app.instrument, el.env_id)
+				end,
+			set =
+				function(self, v)
+					sfx.set_env_start(app.instrument, el.env_id, mid(v, 0, 255))
+				end,
 		})
 		el:attach(ui.create_toggle {
 			x = xloop + 4, y = 44,
 			label = "rnd start",
 			fg = 56,
-			visible = function(self) return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-			get = function(self) return
-				(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
-			end,
-			set = function(self, v)
-				local flags = sfx.env_flags(app.instrument, el.env_id)
-				sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
-			end,
+			visible = visifun,
+			get =
+				function(self) return
+					(sfx.env_flags(app.instrument, el.env_id) & 0x08) > 0
+				end,
+			set =
+				function(self, v)
+					undo.checkpoint()
+					local flags = sfx.env_flags(app.instrument, el.env_id)
+					sfx.set_env_flags(app.instrument, el.env_id, (flags & ~0x08) | (v and 0x08 or 0x00))
+				end,
 		})
 		el:attach(ui.create_label { x = xloop + 3, y = 55, label = "loop0\-f:", visible = visifun })
 		el:attach(ui.create_field {
 				x = xloop + 34, y = 54,
 				fg = 11,
-				onclick = function(self) if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
-				onrelease = function(self) if (not el.large) ui_visual.close() end,
-				visible = function(self) return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function(self) return sfx.env_loop0(app.instrument, el.env_id) end,
-				set = function(self, v) sfx.set_env_loop0(app.instrument, el.env_id, v) end,
+				onclick =
+					function(self)
+						if (not el.large) ui_visual.open_custom_envelope(el.env_id)
+					end,
+				onrelease =
+					function(self)
+						if (not el.large) ui_visual.close()
+					end,
+				visible = visifun,
+				get =
+					function(self)
+						return sfx.env_loop0(app.instrument, el.env_id)
+					end,
+				set =
+					function(self, v)
+						sfx.set_env_loop0(app.instrument, el.env_id, v)
+					end,
 		})
 		el:attach(ui.create_label { x = xloop + 3, y = 65, label = "loop1\-f:", visible = visifun })
 		el:attach(ui.create_field {
 				x = xloop + 34, y = 64,
 				fg = 9,
-				onclick = function(self) if (not el.large) ui_visual.open_custom_envelope(el.env_id) end,
-				onrelease = function(self) if (not el.large) ui_visual.close() end,
-				visible = function(self) return (sfx.env_flags(app.instrument, el.env_id) & 0x10 > 0) or (sfx.env_type(app.instrument, el.env_id) == 2) end,
-				get = function(self) return sfx.env_loop1(app.instrument, el.env_id) end,
-				set = function(self, v) sfx.set_env_loop1(app.instrument, el.env_id, v) end,
+				onclick =
+					function(self)
+						if (not el.large) ui_visual.open_custom_envelope(el.env_id)
+					end,
+				onrelease =
+					function(self)
+						if (not el.large) ui_visual.close()
+					end,
+				visible = visifun,
+				get =
+					function(self)
+						return sfx.env_loop1(app.instrument, el.env_id)
+					end,
+				set =
+					function(self, v)
+						sfx.set_env_loop1(app.instrument, el.env_id, v)
+					end,
 		})
 	end
 	
@@ -4524,7 +4615,7 @@ end
 
 return ui_envelopes
 :: src/ui/help.lua
---[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-16 21:53:52",revision=5581]]
+--[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-17 08:01:33",revision=5697]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local soft_wrap = require "src/soft_wrap.lua"
@@ -4626,11 +4717,12 @@ end
 return ui_help
 
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-16 21:53:52",revision=27049]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-17 08:01:33",revision=27165]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_envelopes = require "src/ui/envelopes.lua"
+local undo = require "src/undo.lua"
 
 
 local ui_menus = {}
@@ -4654,34 +4746,40 @@ function ui_menus.open_relationship(self)
 					label = (flags & 0x03 == 0x00)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							self.parent.min_val, self.parent.max_val = -128, 127
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: replace parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 	end,
 				},
 				{
 					label = (flags & 0x03 == 0x01)
 						and "\|f\^:1c225d5d5d221c00\|h add"
 						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						self.parent.min_val, self.parent.max_val = -128, 127
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							self.parent.min_val, self.parent.max_val = -128, 127
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: add parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 	end,
 				},
 				{
 					label = (flags & 0x03 == 0x02)
 						and "\|f\^:1c225d5d5d221c00\|h multiply"
 						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						self.parent.min_val, self.parent.max_val = 0, 255
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							self.parent.min_val, self.parent.max_val = 0, 255
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: mul parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 	end,
 				},
 				{ divider = true },
 				{
@@ -4689,10 +4787,12 @@ function ui_menus.open_relationship(self)
 						(flags & 0x20 > 0)
 							and "\|f\^:7f415d5d5d417f00\|h quantized"
 							or "\|f\^:7f41414141417f00\|h quantized",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags ^^ 0x20)
+					 	end,
 				},
 			}
 		}
@@ -4709,21 +4809,25 @@ function ui_menus.open_relationship(self)
 					label = (flags & 0x03 == 0x00)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: replace parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 	end,
 				},
 				{
 					label = (flags & 0x03 == 0x02)
 						and "\|f\^:1c225d5d5d221c00\|h multiply"
 						or "\|f\^:1c22414141221c00\|h multiply",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: mul parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: mul parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x2)
+					 	end,
 				},
 			}
 		}
@@ -4742,21 +4846,25 @@ function ui_menus.open_relationship(self)
 					label = (flags & 0x03 == 0x00)
 						and "\|f\^:1c225d5d5d221c00\|h set"
 						or "\|f\^:1c22414141221c00\|h set",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: replace parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: replace parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, flags & ~0x3)
+					 	end,
 				},
 				{
 					label = (flags & 0x03 == 0x01)
 						and "\|f\^:1c225d5d5d221c00\|h add"
 						or "\|f\^:1c22414141221c00\|h add",
-					action = function()
-						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-						-- set bit: add parent
-						sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
-					 end,
+					action =
+						function()
+							undo.checkpoint()
+							local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+							-- set bit: add parent
+							sfx.set_node_param_flags(app.instrument, self.parent.node_id, self.parent.param, (flags & ~0x3) | 0x1)
+					 	end,
 				},
 			}
 		}
@@ -4771,16 +4879,16 @@ end
 
 function ui_menus.open_multiplier(self)
 	local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-	
-	local mult_options = { 
+
+	local mult_options = {
 		[0] = 
+		{ label = "\^:221408142200000064", val = 0x00 | 0xc0 },
+		{ label = "\^:221408142200000016", val = 0x00 | 0x80 },
+		{ label = "\^:22140814220000004", val = 0x00 | 0x40 },
 		{ label = "none", val = 0x00 | 0x00 },
-		{ label = "*4", val = 0x00 | 0x40 },
-		{ label = "/4", val = 0x20 | 0x40 },
-		{ label = "*16", val = 0x00 | 0x80 },
-		{ label = "/16", val = 0x20 | 0x80 },
-		{ label = "*64", val = 0x00 | 0xc0 },
-		{ label = "/64", val = 0x20 | 0xc0 },
+		{ label = "\|f\^:1010080804040000\|h4", val = 0x20 | 0x40 },
+		{ label = "\|f\^:1010080804040000\|h16", val = 0x20 | 0x80 },
+		{ label = "\|f\^:1010080804040000\|h64", val = 0x20 | 0xc0 },
 	}
 	local mult_menu_items = {}
 	for i = 0, #mult_options do
@@ -4789,11 +4897,13 @@ function ui_menus.open_multiplier(self)
 				label = (env & 0xe0 == mult_options[i].val)
 					and ("\|f\^:1c225d5d5d221c00\|h " .. mult_options[i].label)
 					or ("\|f\^:1c22414141221c00\|h " .. mult_options[i].label),
-				fg = i == 0 and 5 or 24,
-				action = function()
-					local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
-					sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
-				 end,
+				fg = i == 3 and 55 or 24,
+				action =
+					function()
+						undo.checkpoint()
+						local flags, val1, val0, env = sfx.node_param(app.instrument, self.parent.node_id, self.parent.param)
+						sfx.set_node_param_env(app.instrument, self.parent.node_id, self.parent.param, (env & ~0xe0) | mult_options[i].val)
+				 	end,
 			}
 		)
 	end
@@ -4905,7 +5015,7 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-16 21:53:52",revision=33624]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-17 08:01:33",revision=33740]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5582,7 +5692,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-16 21:53:52",revision=23196]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-17 08:01:33",revision=23312]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -6336,7 +6446,7 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-16 21:53:52",revision=13977]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-17 08:01:33",revision=14093]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -7090,7 +7200,7 @@ end
 
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-16 21:53:52",revision=28371]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-17 08:01:33",revision=28487]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -7420,7 +7530,7 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-16 21:53:52",revision=27996]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-17 08:01:33",revision=28112]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -7975,7 +8085,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-16 21:53:52",revision=25433]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-17 08:01:33",revision=25549]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -8116,7 +8226,7 @@ end
 return ui_settings
 
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-16 21:53:52",revision=30165]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-17 08:01:33",revision=30281]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -8400,7 +8510,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-16 21:53:52",revision=9942]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-17 08:01:33",revision=10058]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local ui_visual = require "src/ui/visual.lua"
@@ -9306,7 +9416,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-16 21:53:52",revision=23327]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-17 08:01:33",revision=23443]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -10198,7 +10308,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-16 21:53:52",revision=20776]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-17 08:01:33",revision=20892]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -10493,7 +10603,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-16 21:53:52",revision=25957]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-17 08:01:33",revision=26073]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -11141,6 +11251,8 @@ function ui.create_field(el)
 
 	
 	function el:click(msg)
+		-- TODO: the situation with checpoints in widgets is inconsistent: some
+		-- widgets handle it themselves (have to), others let that to the caller.
 		undo.checkpoint()
 		if self.visible and (not self.visible(self)) then
 			return true
@@ -11499,7 +11611,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-16 21:53:52",revision=26681]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-17 08:01:33",revision=26797]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -11994,7 +12106,7 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-16 21:53:52",revision=24907]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-17 08:01:33",revision=25023]]
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
@@ -12150,7 +12262,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-16 21:53:52",revision=17710]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-17 08:01:33",revision=17826]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -12242,7 +12354,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-16 21:53:52",revision=26561]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-17 08:01:33",revision=26677]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -12717,7 +12829,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-16 21:53:52",revision=26896]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-17 08:01:33",revision=27012]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -12787,7 +12899,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-16 21:53:52",revision=25266]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=25382]]
 # Things To Do
 
 ## Before Next Release
@@ -12829,9 +12941,9 @@ return Wavetable
 - add wavetable importer.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-16 21:53:52",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#132",workspace_index=2},{location="pal/0.pal",workspace_index=7},{location="sfx/0.sfx",workspace_index=9}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-17 08:01:33",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#132",workspace_index=2},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-16 21:53:52"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-17 08:01:33"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -12881,7 +12993,7 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-16 21:53:52",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 Mi0xNiAxMTo0OToxNiIscmV2aXNpb249MTAzMTVdXWx6NAClEAAAsk4AAPMle1swXT17Ym1wPXB4
@@ -13375,9 +13487,9 @@ wBHBFdcRwRURFREVEcAVwREV1REVwBHAFcARwRXAEcAVERURFRHBFc8RwRURFcERFcERwRXAEcAV
 wBEV0xHAFREVERURwBXAERURFRHAFdQRwRURwRXAERXAEcEVEcEV7BEVERURwBXAEcEVwxHBFRHB
 FcE80QI85RX9-f39-f3vAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-16 21:53:52",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-16 21:53:52",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-17 08:01:33",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -13431,7 +13543,7 @@ MjAwOTNlODlYAPAFODkzOTEwMDg0ZGVkYjAwOTg2ZWJYAcBhYTllYTAwYWQ3NzQgATAxYWGgAEA1
 MTg5WAB1ODRjMmY5MAEAEDQCAHA0MDA3Njc3qABBZGFkYVAA8gZmYTBhNjAwMWUzNzNjMDAzZjU2
 NWGoASYwMAgAgDE2MTYxNiIp
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-16 21:53:52",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
 :: sfx/0.sfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTE2IDIxOjE1OjEzIixtb2RpZmllZD0iMjAyNi0w
 Mi0xNiAyMToxNToxMyIscmV2aXNpb249MF1dbHo0ALUAAAAWCgAA-zBweHUAAygAAAQABA9AEAIO
@@ -13439,11 +13551,11 @@ AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-MqoBEAYP
 MBABIAEgAfAAAhACDhABIA8hIAEwD0DwugIgDx8gDxUPKA--D6QPqvDED-gKD-8PgA-3Dw0B8AkB
 EAYOOwAEEMM0AC-wxjAA------_fH-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-16 21:53:52",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-17 08:01:33",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-16 21:53:52"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-17 08:01:33"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-16 21:53:52"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-17 08:01:33"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-16 21:53:52"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-17 08:01:33"]]
 :: [eoc]
