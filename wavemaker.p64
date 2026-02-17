@@ -11,18 +11,25 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=14555]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 12:32:21",revision=14665]]
 Version 0.2.1, aka #wavemaker-???:
 
+- Changed: when there is a selection spanning multiple rows, the jump step is
+  now implicitly set to 0; only the preview key (ENTER) retain the previous
+  behavior of adding the selection length to the jump step. While it was
+  sometimes convenient, the previous behavior was also sometimes very surprising
+  and inconvenient.
 - Fixed: the number of patterns is now 128 like in the default tracker; this
   is hardcoded for now, since the info stored in sfx files is wrong (says 64).
 - Fixed: the maximum number of tracks is now 255; the default tracker is
-  supposed to support 384 tracks, only actually support 256, since there is
-  only 1 byte reserved for track IDs in the file format... Also, the info
+  supposed to support 384 tracks, but only actually support 256, since there is
+  only 1 byte reserved for track IDs in the sfx format... Also, the info
   stored in sfx files is wrong (says 512).
 - Fixed: the modulation target of reversed knobs (filter LP and shaper cut) was
   not reversed.
-
+- Fixed: missing undo checkpoints in synth view.
+- Fixed: default instrument was played when overwriting sustained notes.
+  
 Version 0.2.0, aka #wavemaker-7:
 
 - Added: scrollbar for the tracker; it also shows the position of bar divisions
@@ -113,7 +120,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-17 08:01:33",revision=27323]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-17 12:32:21",revision=27433]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -212,7 +219,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",revision=35787]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-17 12:32:21",revision=35897]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -448,7 +455,7 @@ function generate_gui()
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=25535]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 12:32:21",revision=25645]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -580,7 +587,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-17 08:01:33",revision=12452]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-17 12:32:21",revision=12562]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -855,7 +862,7 @@ end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 
-local function preview(tracker, jump)
+local function preview(tracker, jump, direction)
 	if tracker.str_instrument or tracker.str_volume or tracker.str_fx then return end
 	local step = selection.min_step()
 	if step then
@@ -874,7 +881,10 @@ local function preview(tracker, jump)
 		tracker.preview_timer = 16
 		-- Now move down
 		if jump == "jump" then
-			local jump_step = selection.jump_step()
+			local jump_step = selection.extended_jump_step()
+			if direction == "back" then
+				jump_step = - jump_step
+			end
 			local moved = selection.move_step(jump_step)
 			if not moved then
 				local min_step = selection.min_step()
@@ -894,6 +904,11 @@ end
 
 function actions.preview_row_and_jump_down(tracker)
 	preview(tracker, "jump")
+end
+
+
+function actions.preview_row_and_jump_back(tracker)
+	preview(tracker, "jump", "back")
 end
 
 	
@@ -1403,7 +1418,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-17 08:01:33",revision=32592]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-17 12:32:21",revision=32702]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1742,7 +1757,7 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-17 08:01:33",revision=26971]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-17 12:32:21",revision=27081]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -2071,7 +2086,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-17 08:01:33",revision=21729]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-17 12:32:21",revision=21839]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2742,6 +2757,19 @@ end
 
 
 function selection.jump_step()
+	local selection_size = selection.max_step() - selection.min_step() + 1
+	if app.jump_step == 0 or selection_size > 1 then
+		return 0
+	else
+		return app.jump_step
+	end
+end
+
+
+
+-- Old algorithm
+--[[
+function selection.jump_step()
 	local selection_span = selection.max_step_span()
 	-- This seem convoluted, but is actually pretty intuitive.
 	-- A jump step of 1 is actually the neutral position,
@@ -2754,6 +2782,17 @@ function selection.jump_step()
 		return selection_span
 	elseif selection_span > 1 then
 		return selection_span + app.jump_step
+	end
+end
+--]]
+
+
+function selection.extended_jump_step()
+	local selection_span = selection.max_step() - selection.min_step() + 1
+	if app.jump_step == 0 then
+		return 0
+	else
+		return selection_span + app.jump_step - 1
 	end
 end
 
@@ -2918,7 +2957,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-17 08:01:33",revision=27877]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-17 12:32:21",revision=27987]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -3078,7 +3117,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-17 08:01:33",revision=32363]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-17 12:32:21",revision=32473]]
 local sfx = {}
 
 
@@ -4083,7 +4122,7 @@ end
 
 return sfx
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-17 08:01:33",revision=8446]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-17 12:32:21",revision=8556]]
 local soft_wrap = {}
 
 -- Soft-wraps a very tiny subset of markdown.
@@ -4194,7 +4233,7 @@ end
 
 return soft_wrap
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-17 08:01:33",revision=28182]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-17 12:32:21",revision=28292]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4615,7 +4654,7 @@ end
 
 return ui_envelopes
 :: src/ui/help.lua
---[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-17 08:01:33",revision=5697]]
+--[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-17 12:32:21",revision=5807]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local soft_wrap = require "src/soft_wrap.lua"
@@ -4717,7 +4756,7 @@ end
 return ui_help
 
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-17 08:01:33",revision=27165]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-17 12:32:21",revision=27275]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5015,13 +5054,14 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-17 08:01:33",revision=33740]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-17 12:32:21",revision=33850]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_envelopes = require "src/ui/envelopes.lua"
 local ui_params = require "src/ui/params.lua"
 local ui_visual = require "src/ui/visual.lua"
+local undo = require "src/undo.lua"
 
 
 local ui_nodes = {}
@@ -5330,10 +5370,10 @@ function ui_nodes.populate_osc(parent, el)
 			fg = 46,
 			highlight = 15,
 			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wavetable 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	else
@@ -5357,10 +5397,10 @@ function ui_nodes.populate_osc(parent, el)
 			fg = 46,
 			highlight = 15,
 			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wt 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	end
@@ -5416,10 +5456,10 @@ function ui_nodes.populate_fm(parent, el)
 			fg = 44,
 			highlight = 15,
 			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wavetable 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	else
@@ -5442,10 +5482,10 @@ function ui_nodes.populate_fm(parent, el)
 			fg = 44,
 			highlight = 15,
 			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wt 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	end
@@ -5501,10 +5541,10 @@ function ui_nodes.populate_ring(parent, el)
 			fg = 50,
 			highlight = 15,
 			items = {
-				{ label = "wavetable 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wavetable 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wavetable 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wavetable 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wavetable 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wavetable 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wavetable 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wavetable 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	else
@@ -5527,10 +5567,10 @@ function ui_nodes.populate_ring(parent, el)
 			fg = 50,
 			highlight = 15,
 			items = {
-				{ label = "wt 0", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
-				{ label = "wt 1", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
-				{ label = "wt 2", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
-				{ label = "wt 3", action = function() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
+				{ label = "wt 0", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 0) end },
+				{ label = "wt 1", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 1) end },
+				{ label = "wt 2", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 2) end },
+				{ label = "wt 3", action = function() undo.checkpoint() sfx.set_node_osc_wavetable(app.instrument, el.node_id, 3) end },
 			}
 		})
 	end
@@ -5692,7 +5732,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-17 08:01:33",revision=23312]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-17 12:32:21",revision=23422]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -6446,13 +6486,14 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-17 08:01:33",revision=14093]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-17 12:32:21",revision=14203]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
 local ui_routing = require "src/ui/routing.lua"
 local ui_panel = {}
+local undo = require "src/undo.lua"
 
 
 ----------------------------------------------------------------------------------------------------
@@ -6483,12 +6524,14 @@ function ui_panel.attach_view_selector(parent, el)
 	end
 	
 	function el:click(msg)
+		undo.checkpoint()
 		if app.view == "synth" then
 			app.view = "tracker"
 		else
 			app.view = "synth"
 		end
 		app.refresh_gui = true
+		undo.checkpoint()
 	end
 	
 	return el
@@ -7200,7 +7243,7 @@ end
 
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-17 08:01:33",revision=28487]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-17 12:32:21",revision=28597]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -7530,7 +7573,7 @@ end
 
 return ui_params
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-17 08:01:33",revision=28112]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-17 12:32:21",revision=28222]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -8085,7 +8128,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-17 08:01:33",revision=25549]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-17 12:32:21",revision=25659]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -8226,7 +8269,7 @@ end
 return ui_settings
 
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-17 08:01:33",revision=30281]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-17 12:32:21",revision=30391]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -8510,7 +8553,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-17 08:01:33",revision=10058]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-17 12:32:21",revision=10168]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local ui_visual = require "src/ui/visual.lua"
@@ -9416,7 +9459,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-17 08:01:33",revision=23443]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-17 12:32:21",revision=23553]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -9670,7 +9713,7 @@ function ui_tracker.attach(parent, el)
 			if keyp("delete") then actions.clear_rows(self) end
 			if keyp("'") then actions.clear_rows_and_jump_down(self) end
 			if keyp("backspace") then actions.jump_up_and_clear_rows(self) end
-			if keyp("enter") then actions.preview_row(self) end
+			if keyp("enter") then actions.preview_row_and_jump_back(self) end
 			if keyp("e") then actions.increase_part(self) end
 			if keyp("d") then actions.decrease_part(self) end
 			if keyp("c") then actions.copy(self) end
@@ -9742,14 +9785,25 @@ function ui_tracker.attach(parent, el)
 		-- Play Notes
 		-----------------------------------------------------------------------------
 		if pitch and pitch_just_pressed and not (app.is_editing and music_is_playing) then
-			if selection.has_part(selection.note) or not app.is_editing then
+			if selection.has_part(selection.note) or (not app.is_editing) then
 				local track = sfx.pattern_track(app.pattern, selection.min_channel())
 				local step = selection.min_step()
-				local inst = self:instrument_to_use(track, step)
+				local existing_note = sfx.track_pitch(track, step)
+				local inst
+				if existing_note == 0xff and not key("shift") then
+					inst = self:instrument_to_use(track, step)
+				else
+					inst = self:instrument_to_preview(track, step)
+				end
 				if inst == 0xff then
 					inst = self:current_instrument(track, step)
 				end
-				local vol = self:volume_to_use(track, step)
+				local vol
+				if existing_note == 0xff and not key("shift") then
+					vol = self:volume_to_use(track, step)
+				else
+					vol = self:volume_to_preview(track, step)
+				end
 				if vol == 0xff then
 					vol = self:current_volume(track, step)
 				end
@@ -10308,7 +10362,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-17 08:01:33",revision=20892]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-17 12:32:21",revision=21002]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -10603,7 +10657,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-17 08:01:33",revision=26073]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-17 12:32:21",revision=26183]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -11611,7 +11665,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-17 08:01:33",revision=26797]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-17 12:32:21",revision=26907]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -11982,13 +12036,14 @@ function ui_visual.draw_stereo_signal(x, y, width, height, addr, length, zero_cr
 	end
 	local last_y_left = sample_to_y(peek2(0x90000 + zero_crossing))
 	local last_y_right = sample_to_y(peek2(0x90002 + zero_crossing))
+	local cliff <const> = height // 6
 	for x = 0, width - 1 do
 		local pos = zero_crossing + x * 4 * hscale
 		local y_left = sample_to_y(peek2(0x90000 + pos))
-		local dx_left = abs(y_left - last_y_left) > 3 and 1 or 0
+		local dx_left = abs(y_left - last_y_left) > cliff and 1 or 0
 		line(x + dx_left, last_y_left, x + 1, y_left, fg_left)
 		local y_right = sample_to_y(peek2(0x90002 + pos))
-		local dx_right = abs(y_right - last_y_right) > 3 and 1 or 0
+		local dx_right = abs(y_right - last_y_right) > cliff and 1 or 0
 		local same_spot = (y_right == y_left)
 		line(x + dx_right, last_y_right, x + 1, y_right, same_spot and fg_both or fg_right)
 		last_y_left, last_y_right = y_left, y_right
@@ -12106,7 +12161,7 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-17 08:01:33",revision=25023]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-17 12:32:21",revision=25133]]
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
@@ -12262,7 +12317,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-17 08:01:33",revision=17826]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-17 12:32:21",revision=17936]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -12354,7 +12409,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-17 08:01:33",revision=26677]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-17 12:32:21",revision=26787]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -12829,7 +12884,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-17 08:01:33",revision=27012]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-17 12:32:21",revision=27122]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -12899,7 +12954,7 @@ end
 
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-17 08:01:33",revision=25382]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-17 12:32:21",revision=25492]]
 # Things To Do
 
 ## Before Next Release
@@ -12941,9 +12996,9 @@ return Wavetable
 - add wavetable importer.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-17 08:01:33",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#132",workspace_index=2},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-17 12:32:21",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#132",workspace_index=2},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-17 08:01:33"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-17 12:32:21"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -12993,7 +13048,7 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 12:32:21",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
 Mi0xNiAxMTo0OToxNiIscmV2aXNpb249MTAzMTVdXWx6NAClEAAAsk4AAPMle1swXT17Ym1wPXB4
@@ -13487,9 +13542,9 @@ wBHBFdcRwRURFREVEcAVwREV1REVwBHAFcARwRXAEcAVERURFRHBFc8RwRURFcERFcERwRXAEcAV
 wBEV0xHAFREVERURwBXAERURFRHAFdQRwRURwRXAERXAEcEVEcEV7BEVERURwBXAEcEVwxHBFRHB
 FcE80QI85RX9-f39-f3vAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 12:32:21",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-17 08:01:33",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-17 12:32:21",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -13543,19 +13598,13 @@ MjAwOTNlODlYAPAFODkzOTEwMDg0ZGVkYjAwOTg2ZWJYAcBhYTllYTAwYWQ3NzQgATAxYWGgAEA1
 MTg5WAB1ODRjMmY5MAEAEDQCAHA0MDA3Njc3qABBZGFkYVAA8gZmYTBhNjAwMWUzNzNjMDAzZjU2
 NWGoASYwMAgAgDE2MTYxNiIp
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 08:01:33",stored="2024-03-24 00:48:06"]]
-:: sfx/0.sfx
-b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTE2IDIxOjE1OjEzIixtb2RpZmllZD0iMjAyNi0w
-Mi0xNiAyMToxNToxMyIscmV2aXNpb249MF1dbHo0ALUAAAAWCgAA-zBweHUAAygAAAQABA9AEAIO
-AAGgASACoA4ADxAADfDKAQIDQA8PkAQFBgdADJAICQoLQAyQDwwPDQ8ODEAM8P8BAOv-MqoBEAYP
-MBABIAEgAfAAAhACDhABIA8hIAEwD0DwugIgDx8gDxUPKA--D6QPqvDED-gKD-8PgA-3Dw0B8AkB
-EAYOOwAEEMM0AC-wxjAA------_fH-8BAKzPyA9AAA8QQP--sPD-AQD-6lD-----KQ==
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 12:32:21",stored="2024-03-24 00:48:06"]]
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-17 08:01:33",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-17 12:32:21",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-17 08:01:33"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-17 12:32:21"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-17 08:01:33"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-17 12:32:21"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-17 08:01:33"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-17 12:32:21"]]
 :: [eoc]
