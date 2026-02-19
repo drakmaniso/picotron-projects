@@ -11,7 +11,7 @@ version 2
 :: src/ui/
 :: src/wavetables/
 :: changelog.txt
---[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 17:13:11",revision=14680]]
+--[[pod_format="raw",created="2026-01-31 19:58:41",icon=userdata("u8",16,16,"00000101010101010101010101000000000104040404040404040404040100000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040404010000010104040404040404040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-19 21:34:53",revision=15384]]
 Version 0.2.1, aka #wavemaker-???:
 
 - Changed: when there is a selection spanning multiple rows, the jump step is
@@ -120,7 +120,7 @@ Version 0.0.5, aka #wavemaker-2:
   awareness.
 
 :: lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-17 17:13:11",revision=27448]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-19 21:34:53",revision=28152]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ function structure(meta)
 end
 
 :: main.lua
---[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-17 17:13:11",revision=35912]]
+--[[pod_format="raw",created="2024-03-24 00:48:06",modified="2026-02-19 21:34:53",revision=36616]]
 include "lune.lua"
 include "src/waves.lua"
 local app = require "src/app.lua"
@@ -235,6 +235,7 @@ local ui_settings = require "src/ui/settings.lua"
 local ui_synth = require "src/ui/synth.lua"
 local ui_tracker = require "src/ui/tracker.lua"
 local ui_visual = require "src/ui/visual.lua"
+local ui_wavetable = require "src/ui/wavetable.lua"
 
 
 local tracker = nil
@@ -294,7 +295,7 @@ function _init()
 		-- capture_escapes = true, -- (done in tracker's update)
 		icon = --[[pod_type="gfx"]]unpod("b64:bHo0AB4AAAAcAAAA8A1weHUAQyAICAQwB2AXUAcAB0AHAAcgJzA3QBew")
 	}
-
+	
 	wrangle_working_file {
 		save_state = file.save,
 		load_state = file.load,
@@ -309,7 +310,7 @@ function _init()
 		--]]
 	}
 		
-	on_event("drop_items", file.handle_drop_items)
+--	on_event("drop_items", file.handle_drop_items)
 	on_event("resize", function(msg) app.refresh_gui = true end)
 	on_event("gained_focus", function(msg) app.window_focused = true end)
 	on_event("lost_focus", function(msg) app.window_focused = false end)
@@ -435,7 +436,7 @@ function _draw()
 					fps = max(fps, v)
 				end
 				fps = flr(0.5 + fps * 100.0)
-				local y = app.view == "tracker" and 2 or 250
+				local y = app.view == "tracker" and 253 or 250
 				print(string.format("%3.0f%%", fps), 463, y, 58)		
 			end
 		end
@@ -449,13 +450,15 @@ function generate_gui()
 	local height <const> = get_display():height()
 	if app.view == "tracker" then
 		tracker = ui_tracker.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
+	elseif app.view == "synth" and app.synth_mode == "wavetable" then
+		ui_wavetable.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
 	elseif app.view == "synth" then
 		ui_synth.attach(ui.head(), { x = 0, y = 0, width = width, height = height })
 	end
 end
 
 :: manual.txt
---[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-17 17:13:11",revision=25660]]
+--[[pod_format="raw",created="2024-04-14 09:49:39",icon=userdata("u8",16,16,"000001010101010101010101010000000001040404040404040404040401000001070104040404040404040404040100000101040404040f0f0f0404040401000001040404040f0f040f0f04040401000107010404040404040f0f040404010000010104040404040f0f040404040100000104040404040f0f0404040404010001070104040404040404040404040100000101040404040f0f04040404040100000104040404040404040404040401000107010404040404040404040401010000010101010101010101010101070100000101070707070707070707070401000000010404040404040404040401000000000001010101010101010101000000"),modified="2026-02-19 21:34:53",revision=26364]]
 # WaveMaker
 
 WaveMaker is an alternative to Picotron's default
@@ -587,7 +590,7 @@ around the cursor. The only exception are the keys
 ...
 
 :: src/actions.lua
---[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-17 17:13:11",revision=12577]]
+--[[pod_format="raw",created="2026-02-04 10:08:37",modified="2026-02-19 21:34:53",revision=13281]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -1418,7 +1421,7 @@ end
 
 return actions
 :: src/app.lua
---[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-17 17:13:11",revision=32717]]
+--[[pod_format="raw",created="2024-04-12 08:11:00",modified="2026-02-19 21:34:53",revision=33421]]
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -1491,8 +1494,11 @@ app.bar_length = 4 * app.beat_length
 
 -- UI State
 
-app.view = "tracker" -- "tracker" or "synth"
+app.view = "synth" -- "tracker" or "synth"
 app.detail = false -- TODO: remove?
+app.tracker_mode = "tracker" -- "tracker" or "pianoroll"
+app.synth_mode = "wavetable" -- "instrument" or "wavetable"
+app.wavetable = 0
 app.toolrack_tab = nil
 app.toolrack_track_scrollstart = 0
 app.channel_oscillos_visible = true
@@ -1567,6 +1573,61 @@ end
 function app.mute_channel(pattern, channel, muted)
 	sfx.mute_channel(pattern, channel, muted)
 	app.update_track_patterns()
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Wavetables
+----------------------------------------------------------------------------------------------------
+
+
+local wavetables = {}
+local wavetable_list = {}
+
+
+function app.update_wavetables()
+	for inst = 0, sfx.num_instruments() do
+		for wt = 0, 3 do
+			local addr, width, height = sfx.wavetable_info(inst, wt)
+			if addr == 0 then
+				-- Do nothing
+			elseif wavetables[addr] then
+				local info = wavetables[addr]
+				if info.width ~= width or info.height ~= height then
+					notify("WARNING: wavetable at 0x" .. string.format("%04x", addr)
+						.." has conflicting width or height")
+					info.width = max(info.width, width)
+					info.height = max(info.height, height)
+				end
+				add(info.instruments, inst)
+			else
+				local info = {
+					addr = addr,
+					width = width,
+					height = height,
+					instruments = { inst },
+				}
+				wavetables[addr] = info
+			end
+		end
+	end
+	wavetable_list = {}
+	local i = 0
+	for addr, info in pairs(wavetables) do
+		wavetable_list[i] = addr
+		i += 1
+		log(string.format("%04x:", addr).." width="..info.width..", height="..info.height)
+	end
+end
+
+
+function app.num_wavetables()
+	return #wavetable_list + 1
+end
+
+
+function app.wavetable_info(wavetable)
+	return wavetables[wavetable_list[wavetable]]
 end
 
 
@@ -1757,13 +1818,22 @@ return app
 
 
 :: src/file.lua
---[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-17 17:13:11",revision=27096]]
+--[[pod_format="raw",created="2024-04-07 08:14:09",modified="2026-02-19 21:34:53",revision=27800]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
+local Wavetable = require "src/wavetable.lua"
 
 
 local file = {}
+
+
+
+--local wt = Wavetable.new(1024, 32)
+--wt:set_wavetable(drakma_cosine2saw2reso)
+--local wt_addr = 0x070000
+--wt:poke(wt_addr)
+
 
 
 file.default_filename = "/ram/cart/sfx/0.sfx"
@@ -1774,29 +1844,27 @@ file.default_filename = "/ram/cart/sfx/0.sfx"
 
 
 function file.save()
-	local ud = userdata("u8", 0x40000)
---	for i=0,0x3f do
---		set(ud, i * 0x1000, peek(0x30000 + i * 0x1000, 0x1000))
---	end
+	local ud = userdata("u8", 0x40000) -- + wt.width * wt.height)
 	ud:peek(0x30000)
 	local metadata = file.save_metadata()
 	return ud, metadata
 end
 
-
+	
 function file.load(ud, metadata)
 	if (type(ud)~="userdata") then
 		init_data()
 	else
 		memset(0x30000, 0, 0x40000) -- in case stored short / legacy userdata
 		ud:poke(0x30000)
-		
 	end
+--	wt:poke(wt_addr)
 	-- TODO
 	app.instrument = 0
 	app.node = 0
 	app.refresh_gui = true
 	file.load_metadata(metadata)
+	app.update_wavetables()
 	app.update_track_patterns()
 	undo.init()
 end
@@ -1916,6 +1984,7 @@ function clear_pattern(i)
 	memset(addr,0,20)
 end
 
+
 function clear_instrument(i)
 	local addr = 0x40000 + i * 0x200
 	
@@ -1972,7 +2041,18 @@ function clear_instrument(i)
 		0x80,
 		0xf7,
 		0x0d, -- samples (1 << n) 8192
-		0x01
+		0x01,
+		
+		-- *** TEMP ***
+--		0x80,
+--		0xf7, --0x060000 >> 32,
+--		flr(math.log(wt.width, 2)),
+--		wt.height,
+		
+		(wt_addr >> 8) & 0xff, -- addr >> 16
+		wt_addr >> 16, -- addr >> 32,
+		flr(math.log(wt.width, 2)),
+		wt.height
 	)
 
 	-- envelope 0 inst 1
@@ -2086,7 +2166,7 @@ end
 
 return file
 :: src/selection.lua
---[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-17 17:13:11",revision=21854]]
+--[[pod_format="raw",created="2026-01-27 06:45:26",modified="2026-02-19 21:34:53",revision=22558]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 
@@ -2957,7 +3037,7 @@ end
 
 return selection
 :: src/settings.lua
---[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-17 17:13:11",revision=28002]]
+--[[pod_format="raw",created="2024-04-11 08:58:08",modified="2026-02-19 21:34:53",revision=28706]]
 local settings = {}
 
 local settings_folder = "/appdata/wavemaker/"
@@ -3117,7 +3197,7 @@ end
 
 return settings
 :: src/sfx/sfx.lua
---[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-17 17:13:11",revision=32488]]
+--[[pod_format="raw",created="2024-04-07 08:22:05",modified="2026-02-19 21:34:53",revision=33192]]
 local sfx = {}
 
 
@@ -4122,7 +4202,7 @@ end
 
 return sfx
 :: src/soft_wrap.lua
---[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-17 17:13:11",revision=8571]]
+--[[pod_format="raw",created="2025-03-07 11:09:14",modified="2026-02-19 21:34:53",revision=9275]]
 local soft_wrap = {}
 
 -- Soft-wraps a very tiny subset of markdown.
@@ -4233,7 +4313,7 @@ end
 
 return soft_wrap
 :: src/ui/envelopes.lua
---[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-17 17:13:11",revision=28307]]
+--[[pod_format="raw",created="2024-04-14 20:24:26",modified="2026-02-19 21:34:53",revision=29011]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -4654,7 +4734,7 @@ end
 
 return ui_envelopes
 :: src/ui/help.lua
---[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-17 17:13:11",revision=5822]]
+--[[pod_format="raw",created="2026-02-11 10:17:11",modified="2026-02-19 21:34:53",revision=6526]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local soft_wrap = require "src/soft_wrap.lua"
@@ -4716,14 +4796,16 @@ function ui_help.open()
 	
 	el:attach(create_text_viewer {
 		file = "manual.txt",
-		x = 10, y = 22,
-		width = el.width - 2 * 10,
-		height = el.height - 44,
+		x = 6, y = 18,
+		width = el.width - 2 * 6,
+		height = el.height - 18 - 6,
 	})
 	
 	el:attach(ui.create_button {
-		x = el.width // 2 - 14, y = el.height - 18,
-		label = "close", fg = 5,
+		x = el.width - 16, y = 4,
+		width = 11, height = 11,
+		spr = 36,
+		label = "close",
 		action = function(self)
 			ui.close_modal()
 		end,
@@ -4756,7 +4838,7 @@ end
 return ui_help
 
 :: src/ui/menus.lua
---[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-17 17:13:11",revision=27290]]
+--[[pod_format="raw",created="2024-04-20 10:41:15",modified="2026-02-19 21:34:53",revision=27994]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5054,7 +5136,7 @@ end
 
 return ui_menus
 :: src/ui/nodes.lua
---[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-17 17:13:11",revision=33865]]
+--[[pod_format="raw",created="2024-04-12 16:30:23",modified="2026-02-19 21:34:53",revision=34569]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -5732,7 +5814,7 @@ end
 
 return ui_nodes
 :: src/ui/notegrid.lua
---[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-17 17:13:11",revision=23437]]
+--[[pod_format="raw",created="2026-01-26 13:53:28",modified="2026-02-19 21:34:53",revision=24141]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local settings = require "src/settings.lua"
@@ -5849,8 +5931,8 @@ local function create_channel_dialog(el)
 	--]]
 	
 	el:attach(ui.create_list {
-		x = 2, y = 13,
-		width = el.width - 4, height = el.height - 70,
+		x = 3, y = 14,
+		width = el.width - 6, height = el.height - 72,
 		cursor = "pointer",
 		row_height = 9,
 		nb_columns = 1,
@@ -5907,7 +5989,7 @@ local function create_channel_dialog(el)
 	local x_button = app.column_width - 33 -- 14
 	
 	el:attach(ui.create_button {
-		x = x_button, y = oy - 19, fg = 5,
+		x = x_button, y = oy - 19,
 		label = "clone",
 		action =
 			function(self)
@@ -5971,7 +6053,7 @@ local function create_channel_dialog(el)
 	})
 	
 	el:attach(ui.create_button {
-		x = x_button, y = oy + 20, fg = 5,
+		x = x_button, y = oy + 20,
 		label = " new ",
 		action =
 			function(self)
@@ -6486,7 +6568,7 @@ end
 
 return ui_notegrid
 :: src/ui/panel.lua
---[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-17 17:13:11",revision=14218]]
+--[[pod_format="raw",created="2026-02-01 19:17:43",modified="2026-02-19 21:34:53",revision=14922]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -7008,7 +7090,7 @@ function ui_panel.attach_pattern_selector(parent, el)
 	function el:draw()
 		--rrectfill(0, 0, self.width, self.height, 0, 49)
 		ui.print_centered("patt", 10, 1, 58)
-		ui.print_centered(string.format("%02d", app.pattern), 10, 9, 5) -- 12 or 19
+		ui.print_centered(string.format("%02d", app.pattern), 10, 9, 56) -- 12 or 19
 	end
 	
 	function el:mousewheel(msg)
@@ -7197,13 +7279,13 @@ end
 
 function ui_panel.attach_edit_button(parent, el)
 	el.width = 19
-	el.height = 15
+	el.height = 14
 	el.cursor = "pointer"
 	parent:attach(el)
 
 	function el:draw()
 		--rrectfill(0, 0, self.width, self.height, 0, 43)
-		spr(app.is_editing and 7 or 6, 2, 1)
+		spr(app.is_editing and 7 or 6, 0, 0)
 	end
 	
 	function el:click()
@@ -7224,13 +7306,13 @@ end
 
 function ui_panel.attach_play_button(parent, el)
 	el.width = 19
-	el.height = 16
+	el.height = 14
 	el.cursor = "pointer"
 	parent:attach(el)
 
 	function el:draw()
 		--rrectfill(0, 0, self.width, self.height, 0, 45)
-		spr(sfx.music_is_playing() and 5 or 4, 2, 1)
+		spr(sfx.music_is_playing() and 5 or 4, 0, 0)
 	end
 	
 	function el:click()
@@ -7241,9 +7323,99 @@ function ui_panel.attach_play_button(parent, el)
 end
 
 
+----------------------------------------------------------------------------------------------------
+-- Piano-Roll Toggle
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_piano_toggle(parent, el)
+	el.width = 17
+	el.height = 11 -- * 2 + 2
+	el.cursor = "pointer"
+	parent:attach(el)
+	
+	function el:draw(msg)
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		if app.tracker_mode == "tracker" then
+			spr(134)
+--			spr(135, 1, 0)
+--			pal(7, 57) pal(63, 58)
+--			spr(134, 1, 13)
+--			pal(7, 7) pal(63, 63)
+		else
+			spr(135)
+--			pal(7, 57) pal(63, 58) pal(59, 6) pal(60, 6)
+--			spr(135, 1, 0)
+--			pal(7, 7) pal(63, 63) pal(59, 59) pal(60, 60)
+--			spr(134, 1, 13)
+		end
+	end
+	
+	function el:click(msg)
+		undo.checkpoint()
+		if app.tracker_mode == "pianoroll" then
+			app.tracker_mode = "tracker"
+		else
+			app.tracker_mode = "pianoroll"
+		end
+		app.refresh_gui = true
+		undo.checkpoint()
+	end
+	
+	return el
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- Wavetables Toggle
+----------------------------------------------------------------------------------------------------
+
+
+function ui_panel.attach_wavetable_toggle(parent, el)
+	el.cursor = "pointer"
+	el.x_left = el.width // 4 - 14
+	el.x_right = 3 * el.width // 4 - 14
+	parent:attach(el)
+	
+	function el:draw(msg)
+		--rrectfill(0, 0, self.width, self.height, 0, 47)
+		if app.synth_mode == "instrument" then
+			spr(136, self.x_left, 1)
+			pal(7, 60)
+			spr(137, self.x_right, 1)
+			pal(7, 7)
+		else
+			pal(7, 60)
+			spr(136, self.x_left, 1)
+			pal(7, 7)
+			spr(137, self.x_right, 1)
+		end
+	end
+	
+	function el:click(msg)
+--		local pointer_on_left = msg.mx < self.width // 2
+--		if pointer_on_left and app.synth_mode == "wavetable" then
+		if app.synth_mode == "wavetable" then
+			undo.checkpoint()
+			app.synth_mode = "instrument"
+			app.refresh_gui = true
+			undo.checkpoint()
+--		elseif (not pointer_on_left) and app.synth_mode == "instrument" then
+		else
+			undo.checkpoint()
+			app.synth_mode = "wavetable"
+			app.refresh_gui = true
+			undo.checkpoint()
+		end
+	end
+	
+	return el
+end
+
+
 return ui_panel
 :: src/ui/params.lua
---[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-17 17:13:11",revision=28612]]
+--[[pod_format="raw",created="2024-04-20 11:45:24",modified="2026-02-19 21:34:53",revision=29316]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local undo = require "src/undo.lua"
@@ -7572,8 +7744,22 @@ end
 
 
 return ui_params
+:: src/ui/pianoroll.lua
+--[[pod_format="raw",created="2026-02-18 10:38:25",modified="2026-02-19 21:34:53",revision=673]]
+local app = require "src/app.lua"
+local selection = require "src/selection.lua"
+local settings = require "src/settings.lua"
+local sfx = require "src/sfx/sfx.lua"
+local ui = require "src/ui/ui.lua"
+local undo = require "src/undo.lua"
+
+
+local ui_pianoroll = {}
+
+
+return ui_pianoroll
 :: src/ui/routing.lua
---[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-17 17:13:11",revision=28237]]
+--[[pod_format="raw",created="2024-04-13 06:33:13",modified="2026-02-19 21:34:53",revision=28941]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -8128,7 +8314,7 @@ end
 
 return ui_routing
 :: src/ui/settings.lua
---[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-17 17:13:11",revision=25674]]
+--[[pod_format="raw",created="2024-04-30 07:47:36",modified="2026-02-19 21:34:53",revision=26378]]
 local settings = require "src/settings.lua"
 local ui = require "src/ui/ui.lua"
 
@@ -8235,8 +8421,10 @@ function ui_settings.open()
 	}
 	
 	el:attach(ui.create_button {
-		x = 140, y = el.height - 18,
-		label = "close", fg = 5,
+		x = el.width - 16, y = 4,
+		width = 11, height = 11,
+		spr = 36,
+		label = "close",
 		action = function(self)
 			ui.close_modal()
 		end,
@@ -8269,7 +8457,7 @@ end
 return ui_settings
 
 :: src/ui/synth.lua
---[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-17 17:13:11",revision=30406]]
+--[[pod_format="raw",created="2024-04-10 15:43:44",modified="2026-02-19 21:34:53",revision=31110]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -8279,7 +8467,7 @@ local ui_nodes = require "src/ui/nodes.lua"
 local ui_panel = require "src/ui/panel.lua"
 local ui_routing = require "src/ui/routing.lua"
 local ui_visual = require "src/ui/visual.lua"
-local ui_wavetable = require "src/ui/wavetable.lua"
+--local ui_wavetable = require "src/ui/wavetable.lua"
 
 
 local ui_synth = {}
@@ -8302,28 +8490,27 @@ function ui_synth.attach(parent, el)
 --	el.width = 480 - (app.detail and app.detail_width or 0)
 --	el.height = 270 - 11 -- TODO: remove - 16
 	parent:attach(el)
-	
+
 	app.is_editing = false
 
-	sfx.refresh_nodes(app.instrument)	
-
-	local chooser_start = instr_chooser and instr_chooser.start or 0
-	instr_chooser = ui_synth.attach_instr_chooser(el, {
-		x = app.panel_width + 4 - 4, y = 4
+	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
+	el:attach(ui.create_horiz_divider { x = 3, y = 41, width = 13 })
+	ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
+	ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
+	ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
+		
+	ui_synth.attach_instr_chooser(el, {
+		x = app.panel_width, y = 4,
+		width = 82, height = 97,
 	})
-	instr_chooser.start = chooser_start
-	
+
+	sfx.refresh_nodes(app.instrument)		
 	app.routing_widget = ui_routing.attach(el, {
 		x = app.panel_width + 90 - 4, y = 4,
 		width = 356, height = 97,
 	})
 
 	ui_panel.attach_meters(el, { x = 464, y = 3 })
-	
-	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
-	ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
-	ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
-	ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
 	
 	local dx = app.synth_width + app.synth_gap
 	local dy = app.synth_height + app.synth_gap
@@ -8384,12 +8571,12 @@ function ui_synth.attach(parent, el)
 			)
 		end
 	else -- A wavetable is selected
-		ui_wavetable.attach(
-			el,
-			{
-				x = 4, y = oy, 
-			}
-		)
+--		ui_wavetable.attach_temp_widget(
+--			el,
+--			{
+--				x = 4, y = oy, 
+--			}
+--		)
 	end
 
 	function el:draw()
@@ -8403,8 +8590,8 @@ function ui_synth.attach(parent, el)
 		line(w - 1, 0, w - 1, h - 1, 58)
 		line(0, h - 1, w - 1, h - 1, 58)
 		-- divider
-		line(3, 41, app.panel_width - 4, 41, 58)
-		line(3, 42, app.panel_width - 4, 42, 57)
+--		line(3, 41, app.panel_width - 4, 41, 58)
+--		line(3, 42, app.panel_width - 4, 42, 57)
 		if app.node then
 			line(0, 183, 125, 183, 57)
 			line(354, 183, 480, 183, 57)
@@ -8494,57 +8681,56 @@ end
 -------------------------------------------------------------------------------
 
 
+local instr_chooser_start = 0
+
+
 function ui_synth.attach_instr_chooser(parent, el)
-	el.width = 82
-	el.height = 81
-	el.start = 0
 	parent:attach(el)
 	
-	local nb_rows <const> = 9
-	local h_row <const> = 8
-
-	function el:draw()
-		rectfill(0, 0, self.width, self.height, 59)
-		-- Rows
-		for i = 0, nb_rows  do
-			local instrument = self.start + i
-			if instrument == app.instrument then
-				rectfill(0, i * h_row, self.width, (i * h_row) + h_row, 4)
+	ui_panel.attach_wavetable_toggle(el, {
+		x = 0, y = 0,
+		width = el.width, height = 10,
+	})
+	
+	el:attach(ui.create_list {
+		x = 0, y = 12,
+		width = el.width, height = el.height - 12,
+		with_bg = false, with_border = false,
+		get_max = function(self) return sfx.num_instruments() - 1 end,
+		get_start = function(self) return instr_chooser_start end,
+		set_start = function(self, instr) instr_chooser_start = instr end,
+		get_active = function(self) return app.instrument end,
+		set_active =
+			function(self, instrument)
+				app.instrument = instrument
+				ui_routing.clear_placement_buttons()
+				if app.node then
+					app.node = 0 -- TODO: something else?
+				end
+				app.refresh_gui = true
+			end,
+		draw_item =
+			function(self, instrument, x, y, w, h, has_pointer)
+				if instrument == app.instrument then
+					rrectfill(x, y, w, h, 0, 17)
+					if y + h >= self.height - 1 then
+						pset(0, self.height - 1, 58)
+						pset(self.width - 1, self.height - 1, 57)
+					end
+				end
+				local name = sfx.instrument_name(instrument)
+				if name == "" then name = "---" end
+				print(string.format("%02x", instrument), x + 2, y + 2, 45)
+				print(":", x + 2 + 8, y + 2, 58)
+				print(name, x + 2 + 14, y + 2, 57)
 			end
-			local name = sfx.instrument_name(instrument)
-			if name == "" then name = "---" end
-			print(string.format("%02x", instrument), 2, 2 + i * h_row, 45)
-			print(":", 2 + 8, 2 + i * h_row, 58)
-			print(name, 2 + 14, 2 + i * h_row, 57)
-		end
-		-- Border
+	})
+		
+	function el:draw(msg)
+		rrectfill(0, 0, self.width, self.height, 0, 59)
 		clip()
-		line()
-		line(1, -1, 58)
-		line(self.width - 2, -1, 58)
-		line(self.width, 1, 58)
-		line(self.width, self.height - 2, 57)
-		line(self.width - 2, self.height, 57)
-		line(1, self.height, 57)
-		line(-1, self.height - 2, 57)
-		line(-1, 1, 58)
-		line(1, -1, 58)
-		clip(self.sx, self.sy, self.width, self.height)
-	end
-	
-	function el:click(msg)
-		app.instrument = self.start + (msg.my - 2) // h_row
-		ui_routing.clear_placement_buttons()
-		if app.node then
-			app.node = 0
-		end
-		app.refresh_gui = true
---		return true
-	end
-	
-	function el:mousewheel(msg)
-		self.start -= msg.wheel_y
-		self.start = mid(self.start, 0, sfx.num_instruments() - 1 - nb_rows)
+		line(0, 11, self.width - 1, 11, 60)
+		app.draw_borders(0, 0, self.width, self.height)
 	end
 
 	return el
@@ -8553,7 +8739,7 @@ end
 
 return ui_synth
 :: src/ui/toolrack.lua
---[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-17 17:13:11",revision=10183]]
+--[[pod_format="raw",created="2026-02-08 05:11:28",modified="2026-02-19 21:34:53",revision=10887]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local ui_visual = require "src/ui/visual.lua"
@@ -8784,8 +8970,8 @@ local function attach_track_strip(parent, el)
 	
 	local nb_rows = (el.height - 13) // 8
 	el.track_list = ui.create_list {
-		x = 2, y = 7,
-		width = app.column_width - 4, height = el.height - 13,
+		x = 3, y = 8,
+		width = app.column_width - 6, height = el.height - 15,
 		row_height = 8,
 		nb_columns = 3,
 --		start = sfx.pattern_track(app.pattern, el.channel) - nb_rows // 2,
@@ -9459,7 +9645,7 @@ end
 
 return toolrack
 :: src/ui/tracker.lua
---[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-17 17:13:11",revision=23568]]
+--[[pod_format="raw",created="2026-01-26 12:39:34",modified="2026-02-19 21:34:53",revision=24272]]
 local app = require "src/app.lua"
 local actions = require "src/actions.lua"
 local selection = require "src/selection.lua"
@@ -9545,20 +9731,25 @@ function ui_tracker.attach(parent, el)
 	ui_notegrid.close_channel_dialog()
 	
 	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
+	el:attach(ui.create_horiz_divider { x = 3, y = 41, width = 13 })
 	el.octave_selector = ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
 	el.instrument_selector = ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
 	el.volume_selector = ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
+	
 	el.step_selector = ui_panel.attach_step_selector(el, { x = 0, y = 93 })
-
+	el:attach(ui.create_horiz_divider { x = 3, y = 111, width = 13 })
 	ui_panel.attach_pattern_selector(el, { x = 0, y = 116 })
 	ui_panel.attach_pattern_arrows(el, { x = 0, y = 132 })
---	ui_panel.attach_pattern_flags(el, { x = 0, y = 145 })
 
-	ui_panel.attach_meters(el, { x = 3, y = el.height - 86 })
-	ui_panel.attach_edit_button(el, { x = 0, y = el.height - 31 })
-	ui_panel.attach_play_button(el, { x = 0, y = el.height - 16 })
+	ui_panel.attach_meters(el, { x = 3, y = el.height - 85 })
+	ui_panel.attach_edit_button(el, { x = 0, y = el.height - 28 })
+	ui_panel.attach_play_button(el, { x = 0, y = el.height - 14 })
 
-		
+	if is_loaded_cart then		
+		ui_panel.attach_piano_toggle(el, { x = 1, y = el.height - 100 })
+	end
+
+	
 	------------------------------------------------------------------------------
 	-- Draw
 	------------------------------------------------------------------------------
@@ -9573,14 +9764,14 @@ function ui_tracker.attach(parent, el)
 		line(0, 0, app.panel_width - 1, 0, 57)
 		line(0, 0, 0, h - 1, 57)
 		line(app.panel_width - 1, 0, app.panel_width - 1, h - 1, 58)
-		line(0, h - 1, app.panel_width - 1, h - 1, 58)
+		line(0, h - 29, app.panel_width - 1, h - 29, 58)
 		-- dividers
-		line(3, 41, app.panel_width - 4, 41, 58)
-		line(3, 42, app.panel_width - 4, 42, 57)
-		line(3, 111, app.panel_width - 4, 111, 58)
-		line(3, 112, app.panel_width - 4, 112, 57)
-		line(3, el.height - 92, app.panel_width - 4, el.height - 92, 58)
-		line(3, el.height - 91, app.panel_width - 4, el.height - 91, 57)
+--		line(3, 41, app.panel_width - 4, 41, 58)
+--		line(3, 42, app.panel_width - 4, 42, 57)
+--		line(3, 111, app.panel_width - 4, 111, 58)
+--		line(3, 112, app.panel_width - 4, 112, 57)
+--		line(3, el.height - 91, app.panel_width - 4, el.height - 91, 58)
+--		line(3, el.height - 90, app.panel_width - 4, el.height - 90, 57)
 		-- channel headers
 		rrectfill(app.panel_width, 0, self.width, app.track_header_height, 0, 56)
 	end	
@@ -10362,7 +10553,7 @@ end
 
 return ui_tracker
 :: src/ui/trakdial.lua
---[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-17 17:13:11",revision=21017]]
+--[[pod_format="raw",created="2026-01-27 14:07:26",modified="2026-02-19 21:34:53",revision=21721]]
 local app = require "src/app.lua"
 local ui = require "src/ui/ui.lua"
 local sfx = require "src/sfx/sfx.lua"
@@ -10657,7 +10848,7 @@ end
 
 return ui_trakdial
 :: src/ui/ui.lua
---[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-17 17:13:11",revision=26198]]
+--[[pod_format="raw",created="2024-04-23 10:25:40",modified="2026-02-19 21:34:53",revision=26902]]
 local app = require "src/app.lua"
 local settings = require "src/settings.lua"
 local undo = require "src/undo.lua"
@@ -10879,7 +11070,10 @@ end
 
 function ui.create_button(el)
 	if not el.width then
-		if el.label then
+		if el.spr then
+			el.width = get_spr(el.spr):width()
+			el.height = get_spr(el.spr):height()
+		elseif el.label then
 			el.width = 8 + (4 * #el.label)
 		else
 			el.width = 9
@@ -10890,10 +11084,18 @@ function ui.create_button(el)
 	el.bg = el.bg or 6
 	el.bg_hi = el.bg_hi or 57
 	el.bg_lo = el.bg_lo or 58
-	el.border = el.border or 55
+	el.border = el.border or 56
 	el.cursor = "pointer"
 	el.visible = el.visible or function() return true end
+	if el.spr then
+		el.x_spr = el.width // 2 - get_spr(el.spr):width() // 2
+		el.y_spr = el.height // 2 - get_spr(el.spr):height() // 2
+	end
 	function el:draw()
+		if self.spr then
+			spr(self.spr, self.x_spr, self.y_spr)
+			return
+		end
 		rrect(0, 0, self.width, self.height, 2, self.border)
 		if self.clicked then
 			rrectfill(1, 1, self.width - 2, self.height - 2, 1, self.bg_lo)
@@ -11031,6 +11233,8 @@ end
 function ui.create_list(el)
 	el.row_height = el.row_height or 9
 	el.nb_columns = el.nb_columns or 1
+	if el.with_bg == nil then el.with_bg = true end
+	if el.with_border == nil then el.with_border = true end
 	el.get_str = el.get_str or function(self, idx) return tostr(idx) end
 	el.get_active = el.get_active or function(self) return nil end
 	el.scrolled_to = el.scrolled_to or function(self) end
@@ -11044,10 +11248,12 @@ function ui.create_list(el)
 	ui.head():new(el)
 	
 	function el:draw(msg)
-		rrectfill(1, 1, self.width - 2, self.height - 2, 0, 59)
-		clip(self.sx + 1, self.sy + 1, self.width - 2, self.height - 2)
-		local nb_rows = (self.height - 2) // self.row_height
-		local column_width = (self.width - 2) // self.nb_columns
+		if self.with_bg then
+			rrectfill(0, 0, self.width, self.height, 0, 59)
+		end
+--		clip(self.sx + 1, self.sy + 1, self.width - 2, self.height - 2)
+		local nb_rows = self.height // self.row_height
+		local column_width = self.width // self.nb_columns
 		local active_idx = self:get_active()
 		local max = self:get_max()
 		local first_row = 0
@@ -11060,12 +11266,12 @@ function ui.create_list(el)
 			for col = 0, self.nb_columns - 1 do
 				local idx = col + (start + row) * self.nb_columns
 				if idx > max then break end
-				local x = 1 + col * column_width
-				local y = 1 + row * self.row_height
+				local x = col * column_width
+				local y = row * self.row_height
 				local w = column_width
 				if col == self.nb_columns - 1 then w += self.width % self.nb_columns end
 				if self.draw_item then
-					local hovered = msg.has_pointer and row == (msg.my - 2) // self.row_height
+					local hovered = msg.has_pointer and row == (msg.my - 1) // self.row_height
 					self:draw_item(idx, x, y, w, self.row_height, hovered)
 				else
 					if idx == active_idx then
@@ -11086,16 +11292,19 @@ function ui.create_list(el)
 		end
 		-- Borders
 		clip()
-		line()
-		line(0, self.height - 3, 58)
-		line(0, 2, 58)
-		line(2, 0, 58)
-		line(self.width - 3, 0, 58)
-		line(self.width - 1, 2, 58)
-		line(self.width - 1, self.height - 3, 57)
-		line(self.width - 3, self.height - 1, 57)
-		line(2, self.height - 1, 57)
-		line(1, self.height - 2, 57)
+		if self.with_border then
+			app.draw_borders(0, 0, self.width, self.height)
+--			line()
+--			line(0, self.height - 3, 58)
+--			line(0, 2, 58)
+--			line(2, 0, 58)
+--			line(self.width - 3, 0, 58)
+--			line(self.width - 1, 2, 58)
+---			line(self.width - 1, self.height - 3, 57)
+--			line(self.width - 3, self.height - 1, 57)
+--			line(2, self.height - 1, 57)
+--			line(1, self.height - 2, 57)
+		end
 	end
 	
 	function el:show_active()
@@ -11665,7 +11874,7 @@ end
 
 return ui
 :: src/ui/visual.lua
---[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-17 17:13:11",revision=26922]]
+--[[pod_format="raw",created="2024-04-16 18:22:58",modified="2026-02-19 21:34:53",revision=27626]]
 local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local ui = require "src/ui/ui.lua"
@@ -11709,6 +11918,7 @@ local function draw_wave(
  		last_h = h
 	end
 end
+ui_visual.draw_wave = draw_wave
 
 
 -------------------------------------------------------------------------------
@@ -11798,7 +12008,6 @@ function ui_visual.attach_shaper_display(parent, el)
 		
 		local _, elbow, _, elbow_scale = sfx.node_param(app.instrument, parent.node_id, 1)
 		elbow /= 255.0
-		log(elbow_flags)
 		elbow *= sfx.param_scale(elbow_scale)
 		
 		local _, cut = sfx.node_param(app.instrument, parent.node_id, 2)
@@ -12161,22 +12370,160 @@ end
 
 return ui_visual
 :: src/ui/wavetable.lua
---[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-17 17:13:11",revision=25148]]
+--[[pod_format="raw",created="2026-01-25 09:41:43",modified="2026-02-19 21:34:53",revision=25852]]
+local app = require "src/app.lua"
 local sfx = require "src/sfx/sfx.lua"
 local Wavetable = require "src/wavetable.lua"
 local ui = require "src/ui/ui.lua"
+local ui_panel = require "src/ui/panel.lua"
+local ui_synth = require "src/ui/synth.lua"
+local ui_visual = require "src/ui/visual.lua"
 
 
 local ui_wavetable = {}
 
 
 -------------------------------------------------------------------------------
--- Locals
+-- Wavetable Synth View
 -------------------------------------------------------------------------------
 
 
-local wt = nil
-local wave = 25
+function ui_wavetable.attach(parent, el)
+	parent:attach(el)
+
+	app.is_editing = false
+
+	ui_panel.attach_view_selector(el, { x = 0, y = 4 })
+	el:attach(ui.create_horiz_divider { x = 3, y = 41, width = 13 })
+	ui_panel.attach_octave_selector(el, { x = 0, y = 45 })
+	ui_panel.attach_instrument_selector(el, { x = 0, y = 57 })
+	ui_panel.attach_volume_selector(el, { x = 0, y = 75 })
+		
+	ui_wavetable.attach_wavetable_chooser(el, {
+		x = app.panel_width, y = 4,
+		width = 82, height = 97,
+	})
+	
+	ui_wavetable.attach_wavetable_display(el, {
+		x = app.panel_width + 90 - 4, y = 4,
+		width = 356, height = 97,
+	})
+	
+	--[[
+	ui_wavetable.attach_temp_widget(el, {
+		x = 4, y = 100,
+		width = 356, height = 97,
+	})
+	--]]
+
+	ui_panel.attach_meters(el, { x = 464, y = 3 })
+	
+	function el:draw()
+		local w <const> = self.width
+		local h <const> = self.height
+		cls(6)
+		line(0, 0, w - 1, 0, 57)
+		line(0, 0, 0, h - 1, 57)
+		line(0, 106, w - 1, 106, 57)
+		line(0, 105, w - 1, 105, 58)
+		line(w - 1, 0, w - 1, h - 1, 58)
+		line(0, h - 1, w - 1, h - 1, 58)
+	end
+	
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+-- Wavetable Chooser
+-------------------------------------------------------------------------------
+
+
+local wavetable_chooser_start = 0
+
+
+function ui_wavetable.attach_wavetable_chooser(parent, el)
+	parent:attach(el)
+	
+	ui_panel.attach_wavetable_toggle(el, {
+		x = 0, y = 0,
+		width = el.width, height = 10,
+	})
+	
+	el:attach(ui.create_list {
+		x = 0, y = 12,
+		width = el.width, height = el.height - 12,
+		with_bg = false, with_border = false,
+		get_max = function(self) return app.num_wavetables() - 1 end,
+		get_start = function(self) return wavetable_chooser_start end,
+		set_start = function(self, instr) wavetable_chooser_start = instr end,
+		get_active = function(self) return app.instrument end,
+		set_active =
+			function(self, wavetable)
+				app.wavetable = wavetable
+			end,
+		draw_item =
+			function(self, wavetable, x, y, w, h, has_pointer)
+				if wavetable == app.wavetable then
+					rrectfill(x, y, w, h, 0, 17)
+					if y + h >= self.height - 1 then
+						pset(0, self.height - 1, 58)
+						pset(self.width - 1, self.height - 1, 57)
+					end
+				end
+				local info = app.wavetable_info(wavetable)
+--				local name = sfx.instrument_name(instrument)
+--				if name == "" then name = "---" end
+				print(string.format("%06x", info.addr), x + 2, y + 2, 49)
+--				print(":", x + 2 + 16, y + 2, 58)
+--				print(name, x + 2 + 14, y + 2, 57)
+			end
+	})
+		
+	function el:draw(msg)
+		rrectfill(0, 0, self.width, self.height, 0, 59)
+		clip()
+		line(0, 11, self.width - 1, 11, 60)
+		app.draw_borders(0, 0, self.width, self.height)
+	end
+
+	return el
+end
+
+
+-------------------------------------------------------------------------------
+-- Wavetable Display
+-------------------------------------------------------------------------------
+
+
+function ui_wavetable.attach_wavetable_display(parent, el)
+	parent:attach(el)
+	el.wave = 0
+	function el:draw()
+		local info = app.wavetable_info(app.wavetable)
+		rrectfill(0, 0, self.width, self.height, 0, 59)
+		ui_visual.draw_wave(info.addr, info.width, info.height,
+			el.wave, 0,
+			self.width, self.height,
+			60)
+		print(string.format("address: %06x", info.addr), 4, 4, 57)
+		print("width: " .. tostr(info.width))
+		print("height: " .. tostr(info.height))
+		print("instruments: " .. tostr(#info.instruments))
+		--[[
+		for inst in all(info.instruments) do
+			print(tostr(inst) .. " \0")
+		end
+		--]]
+		clip()
+		app.draw_borders(0, 0, self.width, self.height)
+	end
+	function el:mousewheel(msg)
+		el.wave -= msg.wheel_y
+		el.wave = mid(el.wave, 0, 255)
+	end
+	return el
+end
 
 
 -------------------------------------------------------------------------------
@@ -12184,7 +12531,11 @@ local wave = 25
 -------------------------------------------------------------------------------
 
 
-function ui_wavetable.attach(parent, el)
+local wt = nil
+local wave = 25
+
+
+function ui_wavetable.attach_temp_widget(parent, el)
 	el.width = 480 - 2 * 4
 	el.height = 270 - 11 - 100
 	parent:attach(el)
@@ -12317,7 +12668,7 @@ end
 
 return ui_wavetable
 :: src/undo.lua
---[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-17 17:13:11",revision=17951]]
+--[[pod_format="raw",created="2026-01-29 15:20:29",modified="2026-02-19 21:34:53",revision=18655]]
 local app = require "src/app.lua"
 local selection = require "src/selection.lua"
 
@@ -12409,7 +12760,7 @@ end
 
 return undo
 :: src/waves.lua
---[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-17 17:13:11",revision=26802]]
+--[[pod_format="raw",created="2026-01-23 20:54:55",modified="2026-02-19 21:34:53",revision=27506]]
 ----------------------------------------------------------------------------------------------------
 -- Transforms
 ----------------------------------------------------------------------------------------------------
@@ -12884,7 +13235,7 @@ drakma_sawpulse2resoalt =
 	)
 
 :: src/wavetable.lua
---[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-17 17:13:11",revision=27137]]
+--[[pod_format="raw",created="2026-01-23 13:43:16",modified="2026-02-19 21:34:53",revision=27841]]
 -- TODO: move into pfx
 
 local Wavetable = structure {
@@ -12952,24 +13303,30 @@ function Wavetable:set_wavetable(func)
 end
 
 
+function Wavetable:poke(addr)
+	self.samples:poke(addr)
+end
+
+
 return Wavetable
 :: todo.txt
---[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-17 17:13:11",revision=25507]]
+--[[pod_format="raw",created="2024-04-10 20:46:30",icon=userdata("u8",16,16,"00000101010101010101010101000000000112121212121212121212120100000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121212010000010112121212121212121212120100000112121212121212121212121201000107011212121212121212121201010000010101010101010101010101070100000101070707070707070707071201000000011212121212121212121201000000000001010101010101010101000000"),modified="2026-02-19 21:34:53",revision=26211]]
 # Things To Do
 
 ## Before Next Release
 
 ## Soonish
 
+- fix: channel dialog stays open when changing pattern
+- fix: follow playhead for looping tracks and tracks with different speeds.
 - add: shift-ctrl-V for insert and paste
 - add: S-C-Enter to insert rows without moving.
-- fix: num field entry for tuning in fm node (must support fractions).
+- add: num field entry for tuning in fm node (should support fractions).
 - add: scroll-wheel support for synth knobs and fields.
 - add: track config for beat and bar length.
 - add: metadata (key...)
 - add: drag channels left and right to reorder them.
 - add: drag tracks (in track picker) to reorder them.
-- fix: follow playhead for looping tracks and tracks with different speeds.
 - add: contextual help for entering FXs (especially their parameters).
 - add: group patterns together
 - add: save some UI state in the metadata (view, current pattern, ...)
@@ -12996,9 +13353,9 @@ return Wavetable
 - add wavetable importer.
 
 :: .info.pod
---[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-17 17:13:11",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#6",workspace_index=2},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7}}]]
+--[[pod,author="drakmaniso",created="2024-04-16 13:35:13",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071818181818181818181807010001071818181818180718181818180701010718181818181807071818181807010107181818181818071807181818070101071818181818180718071818180701010718181818070707181818181807010107181818070707071818181818070101071818181807071818181818180701010718181818181818181818181807010106071818181818181818181807060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),lowcol_icon=false,modified="2026-02-19 21:34:53",notes="A music tracker (and instruments\neditor) for \".sfx\" files.",runtime=24,stored="2024-04-16 11:37:51",title="WaveMaker",version="0.2.1",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#135",workspace_index=2},{location="sfx/0.sfx",workspace_index=4},{location="pal/0.pal",workspace_index=7}}]]
 :: fonts/.info.pod
---[[pod,created="2026-01-30 07:12:02",modified="2026-02-17 17:13:11"]]
+--[[pod,created="2026-01-30 07:12:02",modified="2026-02-19 21:34:53"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -13048,86 +13405,94 @@ NgDRFAgBIAkADgAPHiAIBB4BQH4gD0BNACBoBnMBMQoECZkA8BMUIA0hDiAKAQoBCiAOAA4HDCAj
 BwEgLxQPVA8yIBIPIg8SIAFhLyIOIA4FvQDwEgcJBwwgBhcBDw4wDxUBDwgGMAQKDxQEQAsPCAow
 DQwBDXAAoGMBCCAIAQMECCA=
 :: gfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 17:13:11",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-19 21:34:53",stored="2024-03-24 00:48:06"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI0LTAzLTI0IDAwOjQ4OjA2Iixtb2RpZmllZD0iMjAyNi0w
-Mi0xNyAxNzoxMjo1MiIscmV2aXNpb249MTAzMzJdXWx6NADNEAAAw04AAPMle1swXT17Ym1wPXB4
+Mi0xOSAxMToyNzowOCIscmV2aXNpb249MTA0MzNdXWx6NAC4EgAAYlIAAPMle1swXT17Ym1wPXB4
 dQBDIAgIBMAXQAcQFyAHEBcQByAXEAdAF8AsZmxhZ3M9MCxwYW5feAgA13k9MCx6b29tPTExfSxD
 APYPEBAE8AgvOcAOBx6wDhceoA4nHpAOBw4XDpAOBx4HBgDiDgceYD4HLmAeNw6ADkcEAH8eJx6Q
 TvAGcAALHTZvAPAKCj85kC4XDnAuNw5QLlcOUA5HHgcOUA4nPgYAQQcuEA4IADIOEC4IAP8TAB4n
 DjAuBw4ADjcOIB4nDgAeFx4gDjcOED4wHhceoD7wCoEAHXITPzmgHhce3ADwBoAeBx4HHnAOBz4H
-DmAeBz4HjgcGDgIAEgcGAGGOBz4HHmAfABFwKwASgBMBAnwAHwN8ABnxCA8NBBCvOCAOrzkOAA4N
-pg86Hg02DxJWCAAxHxJGCAAxLxI2CAA5PxImEAAEIAADMACvpgwOAA6sDiCuEIEACx83gQADvRIO
-AA7NHs0ePUc9BAB-zR7NDgAOrVwAJgbdACCmDMEAiyQ2DB4NJksmBgBCNis2DCMAD8wALBMkzAA5
-TSdNyAAAEAAPzAAk-wcICAQwB2AXUAcAB0AHAAcgJzA3QBewQgAZ8QMbBgQgLztQLlAuQB4PER4w
-Hg0EAFMgHi0eEAQA-wAAHk0_TT5NLm0ebR5t-gxeAAscOF4Acv87DG8RHzsEAFMvO08RPwQAZR87
-AB4vEWYANSAeDX4AIEAukQAfIGoAGaAMDARATzlQHi86QgCYLg0eIA4NTg0OBgAgEC4YAEAAHh0O
-1ADfLU4QDi0eUB4NHnAucGoAGf8KBwgELzkADgAeUA5QDhAOIA4QHhBeMB5ADrAADCwxNEcAkSAP
-OUAeMF4QHkYAnw5QDlAeAA4ALkcAHVLgTzkQTgIAH3A8ABqgDQ0EkA87DzkGgAYAIBZwBgAgJmAG
-ACA2UAYAIEZABgAgVjAGAFEWLzoWIAkAow86Hw4PJQ86BhAPALAPDg85HyUPJA85ABIAECYSABEv
-EAAADwD-AjYPOi8lHyQfOVYOLyQOhi4WngIZ8QcwCQQPOQb-EhwGDzoPORb-EhoWDzoAEwBRGgYP
-OhAUAFEYFg86IBQAURgGDzowFABRFhYPOkAUAP8AFgYPOlAPOfYYDzpg-hgwfgAZ8AQgCgQQ-zkM
-IA7POA86DsYOAA7fCQDxE9YNDi84FgwmDCYMDQ5GHAYcNg0OHAYMBgwGLAYsDQ42DAYCABMmFgBK
-FhwWHBYAIxYcKgAiHBYSAP8B3A0O1g0ADcwNDsYNIP0MEKUAIlDGDzoOzzAF8RzWDzoO3xIPOg4m
-HzgGLQYtBg86Dk8SFwwXPA86DhYNBg0GDSYNJgsOPAcMAgAiLAsWAEodFh0WFgAjHRYqACIXHBIA
-79YLDtwLAAvGCw7MCyD7qQAb-wINDQTwKg83sA6QTpAOsA7wKj0ADA_rAjInLzipAiZPOKMCJU84
-nwIhTzidAh84nQId_gg4CgTwKB8g-yUkLyAPJfAkDg8gDvAmHgMAPA7wKFQAwy4xMjM4MDk1MjM4
-MWAAoi0xLjExNDI4NTcGAAJvABo1bwBECAQPJVcABmAAAHUAbyQOLf4kHWgAN08vJBAeAgAEFD55
-AATfAB9gdwA0rAUFBGAHICcAR0BRAAqEASwxNjcAECBQCm8nIBcwBwA7AB1-QEcAJyAHYDcAHWAA
-BzAXICfOCh8gOwAdX0dAR0BHNQAaEAfiAH9AJyBHAGdgnwIZzwcFBGBnAEcgJ0AHIDgAGUEFBQQQ
-iQFfEAcwBxCrABtgBwQQLzogTAP-AwAOTQ85Dk0MDk0MAAwtDCAsEO4LGgRKAABrBjYOAA5jBhQO
-XAYQDlYGnw85AA0vJA0gLV4AG2EMBgQwFyAzCTEABxCTDDUQBwAIABMwGAA-QBcgAQEOHjBZAP8K
-CHAHAAhgFwAIB2AXCAAHcAgHAAdgCBAXUEsAGlEFBQQHIIkAFSAIAA_NARoP3wIXD4gDNCHwBKcA
-DzcAGqULCgS-OS86DzkPBAD-Fh85DzqfOQ86bzkQDg86Lg0uEA4NLh0eEA5tDhBOHR5QDg0eYC7I
-BxrxAAsKBDAvOWAeDzoOUB4dTkoAMx4dLhIKkA4Qbg2eDR4NDgIALy2_WQAcyvAIbzkwDk86DjAO
-TQQAL27ASwAZ-wMHBwQwB0AXMCcgNzAnQBdQBxA_ABzvEAdQF0AnMDcgJzAXQAcgAR11vzkvJQ85
-DwQAgR85DyWfOQ8lhQEfJYUBIy8xMIYBAx8lhgEuLzEwhwEEFiV-AQ6HAQ9MABLxGRcXBPD5AfAF
-AQcB8AQBFwHwAwEnAQAB8AABNwEHAeABFxEnAeARBxEfABIHHwAg8AMKAE8FAfAMhgQaAGsAcp8x
-8AIBNwEFAPYAAAFHAeAhNwHQAWcB4EEHWAAfl1gAHhNuwwABnwBCAhEHEUwAAbMARQQh8AQNABAD
-HAAYAsUAH25tABqQGRkE8P8qAfAHPgBwBgEHEQABEMoAABAAACYB8APQEUcBJwGwAQcBRxEHEcAB
-VxFGAWA3QfAAMQBFARAFgAAzBAEnsAA-BwEwjA0ZD64BASQx4KsBVyEHAfAArAEE-gAfIhICJgFP
-AW0BAUcB8AFUAR9VVgAa-CkfHwTwHgXwQwXwAQXwAg86Rw7wBg6HDvADx-AB5_D3AXAFMA73AQ4w
-BWD3Aw8-kA73Aw6Q9wUNgAQAABkAoA1ABTD3Ax0QBWAzAP8XDbD3AR3A5x3gxx3ABSAOhw4dAAWg
-BUANDkcOLSAFgAVwbVAF8HAPEhkMrAAQRqwAoYYO8APG8AHm4PasABH2rAAR9qwAjPYDDpD2BQ2A
-BAAiDvasABL2rAAQ9qwAgfYBHcDmHeDGrAAVhqwAH0asACr8IgfwQwfwAQfwAm8-8Aau8APO8AHu
-4P4BcAcw-gMwB2D_Aw86kP4EDyGQ-gUPOoD_BQ0EABBAKgAgHRArAP8RDbD_AR3A7h3gzh3AByCu
-HQAHoAdADW4tIAeAB3BtUAefAB5B4AfwDgMAHySkAA8nBZCVAA_hAA_v8AGuHfADDW4twJsAIADK
-A-MVFQfwAgegB-AZTz-wAo7groAHIM4gB2DukO4POnD_AXD_AQ1gBAD-GDAHEP4BDQAHUO4dcO4N
-kM4doK4dwI4doAcgDU4tAAeAB1BNMAfwP4gGGXAZGQSwB-AIhAA-QAdAhgAxX-AATfBEgwAZ-wEJ
-BwTwBU86IG4QbhBuIE4A1AMa0AkHBKBPPyBuEA5PDw4-AB_gPwAa3xwcBP86CDAO-zgGDzkHAADx
-Bl79Cg85Dv0KDA78AJ0M8AAOLSwOLQgALAwQCQC7Pi0MvjAOnQwOnQwHAB_8NwAMYPAADp3_AmYA
-AAQAbCwO-QYMMAUAH-zlCQ0MnQj-AFcAZzAHADcANwAHMGcAVwANHQAoAx8BTAEajwwFBPANB-AO
-NQAajwsFBPALB-ALagAejwkPKnAPMvAJOQAePw0PKqQAHK8HBQSAJzAnMCeApwcNDzcANSEXMNcL
-LzAXOwAeAH0Mf1AHUAdgJyA7ABoQCDsAUTAHMBcABAAvcCdpChuUBwUEJzAHEAcgBAAvJzADBBkE
-PwAiACcEAA8-AB_vNyAHUCcwB1A3IDkAJC8HUDkAH08wRxAnOQAfAqMBEADpDk8HMCcgPgAgbzAn
-ABcAJz4AJUUQByA3qAEPQAAiTwBXACdAACMQJ9kCEjB-AA_rARtwCwYEACdgBzsBn5AHkAcgB2An
-YEAAIgB5AQBmEA9EACMSN4MABwQAHzdDACIAhgAEBgAPRwAjYEdQB5AncA0BL0dQOwAgQAeQN2AG
-AA87AB8SQEEBDj8AD8MBGiAQF-cAP2A3UMUBKg9GACsAPAA0UEdQCgAPigAmAQYAD0gAJgJTAi83
-YAoCI68DBQQ3ABcAFwA34gcaMQMFBHoTAHAFDzkAHU8nEEcQNQAgLzcQowAeAqEAPzcQBzkAHT83
-ECduAB8-NxA3RgEfMicQBwIAD6MAHi8AR24AH083ADcQowAhHwCqFx6EJwkEJh86Nh4CAH9mDg84
-DzkmBgAKNWYdNgIANyYeNgIAjwYODzgNJg4MBAACPwYdNjkABBdmJgAIBAAJaQAP1wALGTPWAPAA
-KgcEAE8oAE4AHgAeAD4QBgDyFi8wED0gHzIAHAAcMBwAHAAeMB4AHhAdEB1AHyoAGwAbQCsQTgAT
-AKFNEB8sABoAGkAqOgADKACRAB0QTy4AOSApFQATThMAgB80MBgwGAAYJgAUMCgA-AAdMB0wHQAd
-AE4wHgA9AE2SAaAtMy4wODczMDE1BgAVMssZZDMuNzM2MQEAHzIHBAGSFQkE9gYfOhYeAgACkAEf
-BgYABBcWDAAPHgBZMyYdFgIAL-YGzgwZeCYeBB86Jh4CAAhvAA8GABEHCwAPLwD-----2zkGHSYC
-AA90BRmgDxUE9gC-OiYOr7kFQL32Ab4LABMNCgAfrAkAAx8ApBIcQYAvOSBFJS8gLuoQDRw19xOf
-kG85AP4LAG6QOQAazw0HBNCvOQD_FwCu0KoVGVANBwQQj2cfID9faR9ADz8PNwsASA85Dk8HACAA
-DRYATw0gjRBdACEjXzh8HydfOH4fJV84gB8kXziCH09fOC8kZwAdAeEfEDfEAAErIB86KyAsHjcr
-IBQ6KyASOisgHzorICK-BwcEcE83gE6ATnA4ABqQEAoEEL86IA6-ogHA3Q85Dh0vNw0cDSwdCwCS
-DA0MDQwdDD0LCwCDHA0cLQsOHSwUAJ-dCwALvQsguxDBAhkEcAAwnw4fBgFUHw4PF58xIaMPFw8l
-Jw0HHQcdEQB6HQcNBw0XDRAAMgcNFxAAFy0sABG94gFvDL8kDCC8kAAaLyoG3Qorak8sADogKsYK
-fy4wGTAZABnGChkPgQsK-wYNBwTgLz_ADg83LnBOTzggToAu8AVrFBoQDS8YQx4PJYB1AjEgTzh0
-AhBwcgI-gC3gTQAaEAfkJjQ4UA4CAP8AQC8-IA0PNy0QTRBNIC2AFyobcw0EgB4PJSCYABEQlgAQ
-EJYAdCAtQA84UAwCAB_QVwAaQicbBLaJDS32CXINIfYJBA0j9iwxDSz2A2kNQvYDHTYkAAZZDRfG
-IAAEBAATxicABykAJ-YDIAAPTABHIywe3QAHHQAC1wAftloCGZBAFAT2AB86dh4CAI32Dw4fOA85
-VgYAJ-YODQAJGQAxDx12AgBD9gsedgIAmfYFDh84DVYOHAQAJ-YEDQAFFQATBT8AB0EAJ-YPIQAA
-BAAn9g4NAAAEAA91AAQGIQAPdABKD7kDDAqHApE8FQT2Lb86Jr4CAAEWCB0WBgAiJr0CACL2LicA
-AjQINRYOrAQAAiAACSIABh0ADyEAPB8tPQUZkEAZBP86Mf84LhAlAwcAWR84vzcvBAACFgBPDzev
-PwgAChA5BisZvwQALx84WQD-XQQHAC85L_cCGT8oBQRDBwAfAEMHAWAgTywAOyBBBwAuB5dNHy4w
-GjAaABorBxo9KQcP1xUZIhAJXAgxTw5vcAowDh8lHwhhHzgvPx84QQgBOwg0PzgPEAAbHSAAAxAA
-Mg8-PxAANg0nDSAAbgAMTyRvOGEIDy8HDASWAMBvOE8ODgAOLzgPPy_rCjElJw27CDEfOB8RACIt
-BxAABCEAKw0nEAAjBy0wAAGPAAQgAG8ADG84TySWAB9PEATw8DIA------------------------
--------DUD0xMH19
+DmAeBz4HjgcGDgIAEgcGAGGOBz4HHmAfABFwKwASgBMBAnwAHwN8ABn0FxMOBP84Awf-OQMH-gAP
+Oh7mHR5WDxJ2HR5WHGYdHlYsVh0eVjxGCgABFACfDHYdHuYdDv0VaAALHzloAABT-zdDR94CAC-_
+Q0AAHwmoAACrAIgvJFYdHkZMRgUAAasAAiAAX-0BDv0CpwAhMUQn7qUAT_4n-kRAABn-BwgIBDAH
+YBdQBwAHQAcAByAnMDdAF7BCAAsZN0IA8QMbBgQgLztQLlAuQB4PER4wHg0EAFMgHi0eEAQA-wAA
+Hk0_TT5NLm0ebR5t-gxeAAscOF4Acv87DG8RHzsEAFMvO08RPwQAZR87AB4vEWYANSAeDX4AIEAu
+kQAfIGoAGaAMDARATzlQHi86QgCYLg0eIA4NTg0OBgAgEC4YAEAAHh0O1ADfLU4QDi0eUB4NHnAu
+cGoAGf8KBwgELzkADgAeUA5QDhAOIA4QHhBeMB5ADrAADCwxNEcAkSAPOUAeMF4QHkYAnw5QDlAe
+AA4ALkcAHVLgTzkQTgIAH3A8ABqgDQ0EkA87DzkGgAYAIBZwBgAgJmAGACA2UAYAIEZABgAgVjAG
+AFEWLzoWIAkAow86Hw4PJQ86BhAPALAPDg85HyUPJA85ABIAECYSABEvEAAADwD-AjYPOi8lHyQf
+OVYOLyQOhi4WngIZ8QcwCQQPOQb-EhwGDzoPORb-EhoWDzoAEwBRGgYPOhAUAFEYFg86IBQAURgG
+DzowFABRFhYPOkAUAP8AFgYPOlAPOfYYDzpg-hgwfgAZ8AQgCgQQ-zkMIA7POA86DsYOAA7fCQDx
+E9YNDi84FgwmDCYMDQ5GHAYcNg0OHAYMBgwGLAYsDQ42DAYCABMmFgBKFhwWHBYAIxYcKgAiHBYS
+AP8B3A0O1g0ADcwNDsYNIP0MEKUAIvElxg86Ds8SDgAO1g86Dt8SDzoOJh84Bi0GLQYPOg5PEhcM
+FzwPOg4WDQYNBg0mDSYLDjwHDAIAIiwLFgBKHRYdFhYAIx0WKgAiFxwSAO-WCw7cCwALxgsOzAsg
+_6kAG-8CDQ0E8CoPN7AOkE6QDrAO8Co9AAwPqwIyJy84qQImTzijAiVPOJ8CIU84nQIfOJ0CHfoI
+OAoE8CgfIP8lJC8gDyXwJA4PIA7wJh4DADwO8ChUAMMuMTIzODA5NTIzODFgAKItMS4xMTQyODU3
+BgACbwAaNW8ARAgEDyVXAAZgAAB1AG8kDi3_JB1oADdPLyQQHgIABBQ_eQAE3wAfYHcANKwFBQRg
+ByAnAEdAUQAKhAEsMTY3ABAg9glvJyAXMAcAOwAdf0BHACcgB2A3AB1gAAcwFyAndAofIDsAHV9H
+QEdARzUAGhAH4gB-QCcgRwBnYJ8CGc8HBQRgZwBHICdAByA4ABlBBQUEEIkBXxAHMAcQqwAbYAcE
+EC86IEwD-wMADk0POQ5NDA5NDAAMLQwgLBCUCxoESgAAawY2DgAOYwYUDlwGEA5WBp8POQANLyQN
+IC1eABthDAYEMBcgMwkxAAcQOQw1EAcACAATMBgAP0AXIAEBDh4wWQD-CghwBwAIYBcACAdgFwgA
+B3AIBwAHYAgQF1BLABpRBQUEByCJABUgCAAPjQEaD98CFw_IAzQh8ASnAA83ABqlCwoEvzkvOg85
+DwQA-xYfOQ86nzkPOm85EA4POi4NLhAODS4dHhAObQ4QTh0eUA4NHmAuyAca8QALCgQwLzlgHg86
+DlAeHU5KADMeHS4SCpAOEG4Nng0eDQ4CAC8tvlkAHMrwCG85MA5POg4wDk0EAC9uwEsAGf8DBwcE
+MAdAFzAnIDcwJ0AXUAcQPgAc7xAHUBdAJzA3ICcwF0AHIAEddb85LyUPOQ8EAIEfOQ8lnzkPJYUB
+HyWFASMvMTCGAQMfJYYBLi8xMIcBBBYlfwEOhwEPTAAS8RkXFwTw_QHwBQEHAfAEARcB8AMBJwEA
+AfAAATcBBwHgARcRJwHgEQcRHwASBx8AIPADCgBPBQHwDIYEGgBrAHKfMfACATcBBQD2AAABRwHg
+ITcB0AFnAeBBB1gAH5dYAB4TbsMAAZ8AQgIRBxFMAAGzAEUEIfAEDQAQAxwAGALFAB9ubQAakBkZ
+BPD-KgHwBz4AcAYBBxEAARDKAAAQAAAmAfAD0BFHAScBsAEHAUcRBxHAAVcRRgFgN0HwADEARQEQ
+BYAAMwQBJ7AAPwcBMIwNGQ_uAQEkMeCrAVchBwHwAKwBBP4AHyISAiYBTwFtAQFHAfABVAEfVVYA
+GvwpHx8E8B4F8EMF8AEF8AIPOkcO8AYOhw7wA8fwAefg9wFwBTAO9wEOMAVg9wMPP5AO9wMOkPcF
+DYAEAAAZAKANQAUw9wMdEAVgMwD-Fw2w9wEdwOcd4McdwAUgDocOHQAFoAVADQ5HDi0gBYAFcG1Q
+BfBwtREZDKwAEEasAKGGDvADxvAB5uD2rAAR9qwAEfasAIz2Aw6Q9gUNgAQAIg72rAAS9qwAEPas
+AIH2AR3A5h3gxqwAFYasAB9GrAAq-CIH8EMH8AEH8AJvP-AGrvADzvAB7uD_AXAHMP4DMAdg-gMP
+OpD_BA8hkP4FDzqA-gUNBAAQQCoAIB0QKwD-EQ2w-gEdwO4d4M4dwAcgrh0AB6AHQA1uLSAHgAdw
+bVAHnwAeQeAH8A4DAB8kpAAPJwWQlQAPoQAPr-ABrh3wAw1uLcCbACAAygPzFRUH8AIHoAfwGU8-
+8AKO4K6AByDOIAdg7pDuDzpw-gFw-gENYAQA-xgwBxD_AQ0AB1DuHXDuDZDOHaCuHcCOHaAHIA1O
+LQAHgAdQTTAH8D_IBhlwGRkEsAfwCIQAP0AHQIYAMV-wAE3wRIMAGf8BCQcE8AVPOiBuEG4QbiBO
+ANQDGtAJBwSgTz8gbhAOTw8OPwAfoD8AGt8cHAT-OggwDv84Bg85BwAA8QZe-QoPOQ79CgwO-ACd
+DPAADi0sDi0IACwMEAkAuz4tDL4wDp0MDp0MBwAfvDcADGDwAA6d-gJmAAAEAGwsDv0GDDAFAB-8
+5QkNDJ0I-wBXAGcwBwA3ADcABzBnAFcADR0AKAMfAUwBGo8MBQTwDQfwDjUAGo8LBQTwCwfwC2oA
+Ho8JDypwDzLwCTkAHj8NDyqkAByvBwUEgCcwJzAngKcHDQ83ADUhFzDXCy8wFzsAHgB9DH9QB1AH
+YCcgOwAaEAg7AFEwBzAXAAQAL3AnaQoblAcFBCcwBxAHIAQALycwAwQZBD8AIgAnBAAPPwAfrzcg
+B1AnMAdQNyA5ACQvB1A5AB9PMEcQJzkAHwKjARAA6Q5PBzAnID4AIG8wJwAXACc_ACVFEAcgN6gB
+D0AAIk8AVwAnQAAjECfZAhIwfwAPqwEbcAsGBAAnYAc7AZ_QB5AHIAdgJ2BAACIAeQEAZhAPRAAj
+EjeDAAcEAB83QwAiAIYABAYAD0cAI2BHUAeQJ3ANAS9HUDsAIEAHkDdgBgAPOwAfEkBBAQ4-AA-D
+ARogEBf3AD9gN1DFASoPRgArADwANFBHUAoAD4oAJgEGAA9IACYCUwIvN2AKAiOvAwUENwAXABcA
+N_IHGjEDBQR6EwBwBQ85AB1PJxBHEDUAIC83EKMAHgKhAD83EAc5AB0-NxAnbgAfPzcQN0YBHzIn
+EAcCAA_jAB4vAEduAB9PNwA3EKMAIR8AqhcehCcJBCYfOjYeAgB-Zg4POA85JgYACjVmHTYCADcm
+HjYCAI8GDg84DSYODAQAAj8GHTY5AAQXZiYACAQACWkAD9cACxkz1gDwACoHBABPKABOAB4AHgA_
+EAYA8hYvMBA9IB8yABwAHDAcABwAHjAeAB4QHRAdQB8qABsAG0ArEE4AEwChTRAfLAAaABpAKjoA
+AygAkQAdEE8uADkgKRUAE04TAIAfNDAYMBgAGCYAFDAoAPwAHTAdMB0AHQBOMB4APQBNkgGgLTMu
+MDg3MzAxNQYAFTLLGWQzLjczNjEBAB8yBwQBkhUJBPYGHzoWHgIAApABHwYGAAQXFgwADx4AWTMm
+HRYCAC-2Bs4MGXgmHgQfOiYeAgAIbwAPBgARBwsADy8A-----9s5Bh0mAgAPdAUZoA8VBPYAvzom
+Dq_5BUC99gG_CwATDQoAH6wJAAMfAKQSHEGALzkgRSUvIC7qEA0cNfcTn5BvOQD_CwBukDkAGs8N
+BwTQrzkA-hcArtCqFRlQDQcEEI9nHyA-X2kfQA8-DzcLAEgPOQ5PBwAgAA0WAE8NII0QXQAhI184
+fB8nXzh_HyVfOIAfJF84gh9PXzgvJGcAHQHhHxA3xAABKyAfOisgLB43KyAUOisgEjorIB86KyAi
+vwcHBHBPN4BOgE5wOAAakBAKBBC-OiAOv6IBwN0POQ4dLzcNHA0sHQsAkgwNDA0MHQw9CwsAgxwN
+HC0LDh0sFACf3QsAC70LILsQwQIZBHAAMJ8OHwYBVB8ODxefMSGjDxcPJScNBx0HHREAeh0HDQcN
+Fw0QADIHDRcQABctLAARveIBbwy-JAwgvJAAGi8qBt0KK2pPLAA6ICrGCn8uMBkwGQAZxgoZD4EL
+Cv8GDQcE4C8-gA4PNy5wTk84IE6ALvAFaxQaEA0vGEMeDyWAdQIxIE84dAIQcHICP4At4E0AGhAH
+5CY0OFAOAgD-AEAvPyANDzctEE0QTSAtgBcqG3MNBIAeDyUgmAAREJYAEBCWAHQgLUAPOFAMAgAf
+kFcAGkInGwS2iQ0t9glyDSH2CQQNI-YsMQ0s9gNpDUL2Ax02JAAGWQ0XxiAABAQAE8YnAAcpACf2
+AyAAD0wARyMsHt0ABx0AAtcAH7ZaAhmQQBQE9gAfOnYeAgCN9g8OHzgPOVYGACf2Dg0ACRkAMQ8d
+dgIAQ-YLHnYCAJn2BQ4fOA1WDhwEACf2BA0ABRUAEwU-AAdBACf2DyEAAAQAJ-YODQAABAAPdQAE
+BiEAD3QASg_5AwwKhwKRPBUE9i2-Oia_AgABFggdFgYAIia9AgAi9i4nAAI0CDUWDqwEAAIgAAki
+AAYdAA8hADwfLT0FGZBAGQT-OjH-OC4QJQMHAFkfOL83LwQAAhYATw83rz8IAAoQOQYrGb8EAC8f
+OFkA-10EBwAvOS-nAhk-KAUEQwcAHwBDBwFgIE8sADsgQQcALgeXTR8uMBowGgAaKwcaPSkHD9cV
+GSIQCVwIMU8Ob3AKMA4fJR8IYR84Lz8fOEEIATsIND84DxAAGx0gAAMQADIPPz8QADYNJw0gAG4A
+DE8kbzhhCA8vBwwElgDAbzhPDg4ADi84Dz8vqwoxJScNuwgxHzgfEQAiLQcQAAQhACsNJxAAIwct
+MAABjwAEIABvAAxvOE8klgAe3xELBCYXLz8HLhdWFy4GAA9eJwYnBicGAB8mdAAdVhYPPy8iBADD
+Ng4vIg4tDi0ONg4tCABnLyMOLA4sEQAMCAAfLCAACh8WkgAaYR0JBP87DuMAAQYATwcuFx4OABcn
+Jw4CAA8OAAkv-g6WAB2ATzsHPgeuB37ANoAHHhd_Bw4Hfus3AAIAAOA28AEnDgdetx4HDncOBw73
+DQ7nCQBCLgcONyEAEB4hADAXbgcUADAeB15DAI8HjgdeB34HbokAGlINCQTfOCYCIR84-AAeHQYA
+UicNJw0nBgAf3V4AGrEPCwT3AM8-Fw4vPLsBQRcOLzvcATMXDi0RAB8sEAALP873ANAAG3MNBN8-
+LzsPBABTHz8vPA8EAB8fGABYL98-tgAb-wMLBN86Fi84Bi4WHzoWLgYuFh0GAAUQJggzCAYAD5IB
+G3kfCwT3EA8-5gIAUgIPEAAsGScCAA8QAA4--g33ow8a8AYfCwRGJxYnhid2Nw8-Nw4XVicOB3Yt
+A8EHDhceJxYnDgcOJ1YEAwACACIONyoDQQYnvhdVA1En-g0n7gkAIAYHXAMBJQARFzsDIScmPQBB
+DhcOV2k7-wUHZicOBwY3Dgc2Jw43hic2J1YnZqoAGQHyAgVgAR8OCAANAxABDAgADvYCD2gDFAUC
+AD-OFw4MAAwPZgAfAK47H-AyAP---------------------------2lQPTEwfX0=
 :: label.qoi
 b64$cW9pZgAAAeAAAAEOBAH_--Ho-f39-f39-f3T-qKIefk-wf7DAEz5P8H_ooh5zD-9-f39-BLE
 P9cS0j-AEss-wBLWP-7DAEzZPxLLP8AS0D-_ooh5zj-9-f3OEsE-wBLBP8oSwT-IEj-IEsY-xxI-
@@ -13543,9 +13908,9 @@ wBHBFdcRwRURFREVEcAVwREV1REVwBHAFcARwRXAEcAVERURFRHBFc8RwRURFcERFcERwRXAEcAV
 wBEV0xHAFREVERURwBXAERURFRHAFdQRwRURwRXAERXAEcEVEcEV7BEVERURwBXAEcEVwxHBFRHB
 FcE80QI85RX9-f39-f3vAAAAAAAAAAE=
 :: map/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 17:13:11",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-19 21:34:53",stored="2024-03-24 00:48:06"]]
 :: pal/.info.pod
---[[pod,created="2024-04-10 04:52:51",modified="2026-02-17 17:13:11",stored="2024-04-10 04:52:51"]]
+--[[pod,created="2024-04-10 04:52:51",modified="2026-02-19 21:34:53",stored="2024-04-10 04:52:51"]]
 :: pal/0.pal
 b64$LS1bW3BvZCxiZ19jb2xvcj0wLGJsYWNrZXN0X2NvbG9yPTAsY3JlYXRlZD0iMjAyNC0wNC0x
 MCAwNDo1Mjo1MSIsaGlkZGVuPXtbMF09ZmFsc2UsdHJ1ZSx0cnVlLHRydWUsdHJ1ZSx0cnVlLHRy
@@ -13599,13 +13964,985 @@ MjAwOTNlODlYAPAFODkzOTEwMDg0ZGVkYjAwOTg2ZWJYAcBhYTllYTAwYWQ3NzQgATAxYWGgAEA1
 MTg5WAB1ODRjMmY5MAEAEDQCAHA0MDA3Njc3qABBZGFkYVAA8gZmYTBhNjAwMWUzNzNjMDAzZjU2
 NWGoASYwMAgAgDE2MTYxNiIp
 :: sfx/.info.pod
---[[pod,created="2024-03-24 00:48:06",modified="2026-02-17 17:13:11",stored="2024-03-24 00:48:06"]]
+--[[pod,created="2024-03-24 00:48:06",modified="2026-02-19 21:34:53",stored="2024-03-24 00:48:06"]]
+:: sfx/0.sfx
+b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI2LTAyLTE5IDE0OjI5OjU5Iixtb2RpZmllZD0iMjAyNi0w
+Mi0xOSAxNDozMTozOCIscmV2aXNpb249Mix3YXZlbWFrZXI9e2Jhcl9sZW5ndGg9MTYsYmVhdF9s
+ZW5ndGg9NCxuZXdfdHJhY2tzX2xlbmd0aD0wLG5ld190cmFja3Nfc3BlZWQ9MTYsdmVyc2lvbj0i
+MC4yLjEifV1dbHo0AGTXAADl-QAA-xhweHUAAygAgAQABA9AEAIOAAGgASACoA4ADxAADfDKAQID
+QA8P8P8BAOvxA_YBEAYPMBABIAEgAfAADyIQAg4A_SMPISABMA_S8MMPKA--8MQBAA-4Cg--D4AP
+9w8NAQAHCg8gMA90D2UPcw90DyAPdw90kEgARAIQAgxGAB8ORQAIb-AFARAGDDYA--------Qh--
+AQCs8hPEDgANQB81DzcPOC86DzwfPRwfMR8zLzX--x0ACyAbEAsAAgCi_x8PIAspGxkLCQIAQPsf
+8HA7AC-7sAgAHh--AQD-5fH---8_KAEPgAEIAwgGCAoIDQgPFwgPHwgPKAgPMggPPggPSwgPWQgP
+aQgPeQgPiwgPnggPswgPyAgP3wgP9wgND4EPKw_BD0YPgQ9jL4EPoQ_BD8EPgQ-jD4EGD4IPKg_C
+D08Pgg92D4IPng_CD8cPgg-xD4IPHQ_DD0kPgw93D4MPpg_DD9YPgw8ID4QPOw_ED24PhA_jD4QP
+2g_EDxEPhQ9KD4UPgw_FD74PhQ-6D4UPOA_GD3YPhg_2D4YP9w_GDzkPhw98D4cPwA_HBg_ID0wP
+iA_UD4gP3Q_IDycPiQ9yD4kPvw_JDwwPig9bD4oPqw_KD-wPig9OD4sPoQ_LD-UPiw9KD4wPoQ_M
+D-kPjA9RD40Pqw_NBg_OD2IPjg_-D44PHg_PD30Pjw-dD48PPw_QD6EPkA8FD5EPag_RD88PkQ82
+D5IPng_SBw_TD3EPkw-cD5MPSA_UD7UPlA8jD5UPkw_VAw_WD3QPlg-mD5YPWg_XD84Plw9DD5gP
+uQ_YDzEPmQ_pD5kPIg_aD5wPmg8YD5sPlA_bDxEPnA_PD5wPDg_dD44PnQ8PD54PkQ_eDxQPnw_Y
+D58PHA_gD6IPoA8pD6EPsA_hDzgPog-CD6IPTA_jD9cPow9jD6QP8A_kD34PpQ8MD6YPnA_mDywP
+pw_9D6cPTw_oD_IPqA92D6kKD6oPoA_qDzYPqw-ND6sPZQ_sD-0PrA_XD60PMQ_uD8wPrg9oD68P
+BQ_wD6IPsA4PsQ-fD7EPfg_yDx8Psw-AD7MPYg_0BA_1D6gPtQ9MD7YP8A_2D5YPtw88D7gP4w_4
+D4oPuQ8zD7oP2w_6D4UPuw8vD7wP2g_8D4UPvQ8yD74P3g__D4wPvw86D8AP6A-AD5gPwQ9HD8IP
+_A-CD6kPww9bD8QPDQ-FD78PxQ9zD8YPJw-HD9sPxw_QD8gPRQ-JD-sPyQ_yD8oPaQ-LDyEPzA-Z
+D8wPkQ-ND0oPzgQPzw__D88PeA-QDzMP0Q-uD9EPqg-SD2cP0w8jD9QP4A-UD54P1Q9cD9YPGg-X
+D9kP1w_YD9gPVw-ZDxcP2g-XD9oPmA-bD1kP3A8aD90P3A-dD54P3g9gD98PIg-gD_UP4A_pD_EP
+bA-iDA-jD-TwAPH-MOQPfQ-lD0EP5gcP5w-MD_cPkQ-oD1cP6Q8dD_oP4w-qD6oP6w9wD_wPNw-t
+D-4P7Q-FD_4PjQ-vD1QP8A8cD-EP4w-xD6sP8g9zD-MPOw-0BA-1D8wP9Q_VD-YPXQ-3DyYP_A-u
+D-gPtw-5CA-6D0kP_w8SD-wP2w-8D6QP-Q9tD-4PNgsQD8gAD5EBD1oCDyMDD_wDD7UED34PBQ9H
+Bg0HD9gHD6EPCA9pDwkPMgoP_goPww8LD4sPDA9TDw0PGw8OD_IPDg_qDw8PcQ0POQ8RAA8SD8cP
+Eg_ODxMPVA8UDxsPFQ-hDxUPpw8WD20PFw8yDxgP9w8YD70PGQ_BDxoPRg8bCg8cD84PHA_SDx0P
+VQ8eDxkPHw-cDx8PngkPYA8hHyIP5A8iD6UPIw9mDyQPJw8lD_cPJQ_nDyYPZg4A8JQoD_QPKA_i
+DykPYA8qDx4PKw-bDysPmA8sD1QPLQ0PLg-LDy4Phg8vDgwP_gwPtA8xD20PMg8lDzMP3Q8zD5UP
+NA9MDzUDDzYPuQ82D24PNw8jDzgP1w84D4sPOQ8-DzoP8Q86D6QPOw9VDzwGDz0Ptw89D2YPPg8W
+Dz8PxA8-D3IOCQ9BD80PQQ95D0IPJA9DD88PQw95D0QPIw9FD8wPRQ905gABpwLx-wVHD2gPSA8O
+D0kPsg9JD1YPSg-6D0oPnA9LDz4PTA-fD0wID00PHw9OD74PTg9cD08P_g9PD5YPUA8yD1EPzQ9R
+D2cPUgEPUw_ZD1MPMQ9UD8gPVA9fD1UP9A9VD4gPVg8cD1cPrw9XD0EPWA-SD1gPYw9ZD-IPWQ_B
+D1oPDg9bD5sPWw8nD1wPsg9cDz0PXQ-GD10PTg9eD9YPXg9cD18P4g9fD2cPYA-qD2APbQ9hD_8P
+YQ9wD2IP8A9iD28PYw-tD2MPaw9kD_cPZA9iD2UP3A9lD1UPZg-OD2YPRQ9nD7sPZw8xD2gPpQ9o
+DxgPaQ_KD2kP-A9pD2wPag-bD2oPSQ9rD7YPaw8iD2wPjQ9sD-cPbGoA8f8xyA9tDy8Pbg_VD24P
+_g9uD10Pbw-AD28PIQ9wD4IPcA-hD3APPw9xD5wPcQ-4D3EPUw9yD60PcgYPcw9eD3MPtA9zCg90
+D14PdA_xD3QDD3UPVA91D6QPdQ-yD3UOD3YPjA92D9gPdg8iD3cPaw93D7IPdw-5D3cPPg94D4MP
+eA-GD3gPCA95D0kPeQ_ID3kPxw95BA96DgUPewUPtQUP7gUPJQ97D1sPew_QD3sPxA97D-cPew8o
+D3wPWQ98D4gPfA_1D3wP4g98Dw4PfQ84D30PYQ99D4kPfQ_vD30P1Q99D-kPfQ8cD34PPg9_D14v
+fg_cD34PuQ9_D9QPfg-vD34PCA9-CQsPNwsPTAsPYQsPdAsPhgsPlgsPpgsPtAsPwQsPzAsP1wsP
+4AsP6AsP7wsP9QsP_QsP-AsP-gsP-wYAEfwSABH1HgAR6CoAQdcLD808ABG0SAARllQAEXRgABBN
+bABRCQsPCAt_ABPVjgBTnC9_D1_mAACuABP5vgATsM4AE2HeAADmAFPjD3wPtv4AAAYBMSkPfBYB
+8ADFD3sPkQ97D1wPew8mD3s9AfMCtgUPfAUPQQUPBQUPyA95D4lrAREJawECgwGTPw94D-oPdw_z
+owEAqwEAswHzEo0Pdg9BD3YP8w91D6UPdQ9VD3UEAg_yD3QPXw90CgcPtQQC8SYHD3MPrg9yD1QP
+cg-5D3EPnQ9xDgAP4g9wD4MPcA8iD3APwQ9vD14Pbw-7D24Plg9uDA0PyeUC8f-dbQ-4D2wPjg9s
+DyMPbA_3D2sPSg9rD9wPag9tD2oP-Q9pD4sPaQ8ZD2kPpg9oDzIPaA_8D2cPRg9nD88PZg9XD2YP
+3Q9lD2MPZQ-oD2QPbA9kD_8PYwAID-IPYgABD-EPYQ9vD2EP7A9gD2gPYA-jD18PXg9fD9cPXg9Q
+D14Pxw9dDz4PXQ_0D1wPKQ9cD50PWw8QD1sPgg9aD-QPWQ9kD1kP1A9YD0MPWA_xD1cPHg9XD4oP
+Vg-1D1UPYA9VD8oPVA8zD1QPmw9TDwIPUw9pD1IPzw9RDzQPUQ_YD1AP_w9PD14PTw-AD04PIQ9O
+D4EPTQ-hD0wOBg_eD0sP_w9KD1gPSg_0D0kPDw9JD2oPSA-ED0cPHQ9HAg9GD80PRQ8kD0UPew9E
+D9EPQw8mD0MFD0IPzg9BDyEPQQcOD8YPPw8XDz8PaA8_D7gPPQ8IDz0PVw88D6UPOw-zDzoOAw_N
+DzkP2Q84DyUPOA9wDzcPug82BAkPTg81D5cPNA-fDzMPJw8zD28PMg_2DzEP-AwPQgwPiA8vD80P
+Lg8RDy4PVg8tD5kPLA-dDysPIA8rAQ8qD6QPKQ-mDygPJw8oD2gPJw_pDyYP6Q8lDykPJQ9oDyQP
+pw8jD_YPIg8kDyIBDyEPoA8gD90PHw8bDx9AAfGZlA8dD9APHA8MDxwPSA8bD4MPGg_-DxkP_Q8Y
+DzQPGA9vDxcPqQ8WD_MPFQ8dDxUPVg8UD5APEw-JDxIPAg8SDzsPEQ9zDxAPrA8PD_QPDg8dDw4P
+VQ8ND40PDA-FDwsP-AoPNAoPaw8JD6MPCA-aDwcPEg8HD0kPBg_ADwUPtwQP7g8DDyUPAw9cDwIP
+kw8BD8ovAA84D-8Pbw-_D6YP-Q-dD-wPFA-8nwHxpYIP_g_5D-kP8A-4DygP_A9fD-cPlw-2D84P
+9Q8GD-UPPQ-0Ag-zD60P8g-lD-EPHg-xD1YP8A_PD_8Pxw-uDwAP7g85D_0Pcg-sD6wP6w-lD_oP
+Hw-qD1kP6Q_TD_gPzg-nDwkP5w9DD_YPfw-lD7oP5A-2D_MPMg-jDQ-iD6oP4Q-nD_APJA-gAQ-f
+D6Af3g-dDxwP3Q9bD9wPmg-bD9kP2g8ZD9oPWQ-ZD5oP2A-bD9cPHNwC8WvWD6AP1Q-iD9QPJQ-U
+D2gP0w_sD9IP8A-RDzUP0QUP0A-AD88PBg-PBg-OD5MPzQ-bD8wPIg-MD2sPyw_0D8oP-Q-JD0cP
+yQ_SD8gP3Q-HDygPxwIPxg-BD8UPDw-FD1wPxA_rD8MP_g-CD0kPwg_ZD8EP6g-ADzwPwIoL8Rjg
+D74PMw__D4cPvQ-cD7wPMQ_8D4cPuw-dD7oPNA_6D4wPuQ-lD7i3AvGZmA_3D-IPtg9ND7YPqQ_1
+DwYPtQgPtA-CD7MPIA_zD4APsg-gD7EPQg_xD6MPsA8GD7APaQ_vD84Prg8zD64PmA_tD-8PrA9m
+D6wPzg_rDzcPqw_hD6oPDA_qD3cPqQ-kD6gPUQ_oD78Ppw8tD6cPnQ_mDw4Ppg9-D6UP8Q_kD2QP
+pA-YD6MPTQ_jD8MPogMLD7EPoQ8qD6EPow_gDx4PoA_ZD58PFQ_fOwxREA_eD4-jC-FGnQ_QD5wP
+Eg_cD5UPmw8ZD5sPng_aDyMPmg_qD5kPMg_ZD7sPmA9ED5gPzw_XD1sPlw-nD5YCAAQAD5QPlQ8l
+D5UPtg_UD0kPlA-dD5MPcg_TDwgPk2YA8Q03D5IP0A_RD2sPkQ8GD5ELD5AOBw-eD48Pfg_P4gzw
+AcAPjggJDwcJD6wPjQ9SD40ODfMBCwwPSwwP9g_LCwoPTgoP-EANcVwPig8ND4pYDfAFcw_JDygP
+iQ-eD4gPlQ_ID00PiA_IDXHBD4cPfQ_Hnw0Apw1xtw_GD3cPhr8Nk-sPhQ_-D4UPhN8NMRIPhe8N
+U6QPhA9vBw4ADw5R1w_DD6dKBlGDD0oPgzcOE-JHDhOeVw4TUGcOAG8OE_N_DgCGDvELgg_BCA0P
+Rw0PKw0PEA0P9w_AD98PgA-ID4D-AfEjng_ACgEPeQEPaQEPWQEPSwEPPgEPMwEPKAEPHwEPFwEP
+EAEPCgEPBgEPAwEPAQEFAQUKAPNIBQEPCQEPDgEPFAEPGwEPIwEPLQEPNwEPQgEPTwEPXAEPawEP
+ewEMAQ_eAQ_xAQ-FAQ-aAQ-wAQ8IDQ8gDQMND1QND3AND40ND6oND8kND_kNDwoPgg8sJw-zbnQP
+gg_ZD4IPvw_CD_cPgg8PD4MPOQ_DD2QPgw_PD4MPvA_DD_oPgw8ZD4QPSQ_ED3oPhA_sD4QP3w_E
+DxMPhQ9ID4UPfg_FD7UPhQ-uD4UPJw_GD2EPhg_dD4YP2Q_GDxcPhw9VD4cPlQ_HD9UPhw8XD4gP
+WQ_ID50PiA-hMA-wOW4PiQ_1D4kP-g_JD0gPig_SD4oP3g_KDysKD3gKD8cKDxcMD2cMD7kMDwsP
+jQ9fD40Psw_NDwkJD18JD7cJDw8Pjw9pD48Pw1YC8xYHD3oHD9cHDzYPkQ_VD5EP9Q_RD1YPkg_3
+D5IPGg_TD34Pkw-jLg-xaq8PlA8WD5UPfg_VD_gPlQ9SAA_9AA8pD5cPlQ_XDwMPmA9yD5gP4Q_Y
+D1EPmQ-DD5kPNQ_aD6gPmg8bD5sHBg8GD5wPfA_cD-MPnA9rD50P5A_dD14Png-YD54PVA_fD9AP
+nw9ND6APyw_gD0kPoQ-JD6EPSQsPygsxD-Nrzw_jD1IPpA-WD6QPWw_lD_EPpQ9nD6YP7w_mD3cP
+pw--D6cPiQ_oDxMPqQ_eD6kPKg_qD7YPqg9ED6sP0g_rD2APrA-wD6wBD60PEA_uCwIPNA_vD8cP
+rw9aD7AP7g_wD4MPsQ8ZD7IPrw_yD0YPsw-dD7MPdg_0Dw45D-EYQg_2D9wPtg94D7cPFA_4D7AP
+uA9ND7kP6w_5D4kPug8oD7sPyA_7qQjxJQkPvQ_qD70PTA__D_4Pvg_RD78PNQ-AD9kPwA99D8EP
+Ig-CD8gPwg9uD8MPFQ-ED7wPxAjGBjHGD7QfDPECxw8HD8gPsQ-ID1wPyQ8HD8pAD-FAXg-LDwoP
+zA_3D8wPZA-NDxIPzg-AD84Pbw-PDx4P0A-ND9APfQ-RDy0P0g-eD9IJD9MOD9QP8Q-UD6QP1Q9W
+D9YPCQ-XD7wP1w9vD9gPI00P8xXZDA-aDg-bD-UP2w_rD9wPYA-dDxYP3g-ND94Pgw-fAw-gD-FE
+D-JtYA-iDxgP4w-QD_MPiA-kD0EP5Q-6D_UPsw-mD2wP5w8mD_gP3w-oD5kP6Q9TD_oPDQ-rD8gP
+6w_CD_wPPQ-tD-gP7Q_zD_4Pbg-vDyoP8A-lD-APoQ-xD10P8g8YD-MP1A-zBw-0D00P9Q8JD-YP
+xQ-2D4IP9w8_D-gP_04P8BoPdA-6DzEP_w-tD-sPqg-8D2cP-Q8kD-4P4Q-_D54P-w9aDwAPFwUP
+1P0R8EICD04PAw8LDwQPxw8ED4QPBQ9BDwYP-Q8GD7oPBw92DwgPMw8JD_8PCQ_rDwoPaA8LDyQP
+DA-gDwwGDw0PVw8ODxMPDw-ODw8Pig8QD0UPEQ9mD-AOuw8SD3YPEw8wDxQP6w8UD6UPFQ9fDxYP
+GQ8XD9J6A-AcGA9FDxkP-g8ZD7cPGg9wDxsPKA8cD_APHA_YDx0PUA8eDwcPHw__Dx8PdVoJ8XoP
+IQ-iDyEPmA8iD00PIw8DDyQPuA8kD20PJQ8hDyYP1Q8mD4kPJw88DygP8A8oCw8pD1UPKg8HDysP
+uQ8rD2oPLA8bDy0Pyw8tD3wPLg8rDy8P2w8vD4oPMA84DzEP5g8xD5QPMg9BDzMP7g8zBg80D0cP
+NQ-yDzUPnQ82D0gPNw-yDzcGDzgPRbEIEDkJE-MJPQ87D_QPOwoPPA8xDz0P1w89D3wPPg8geg-x
+CWgODwsPQQ_tD0EPTw9CD-APQg_RD0MPMa0K8ARED3APRQ8OD0YPrA9GD0kPRw-l4gXxEEgPHQ9J
+D7cPSQ9SD0oP6w9KD4QPSw8cD0wPsw9MD0odC-MUTQ92D04PCw9PD58PTw8zD1APxg9QD1gPUQ-p
+D1EPeg9SDwqED-FrKA9UD7YPVA9DD1UP0A9VD1wPVg-nD1YPcQ9XD-oPVw_DD1gPCw9ZD5MPWQ8Z
+D1oPnw9aDyQPWw_oD1sPLA9cAgQPMA9dD7EPXQ8xD14PsQ9eDzAPXw_tD18PKg9gD6cPYA8iD2EP
+nQ9hDxYPYg_PD2IPBwgPfwgP9QiHD-EW3w9kD1MPZQ-GD2UPOA9mD6kPZg8aD2cPiQ9nD-gPZw9m
+D2gP0pwL8RJpD6kPaQ8TD2oPfQ9qD_UPag9MD2sPsw9rDxkPbA99D2yZEvETRA9tD6YPbQ8HD24P
+Zw9uD8YPbg8kD28NAA-dAA85D3APk4wSAFkBAowP8f8n8w9xD0gPcg_dD3IP8Q9yD0MPcw_VD3MP
+5Q9zDzUPdA_ED3QP0Q90Dx4PdQ9qD3UPtQ91D-4PdQ9HD3YPjw92D9UPdg8bD3cPYA93D6MPdw-m
+D3cPJw94D2gPeA_oD3gP5g94DyQPeQ9gD3kGAQ-WAQ8PD3oPSA96D38Peg_1D3oP6g96Dx4Pew9S
+D3sPhA97D7UPew-lD3sPEw98D0EPfA9uD3wPmg98D8QPfA-uD3wPFw99Dz4PfQ9lD30Pig99AgkP
+0QkP9AkPFQ9_DzUPfg9UD34PcQ9_D44Pfg_qD34PxA9_D94Pfg-3D34PDg9-DyQPfw85D38PTg9-
+D2EPfw9zD38Pgw9-D5MPfwsHD7AHD7wHD8gHD9IHD9sHD_QHD_sHD-EHD-YHD-kHD-wHD-4HBQcF
+CgAg_AdjBHHtBw-lBw-cMQDxy8YHD7kHD6oHD5oHD4gHD3UHD2EHD0sHDzQHDxsHDwEHD_YPfg-J
+D34Pqw9_D4wPfg9rD34PSA9_DyUPfg--CQ-ZCQ_xCQ_ICQ9dCQ8xCQ8ECQ-VD3wPpQ98D3MPfA4M
+DwwMD9YPew_fD3sPZw97Dy0Pew-yD3oPtg96D3gPeg85D3oP_AEPtgEPcwEPLwEP6Q94CwMPWQMP
+DwMPxA93AwoPKgoP2w92D4oPdg85D3YP5g91D5EPdQ88D3UP5Q90D40PdA8zD3QP2A9zDAQPHwQP
+wQ9yD2EPcg8AIQKwcQ86D3EP1Q9wAAjFAvFCnwAPNQAPyg9uD14Pbg-wD20Pgg9tDxIPbQ_hD2wP
+Lw9sD7sPaw9GD2sP0Q9qD1oPag-hD2kPaA9pD_4PaA9yD2gP9Q9nCg0P_A9mAwYP9w9lXSIT8YEP
+8T3mD2MPXw9jD9cPYg9OD2IPxA9hDzkPYQ_sD2APHw9gD5APXw8BD18ID14P3w9dD0wPXQ_5D1wP
+JA9cD44PWw-4D1oPYA9aD8cPWQ8tvwPzC1gP9w9XD1sPVw_9D1YPHg9WBw9VD98PVA89ew-xDvgP
+Ug9UD1IPrw9RDwkPUQ9iD1APug9PDxIPTw9o0RPyOk0PEw9NDQ9MD7oPSw8MD0sPXg9KD64PSQUP
+SA9ND0gPnA9HD_kPRg82D0YPgg9FD80PRA8XD0QPYQ9DD6oPQg-yD0EPOQ9BD4B2D5ELDz8PUA8_
+D5QZBfNOPA8aDzwPXA87D50POg-eDzkPHg85D10POA_cDzcP2g82DxcPNg9UDzUPkQ80D8wPMw8H
+DzMPQg8yDA8xD7YPMA-vDy8PJw8vD18PLg_WDy0PzQ8sDwQPLA86DysAcw-xCNkPKA8NDygPQQ8n
+D3QPJg_nDyUP2Q8krgbzQT0PIw9uDyIPnw8hD88PIA--Dx8PLw8fD14PHg_NDx0PvA8cD_oPGw8Y
+DxsPRg8aD3QPGQ_hDxgPzg8XD-sPFg8nDxYPUw8VBw8UD6sPEw-Xaw-wEy0PEQ9YDxAPgw8PD60P
+Dg-YDw0PAg8NDywPDA9WDwsPgA_TGPAACQ-TDwgP-Q8HDyYPBw9QiQsQBW0H8hzLDwMP9Q8CDx4P
+Ag9HDwEIDwAPmQ--D8IFD_sP-Q8UD-0PPQ-8DQ-7D5APZQ-xTuMP_A8MD-gPNg-3D18P9g_JD-UP
+sw-0D90P8w8HD-MPMQ-yD1wP8Q_GD-APsQ-vD9wP7g8HD_4PMg-tD14P7A_KD_sPtQ-qD_IP6Q8O
+D_kPOw-oD2gP5w_VD_YPwmUIs_QPHg-kD00P4w97Xw-zXNoP4A8KD_APOg-fD2oP3g_bD90PzA-c
+BQ-bDzAP2w9iD9oPlQ-ZD8gP2A-8D9cPMA-XD2QP1g_ZD9UPzw-UDwQP1A87D9MPcg-SD6kP0Q-h
+D9APGg-QD1MPzw_MD84Pxg-NDwEPzQ88D8wDWg-xNvEPyQ8uD8kPbA-ID6sPxw-qD8YPKg-GD2sP
+xQ_sD8QP7g-DDzEPww90D8IPuA-BD-wPwA9CD8APiA_-D84Pvg8WD74PXhsa8xS8D-APuw87D7sP
+hg_6D9IPuQ8eD7kPbA_4D7oPtw8JD7cPWVMPkfsPtA9ND7QPoFABEbIBF-ELnw_xD-UPsA9ND7AP
+pQ_vBQ_uD1gPrg_zD63uAfInbA_sD8kPqw8oD6sPhw_qD_gPqQ9JD6kPrA_oDw8PqAQPpw-ZD6YP
+Px_mD6UPDg_lAw_kD_IPRw-xGLoLDycLD5UPoQ8FD6EPdQ_gD_cPnw9ZD58PzQ_eD0IPng_3D50P
+LosP8SicDx8PnA_ZD5sPFQ_bD5EPmg8OD5oPjQ_ZDw0PmQ_OD5gPEA_YD5MPlw8XD5cPnA_WDyMP
+lg_rOhgzlQ__Qw-xCtYPkw9jD5MP8g_SD4IPkg8UD5IPpg_RDzr4G-HIkA9lD5AP-A_PD5UPjw8v
+D48Pyg_OBgIPBAIPow_ND0MPjQ-kD4wPhw_MDysPjA-QD4sPdg_LDx4Piw-HD4oPcg_KDx0Pig-K
+D4kDCQ8oCQ-ZD4gPiw_IDz4PiA-zD4cPqQ_HD2EPhw8ZD4cP0w_GD48Phg9MD4YPCg_GD8kPhQ_K
+D4UPTA_FDxAPhQ-VD4QPmw_ED2IPhA8rD4QP9g_DD8EPgwIKD10KDywKBQ_CD9APgg_kD4IBDg9Q
+Dg8oDg8BDg-cD4EPuA_BD5YPgQ91D4EPVQ_BDzfCGRGBTSHxHOUPgA-MD4APtQ_AD58PgA_LD4AD
+DAYMD1YMD0cMDzoMDy4MDyMMDxoMDxKLBvEIBwwPAwwPAQwADAAMDwIMDwUMDwgMDw0fAPBgGAwP
+HwwPKAwPMQwPOwwPRgwPUgwPXwwPbQwPfAwPjAwPnQwPrwwPwgwP1gwP6gwPAA_BDxcPgQ8uD4EP
+Rw_BD2EPgQ97D4EPlw_BD7MPgQ-QD4EP7w_BDw4ODy4OD08OD3IOD5UOD7kOD94ODwQKrw7wDlIK
+D3sKD6UKD9AKD-sKDygPhA9VD4QKBw_zBw-jlgTxGoUPRg_FAQgPrQgP4ggPGA_GD08Phg_HD4YP
+vw_GD-kPhg8zD4cPbg_HrgLwAugPhw8mD4gPZQ_ID6UPiA-lMQ-hCQ9qCQ_tCQ-xCQ83D4qBCPEK
+xA_KDwwPiw9VD4sPng_LD_kPiw80D4wPgbwD8T_MDxwPjQ9rD40Puw_NDwsCD10CD68CDwIPjw9X
+D48PrA_PAA_QD1gPkA_vD5APCA_RD2EPkQ_7D5EPFg_SD3EPkg-OD5IPKw_TCQ0P6A06D-NyqQ_U
+DwoPlQ9sD5UPzw_VDzMPlg_YD5YP-Q_WD2QPlw-LD5cPMg_YD5sPmA8ED5kPbg_ZD9kPmQ9FD5oP
+sQ_aDx8Pmw_ND5sP_w_bD2sPnA-bD5wPTA_dD74PnQ8wD54PpA_eDxgPnw_MD58PAg_gAwQP7wQG
+D6EP3w_hD1gPog-RdR7xIMcPow9DD6QPvw_kDz0PpQ_7D6UPOQ_mD7gPpg84D6cPuQ_nDzoPqA_8
+D6gPPw_p3h3xDEYPqg-LD6oPUA_rD9YPqw9cD6wP4w_sD2sPrQIVUXwPrg8GCwHzGK8PGw_wD6YP
+sA8yD7EPvw_xD0wPsg-aD7IPaA_zD-cPsw_HD7QPF08P8Us5D7YPyw_2D10Ptw-wD7cKD7gPFw_5
+D6wPuQ9BD7oP1w_6D20Puw8DD7wPmg_8DzIPvQ-KD70PYw__D-wPvg_WD78PMA-AD8oPwAYPwQAP
+wg_dD8IPOg-DD9dFBfMTxA8SD8UPsA-FD08Pxg-uD8YCD8cPLg-ID84PyA9vD8kPEFQP8CdUD8sP
+9w-LD5oPzA89D80P4A-NCA-ODykPzw-OD88Pcw-QDxgP0Q__D9EPZA-SDwsP0w_yD9MfGPM6AA-V
+D6kP1Q9RD9YP_Q-WD6IP1w9LD9gP9Q-YD58P2Q9JD9oP8w-aD50P2w9ID9wP8w-cD58P3Q9LD94P
+9g-eD6MP3w9PD_AP-F8P8QJWD_IPAw-jD7EP4w9eD_QPDBoW8V-lD2kP5g8XD_cPxg-nD3UP6A8k
+D_kP1A-pCg-qDzMP6w-iD_sPkg-sD0IP7Q-zD_0Pow-uD1QP7w8ED-APtQ-wBg-xDxcP8g-ID-IB
+D-MPKg-0D9wP9A_ND-UPPw-2D-AP9g_iD-cPVA-4DwUP_WUP8CxpD-oPGw-7D80P_w9-D-wPMQ-9
+D_MP-Q_VBQ9HD-8P_Q--D6sPAA9dAA8PDwIPwg8CD3QPAw8mDwQP1wEL8SAFDzsPBg-tDwYPnw8H
+D1EPCA8CDwkPtA8JD2UPCg8XDwsPyA8LD3oPDA8rDw0P3MQX8wAODz4PDw-uDw8Pnw8QD1BtD-Es
+sA8SD2APEw8QDxQPwA8UD3APFQ8fDxYPzg8WD34PFw8tDxgP2w8YD4oPGQ84DxoP5g8aD5QPGw9C
+DxypH-M0nQ8dD0oPHg-3Dx4PpA8fD1APIA-9DyAPqA8hD1QPIg8ADyMPqw8jD1YPJA8ADyUPqw8l
+D1UPJgULD6gPJw9RDygP_uUeMUsPKj0B8QaaDysPQQ8sD_gPLA_PDy0PNQ8uD9sDBfIhLwsPMA-L
+DzAPbw8xDxMPMg_3DzIPWg8zD-0PMw_fDzQPQg81D_MPNQgPNgsPNw-Gdw8xBg85hAPzEkQPOg-i
+DzoPgA87Dx0PPA_6DzwPVw89D-MPPQ_PDz4PKn0P8CVfD0AP_A9AD5EPQQ8qD0IPwg9CD1oPQw-x
+D0MPiA9EDx4PRQ_0D0UPSQ9GD90PRg9xD0cP6wrzOZgPSA8qD0kPvA9JD00PSg-eD0oPbg9LBQwP
+jQ9MDxsPTQ_pD00PNg9OD8MPTh9PD9oPTw9lD1AP7w9QAQ9RDwIPUg_LD1IPEoIP8Q4gD1QPpg9U
+DysPVQ_wD1UPNA9WD7cPVg86D1cPvLkA8TRYD74PWA8_D1kPvQ9ZDzwPWg_6D1oPNw9bD7MPWw8v
+D1wPqg9cDyUPXQ_fD10PGA9eD5APXg8ID18Pfw9fD-UPXw9qxCFxYA9TD2EPx0oM8gFiD6sPYg8c
+D2MPjA9jD-wPFh-xFtkPZA9GD2UPsg9lDx4GCQYP8wYPXQ9nD8UPZw8tD2gPlA9oD-sFHPNIaQ-F
+D2kPKQ9qD4wPag-uD2oPTw9rD7APaw8QD2wPbw9sD80PbA8rD20Phw9tD_MPbQ8_D24PmA9uD-EP
+bg9JD28PoQ9vD-gPbw9ND3APog9wD-cPcA9Klg-xKe4PcQ8-D3IPjw9yD94Pcg8sD3MBDg-FDg8R
+D3QPWw90D6UPdA-uD3QPNg91D30PdQ-DD3UPCQ92_RDwHZEPdg-TD3YPFQ93D1YPdw_WD3cP1Q93
+DxMDD1ADD4wDD8gDDwIBDzwBD3UBxRTD4wEPGQ96D04Peg_ClQ-xOecPeg8ZD3sPSQ97AwcPpwcP
+1AcAD3wPLA98D1cPfA_BD3wPqg98D9IPfA-5D3wPHw99D0QPfQ9oD30Piw99D60PfQ-OD30P72ke
+8xx_DywPfg9KD34GDQ_CDQ_dDQ_2DQ-PDQ-nDQ-9DQ8TD38PKA9-DzwPfw9PlA-xGHIPfw_CD38P
+kQ9-D58Pfw_sD38PuA9-D8MPfw-ND38P1w9-D98Pf-Ia0e0Pfw-yD38P9g9-D-pjBDB-BQQCAPMs
+D-sED-gED-IED_sED_IED9cED8sED74ED64ED50ED4sED3cED2EED0kEDzAEDxYED-kND9wND7wN
+D5u8F-EgLg0PBg0P3Q99D7MPfQ_GD30PWA99DykPfQ-4D3wPxQ98D5EPfA9bD3wPIw98D_o_EHJ0
+Bw82Bw-3lw-RDgIPLwIP6gEPowEPWmUYocQDD3cDDygDD9gfGfMldw8zD3cP3g92D4cPdg8wD3YP
+1g91BwoPHwoPwQ90D2IPdAAID58ODzsOD9YPcg9vD3IPB4wP8Q8yD3EPxg9wD1gPcA-pD28DCw8G
+Cw_SD24PHQ9uD6eOIfESbQ_2D2wPOw9sD78Paw9CD2sPww9qD0MPag-CD2kPPw9pYhYRNvElsWcP
+Jw9nD54GDxMG9ggT_ogP81HcD2MPSw9jD7kPYg8lD2IPkA9hD-oPYA9jD2APyw9fDzEPXw_WD14P
+_i9dD74PXA8eD1wND1sP2w9aDzgPWg_UD1kP7w9YD0gPWA_gD1cP9w9WD04PVg_jD1UP9g9UD0l9
+D-AE7A9SDzsPUg_KD1EP1w9QDyQPUL4TEbp3FfEuTg9MD00Pkw9MD9oPSw8gD0sPZA9KD6gPSQ-r
+D0gPLA9ID20PRw_tD0YP7A9FDysPRQ9oD0QPpA9DD_APQsMFcFUPQQ_OD0B3D-EoBQ8_DzQPPg9q
+Dz0Pnw88D9MPOw8HDzsfOg9sDzkPnQ84D84PNwUPNg8tDzYPWw81CQ80D7YPM1IdsQ8PMg86DzEP
+ZQ8wBQzwArgPLg-hDy0PCQ8tDzEPLA9YfxoCaw-wD8oPKA-vDycPEw8nDzcPJg9aDyUPfQ8kD6AP
+Iw-CDxIlMSEPBZcV8Q0gD0YPHwYPHg_FDx0PpQ8cD8QPGw-iDxoPAA8aTCWROw8YD1kPFw92FQqz
+FQ_uDxQPyw8TD_ZjD-A7HQ8RDzgPEA9TDw8Pbg8OCQ8ND6MPDA_9DwsP1w8KD-EPCQ8LDwkPJQ8I
+Dz4PBw9YDwYPcQ8FD4oPBA_kDwMPvQ8CD9YAD_8PAA9gD4EiD-8POwUPVFwmEfy-GxOgXQ_A0w-4
+D_wP9w_uEfESIA-2DzoP9Q9UD-QPbg-zD4gP8g_jD-EPvQ-wD9gP7w-0gQdR7g8qD_2YARBihgPz
+FOoPmw-pD7gP6A-VD_cP8w-mDxAP5g8vD_UPTQ-kD2wP4w_LVA-xBsoP4A-rD98PCw-fDy0P3g9O
+D90PcGwp8RrbD7YP2h-ZD-0P2A8hD9gPRg-XD2wP1g_SD9UPuA-UD98P0w8HD9MPLz8lEdE9DPME
+qw-PD9UPzgAMDywPzQ9ZD8wPhkoP0eIPyQ8RD8kPQQ-ID3LUCmDGD9UPxQ9CGfM5Ow-ED3APww_l
+D8IP2g-BDxEPwQ9ID8APgQ_-D7oPvg-0D70PLg_9D2oPvA_mD7sP4w_6DyIPug9hD7kPoA_4D_EP
+tw8jD7cGQQ-wHu4PtA8zD7QPeg_zD8EPsg8KD7IPUw_xD54PsA-pD68PNQ_vD4MPrg-RD60PIRwl
+8yQPrA-DD6sPFg_rD2oPqg_-D6kPFQ_pD2wPqA-ED6cPHQ_nAw_mD9MPpQ8wD6UPjg_kD_09D-EF
+rw_iDxEPogoPoQ-aD6APQA_gD6gNCfM8nw96D54P5Q_dD1IPnQ_-D5wPLg_cD54Pmw8QD5sPgg_a
+D-YPmQ9sD5kP4g_YD1oPmA-TD5cPTg_XD8oPlg9HD5YPxQ_VD0UPlQ-HNg-xAs0Pkw9TD5MP2Q_S
+D2EPkg-rfwYAMRnxCpEfkA8fD5APsA_PD0IPjw-VD44Pag_ODwCSD-EQjQ8xD40PzA_MD2gPjA8G
+D4wPpQ_LD0UPiw-nD4oPi3YYUYoP1gkNLg-xMNMPiAQCDy0CD90Phw_OD4cPQQ_HD-UPhg_rD4YP
+Yg_GDxsPhg-VD4UPkQ_FD04PhQ8ND4UMD4QPkA_ED1QPhEMd8w7gD4MPqA_DD3IPgw8_D4MPCw_D
+D9oPgg_qD4IPfFse8FYlD4IP-A_BD9QPgQ_uD4EPig_BD2cPgQ9FD4EPJg_BDwgPgQ-rD4AP0Q_A
+D7cPgA_gD4APig_AD3YPgA9jD4APUg_AD0IPgA81D4APKA_ADx4PgA8VD4APDg_ADwgPgA8ED4AA
+AQIAAIEHcQQBDwcBDwsYBvAjFgEPHAEPJAEPLAEPNQEPPwEPSgEPVQEPYgELAQ0BD40BD50BD64B
+D78BD9IBD_UBD-pKF-McgQ8lD4EPPA_BD1MPgQ9sD4EPhQ_BD6APgQ_7D4EP1w_BD-QPgQ8RD4IP
+MHQeAI0n8RaRD4IPsw_CD9YPgg-5D4IPHg_DD0MPgw9pD4MPkA_DD7gPgw-hIQHxEoQPNQ_ED2AP
+hA_MD4QPuQ_ED_cPhA8WD4UPRQ_FCgcPpl0q8BsLD4YPPg_GDggPqAgP3ggPFQ_HD00PhwcFD74F
+D-gFDzMCCwIPrAIP6QJCD-EjZgkPpgkP5gkPKA_KD2oPig_tD4oP8Q_KDzUPiw96D4sPwA_LDwcP
+jA9PD4wPmA_MD_FTERGNSSYRwd8LAOEV8R2OD6kPjg-3D44PRw_PD5cPjw-oD48POQ_QD4wPkA-f
+D5APMw_RAgYP3QYPM9Ye8wCSD_IPkg86D5MPlA_TD_6IHvECpA_UDwAPlQ9cD5UPug_VDxguCfEG
+lg-XD5YPNw_XD5gPlw-6D5cPXQ_YrCzxIiQPmQIDD_4DD1QPmg_6D5oPIg_bD4oPmw-yD5sPXA_c
+D8YPnA8xD50PnA_dDwgPngp7CPMNUA_fD78Pnw8uD6AEDA8PD6EBAA-yAA9lD6IP2E8PscAPow81
+D6QPqw_kLCvwBpgPpQ8QD6YCDQ8BD6cPeg_nD-QPp0wMMeoPqCga8CziD6kPXw_qD90Pqg9bD6sP
+2Q_rD1gPrA-YD6wPWQ_tD9kPrQ9bD64P3Q_uD18Prw-jD68PZg_wD_oPsJ8i8wj0D7EPeg_yDwAP
+swUODw8PtA_WD7QPH1EP8SIxD7YPuw_2D0UPtw-QD7cPXA_4D_cPuA90D7kPAA_6D44Pug8cD7sP
+qg_7DzgPvA-HqgvzR70P5w_9D3gPvg8ID78Pmg_-DywPwA__D8APUQ-BD_QPwQ93D8IPCw-DD58P
+ww80D8QPyQ-ED18PxQ-1D8UPiw-GDyIPxw_5D8cPUA-ID_gPyAEPyQ8ZXA-xVksPyw-lD8sPfw-M
+DxkPzQ_0D80PTw-OD_sPzg_GD88PIg-QD78P0A9cD9EP_Q-RD5YP0g80D9MP0g-TD3AP1A8OD9UP
+rQ-VD0wP1g-sD9YPiw-XDysP2A-MD9gPbA-ZDw0P2g_urAzxFtsP8Q-bD5IP3A80D90P1g-dD3kP
+3g8cD98Pvw-fD2IP4A8FD_FmD-BoTA-iD-AP4g_UD_MPOQ-kD90P5A_CD_UPJw-mD8wP5g9xD_cP
+Fw-oD7wP6A9iD_kPCA-qD64P6g9UD_sP_g-rAA-sD0cP7Q-uD_0PlQ-uDzwP7w-jD_8Pig-wDzEP
+8Q-ZD-EBD-IPKA-zD88P8w93D-QPHw-1D8cjKpH2DxcP9w_-D-cpHBMPbg-wSV8P_g8ID-sPsA-7
+D1gP-A8BD-0PqQ-9D1IP-g-6D-4Pow--D0sPAA-0DwAPnA8BD0QPAg-tDwIPlQ8DDz4PBA-mDwQP
+jg8FDzcPBg-fDwYFDwcPLw8ID9fdKvMhDwkPJw8KD88PCg93DwsPHw8MD8YPDA9uDw0PFQ8OD70P
+Dg9kDw8PCw8QD7IPEA9ZeA8xpw8SORnxCvQPEw_aDxQPQA8VD_YPFQ_MDxYPMg8XD9fSG3EYDyIP
+GQ-HzBzxDBoPEQ8bD7UPGw9aDxwP-g8cD6IPHQ9GDx4P6YwYwR8PMA8gD9MPIAoPITkAAHcH8QJc
+DyMP-g8jD58PJA9BDyUP4swF8QImDyMPJw-DDycPYw8oDwMPKYEP8QRCDyoP4A8qD38PKw8dDywP
+uw8sJxrxMfYPLQ_TDy4PMA8vD8wPLw9pDzAPBA8xDAgPOw8yD9YPMg9wDzMPCg80D6QPNA89DzUP
+1g81Cw82DwcPNw_fHzc8CvMbOA9kDzkP_w85Bg86DyYPOw_8DzsPUA88D_UPPA95Dz0PDA8_D58P
+Pg8yhw-xRFYPQA-oD0APeQ9BDwkPQgMHDykPQw_4D0MPRw9ED9UPRA9jD0UP8A9FD30PRg8JD0cP
+lQ9HDyEPSA_rD0gPNg9JD8AfSQ9KD9IPSg9bD0sP4g9LHR7xevEPTA93D00P-Q9ND4IPTg8HD08P
+iw9PDw8PUA_SD1APFQ9RD5cPUQ8YD1IDCQ8aD1MDBA8ZD1QPlw9UDxYPVQ_TD1UPEA9WD4wPVg8I
+D1cPhA9XD-4PVw94D1gP8g9YD2oPWQ-jD1kfWg-RD1oPSA9bD70PWw8zD1wPpw9cDxsPXQ_OD10P
+AQ9e3ytR5A9eD1XsA7FfDzUPYA_jD2APEe0NAFkr8QZhD1gPYg-DD2IPLg9jD5gPYw8CD2SSD-Ew
+0w9kDzoPZQACDwcPZg9sD2YP0Q9mDzUPZw_YD2cP_w9nD10PaA__D2gPHg9pD34PaQ-dD2kPOw9q
+Aw0P9g0JWxRxaw8ID2wPYpIc8AFsDxQPbQ9sD20Pww9tDxkvNiPzDW4PFwsPawsPvQsPDw9wD2AP
+cA_wD3APAA9xD06RD-EY6g9xDzYPcg_CD3IPzQ9yDxcPcw9gD3MPqQ9zD-APcw83D3QPfQ90LxSw
+BwoPSwoPjgoP0QrhIaEEDg_SDg-RDg8QjwHzKHcPig93D8YPdw8BD3gPOw94D3QPeA_tD3gP5A94
+DxsPeQ9RD3kFAQ_7AQ-vAQ8iD3oPVA96D4WZD-NB5Q96DxMPew9BD3sPbg97D5oPew-GD3sP8A97
+DxoPfA9DD3wNDA_SDA_4DA-dDA8CD30PJg99D0kPfQ9rD30PjA99D6wPfQ-MD30P6g99Dwh9HvEW
+QQ9_D10Pfg93D34PkA9_D6kPfg-BD34P2A9_D_4Pfg8DD38PGDADc38PPg9-D1CpD-MqcQ9-D4AP
+fw_OD38PnA9-D6gPfw_0D38Pvw9-D8kPfw-SD38P2w9-D_IPfw-pD38P7g9-D-MPfw-3rQ9X-Q9-
+D-4EABP7HADT8A9-D_gPfw-dD38P0fkPU7MPfw_ibAATeIAAkUcPfw8sD38PDzQA8QR_D88Pfg_s
+D34PiA9_D2EPfg859R-hfg-iD30PtA99D4QPfQTwNpDqDA_yDAEMDz7CGOMPww97D4IPew9AD3sP
+-FIf8wxuD3oPJA96D9kBD4wBDz0BD_wPeAMGD0UGD_5UEfAMPQ93D_EOD4QODyUOD8QKD2IKD-0P
+dA_XD3QPKUHzAsYPcw9bD3MP7g9yD4APcg8PuQ-xPioPcQ_0D3APPQ9wD8ULD0oLD84Pbg9RD24P
+0g9tD1EPbQ-OD2wPSg9sD8QPaw89D2sPtA0PKg0Png9pDxAPaQ_BD2gP8A9nD14PZw-KDANxZg_e
+Ag8GArAP8QrRD2MPNA9jD5UPYg-2D2EPVQ9hD7IPYA8OvS7yA18PwQ9eDxkPXgsPXQ-ED1wPGK8P
+8QS7D1oPCg9aH1kPpQ9YD-EPVw878gOwVg-MD1UPEg9VD1epD-EUBA-eCQ8fCQ9fD1EPng9QD9wP
+Tw8YD08PVA9OD44PTQ-HD0xhBjE2D0vDAAB8J5HUD0gPBg9IDzg7M-IMRg_XD0UPxg9ED-MPQw8f
+D0MPSg9CD3QPQQ_enw-xFQ-tDz4PFA8_DzkPPQ9eDzwPgg87D6UPOg-HDzkP6A84DwgPOFMPAGcf
+8QxkDzUPgQ80D50PMw_5DzIP0w8xD_0PMA8HDzC_HlA3Dy4PTjcMcywPew8rD5CcD-EduA8oD8wP
+Jw-eDyYP8Q8lDwIPJQ8THyQPIw80DyIPQw8hCQ8gD2EPHwsPHgy2G-MYHA_WDxsPow8aD68PGQ_6
+DxgPxg8XD9APFg-bDxUP5Q8UD_8PEw-5kA-xIQsPEQ8UDxAPHA8PDyUPDg8tDw0PNQ8MDzwPCw9E
+DwoPSw8JBA8ID1oPBw9hDwYPaOseEA5NG4ACD4MPAQ_KDxUaMf8Pl4gms-0PpQ-8D6sP_w_yhw-x
+BsAP_A-HD-cPzw-2D9YP9Q-eD-QP5a8X8CXyD-UP8Q-_D-APBg-wDw8P7w8YD_4PIQ-tDysP7A81
+D_sPPw-qD0kP6Q9UD_gPXw-nD2sPsSOz5Q_DD_QPkA-jD52AD-EyuQ-gD8cP3w-WD94P5Q-dD-UP
+3A8GD9wPFw-bDygP2g87D9kPTQ-YD2EP1w90D9YPiQ-VD54P1A_0D9MPyg-SD_GGCfMI0A8SD9AP
+Kw-PD0UPzg9fD80Pew-MD5d8D-EC0g-JD-APyA8PD8gPMA-HD1EzAwBhDvAvxA_5D8MP3Q-CDwMP
+wg8pD8EPUA-AAQ_-D6IPvg-MD70P9w_8DyMPvA9QD7sPfg_6D64PuQ-eD7gPDw_4D0EBGgJzD-AK
+3w_0DxYPtA9OD7MPhg_yD8EPsQ-8D7APONo48i_vD7UPrg-1D60PNg_tAQ_sD7wPqw8BD6sPRw_q
+D48PqQ-YD6gPIg_oD20Ppw_6D6YPCA_mD1cPpQ_oD6QP_moP8CMfog-4AA9QAA_pD6APAw_gD18P
+nw_8D54PGw_eD3sPnQ-cD5wPPw_cD6QPmw8KD5sPcnQv4QMPRQMPsQ_YDx8PmA_O6AHzAJYPcQ_W
+D_QPlQ9aD5UP0V0P8SbDD5MPPw_TD7wPkg87D5IPvA_RDz4PkQ-CD5APSA_QD88Pjw9YD48P4g_O
+D24Pjg-8D40PjK4h8xSND7APjA9ED4wP2w_LD3MPiw8ND4sPqA_KD0UPig-lD4kPhcot8SHMD4gP
+cg_IDxoPiA-EBQsFDxwFD8sPhgwHDy8HD_MPhQMID1EIDwsID8cvhA9DD4T-KPMHxw_DD4wPgwQG
+DxsGD_YPgg_yD4IPgEUP0yIPgg-1D4EPyw_BD6LJHRFXqAPwDYEPEg_BD-MPgA-WD4APug_AAA0P
+iQ0Pcw0PXw1aI6E9DQ8vDQ8jDQ8Yxi3hCQ0PBA0PAQ0CDQINDwINANAHDQ8KDQ8PDQ8UDQ8ZZi2x
+DycNDzANDzkND0JDAFBYDQ9kDco4EX95LfECnA0PrA0PvQ0Pzg0P4Q0P9A3DD-MXHA_BDzIPgQ9I
+D4EPXw_BDgkPjwkPqAkPwgkP3QkP_AkPFQ_CDzIzD-AEbg_CD40Pgg_uD4IPzg_CD-APgiUV8QI2
+Bg9aBg9_Bg_kBg-KBg-xBmUQ8ARBD4QPag_ED5QPhA_-D4QP6w_EYj3xAUQID3IID6AID88ID-8I
+DzAaJhGUMibQ_gcPLwUPZAUPmgUP0HEL8wCID0APiA94D4gPsg_ID_ypLfEKYw_JD58PiQ-cD4kP
+Gg_KD1kPig_YD4oP2LEa8DSLD1oPiw_cD4sP3w_LDyMPjA9nD4wPrA_MD-IPjA84D40Pfw_ND8cP
+jQ8PD44PWQ_OD6MPjg-tD44POA_PD4QPjw-Rwi3xGg_QD2wPkA_7D5APCg_RD1oPkQ_rD5EP-A_R
+D04PkgAKD-QKD0gPkw_dJyECQg-xAp8PlA-2D5QPTg_VD6cPlQ8A9TwRllEO8y4QD5cPaw_XD8gP
+lw8lD5gGAQ-hAQ9AAw_gAw8AD5oPYQ_aD8IPmg8kD5sFCw-qCw9OD5wPsw_cDxgPnQ9_1i1RSw_e
+D7JSA-MOnwYMD_0MD1cPoA-BD6APLAABAA8ED6IPcQ_iD95HD-Mcug_jDykPpAMEDwkPpQ96D6UP
+6w_lD10Ppg-PD6YPQg_nD7YPpw8qD6gPnuAt8QKJD6kP-w_pD3UPqg-tD6oPZLosMasPVQwy8QKs
+D0gPrQ-CD60PPQ_uD7gPrust8xywD68PLQ_wD6oPsA8oD7EPpg_xDyQPsg_jD7IPIw_zD6MPsw8j
+D7QEAg8mUQ9RKg_2D62nJZG3Ag0POA_4D7yrBBG58Q7TTQ_6D9MPug9ZD7sP4fct8QzwD7wPeA_9
+DwEPvg_KD74PFA_-D54Pvw8oD8CJPdM_D8EPyQ-BD1UPwg-h-y0w_w-DxgOBDxYPxQQODzJtMwD5
+KhHHzgXTbw-IDwAPyQ_QD8kPIVYP0UMPyw-VD8sPZw-MD-qPE-EMzQ8gD84Psw-OD0YPzw-aD88P
+bw-QDwMP0QEJDC4RwlgV8QbTD_4P0w_ED9QPGw-VD7EP1Q9ID9YwBtJ3D9cPDw-YD6cP2A8-Fi7x
+Cw9wD9oPCQ-bD6IP2w87D9wP1Q-cD24P3Q8Iuh7zAN4PPQ-fD9gP3w9yD_APDVwP8QpED_IP3w-i
+D3sP4w8XD_QPsw-kD08P5Q-siyEg5g9FPPFLwg-nD18P6A-8D_gDD_kPNw-qD9QP6g9yD_sPEA-s
+D60P7A9MD_0P6g-tD4gP7g8mD_8OCA9jD-APAg-xAAcPQA-yD98P8g9_D-MPHQ-0D7wP9A9bD-UP
+_g-1ChXxAjkP9w-ZD-cPeA-4DxgP_Q0KFCzxFPcP_g_WD-sPNg-8D9YP-A91D-0PFQ-_D7UP-g9V
+D-8P9Q--VRLxFjQPAQ-UDwEPdA8CDxQPAw_zDwMPUw8ED-MPBA_TDwUPMg8GD9KMF-APBw8RDwgP
+sA8ID1APCQgFD44PCg8uDwsPzQ8LD2wPezHxAA0Pqg8ND0kPDg-nDw4PhlkIcxAPww8QD2JnD-EG
+ng8SDzwPEw-aDxMPeA8UDxYPFQ_z5A3zAhYP7g8WD4sPFw8oDxgOCw9iUy7zHpsPGg83DxsP0w8b
+D28PHA8LDx0Ppg8dD0EPHg-dDx4PeA8fDxIPIA_tDyAPR1su8AZ8DyIPFg8jD68PIw9IDyQP4g8k
+D3s_CcEPJg_sDyYPRA8nD9xdKDMoDwtuD9A5DyoP0A8qD2cPKw-9zCLxCQ8sDygPLQ__Dy0PUw8u
+D_gPLg98Dy8PEccWAmwuEcxYGvE0MgcGD4QPMw8WDzQPqA80DzkPNQ-KDzUPWw82D_wPNg98DzcP
+DA84D5sPOA8rDzkPuQ85D0gPOg-WDzoPZA87BwwPfnUJMT0Pl98ocz4Prg8_Dzp4D-MeTw9AD9kP
+QA9iD0EP6w9BD3QPQg-9D0IPhQ9DDwwPRA_TD0QPGg9FD6APRQ8mhS5xMQ9HD7UPR2gAkb0PSA9A
+D0kPwyEf8wJKD8gPSg9JD0sPyh9LD0wPy4wuEckaKvEATg-GD04PRA9PD8EPTw8_WirwB1APNg9R
+D7EPUQ8sD1IPpg9SDyAPUwNBCvABVA_KD1QPAg9VD3kPVQ-wD6A98whWD9wPVg9RD1cPxg9XDzoP
+WA_tD1gPIJousQQPWg92D1oP5w9a5SoRxiQB8whcD6QPXA8SD10PgA9dD_wPXQ9ZD14PxKQuUZoP
+Xw8EvD3xAmAP1g9gDz4PYQ_mD2EPDQ9iexxx2Q9iDz8PY1xCEweOD-ESzQ9kDzAPZQ_RD2UP8g9l
+D1IPZg_yD2YPEQ9nD3APZw-N5gFyaA_HD2gP47cusQMED-MED0wPag_ljDvwD2oPVA9rD6sPaw8B
+D2wPVw9sD6sPbA8AD20CAQ_mAcEs8xZJD24Pmg9uD_oPbg86D28PiA9vD9YPbw8kL3APvA9wDwgP
+cQ9SmA8AZBPzGi4Pcg92D3IPvQ9yDwQPcw9JD3MPjw9zD9MPcw8XD3QPWg90D5wPdA-dxy7yH14P
+dQ_eD3UP3A91DxoPdg9YD3YPlA92D9APdg8LD3cPRQ93D38Pdw_4D3cP8A-PLvALXg94D5QPeA-J
+D3gP-g94Bg95D2UPeQ_XD3kPPcMKCQ8pD3oPWQ96D4epD-AK4g96Dw4Pew86D3sPZQ97D48Pew_4
+D3sP4ZE_s3wPMA98D1YvfA_g2i7zFOgPfA8KD30PLA99D00PfQEAD40AD6sAD8kAD_cADwMPfg8f
+zw5xVA9_AQ0PhUgf8w20DQ-KDQ-gDQ-1DQUPfw8cD38PLg9-D0APfw9RIg-wDXAPfw0ID4wIAwgP
+pQgPsQgPuwgPxQgPzggP1gitF-EL5QgP6wgP8AgP9AgP_AgP_wgP-QgP-ggOCA4NAPEe9QgP7ggP
+5AgP2AgPyggPuQgPpggPkQgPeggPYQgPRQgPJwgPBwgP5Q0PwA0D7jYRRb4J8QHoAA_2AA_CAA9M
+AA8UAA-ZrTXxCnwPXQ98DxwPfA-ZD3sPkw97D0sPew8CD3txD-ELaA96DxcPeg-FCQ9wCQ8aCQ-B
+D3gPZg94BQuGORFJqAwRdm0Z8RAYD3YPrw91D0MPdQ-WD3QPZg90D-QPcw_AD3MPCw9zDDkTGW8P
+8UQgD3EPoA9wDx4PcA_aD28PFQ9vD40Pbg8ED24LAQ-rD2wPWw9sD8oPaw83D2sPog9qDwsPag9z
+BA-YD2gPPA9oD54PZw4PZg9cD2YPuA9lDxMPZWkPccMPYw8YD2NZErG_D2EPDg9hD1wPYJYX8Qf0
+D14PPg9eD4YPXQ-MD1wPEA9cAg9b3QvwDNQPWQ8TD1kPTw9YD4oPVw-ED1YP-A9VBgcPZ2IP80UC
+D80PUg4PUQ8tD1EPWw9QD4cPTw_yD04P3A9NDwQPTQ8rD0wPUA9LD3UPSg_XD0kPuQ9ID9kPRwoP
+Rg8WD0YPMw9FD08PRAQPQw_CD0IPmg9BD7BZD7HbDz4P7g89DwAPPSwGUSIPOw8xDgWxOQ9MDzgP
+WA83D2NBQ1A1D3cPNNI0IYcGqBtxkw8wD5gPLy4c058PLQ_iDywPow8rD6RQDxGk2SSRJw_gDyYP
+ng8l0gkAZCvQkg8iD40PIQ_HDyAPgDgQ8RoeD3IPHQ9qDxwPYg8bD1kPGg9PDxkPRQ8YDzsPFw8w
+DxYPJQ8VDxoPFDE1AAsF8Br1DxAP6Q8PD9wPDg-ODw0PwQ8MD7MPCw_lDwoPlwUPiQ8ID3oPBw9s
+D6gj8AUFD04PBA8-DwMPMA8CDyEPAQ8SDyMKAJQHMf0P5n4tMPsPyEcPgAoPqw-4D5wPQRrxIvYP
+gA-1D3IP9A9kD-MPVg-yD0kP8Q88D-APLw-vDyMP7g8XD_0PCw-sD-8P6g-0H_mbNjHnD9XmF7Pl
+D8MP5A_6D_MPsjwP8QKjD_APnQ-fD5cP3g_SD90PjbULsNsPhg-aD4MP2Q_BTQMR14EDIdUIaxzx
+ANMPgw-SD4YP0Q_KD9APj9gps84Pmw-ND6IPzA_rMA-xF74fyQ-ID9UPxw-iD8YP8A-FD-8PxA8P
+D8QPIA-DBg-CD0YPwQ9adkMA0irxDL4Png_9D7cPvA-RD7sP7A_6DwgPug8mD7kPRckCUbcPhw_2
+Jw8ATRnxQvMPsw8ZD7MPQg_yD2sPsQ_WD7APwg_vD_8Prg8eD64PTw_tD4EPrA_0D6sP6Q_qDx8P
+qg9XD6kPkA_oD8sPpw8ID6cPRg_mD4UPpQ-GD6QFDIkeEZPzCTGhDyTuJHGgD7wPnw8KRDXxCJ4P
+qw_dD-8PnA9UD5wPqw_bDwMPmw9eVhuhmQ8YD5kLD5gP2bkH05cPog_WBQMPcg_VD90aD-EAuA_T
+DygPkw_bD5IPDw_S_h3xBv0PkA93D5AP8w_PD3EPjw-xD44PcyUc8AKNAA0PBQ0Pjw_MDxsPjA_p
+DxlG8wCLD8sPig9fD4oP9Q_JD44PD-AfxA_ID2MPiA8DD4gPpg_HD0sPhw-yD4YPmw_GD0YPhg-z
+D4UPow_FD1QPhQ8ID6hK8xSED3YPhA8wD4QP7A_DD6sPgw9sD4MPLg_DD-MPgg_7D4IPhBkPcR4P
+gg-uD4FDIPEwlA_BD2sPgQ9ED4EPHw_BD-0PgA-cD4APvg_AD6IPgA_ID4APcQ_AD1sPgA9ID4AP
+OA_ADykPgA8dD4APEg_AOjGTBQ_ADwIPgA8BBAASAmIeAKdAcQUBDw0BDxLcPCAdAVkeESvxPFA8
+AQ9GAYgn8QBbAQ9mAQ9zIQ0BD5wBD6twFkHLAQ-ddhbxCAEPgQ8VD4EPKQ_BDz0PgQIHBAcBBw_X
+4SRByAcP4gA1UxcPgg8zJA8A-DPxFooPgg_pD4IPyA_CD_gPgg8ID4MPKg_DD0wPgw9uD4MPkQ_D
+D7V0H7GDD-8Pgw8lD4QPTGA28QCED5wPhA-ED4QP7g_EDxiCCfE2hQ9uD4UPmg_FD8cPhQ-1D4UP
+Iw_GD1IPhgcOD7EOD_IODxQPhw9GD4cPeQ_HD6wPhw-gD4cPFQ_ID0sPiAcJD7gJD_8JOg-xN2AP
+iQ_ZD4kP0w_JDw4Pig9JD4oOCg-CCg8AD4sPPQ_LD3wPiw_7D4sP_w_LDzwPjAAID78IDwEND0QN
+CQ0PzA0PEQ_OD1eVS3GOD_QPjg8rXgjxC48PvA_PDwYPkA9PD5APmg_QD_UPkA8xD5EAEBCxGA_S
+D2YPkg_1D5LwCwBQGVOlD5MP9jcPAPZL8QHuD5QPQS_VD_oPlQ8-Aw_VuknRQw_XD5sPlw-zD5cP
+TAceMZgP-40h8TKZD7UPmQ8QD5oPbQ_aD8kPmg8nD5sPhQ_bD_MPmw9CD5wPog_cDwIPnQ9iD50P
+xA_dDyUPng_HD54P6g_eD04Pn7Ix8w4WD6APew_gD_APoA9GD6EPrQ_hDxQPog97D6IP40YP8T61
+D6MPHw_kD4kPpA-zD6QPXg_lD8oPpQ82D6YPow_mDxAPpwAMD_sMD1oPqA-JD6gPOA_pD6gPqQ8Z
+D6oKCw-7Cw9tD6sP3w_rD1IPrJQy4DkvrQ8iD64Plw_uDw0P6SJRrw-5D69qGfEA5w_wD18PsQ-X
+D7EPUA_y4EvzAkIPsw_8D7MPNg_0D7EPtA8sSA-wGyQPtg_gD7YPHQ_3D5oPtw8YD7gPlQ_4DxQP
+uQ_TD7kPEg_6BgUPEQ_7Bj4GEbw8E-EQFA_9AwQPGA__D5sPvg8eD78PoQ_-DyUPwA_oD8APLRYU
+8ADBDzYPwg_8D8IPQQ-DD8e6KvMbD8QP1A-ED1sPxQ-iD8UPag-GD-IPxg96D8cPAw-ICAEPFQ-J
+D54PyQ8oTA_xPA-LD8cPyw9SD8wCNJFpD80P9A-ND4C6BvEQzw_ZD88PJg-QD7MP0A9BD9EPzg-R
+D1wP0g-qD9IPeQE1MdQDB6g7gLUP1Q9FD9YHUh3xCNcP9Q-XD4UP2A8WD9kMCQ84D9oPyQ-aZCcR
+7V0Z4NwPEQ-dD6MP3Q82D94Bzxez3w-uD98Pgg-gDxVOD7E8D_IP0A-iD2QP4yY1EY2TS7HlD7YP
+5Q9LD_YP4A048R7nDwoP6A_gD_gPNQ-pD8sP6Q9hD_oP9w-qD40P6w8jD_wPuQ-sD08P7Q-mD_2Q
+OdETD_8LAA9BD-AP1w-w3SrwCAYP8g_dD-IPNA-zD8sP8w9jD-QP_g-06kRxKQ-2D8EP9os3k-AP
+9w_ID-gPH7oeAClLEecUGvEc_w8XD-wPrw-8D0cP-Q-fD-0Pdw-_Dw8P-wwKDz8PAA-XDwAPbw8B
+DwcPAqMw8SM3DwMPzw8DD2cPBAoFAw8FDy4PBg-GDwYPXg8HD-YPBw_NDwgPJQ8JBAIPVA8KD_wP
+CtwisRoPDA_yDwwPSQ8NdhAgdx8HIZGlDw8PPA8QD9NrGQFbD4EDCA8tDxMPw7cJ0RQABw_FDxUP
+Gw8WD7ByCQASF3EXD3EPGA8GVQ-wCxkPMA8aD8UPGg9ZDxsP7g8bD4IPHA8WDx0LmC6RHg-RDx4P
+ZQ8f_wDxCosPIA8eDyEPsQ8hD0MPIg-WDyIPaA8jD-rDE-MPJA4PJQ_vDyUPQA8mD9EPJg9iDycP
+8g8nD4IPKA8TXg-xHjIPKg-BDyoPUQ8rD98PKw9uDywP-Q8sD4sPLQ8ZDy4Ppg8uDzQPLw-BDy8P
+TpA2ETDiSwALN-EEfw8yDwoPMwMJDyEPNA_rDzQPNlpAcTUPSg82D9NCDtE3D_UPNw9uDzgP9g84
+gwwA2B7zE40POgcPOw_bDzsPIQ88DAEPLQ89D7IPPQ83Dz4PvA8_D0BlDwAjD1HLD0APTvIC8AFB
+D1MPQg-VD0IPVg9DD9cPEknxFkQP2A9ED1gPRQ-YD0UPVw9GD9YPRg9UD0cP0g9HD1APSA-ND0hb
+D-EMxg9JD0IPSg__D0oPOQ9LD7QPSw8uD0wPqA9M8j7zIJsPTQcPTg_MD04FD08Pew9PD-IPTw9p
+D1AP3w9QD1QPUQ-JD1EPPg9SD7IPUg8mfy7xHgwPVA9-D1QP8Q9UD2IPVQ-TD1UPRA9WD7QPVg8j
+D1cPkw9XDwEPWA9vD1gP3WpJEVkWN-JWIw9aD48PWg-6D1oPZA9bD88PWw84D1wPoQ9cDwoPXQ9y
+D10P2g9dD0EPXg_oD14PDg9fD3MPXw-YD18PPQ9gD6EPYAUPYQ9nD2EPyQ9hDysPYg_MD2IP7Q9i
+D00PYw_tD2MPDA92D-EPyQ9kDyYPZQ_DD2UP3w9lDzsPZgMND-END0sPZw_kuEDxQ2cPVg9oD60P
+aAUPaQ9bD2kPsQ9pDwcPag9bD2oPsA9qDwMPaw9XD2sPqQ9rD-sPaw9MD2wPnQ9sD_0PbA89D20P
+jA9tD9oPbQ8oD24PdQ9uD8HZIRFv_QCxow9vD_0Pbw83D3BSDjDID3AuUCMPVoUP8RbiD3EPJw9y
+D2wPcg_vD3IP8w9yDzUPcw93D3MPuA9zD-kPcw855x7xA3QPtw90D-UPdAkPdQ9vD3UPq3YE8QF1
+DyIPdg9cD3YDBg-OBg8H2E1wdw91D3cPq2Ud8yUPdw8WD3gPSg94D34PeA_xD3gP4w94DxUPeQ9G
+D3kGCg_mCg-UCg8DD3oPMA96D10Peg_KiA-xGuAPeg8KD3sPNA97D10Pew_FD3sPrA97D9MPew-5
+D3sPHw98D0QPfA9oBwgAgTTxE3wP0A98D-EPfAgPfQ8yD30PUQ99D3APfQ_ND30Pqw99D8c7TfMM
+fQ-_D30PGQ9_DzIPfg9LD34PZA9_D3sPfg_SQR-xCL4Pfg-TD34P5w9_D-sPfg8ND38PHw9-eQMX
+QaMP028Pfw99D38Pig9-D5flHhOt8i7zFsEPfw-KD38P0w9-D9oPfw-hD38P5w9-D_wPfw-xD38P
+9Q9-D-g5HwxNHwBNBVP0D38P6y4vAEkfEsBOL0EDBA99-S7zBEIEDyEED-4Pfg-XD34Prg9_D4JE
+P8MjD34AD30PuQ99D4DfLzEGD332LgD-L-EAOw98D-MPewwCD1kCDwkCwg8xYA96kA3xAq0KD1AK
+D-APeA_ND3gPKA94_iXxAFcPdw-qBgIGDwkGD5UPdbVC8wamD3QPKw90D60Pcw8tD3MPqg9yDyW5
+D-EZEw9xD4cPcA-5D28PaA9vD9QPbg8-D24MD20PDQ9tD3APbA-RD2sPMF83M2oP59Mu8wWVD2gP
+6Q9nDzsPZw_KDQ-YD2UPI7MP8wWzD2MP_A9iDzoPYgIPYQ_6D2AP9sMucWkPXg_gD10dVJMHD1wP
+OA9bD2fALjG-D1jTU8MQD1cPNQ9WD1kPVQK3LvMGuQ9SD9YPUQ-xD1APCg9QDyIPTw84sC7zBV8P
+TA9wD0sED0oPjQ9JD5kPSA_kpy7zBrUPRQ_8D0QPwA9DD8QPQg-GD0EPx6cPEcTaF6A9D7wBD7YP
+Ow_vejkCmC7zBJIPNw_GDzYKDzUPaw80D1wJD0uQLhAoUhrzAC8PAA8uD_oPLA-UDysPvJwPMYsP
+KJ4DEVaMJJElDx8PJA8BDyOALpDFDyAPpg8fD4aTBpEOD0QPHA8iDxt4LuDdDxgPug8XAw8WD3IP
+FVkFAHMGgQIID9wPEA_1_EfRDg9oDw0PQA8MDxkPC2YuUMkPCA_h-yKgBg9QDwUPKAUP-1wu8AMP
+AQ_tDwAPhQ--D1wP-gkP-Q9cShPizh7RkQ-4D2kP9w9BD-YPGcAeQvMPyg9NLvMFfA-wD1YADy8P
+7g8KD_0P5A-rD8BFLnF3D_gPVA-nmEQRDhcYM_MPy4EPUIoP4A9rjFPQD94PLg-dDxEP3A-1DzUu
+8wa_D9gPpA-XD4sP1g9zD9UPWw-UD0QtLvIGGg-RDwcP0A-0D84P4g-ND9IPzA-Cew8RDG4LkMgP
+jw-HD4YPxgcDEwYdLvIGaw-CD2cPwQ9lD8APZA_-D2UPvg0PFC7zBm4Puw91D7oPfA_5D4UPuA_Q
+D7cPnHMPsbkPtA-JD7MP3A_yij4QBdUMEbAELvIFUA_uD2wPrQ_LD6wPqg_rD8wPqgD7LcEBD6gP
+ZQwPjw_mD7zaGlGkDxsPpGkP8waCD6IPuA_hD-APoA8qD6APZw_fD6XrLREo6QUAWhsA9jlymg9G
+D5oPk_Mt8wMJCw_HD5cP3QMPNAMPjg_VD_tgD1GqD5MPDUgT8Q2SD9oPkQ9ED5EPsA_QDx8fkA_P
+DwMPjwoPjg-xAlQzjQ-pxi1R6g_LD25lWbOKD34Pig8JD4oPl1gPcbsPiA9QD4hYOxGDEhIAxFkC
+vS3zBAcPhg_uD4UPWA_FBQIPsw_ED2W0LfME0A_DD4kPgw9FD4MFBA-FD4IPiUwPERlpKQIePFCE
+D4EPWDc3A6It8wbkD4APwg_AD6MPgA_HD4APbQ_AD1eaLdIxD4APIg_ADxYPgA8NLA8NRA8TAxgA
+kwkPgA8MD4APEMYt8Q4aD4APIQ_ADycPgA8vD4APNw_ADz8PgA9JD4APU2QX8RyAD2gPgA90D4AP
+gQ_AD44PgA_cD4APqg_AD7kPgA-JD4AP2Q_AD_oPgA-8Fi4zgQ8hGR8Aix7zFl0PgQ9yD4EPiA_B
+D58PgQ_2D4EPzg_BD_cPgQ8AD4IPGg_CDzRyD9FrD4IPiA_CD6UPgg-C6wtQgg--D4K2Q-EIPwQP
+YAQPgQQPowQPxQQP6QQPDQ_EDzHPI-AAhA98D4QPog_ED8kPhA-xZwHxEQIPQgIPawIPlQIPwAIP
+6wIPFw_GD0MPhg9wD4YPng_GLjGR_w_GDysPhw9b4j4Ak0-RhwAHDyEPiA9VL4gPvf8xEYhvD-EV
+XQ_JD5QPiQ-LD4kPAw_KAQgPdQgPrggP6QgPIw_LD18Piw_bfSsRiwUqUVIPjA_RMT-wF4wPDw_N
+D08PjQ_QD40P0Q_NDxMPjg9VD44LBg-cBg8gD48PZA_PnCHxBQANDzYPkA98D5APxA_QDwwPkQ9U
+LVsgkQ9-WfMKMQ_SD3wPkg-HD5IPEw_TD2APkw_tD5MP_nsP8CCXD5QP5g_UDzUPlQ_GD5UP1g_V
+DygDCgMPzAMPHg_XD3IPlw-GD5cPGgsPbwsPxCsM8QiZD3EPmQ-ID5kPHw_aD3cPmg-QD5oPKTQx
+8QSbD9wPmw83D5wPkg_cD_4PnA9KlkBxnQ8DD54PYbUd8RueDx0Pnw98D58P2w_fDzsPoA_cD6AP
+-Q_gD14PoQ-AD6EPIg_iAg4P6A6AD-E6sA_jDxUPpA96D6QP3w_kD0UPpQ_sD6UPEw_mD3oPpg-i
+D6YPSg_nD7MPpw8cD6gPhg_oD-APqA9aD6kPxQ_pDzAPqg_cD6oPCGAJ8SirD_IPqw9QD6wPvQ_s
+DywPrQ_aD60PCg_uCgwP6QwPWQ_vD8oPrw87D7APrQ_wDx8PsQ_RD7EFY1fzCLIP6w_yD14Psw-T
+D7MPRw_0D7wPtA8yjg8RHoBQ8QO2DwsPtwQJD-oJD3IPuA-rD7gwNvES3A_5D1YPug-QD7oPSg_7
+D8QPuw8-D7wPug_8DzYPvQ_xPzNxvg_qD74PJ0c_8QS-DyEPwA_fD8APHQ-BD5wPwQ8aGFLxIsIP
+GQ-DCwcPGA-ED5kPxA8ZD8UPmg-FDxsPxg_dD8YPHg-HD6APxw8jD8gPpQ-IDyh2QgAjQwKZD-EI
+Ng-LD7oPyw8-D8wHAQ9IL80PUw-OD9mTJLDPD_UPzw9rD9AP8jpAsdEPAA-SD4cP0g8P_zKx0w8f
+D9QPpw-UDzBgNPEc1Q9BD9YPyg-WD1QP1w-dD9cPZw-YD-EP2A97D9kPBQ-aD5AP2g8aD9sPpWsN
+ALlS8w7cD0cP3Q-TD90PXg-eD_oP3g93D98PAw-gDQgPHKAP8Qo1D_IPwg-iD1AP4w-dD_MPag-k
+D-gP5A_GXibxEuYOBg8wD_cPvg-nD0wP6A-bD_gPag-pD-gP6Q_HD_oPFuYg8QDrDzQP7A-ED_wP
+Uw-tD_I0VLHuDwEP7w_RD_8PIWgGcfAPQQ-xD9HUVlHyD-EP8pAjoBIP9A4ADzIP9QejHhH2QlTw
+DXQP9w8FD-gPlg-4DyYP_QkCD0gP_g-ZD-oPai8qE-EI-A8cD-0PrQ-9Dz4P-g-PD-4PYA--D-GF
+BPAOAA8TDwEPpA8BDzUPAg-GDwIPVw8DD_cPAw94BQ-VPfECmg8FDysPBg_8DwYPTA8HD92xSjAI
+D-47UfANCQ8fDwoPsA8KD0APCw-RDwsPYQ8MD-EPDA_BD44T8ggOD6EPDg8xDw8PwQ8PD1EPEA-h
+DxAPcK4P8A0NDA8fDxMPrg8TDz0PFAEED1sPFQ-qDxUKDxYPtBTxDJYPFw8kDxgPsw8YD0EPGQ-P
+DxkPXQ8aD_sPGn8r8QIGDxwPkw8cDyAPHQ_tDx0POl4CYB4PVA8fCI4fICAClB6xIQ8QDyIPnA8i
+DyfxIQBcHvMUJA-JDyQPUw8lD94PJQ9oDyYP8w8mD3wPJw8GDygPkA8oDxm0D-AkKw8qD7QPKg89
+DysPxQ8rD00PLA-VDywPXQ8tD_QPLQ9rDy4P8g8uCg8vD-8PLw_GDzAP5UcA2gTxAhcPMg_cDzIP
+IQ8zD6YPMw8qkCKxNA8zDzUPtg81DzpbA-EINg9ADzcPwg83D0UPOA-HDzgPSA85D8o2D-EAOgEO
+D00POw-NDzsPTQ88WUbzAkwPPQ-LDz0PSg8_D8gPPg9Hvg_xQg9AD78PQA88D0GuIhE1QlVxQg8s
+D0MPp7IQMUQPneVIYEUPkQ9FD4YacYMPRg-8D0YjTFHtD0cPZLBA8RhID1MPSQ-JD0kPQA9KD7UP
+Sg8rD0sPoA9LDxUPTA_JD0wP-Q9MD3EIOLFND1cPTg-JD04PO3cYkE8PHg9QDQAP--gR8wBRD98P
+UQ9OD1IPvQ9SDyvFD-EJBw9UD3QPVA-hD1QPTQ9VD7kPVQ8kD1YNXyWRZA9XD84PVw83hDrxNVgP
+CA9ZD3APWQ-YD1kPPw9aD6UPWg8LD1sPcQ9bD9YPWw87D1wPnw9cDwMPXQ9mD10PyQ9dDysPXg_N
+D14P7w9eAA9fsRQRECku0WAPzw9gDy4PYQ_MD2ExE-IHRg9iD6MPYg--D2IPWw9jD7YPYw8QD8oP
+8QDED2QPHQ9lD3YPZQ-OD2UCX-EEfQ9mD9MPZg8pD2cPfw9nD9QPZxZZAJQOEdAPEvAHaQ91D2kP
+xw9pDxgPag9pD2oPuQ9qD9wu0VgPaw_nD2sP9Q9rD0O8JfM0bA-cD2wPKA9tD3QPbQ_-D20PCQ9u
+D1MPbg_cD24P5Q9uDy0Pbw90D28Puw9vDwIPcA9ID3APjQ9wD9IPcA8WD3EPWdYP8W7fD3EPIQ9y
+D2IPcg_jD3IP4w9yDyMPcw9iD3MPoA9zD94Pcw8bD3QPWA90D5QPdA-QD3QPCw91D0UPdQ9-D3UP
+uA91D-EPdQ8pD3YPYA92D5cPdg-ND3YPAw93DzgPdw9sD3cPoA93D9MPdw8GD3gPOA94D2kPeA_a
+D3gPy0tc8QF4DykKD1gKD4UKD7MKD98K6kGTNw96D2EPeg_M4Q-xJN4Peg8GD3sPLg97D1UPew98
+D3sPoQ97D8cPew-rD3sPDw98DzIPfA9VD3wPdw98D5kPfJQL8Q7aD3wP_g98DxkPfQ83D30PVQ99
+D3IPfQ_OD30PqukOg30IAw-6Aw8TwT6TRA9_D1sPfg9yYC7Tng9_D7MPfg-HD34P2ygv8QoAD38M
+CQ8jCQ8zCQ9DCQ9SCQ9hCQ9vCQ98103xB5QJD6AJD6oJD7QJD74JD8cJD88JD9Z0KPAL4wkP6QkP
+7gkP8gkP9gkCCQ-7CQ-9CQ-_CQUIABECGAAR5yJOgMcJD7MJD5spWgARPygfAMEk0MYPfg_XD34P
+ZQ9_DzDuTlADD7wjDj1L8wZ8D6wPfA9hD3wMBA_-D3sPag97DxFzH8FXD3oP9QoPkAoPJwpvJpFO
+D3gP3A93D2f7IHF2D3UPdg-3iBHxAHUP8w90D2wPdA-iD3MPVZtjM3IPM6wP8zYFD3EPaQ9wD8sP
+bw8qD28Phg9uD98PbQ81D20PiQ9sD9oPaw8oD2sPcw9qD7sPaQ8BD2kPRA9oD4UPZw-CD2YP-Q9l
+DzamD3CfD2MP0A9iHRNRKg9hD1NXEPEQXw_eD14PwA9dD98PXA-9D1sPFw9bDzAPWg9GD1kPWgkD
+EFeAVlOHD1UPkp4PEaJYIzBRD6hADVFPD6cPTrYrsZ0PTA_VD0sPjA9KvQvzDnMPSA9jD0cPUg9G
+Dz8PRQ8qD0QPFA9DD-wPQQ-ilg-wAKkPPg_KDz0Pag88D0gPO5wV8Q7-DzgP2Q83D7EPNg_IDzUP
+XQ80DzEPMw8EDzIP1cwk8wAvD3QPLg9CDy0PDg8sD9qSD-EMbg8oDzYPJw-9DyUPww8kD4kPIw9N
+DyIPEQ8hbwgQlUpXUR0PFw8cp2TwBpUPGQ9TDxgPEQ8XD84PFQ_KDxQPRowPAOI9AFMy8AEPDzIP
+Dg-rDwwPpQ8LD14PF0UxCQ-QSipwBg9BDwUCD24sEQJ3AWEhDwAP2QUtHRFJIDbwBfsPuQIPcg-4
+DyoP9w-jD-UPnA-0KU3xGA8P8g-KD-APhA-vDz8P7g-6D_wPtg-rD3MP6g8vD_kP7Q-nD6sP5otS
+UykP5A-qfA9BbAgPL1UnIN0P41ZRew-bD0H_J-EE2Q-RD9cPmg-WD2QP1Q8vD9QP_wIuUdEPmA-Q
+il8xOQ-O9SYT3-Ae0YoPyQ9iD8gPOw-HDxZ_GXHED9APww_vAC3xCMEPcw-AD1cPvw88D74PJA_9
+Dw0PvA-4AF2zuQ-TD7gPww_3D7VwD-Eanw_0D5cPsw_RD7IPjQ_xD4sPsA_KD68PjA_uD5APrQ_W
+D6wPnw_rD6nqVwBGC-MEqA-WD6cP6Q_mD-8PpQ8WD6UPMWwPsWwPog_OD6EPsQ_gnkfxAgAPnw8s
+D54PWQ_dD4oPnA_8DzoRmuJFUWQPmQ_iyljzAJcPJA_XD2kPlg_xD5UP-GgPsZkPkw-sD5IPQg_S
+u0yR9g_QD1QPkA_13ywAQw4AfBkRV70r8wiMDzkPjA_vD4sPJw_LD6MPig8iD4oPo2EPQLAPiA4O
+R7GHD1kPhw-tD4YPhNkREYZ8ZzFcD4WDEYGnD4QPUQ_EBWo_cYMPYg_DDxh9IGGCD5APggD-QVPa
+D4EPpIsO-yJCD4EPFg_BD_0PgA-HD4APpQ_AD4YPgA9qD4APUQ_ADzwPgA8qD4APGw_ADw8PgA8H
+Tw8EEwUBPRMLKABTEw_ADxghPfEAJA_ADysPgA8yD4AOAQ9Cn1vwBFUBD18BD2oBD3YBBgEPjgEP
+mwEAEVC3AQ-GAUZUUeYBD-YB7Q8AhWbTLA_BDz8PgQ9SD4EPZnIuk5APgQ_mD4EPvc89gesPgQ8E
+Bg8cui3zD08GD2oGD4UGD6EGD70GD9oGD-cGDxUPgw8zD4MPUiU_sZIPgw_zD4MP1A_DY00AkRDx
+EDwPhA9fD4QPgw_ED6gPhA-ND4QP8w_EDxoPhQ9BD4XTBDGQD4XyEVDiD4UPDLITA5hbUY0Phg_5
+0gtjhgwPhw9AbkzxA50Phw-MD4cP-A_HDy0LD14LDfJjIfQLTw9wWw_JDQkPxAMGAItXEWViAjOK
+D9R3TBFEcEWziw_3D4sP8Q_LDyz7LVOjD4wP339M8RhZD40Plw_ND9UPjQ8UD44PVA_OD5QPjg-U
+D44PFQ0PVw0PmQ0P2w3-LQDhQ5GmD5AP6g_QDy8dVAKPTPAOAg_SD0kPkg_QD5IP2A_SDyEPkw9q
+D5MPtA_TBQNWD7EDBA-fBA8rD5UPd8Exo5UMD5YPYA_WD66cTPMLTQ_XD50Plw-tD5cPPg_YDQoP
+4QoPMw_ZD4ahTFEtD5oPgSEEABlJgZsBBw-WBw8tGyARnKZMUzMPnQ_LFi6RPQ_eD5cPng-xBGMx
+nw_mCxwRoMYV8QK6D6APFw_hD3QPoQ-RD6EPL7ADM6IP7d4eEawfQ-IJpA9sD6QPzQ_kDy8PpQ_R
+D6UP8w_lD1UPwkxBHA_nAfgmU0kPqA_uKy5TeQ_pD9-HTDGtD6rqUvMPfA_rD_UPqw9ND6wPtg_s
+Dx8PrQkAD-MAD14Prg-JMC7zAqAPrw8LD7APeA_wD_UPsA9S1EzzDC0PsgcODwkPsw94D7MP5w_z
+D1cPtA-HD7QPN2IP8w4ZD7YPig_2D-sPtg9tD7cP4A_3D1IPuA-FD7gPOONM8wAgD7oEBg8JD7sP
+fQ_7D-NALlPeD7wPVOlMwEEPvg_4D74PLw_-CLo7UcAPlw-AQA0Aul_TAQ-CD3oPwg-0Ri4R6Ik5
+s8QP3Q-ED1gPxQ-T_UxRyw-GD0ccHwCsFvEEyA_8D8gPOQ-JD7cPyQ80D8oOArVKEa5BWvMEzA_s
+D8wPKw-ND6oPzQ8pD84PqQlNkakPzw8pD9APqho0M9EPrGRc8xiuD9IPMA-TDgUPNA-UD7YP1A85
+D9UPuw-VDz4P1g-BD9YPRA-XD8gYTVPPD9gPU14u8wJbD9oP4A-aD2UP2w-pD9sPbiBN8wx5D90P
+-g-dD4QP3g8KD98NAw8VD_APnA-gDyJ2D-IPLw-iD7YP4g89D_MPxA-jD0sP5A-SD_QPWg-lD_EP
+Lk3xAvEP5g95D_cPAQ-oCQwPEQ-pk1wRItlrEeo1TfMMuw-rD0QP7A-ND_wPVg-tAwoPaA-uD-IP
+7g97O01xjg-wDxcP8aFc8wIqD-IPtA-yDz4P8w-ID-MPUkVN0WYP9Q-wD-UPeg-2DwSYJgBla3P4
+D6MP_A8tJR8RQqQvcfoPVg-7D_HHGzH8D-ZLFJH9DwsP-g_VD-66VbOqD-8PNQ8ACwEPSoUuU18P
+Ag-pXU0R-t0kcAQPEw8FD52oF6MPBg4ADzwPBw-GZE1T2w8ID2XQXDF5Dwr6XKKNDwsPFw8MD6EP
+bE2gtA8NDz4PDg-ID68ooA8P2w8PD2QPEAq9G-MPEQEPEgkUDxMPmw8TDyQPFA_sDxQPNQ8VD74P
+FQ9GdU2RVw8XAwYPZw8YpzYTdpYuQIYPGg_WbPEGlA8bHxwPow8cDyoPHQ_wDx0PNw8evyFRRA8f
+Agh-TVPWDyAPXJouUWcPIgoFogwR945JYCQBDyUPhfgf8AUPJg_NDyYPEQ8nD5UPJw8ZDygPnPBw
+AowPECUNMmEfKg8rD63yXLMsD7EPLA8yDy0PtJNNUbYPLg837UdzLw84DzAPuKQuU7gPMQ83nE3y
+FTYPMw_1HzMPNA4NDzAPNQ_tDzUPKw82D6gPNg8mDzcPog83CKkuAKVNsZMPOQ8PDzoPig864U4A
+qU0x_g87ilkR73QqET2VAlFbDz4P1FhsAo8PcTwPQA_0D0A3ThGivhBgQg_QD0IA9jsDuE3RZg9E
+D9sPRA9QD0UPxP4PAbkuUwgPRw_Sv01Rdw9ID_mwPVFJD8wPSfcPEa7bTvMASw_OD0sP-g9LD20P
+TA-cwi4AnzIxJg9O4zNiAQ9PD24P001ARg9QDh858wRRD4gPUQ-zD1EPXQ9SD8cPUg8wlg8AJhsA
+7y3zBtIPVA86D1UPoQ9VDwgPVg9uD1YP1OJN8wKfD1cPBA9YD2gPWA-MD1gPL9IuU-UPWQ9Y6k0x
+Gw9baEtR3Q9bDz1habNcD-wPXA9bD10PuvJNANctE9PaLhGMFTKzXw9DD2APng9gD-n6TfMNrQ9h
+AA9iD18PYg_3D2IPDw9jD2cPYw__D2MPFKEPAMUZUBUPZQ9qyRlAD2UEL-UrMWYPC2g_cGcPrg9n
+D-8RY3NoD6APaA-vml1TjQ9pD9sPThF2X0vwA2oPDw9rD1oPaw_lD2sP8A9rD2BKIoQPF04ASW8S
+XqpdMQoLDWs8kW4PwA9uDwUPbxxOcY4Pbw-RD2_nUPMCVw9wD5kPcA-bD3APHA9xD1ygD5HcD3EP
+Gw9yD1mxFlByD9UPcv4uUU4Pcw_KSDkQc3wykzovdA_tD3QP5v0uU1YPdQ_NMU7zDvkPdQ8vD3YP
+ZA92D5gPdg-MD3YP-w92DzIPdw9k5TxTxw93D-cFLwD8P-EAhg94D7QPeA-iD3gPDw951EDzDmgP
+eQ_UD3kPvw95D_kPeQ8TD3oPPA96D2UPeg_Npw-zEtwPeg8DD3sPKQ97D04Pew9zD3sPlw97D7sP
+ew-eD3sPAUZNAIwfU2UPfA_G_lwxxA98qGyhAQ99CAcPPAcPWGRNoY8HD6kHD8MHD92cXQDkPVMm
+D34PPb0e8wJqD34Pfw9_D5QPfg_oD34PvBw_EeHsMwAacfMEfw8VD38PJg9-DzUPfw9ED38PU48f
+8wJuD38Pew9-D4cPfw_SD38Pndg_U7EPfw_7jD4Xy5MfE_CJTgBnHxPv4D5f9g9-D-mXHwAT-a8f
+E_-LH5PQD38Pug9-D6CFXgCAALE7D38PEQ9-D_MPfnpz8Qt6D34PQA9_DwIPfg_-Bw95Bw8uBw-g
+D3wPjgEzMXwP3XYgM3sPHNYPMUsPerREkWsPeQ-1D3gPe7QwEXcAEfMQ9w92D24Pdg-hD3UMCQ_8
+D3QPIw90D4cPcw-oD3IPRM8PMfMPcH5hUZMPbw-dQmAwbg9ofUbwC2wP5A9rDx0Paw9TD2oPhQ9p
+D7QPaA-fD2cPwC5TLA9mD07GD1CHD2MPnyx08AEPYQ-FD2AP1A9fD98PXg-npFjxClwP7w9bD_8P
+Wg-rD1kP5Q9YD9wPVw-QD1bQNhOvvw9QhA9SD2rtE-EmDA8wD08PDg9OD_oPTA-ED0sPmw9KD3AP
+SQ9DD0gPEw9HD_EPRQ_tD0QPdg9DDz4PQg8DD0G3D7GHDz4PRg89DwMPPHN0MXgPOcYFMeUPNlNm
+wUsND-wPMg_rDzEPWO1Dsy8Prg8tD1cPLA-_rw-xCUkPKA-sDyYPjg8lDy8PJA-PBQ9uDyEPC-tT
+sR4PQw8dD94PGw94t0TQGQ_pBg9ADxYP1w8UC6UP8QAED5cPEA8rDw8Pvw8ND1KIVfIBCg93HwkP
+CA_bAA8tDwUPv-o9geIBD3MP-w8EDTxR-A8nD-sfH-EGSw-4D90P9g9wD-UPAw-0D5YP8g8paE3x
+FO8PUg-uD_cP7AcP6w8TD_oPqw-oD0MP5w-bD_UJD_QPDw-jkg9RRw-gD_SBZYHdBQ-cD8MP2ulS
+EQgqSFHWD1IP1dtNkaEP0g9LD9EP9h5n8BXOD1IPzQ8CD8wPtAIPZw-JDx0PyA-UD8YPjQ-FD0cP
+xA8EH8N0WsEPwA9GD78PCw__D9L5DlG7D2YPuo8-IAMPLxkCfw_QgA_0D1kPsw812C8AfUiRrw-X
+D64PvQ_t2hoRkBJh8wiqD28PqQ9iD6gPWA_nD1EPpg9ND6UPTHYP8QJSD6IPWg_hD2QPoA9yD58P
+gwIM8QCdD64PnA-ID5sP5g_aDwc7DPEFmQ9SD5gHD5cPqw_WD9wPlQ8RD5VtD-EMhQ_TD8QPkg8H
+D5IPTQ_RD5cPkA-kD48PNQ_PAi7A4Q_NDz0PjQ_dD4wBUCgRi5EvQ0APig5kD5GiD4gPHw_ID6Ed
+WvEQhw_vD4YPPA_GD80PhQ9iD4UP_w_ED5cPhA84D4QP3cd48BaDDzIPgw-jD4IPlw_CDAgPDQgP
+zQ_BD5IPgQ9bD4EPKA_BD-kPISrQgA_nD4APhA_AD2UPgJkS8QYNCg8hCg8TCg8JCg8DCg8BCgYK
+DwILACAFCmQhwQoKDw4KBAoPFgoPGysAICcKMxiANQoPPQoPRQrBa8FXCg9hCg9sCg93CgiRRICb
+Cg_oCg_2Cq5C8R3TCg-iCg-yCg8CD4EPEw_BDyQPgQ82D4EPSQ_BD1wPgQ9vD4EPgw_BD5gPgfwv
+U8MPgQ-ZiFtQBwgPHgjUCCBPCCx68QWDCA_dCA_4CA-TCA-vCA8MD4MPKQkY8B2DD2Qvgw_iD4MP
+wg_DD_IPgw8DD4QPJA_ED0UPhA9oD4QPig_ED64PhA-RD8hc8QiEDxsPhQ9AD4UPZg_FAwsPswsP
+2gsPAn0e8QqGD1QPhgcAD6cAD9EAD-wADygPhw9UD4cKk1vzCdsJDwkPiA83D4gPZg_ID5YPiA-G
+D4gP9pYe8QJZD4kPiw_JD70PiQ-wD4kPJH0zkYoDBQ-BBQ-2BTEpUWMPiw_a9QHxJ4sPCQMPQQMP
+egMPswMP7QMPKA_ND2IPjQ_eD40P2Q_NDxYPjg9SD44PkA_OD80Pjg8LD48PSkYC8QuPD8kPjw8J
+D5APSQ_QBQIPzAIPDQ_RDAEPk7gQ8QAaD5IPXg_SD6MPkg-oD5JxSACwNGC6D5MGD5RJD-EAAg4P
+2A4PIQ_VD2oPlQ_01AsAvwLxCZYODQ-fDQ8rD5cPdw_XD8QPlw8RD5gPX71usZgP_w_YD0oPmQ_a
+nwzxHZkPOg_aBQQP2wQPLQ_bD38Pmw-RD5sPJA_cD3cPnA-KD5wPHg_dD3MPnQ-I2lgxng9zzCyA
+ng8fD58Pdg9nX2GfDyUPoAelMjEuD6H3ArLhD6EPOw_iDQsP8UprMagPo0dS8QhgD6QPvQ_kDxoP
+pQ94D6UP1Q_lDzQPpkNfEfKFFfEApw_xD6cPEQ_oD3EPqA-S0TnxAKkPlQ_pD-cPqQ9aD6oPvFcy
+EatFMQBdFFFLD6wPrzsM8RCtD3kPrQ-fD60PRQ_uD6sPrg8SD68PeQ_vD_APrw9HkD2hsA8YD7EK
+AA-pAOEpgbwPsg8mD7MClx6TZQ_0D9APtA88Vg9BFA_2CtgB8RlaD7cPxw_3DzUPuA_jD7gPEQ_5
+CgwP7gwPXg_6D80Pug89D7sPrQ_7AGNRjg_8D-6COPEAvQ-hD70PUw__D8UPvg83m1FRvw8cD8BZ
+b1ECD8EPds1wAG1FEcI0PVFHD8MPvJZhscQPpg-EDxwPxQ_SaFIRxr4X8QT1D8YPbA-HD_MPxw9a
+D8gP0g-IMBtTwQ-JDzrHHvEaKw-LD6QPyw8dD8wNAQ8QD80PiQ-NDwMPzg9_D84P_A-OD3MPzw-t
+D885GvEK5A-QD18P0Q-bD9EPVi-SD04P0w-LD9MPR9Yu8RLUD0EP1Q__D9UPOw-WDAYPNg-XD7QP
+1w8yD9gPsA-YDy9AThHZtxaRqg-aDykP2w_o-EPxBNwPpw-cDyYP3Q_mD90PJg-eD6ZJRfMA3w_m
+D98PJw-gD6cP4A8oYg8RKRcW8RriDywP4w_tD_MPLg-kD7AP5A8xD_UJDg81D_YPtw-mDzkP5w_7
+D_cPPRJ88AroD0IP6Q-FD_kPRw-qD8oP6g9ND_sP0A-rKFbxEwYFD1kP7Q-cD_0PYA-uD_MP7g9m
+D_8P6g-vD20P8A-xD-B3GhH5PiYx8g8AnhOx8w8ID-QPjA-0DxBae-MM9Q8ZD-YPnQ-2DyEP9w_m
+D-cPKg-4D64P_A8zag_RPA-6D8AP_g9FcHzxEPsPTg-8D9IP-A9XD-0P2w-9D2AP-g4ED2kP-w-u
+D-8iZzH3DwCnClEADwIPhaZcAFIlAD8aAAQI8RYEDxwPBQgHDyUPBg_pDwYPLQ8HD7IPBw82DwgP
+uw8IDz8PCQ-D3UsxCg-LSyjxCAsP1A8LD1gPDA-cDwwPXw8ND_MPDQ9n6xcxDg9voReyDw92DxAP
+_Q8QD33_HvEVD4MPEg8GDxMPiQ8TDwwPFA_PDxQPEg8VD5UPFQ8YDxYPmg8WXBgxnw8XPU2RpA8Y
+DyYPGQ_onR7wCRoPqw8aDy0PGw_uDxsPMA8cAAsPMg8dCeFuER7wIfNCNg8fD7YPHw83DyAPtw8g
+DzcPIQ_3DyEPNw8iD7cPIg82DyMPtg8jDzUPJA_0DyQPMw8lD7IPJQ8wDyYPrw8mDy0PJw_rDycP
+KQ8oD6cPKA8lhw_RIA8qD50PKg8a4QRxKw8TDywPkCVmcS0PiA8tDwTZOvEALg-7Dy4Pdg8vD-EP
+Lw9sFCHxEjAPYQ8xD9sPMQ9VDzIPzw8yD0kPMw-CDzMPOw80D7QPNMcPMKUPNb4AwQ0DDw4PNw_F
+DzcP-bRLUTgP6w84EVzR2A85D04POg-EDzoPOXkp8QQ7DyQPPA_ZDzwPDg89D4IPPQ-2AhpzPg-e
+Dz4PUZUPgTcPQA_qD0ALYljxAEEPAA9CD3EPQg-jD0IPU98pcUMPNA9ED6VVGhFF_gaR8w9FD2IP
+Rg-RcRoAEyrxCkcPGw9ID4gPSA-1D0gPYg9JD84PSQ87D0rpI-ABEg9LD30PSw-oD0sPUw9MDwxw
+ESfCCEBND-oPLi4gTgGWTmBPD5wPTw9vUvINaw9QD9IPUA85D1EPnw9RBw9SD2sPUg-QD1IPNZ0P
+wQQMD2IPVA-FD1QPKL1ikFUP7g9VD1APVgUYgQ9XD3QPVw-U8iqQWA_VD1gP9A9YLCQgsg-ZT-EI
+Wg9vD1oBBQ8qD1sPhg9bD_MPWw8-D1wEUzH2D1wMEDGsD12FMfEOYA9eD7kPXg8SD18Paw9fD8MP
+Xw8bD2APcg9gD8nOafEQYQ92D2EPyw9hDyEPYg92D2IPyg9iDx4PYw9yD2MPxWk7Ap8P8Ay9D2QP
+Dg9lD18PZQ_wD2UPAA9mD1APZggOD__kARFn-hYR2c1a8C1oD3MPaA-AD2gPDA9pD1cPaQ_jD2kP
+7Q9pDzcPag_BD2oPyw9qDxMPaw9cD2sPpA9rD_sPaw8yD2wPeQ8xW_FsBw9tD0oPbQ_PD20P0-p_
+sW4PWw9uD50Pbg-gK2nzFG8PZA9vD6UPbw-lD28PJQ9wD2UPcA_kD3AP4w9wDyEPcQ9frA8x2Q9x
+SitxUQ9yD40Pcm1Y8QYCD3MPPA9zD3YPcw_vD3MP5w9zDx93ATF0D452YjF0D-pMTPAkdQ9lD3UP
+mg91D84PdQ8BD3YPNA92D2cPdg_ZD3YPyw92D-wPdg8tD3cPXQ93D4wPdw_7bC3zKg93DxgPeA9G
+D3gPcw94D58PeAEJD-cJDyIPeQ9ND3kPdw95CAIPygIP8gIPGg96D0IPeg9pD3oPj7MPUdsPeg--
+Bk3xGHsPSA97D2sPew_OD3sPsA97D9IPew-0D3sPFA98DzUPfA9UD3wPdHYnIXwAbUcQ62pHAPFa
+cX0PQA99D1umXgBXg-IcfQ_pD30Pwg99D9oPfQ-yD30PCQ9_DyAPfg83D34PTA9_D2IPfg92D34P
+i2UfIAADNl0g1gPkQ5L5Aw8JD38PGQ80XpA3D38PRg9-DAsRffEibQsPegsPhQsPkAsPmwsPpQsP
+rwsPuAsPwAsPyAsPzwsP1gsP3AsP4gsP5wsP7AsP8GQZ8QH3Cw-6Cw-8Cw-9CwQLBAsKEgAR63cK
+ccMLD6gLD4ddAPEDNQsHCw-PAw_UAw9UAw8OAw-E708RffteQMUNDg0xOBOY4BAAhQ-APQ96D78C
+Dz0CD7UJwlgATBERAFgRMHYPxP4uIx91JE5DEw9zBXgPEdyWYgAHYBFv4E8Tpw1OEfFXYGBrDyoP
+ag-kLqNRD2gPXh9nDg9rbg8RaJBdAL8yUWEPRQ9g0y6AGQ9eBA9cD97fTREFyS4xaQ9Y2E0RCYAT
+MFQPm1gGUVIPHw9Ryk0TlrkuAMJNca8PSg9cD0m6TQCyLhFStwQxQw_Rzx4CXQ8A9nwT8KJNUxEP
+Og_dmk1zrx81DzQPuZwuE7qITTGzHywzPhEpxnIxjw8md00TdIsuAP1Ck8APHg8sDx0PloQuAO8i
+ktAPFg83DxUPnRA_EQ5rZQJTTRKPdi4gDA-qeUEGDxUHXCIAbi7DNw8AD5cED-gP-A9YRw9BGg-4
+DSllUfQPQA-zXS4AI00AumETzxtNEZshFxHoE01T1A-kDz9AD3AXD_APhg-eA01CDg-bH-hMk8MP
+1g87D9UPtD0uE6zoTDCsD817bwC-HlM7D8kPxddME98uLhED0CgwwA8xyVkCJi4xCg_7v0w0VA_4
+t0xQWQ_0DwsmXCMAAhQug-UPrQ_4D6wDnkwAB1wT5ZZMU5IPpQ9uJA_QMQ_iDxgPoQ8Du34C-S0A
+gUwx2A_bex8T29hbEO4eAXOWDxMPlg8sGw9Taw_TD5FiTCLrD7lbEVjtajOOD9ZSTADjLRK4SkwA
+SDsTxRUPw5APiAoPhw9vD4cP5tEtEeMbEkKFD-Qvxy1Asw_DDDVeM4IPob8tUwQPgg_9qh0iPw_3
+LQAUTBGpRkwzgA9fry0TKygeEwtIHhcBBAAAEAATBHQeEwnPLQCrLVcUD4APGVweEyr3LQBDPRNA
+Tz1xUA_ABQsPYzYEYXgLBgsPjzUEIKcLaoGgwgsP0AsP3gsP7RAEUw0PgQ8dnGoTQGUek2QPgQ93
+D4EPi6otAIYuUcgPgQ-dTykRged5UyAPgg84ri0QaKF6AWBdM4IPtEhMACQ9IAQG_1-zDjwGD1gG
+D3UGD5MGAAYP0AYP7wYPDg_EDy4PhA9PJXsRkUcBEYT8axP4KA-xED8PhQ9jD4UPiA_FD60PhQ-T
+D4UP_Q_FDyAPhg9HD4aIIxOX4GrxGegPhg8SD4cPOw_HDgkPkQkPvAkP6AkPFA_ID0EPiA9uD4gP
+mw_ID8qVOQI0D-MGVw_JD4YPiQ_3D4kP6A_JDxkPig9L92oAPiEx4w_KWUiTSg_LD38Piw_0-2rz
+Ah8PjA9VL4wPww_MD-oPjA8yA2sxpA_NDkHxABcPjg9RD44PjA_OD8cPjg5rET4hRfEAjw_4D48P
+9Q_PDzMPkA9xCGrxAJAP7g_QDy4PkQ9uD5EPrswqM5EPMB9rcLMPkg-2D5JVGXINBw-ABw8ERg-z
+Bw_ND5QP0g_UDxgPlQ9eD5UPpQ_VD_wva9F7D5YPww_WDwwPlw9VRx4zlw-oN2vzBn0PmA-ID5gP
+Ew_ZD18PmQ_rD5kP_D9r8QaSD5oP4A_aDy4Pmw99D5sPzA_bDxuBenGcD7sPnA8MmhgAkxJznQ--
+D50PUU9r8AD2D54PSg_fD50Pnw-xD583RRGaKRFRRA_hD5q2MbOhD0YPog_dD6IP9KYeUaQPow-8
+KGOzpA_uD6QPBw_lD2Foa7EVD6YPcA_mD8sPpsZxU4IPpw-ecGvxAJcPqA-0D6gPUg_pD68PqTtK
+E2x4a1EqD6sPicFBsasPSQ_sD6kPrA8KIVdxrQ-MD60PLg4jUa4P8g_uiBUSuIhrIAMBnhQRRpFG
+AN1ZE3WLa-ECQA_zD6YPsw8MD7QPcg_0D9meGgJjD-ABDw_2D3cPtg-gD7YPSA_3AGMI8Qu4BgQP
+7QQPVw_5D8EPuQ8sD7oPlg_6DwEPu59rsdgPuw9ED7wBDA8cqBEzvQ-2pWvR0A__Dz4Pvw_sD78P
+Gshw8ADAD-cPwA4PwQ-VD8EPRA-pf3HCDyMPwwcF7XQAPgkR5VxFAIIFscUPOA-GD6oPxg8ccQIx
+xw8AggnzAMgP5Q-ID1gPyQ-LD8kPPmcPESbBa-IAyw8OD8wPgg-MD-cPzA9szWvzBw9WD84Pyw-O
+D0APzw_2D88PLA-QD6LWa-IDjw-RDwUP0g0KD-MKD2oP0w-i22thD9EP1A9JqQCx1Q85D9YACw8q
+D9fia1EbD9gPlBNzEdm0fVMAD9oPeeprMW0P28wV02EP3A-bD9wPVQ-dD9Dya-EAxQ-eD0AP3w_7
+D98PNg-g3oATLXIP8QAkD_IICQ8cD_MPmA-jDxTYUwIAbFGJD_UPBa5Rs_YP-g-mD3sP5w-4CGxR
+8g-oD2-XJfAV6Q9qD_oP5w-qD2UP6wkDD2AP7A-eD_wPXA-tD9oP7Q9XD_4L2Rsg7wrmNfAC8A-O
+D-APTQ-xD8sP8Q9JD-IcbKEPRg-zD8UP8w9EVCBz9A9BD-UPwCVsANYB8wI8D-cPuw-3DzoP_A_5
+D-gPOHYPkTYP_g_1D-oPNG5ycvsPMw-8D7I1bBABnBeR-g_vD-4PLg--sIExLA8APGzzBisPAQ_q
+DwEPKQ8CD6gPAg8nDwMPpkVs8AOlDwQPJA8FD6MPBQ8iDwYPoQ9KMhEHTmwxHg8IpV-THA8JD5sP
+CQ8ZDwoPmFZsgJYPCw8UDwwH8h_gDQ_QDw0fDg_ND6568QAPD4kPDw8IDxAPhg8QDwReYQJ8DxF_
+mYsREgEbk-cPEw91DxQP8mps8wTtDxUPag8WD_cPFg9lDxcJDg9ecGzxAlgPGQ-VDxkPUQ8aD84P
+Gg9K1zACeGxxvg8cDzoPHfBAkDIPHg_tDx4PKZpB4R8fDyAPmg8gDxUPIQ_QjxgzIg_FhmxReg8j
+D-TOdREk4m0AuWcS245s8AIPzg8mD0cPJw-ADycPOQ8oAMMNAoIPMBsPKl1Tww8rD4IPKw-6DysP
+cZxs8ANfDy0LCA9NDy4Pww8uDzoPLwFcAdEwD5sPMA8RDzEPhg8xpAFTcQ8yD_WpbDHODzP5DvED
+tw80DQ81D54PNQ8RDzYPhQ82nXVxag83D90PNy45U8EPOA8zu2yxFg86D4gPOg-5DzrGWxHaBA8Q
+PMNskQ0PPQ_aDz0PCfOJcz4P5w8_D1aEDxEz42QxQA8OMnpyQQ-pD0EPVtJsAFFDUZsPQw8H3Rpz
+RA-eD0QPSdlscR4PRg_ID0axAjBcD0ffIgDMJADgbNEAD0kPaQ9JD9EPSQ84ylhQSg8HD0vobKEP
+1Q9LDzsPTA_huzCCTQ9sD00P0Q-ybJGbD04P-w9OD2MyI-EBTw0PUA_ND1AGAg9SD1EPtI5Ps1IP
+dw9SD9gPUg85KB9x_g9TD1kPVAUKkRgPVQ93D1ULCghtQJIPVgY9TQBqRzFXDwYmXQIObfMFGQ9Z
+D3QPWQ-PD1kND1oPhA9aD90VbdGQD1sP6Q9bD0EPXA_Z7nYzXA9IHW1R9Q9dD0t1NLNeD-cPXg9M
+D18PoSVt8wZJD2APnQ9gD-APYA9DD2EPlQ9hD_ctbUCKD2IPy3bTLA9jD3wPYw-MD2MPHJUPMLkP
+ZDAigQoMD6MMD-AMXY1xiQ9mD9UPZpkh02wPZw_2D2cPAQ9oD0tFbRHdITHzAGkPbg9pD7YPaQ-_
+D2kPRU1tkdIPag8YD2sPXZBLEWumWBMrVW3zBrIPbA-1D2wPOA9tD3oPbQ_8D20P-V1t8wZ_D24P
+vg9uD-4Pbg89D28PfA9vD7plbXE1D3APcg9wckST6w9wDyYPcQ9inQ_R1w9xDxEPcg9K9icxcg_8
+DEoBdW1hD2MPcw_auXGzcw8GD3QPPA90D3GAbdPZD3QPDQ91D0APdQ9z3Ioi1w_IbRE6CCDwCHYP
+mg92D8oPdg-5D3YFD3cECQ_ECQAJRlvRCg94DzYPeA9hD3gPjAiC8yB4D_EPeA8LD3kPNA95D1wP
+eQ_FD3kPrA95D9QPeQ-6D3kPIQ96D0YPeg9sD3oPkaUPMdkPerNc8wIfD3sPQg97D2QPew_GD3sP
+pwMvcecPew8HD3yKMhFFuwECwD2gng98D7sPfA-XD8g9AvaMEynoPbBeD30JDg_QDg_oDmUH8QfY
+DgYODwUPfg8bD34PMQ9_D0YPfg9abwECLz4TlWYf8wK6D34Pyw9_D90Pfg-tD34P-fU_AJhOEyt3
+fQCyXRNU6h7yBm0Pfw95D38PhA9-D48Pfw_ZD38Po6E_oQ_1D38PvQ9-D8XxYwJuHxPZyT4X5E5e
+CAU-Evr-bQ1yHxH0GYmRfw-OD38ABw_MfVfDLgcP9Q9_D7UPfg9tXk9wyg4Pbg4PC180AqFPYbkP
+ew87D9AP8QUNCA_YD3kP-w94D18PeA_5CQ8MCTlQAElQMd4PdGlQQ0oPcwnKDzG9D3Aag8DrD24P
+_Q9tDwEPbQ_hXfAE-g9qD-QPaQ-kD2gPzw9nD7MPZq5fAMQP8BpAD2MPDg9iD9gPYA_bD18PWg9e
+DxQPXQ-ID1sJD1oPIg9ZD8cPVw9oBPF2EZs7UzBSD7zki5FPD8sPTR9MD8lNXQAcgeNHBQ9GD5UP
+RA-_D0IPZLAPMSUPPrIrUdgPOg8sTFBgNw-MDzUPNIuQYA8yD6YPMA-q9W4zLQ9oqw-wCd4PJw8V
+DyYPSg8kD34PIg_vDyAP3w8eD-gjcTkPGw9kDxnRC1K1DxUP3KMP0A8nDxAPSw8OD24PDA9IWFGy
+DwgP1OqKsAQPFg8DDzYPAQ9X734z-Q_Yng_w2w-3D-wP9Q8fD-QnfZAMD-APig-uD6_nEePqD-4P
+6A8nD_cPUQ-lDpQPUdoP3w8KOVbxFdwPcg-aD6gP2A-hCw8cD9UPWg-TD5oP0Q-cD88PIQ-OD2kP
+zI8PMQEPyZ8k8Q2mD8UP-Q-DD1cPwg_0D8APFQ_-CA_9D_IPuw9O12sRuNQlAIgPoSUPtA_lD7IP
+KQDLhVE-D64P0CaKAHYIEapVa5NED6cP7Q_lD5qCD-EKBQ_iD8IPoA_FD58PTA_eDxkPnQ-sD5sP
+w_gLgJkPhA_YD20PzIkzlg9PfA-RSQ_TD08Pkg9bD5EPbT4sEY_fWVDID40P8whG8QEPjA9bD4sP
+mQ_KD90PiQUB45DxBNEPhw8vD4cPlA_GDwAPhg9yD4VuWhFr2DswgwcD8HGyrg_CAgYP_Q_BD6jr
+WgH7WvES4Q_AD6wPgAcED1gEDzkEDyAEDw8EDwQEDwEECgQKBA8DDQBxBgQPCQQPDBwAgBMEDxcE
+DxwELUKhJwQPLQQPNAQPOz9C0EoED1MED1wEDAQPbwR1kfEEhAQPjwQPmgQPpgQPswQPwAQPzYkc
+EeqPcQDpD5MXD4EPJw_BDzhuHhJbvWrwBQcND5IND6UND7kND80ND_IND-cNQYVBIgYPObMt8ARn
+BgcGD5cGD68GD8kGD_IGD-wGo0DxBDIDD00DD2kDD4UDD6IDD78DD9y5MxMZih9TVw_ED3eaH-Ma
+tw_ED9kPhA-6D4QPHA_FDz4PhQ9hL4UPqA_FD8wPhQ-xD4UPFg_GDzu0LRGImz4ghguGM-ETDyUP
+hw9OD4cPdw_HD6APhw-KD4cP9A_HDx4PiA9KD4gPdSQdcIgPzQ_ID-pFDwDILhAD7msQ4K5r0YoP
+Pw_KD28Pig_gD4pbIBECLXoxiw9m3gGziw-MD4sP-w_LDzPGLVGcD4wP0R9t0Y0PPA_ND3MPjQ_p
+D42pIPMNGA_OAg4PiA4PwQ4P_g4PNA_PD24Pjw_oD48P48xb8ypaD5APlg_QD9IPkA8PD5EPTA_R
+AQgPxwgPBg_SD0QPkg_ED5IPww_SDwMPkw9DD5MPhA_TD8UPkw_LHiEPiuFtcZQPEA_VD1OaiXGV
+D9sPlQ8gbHqRlg_qD5YP7w_WCpBxfA_XD8IPl0QLALiQE5nAifEFKg_ZD3MPmQ_8D5kPBg_aAiUP
+5QU9ClF7D5sPxyIq8wScD2APnA_tD5wP_g_cD0gPnQ_W5y1QMw_eBgpIZfAFIQ_fD3EPnw-BD58P
+Eg_gD2MPoA_MfhEGlnoRobCN0-4PoQ9RD6IPpA_iD-hGD-EVoA_jD-UPow9KD6QPoA_kD-UPpA9L
+D6UPog_lD-kPpQIPpg_n4zEA21-zAKcPrw_nDwcPqA9gD6gPuvYtkW0PqQ-HD6kPIvN08QCqD9gP
+qg8zD6sPjw_rD_uRE7GsD6QPrA8AD60PXi0es60PGQ_uD3cPrg-VAS7zKZMPrw-yD68PUg_wAAwP
+EQAPcgAP0gAPMw_yD5QPsg-2D7IPWA_zD7oPsw8cD7QPfg_0D_EPtA9ETQ-RCw_2D28Ptg-TD7YP
+OEZCsbcPAQ_4D2cPuA-MsQQguQ9fmhH_jAkRuu88MTIPu0COMQAPvBAu8R-QD7wPOA_9D6APvQ8J
+D74Pcg__D9sPvg9ED78Prg_-DxgPwAYED_wED1YvwQ8sywExwg8CHmcAMySxww9GD8QPsg-EDx6s
+a1HFD-gPxbmGEdJdBqHHD60Pxw8bD8gBtwOTZg-JD9QPyQ9DVQ-xICEPywgHDwAPzA9wD8wP4A-M
+Ag-NBAsPMQ-OD6EPzg8SD88DCQ-1CQ9mD9AP1w-QegsTuxouUZ8P0g8SblzzI9MP9w-TD2oP1A-d
+D9QCD9UPww-VDzYP1g_qD9YPHg-XD5IP1w8GD9gPeg-YD_4P2A9jIy4RTMFxMdoPNpmKMdsPIBgk
+MdwPC7ITAGAl8wrdD2wP3g-iD94PWA-fCQ4PRQ-gD7sP4A8yVw9xHw-iD5YP4ocdkYQP4w-7D_MP
+c-g08QbkD2IP5Q-ZD_UPUQ-mD8kP5g9BD_cwbREx8oAz6A8hNS6REQ-qD4oP6g8CmThA6w-0D39W
+Eey_RPMRXg-tD9cP7QIP7g-JD_4PQg-vD7sP7w81D-APrg-wDyc_LqAaD-IPlA-yDw0PNYCA8w8B
+D-QPei_Dc-MO9Q-oD-UPYQ-2D9sP9g9VD-cJBQ9JD-gPww-4Dz1gD5ExD-oPqw-6DyXVczH7DxqI
+NLH8Dw4P-Q_ID-0PAtRIsf4FCg9xD-8P6w--YxtT4A8AD1pILoBODwINDA9DDzd0gAMPNw8ED7EP
+9zGRBQ_lDwUPHw8G5gNxEw8HD44fB_0FAI9sMwgPdU4uYGkPCg-jDwIoMAsP1hF-AFtFAFEAEQ3B
+NfECNg8OD68PDg8pDw8Pog8PDxt7BHMQDw4PEQ_HZw-wEXkPEg-yDxIPaw8TD_MPEw9cDxQP1Q8U
+D00PFQ-GDxUP2JnxBrYPFg8vDxcPpw8XDx8PGA_XDxgPD14u8CUZCgAPdg8aD_0PGg9lDxsP3A8b
+D1MPHA-KDxwPQQ8dD7gPHQ8vDx4Ppg8eDxwPHw_TDx8PD2YggA-ydDMgD2xwLvEEVw8iCwYPQw8j
+D7gPIw8tDyQPo1g_8QwlD4wPJQ8BDyYPdg8mD_oPJg9fDycP0w8nD0fWjTMoDy9xD5EWDyoPiQ8q
+D-wyOTErD_ICe-AALA0BDzoPLQ_sDy0PHg8u_xQRDEk4ACZ1MS8PViplAoEuMKkPMbU-8QKKDzIP
+_g8yD2oPMw-aDzMPSX0ZMTQPKJcFIDUP3SHAdQ82D_MPNg9SDzcEziMBiy5BDwkPOQqI8AHjDzkC
+DzoPvQ86DykPOw_Ws4HxBDwPbg88D9kPPA9FDz0PsA89DxstBwDzGTM_D1p5D-EOLg9AD5gPQA8B
+D0EPag9BD9MPQQ88D0IPpA9CDw2fWWBDD9wPQx85j8FEDxIPRQ95D0UOBx_VLoEPEQ9HD3cPRyFB
+kUEPSA_mD0gPCgAt8xRJD9MPSQ82D0oPmg9KD-0PSg9gD0sPww9LDyUPTA_HD0wP6Z4u8QasD00P
+DQ9OD20PTg-OD04PLg9PD46jUEBPD00Cd3IxCg9RMxsAihkxJQ9S4TVT4A9SDz1_D0D2D1MP_ofx
+Bq4PVA8JD1UPZA9VD78PVQ8aD1YPdPITMVYPKMFk8QBXD9oPVw8zD1gPiw9YD_NOGwKuLuDqD1kP
+QQ9aD5cPWg-tD0V98QZbD5kPWw-uD1sPQw9cD5cPXA-rD1w1G9GTD10P5g9dDzkPXg_LE0ICti4A
+oAnxBtIPXw8jD2APdA9gD8QPYA8UD2EPY8JpsGEPAQ9iD08PYg_eTHfzAQ9iDzkPYw_GD2MP0g9j
+Dx_LD-EGtg9kDwEPZQ9MD2UPlw9lD_EPZQ8rH1tgZg_9D2YPcDGxTg9nD5YPZw-eD2eoQDFsD2hX
+gRP5zS6RhA9pD8kPaQ8NfSsRaokmINkPtVkRa8IfkaEPaw-jD2sPJI5tQGwPpg_wj3NsDycPbQ9n
+f4wx5Q9tgRJRYQ9uD5_RMxBuvT_AVQ9vD5IPbwvGHfECcA9DD3APfg9wD7gPcA-yD3ByEhNklA-x
+HdQPcQ8MD3IPQw9yD3oPcg_xD3IP5w9yDxwPcw9SD3MPhg9zD7sPcw-vD3MGpgGzdA_ID3QPuw90
+D_3qLvEATw91D4APdQ_wD3UP4A91LSPxCT4Pdg9tD3YPmw92D8kPdg-2D3YPIw93AqI9QacJD9Lo
+CVMnD3gPUTktcaQPeA-MD3hJLVMcD3kPRFktUZEPeQ_3YzRieQwPeg8neC1BAwUPknCcs9gFD-oF
+DxsPew89eU4Aoi0AFGgxvQ97GDvxBPsPewAPfAgKD1QKD3EKD40KD6mYKRHgo5-zDhQPfQ8uD30P
+Rw99D2APfQ94D30PkA99D6gPfQ_-05tR7A99DwG8gDN_DyslLgD9LkFnD34F-Wahnw0PsA0PwQ0P
+0k4LM-INDFsuAIZOEy1rLhdIkQ8TbFttEYMvZjN-D5ebLlOpD38PsqsuE8LbbQC7LhHWflQCyy4I
+Ay8f8pUPDBP8uQ8AvlQSvHyNIw9hnI2j3g0Pjg0PNQ0P0uWNY_8KAwoP5SKOQLYFDxAaPhF5XY7x
+AOcJDxwJD0gPdg9rD3UPhXWjAMgoAoQPEJTudlADD2gPbsshMRoPbK8806oPaQ9nD2gPGw9nD8c-
+HzEJD2OrRzEsD2DuRnExD10PqQ9bgnIRhf5NAS6MAHUPEOuZmxECKz8RtV1kADkzgUkPSw9HD3EH
+RwsTr28P8QDYDz0P5g87D_8POQ-0CAHLB3AzD_gPMQ-d4YEzLQ_6ZQ8wiw8nTpoRT0gGESH-RLHi
+DxwPuQ8aD44PGDqQQTIPFAxMawA0mBENpF6QNQ8JD-8PBg-JX1izDA9cDwAPJg-_D_9TD-EAhA-3
+D08P9Q8aD-MP5w-wgHoAolpRVQ-qDygzZTPlD9JODxCFdxAx3Q9CJhYg2Q83fPMB8w-UDg-SD88P
+0A-CD84PuUUP0bMPyA_2D8YPvQ-ED8oXe-IEwA-wD74PCg_9DyoPuw9PD7kPeT4PYA4Psw8aD6eg
+8AKwD6MPrg-xD6wHD6sPoA_pD8hMU2kPpg-YNQ_xyg_hD04PoA-aD56WUnEHD5wPqQ_aoAUxBA_Y
+ooUTfy0PERtEWTGRD9j9SQAxHFGOD7QPjRCaEsiZHhP-mR4RWqSYsIcP2g_GDygPhg9-6QARhEuX
+AFuXETm_LiCCApd88wyBD40PgQ86D4EP8A_AD7EPgA97D4APTw_ADy1RHgDBPBYBBAAgDAa8HfEE
+BgYPCAYPCwYPDgYPEgYPFgYPGtEdwCQGDyoGDzAGCAYPPbQOcE0GD1UGD17CDvMVD3AGBQYPhAYP
+jwYPmgYPpgYPsgYPvgYPywYP2AYP5gYBBg8DKGsAG0xTMQ_BD0F1HpNjD4EPdA_BD4aVLbGrD4EP
+vg_BD9IPgQtNMPoPgawPESTUD0FPBA9m5VHhlAQPrAQPxAQP3AQP9QRlmPECKA_DD0IPgw9dD4MP
+eA_DD5OPWfMEgw-LD4MP6A_DDwUPhA8jD4QPQO08E32iW9O8D4QP3A_ED-wPhA8dPQ8xXw_Fd3qg
+pA_FD8YPhQ-pD317EYYXGFBVD4YFACiQUMUAD_oAwwkQCOproAAND64ND9YND-_MjjGID1KBoABv
+XQDWEDOID-yAHvEGUw_JD38PiQ_sD4kP2Q_JDwYPig80ihaRig_RD4oPwA_KLXcASFdxTw_LBgoP
+sdQuURQPjA9GVRXwCYwPqw_MD94PjA8SD40PRg_NBQkPrwkP5OwZEY4pCBGF1itxjg-zD44PKp_T
+cY8Pmg_PD9JfIjGQD0QPcxGQvk-wEfIPkA8tD5EPaA_RD6MPkQ4LDxsPkg9XD5IPlA_SD9EPil6Q
+kw9ND5MKAw-K4wYCRQ_RiA_UD8gPlA8IwgKxlQ_KD5UPzA_VDw0XpJGWD5IPlg-VD5amCgAqCJGg
+D5cP5A_XDygrEvEMmA_zD5gP_A_YDz4PmQ_FD5kPyw_ZDxIPmg9ZUxLQmg-pD5oPMQ_bBQIPw08L
+MZwPVl1MUJwP6g_cnJVxBgwPywwPFjgI8QieD68Png-7D54PSA_fD5UPnw-jD58PMeUFcaAPzQ_g
+DxzgB3GhD7oPoQ8KczFyog_qD6IP_1EPsAwHD_8HD0EPpAMBhnxwOA_lCgQP3vNCUKYACA-a-UEA
+Y0Bxpw-ZD6cPLiM-EaigExEw4ozxKqkP3Q_pDzUPqg_MD6oP5A_qDzwPqw_UD6sP7A_rD0UPrA_e
+D6wP_A_sD1EPrQ_rD60PBQ_uD2APriUj8QYWD68PcQ_vD8wPrw8oD7APhA_wD_CcChGx3Ypg9w_x
+D1QvfXjzCLMPbg_zD8wPsw8rD7QPig_0D_kPtA9ITw9xCA_2D2gPtswEESnfIJG3D_oPtw9MD7ho
+I1EPD7kPcUVCAFGm8Q66D5gPug-7D7oPXw_7D8IPuw8lD7wPiQ_8D_0PvIhIkLYPvQ8bD74GDQhl
+8Q5KD78PsA_-DxYPwA98D8AP4g-AD0gPwQ_vD8EPFvgmUcIP5A-CzwrxLrMPww8bD8QPgw-ED_sP
+xA9TD8UPvA-FDyUPxg_OD8YP9w-GD2APxw-KD8cPNA-ID54PyA8ID8kPcg-JD91enwJeD5EdD8sP
+iA-LD-STg6DMD8sPzA83D80HoZtRzg97D84ooPEcVA-PD8EPzw8uD9ACDg8JD9EPdg-RD_QP0Q9S
+D9IPwA-SDy4P0w_cD9MPCnMYMdQP56c5ABCBYNUPNA-WB9M0cdcPgg-XD-KZk-EC2A-SD9gPQg-Z
+D7IP2Q8iD9ouUvEEAw-bD3QP2w-kD9sPVQ-cD8YP3O8bAP0BcBoP3goFD-3oOFHfD_AP34wLU8QP
+4A82aA8A_4JRjQ-iDwBwSDHjD_VoC-EI5A-LD_QPPg-lD7EP5Q8kD_YPlw-mDwpbV1HnD-EP57uj
+MdgP6BoMkcAP6Q80D_oPp7GSAM8kMOsPBMB18Qkv7A9gD_0P1Q-tD0kP7g0MDzIP7w_nD_-jidGQ
+D-APBQ-xD3oP8Q-viJTwD-IP2Q-yD04P8w-DD-MPOA-0D60P9A8iD-UPlw-1DyqfcYIP9g-3D-YI
+pxHiYZRz_A-MD-gPQnEP8CctD-oPog-6DxgP_w_ND-sPAw-8D3gP-AwDD2MP-Q-ZD-0PTw-_D8QP
+-g86D-8Prw--DyUPAALdL_EBAAQP_wQPcQ8CD_YPAo5KkdIPAw9HDwQPvWNGkQUPqA8FDx0PBrAT
+UQgPBw994pJRBw9oDwhcbZFTDwkPyA8JDz2FFwATj4ALD50PCw8SD39CIAwDSGlADQ-mDzJeUQ4O
+Bg9E_QLwAA8PLg8QD6IPEA8XDxEKCURlYHQPEg-pD0hqcRMP0Q8TD0VvX-EGFA8tDxUPoR8VDxYP
+iQ8WD-0PFg9wq23gFw9XDxgPyw8YDz4PGQ8KnZElDxoPmA8aDwtEGlAbD-APG0EcIQsHzpkAXzEA
+7g4wnw8e-QgRg_Z88QQfD2cPIA-ZDyAPSg8hD7wPIQ8tnpTxCCIPEA8jD4EPIw-yDyMPYg8kD9MP
+JA9ErRfxBiUPJA8mD5UPJg8FDycPdQ8nD_QPJ_IsU8QPKA8zeQ8REhImICoPOZwRXqRAkSsPOw8s
+D6kPLAiM8S6FDy0P8w8tD2EPLg-ODy4PPA8vD6kPLw8WDzAPgw8wD-APMA9cDzEPyQ8xDzUPMg_h
+DzIPDQ8zD3kPMw-kbZqANA_7DzQPJg_slfEGNQMFD2YPNg-RDzYPOw83D6UPNw8P7UrQOA-iDzgP
+Sw85D7QPOWtO8QUADQwND1YPOw__DzsPJg88D44PPC4hYF0PPQ-EDy9OMT4PksScAF5oAoMPsSoP
+QA_QD0AP9Q9A9B3xCsAPQQ8kD0IPiQ9CD_0PQg9RD0MPtQ9DDxlbO3FED_APRA9DUlLxCEUPCA9G
+D2oPRg-MD0YPLg9HD5APRw-xCkmxSA_zD0gPFA9JD3S8IgBVEPEOSg_UD0oP9A9KD1MPSw_yD0sP
+EA9MD28PTA-ND0zHTpGJD00P5g9ND0PPCWBOD-0PTg-raIG2D08JD1APbdh-8QBQDyMPUQ9_D1EP
+2Q9RDzN9onNSD_cPUg9Akg8R8mEA4FQPow9UD-sPVA9TD1UPkXERAn1Z8QJWD7APVg8GD1cPXA9X
+D7IPV9SGMV0PWEUVUQYPWQ9b1FJxWQ8CD1oPVhVTIFoDwZ3xBFsPoQ9bD-MPWw9ED1wPlg9cD_fi
+XvAQXQ_ID10P2A9dDygPXg93D14Pxg9eDxUPXw9kD18PsopGMWAPTpcbMmAP6LhdsYEPYQ-ND2EP
+GQ9iSquArw9iD-oPYg_ufTGOD2N8FBMhlg-wIrMPZAMED0QPZQ_MD2UP0w9lDxoPZg9hD2YPpw9m
+D_0PZg8zD2cPeA9nD74PZw8CD2greREKpWtxEg9pD1UPaTpI8QDaD2kPGw9qD10Pag_eD2pulpEg
+D2sPYA9rD6DxWMBrDx4PbA9dD2wPmw91S7FsDxcPbQ9VD20Pkkos8QhtDwoPbg9GD24Pgg9uD70P
+bg-4D24PMlofMW8PppUFwG8PGA9wD1EPcA_JD3Kps3AP_A9wDy8PcQ9mnA-xA9IPcQ8ID3IPPS9y
+D6cPcg-bD8erEUIFH3FzD6cPcw-ZiWvxBHQPPQ90D24PdA_eD3QPzw90D-4SS3F1D10PdQ_MHVkA
+fSQxdQ8WujvxGnYPcA92D5wPdg-ID3YP9A92Dx8Pdw9KD3cPdA93D54Pdw-ID3cP8Q93rFGQQg94
+D2oPeA_SkB3xEQ94D_APeA8HD3kPLQ95D1IPeQ94D3kPnQ95D8EPeQ-lq6ryAHoPLA96D08Peg9x
+D3oPk0If8wwLDg-3Dg8YD3sPOA97D1cPew92D3sPlQ97D7ToLlPvD3sPDB_r8gpGD3wPYg98D30P
+fA_YD3wPsw98D80PfA-noz4jDxo0XgCxMXFiD30OBw_RQI3SvgcP0wcP6QcP-gcPEq0_cQ0AD00A
+D2AMGEGFAA_W2jgguADKryDYAEFt8wH3AA8GD38PFA9-DyIPfw8vJY1XSQ9-D1WxDwCtblCBD38K
+DHRHUJ4MD6cMW5XxDbcMD78MD8YMD80MD9MMD9kMD94MD_MMD_gMD_ymIfEI8wwP9gwP_AwP_gwD
+DA-9DA-_DAkMD-vXZRHLoZWwYQwPFgwPvAAPVABnPyFYB-1dESPqL8F7D7YOD_oPeQ8QD3niXQDI
+jBEwsgEAojAjdAuEDwCejDEGD2-KLlM7D2wPw8IuAHGMEBM-EhEEWowS_rQuUR9dAA9bqy4xoA9X
+-CgAcw9xig9RD28PT5wuAP2LEuuULgA-KREbPV0RP82LAJFiAIMuALiLQbYPMw2jQxEumIsAZg9h
+Ew8nBw8kbS4wRg8faYsRAaRjURcPrg8UuR4AQIsRo2pUEQkpi1CKDwQLD4N-Qf8PbQNVDxEG3ZIR
+9D8uAOGKEUbcHRHpyooRTc8KEeGyipFwD9wf2Q9GD9eSigAgLhGrLSgRzUUPEUHGaxHFES4xEQ-B
+dR6Wag_8DyIPug-hPQ8QU4RXEa8LigADigD0LTEdD6dZTgA1D0B1D6EP1YkR5QeZEZxdLADdLVNO
+D5cPxS0PAJWJMXYPkc4tEtV3iTAID4wePABdiQAkDxEtACwghw_2LVORD4UPznlbAAojE9qsLQA_
+SxNnpC0Tt_2IE0JgLRYIEw8F8EsTBC8PABwAGwqYLRMYw2oTIkdbAF8PUzMPgA85nC0TR3cPElcE
+LvACCAIPcQIPewIPhQIPjwIPmgKzG3CxAg_9Ag-JVohx4wIP8AIJAhtW4RsPgQ8qD4ENBg9JBg9a
+4UsgewbbtfACngYPsAYPwwYLBg-pBg-9Bg_zJ4AlD4INDA9PDFFdcXsMD5EMD6gyA7PXDA-vDA8H
+D4MPICQQADIWANJrU4YPgw_hl6cR195rANScM4QPLFQQE2YXTHChD4QPwA_Ep6chCQQoD1M9D4UP
+Xa2nU58PhQ-BHUwxBA_GtadRSg_GD22BATGGD7UJKiCGCcknM4cPSSRMAMcQcbsPhw-iD4fnPBIx
+y6exDAcPqwcP1AcP-QcyD3FRD4kPfA_JvqZA0g_JCWutAeg8Iw_DtC0A3KegDAoNCg9pCg_YCuGn
+8QP3Cg8nD4wPVw_MBwMPuQMP6gM1TLFOD40GDg_zDg-nDogS0k4PjgwFD7cFD_wFDyG-mFAOCA-D
+CJa08h8wD5APaA_QD58PkA-XD5APEA_RD0kPkQwCD7sCD-UCDy8Pkg9pD5IPpA_SD98PDahxVg_T
+D5IPkzusEgsqDxEAczNRAQ_VD0BTJPMElQ_9D5UP-Q_VDzwPlg98D5YPvUxMkz4Plw_AD5cPwSyo
+UEUPmAcE3pGTDg_ZD1EPmQ_VVExTHg_aD2M5qPEA7Q_aDzMPmw95D5sPvw_bQ6jBTA_cCwkP2wkP
+Iw_dSKjxAbQPnQ-8D50PRQ_eCAEP2AFzClNsD58Pt2FMcE0PoAQND_TnRwAnJBGhWqhxFg_iD2MP
+ojS3E-56HtOaD6MP6Q_jDzgPpA_HbKhRJg_lD3Yhb3OlDxcPpg9nbkyTCg_nD1sPpw_tfKgxUg_o
+aH6B9w_oD0sPqQGoPwB2THGaD6oP7w_qiahRmQ_rD_5YGTKsD5mRqJEPRg_tCQMP8wPTR_CiD64P
+_Q_uD1EPrwoGD0syAJ_oorMPsA8MD7EPZQ_ETACnqNBzD7IPzQ_yDygPswwFJ0JwOQ_0Cw4P8I5c
+AjMPUQQPtg9h6Q4xtg8brSbzBLcP1Q_3DzMPuA_RD7gP7w_4D02QTJILD7oPag_6D8nJqEAHAg-o
+PVoRvA2aUwkPvQ9pl0xTKw__D43WqHFQD78Psg_-nZcTdt6oUTsPwQEAn0wTZOSoEStqqhHDkg0A
+PHMRvP1wcsUPhQ-FD_qnTPICDggPGg-HD38Pxw-lD8cPSw-7qBEXeaNzyQ-kD8kPSzcP4hkPyw_A
+D8sP6A-LD08PC6nTHw-ND4cPzQ-vD80PWBOp0ykPzw_SD88P_w-PD2QbqcE3D9ENBA8KD9IPdA8h
+qSMPSM6ZUxwP1A_HK6kRXK9xEdU_iBOdM6lTdA-XD_DHTBO3O6lRjw-ZD-u5OJHaD9QP2g9AD9uU
+hzPcD4fNTABLqfAAzg-dDzsP3g_oD94PFg-fU6lhD-EP3w9fnC4AgaACRA8RF14EkeIP8w-iD2IP
+42SpQD8P5AOntzPlD4tqqQDdTJPYD_YPRw-nD7ZyqdGVD_gPBA-pD3QP6QoGeKkiww-lTHGjD_sP
+Eg-sgKkx8g-sSrbzANMP7Q9DD_4FDA8jD_8PlO1ME3WOqUBWD-EInpgz8g_olKmTiQ-zD-oP8w9r
+80zxAk0P9Q_9D-UPLg-2D58P9g8RIzTzAPcP8w-3D2QP_A-VD-gPRkoP0ygP_g_aD-oPCw-7D3y1
+qVFfD-wP0KdVM-0Psr2pAC9BEQaoJzH-BgfDqRHM8nRxAQ_uDwEPIJiQMQIPAwlNU_UPAw9W06lg
+OQ8FD6oPsxkRBnEjANupIG4PaUcRBxNNE8LjqVGkDwkPFZafMwoP9_upk9gPCw9JDwwPuhtN4JsP
+DQ8MDw4PfQ8OD_0P6y0AhxHzAA8PPw8QD68PEA8fDxEPkM4e0nAPEg-gDxIPUA8TD8AMqkENAg8Q
+cGIxFQ-vhgwRFjBNsT4PFwMBDx0PGA_MUBAADFqRGQ-ZDxkPSA8aIaoSJjhNEA-CBRNyKaqxTg8d
+D70PHQ8rDx4QBREHogkzHw-jw5oTvjmq05kPIQ8GDyIPcw8iD_BBqhG6PoszJA_U05oRbR8YICUP
+EHtRsQ8mDx11BnEnD-UPJw9gVIUzKA83ZQ8ACJWTeA8qD_MPKg9OYqrTIw8sD40PLA-3DywPYWqq
+ETVUdiAuDzoU0XIPLwkAD0QPMAMODxVqKhExdqoTT2ZNER_in9EzDAQPVg80D70PNA8kNpARNYWq
+U1kPNg_-cE0RjHgCMTcPWPMiczgPIw85D4iWqpNSDzoPtw86Dxx6TZHkDzsPSA88D6z5bTE9D3OP
+pdM9DzoPPg_dDz4HCg9iaw8RJ5qB8QpAD_oPQA9MD0EDBQ8OD0IPbw9CD9APQg8xHznxBEMLCA9R
+D0QPsQ9EDxAPRQ9wD0X-hBEukxYzRg-ry6oTp45NU2IPSA-A1KpQeg9JD9aQmABLRALbqlNHD0sP
+opVNIlkP46qxDg9ND2gPTQ-DD03hAQDrqlHQD04PKWs2AZ1NAAQ_EYtNYJFQDzsPUQ_SD1H6qtNA
+D1IPlw9SD_0PUg9Ebg9R7w9TD0XQkADqnYFUCA9VD5gPVSsaEUCnBzNWD_etTQAnCDHfD1cuSQAZ
+q9PVD1gPJg9ZD3gPWQ-IIasTabVNEQmHDxFbKasx9w9bYy_BlA9cD_IPXA5sijNdD8u8TRNkOquR
+-Q9eD0kPXw_U0gQCQquRdQ9gD78PYA8JC1oRYUqrEubITVB3D2IPv1GrAW4vs2MPlg9jD90PYw8k
+dw-TsQ9kD-YPZA88D2UPgWSr0wsPZg9PD2YPkw9mD9ZsqxFdLmfxAmcP4g9nDyQPaA9mD2gPpw9o
+_qUiKS94qxPp3k1TaA9qD6eAq5EjD2sPYQ9rD59suCBrD7yOU1UPbA_R5k1ACQ9tD5CrAOkskrkP
+bQ-zD20PLZirQA0GD9mIChFv7iAAbEfTuQ9vD-APbw8nD3APXaircMkPcA-_D3AGFBNofA-R0A9x
+DwQPcg83D3IPamQN0XIPzw9yDwEPcwQCD2TGZRHFdQkAXDsRVV118AN0D7MPdA-hD3QPDw91Dz0P
+dQ-JqxOXBU4AsQUxGw920avRcg92D50Pdg-HD3YLAderU0QPdw9tC04Tvt_r0w0PeA80D3gPWw94
+D4Lnq5PND3gP8g94DxcTTvEEYA95D4QPeQ_nD3kPyg95D_0Pefqr0zEPeg9TD3oPdA96D5XDLjHV
+D3r4UlAUD3sECTRdsHAJD40JD6sJD8gJy0oAG07xCR0PfA84D3wPUw98BgwPiAwPogwPvAwP1a1F
+EweIPVI2D30PTjYeFAl5D1C8Bw-RB52-IfoHJk4TIiesE0fELkFsD34HHEnwAp8KD68KD78KD88K
+D94KD_0KRqQAbT4TF5keALdtWj4Pfw9KgA-gAQMPgAMPigMPkwMPnAPFpqGtAw_1Aw_8Aw-DCBoR
+0L0_oNsDD_ADD_UDD_l5RnELAw-0Aw-20T7B_wMP-AMP-QMP-gMFuCog3wPqO3BhAwUKD4IKbxlQ
+RAcPgQyfIABZPgAMRxGNjU9Qdw8JAQ9CbSEtAmwPYfkPbw8-BhltEY24ITFoD4qiITFkDzoOjCFf
+DVCqEVvSbDA1D1ZeDzELD1CybDFwD0ujbACbbBPEVg9xvA88D6cPOcNYQFwEDyjyDwJNDwBObABG
+bAA_bAA3bAAvbAAobABHDwAabDAZDwsKbEAPKA8E-GsxBA-9QA8xQQ-23GsxVg-vzWsxdw-ovWsA
+OA8RTGM9EdqfawCXa1MaD9EP4jIPY48PxwEPxGhrQb4GD7tQawCjLQBAawAfVBFswjgATxoAZQoC
+Ig8h8A0DawD7ahBGkCxRmA80D5YYDzFyD5LOajEDD48tAUPqD4sKEQ8AoGoTwJBqE7OCajEED4MJ
+D0CzD4EACggCUmoTMdsOHwHvWgQXB0JqEw-zWhMXK1slHw_bPIAAAw81Aw88A6s0cEkDD1EDD1n9
+AXEPagMPcgMM1SxBjwMPmloCobADD7sDD8cDD9NOAhHtLwLQCAgPFggPJAgECA9CCKyJ8QFhCA9x
+CA_CCA_TCA_kCA_2wMVA2ggP7d_bUYIPEw_CRHQTO5w8EWT2nzOCD49OagCyelHSD4IP6cllASBc
+IA4F5azxAWEFD3oFD5QFD64FD8gFD_PIGQAtEPMCNA_ED1APhA9tD4QPiQ_ED6bOeZPhD4QP-w_E
+Dx4ED6FcD4UJBw_bBw_7Mq8Q-YM3M4YPP2stYIQPhg_mD_6oMYYP7F03c4cPNA_HD1hbuFGiD4cP
+x9tcMYcPEyY28wSID2APiA_HD4gPrw_ID9cPiA--Ox4xUA_Jpb4gog-hiiCJDwmsUSEPig9MfZHw
+DYoPog_KD84Pig-6D4oPJw_LD1MPiwgCD64CD9wwJgAyiQKBLbGWD4wPxg_MD-UPjEdWkVYPjQ_H
+D40PuPZsMY0PG-eOAJKQ8QqOD7IPjg-lD44PGQ_PD0wPjwMLD7ULD_kLii0xUw_QKj9Rvw_QD-XZ
+RjGRD2OqqvEGkQ-RD5EPCQ_SD0EPkg96D5IPsg_ShqXRJQ_TD14Pkw_YD5MP049tASYPIAUBPEAQ
+__ZAkZUPcw_VD7APlUCWkSoPlg9oD5YPpkmM8A6WDyMPlw9iD5cPoQ_XD_APlw8gD5gPYA_YDQYP
+4ekJ8RSZD2MPmQ_lD5kP5w_ZDykPmg9rD5oPrg_aD-EPmg80D5sPd89P8wybD-8Pmw9ED5wPiA_c
+D80PnA8TD50PWA_dD56lLZEqD54PcQ_eD7g2tfEDng9HD58Pjg_fD9YPnw8fDQ9nhiQQ_Q8oEaF6
+x1HWD6EPINo1kaIPtg_iDwEPozIP8AaXD6MP4w_jAA_kDAoPyAoPFQ_lD2JYrCEPpQaP8ARLD6YP
+mQ_mD_cPpg82D6cHBA-U3TlzqA9zD6gPw64tcWQPqQ_0D6nOC9FWD6oPqA_qD-kPqg9LcH7wCqsP
+8A_rD0IPrA_VD6wP6A_sDzsPrQsOD_MWSGGuAgkP3wmwLbGJD68P3g_vDzMPsFtfEd_IQTCxAgg7
+qvEFOA_yCwMP5wMPPg_zD5YPsw-tD7NSOJOeD7QP9g_0D081DwDCcfEGWg_2D7QPtg8ND7cPZw_3
+D8IPtw8cW4TxBLgP0Q_4DywPuQ_HD7kP4w_5Dz5SmvMAug-2D7oPUg_7D68Puw8Lvy0RxSEUABI1
+Ub0P3Q_9JRpxmQ__D-cPvrAosLMPvw8SD8APcQ-Amr3wAQAPwQ_OD8EP7g-BD04PwgmrCgLLLUHO
+D8MAN23xCsQP8Q-ED1IPxQ_zD8UPFA-GD3YPxg-YD8ZtkfEsnA-HD-4Pxw9gD8gPww-IDyYPyQ_I
+D8kP7A-JD08PygMBDxYPyw95D8sP3Q-LD0EPzA_lD8wPCQ-ND248cfMYzQ83D84PnA-ODwEPzw9m
+D88Pyw-PDzAP0A_WD9AP_w-QD2EP0Q-H4y3xBpMP0g-5D9IPYA-TD8YP0w8tD9QPlCNicdQPYg-V
+D8lSY-EE1g_YD9YP-w-WD2cP1w-PD9cPN4Fhc9gPBw-ZD2-sLRFAcCDxCNoPEQ-bD3kP2w-iD9sP
+Sw-cD7QP3A8eQZ4x3Q-wLTnR3g-DD94PLQ-fD5YP3_ksIGoPJMgz4A8_Sg8REzqU0eIP6A-iD1IP
+4w_9D_NVHFGSD_QP-cU18QjlD9MP5Q8_D_YPqQ-mDxQP5w_AD_cP6zMLU_gFBg8u-C0RBUOW8Qbq
+D9wP6g9ID_sPtA-rDyAP7A_MD_xWoeBkD_0P0Q-tDz0P7g_pD7KJQO8Pgi8nVQAjkTPwDzQBLvEC
+DQ-yD3oP8g-nD-IPVA-zD8GrHGD0D5oP9A-TNvEKdA-1D_EP9Q9OD-YPuw-2DygP9w_VD-cPA8cZ
+AExUM-gPSlQP0SQP_g_SD-oP-w-6D2yAEPAA_w9HD-wPtA-8DyEP-QsNXLEAnDmA1w-_D0QP-whc
+a7MAD4wPAA-5DwAPZxQusUEPAg_vDwIPHA8D9G8AbQBgZA8ED9EPjYNABQ_sDycG8QAGD4YPBg-z
+DwYPYQ8HD86vF0AID6gPMJ4zCQ_CIC7RXA8KD8kPCg82DwsPo0yacQwPfQ8MD_kvskAND8MPehMR
+DinLEQnQCvMEDw-iDw8PTg8QD7sPEA8nDxEPlFsP8QBsDxIP2A8SD0QPEwgKDx3sQvEIFA-0DxQP
+YA8VD8wPFQ84DxYPow8WDw95hhEXHKvTUQ8YD70PGA8oDxkPk5VcMWkPGpIIUT8PGw_qEckRHNc4
+8AXqDxwPVA8dD78PHQ8pDx4Pkw8eDQlX8wQfD9EPHw87DyAPpQ8gDw8PIQ94Ny6BSw8iD7QPIgfe
+FfEAIw-wDyMPWQ8kD8EPJA8q8gUAmy-xBiUPYw8mD8wPJg80DycPnA8nDwQPKNZpU9MPKA87Yg8x
+Cg8qTpYR2NGpMSsPpnwQALU6ALVPsSwPQA8tD6YPLQ8MIYmALg-YDy4PPgBgBVAJDzAPbm1fA0ku
+8ACdDzEPAg8yD2YPMg-LDzKYMtGTDzMP9w8zD1sPNA_-F5UxNQ_GFn6xNQ9MDzYPrw82DxJCTRE3
+hwMSOVMu8Q0NBA9fDzkPwQ85DyIPOg_EDzoP5Q86D0YPOw_naKURPFWH8wzIDzwPKA89D4gPPQYO
+D0gPPg_nDz4PBg8-D2VrD-EMIw9AD4IPQA-gD0APPg9BD5wPQQ-6D0EPVw9CP73wBBIPQw9vD0MP
+zA9DDykPRA_FD0Q0jgC4MaKZD0UP9Q9FD1APZi7xAAcPRw9iD0cPvA9HDxcPSPC48RzLD0gPJQ9J
+D34PSQ-YD0kPMQ9KD4oPSg-jD0oPOw9LD5QPSw-sD0sPRA9MJhYT824u8QChD00P_A9ND08PTg_l
+D04ZUCBRD1to8BVPD-wPTw9SD1APpw9QD-wfUA9RD6QPUQ-5D1EPTA9SD6APUg-tXxNHdg8ApW8R
+P7dykVQP4w9UDzQPVTIn8QbXD1UPKA9WD3kPVg-JD1YPGg9XD2ozQ0BXDwkvGVcxWA-2N30Cei7x
+AuEPWQ8uD1oPfA9aD8kPWg8WdGzxAFsPrw9bD-sPWw9HD1wPkwdK8AdcDykPXQ90D10Pvw9dDwkP
+Xg9TD14PN78T5oIuEXkgmNFfDwoPYA9SD2APmg9gqr0RKUTKAP8V8QJhDQIPQw9iD4kPYg-PD2IP
+FKDKAD0rc2MP4g9jDyd7DxGuPiMAn5fxFmUPdw9lD7oPZQ-8D2UPPg9mD4APZg-BD2YPAg9nD0MP
+Zw_DD2fcCwCqKxFDKkeRaA-BD2gPAA9pkC5xfA9pD7oPaSd4ETX1DvEAag_uD2oP6w9qDyYPaw9i
+uRfwA2sP2Q9rCg9sD04PbA_ID2wFCUNrIjQvkC6x3g9tDxYPbg9OD25ahBG8tKbgbg8pD28PXw9v
+D5UPbwFtC-ABNA9wD2gPcA_dD3AP0A9wD3sPUzcPcQ9qfw8xzw9xDbkRMppOEXJLDDHFD3I-iPEC
+JQ9zD1QPcw_ED3MPsw9zD_FjxiF0DlucIJgL7Jkx8gsHuYkRdVtrANe0McwPdWFrkCEPdg9LD3YL
+CHLREcYdRlMXD3cPP4xrwI4Pdw_1D3cP2w93D30sAKIu000PeA9yD3gPlw94D7sAH-EdAw95DycP
+eQ9KD3kPbQ95D48PeQ_xD3kP0w95D-QPeQ8VD3oPNg96D1YPeghzHkG1AA-Ur2TTEQ97Dy8Pew9M
+D3sPaUQ_MaMPezNsUdsPew-2N2wRfAOsAAUfdGAPfAAED5NdKhHdXSoArAXxCiMPfQ86D30PUA99
+D2cPfQQGD5IGD6cGD7vaSBHjamdTCg9_Dx2qbBNCti7wCGUPfggND4cND5cND6cND7cND8YND9UN
+xsYQ8RgjUw0Pfw8as11TMw9-Dz_LDxNWiw9gaw9-D3UvMCoCt10Tmk0_F6u8LhHBFxgCRKwEUT4T
+3p_cE_fALhPuwC4ANT4X98ddDMQuABwAE8N8APECzw0PDg0PHwYPAQQPtgAOD3kwEQDnTQDhTQCc
+D1FKAw-OCcBNQV4PZwlkMgA8IlFeD7sPWpRNAOkeENyQHBFLdE0AbE0Agw8Apw0AVE0ATk0ARk0R
+pOZEESUwTQAoTQAgTQJnuTAND1MLDhEDT5gAbQ8A7EwxBg-w3Ewxaw-mZQ8R9UiMEdi3TACvTCG0
+AZ9MIQMFVpkAh0wAVQ8xwQ_xckwAa0wRuodbEaPdmABMTABETBP_Rw8ALUwAJUwxHQ_NX5hgKA_J
+Aw_H-ktDH4QPUzUPE3vaSxNf-h0XAQQADy8PARMLL6cTEnV5GxkyHhIsKmoBzksA0D5xRQ_AD0wP
+gIF5E1uHp9BrD4ALAgYCD4YCD5ACNh4RpHe1EbocE0HRAg-djaYh9gJrLUARD4EHN7cApsCwSgoP
+WQoPaAoPeArWTBGZlTFBugoPzBQSEPAtWzGCDxWBgzeCDzxBDwAKExGNhntxgg_4D4IPzaDGMYIP
+_h5GAnMtMD8Pg1HA8wgDDQ_IDQ_hDQ_6DQ-TDQ-tDQ8HD4QPIl1qEVdABBGElpcRq2qZ8QGED_QP
+hA8BD4UHBA88BA9aZT1xlwQPtgQP1nYDExVkahNWdMcRmcy5cYYP3A_GDAB-jZFED4cPZw_HD4u0
+XLOHD9MPhw-3D4cPHP5LsWcPiA_ND4gPsw_ImbgRANcXwYkPTg_JCA4Png4Px2FTkRgPig9BD4oP
+a8QsMYoPv8448BeKDxQPiw9AD4sPaw_LD5cPiw-DD4sP7w_LDxwPjA9JD4wICQ_kCVsz8SgAD40P
+Lw_ND10vjQ_8D40P7A_NDxwPjg9MD44GAQ_uAQ-fAQ8RD48PQw_PD3UPjw_nD48P2g_PgUeAQA_Q
+CwUPqAVYu1ERD5EPRqLO8ASRD7APkQ-mD5EPHA_SD1IPkg4CxXpB9wIPLuMVspMPng_TD9cPkw8P
+Pg8Beouxuw_UD-UPlA8vD5UxgPAMpA_VD98PlQ8aD5YPVQ_WD5EPlg-ND5YPCQ_XsZ6hDQoPwAoP
+-QoPOwRC4ZgPtw_YD-YPmA81D5kLIlxB8wMPMydEMZoPs4oLkZoPNQ_bCAcPuHgUETws0LGcD8AP
+nA8DD50PRilu8QadD80PnQ8RD54PVQ_eD5oPng-fD57CpNFpD58Prg_fD-QPnw86ZKrzEaAPxg_g
+Dw0PoQ9UD6EHBA-jBA8rD6IPcw_iD7sPog8DQg8xlQ_jUpfAKA_kD3EPpA_7D6QPmjkRUKJAMaUP
+5cZusaYPfA_mD8gPpg8TocLwHKcPrA_nD-gPpw9FD6gCDA-gDA8tD6kPew_pD8kPqQ8XD6oPZQ_q
+D7QPqg_BUPEzUg_rBAAP8QAPQQ_sD5EPrA-hD6wPMQ_tD4IPrQ-TD60PJA_uD3UPrg-HD64PGQ_v
+D2sPrw_9D68PDw_wD2IPsA_165ZxsQ9bD7EPrppwsbIPVg_yD6oPsg-_Fa0Rs9x6MfwPszVHEaeR
+DGC0D1IPtQwTcwCyw-EXAAYPAQ_3D1gPtw_vD7cPBg_4D14PuAYBDw0PuQ9lD7kPvg_5Dxb-RfAB
+ug-HD7oPIA_7D3kPuw-TD_6lEbwXbzHgD7z3OPEWlA_9D_4PvQ9JD74PpA__D-8Pvg9aD78JBQ8Q
+D8APbA-AD8gPwKYLUYAPwQ-c3wrRwg_VD8IP8g-CD08Pw6qtEAnGCIEvxA8iD8UPgKNL8APFDzwP
+xg_aD8YP_Q-GD1gPxwbYGvEByAsND9QNDzMPyQ_TD8kP8phCApEeURIPyw9ypltxyw8zD8wPlArW
+kcwPVg-ND7cPzW6-8AJ5D84P2w-ODzwPzw_eD88PAC1zYQ-QD8QP0CeI8ReJD9EP6w-RD04P0g_x
+D9IPEw-TCAoP2goPPQ-UD6AP1A8ED9UPZ-WZAIdxIdYCiBZAWw-XBZUMkNgPiA-YD_wP2J8pQQYE
+DxrjZPEA2g-kD9oPSg-bD68P2w8UzWWA3A-fD9wPRQ_AqvEF3Q8QD94IDA-cDA9CD98PqA-fDw90
+NzHgD9uEsQJOD0EPD_IIicTxAEQP4w_rD_MPEg-kD3kP5KFikUcP5Q_vD_UPFibDQOYP5Q9UJfEA
+5w_0D_cPHA-oD4QP6A-s9YGR6Q_8D_kPJA-qc4Ax9A-qXTlRxQ-rDy3jT1HsD-4P7FkpAA5dcTcP
+7g_gD_5gDpFyD_8P2g-vD0MtIZHwDxUP8Q9_D-FDLvEQUA-yD7kP8g8iD-MPiw-zD-QP8w9dD-QO
+AQ8wD-UPmYfAAOktcfYP1Q-2Dz6cIXH3DxEP_A97qnsz_A9OVw8RIVcUgPoBCQ9dD-sO5T5x-A_a
+D-wPBKpI8Qr9Bw0PQQ-_D6oP-g8UD-8Pfg--D_cP-w9RWasRAJ_D4I4PAQ-3DwEPYQ8CD8sPfltx
+Aw_eDwMPB5EKcQQP2w8ED0QbMfEEBQ8XDwYPgQ8GD_oPBg9UDwcPvUXBEQhPvCD5D__aEQmZERE1
+eZHRCg8IDwsPcQ8LD9oPC_mYIK0PHTIAXgnwAg0P6A8ND1EPDg_6Dw4PIw8Pk38QAcyIURAPxg8Q
+o5kTl1wP8AFoDxIP0Q8SDzkPEw_iDxMPdjMxcw8UHgIxQw8VsCZREw8WD3uG0ZEWD0sPFw_zDxdA
+wlCCDxgP6neogQ8ZD7kPGQ8hfKAxGg-v7QxxGw__DxsPJT0GsRwP8w8cD1oPHQ-AbR5gHg_ODx4B
+S5XxAh8PwQ8fDycPIA_ODyABAw9aO34AT7OxIg_LDyIP8Q8iD1cjotAjDyEPJA_HDyQP7A8kAzwQ
+BuUf8w0mD4APJg-kDyYPSQ8nD64PJw8SDygIBA-aBA8_YA8RBq8J8QIqD84PKg8xDysPlA8rD-gP
+K-jHMb4PLJEu8QSEDy0P5g8tD0kPLg_rDy4PDg8vLSvxAtIPLw80DzAPlQ8wD-cPMA9ZCVcxMQ8b
+HSpxMg-eDzIPPsy5ETMqnJFgDzQPwA80DyHRpCA1DxF_8QBADzYPoA82D-8PNg9fDzdpYBEdBRux
+OA-bDzgfOQ_YDzmmnABea3GyDzoPEA87ZykQy5tF8QA8D4UPPAAMDz8PPQ_cDz0GQNJVDz4PsQ8_
+Dw0PPw9pag8RA-WmsEAP1g9ADzEPQQ_MvkAhH0FPkPEAQg-2D0IPUA9DD6kPQw8DNi1BRAYJCinY
+QEUPwA_eygAYuvEDRg-JD0YPIQ9HD3kPRw-QD0cEVzoxSA-WoLUA-N0RScW8ETDsJgBJBHFKDzEP
+Sw_GmhNRSw8xD0zgwFHaD0wPLrCqUU0P1g9NPCAxfg9OzwRQJA9PD3d8FPEPD08PHA9QD28PUA-B
+D1APEg9RD2QPUQYODwcPUg9YPSVzUg-5D1IPSWwPMekPUyYBsYgPVA-YD1QPJw9Vh9YRxNymcVYP
+YA9WD66Il-EEVg9JD1cPlg9XD_MPVw8wD1gPfCBS8QJYDxQPWQ9gD1kPrA9ZD-cPWSu7cY0PWgcL
+DyJBmPEEWw_1D1sP-w9bD0gPXA_RD1wP2pSsEV3JTBCzCwTAD10PQw9eD4oPXg-R-0_BL18PpQ9f
+D_uDiCFgCHu4APQD8AdFD2EPig9hD84PYQ8SD2IPVg9iD5oPojkQYjgy02IPYw_lD2MP5w9jDylw
+DxGsQBTxDmQPLg9lD24PZQ_vD2UP7w9lDy8PZg9uD2YPrQ9mEwUxKw9n-zrxBqcPZw-lD2cPIw9o
+DQIPnQIP2gIPFnnW8AFpD44PaQ-KD2kPBQ9qD0APL3pRag_1D2ouWVEqD2sPY-BUsWsP1g9rDw4P
+bA9HhizxDmwPtw9sD_4PbA8mD20PXQ9tD5QPbQ-KD20PAA9uVpjQbA9uD6EPbg-WD24PC6scQQ9v
+D3MbLPMKbw-aD28PDg9wD0APcA9zD3APpQ9wBwEPCXPIE2x_D5HND3EP-Q9xDy1djZFyD4wPcg_7
+D3Lyn-EAGA9zD0YPcw90D3MPoQ9zDWMQ_8eZEXQbfvEEgA90D6sPdAcFDwIPdQ8sD3UPVwXDcXUP
+qg91D9TFn3N1DyYID04ogg-B7QgPFA93DzoPdw9h8kdzdw_sD3cP0hBt8xYbD3gPQA94D2QPeA_H
+D3gPqw94D84PeA-xD3gPEw95DzUPeQ9Xhi5RmQ95D7qMFrN5D-sPeQ8bD3oPOjCcU3gPeg_XCR8R
+03w0AjickSsPew9HD3sPY4xsACxHIXsG_WYQ7BYuMHwDDBiKcVMMD2wMD4SuLXG1DA-MDA-kwy3x
+ABEPfQQJDz0JD1MJAikPknKzILoJgg6z4QkP9AkPBw9_Dxk2PhE9YQMRfjXaU28Pfg_AA6winw8Q
+jPEEvQ9_D8wPfg-aD34P6A9_D-YPfg_sERACFXN-DykPfw80dZwcS5APAYVtEX9LbROQ4U0ToVA_
+4rAPfw_3D38Pvg9-D8QPU20EVD4AGD4T4OlNE_jujAhYPg_YDwkT64AAAFQQYcUMBg96BMqgEXWH
+DwCHLhE-ztwRZCRdAGsuEZtUYRBNUy4Bcw8ARC4ROu15ESkuLgCLXABjDwAXLkDWDwEPXA8AAS4R
+mwiZMeEf2fAFQbQPygHeLhG8Qw8AtVsAsi0AOw8R5VapEZgzDxAfkQ4hjARBExGGPR0AJA8AWi0X
+QhgPCBwPAE4tAI2IEwgcDwhOLQNPHlADCg8kCix-IC8KuNhxOgoPQAoPRwNq8QNVCg9cCg9kCg9s
+Cg91CgkKD4bvfUCZCg_jAYYAdFwRw-MgQdoKD_a6VkP-Cg8MV3kApEsAnIjxAkMPgQ9RD4ENDg9v
+Dg9_Dg_OFA6Arg4Pvw4P0A4ErTDzDg92xlcXD4IPKRoP02MPgg93D4IPiw_CD5-7WrDJD4IP3g_C
+D-QPgoqTEAPH3NEPTgsPZQsMCw_UCw_sKhMR3ohf0RAPhA8qD4QPRA_ED15QIhGEWqexrw_ED8oP
+hA-mD4RuZTEfD4XwBkFZD4UIWKdBsgcP0Ko6cQ0Phg8tD4ZLx-MWbA_GD4wPhg_sD4YPzQ_GD_4P
+hg8PD4cPMQ_HD1MPhw91D4cPmGkt8xLeD4cPAQ_IDyUPiA9JD4gPbQ_ID5IPiA_3D4gP3A_IDwEi
+DwD0NJN0D4kPmg_JD8EoW8AQD4oPOA_KDQUPiAXEL0HaBQ8EkJOgiw9XD4sOAA_sAHG7kQIPjA8t
+D4wPWV238Q6MD7EPjA-dD4wPCg_NDzcPjQ9kD40Pkg_ND8APjTLiER2ec-EUjg96D44Pqg_OD9kP
+jg8JD48POg_PD2oPjw_bD48PzA_PD-2bvACovfAFkA_TD5APxQ_QD-gPkA8rD5EPXg-lXVGRD8UP
+kXuN8QAuD5IPYg_SD5cPkg-MD5LO2vMCOA_TD24Pkw_kD5MP2g_TDxE6D1F-D5QPt_YpEZRLdVFf
+D5UPmK2qsJUPCg_WD0QPlgkG77qB8gYPLA_XD2e5m3GXD90Plw8ZUybxLJgPkQ_YD80PmA8JD5kP
+Rg_ZCwEPwQEP-gEPPA_aD3oPmg_5D5oP9w_aDzYPmw91D5sPtQ_bD-QPmw80waFRnA_0D5yjfvEC
+Ng_dD3cPnQ_4D50P_g_dDzyOgTGeD8AnCzGfD0UsqbGfD8wPnw8PD6APU1Y9YaAP2w_gA0Ru8QKh
+D6kPoQ-vD6EPNA_iD3oPol2sEwZIDwCga-AS2Q_jAw_kD2gPpA_vD6QP9w_kDz8PpQ_HD6UPzw_l
+DxgPLKPwCKYPqg_mD-MPpg89D6cPhg_nD9APpw8aqI3xEA_oD68PqA-6D6gPRQ_pD5EPqQ-cD6kE
+D6oPdA_qD8Be2vEAqw9ZD6sPpQ_rD-IPqw8-jNkwrA-aVBVhrQgCD8QCyobRYQ_uD7APrg--D64P
+TsE9YK8P7Q_vD5dHAOirUd0PsA8uK3LxEbEPzw_xAw_yD3EPsg-DD7IPFA_zD2YPsw_4D7MPCg_0
+pd6Trw_0DwIPtQ9Vph5R_w_1D06JH7G2D-YPtg9KD7cPnlDb8Sy3D0cPuA_cD7gP8Q_4D0YPuQ_b
+D7kP8A_5D0YPug_cD7oP8g_6D0gPuw_eD7sP9A_7D0sPvA_iD7wP_ZytgL0Ppw_9D-8Pcc-wBL4P
+rg__DwYPvw9eD78Ptw_-Dw_dZUEvwA8ZZ9DxBMEPyw-BDyUPwg9_D8IP2A-CDzJBXvEKww-mD8MP
+QA-ED5sPxA-1D8QPUA-FD6sPxeWX8QZhD8YPvA-GDxgPxw9zD8cPzw-HDysFf-MEyA-jD8gPQA-J
+D5wPyQ-5D8kPVWUPUQ8Pyw9s8lvxAMsPJw-MD4QPzA-iD8wPP5AREc2sxlFZD84PuHYrcc8PdQ-P
+D9NZaABR2-EA0A-wD9APTw-RD64P0Q8NtLEAKpDxFtIPLA-TD4wP0w-rD9MPSw-UD6wP1A8MD9UP
+bA-VD8wP1Q8tD9ZNYfAO7g-WD08P1w_wD9cPEQ-YD3IP2A-TD9gPNQ-ZBgra7JFZD9oPuw-aDx0I
+B1HbD_EP20dJMaUP3CuJEWlemnHdDy4P3g_R5xWR3g9WD98PuQ-f9SsAPAdT4g-gD0V3D1EMD_IP
+b45cEeIHSjGaD_OFx9FhD_QPxQ-kDykP5Q_NfN7xFeUPVQ-mD7kP5g8dD_cODA-mDA9KD_gPrw-o
+DxMP6Q94D_kP3F1ZkeoPpg-qDwoP6_NU8QzUD_sPOQ-sD54P7A8DD_0PaA-tD80P7Q8yD_5uYlH9
+D_4PYs-ece8PLQ-wD5IM3-ED8A9dD-EPww-xBA-yD44P8g-z6eTh8w_-D-MPJA-0BQcP8Acn4dG8
+D-UPIg-2D4cP9g-tsElR9w_5D-dFmZOFD-gP6w-4D1F9D1AdD-oLDWrbADjhADh9cRwP-A_CD-zz
+RACSOrG0D-0PGw-_DgAMAOxk8QqzD-8PGQ8AD4APAA-mDwAPTA8BD7IPAQ8YcXVxAg-lDwIPS0KD
+8AMDDxcPBA99DwQP4w8ED0kPBQ8o6REVfoYxBg-huBdxBw_uDwcPE4vkgAgP3w8ID0UPFNgwCQ8R
+_HPwDA8KD90PCg9DDwsPqA8LDw4PDA90DwwKCQ8-D60mMQ0PCgcLAKy6MQ4PO7sEMQ8PBvxlURAP
+0A8QR1sTm4QPMWUPEjQSUS8PEw_UgLIREzNWQcMPFARcjwDfEDEVD1YIE_EWDx8PFwsBD_gBD0wP
+GC5v0RUPGQ95DxkP3Q8ZD0G6b3EaDwkPGw9tWBgxGw80aNgRHEQB8AlfDx0Pwg8dDyUPHg_JDx4P
+7A8eD08PHw8X6kEVAw944SgRPavhcSEPAw8iD2XMuzEiDyrLmlEjD_4PI9fDEbIQfPAOJQ92DyUP
+1w8lDzkPJg_aDyYP-A8mD10PJw__DyfEkHOABA-hBA9Ciw-RAw8qD2MPKg-EDyoPJPPOcSsP5A8r
+D0SPKCAsD_ZwUWMPLQ-DJD7wAi4OCA-gCA8-Dy8Png8vD-0PIsjxADAPug8wDxkPMQ93DzEP1aqF
+MTIPkQJAUTIPTQ8z1lHRCA80D2UPNA-CDzQPH9loMTUKEvLrMTYP7pBM8R43D6cPNw8CDzgPXg84
+D7oPOA8VDzkPcQ85D8wPOQ8nDzoPgg86D90POg84Dzu3sfAH7A87D0cPPA_hDzwP_w88D1QPPQ_u
+D7A4MT4PYfQjcz4PEw8-D2z7HhEdUVqxQA-ND0APJQ9BD32rb3FBDy0PQg_EpUfwBUIPMg9DD4kP
+Qw-gD0MPNg9ED40PUxPRRA85D0UPjw9FD_QPRXcfsY8PRg-kD0YPOQ9HKr-xAuMPRw83D0gPjA9I
+D_APSA80YjbxAEkP2w9JCA9KDgYP1AYPJ0F4cUsPzA9LDx7ElmBMD8IPTA9iT5FlD00Ptw9NDwjZ
+PfEFTg_pD04NBQYPTw_aD08P6g9PDzp7J4FQCgcED1EPd10acFEPFA9SD2L8UmMPUgAMD0yWD7Dn
+D1MPNA9UDgkPzesyAOWqYFUPsg9VAE0xsVYPlQ9WD_APVg8rqg0RV_yFcQoPWAkBD57GAhExPw3R
+WQ-DD1kPDA9aCQMPnWArMS0PWyTJgbwPWw8DD1wGAxqB1wIPHQ9dD2PYSbFdD_4PXQ8zD14PeQbT
+oF4PAg9fD0YPXw8PpPEIzg9fDxIPYAsID5gID9sIDx4PYQgND6PcQ3EmD2IPaA9ipnZR6g9iDysN
+D7NjD6sPYw-rD2MPK48PAEaw8QXpD2QED2UPZg9lD6QPZQ-iD2UPIE_M4GYPmw9mD9gPZg8UD2cP
+EeoRjWJ30WcPBA9oD0APaA97D2iiRBHxiFkxaQ9lEhiRaQ-YD2kPEg9q4LsRhGsMMWoP9LjbAHUA
+ApYPQNMPaw8HHxFAYIsAFytxbA-jD2wPGCJPMW0Pg0eCoW0P7A9tDyAPbgmlCiC7BeTnUSEPbw9T
+NWZAbw_4Dw5iMW8PG-8BEXACm1GuD3AP3p4Ec3EPPg9xD22XD3DLD3EP_g9xly4xVg9yPToxsg9y
+z6-xAgwPcw84D3MPZQ9zD5EPcw_9aXoA9GrxKnQPPg90D2kPdA_TD3QPvQ90D_cPdA8QD3UPOg91
+D2IPdQ_LD3UPsw91D9sPdQ8DD3YPKg92DAoPeKot8wjFCg-rCg8RD3cPNg93D1sPdw_AD3cPpCI_
+UewPdw8QlDwxeA9Wgg8xeA_bTbGReA-fD3gPAA95BW3wEkIPeQ9jD3kPgw95D6MPeQ-DD3kP4g95
+DwEPeg8gD3oPPkycQy96D5igD-EW0g96D_8Peg8LD3sPJw97D0MPew9eD3sPeQ97D5QPew_uD3sP
+yBfWcXsP-A97DxVI3RF8MB8RX397EXy1ewCBGcC9D3wP1A98D_oPfA9om1EWD30PK_wDMX0PVuPb
+s30Pfg99D5IPfQ_miJuxzA99D98PfQ-xD30TrHEVD34PJw9_mJ8AzCIRWQC98wB_D3kPfg_JD34P
+mA9_D6flXJPED34P0g9_D9_cXTH6D35ePhMTD04AoF0TNpmcEkzHD1ANBw9qB219cX0HD4YHD48C
+phGfVi9BrgcPtVwvEcIRphHO3j4g2AcnPhHhbi8R6RrbIPAHI9sR9izbkfoHD-sHD-0HAAIAIQ0H
+zS4Rnd4REWSEDwB8DwLfHhESZA8RqgNXEcpPDwBHD6BJD5QED4kPUA_C
 :: src/.info.pod
---[[pod,created="2024-04-07 08:14:00",modified="2026-02-17 17:13:11",stored="2024-04-07 08:14:00"]]
+--[[pod,created="2024-04-07 08:14:00",modified="2026-02-19 21:34:53",stored="2024-04-07 08:14:00"]]
 :: src/sfx/.info.pod
---[[pod,created="2026-02-01 20:27:30",modified="2026-02-17 17:13:11"]]
+--[[pod,created="2026-02-01 20:27:30",modified="2026-02-19 21:34:53"]]
 :: src/ui/.info.pod
---[[pod,created="2026-02-01 17:54:12",modified="2026-02-17 17:13:11"]]
+--[[pod,created="2026-02-01 17:54:12",modified="2026-02-19 21:34:53"]]
 :: src/wavetables/.info.pod
---[[pod,created="2026-01-25 09:38:05",modified="2026-02-17 17:13:11"]]
+--[[pod,created="2026-01-25 09:38:05",modified="2026-02-19 21:34:53"]]
 :: [eoc]
