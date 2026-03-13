@@ -8,25 +8,23 @@ version 2
 :: src/
 :: src/ui/
 :: defaults/settings.lua
---[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-02-06 14:25:36",revision=3177]]
+--[[pod_format="raw",created="2025-04-05 12:46:20",modified="2026-03-13 08:08:28",revision=3407]]
 return {
 	window_mode = "tabbed",
-	default_theme = "dark",
 	cursor_style = "line",
 	cursor_hide_if_selection = true,
-	cursor_hide_if_typing = true,
+	pointer_hide_if_typing = true,
 }
 :: defaults/shortcuts.lua
---[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-02-06 14:25:36",revision=3176]]
+--[[pod_format="raw",created="2025-04-05 12:46:29",modified="2026-03-13 08:08:28",revision=3406]]
 return {
 }
-:: defaults/theme_dark.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-06 14:25:36",revision=4625]]
+:: defaults/theme.lua
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-03-13 08:08:28",revision=4855]]
 return {
 	-- UI
 	ui_bg = 17,
 	ui_fg = 1,
-	ui_bg_active = 6,
 	ui_fg_warning = 25,
 	ui_fg_highlight = 7,
 	banner_bg = 2,
@@ -45,22 +43,21 @@ return {
 	editor_cursor = 14,
 	editor_cursor_special = 30,
 	lua_text = 6,
-	lua_comment = 13,
+	lua_comment = 29,
 	lua_operator = 7,
 	lua_keyword = 14,
-	lua_string = 12,
-	lua_number = 12,
-	lua_reserved = 12,
-	lua_function = 11,
+	lua_string = 28,
+	lua_number = 28,
+	lua_reserved = 28,
+	lua_function = 26,
 	lua_unknown = 8,
 }
 :: defaults/theme_light.lua
---[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-02-06 14:25:36",revision=4626]]
+--[[pod_format="raw",created="2025-03-31 13:01:59",modified="2026-03-13 08:08:28",revision=4856]]
 return {
 	-- UI
-	ui_bg = 22,
-	ui_fg = 21,
-	ui_bg_active = 6,
+	ui_bg = 13,
+	ui_fg = 1,
 	ui_fg_warning = 24,
 	ui_fg_highlight = 0,
 	banner_bg = 2,
@@ -69,27 +66,27 @@ return {
 	-- Editor
 	margin_bg = 6,
 	margin_fg = 7,
-	scrollbar_bg = 5,
-	scrollbar_thumb = 6,
-	editor_bg = 7,
+	scrollbar_bg = 13,
+	scrollbar_thumb = 1,
+	editor_bg = 6,
 	editor_bg_error = 23,
 	editor_bg_match = 15,
 	editor_bg_selection = 10,
 	editor_bg_special = 9,
 	editor_cursor = 14,
 	editor_cursor_special = 30,
-	lua_text = 5,
-	lua_comment = 29,
+	lua_text = 0,
+	lua_comment = 18,
 	lua_operator = 21,
-	lua_keyword = 30,
+	lua_keyword = 2,
 	lua_string = 16,
 	lua_number = 16,
 	lua_reserved = 16,
-	lua_function = 27,
+	lua_function = 3,
 	lua_unknown = 8,
 }
 :: main.lua
---[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-02-06 14:25:36",revision=9840]]
+--[[pod_format="raw",created="2025-03-24 12:49:34",modified="2026-03-13 08:08:28",revision=10070]]
 ----------------------------------------------------------------------------------------
 
 
@@ -157,7 +154,6 @@ function _init()
 	open_window(main_path, path)
 
 	buffers.init()
-	load_fonts()
 
 	filetree.create(root_path)
 	--filetree.printh()
@@ -174,6 +170,15 @@ function _init()
 		editor:center_cursor()
 	end
 
+	load_fonts()
+	local palette = nil
+	if fstat("/appdata/codron/theme.pal") then
+		palette = fetch "/appdata/codron/theme.pal"
+	end
+	if type(palette) == "userdata" then
+		palette:poke(0x5000)
+	end
+	first_update = false
 end
 
 
@@ -718,7 +723,7 @@ end
 ------------------------------------------------------------------------------------------
 
 :: manual.txt
---[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-02-06 14:25:36",revision=7993]]
+--[[pod_format="raw",created="2025-03-25 12:12:29",modified="2026-03-13 08:08:28",revision=8223]]
 # Codron
 
 ## Keybinds
@@ -726,50 +731,36 @@ end
 ### Editor
 
 Switch between files:
-- Ctrl-E: File Chooser / Command Palette
-- Ctrl-J: Jump to previous file in recent stack (hold ctrl to keep jumping)
-- Ctrl-Shift-J: Jump to next file in recent stack
+- Ctrl-J: jump to previous file in recent stack (hold ctrl to keep jumping).
+- Ctrl-Shift-J: jump to next file in recent stack.
 
-Find, aka incremental search:
-- Ctrl-F: Find
-- Ctrl-Shift-F: reverse Find
-- Ctrl-F Ctrl-F: find aGain
-
-Search and replace:
-- Ctrl-H: searcH and replace
-
-Navigate in current file:
-- Ctrl-G: go to line number (if a number is entered)
-  or to a specific function definition (otherwise).
-- Ctrl-PageUp: go to previous cursor/selection, or go to
-  previous function definition if only one cursor.
-- Ctrl-PageDown: go to next cursor/selection, or go to
-  next function definition if only one cursor.
+Find (incremental search):
+- Ctrl-F: find.
+- Ctrl-Shift-F: reverse find.
+- Ctrl-H: multifile find.
+- Ctrl-F Ctrl-F: find again.
 
 Selection:
-- Ctrl-L: select current line, or extend selection
-  by one line.
+- Ctrl-L: select current line, or extend selection by one line.
   
 Multi-cursors and multi-selection:
-- Ctrl-D: if selection, add next occurence; otherwise select current word.
-- Ctrl-Shift-D: if selection, deselect current occurence and add next occurence.
-- Ctrl-G: deselect current occurence?
-- Ctrl-I: if selection, add a cursor at end of each
-  line, otherwise add one cursor below.
-- see also Ctrl-PageUp and Ctrl-PageDown
+- Ctrl-D: select current word, or add next occurence (multi-selection)
+- Ctrl-Shift-D: select next occurence of current word.
 
 ### Find (incremental search)
 
 - Enter: exit find, keep selection.
+- Escape: exit find, go back to original position.
+- Movement keys: exit find, cancel selection.
 - Shift-Enter: exit find, cancel selection.
 - Ctrl-A: exit find, select all occurences.
 - Ctrl-F: select next occurence.
 - Ctrl-Shift-F: select previous occurence.
-- Escape: exit find, go back to original position.
-- Movement keys: exit find, cancel selection.
+- Ctrl-H: select next occurence (multifile).
+- Ctrl-Shift-H: select previous occurence (multifile).
 
 :: src/app.lua
---[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-02-06 14:25:36",revision=7610]]
+--[[pod_format="raw",created="2025-03-27 11:19:40",modified="2026-03-13 08:08:28",revision=7840]]
 
 local multiclipboard = {}
 
@@ -797,7 +788,7 @@ return {
 	get_multiclipboard = get_multiclipboard,
 }
 :: src/buffers.lua
---[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-02-06 14:25:36",revision=11482]]
+--[[pod_format="raw",created="2025-03-22 18:20:27",modified="2026-03-13 08:08:28",revision=11712]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2200,6 +2191,84 @@ local function new(text)
 	end
 	
 
+	function self:comment()
+		dirty = true
+		self:clear_matches()
+		-- Undo checkpoint, with grouping of inserts
+		local group = "comment"
+		if group ~= undo_group then
+			self:checkpoint()
+		end
+		undo_group = group
+		-- Actual edit
+		-- (this should probably be simplified)
+		local has_selection = self:number_of_selections() >= 1
+		if has_selection then
+			self:foreach_selection(
+				function(scol, srow, ecol, erow)
+					if ecol == 1 then
+						erow -= 1
+					end
+					local uncomment = true
+					for row = srow, erow do
+						local str = text[row]
+						if str[1] ~= "-" or str[2] ~= "-" then
+							uncomment = false
+						end
+					end
+					if uncomment then
+						for row = srow, erow do
+							text[row] = text[row]:sub(3)
+						end
+						for cursor in all(cursors) do
+							if cursor.row == row then
+								if cursor.col >= 3 then
+									cursor.col -= 2
+								else
+									cursor.col = 1
+								end
+								cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
+							end
+						end
+					else
+						for row = srow, erow do
+							text[row] = "--" .. text[row]
+						end
+					end
+				end
+			)
+		else -- no selection
+			for cursor in all(cursors) do
+				local row, col = cursor.row, cursor.col
+				local str = text[row]
+				if str[1] == "-" or str[2] == "-" then
+					text[row] = sub(str, 3)
+					-- Move all impacted cursors
+					for cursor in all(cursors) do
+						if cursor.row == row then
+							if cursor.col >= 3 then
+								cursor.col -= 2
+							else
+								cursor.col = 1
+							end
+							cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
+						end
+					end
+				else
+					text[row] = "--" .. str
+					-- Move all impacted cursors
+					for cursor in all(cursors) do
+						if cursor.row == row and cursor.col >= 1 then
+							cursor.col += 2
+							cursor.wanted_x = self:find_cursor_x(cursor.col, cursor.row)
+						end
+					end
+				end
+			end
+		end
+	end
+	
+
 	function self:backspace()
 		dirty = true
 		self:clear_matches()
@@ -2304,7 +2373,7 @@ return {
 	new = new,
 }
 :: src/config.lua
---[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-02-06 14:25:36",revision=4623]]
+--[[pod_format="raw",created="2025-03-31 13:04:42",modified="2026-03-13 08:08:28",revision=4853]]
 ----------------------------------------------------------------------------------------
 
 
@@ -2464,10 +2533,7 @@ function M.init()
 	})
 	M.settings = load_config_file("defaults/settings.lua")
 	load_config_file("/appdata/codron/settings.lua", M.settings)
-	local theme_file = "defaults/theme_" .. M.settings.default_theme .. ".lua"
-	if not fstat(theme_file) then
-		theme_file = "defaults/theme_dark.lua"
-	end
+	local theme_file = "defaults/theme.lua"
 	M.theme = load_config_file(theme_file)
 	load_config_file("/appdata/codron/theme.lua", M.theme)
 end
@@ -2482,7 +2548,7 @@ return M
 ----------------------------------------------------------------------------------------
 
 :: src/filetree.lua
---[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-02-06 14:25:36",revision=5661]]
+--[[pod_format="raw",created="2025-03-29 16:06:07",modified="2026-03-13 08:08:28",revision=5891]]
 -------------------------------------------------------------------------------------------
 
 
@@ -2982,6 +3048,21 @@ local function next_file(node)
 end
 
 
+local function previous_file(node)
+	local previous = nil
+	root:foreach(
+		function(n)
+			if n == node and previous ~= nil then
+				return true
+			elseif n:is_file() then
+				previous = n
+			end
+		end
+	)
+	return previous
+end
+
+
 -------------------------------------------------------------------------------------------
 
 
@@ -3031,6 +3112,7 @@ return {
 	find = find,
 	first_file = first_file,
 	next_file = next_file,
+	previous_file = previous_file,
 	save_all = save_all,
 	printh = printh_nodes,
 }
@@ -3039,7 +3121,7 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: src/lune.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-06 14:25:36",revision=4835]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-03-13 08:08:28",revision=5065]]
 ----------------------------------------------------------------------------------------------------
 -- Logging and Errors
 ----------------------------------------------------------------------------------------------------
@@ -3138,7 +3220,7 @@ function structure(meta)
 end
 
 :: src/ui/banner.lua
---[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-02-06 14:25:36",revision=2832]]
+--[[pod_format="raw",created="2025-04-09 08:35:55",modified="2026-03-13 08:08:28",revision=3062]]
 ------------------------------------------------------------------------------------
 
 
@@ -3241,7 +3323,7 @@ end
 ------------------------------------------------------------------------------------
 
 :: src/ui/button.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-06 14:25:36",revision=3738]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-03-13 08:08:28",revision=3968]]
 -------------------------------------------------------------------------------------
 
 
@@ -3297,7 +3379,7 @@ end
 -------------------------------------------------------------------------------------
 
 :: src/ui/editor.lua
---[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-02-06 14:25:36",revision=11619]]
+--[[pod_format="raw",created="2025-03-23 10:19:52",modified="2026-03-13 08:08:28",revision=11849]]
 -------------------------------------------------------------------------------------------
 
 
@@ -3501,7 +3583,7 @@ return function()
 			if msg.my >= thumb_y and msg.my <= thumb_y + thumb_height then
 				self.cursor = "grab"
 			end
-		elseif typing_mx and config.settings.cursor_hide_if_typing then
+		elseif typing_mx and config.settings.pointer_hide_if_typing then
 			self.cursor = 0
 		else
 			self.cursor = get_spr(16)
@@ -3823,6 +3905,9 @@ return function()
 			elseif keyp("u") then
 				recent_pick -= 1
 				recent_pressed = true
+			elseif keyp("/") or keyp("b") then
+				buffer:comment()
+				moved = true
 			elseif keyp("tab") then
 				notify("!!!")
 			elseif key("shift") and keyp("n") then
@@ -4110,7 +4195,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/findbox.lua
---[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-02-06 14:25:36",revision=6512]]
+--[[pod_format="raw",created="2025-03-28 14:29:26",modified="2026-03-13 08:08:28",revision=6742]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4194,10 +4279,9 @@ return function(editor)
 		if anode ~= editor:node() then
 			anode = editor:node()
 		end
-			
+
 		local found = false
 		if direction == "forward" then
---			buffer:set_cursor(ocol, orow) -- TODO: remove
 			for scol, srow, ecol, erow in buffer:matches() do
 				if (srow == arow and scol >= acol) or (srow > arow) then
 					buffer:select(scol, srow, ecol, erow)
@@ -4237,7 +4321,6 @@ return function(editor)
 				end
 			end
 		elseif direction == "backward" then
-			buffer:set_cursor(ocol, orow)
 			for scol, srow, ecol, erow in buffer:matches_reverse() do
 				if (srow == arow and ecol <= acol) or (srow < arow) then
 					buffer:select(scol, srow, ecol, erow)
@@ -4245,7 +4328,31 @@ return function(editor)
 					break
 				end
 			end
-			if not found then
+			if not found and multifile then
+				local previous_file = editor:node()
+				repeat
+					previous_file = filetree.previous_file(previous_file)
+				until previous_file == nil or previous_file:buffer():has_match()
+				if not previous_file then
+					previous_file = filetree.first_file()
+					while previous_file ~= nil
+						and previous_file ~= editor:node()
+						and previous_file:buffer():has_match() == false
+					do
+						previous_file = filetree.previous_file(previous_file)
+					end
+				end
+				if previous_file then
+					editor:set_node(previous_file)
+					buffer = editor:buffer()
+					arow, acol = 1, 1
+					for scol, srow, ecol, erow in buffer:matches_reverse() do
+						buffer:select(scol, srow, ecol, erow)
+						found = true
+						break
+					end				
+				end
+			elseif not found then
 				for scol, srow, ecol, erow in buffer:matches_reverse() do
 					buffer:select(scol, srow, ecol, erow)
 					found = true
@@ -4435,7 +4542,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/ui/head.lua
---[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-02-06 14:25:36",revision=7014]]
+--[[pod_format="raw",created="2025-03-27 19:11:47",modified="2026-03-13 08:08:28",revision=7244]]
 ----------------------------------------------------------------------------------------
 
 
@@ -4495,7 +4602,7 @@ return {
 ----------------------------------------------------------------------------------------
 
 :: src/ui/iconbutton.lua
---[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-02-06 14:25:36",revision=3737]]
+--[[pod_format="raw",created="2025-04-02 11:35:00",modified="2026-03-13 08:08:28",revision=3967]]
 -------------------------------------------------------------------------------------
 
 
@@ -4544,7 +4651,7 @@ return function(self)
 	return self
 end
 :: src/ui/sidebar.lua
---[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-02-06 14:25:36",revision=10105]]
+--[[pod_format="raw",created="2025-03-23 12:31:49",modified="2026-03-13 08:08:28",revision=10335]]
 -------------------------------------------------------------------------------------------
 
 
@@ -4760,7 +4867,7 @@ end
 -------------------------------------------------------------------------------------------
 
 :: src/utils.lua
---[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-02-06 14:25:36",revision=8071]]
+--[[pod_format="raw",created="2025-03-19 09:08:58",modified="2026-03-13 08:08:28",revision=8301]]
 --------------------------------------------------------------------------------------------
 
 --[[
@@ -4871,7 +4978,7 @@ end
 --------------------------------------------------------------------------------------------
 
 :: src/workspace.lua
---[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-02-06 14:25:36",revision=9197]]
+--[[pod_format="raw",created="2025-03-23 16:21:54",modified="2026-03-13 08:08:28",revision=9427]]
 -------------------------------------------------------------------------------------------
 
 
@@ -5303,10 +5410,10 @@ return {
 -------------------------------------------------------------------------------------------
 
 :: todo.txt
---[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-02-06 14:25:36",revision=8028]]
+--[[pod_format="raw",created="2025-03-25 08:49:54",modified="2026-03-13 08:08:28",revision=8258]]
 # Things To Do
 
-## Before First Release
+## Sooner
 
 - Fix: disable syntax highlighting for non-lua files.
 - Change: debugging logs opt-in in settings.
@@ -5315,19 +5422,31 @@ return {
 ## Later
 
 - Fix: Find when a multiline selection... what to do?
-- Add: button to colapse the sidebar.
-- Add: button to open the file chooser/command palette.
 - Add: auto-close for parenthesis, with smart newline.
 - Add: syntax highlighting for markdown files.
 - Add: horizontal scrollbar? based on longest line on screen?
 - Add: horizontal drag with right click, but gated with pressure.
 
+## Future Keybinds
+
+Navigate in current file:
+- Ctrl-G: go to line number (if a number is entered)
+  or to a specific function definition (otherwise).
+- Ctrl-PageUp: go to previous cursor/selection, or go to
+  previous function definition if only one cursor.
+- Ctrl-PageDown: go to next cursor/selection, or go to
+  next function definition if only one cursor.
+
+Selection
+- Ctrl-I: if selection, add a cursor at end of each
+  line, otherwise add one cursor below.
+
 :: .info.pod
---[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-02-06 14:25:36",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#24",workspace_index=2}}]]
+--[[pod,author="drakmaniso",created="2025-03-22 16:04:04",icon=userdata("u8",16,16,"00000001010101010101010101000000000001070707070707070707070100000001071111111111111111111107010001071111111111111111111111110701010711110707071111070707111107010107111107071111111107071111070101071111070711111111070711110701010711110707111111110707111107010107111107071111111107071111070101071111070707111107070711110701010711111111111111111111111107010106071111111111111111111107060101060607070707070707070707060601000106060606060606060606060601000000010606060606060606060601000000000001010101010101010101000000"),modified="2026-03-13 08:08:28",notes="A code editor",runtime=24,title="Codron",version="0.0.0",workspaces={{location="main.lua",workspace_index=1},{location="gfx/0.gfx#24",workspace_index=2}}]]
 :: defaults/.info.pod
---[[pod,created="2025-03-31 13:01:37",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2025-03-31 13:01:37",modified="2026-03-13 08:08:28"]]
 :: fonts/.info.pod
---[[pod,created="2025-03-23 21:36:31",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2025-03-23 21:36:31",modified="2026-03-13 08:08:28"]]
 :: fonts/cozi.font
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIxIDE5OjIyOjIwIixtb2RpZmllZD0iMjAyNi0w
 MS0wNyAwNzoyODo0MSIscmV2aXNpb249MzRdXWx6NACxAwAAVwcAAPAYcHh1AAMoAAgAAAQFCgsA
@@ -5377,7 +5496,7 @@ BQMgdgFhMAgMCB8qygCxCAUgBwAMAAYgCAQaAUB_IA9ASwBRaA8GIAacBACVAPATFCAKJQwgBgUG
 BQYgDAAMDgsgLQ4FIC8UD1QPMiASDyIPEhkBYS8iDCAMAbkA8BIOBw4LIA8GHgUPDjAPFQUIDwYw
 BAYPFARAAwgGMAoLBQpwAKBjBQggCAUJBAgg
 :: gfx/.info.pod
---[[pod,created="2025-03-22 17:37:31",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2025-03-22 17:37:31",modified="2026-03-13 08:08:28"]]
 :: gfx/0.gfx
 b64$LS1bW3BvZCxjcmVhdGVkPSIyMDI1LTAzLTIyIDE2OjAzOjQ4Iixtb2RpZmllZD0iMjAyNi0w
 Mi0wMyAyMDowNzowNyIscmV2aXNpb249OTA3NF1dbHo0ANEBAAAyMwAA8yF7WzBdPXtibXA9cHh1
@@ -5675,9 +5794,9 @@ MSjAMSjAPyjFNijCPyj9-f39-cgQxRX6KOExwSjAMcAowjHAKMAxwCjAMSjCMcEoMSjAMSjAMcEo
 MSjAMSjBPyjCNsAowj8owz8o0wcowgcowgco-f39-eEQxRX6KP3RPyjGPyjEPyj9-f39-cMQxRX6
 KP3gPyj9-f39-cQQxRX6KP39-f39-ecQxRX6KP39-f39-ecQxQAAAAAAAAAB
 :: sfx/.info.pod
---[[pod,created="2026-02-04 18:42:51",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2026-02-04 18:42:51",modified="2026-03-13 08:08:28"]]
 :: src/.info.pod
---[[pod,created="2025-03-22 18:20:11",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2025-03-22 18:20:11",modified="2026-03-13 08:08:28"]]
 :: src/ui/.info.pod
---[[pod,created="2025-03-23 10:19:01",modified="2026-02-06 14:25:36"]]
+--[[pod,created="2025-03-23 10:19:01",modified="2026-03-13 08:08:28"]]
 :: [eoc]
